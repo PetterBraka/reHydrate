@@ -13,6 +13,7 @@
 		3378767E24378A9400F5A732 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378767C24378A9400F5A732 /* Main.storyboard */; };
 		3378768024378A9800F5A732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3378767F24378A9800F5A732 /* Assets.xcassets */; };
 		3378768324378A9800F5A732 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378768124378A9800F5A732 /* LaunchScreen.storyboard */; };
+		9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,9 @@
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3378768224378A9800F5A732 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3378768424378A9800F5A732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_reHydrate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A4C495ADD1C849E22BAE45E /* Pods-reHydrate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reHydrate.release.xcconfig"; path = "Target Support Files/Pods-reHydrate/Pods-reHydrate.release.xcconfig"; sourceTree = "<group>"; };
+		B204E91E4654643981AEA857 /* Pods-reHydrate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reHydrate.debug.xcconfig"; path = "Target Support Files/Pods-reHydrate/Pods-reHydrate.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +47,8 @@
 			children = (
 				3378767524378A9400F5A732 /* reHydrate */,
 				3378767424378A9400F5A732 /* Products */,
+				DEE3AF47A916B38FCDFA6298 /* Pods */,
+				F887073E19DFDDCFF694E7E8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +74,24 @@
 			path = reHydrate;
 			sourceTree = "<group>";
 		};
+		DEE3AF47A916B38FCDFA6298 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B204E91E4654643981AEA857 /* Pods-reHydrate.debug.xcconfig */,
+				5A4C495ADD1C849E22BAE45E /* Pods-reHydrate.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		F887073E19DFDDCFF694E7E8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +99,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3378768724378A9800F5A732 /* Build configuration list for PBXNativeTarget "reHydrate" */;
 			buildPhases = (
+				88097486E497473D37F0076C /* [CP] Check Pods Manifest.lock */,
 				3378766F24378A9400F5A732 /* Sources */,
 				3378767024378A9400F5A732 /* Frameworks */,
 				3378767124378A9400F5A732 /* Resources */,
+				A423E6166413CEA25E5B2445 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -132,6 +159,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		88097486E497473D37F0076C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-reHydrate-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A423E6166413CEA25E5B2445 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-reHydrate/Pods-reHydrate-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-reHydrate/Pods-reHydrate-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-reHydrate/Pods-reHydrate-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3378766F24378A9400F5A732 /* Sources */ = {
@@ -282,6 +351,7 @@
 		};
 		3378768824378A9800F5A732 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B204E91E4654643981AEA857 /* Pods-reHydrate.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -300,6 +370,7 @@
 		};
 		3378768924378A9800F5A732 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A4C495ADD1C849E22BAE45E /* Pods-reHydrate.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
