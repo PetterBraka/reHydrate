@@ -102,14 +102,32 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wns-xE-hyU" userLabel="calender">
-                                <rect key="frame" x="20" y="461.5" width="374" height="380.5"/>
+                            <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="wns-xE-hyU" userLabel="calender" customClass="FSCalendar">
+                                <rect key="frame" x="20" y="481.5" width="374" height="360.5"/>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="firstWeekday">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsSelection" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="titleDefaultColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="headerTitleColor">
+                                        <color key="value" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="weekdayTextColor">
+                                        <color key="value" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="selectionColor">
+                                        <color key="value" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="wns-xE-hyU" firstAttribute="top" secondItem="30z-KG-YOx" secondAttribute="bottom" constant="20" id="0du-iT-YmH"/>
+                            <constraint firstItem="wns-xE-hyU" firstAttribute="top" secondItem="30z-KG-YOx" secondAttribute="bottom" constant="40" id="0du-iT-YmH"/>
                             <constraint firstItem="30z-KG-YOx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="G5s-yL-Z0w"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wns-xE-hyU" secondAttribute="bottom" constant="20" id="KFL-Wg-WYm"/>
                             <constraint firstItem="30z-KG-YOx" firstAttribute="top" secondItem="glR-cI-Sws" secondAttribute="bottom" constant="20" id="KLe-hD-bMd"/>
