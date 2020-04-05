@@ -13,6 +13,8 @@
 		3378767E24378A9400F5A732 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378767C24378A9400F5A732 /* Main.storyboard */; };
 		3378768024378A9800F5A732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3378767F24378A9800F5A732 /* Assets.xcassets */; };
 		3378768324378A9800F5A732 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378768124378A9800F5A732 /* LaunchScreen.storyboard */; };
+		33FC8427243A47A800848B7C /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8426243A47A800848B7C /* Drink.swift */; };
+		33FC8429243A4A2600848B7C /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8428243A4A2600848B7C /* Day.swift */; };
 		9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +27,8 @@
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3378768224378A9800F5A732 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3378768424378A9800F5A732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33FC8426243A47A800848B7C /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
+		33FC8428243A4A2600848B7C /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_reHydrate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A4C495ADD1C849E22BAE45E /* Pods-reHydrate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reHydrate.release.xcconfig"; path = "Target Support Files/Pods-reHydrate/Pods-reHydrate.release.xcconfig"; sourceTree = "<group>"; };
 		B204E91E4654643981AEA857 /* Pods-reHydrate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reHydrate.debug.xcconfig"; path = "Target Support Files/Pods-reHydrate/Pods-reHydrate.debug.xcconfig"; sourceTree = "<group>"; };
@@ -66,6 +70,8 @@
 				3378767624378A9400F5A732 /* AppDelegate.swift */,
 				3378767824378A9400F5A732 /* SceneDelegate.swift */,
 				3378767A24378A9400F5A732 /* ViewController.swift */,
+				33FC8428243A4A2600848B7C /* Day.swift */,
+				33FC8426243A47A800848B7C /* Drink.swift */,
 				3378767C24378A9400F5A732 /* Main.storyboard */,
 				3378767F24378A9800F5A732 /* Assets.xcassets */,
 				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
@@ -208,6 +214,8 @@
 			files = (
 				3378767B24378A9400F5A732 /* ViewController.swift in Sources */,
 				3378767724378A9400F5A732 /* AppDelegate.swift in Sources */,
+				33FC8427243A47A800848B7C /* Drink.swift in Sources */,
+				33FC8429243A4A2600848B7C /* Day.swift in Sources */,
 				3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
