@@ -154,8 +154,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Bottle" width="566" height="932"/>
-        <image name="Flask" width="476" height="784"/>
-        <image name="Glass" width="485" height="585"/>
+        <image name="Bottle" width="187" height="308"/>
+        <image name="Flask" width="157" height="258.5"/>
+        <image name="Glass" width="160" height="193"/>
     </resources>
 </document>
