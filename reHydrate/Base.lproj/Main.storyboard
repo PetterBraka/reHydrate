@@ -28,34 +28,41 @@
                                 <rect key="frame" x="107" y="155" width="110" height="200"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleAspectFit" alignment="bottom" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="30z-KG-YOx" userLabel="optionStack">
-                                <rect key="frame" x="102" y="291.5" width="210" height="150"/>
+                            <stackView opaque="NO" contentMode="scaleAspectFit" distribution="equalSpacing" alignment="bottom" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="30z-KG-YOx" userLabel="optionStack">
+                                <rect key="frame" x="93" y="291.5" width="248" height="150"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wib-TY-MgY" userLabel="smallOption">
-                                        <rect key="frame" x="0.0" y="90" width="43.5" height="60"/>
+                                        <rect key="frame" x="0.0" y="80" width="50.5" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="wib-TY-MgY" secondAttribute="height" multiplier="123:170" id="34Y-7v-fgR"/>
-                                            <constraint firstAttribute="height" constant="60" id="ROC-eA-bdJ"/>
+                                            <constraint firstAttribute="height" constant="70" id="ROC-eA-bdJ"/>
                                         </constraints>
-                                        <state key="normal" image="glass">
+                                        <state key="normal" title="size" backgroundImage="Glass">
+                                            <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R8b-pY-RjC" userLabel="mediumOption">
-                                        <rect key="frame" x="73.5" y="30" width="56.5" height="120"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0oB-mO-Gxs" userLabel="mediumOption">
+                                        <rect key="frame" x="66.5" y="27" width="80" height="123"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="R8b-pY-RjC" secondAttribute="height" multiplier="40:85" id="Wg7-QN-zV4"/>
-                                            <constraint firstAttribute="height" constant="120" id="zds-fV-Pdy"/>
+                                            <constraint firstAttribute="width" constant="80" id="L2W-pJ-xZV"/>
+                                            <constraint firstAttribute="width" secondItem="0oB-mO-Gxs" secondAttribute="height" multiplier="65:100" id="Usl-7A-ojJ"/>
                                         </constraints>
-                                        <state key="normal" image="Flask"/>
+                                        <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="20"/>
+                                        <state key="normal" title="size" backgroundImage="Bottle">
+                                            <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0oB-mO-Gxs" userLabel="largeOption">
-                                        <rect key="frame" x="160" y="3.5" width="50" height="146.5"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R8b-pY-RjC" userLabel="largeOption">
+                                        <rect key="frame" x="162.5" y="0.0" width="85.5" height="150"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="50" id="L2W-pJ-xZV"/>
-                                            <constraint firstAttribute="width" secondItem="0oB-mO-Gxs" secondAttribute="height" multiplier="75:220" id="Usl-7A-ojJ"/>
+                                            <constraint firstAttribute="width" secondItem="R8b-pY-RjC" secondAttribute="height" multiplier="40:70" id="Wg7-QN-zV4"/>
+                                            <constraint firstAttribute="height" constant="150" id="zds-fV-Pdy"/>
                                         </constraints>
-                                        <state key="normal" image="Bottle"/>
+                                        <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="20"/>
+                                        <state key="normal" title="size" backgroundImage="Flask">
+                                            <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -128,7 +135,7 @@
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="wns-xE-hyU" firstAttribute="top" secondItem="30z-KG-YOx" secondAttribute="bottom" constant="40" id="0du-iT-YmH"/>
-                            <constraint firstItem="30z-KG-YOx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="G5s-yL-Z0w"/>
+                            <constraint firstItem="30z-KG-YOx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="10" id="G5s-yL-Z0w"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wns-xE-hyU" secondAttribute="bottom" constant="20" id="KFL-Wg-WYm"/>
                             <constraint firstItem="30z-KG-YOx" firstAttribute="top" secondItem="glR-cI-Sws" secondAttribute="bottom" constant="20" id="KLe-hD-bMd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wns-xE-hyU" secondAttribute="trailing" constant="20" id="Pyq-zp-t0D"/>
@@ -147,8 +154,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Bottle" width="92.5" height="302.5"/>
-        <image name="Flask" width="123.5" height="240"/>
-        <image name="glass" width="110" height="170.5"/>
+        <image name="Bottle" width="566" height="932"/>
+        <image name="Flask" width="476" height="784"/>
+        <image name="Glass" width="485" height="585"/>
     </resources>
 </document>
