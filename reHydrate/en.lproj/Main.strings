@@ -1,0 +1,30 @@
+
+/* Class = "UILabel"; text = "500ml"; ObjectID = "C3V-dQ-bFh"; */
+"C3V-dQ-bFh.text" = "500ml";
+
+/* Class = "UILabel"; text = "day and date"; ObjectID = "JhD-0d-RlU"; */
+"JhD-0d-RlU.text" = "day and date";
+
+/* Class = "UILabel"; text = "4"; ObjectID = "Lld-rv-Oqo"; */
+"Lld-rv-Oqo.text" = "4";
+
+/* Class = "UILabel"; text = "L"; ObjectID = "LrS-k0-AEy"; */
+"LrS-k0-AEy.text" = "L";
+
+/* Class = "UILabel"; text = "2.5"; ObjectID = "PgI-WQ-LzU"; */
+"PgI-WQ-LzU.text" = "2.5";
+
+/* Class = "UILabel"; text = "/"; ObjectID = "d8T-TA-6Mk"; */
+"d8T-TA-6Mk.text" = "/";
+
+/* Class = "UILabel"; text = "reHydrate"; ObjectID = "mv3-wG-t6B"; */
+"mv3-wG-t6B.text" = "reHydrate";
+
+/* Class = "UILabel"; text = "750ml"; ObjectID = "ocS-6z-OwM"; */
+"ocS-6z-OwM.text" = "750ml";
+
+/* Class = "UILabel"; text = "300ml"; ObjectID = "sdP-iI-Na9"; */
+"sdP-iI-Na9.text" = "300ml";
+
+/* Class = "UIButton"; normalTitle = " History "; ObjectID = "wLA-TR-sU9"; */
+"wLA-TR-sU9.normalTitle" = " History ";
