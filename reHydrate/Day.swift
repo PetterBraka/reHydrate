@@ -7,19 +7,20 @@
 //
 
 import UIKit
+import FSCalendar
 
 class Day: NSObject {
     var date: Date
-    var goalAmount: Double
-    var consumedAmount: Double
+    var goalAmount: Drink
+    var consumedAmount: Drink
 
     override init() {
         self.date = Date.init()
-        self.goalAmount = 0
-        self.consumedAmount = 0
+        self.goalAmount = Drink.init()
+        self.consumedAmount = Drink.init()
     }
     
-    init(_ date: Date, _ goalAmount: Double, _ consumedAmount: Double) {
+    init(_ date: Date, _ goalAmount: Drink, _ consumedAmount: Drink) {
         self.date = date
         self.goalAmount = goalAmount
         self.consumedAmount = consumedAmount
