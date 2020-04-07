@@ -13,6 +13,7 @@
 		3378767E24378A9400F5A732 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378767C24378A9400F5A732 /* Main.storyboard */; };
 		3378768024378A9800F5A732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3378767F24378A9800F5A732 /* Assets.xcassets */; };
 		3378768324378A9800F5A732 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378768124378A9800F5A732 /* LaunchScreen.storyboard */; };
+		33CD6D5A243BE56A00EF0335 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		33FC8427243A47A800848B7C /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8426243A47A800848B7C /* Drink.swift */; };
 		33FC8429243A4A2600848B7C /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8428243A4A2600848B7C /* Day.swift */; };
 		33FC842F243B992600848B7C /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarView.swift */; };
@@ -27,7 +28,7 @@
 		3378767D24378A9400F5A732 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3378768224378A9800F5A732 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		3378768424378A9800F5A732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33CD6D58243BE53B00EF0335 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		33FC8426243A47A800848B7C /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
 		33FC8428243A4A2600848B7C /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		33FC842E243B992600848B7C /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */,
+				33CD6D5A243BE56A00EF0335 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +80,6 @@
 				3378767C24378A9400F5A732 /* Main.storyboard */,
 				3378767F24378A9800F5A732 /* Assets.xcassets */,
 				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
-				3378768424378A9800F5A732 /* Info.plist */,
 			);
 			path = reHydrate;
 			sourceTree = "<group>";
@@ -95,6 +96,7 @@
 		F887073E19DFDDCFF694E7E8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				33CD6D58243BE53B00EF0335 /* HealthKit.framework */,
 				57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */,
 			);
 			name = Frameworks;
@@ -365,6 +367,7 @@
 			baseConfigurationReference = B204E91E4654643981AEA857 /* Pods-reHydrate.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = reHydrate/Info.plist;
@@ -385,6 +388,7 @@
 			baseConfigurationReference = 5A4C495ADD1C849E22BAE45E /* Pods-reHydrate.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = reHydrate/Info.plist;
