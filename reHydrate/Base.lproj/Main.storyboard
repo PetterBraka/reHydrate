@@ -236,7 +236,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="setAbout" destination="BYZ-38-t0r" eventType="touchUpInside" id="FTl-BP-4XP"/>
+                                    <action selector="about:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OBr-cO-QTG"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -257,6 +257,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="u6A-3G-Jw4"/>
                     <connections>
+                        <outlet property="aboutButton" destination="bRX-89-1yb" id="djM-zv-Sjp"/>
                         <outlet property="currentDay" destination="JhD-0d-RlU" id="Lfo-Qr-yGq"/>
                         <outlet property="historyButton" destination="wLA-TR-sU9" id="yQh-4F-fse"/>
                         <outlet property="largeOption" destination="R8b-pY-RjC" id="CYQ-fz-BBk"/>
@@ -264,7 +265,6 @@
                         <outlet property="mediumOption" destination="0oB-mO-Gxs" id="WIM-V2-cMu"/>
                         <outlet property="mediumStack" destination="CIL-V5-4d0" id="N2k-8T-Ulo"/>
                         <outlet property="optionsStack" destination="30z-KG-YOx" id="1Ru-EN-Ofk"/>
-                        <outlet property="settingsButton" destination="bRX-89-1yb" id="vWt-dh-PMJ"/>
                         <outlet property="smallOption" destination="wib-TY-MgY" id="QXf-4i-JBT"/>
                         <outlet property="smallStack" destination="CIL-V5-4d0" id="9pu-TH-C7w"/>
                         <outlet property="sumaryAndGoal" destination="EaB-HY-8l5" id="Oor-QK-vno"/>
