@@ -13,8 +13,8 @@ class StartView: UIViewController {
 
     @IBOutlet weak var currentDay: UILabel!
     @IBOutlet weak var historyButton: UIButton!
-    @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var optionsStack: UIStackView!
+    @IBOutlet weak var aboutButton: UIButton!
     @IBOutlet weak var smallStack: UIStackView!
     @IBOutlet weak var mediumStack: UIStackView!
     @IBOutlet weak var largeStack: UIStackView!
@@ -130,10 +130,10 @@ class StartView: UIViewController {
         historyButton.layer.borderColor = UIColor.darkGray.cgColor
         historyButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
-        settingsButton.layer.cornerRadius = 20
-        settingsButton.layer.borderWidth = 3
-        settingsButton.layer.borderColor = UIColor.darkGray.cgColor
-        settingsButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        aboutButton.layer.cornerRadius = 20
+        aboutButton.layer.borderWidth = 3
+        aboutButton.layer.borderColor = UIColor.darkGray.cgColor
+        aboutButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
     
     func getDrinkAmount(_ optionStack: UIStackView)-> Int {
