@@ -23,7 +23,7 @@ class StartView: UIViewController {
     @IBOutlet weak var mediumOption: UIButton!
     @IBOutlet weak var largeOption: UIButton!
     
-    @IBAction func settings(_ sender: Any) {
+    @IBAction func about(_ sender: Any) {
         let alert = UIAlertController(title: "error", message: "This option is not implemented yet", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -40,24 +40,42 @@ class StartView: UIViewController {
         switch sender.view {
         case smallOption:
             print("small short-press")
+            let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType = "water"
+            let date = Date.init()
+            let drink = Drink.init(drinkType, drinkAmount, date)
+            updateConsumtion(drink)
         case mediumOption:
             print("medium short-press")
+            let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType = "water"
+            let date = Date.init()
+            let drink = Drink.init(drinkType, drinkAmount, date)
+            updateConsumtion(drink)
         case largeOption:
             print("large short-press")
+            let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType = "water"
+            let date = Date.init()
+            let drink = Drink.init(drinkType, drinkAmount, date)
+            updateConsumtion(drink)
         default:
             break
         }
     }
+    
     @objc func long(_ sender: UIGestureRecognizer){
-        switch sender.view {
-        case smallOption:
-            print("small short-press")
-        case mediumOption:
-            print("medium short-press")
-        case largeOption:
-            print("large short-press")
-        default:
-            break
+        if sender.state == .began {
+            switch sender.view {
+            case smallOption:
+                print("small long-press")
+            case mediumOption:
+                print("medium long-press")
+            case largeOption:
+                print("large long-press")
+            default:
+                break
+            }
         }
     }
     
@@ -71,6 +89,18 @@ class StartView: UIViewController {
         Thread.sleep(forTimeInterval: 0.5)
     }
     
+    /**
+     Setting upp the listeners and aperients of the buttons.
+    
+     # Example #
+     ```
+     override func viewDidLoad() {
+        super.viewDidLoad()
+        setUpButtons()
+            
+    }
+     ```
+     */
     func setUpButtons(){
         //setting up an gesture recognizer for each button.
         let smallOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
@@ -104,6 +134,32 @@ class StartView: UIViewController {
         settingsButton.layer.borderWidth = 3
         settingsButton.layer.borderColor = UIColor.darkGray.cgColor
         settingsButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    }
+    
+    func getDrinkAmount(_ optionStack: UIStackView)-> Int {
+        var amount = Int.init()
+        for view in optionStack.subviews {
+            if view is UILabel{
+                let label = view as! UILabel
+                var stringAmount = label.text
+                _ = stringAmount?.popLast()
+                _ = stringAmount?.popLast()
+                amount = Int(stringAmount!)!
+            }
+        }
+        return amount
+    }
+    
+    func updateConsumtion(_ consumedDrink: Drink) {
+        for view in sumaryAndGoal.subviews {
+            let label = view as! UILabel
+            if label.tag == 1{
+                var consumed = Double(label.text!)!
+                let amount = Measurement(value: Double(consumedDrink.amountOfDrink), unit: UnitVolume.milliliters)
+                consumed = amount.converted(to: UnitVolume.liters).value + Double(label.text!)!
+                label.text = String(format: "%.1f", consumed)
+            }
+        }
     }
 
 }
