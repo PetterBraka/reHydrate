@@ -7,10 +7,10 @@
 //
 
 import UIKit
+import CoreData
 import FSCalendar
 
 class StartView: UIViewController {
-
     @IBOutlet weak var currentDay: UILabel!
     @IBOutlet weak var historyButton: UIButton!
     @IBOutlet weak var optionsStack: UIStackView!
@@ -18,10 +18,14 @@ class StartView: UIViewController {
     @IBOutlet weak var smallStack: UIStackView!
     @IBOutlet weak var mediumStack: UIStackView!
     @IBOutlet weak var largeStack: UIStackView!
-    @IBOutlet weak var sumaryAndGoal: UIStackView!
+    @IBOutlet weak var consumedAmount: UILabel!
+    @IBOutlet weak var goalAmount: UILabel!
     @IBOutlet weak var smallOption: UIButton!
     @IBOutlet weak var mediumOption: UIButton!
     @IBOutlet weak var largeOption: UIButton!
+    
+    let defaults = UserDefaults.standard
+    
     
     @IBAction func about(_ sender: Any) {
         let alert = UIAlertController(title: "error", message: "This option is not implemented yet", preferredStyle: .alert)
@@ -62,6 +66,7 @@ class StartView: UIViewController {
         default:
             break
         }
+        saveConsumed()
     }
     
     @objc func long(_ sender: UIGestureRecognizer){
@@ -79,8 +84,36 @@ class StartView: UIViewController {
         }
     }
     
+    func saveConsumed() {
+        defaults.set(consumedAmount.text, forKey: "consumed")
+    }
+    
+    func checkForSave(){
+        let drinkConsumed = defaults.value(forKey: "consumed") as? String ?? "0"
+        print(drinkConsumed)
+        consumedAmount.text = drinkConsumed
+        
+    }
+    
+    @objc func appMovedToBackground(){
+        defaults.set(Date.init(), forKey: "date")
+    }
+    
+    @objc func appMovedToForground(){
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/mm/yy"
+        let dateSaved = defaults.value(forKey: "date") as? Date ?? Date.init()
+        let today = Date.init()
+        if formatter.string(from: today) == formatter.string(from: dateSaved) {
+            checkForSave()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let notificationsCenter = NotificationCenter.default
+        notificationsCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+        notificationsCenter.addObserver(self, selector: #selector(appMovedToForground), name: UIApplication.willEnterForegroundNotification, object: nil)
         setUpButtons()
         
         let formatter = DateFormatter()
@@ -88,6 +121,7 @@ class StartView: UIViewController {
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
     }
+
     
     /**
      Setting upp the listeners and aperients of the buttons.
@@ -150,16 +184,12 @@ class StartView: UIViewController {
         return amount
     }
     
-    func updateConsumtion(_ consumedDrink: Drink) {
-        for view in sumaryAndGoal.subviews {
-            let label = view as! UILabel
-            if label.tag == 1{
-                var consumed = Double(label.text!)!
-                let amount = Measurement(value: Double(consumedDrink.amountOfDrink), unit: UnitVolume.milliliters)
-                consumed = amount.converted(to: UnitVolume.liters).value + Double(label.text!)!
-                label.text = String(format: "%.1f", consumed)
-            }
-        }
+    func updateConsumtion(_ drinkConsumed: Drink) {
+        var consumedL = Double(consumedAmount.text!)!
+        let amountml = Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
+        consumedL = amountml.converted(to: UnitVolume.liters).value + Double(consumedAmount.text!)!
+        consumedAmount.text = String(format: "%.1f", consumedL)
+        drinkConsumed.amountOfDrink = Int(consumedL)
     }
 
 }

@@ -15,7 +15,7 @@ class Drink: NSObject {
     var dateOfIntake: Date
     
     override init() {
-        self.typeOfDrink = String()
+        self.typeOfDrink = ""
         self.amountOfDrink = 0
         self.dateOfIntake = Date()
     }
