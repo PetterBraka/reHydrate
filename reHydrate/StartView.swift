@@ -42,6 +42,7 @@ class StartView: UIViewController {
     
     @objc func tap(_ sender: UIGestureRecognizer){
         let date = Date.init()
+        
         switch sender.view {
         case smallOption:
             print("small short-press")
@@ -93,6 +94,7 @@ class StartView: UIViewController {
                 break
             }
             updateConsumtion(drink)
+            saveConsumed()
         }
     }
     
