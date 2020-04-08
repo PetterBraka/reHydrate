@@ -9,7 +9,7 @@
 import UIKit
 import FSCalendar
 
-class Day: NSObject {
+public class Day: NSObject {
     var date: Date
     var goalAmount: Drink
     var consumedAmount: Drink
