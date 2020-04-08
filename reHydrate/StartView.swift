@@ -41,26 +41,24 @@ class StartView: UIViewController {
     }
     
     @objc func tap(_ sender: UIGestureRecognizer){
+        let date = Date.init()
         switch sender.view {
         case smallOption:
             print("small short-press")
             let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
             let drinkType = "water"
-            let date = Date.init()
             let drink = Drink.init(drinkType, drinkAmount, date)
             updateConsumtion(drink)
         case mediumOption:
             print("medium short-press")
             let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
             let drinkType = "water"
-            let date = Date.init()
             let drink = Drink.init(drinkType, drinkAmount, date)
             updateConsumtion(drink)
         case largeOption:
             print("large short-press")
             let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
             let drinkType = "water"
-            let date = Date.init()
             let drink = Drink.init(drinkType, drinkAmount, date)
             updateConsumtion(drink)
         default:
@@ -71,16 +69,30 @@ class StartView: UIViewController {
     
     @objc func long(_ sender: UIGestureRecognizer){
         if sender.state == .began {
+            let drink = Drink.init()
             switch sender.view {
             case smallOption:
                 print("small long-press")
+                let drinkAmount = -getDrinkAmount(sender.view?.superview as! UIStackView)
+                let drinkType = "water"
+                drink.amountOfDrink = drinkAmount
+                drink.typeOfDrink = drinkType
             case mediumOption:
                 print("medium long-press")
+                let drinkAmount = -getDrinkAmount(sender.view?.superview as! UIStackView)
+                let drinkType = "water"
+                drink.amountOfDrink = drinkAmount
+                drink.typeOfDrink = drinkType
             case largeOption:
                 print("large long-press")
+                let drinkAmount = -getDrinkAmount(sender.view?.superview as! UIStackView)
+                let drinkType = "water"
+                drink.amountOfDrink = drinkAmount
+                drink.typeOfDrink = drinkType
             default:
                 break
             }
+            updateConsumtion(drink)
         }
     }
     
@@ -131,7 +143,6 @@ class StartView: UIViewController {
      override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
-            
     }
      ```
      */
