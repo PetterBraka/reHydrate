@@ -11,19 +11,26 @@ import FSCalendar
 
 class Drink: NSObject {
     var typeOfDrink: String
-    var amountOfDrink: Int
-    var dateOfIntake: Date
+    var amountOfDrink: Float
     
     override init() {
         self.typeOfDrink = ""
         self.amountOfDrink = 0
-        self.dateOfIntake = Date()
     }
     
-    init(_ drinkType:String, _ drinkAmount: Int, _ intakeDate: Date ) {
+    init(_ drinkType:String, _ drinkAmount: Float) {
         self.typeOfDrink = drinkType
         self.amountOfDrink = drinkAmount
-        self.dateOfIntake = intakeDate
+    }
+    
+    public func saveDrink() {
+        UserDefaults.standard.set(typeOfDrink, forKey: "drinkType")
+        UserDefaults.standard.set(amountOfDrink, forKey: "drinkVolume")
+    }
+    
+    public func loadDrink() {
+        typeOfDrink = UserDefaults.standard.value(forKey: "drinkType") as? String ?? ""
+        amountOfDrink = UserDefaults.standard.value(forKey: "drinkVolume") as? Float ?? 0
     }
     
     /**

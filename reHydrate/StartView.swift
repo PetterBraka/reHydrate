@@ -25,6 +25,7 @@ class StartView: UIViewController {
     @IBOutlet weak var largeOption: UIButton!
     
     let defaults = UserDefaults.standard
+    var today = Day.init()
     
     
     @IBAction func about(_ sender: Any) {
@@ -41,31 +42,30 @@ class StartView: UIViewController {
     }
     
     @objc func tap(_ sender: UIGestureRecognizer){
-        let date = Date.init()
-        
+        let drink = Drink.init()
         switch sender.view {
         case smallOption:
             print("small short-press")
             let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
             let drinkType = "water"
-            let drink = Drink.init(drinkType, drinkAmount, date)
-            updateConsumtion(drink)
+            drink.amountOfDrink = drinkAmount
+            drink.typeOfDrink = drinkType
         case mediumOption:
             print("medium short-press")
             let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
             let drinkType = "water"
-            let drink = Drink.init(drinkType, drinkAmount, date)
-            updateConsumtion(drink)
+            drink.amountOfDrink = drinkAmount
+            drink.typeOfDrink = drinkType
         case largeOption:
             print("large short-press")
             let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
             let drinkType = "water"
-            let drink = Drink.init(drinkType, drinkAmount, date)
-            updateConsumtion(drink)
+            drink.amountOfDrink = drinkAmount
+            drink.typeOfDrink = drinkType
         default:
             break
         }
-        saveConsumed()
+        updateConsumtion(drink)
     }
     
     @objc func long(_ sender: UIGestureRecognizer){
@@ -94,44 +94,27 @@ class StartView: UIViewController {
                 break
             }
             updateConsumtion(drink)
-            saveConsumed()
         }
-    }
-    
-    func saveConsumed() {
-        defaults.set(consumedAmount.text, forKey: "consumed")
-    }
-    
-    func checkForSave(){
-        let drinkConsumed = defaults.value(forKey: "consumed") as? String ?? "0"
-        print(drinkConsumed)
-        consumedAmount.text = drinkConsumed
-        
     }
     
     @objc func appMovedToBackground(){
         defaults.set(Date.init(), forKey: "date")
     }
     
-    @objc func appMovedToForground(){
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/mm/yy"
-        let dateSaved = defaults.value(forKey: "date") as? Date ?? Date.init()
-        let today = Date.init()
-        if formatter.string(from: today) == formatter.string(from: dateSaved) {
-            checkForSave()
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let notificationsCenter = NotificationCenter.default
-        notificationsCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
-        notificationsCenter.addObserver(self, selector: #selector(appMovedToForground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        notificationsCenter.addObserver(self, selector: #selector(appMovedToBackground),
+                                        name: UIApplication.willEnterForegroundNotification, object: nil)
         setUpButtons()
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE - dd/MM/yy"
+        formatter.dateFormat = "EEEE - dd/mm/yy"
+        let dateSaved = defaults.value(forKey: "date") as? Date ?? Date.init()
+        if formatter.string(from: Date.init()) == formatter.string(from: dateSaved) {
+            today.loadDay()
+        }
+        updateUI()
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
     }
@@ -183,27 +166,41 @@ class StartView: UIViewController {
         aboutButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
     
-    func getDrinkAmount(_ optionStack: UIStackView)-> Int {
-        var amount = Int.init()
+    func getDrinkAmount(_ optionStack: UIStackView)-> Float {
+        var amount = Float.init()
         for view in optionStack.subviews {
             if view is UILabel{
                 let label = view as! UILabel
                 var stringAmount = label.text
                 _ = stringAmount?.popLast()
                 _ = stringAmount?.popLast()
-                amount = Int(stringAmount!)!
+                amount = Float(stringAmount!)!
             }
         }
+        amount = convertToL(Double(amount))
         return amount
+    }
+    
+    func convertToL(_ milliliters: Double) -> Float {
+        var measurment = Measurement(value: milliliters, unit: UnitVolume.milliliters)
+        measurment.convert(to: UnitVolume.liters)
+        return Float(measurment.value)
     }
     
     func updateConsumtion(_ drinkConsumed: Drink) {
         var consumedL = Double(consumedAmount.text!)!
-        let amountml = Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
-        consumedL = amountml.converted(to: UnitVolume.liters).value + Double(consumedAmount.text!)!
-        consumedAmount.text = String(format: "%.1f", consumedL)
-        drinkConsumed.amountOfDrink = Int(consumedL)
+        consumedL = Double(drinkConsumed.amountOfDrink) + Double(consumedAmount.text!)!
+        drinkConsumed.amountOfDrink = Float(consumedL)
+        today.consumedAmount = drinkConsumed
+        updateUI()
     }
-
+    
+    func updateUI(){
+        today.saveDay()
+        if today.consumedAmount.amountOfDrink <= 0 {
+            consumedAmount.text = "0"
+        } else{
+            consumedAmount.text = String(format: "%.1f",today.consumedAmount.amountOfDrink)
+        }
+    }
 }
-
