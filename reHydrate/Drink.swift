@@ -13,12 +13,31 @@ class Drink: NSObject, Codable {
     var typeOfDrink: String
     var amountOfDrink: Float
     
+    /**
+     Default initializer for **Drink**
+     
+     # Example #
+     ```
+     var drink = Drink.init()
+     ```
+     */
     required override init() {
         self.typeOfDrink = "water"
         self.amountOfDrink = 0
     }
 
-    init(typeOfDrink: String,amountOfDrink: Float ) {
+    /**
+     Initializer for Drink
+     
+     - parameter typeOfDrink: - The type of drink.
+     - parameter amountOfDrink: - The amount of drink.
+    
+     # Example #
+     ```
+     var drink = Drink.inti("water", 1.2)
+     ```
+     */
+    init(typeOfDrink: String, amountOfDrink: Float ) {
         self.typeOfDrink = typeOfDrink
         self.amountOfDrink = amountOfDrink
     }

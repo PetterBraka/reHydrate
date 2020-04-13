@@ -14,23 +14,53 @@ public class Day: NSObject, Codable {
     var goalAmount: Drink
     var consumedAmount: Drink
     
+    /**
+     Default initializer for **Day**
+    
+     # Example #
+     ```
+     let day = Day.init()
+     ```
+     */
     required override init() {
         self.date = Date.init()
         self.goalAmount = Drink.init()
         self.consumedAmount = Drink.init()
     }
     
-    init(date: Date, goalAmount: Drink,consumedAmount: Drink ) {
+    /**
+     Initializer for **Day**
+     
+     - parameter date: - The date.
+     - parameter goalAmount: - The drink with the users goal
+     - parameter consumedAmount: - The drinks consumed
+     
+     # Example #
+     ```
+     let day = Day.init(Date.init(), 3, 1.2)
+     ```
+     */
+    init(date: Date, goalAmount: Drink, consumedAmount: Drink ) {
         self.date = date
         self.goalAmount = goalAmount
         self.consumedAmount = consumedAmount
         
     }
     
-    
-    static func saveDay(_ day : [Day]) {
+    /**
+     Saves an array of **Day**s
+     
+     - parameter days: - The days you want to save.
+     - warning: will print a waring if the days can't be encoded and saved.
+     
+     # Example #
+     ```
+     Day.saveDay(days)
+     ```
+     */
+    static func saveDay(_ days : [Day]) {
         do {
-            let object = try JSONEncoder().encode(day)
+            let object = try JSONEncoder().encode(days)
             UserDefaults.standard.set(object, forKey: "days")
         } catch {
             print(error)
@@ -39,6 +69,17 @@ public class Day: NSObject, Codable {
         
     }
     
+    /**
+     Loads and prints an array of **Day**s saved. If there is no thing saved it will print an error code.
+     
+     - warning: Will return an error if the array saved is not of type **Day**
+     - warning: If there are no save it will print an error saying: "Can't retrive data from key used (day) in user defaults"
+     
+     # Example #
+     ```
+     days = Day.loadDay()
+     ```
+     */
     static func loadDay()-> [Day] {
         let decoder = JSONDecoder()
         if  let object = UserDefaults.standard.value(forKey: "days") as? Data {
