@@ -98,17 +98,16 @@ class StartView: UIViewController {
         }
     }
     
-    @objc func appMovedToBackground(){
-        defaults.set(Date.init(), forKey: "date")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let notificationsCenter = NotificationCenter.default
-        notificationsCenter.addObserver(self, selector: #selector(appMovedToBackground),
-                                        name: UIApplication.willEnterForegroundNotification, object: nil)
         setUpButtons()
+        
+//        Too clean the UserDate use the code commented out
+//
+//        let domain = Bundle.main.bundleIdentifier!
+//        UserDefaults.standard.removePersistentDomain(forName: domain)
+//        UserDefaults.standard.synchronize()
+        
         today.goalAmount.amountOfDrink = 3
         formatter.dateFormat = "EEEE - dd/MM/yy"
         days = Day.loadDay()
@@ -121,7 +120,6 @@ class StartView: UIViewController {
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
     }
-    
     
     /**
      Setting upp the listeners and aperients of the buttons.
@@ -169,6 +167,20 @@ class StartView: UIViewController {
         aboutButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
     
+    /**
+     will return the amount off drink
+     
+     - parameter optionStack: - **UIStackView** containg the button and the label under the button.
+     - returns: A **Float** with the amount.
+     
+     # Notes: #
+     1. paramenters the **UIStackView** containg the button clicked on and the label describing the value of the button.
+     
+     # Example #
+     ```
+     let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
+     ```
+     */
     func getDrinkAmount(_ optionStack: UIStackView)-> Float {
         var amount = Float.init()
         for view in optionStack.subviews {
@@ -184,12 +196,39 @@ class StartView: UIViewController {
         return amount
     }
     
+    /**
+     Converts an value parst inn of type **milliliters**
+     
+     - parameter milliliters: - An value in milliliters.
+     - returns: A **Float** of the amount in liters
+     
+     # Notes: #
+     1. Paramenters must be milliters. It will only convert from millilters to liters.
+     
+     # Example #
+     ```
+     amount = convertToL(Double(amount))
+     ```
+     */
     func convertToL(_ milliliters: Double) -> Float {
         var measurment = Measurement(value: milliliters, unit: UnitVolume.milliliters)
         measurment.convert(to: UnitVolume.liters)
         return Float(measurment.value)
     }
     
+    /**
+     Updates the amount consumed in the Day
+     
+     - parameter drinkConsumed: - The drink the user chose.
+     
+     # Notes: #
+     1. Parameters Must be the drink being added to the day
+     
+     # Example #
+     ```
+     updateConsumtion(drink)
+     ```
+     */
     func updateConsumtion(_ drinkConsumed: Drink) {
         var consumedL = Double(consumedAmount.text!)!
         consumedL = Double(drinkConsumed.amountOfDrink) + Double(consumedAmount.text!)!
@@ -199,6 +238,19 @@ class StartView: UIViewController {
         updateUI()
     }
     
+    /**
+     Adds or updates the day in an array of days
+     
+     - parameter dayToInsert: -  An day to insert in an array.
+     
+     # Notes: #
+     1. Parameters must be of type Day
+     
+     # Example #
+     ```
+     insertDay(today)
+     ```
+     */
     func insertDay(_ dayToInsert: Day){
         formatter.dateFormat = "EEEE - dd/MM/yy"
         let date = formatter.string(from: dayToInsert.date)
@@ -216,8 +268,18 @@ class StartView: UIViewController {
         }
     }
     
+    /**
+     Updates the consumed amount in the UI
+     
+     # Notes: #
+     1. Should be called when the amount off drinks has been changed
+     
+     # Example #
+     ```
+     updateUI()
+     ```
+     */
     func updateUI(){
-        //today.saveDay()
         Day.saveDay(days)
         if today.consumedAmount.amountOfDrink <= 0 {
             consumedAmount.text = "0"
