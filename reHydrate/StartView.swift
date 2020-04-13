@@ -25,8 +25,9 @@ class StartView: UIViewController {
     @IBOutlet weak var largeOption: UIButton!
     
     let defaults = UserDefaults.standard
+    var days: [Day] = []
     var today = Day.init()
-    
+    let formatter = DateFormatter()
     
     @IBAction func about(_ sender: Any) {
         let alert = UIAlertController(title: "error", message: "This option is not implemented yet", preferredStyle: .alert)
@@ -103,32 +104,34 @@ class StartView: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let notificationsCenter = NotificationCenter.default
         notificationsCenter.addObserver(self, selector: #selector(appMovedToBackground),
                                         name: UIApplication.willEnterForegroundNotification, object: nil)
         setUpButtons()
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE - dd/mm/yy"
-        let dateSaved = defaults.value(forKey: "date") as? Date ?? Date.init()
-        if formatter.string(from: Date.init()) == formatter.string(from: dateSaved) {
-            today.loadDay()
+        today.goalAmount.amountOfDrink = 3
+        formatter.dateFormat = "EEEE - dd/MM/yy"
+        days = Day.loadDay()
+        for day in days {
+            if formatter.string(from: day.date) == formatter.string(from: Date.init()){
+                today = day
+            }
         }
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
     }
-
+    
     
     /**
      Setting upp the listeners and aperients of the buttons.
-    
+     
      # Example #
      ```
      override func viewDidLoad() {
-        super.viewDidLoad()
-        setUpButtons()
-    }
+     super.viewDidLoad()
+     setUpButtons()
+     }
      ```
      */
     func setUpButtons(){
@@ -136,11 +139,11 @@ class StartView: UIViewController {
         let smallOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
         let smallOptionLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
         smallOptionLongGesture.minimumPressDuration = 0.5
-
+        
         let mediumOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
         let mediumOptionLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
         mediumOptionLongGesture.minimumPressDuration = 0.5
-
+        
         let largeOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
         let largeOptionLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
         largeOptionLongGesture.minimumPressDuration = 0.5
@@ -149,7 +152,7 @@ class StartView: UIViewController {
         smallOption.addGestureRecognizer(smallOptionTapGesture)
         mediumOption.addGestureRecognizer(mediumOptionTapGesture)
         largeOption.addGestureRecognizer(largeOptionTapGesture)
-
+        
         smallOption.addGestureRecognizer(smallOptionLongGesture)
         mediumOption.addGestureRecognizer(mediumOptionLongGesture)
         largeOption.addGestureRecognizer(largeOptionLongGesture)
@@ -192,13 +195,33 @@ class StartView: UIViewController {
         consumedL = Double(drinkConsumed.amountOfDrink) + Double(consumedAmount.text!)!
         drinkConsumed.amountOfDrink = Float(consumedL)
         today.consumedAmount = drinkConsumed
+        insertDay(today)
         updateUI()
     }
     
+    func insertDay(_ dayToInsert: Day){
+        formatter.dateFormat = "EEEE - dd/MM/yy"
+        let date = formatter.string(from: dayToInsert.date)
+        if days.isEmpty {
+            days.append(dayToInsert)
+        } else {
+            for day in days {
+                let secondDate = formatter.string(from: day.date)
+                if date == secondDate {
+                    days[days.firstIndex(of: dayToInsert)!] = dayToInsert
+                } else {
+                    days.append(dayToInsert)
+                }
+            }
+        }
+    }
+    
     func updateUI(){
-        today.saveDay()
+        //today.saveDay()
+        Day.saveDay(days)
         if today.consumedAmount.amountOfDrink <= 0 {
             consumedAmount.text = "0"
+            today.consumedAmount.amountOfDrink = 0.0
         } else{
             consumedAmount.text = String(format: "%.1f",today.consumedAmount.amountOfDrink)
         }

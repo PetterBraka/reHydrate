@@ -9,28 +9,18 @@
 import UIKit
 import FSCalendar
 
-class Drink: NSObject {
+class Drink: NSObject, Codable {
     var typeOfDrink: String
     var amountOfDrink: Float
     
-    override init() {
-        self.typeOfDrink = ""
+    required override init() {
+        self.typeOfDrink = "water"
         self.amountOfDrink = 0
     }
-    
-    init(_ drinkType:String, _ drinkAmount: Float) {
-        self.typeOfDrink = drinkType
-        self.amountOfDrink = drinkAmount
-    }
-    
-    public func saveDrink() {
-        UserDefaults.standard.set(typeOfDrink, forKey: "drinkType")
-        UserDefaults.standard.set(amountOfDrink, forKey: "drinkVolume")
-    }
-    
-    public func loadDrink() {
-        typeOfDrink = UserDefaults.standard.value(forKey: "drinkType") as? String ?? ""
-        amountOfDrink = UserDefaults.standard.value(forKey: "drinkVolume") as? Float ?? 0
+
+    init(typeOfDrink: String,amountOfDrink: Float ) {
+        self.typeOfDrink = typeOfDrink
+        self.amountOfDrink = amountOfDrink
     }
     
     /**
