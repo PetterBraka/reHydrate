@@ -7,22 +7,61 @@
 //
 
 import UIKit
+import FSCalendar
 
-class Drink: NSObject {
+class Drink: NSObject, Codable {
     var typeOfDrink: String
-    var amountOfDrink: Int
-    var dateOfIntake: Date
+    var amountOfDrink: Float
     
-    override init() {
-        self.typeOfDrink = String()
+    /**
+     Default initializer for **Drink**
+     
+     # Example #
+     ```
+     var drink = Drink.init()
+     ```
+     */
+    required override init() {
+        self.typeOfDrink = "water"
         self.amountOfDrink = 0
-        self.dateOfIntake = Date()
-    }
-    
-    init(_ drinkType:String, _ drinkAmount: Int, _ intakeDate: Date ) {
-        self.typeOfDrink = drinkType
-        self.amountOfDrink = drinkAmount
-        self.dateOfIntake = intakeDate
     }
 
+    /**
+     Initializer for Drink
+     
+     - parameter typeOfDrink: - The type of drink.
+     - parameter amountOfDrink: - The amount of drink.
+    
+     # Example #
+     ```
+     var drink = Drink.inti("water", 1.2)
+     ```
+     */
+    init(typeOfDrink: String, amountOfDrink: Float ) {
+        self.typeOfDrink = typeOfDrink
+        self.amountOfDrink = amountOfDrink
+    }
+    
+    /**
+     Compair the the trype of drink based.
+     
+     - parameter compairTo: The **Drink** the user want to compair too..
+     - returns: **true** if equal or **false** if not
+     
+     # Example #
+     ```
+      if drinkOne.isTypeSame(drinkTwo){
+        // do something
+     }
+     ```
+     */
+    func isTypeSame(_ compairTo: Drink) -> Bool {
+        if typeOfDrink.lowercased() == compairTo.typeOfDrink.lowercased(){
+            return true
+        } else{
+            return false
+        }
+    }
+    
+    
 }
