@@ -9,21 +9,37 @@
 import UIKit
 import FSCalendar
 
-class Drink: NSObject {
+class Drink: NSObject, Codable {
     var typeOfDrink: String
-    var amountOfDrink: Int
-    var dateOfIntake: Date
+    var amountOfDrink: Float
     
-    override init() {
-        self.typeOfDrink = String()
+    /**
+     Default initializer for **Drink**
+     
+     # Example #
+     ```
+     var drink = Drink.init()
+     ```
+     */
+    required override init() {
+        self.typeOfDrink = "water"
         self.amountOfDrink = 0
-        self.dateOfIntake = Date()
     }
+
+    /**
+     Initializer for Drink
+     
+     - parameter typeOfDrink: - The type of drink.
+     - parameter amountOfDrink: - The amount of drink.
     
-    init(_ drinkType:String, _ drinkAmount: Int, _ intakeDate: Date ) {
-        self.typeOfDrink = drinkType
-        self.amountOfDrink = drinkAmount
-        self.dateOfIntake = intakeDate
+     # Example #
+     ```
+     var drink = Drink.inti("water", 1.2)
+     ```
+     */
+    init(typeOfDrink: String, amountOfDrink: Float ) {
+        self.typeOfDrink = typeOfDrink
+        self.amountOfDrink = amountOfDrink
     }
     
     /**
