@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CalendarView: UIViewController {
+class CalendarVC: UIViewController {
     @IBAction func exit(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
