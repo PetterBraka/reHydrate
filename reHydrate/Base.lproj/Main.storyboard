@@ -69,8 +69,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- Drink type:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WZL-rC-0ki">
-                                                    <rect key="frame" x="30" y="43" width="120" height="24"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- Drink type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WZL-rC-0ki">
+                                                    <rect key="frame" x="30" y="43" width="114.5" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="24" id="lEh-Ye-kb8"/>
                                                     </constraints>
@@ -78,8 +78,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- Drink amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I15-3w-xBW">
-                                                    <rect key="frame" x="30" y="69.5" width="151.5" height="24"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- Drink amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I15-3w-xBW">
+                                                    <rect key="frame" x="30" y="69.5" width="146" height="24"/>
                                                     <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -115,6 +115,7 @@
                                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="amountOfDrink" destination="cbR-UB-M5N" id="Mgy-h8-igo"/>
+                                            <outlet property="titleOfCard" destination="tSp-aA-qiT" id="SpG-LA-3D5"/>
                                             <outlet property="typeOfDrink" destination="HOt-P7-p8O" id="5yK-ni-vJP"/>
                                         </connections>
                                     </tableViewCell>
@@ -135,6 +136,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="zB7-Ov-Qvx"/>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="uvX-sI-VpH" id="BXc-M8-Kiw"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ODf-g0-l9z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
