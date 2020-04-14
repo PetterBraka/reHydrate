@@ -18,8 +18,8 @@ class StartView: UIViewController {
     @IBOutlet weak var smallStack: UIStackView!
     @IBOutlet weak var mediumStack: UIStackView!
     @IBOutlet weak var largeStack: UIStackView!
-    @IBOutlet weak var consumedAmount: UILabel!
     @IBOutlet weak var goalAmount: UILabel!
+    @IBOutlet weak var consumedAmount: UILabel!
     @IBOutlet weak var smallOption: UIButton!
     @IBOutlet weak var mediumOption: UIButton!
     @IBOutlet weak var largeOption: UIButton!
@@ -30,7 +30,7 @@ class StartView: UIViewController {
     let formatter = DateFormatter()
     
     @IBAction func about(_ sender: Any) {
-        let alert = UIAlertController(title: "error", message: "This option is not implemented yet", preferredStyle: .alert)
+        let alert = UIAlertController(title: "error - about screen", message: "This option is not implemented yet", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -63,6 +63,10 @@ class StartView: UIViewController {
             let drinkType = "water"
             drink.amountOfDrink = drinkAmount
             drink.typeOfDrink = drinkType
+        case goalAmount:
+            let alert = UIAlertController(title: "error - change goal", message: "This option is not implemented yet", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         default:
             break
         }
@@ -98,12 +102,23 @@ class StartView: UIViewController {
         }
     }
     
+    /**
+     This function will be called if the user press the done button and are finiched entering a value.
+     
+     # Notes: #
+     it will call for handleInput and this will check for any updates in any of the text feilds.
+     */
+    @objc func doneClicked(){
+        view.endEditing(true)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
         
 //        Too clean the UserDate use the code commented out
-//
+
 //        let domain = Bundle.main.bundleIdentifier!
 //        UserDefaults.standard.removePersistentDomain(forName: domain)
 //        UserDefaults.standard.synchronize()
@@ -146,14 +161,18 @@ class StartView: UIViewController {
         let largeOptionLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
         largeOptionLongGesture.minimumPressDuration = 0.5
         
+        let changeGoalTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
+        
         //adding the gesture recognizer for each option.
         smallOption.addGestureRecognizer(smallOptionTapGesture)
         mediumOption.addGestureRecognizer(mediumOptionTapGesture)
         largeOption.addGestureRecognizer(largeOptionTapGesture)
+        goalAmount.addGestureRecognizer(changeGoalTapGesture)
         
         smallOption.addGestureRecognizer(smallOptionLongGesture)
         mediumOption.addGestureRecognizer(mediumOptionLongGesture)
         largeOption.addGestureRecognizer(largeOptionLongGesture)
+        
         
         //giving the buttons the aperients
         historyButton.layer.cornerRadius = 20
@@ -165,6 +184,7 @@ class StartView: UIViewController {
         aboutButton.layer.borderWidth = 3
         aboutButton.layer.borderColor = UIColor.darkGray.cgColor
         aboutButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
     }
     
     /**
@@ -253,17 +273,14 @@ class StartView: UIViewController {
      */
     func insertDay(_ dayToInsert: Day){
         formatter.dateFormat = "EEEE - dd/MM/yy"
-        let date = formatter.string(from: dayToInsert.date)
         if days.isEmpty {
             days.append(dayToInsert)
         } else {
-            for day in days {
-                let secondDate = formatter.string(from: day.date)
-                if date == secondDate {
-                    days[days.firstIndex(of: dayToInsert)!] = dayToInsert
-                } else {
-                    days.append(dayToInsert)
-                }
+            if days.contains(where: {formatter.string(from: $0.date) ==
+                formatter.string(from: dayToInsert.date) }) {
+                days[days.firstIndex(of: dayToInsert)!] = dayToInsert
+            } else {
+                days.append(dayToInsert)
             }
         }
     }
