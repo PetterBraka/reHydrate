@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import FSCalendar
 
-class StartView: UIViewController {
+class StartVC: UIViewController {
     @IBOutlet weak var currentDay: UILabel!
     @IBOutlet weak var historyButton: UIButton!
     @IBOutlet weak var optionsStack: UIStackView!
