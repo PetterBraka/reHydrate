@@ -29,19 +29,6 @@ class StartVC: UIViewController {
     var today = Day.init()
     let formatter = DateFormatter()
     
-    @IBAction func about(_ sender: Any) {
-        let alert = UIAlertController(title: "error - about screen", message: "This option is not implemented yet", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    @IBAction func history(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let calendarScreen = storyboard.instantiateViewController(withIdentifier: "calendar")
-        calendarScreen.modalPresentationStyle = .fullScreen
-        self.present(calendarScreen, animated: true, completion: nil)
-    }
-    
     @objc func tap(_ sender: UIGestureRecognizer){
         let drink = Drink.init()
         switch sender.view {
@@ -63,10 +50,6 @@ class StartVC: UIViewController {
             let drinkType = "water"
             drink.amountOfDrink = drinkAmount
             drink.typeOfDrink = drinkType
-        case goalAmount:
-            let alert = UIAlertController(title: "error - change goal", message: "This option is not implemented yet", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
         default:
             break
         }
@@ -95,11 +78,42 @@ class StartVC: UIViewController {
                 let drinkType = "water"
                 drink.amountOfDrink = drinkAmount
                 drink.typeOfDrink = drinkType
+            case goalAmount:
+                let alert = UIAlertController(title: "Change goal", message: "Can you enter the amount you want as a goal in liters?", preferredStyle: .alert)
+                alert.addTextField(configurationHandler: {(_ textField: UITextField) in
+                    textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                    textField.keyboardType = .decimalPad
+                    textField.textAlignment = .center
+                    textField.font = UIFont(name: "American typewriter", size: 18)
+                })
+                let doneButton = UIAlertAction(title: "done" , style: .default) {_ in
+                    let newGoal = (alert.textFields?.first!.text!)! as NSString
+                    if newGoal != "" {
+                        self.today.goalAmount.amountOfDrink = newGoal.floatValue
+                        self.updateUI()
+                    }
+                }
+                alert.addAction(doneButton)
+                self.present(alert, animated: true, completion: nil)
+                
             default:
                 break
             }
             updateConsumtion(drink)
         }
+    }
+    
+    @IBAction func about(_ sender: Any) {
+        let alert = UIAlertController(title: "error - about screen", message: "This option is not implemented yet", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func history(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let calendarScreen = storyboard.instantiateViewController(withIdentifier: "calendar")
+        calendarScreen.modalPresentationStyle = .fullScreen
+        self.present(calendarScreen, animated: true, completion: nil)
     }
     
     /**
@@ -117,11 +131,11 @@ class StartVC: UIViewController {
         super.viewDidLoad()
         setUpButtons()
         
-//        Too clean the UserDate use the code commented out
-
-//        let domain = Bundle.main.bundleIdentifier!
-//        UserDefaults.standard.removePersistentDomain(forName: domain)
-//        UserDefaults.standard.synchronize()
+        //        Too clean the UserDate use the code commented out
+        
+        //        let domain = Bundle.main.bundleIdentifier!
+        //        UserDefaults.standard.removePersistentDomain(forName: domain)
+        //        UserDefaults.standard.synchronize()
         
         today.goalAmount.amountOfDrink = 3
         formatter.dateFormat = "EEEE - dd/MM/yy"
@@ -161,17 +175,18 @@ class StartVC: UIViewController {
         let largeOptionLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
         largeOptionLongGesture.minimumPressDuration = 0.5
         
-        let changeGoalTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let changeGoalLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
+        changeGoalLongGesture.minimumPressDuration = 0.2
         
         //adding the gesture recognizer for each option.
         smallOption.addGestureRecognizer(smallOptionTapGesture)
         mediumOption.addGestureRecognizer(mediumOptionTapGesture)
         largeOption.addGestureRecognizer(largeOptionTapGesture)
-        goalAmount.addGestureRecognizer(changeGoalTapGesture)
         
         smallOption.addGestureRecognizer(smallOptionLongGesture)
         mediumOption.addGestureRecognizer(mediumOptionLongGesture)
         largeOption.addGestureRecognizer(largeOptionLongGesture)
+        goalAmount.addGestureRecognizer(changeGoalLongGesture)
         
         
         //giving the buttons the aperients
@@ -298,11 +313,20 @@ class StartVC: UIViewController {
      */
     func updateUI(){
         Day.saveDay(days)
+        if (today.goalAmount.amountOfDrink.rounded(.up) == today.goalAmount.amountOfDrink.rounded(.down)){
+            goalAmount.text = String(format: "%.0f", today.goalAmount.amountOfDrink)
+        } else {
+            goalAmount.text = String(format: "%.1f", today.goalAmount.amountOfDrink)
+        }
         if today.consumedAmount.amountOfDrink <= 0 {
-            consumedAmount.text = "0"
-            today.consumedAmount.amountOfDrink = 0.0
+            consumedAmount.text = String(format: "%.0f", 0)
+            today.consumedAmount.amountOfDrink = 0
         } else{
-            consumedAmount.text = String(format: "%.1f",today.consumedAmount.amountOfDrink)
+            if (today.consumedAmount.amountOfDrink.rounded(.up) == today.consumedAmount.amountOfDrink.rounded(.down)){
+                consumedAmount.text = String(format: "%.0f",today.consumedAmount.amountOfDrink)
+            } else {
+                consumedAmount.text = String(format: "%.1f", today.consumedAmount.amountOfDrink)
+            }
         }
     }
 }
