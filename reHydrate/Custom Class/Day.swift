@@ -93,8 +93,8 @@ public class Day: NSObject, Codable {
                         print("---------------------------------------------")
                     }
                     let formatter = DateFormatter()
-                    formatter.dateFormat = "EEEE - dd/MM/yy"
-                    print("|Date - ", formatter.string(from: day.date), "\t\t\t\t\t|")
+                    formatter.dateFormat = "EEE - dd/MM/yy"
+                    print("|Date", formatter.string(from: day.date), "\t\t\t\t\t\t|")
                     print("|Goal:", "\t\t\t\t\t\t\t\t\t\t|")
                     print("| - Drink type - ", day.goalAmount.typeOfDrink, "\t\t\t\t\t|")
                     print("| - Drink amount - ", day.goalAmount.amountOfDrink, "\t\t\t\t\t|")
