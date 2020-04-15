@@ -346,11 +346,14 @@
                         <outlet property="goalAmount" destination="Lld-rv-Oqo" id="E2j-mB-OBV"/>
                         <outlet property="historyButton" destination="wLA-TR-sU9" id="yQh-4F-fse"/>
                         <outlet property="largeOption" destination="R8b-pY-RjC" id="CYQ-fz-BBk"/>
+                        <outlet property="largeOptionLabel" destination="ocS-6z-OwM" id="CAz-ro-Hgo"/>
                         <outlet property="largeStack" destination="UBy-4P-27H" id="eke-0T-bVb"/>
                         <outlet property="mediumOption" destination="0oB-mO-Gxs" id="WIM-V2-cMu"/>
+                        <outlet property="mediumOptionLabel" destination="C3V-dQ-bFh" id="fYe-55-jjd"/>
                         <outlet property="mediumStack" destination="CIL-V5-4d0" id="N2k-8T-Ulo"/>
                         <outlet property="optionsStack" destination="30z-KG-YOx" id="1Ru-EN-Ofk"/>
                         <outlet property="smallOption" destination="wib-TY-MgY" id="QXf-4i-JBT"/>
+                        <outlet property="smallOptionLabel" destination="sdP-iI-Na9" id="oFp-AV-XWb"/>
                         <outlet property="smallStack" destination="CIL-V5-4d0" id="9pu-TH-C7w"/>
                     </connections>
                 </viewController>
