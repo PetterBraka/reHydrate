@@ -21,8 +21,11 @@ class StartVC: UIViewController {
     @IBOutlet weak var goalAmount: UILabel!
     @IBOutlet weak var consumedAmount: UILabel!
     @IBOutlet weak var smallOption: UIButton!
+    @IBOutlet weak var smallOptionLabel: UILabel!
     @IBOutlet weak var mediumOption: UIButton!
+    @IBOutlet weak var mediumOptionLabel: UILabel!
     @IBOutlet weak var largeOption: UIButton!
+    @IBOutlet weak var largeOptionLabel: UILabel!
     
     let defaults = UserDefaults.standard
     var days: [Day] = []
@@ -56,35 +59,59 @@ class StartVC: UIViewController {
         updateConsumtion(drink)
     }
     
+    func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
+        let alerContorller = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        let editOption = UIAlertAction(title: "Edit option", style: .default) {_ in
+            let editAlert = UIAlertController(title: "Cahnge option", message: nil, preferredStyle: .alert)
+            editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
+                textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                textField.font = UIFont(name: "American typewriter", size: 18)
+                textField.keyboardType = .decimalPad
+                textField.textAlignment = .center
+            })
+            let done = UIAlertAction(title: "done", style: .default) {_ in
+                let newValue = (editAlert.textFields?.first!.text!)! as NSString
+                if newValue != "" {
+                    optionLabel.text = (editAlert.textFields?.first!.text!)! as String
+                    optionLabel.text?.append("ml")
+                }
+            }
+            editAlert.addAction(done)
+            self.present(editAlert, animated: true, completion: nil)
+        }
+        let removeAmount = UIAlertAction(title: "Remove amount", style: .default) {_ in
+            let drinkAmount = -self.getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType = "water"
+            drink.amountOfDrink = drinkAmount
+            drink.typeOfDrink = drinkType
+            self.updateConsumtion(drink)
+        }
+        alerContorller.addAction(editOption)
+        alerContorller.addAction(removeAmount)
+        alerContorller.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        self.present(alerContorller, animated: true, completion: nil)
+    }
+    
     @objc func long(_ sender: UIGestureRecognizer){
         if sender.state == .began {
             let drink = Drink.init()
             switch sender.view {
             case smallOption:
                 print("small long-press")
-                let drinkAmount = -getDrinkAmount(sender.view?.superview as! UIStackView)
-                let drinkType = "water"
-                drink.amountOfDrink = drinkAmount
-                drink.typeOfDrink = drinkType
+                popUpOptions(sender, drink, smallOptionLabel)
             case mediumOption:
                 print("medium long-press")
-                let drinkAmount = -getDrinkAmount(sender.view?.superview as! UIStackView)
-                let drinkType = "water"
-                drink.amountOfDrink = drinkAmount
-                drink.typeOfDrink = drinkType
+                popUpOptions(sender, drink, mediumOptionLabel)
             case largeOption:
                 print("large long-press")
-                let drinkAmount = -getDrinkAmount(sender.view?.superview as! UIStackView)
-                let drinkType = "water"
-                drink.amountOfDrink = drinkAmount
-                drink.typeOfDrink = drinkType
+                popUpOptions(sender, drink, largeOptionLabel)
             case goalAmount:
                 let alert = UIAlertController(title: "Change goal", message: "Can you enter the amount you want as a goal in liters?", preferredStyle: .alert)
                 alert.addTextField(configurationHandler: {(_ textField: UITextField) in
                     textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                    textField.font = UIFont(name: "American typewriter", size: 18)
                     textField.keyboardType = .decimalPad
                     textField.textAlignment = .center
-                    textField.font = UIFont(name: "American typewriter", size: 18)
                 })
                 let doneButton = UIAlertAction(title: "done" , style: .default) {_ in
                     let newGoal = (alert.textFields?.first!.text!)! as NSString
@@ -99,7 +126,6 @@ class StartVC: UIViewController {
             default:
                 break
             }
-            updateConsumtion(drink)
         }
     }
     
@@ -269,6 +295,9 @@ class StartVC: UIViewController {
         consumedL = Double(drinkConsumed.amountOfDrink) + Double(consumedAmount.text!)!
         drinkConsumed.amountOfDrink = Float(consumedL)
         today.consumedAmount = drinkConsumed
+        if today.consumedAmount.amountOfDrink <= 0.0{
+            today.consumedAmount.amountOfDrink = 0
+        }
         insertDay(today)
         updateUI()
     }
@@ -318,9 +347,9 @@ class StartVC: UIViewController {
         } else {
             goalAmount.text = String(format: "%.1f", today.goalAmount.amountOfDrink)
         }
+        
         if today.consumedAmount.amountOfDrink <= 0 {
             consumedAmount.text = String(format: "%.0f", 0)
-            today.consumedAmount.amountOfDrink = 0
         } else{
             if (today.consumedAmount.amountOfDrink.rounded(.up) == today.consumedAmount.amountOfDrink.rounded(.down)){
                 consumedAmount.text = String(format: "%.0f",today.consumedAmount.amountOfDrink)
