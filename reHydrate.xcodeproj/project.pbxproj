@@ -75,19 +75,35 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				33902D3E244744C4004BE39C /* Custom Class */,
+				33902D3D2447449F004BE39C /* ViewControllers */,
 				3378767624378A9400F5A732 /* AppDelegate.swift */,
 				3378767824378A9400F5A732 /* SceneDelegate.swift */,
-				3378767A24378A9400F5A732 /* StartVC.swift */,
-				33FC842E243B992600848B7C /* CalendarVC.swift */,
-				3359BB6F24461D620008EF6A /* InfoCell.swift */,
-				33FC8428243A4A2600848B7C /* Day.swift */,
-				33FC8426243A47A800848B7C /* Drink.swift */,
 				3378767C24378A9400F5A732 /* Main.storyboard */,
 				3378767F24378A9800F5A732 /* Assets.xcassets */,
 				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
 			);
 			path = reHydrate;
+			sourceTree = "<group>";
+		};
+		33902D3D2447449F004BE39C /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				3378767A24378A9400F5A732 /* StartVC.swift */,
+				33FC842E243B992600848B7C /* CalendarVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		33902D3E244744C4004BE39C /* Custom Class */ = {
+			isa = PBXGroup;
+			children = (
+				3359BB6F24461D620008EF6A /* InfoCell.swift */,
+				33FC8428243A4A2600848B7C /* Day.swift */,
+				33FC8426243A47A800848B7C /* Drink.swift */,
+			);
+			path = "Custom Class";
 			sourceTree = "<group>";
 		};
 		DEE3AF47A916B38FCDFA6298 /* Pods */ = {
