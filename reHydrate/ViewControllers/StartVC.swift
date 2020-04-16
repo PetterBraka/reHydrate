@@ -59,39 +59,6 @@ class StartVC: UIViewController {
         updateConsumtion(drink)
     }
     
-    func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
-        let alerContorller = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        let editOption = UIAlertAction(title: "Edit option", style: .default) {_ in
-            let editAlert = UIAlertController(title: "Change drink amount", message: nil, preferredStyle: .alert)
-            editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
-                textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                textField.font = UIFont(name: "American typewriter", size: 18)
-                textField.keyboardType = .decimalPad
-                textField.textAlignment = .center
-            })
-            let done = UIAlertAction(title: "done", style: .default) {_ in
-                let newValue = (editAlert.textFields?.first!.text!)! as NSString
-                if newValue != "" {
-                    optionLabel.text = (editAlert.textFields?.first!.text!)! as String
-                    optionLabel.text?.append("ml")
-                }
-            }
-            editAlert.addAction(done)
-            self.present(editAlert, animated: true, completion: nil)
-        }
-        let removeAmount = UIAlertAction(title: "Remove drink", style: .default) {_ in
-            let drinkAmount = -self.getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType = "water"
-            drink.amountOfDrink = drinkAmount
-            drink.typeOfDrink = drinkType
-            self.updateConsumtion(drink)
-        }
-        alerContorller.addAction(editOption)
-        alerContorller.addAction(removeAmount)
-        alerContorller.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-        self.present(alerContorller, animated: true, completion: nil)
-    }
-    
     @objc func long(_ sender: UIGestureRecognizer){
         if sender.state == .began {
             let drink = Drink.init()
@@ -130,9 +97,10 @@ class StartVC: UIViewController {
     }
     
     @IBAction func about(_ sender: Any) {
-        let alert = UIAlertController(title: "error - about screen", message: "This option is not implemented yet", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let aboutScreen = storyboard.instantiateViewController(withIdentifier: "about")
+        aboutScreen.modalPresentationStyle = .fullScreen
+        self.present(aboutScreen, animated: true, completion: nil)
     }
     
     @IBAction func history(_ sender: Any) {
@@ -350,6 +318,39 @@ class StartVC: UIViewController {
         }
         let stringFormatConsumed = getStringFormat(today.consumedAmount.amountOfDrink)
         consumedAmount.text = String(format: stringFormatConsumed, today.consumedAmount.amountOfDrink)
+    }
+    
+    func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
+        let alerContorller = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        let editOption = UIAlertAction(title: "Edit option", style: .default) {_ in
+            let editAlert = UIAlertController(title: "Change drink amount", message: nil, preferredStyle: .alert)
+            editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
+                textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                textField.font = UIFont(name: "American typewriter", size: 18)
+                textField.keyboardType = .decimalPad
+                textField.textAlignment = .center
+            })
+            let done = UIAlertAction(title: "done", style: .default) {_ in
+                let newValue = (editAlert.textFields?.first!.text!)! as NSString
+                if newValue != "" {
+                    optionLabel.text = (editAlert.textFields?.first!.text!)! as String
+                    optionLabel.text?.append("ml")
+                }
+            }
+            editAlert.addAction(done)
+            self.present(editAlert, animated: true, completion: nil)
+        }
+        let removeAmount = UIAlertAction(title: "Remove drink", style: .default) {_ in
+            let drinkAmount = -self.getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType = "water"
+            drink.amountOfDrink = drinkAmount
+            drink.typeOfDrink = drinkType
+            self.updateConsumtion(drink)
+        }
+        alerContorller.addAction(editOption)
+        alerContorller.addAction(removeAmount)
+        alerContorller.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        self.present(alerContorller, animated: true, completion: nil)
     }
     
     func getNumberOfDecimalDigits(_ number: Float)-> Int {
