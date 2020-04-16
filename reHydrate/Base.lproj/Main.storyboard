@@ -177,19 +177,40 @@
                                     <action selector="exit:" destination="qsM-Pb-Rvt" eventType="touchUpInside" id="PRE-AM-BBs"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R2I-qq-plc" userLabel="HelpButton">
+                                <rect key="frame" x="147" y="428.5" width="120" height="39"/>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="23"/>
+                                <state key="normal" title="How to use">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                            <imageView hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="toturial" translatesAutoresizingMaskIntoConstraints="NO" id="tQk-1J-iov">
+                                <rect key="frame" x="0.0" y="106" width="414" height="746"/>
+                                <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="tQk-1J-iov" secondAttribute="trailing" id="DC3-pp-dJd"/>
+                            <constraint firstItem="R2I-qq-plc" firstAttribute="centerX" secondItem="nDf-Jp-aQs" secondAttribute="centerX" id="L2C-vo-CLY"/>
+                            <constraint firstItem="R2I-qq-plc" firstAttribute="centerY" secondItem="nDf-Jp-aQs" secondAttribute="centerY" id="Myg-o6-OMd"/>
+                            <constraint firstItem="LhN-cg-DML" firstAttribute="bottom" secondItem="tQk-1J-iov" secondAttribute="bottom" constant="10" id="NyB-Y2-QbZ"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="top" secondItem="LhN-cg-DML" secondAttribute="top" constant="20" id="c2x-w7-4rE"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="width" secondItem="Kcw-zp-J3F" secondAttribute="height" multiplier="1:1" id="mdk-aY-3AR"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rhB-fV-ebC"/>
+                            <constraint firstItem="tQk-1J-iov" firstAttribute="top" secondItem="Kcw-zp-J3F" secondAttribute="bottomMargin" constant="10" id="s6i-d8-XvX"/>
+                            <constraint firstItem="tQk-1J-iov" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" id="uiQ-6L-USb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LhN-cg-DML"/>
                     </view>
+                    <connections>
+                        <outlet property="helpButton" destination="R2I-qq-plc" id="30f-U6-Iyd"/>
+                        <outlet property="imageToturial" destination="tQk-1J-iov" id="4C1-sf-4jn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ial-Rb-9pZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1088" y="78"/>
+            <point key="canvasLocation" x="-1088.4057971014493" y="77.678571428571431"/>
         </scene>
         <!--StartVC-->
         <scene sceneID="tne-QT-ifu">
@@ -208,9 +229,45 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j7H-HD-anS">
-                                <rect key="frame" x="107" y="155" width="110" height="200"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <stackView opaque="NO" contentMode="top" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="glR-cI-Sws" userLabel="dateGoalStack">
+                                <rect key="frame" x="131" y="161.5" width="152" height="104"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day - dd/MM/yy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JhD-0d-RlU" userLabel="dayAndDate">
+                                        <rect key="frame" x="0.0" y="0.0" width="152" height="23"/>
+                                        <fontDescription key="fontDescription" name="AmericanTypewriter-Light" family="American Typewriter" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EaB-HY-8l5" userLabel="currentGoal">
+                                        <rect key="frame" x="21.5" y="23" width="109.5" height="81"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PgI-WQ-LzU" userLabel="consumed">
+                                                <rect key="frame" x="0.0" y="0.0" width="26.5" height="81"/>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="40"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d8T-TA-6Mk">
+                                                <rect key="frame" x="26.5" y="0.0" width="28.5" height="81"/>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="70"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lld-rv-Oqo" userLabel="goal">
+                                                <rect key="frame" x="55" y="0.0" width="26.5" height="81"/>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="40"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LrS-k0-AEy" userLabel="goalPrefix">
+                                                <rect key="frame" x="81.5" y="0.0" width="28" height="81"/>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="40"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleAspectFit" distribution="equalSpacing" alignment="bottom" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="30z-KG-YOx" userLabel="optionStack">
                                 <rect key="frame" x="71" y="285.5" width="272" height="160.5"/>
@@ -292,46 +349,6 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="top" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="glR-cI-Sws" userLabel="dateGoalStack">
-                                <rect key="frame" x="147.5" y="161.5" width="119.5" height="104"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="day and date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JhD-0d-RlU" userLabel="dayAndDate">
-                                        <rect key="frame" x="0.0" y="0.0" width="119.5" height="23"/>
-                                        <fontDescription key="fontDescription" name="AmericanTypewriter-Light" family="American Typewriter" pointSize="20"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EaB-HY-8l5" userLabel="currentGoal">
-                                        <rect key="frame" x="5" y="23" width="109.5" height="81"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PgI-WQ-LzU" userLabel="consumed">
-                                                <rect key="frame" x="0.0" y="0.0" width="26.5" height="81"/>
-                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="40"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d8T-TA-6Mk">
-                                                <rect key="frame" x="26.5" y="0.0" width="28.5" height="81"/>
-                                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="70"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lld-rv-Oqo" userLabel="goal">
-                                                <rect key="frame" x="55" y="0.0" width="26.5" height="81"/>
-                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="40"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LrS-k0-AEy" userLabel="goalPrefix">
-                                                <rect key="frame" x="81.5" y="0.0" width="28" height="81"/>
-                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="40"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                            </stackView>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wLA-TR-sU9">
                                 <rect key="frame" x="334" y="782.5" width="50" height="49"/>
                                 <constraints>
@@ -396,7 +413,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-452" y="78"/>
+            <point key="canvasLocation" x="-452.17391304347831" y="77.678571428571431"/>
         </scene>
     </scenes>
     <resources>
@@ -405,6 +422,7 @@
         <image name="Glass" width="160" height="193"/>
         <image name="calendar.circle" catalog="system" width="128" height="121"/>
         <image name="questionmark.circle" catalog="system" width="128" height="121"/>
+        <image name="toturial" width="933" height="1538"/>
         <image name="xmark.circle" catalog="system" width="128" height="121"/>
     </resources>
 </document>
