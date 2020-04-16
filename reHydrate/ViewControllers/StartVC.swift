@@ -62,7 +62,7 @@ class StartVC: UIViewController {
     func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
         let alerContorller = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         let editOption = UIAlertAction(title: "Edit option", style: .default) {_ in
-            let editAlert = UIAlertController(title: "Cahnge option", message: nil, preferredStyle: .alert)
+            let editAlert = UIAlertController(title: "Change drink amount", message: nil, preferredStyle: .alert)
             editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
                 textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
                 textField.font = UIFont(name: "American typewriter", size: 18)
@@ -79,7 +79,7 @@ class StartVC: UIViewController {
             editAlert.addAction(done)
             self.present(editAlert, animated: true, completion: nil)
         }
-        let removeAmount = UIAlertAction(title: "Remove amount", style: .default) {_ in
+        let removeAmount = UIAlertAction(title: "Remove drink", style: .default) {_ in
             let drinkAmount = -self.getDrinkAmount(sender.view?.superview as! UIStackView)
             let drinkType = "water"
             drink.amountOfDrink = drinkAmount
@@ -291,9 +291,9 @@ class StartVC: UIViewController {
      ```
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
-        var consumedL = Double(consumedAmount.text!)!
-        consumedL = Double(drinkConsumed.amountOfDrink) + Double(consumedAmount.text!)!
-        drinkConsumed.amountOfDrink = Float(consumedL)
+        var consumedL = Float(consumedAmount.text!)!
+        consumedL += Float(drinkConsumed.amountOfDrink)
+        drinkConsumed.amountOfDrink = consumedL
         today.consumedAmount = drinkConsumed
         if today.consumedAmount.amountOfDrink <= 0.0{
             today.consumedAmount.amountOfDrink = 0
@@ -345,17 +345,30 @@ class StartVC: UIViewController {
         if (today.goalAmount.amountOfDrink.rounded(.up) == today.goalAmount.amountOfDrink.rounded(.down)){
             goalAmount.text = String(format: "%.0f", today.goalAmount.amountOfDrink)
         } else {
-            goalAmount.text = String(format: "%.1f", today.goalAmount.amountOfDrink)
+            let stringFormatGoal = getStringFormat(today.goalAmount.amountOfDrink)
+            goalAmount.text = String(format: stringFormatGoal, today.goalAmount.amountOfDrink)
         }
-        
-        if today.consumedAmount.amountOfDrink <= 0 {
-            consumedAmount.text = String(format: "%.0f", 0)
-        } else{
-            if (today.consumedAmount.amountOfDrink.rounded(.up) == today.consumedAmount.amountOfDrink.rounded(.down)){
-                consumedAmount.text = String(format: "%.0f",today.consumedAmount.amountOfDrink)
-            } else {
-                consumedAmount.text = String(format: "%.1f", today.consumedAmount.amountOfDrink)
+        let stringFormatConsumed = getStringFormat(today.consumedAmount.amountOfDrink)
+        consumedAmount.text = String(format: stringFormatConsumed, today.consumedAmount.amountOfDrink)
+    }
+    
+    func getNumberOfDecimalDigits(_ number: Float)-> Int {
+        var stringOfNumber = number.description
+        if stringOfNumber.contains("."){
+            while stringOfNumber.removeFirst() != "." {
+                let numberOfDigits = stringOfNumber.count - 1
+                return numberOfDigits
             }
         }
+        return 0
+    }
+    
+    func getStringFormat(_ number: Float)-> String{
+        return "%.\(String(getNumberOfDecimalDigits(number)))f"
+    }
+}
+extension Decimal {
+    var significantFractionalDecimalDigits: Int {
+        return max(-exponent, 0)
     }
 }
