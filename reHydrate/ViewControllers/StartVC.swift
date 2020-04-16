@@ -216,15 +216,15 @@ class StartVC: UIViewController {
         
         
         //giving the buttons the aperients
-        historyButton.layer.cornerRadius = 20
-        historyButton.layer.borderWidth = 3
-        historyButton.layer.borderColor = UIColor.darkGray.cgColor
-        historyButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+//        historyButton.layer.cornerRadius = 20
+//        historyButton.layer.borderWidth = 3
+//        historyButton.layer.borderColor = UIColor.darkGray.cgColor
+//        historyButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
-        aboutButton.layer.cornerRadius = 20
-        aboutButton.layer.borderWidth = 3
-        aboutButton.layer.borderColor = UIColor.darkGray.cgColor
-        aboutButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+//        aboutButton.layer.cornerRadius = 20
+//        aboutButton.layer.borderWidth = 3
+//        aboutButton.layer.borderColor = UIColor.darkGray.cgColor
+//        aboutButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
     }
     
