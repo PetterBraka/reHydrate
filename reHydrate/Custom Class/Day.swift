@@ -100,7 +100,7 @@ public class Day: NSObject, Codable {
                     print("| - Drink amount - ", day.goalAmount.amountOfDrink, "\t\t\t\t\t|")
                     print("|Consumed Drink: \t\t\t\t\t\t\t|")
                     print("| - Drink type - ", day.consumedAmount.typeOfDrink, "\t\t\t\t\t|")
-                    print("| - Drink amount - ", String(format: "%.1f",day.consumedAmount.amountOfDrink), "\t\t\t\t\t|")
+                    print("| - Drink amount - ", day.consumedAmount.amountOfDrink, "\t\t\t\t\t|")
                     print("---------------------------------------------")
                 }
                 return days
