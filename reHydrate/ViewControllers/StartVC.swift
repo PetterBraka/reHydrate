@@ -110,26 +110,23 @@ class StartVC: UIViewController {
         self.present(calendarScreen, animated: true, completion: nil)
     }
     
-    /**
-     This function will be called if the user press the done button and are finiched entering a value.
-     
-     # Notes: #
-     it will call for handleInput and this will check for any updates in any of the text feilds.
-     */
-    @objc func doneClicked(){
-        view.endEditing(true)
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
+        if UIApplication.isFirstLaunch() {
+            print("first time to launch this app")
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let aboutScreen = storyboard.instantiateViewController(withIdentifier: "about")
+            aboutScreen.modalPresentationStyle = .fullScreen
+            self.present(aboutScreen, animated: true, completion: nil)
+        } else {
+        }
         
-        //        Too clean the UserDate use the code commented out
+        //Too clean the UserDate use the code commented out
         
-        //        let domain = Bundle.main.bundleIdentifier!
-        //        UserDefaults.standard.removePersistentDomain(forName: domain)
-        //        UserDefaults.standard.synchronize()
+        //let domain = Bundle.main.bundleIdentifier!
+        //UserDefaults.standard.removePersistentDomain(forName: domain)
+        //UserDefaults.standard.synchronize()
         
         today.goalAmount.amountOfDrink = 3
         formatter.dateFormat = "EEEE - dd/MM/yy"
@@ -181,19 +178,6 @@ class StartVC: UIViewController {
         mediumOption.addGestureRecognizer(mediumOptionLongGesture)
         largeOption.addGestureRecognizer(largeOptionLongGesture)
         goalAmount.addGestureRecognizer(changeGoalLongGesture)
-        
-        
-        //giving the buttons the aperients
-//        historyButton.layer.cornerRadius = 20
-//        historyButton.layer.borderWidth = 3
-//        historyButton.layer.borderColor = UIColor.darkGray.cgColor
-//        historyButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
-//        aboutButton.layer.cornerRadius = 20
-//        aboutButton.layer.borderWidth = 3
-//        aboutButton.layer.borderColor = UIColor.darkGray.cgColor
-//        aboutButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
     }
     
     /**
@@ -368,8 +352,14 @@ class StartVC: UIViewController {
         return "%.\(String(getNumberOfDecimalDigits(number)))f"
     }
 }
-extension Decimal {
-    var significantFractionalDecimalDigits: Int {
-        return max(-exponent, 0)
+
+extension UIApplication {
+    class func isFirstLaunch() -> Bool {
+        if !UserDefaults.standard.bool(forKey: "firstTimeLaunched") {
+            UserDefaults.standard.set(true, forKey: "firstTimeLaunched")
+            UserDefaults.standard.synchronize()
+            return true
+        }
+        return false
     }
 }
