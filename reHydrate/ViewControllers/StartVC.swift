@@ -96,6 +96,14 @@ class StartVC: UIViewController {
         }
     }
     
+    @objc func didMoveToForground(){
+        print("app enterd forground")
+        today = days.first(where: { formatter.string(from: $0.date) == formatter.string(from: Date.init()) }) ?? Day.init()
+        today.goalAmount = days[days.count - 1].goalAmount
+        updateUI()
+        currentDay.text = formatter.string(from: Date.init())
+    }
+    
     @IBAction func about(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let aboutScreen = storyboard.instantiateViewController(withIdentifier: "about")
@@ -110,6 +118,7 @@ class StartVC: UIViewController {
         self.present(calendarScreen, animated: true, completion: nil)
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
@@ -119,8 +128,10 @@ class StartVC: UIViewController {
             let aboutScreen = storyboard.instantiateViewController(withIdentifier: "about")
             aboutScreen.modalPresentationStyle = .fullScreen
             self.present(aboutScreen, animated: true, completion: nil)
-        } else {
         }
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForground), name: UIApplication.willEnterForegroundNotification, object: nil)
         
         //Too clean the UserDate use the code commented out
         
@@ -128,7 +139,6 @@ class StartVC: UIViewController {
         //UserDefaults.standard.removePersistentDomain(forName: domain)
         //UserDefaults.standard.synchronize()
         
-        today.goalAmount.amountOfDrink = 3
         formatter.dateFormat = "EEEE - dd/MM/yy"
         days = Day.loadDay()
         for day in days {
@@ -350,6 +360,10 @@ class StartVC: UIViewController {
     
     func getStringFormat(_ number: Float)-> String{
         return "%.\(String(getNumberOfDecimalDigits(number)))f"
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(UIApplication.willEnterForegroundNotification)
     }
 }
 
