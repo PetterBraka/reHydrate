@@ -45,8 +45,6 @@ class AboutVC: UIViewController {
                 helpImage.contentMode = .scaleAspectFit
                 helpButton.isHidden = true
                 clearButton.isHidden = true
-            case healthAccessButton:
-                HealthKitManager.init()
             default:
             break
         }

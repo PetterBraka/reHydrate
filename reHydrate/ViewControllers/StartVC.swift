@@ -108,7 +108,11 @@ class StartVC: UIViewController {
     @objc func didMoveToForground(){
         print("app enterd forground")
         today = days.first(where: { formatter.string(from: $0.date) == formatter.string(from: Date.init()) }) ?? Day.init()
-        today.goalAmount = days[days.count - 1].goalAmount
+        if !days.isEmpty{
+            today.goalAmount = days[days.count - 1].goalAmount
+        } else {
+            today.goalAmount = Drink.init(typeOfDrink: "water", amountOfDrink: 3)
+        }
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
     }
@@ -163,25 +167,14 @@ class StartVC: UIViewController {
         Thread.sleep(forTimeInterval: 0.5)
     }
     
-    func saveConsumedWater(water: Double, date: Date) {
-        
-        //1.  Make sure the body mass type exists
+    func saveConsumedWater(_ waterAmount: Double, _ date: Date) {
         guard let dietaryWater = HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
             fatalError("dietary water is no longer available in HealthKit")
         }
-        
-        //2.  Use the Count HKUnit to create a body mass quantity
-        let waterConsumed = HKQuantity(unit: HKUnit.liter(),
-                                          doubleValue: water)
-        
-        let waterConsumedSample = HKQuantitySample(type: dietaryWater,
-                                                   quantity: waterConsumed,
-                                                   start: date,
-                                                   end: date)
-        
-        //3.  Save the same to HealthKit
+        let waterConsumed = HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
+        let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
+                                                   start: date, end: date)
         HKHealthStore().save(waterConsumedSample) { (success, error) in
-            
             if let error = error {
                 print("Error Saving water consumtion: \(error.localizedDescription)")
             } else {
@@ -292,10 +285,10 @@ class StartVC: UIViewController {
      ```
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
+        saveConsumedWater(Double(drinkConsumed.amountOfDrink), Date.init())
         var consumedL = Float(consumedAmount.text!)!
         consumedL += Float(drinkConsumed.amountOfDrink)
-        drinkConsumed.amountOfDrink = consumedL
-        today.consumedAmount = drinkConsumed
+        today.consumedAmount.amountOfDrink = consumedL
         if today.consumedAmount.amountOfDrink <= 0.0{
             today.consumedAmount.amountOfDrink = 0
         }
@@ -343,7 +336,6 @@ class StartVC: UIViewController {
      */
     func updateUI(){
         Day.saveDay(days)
-        saveConsumedWater(water: Double(today.consumedAmount.amountOfDrink), date: Date.init())
         if (today.goalAmount.amountOfDrink.rounded(.up) == today.goalAmount.amountOfDrink.rounded(.down)){
             goalAmount.text = String(format: "%.0f", today.goalAmount.amountOfDrink)
         } else {

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
-		3310709D244DCB48008365A3 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3310709C244DCB48008365A3 /* HealthKitManager.swift */; };
 		3359BB7024461D620008EF6A /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3359BB6F24461D620008EF6A /* InfoCell.swift */; };
 		3378767724378A9400F5A732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767624378A9400F5A732 /* AppDelegate.swift */; };
 		3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767824378A9400F5A732 /* SceneDelegate.swift */; };
@@ -26,7 +25,6 @@
 
 /* Begin PBXFileReference section */
 		3310709A244DBCD3008365A3 /* reHydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reHydrate.entitlements; sourceTree = "<group>"; };
-		3310709C244DCB48008365A3 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		3359BB6F24461D620008EF6A /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767624378A9400F5A732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -111,7 +109,6 @@
 				3359BB6F24461D620008EF6A /* InfoCell.swift */,
 				33FC8428243A4A2600848B7C /* Day.swift */,
 				33FC8426243A47A800848B7C /* Drink.swift */,
-				3310709C244DCB48008365A3 /* HealthKitManager.swift */,
 			);
 			path = "Custom Class";
 			sourceTree = "<group>";
@@ -258,7 +255,6 @@
 				33FC8429243A4A2600848B7C /* Day.swift in Sources */,
 				3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */,
 				3359BB7024461D620008EF6A /* InfoCell.swift in Sources */,
-				3310709D244DCB48008365A3 /* HealthKitManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
