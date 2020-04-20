@@ -352,7 +352,12 @@ class StartVC: UIViewController {
         if stringOfNumber.contains("."){
             while stringOfNumber.removeFirst() != "." {
                 let numberOfDigits = stringOfNumber.count - 1
-                return numberOfDigits
+                if numberOfDigits < 3 {
+                    return numberOfDigits
+                    
+                } else {
+                    return 2
+                }
             }
         }
         return 0
