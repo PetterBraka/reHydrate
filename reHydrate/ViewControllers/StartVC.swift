@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import HealthKit
 import CoreData
 import FSCalendar
 
@@ -31,6 +32,14 @@ class StartVC: UIViewController {
     var days: [Day] = []
     var today = Day.init()
     let formatter = DateFormatter()
+    
+    var healthStore: HKHealthStore?
+    
+    var typesToShare : Set<HKSampleType> {
+        let waterType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
+        return [waterType]
+    }
+    
     
     @objc func tap(_ sender: UIGestureRecognizer){
         let drink = Drink.init()
@@ -99,7 +108,11 @@ class StartVC: UIViewController {
     @objc func didMoveToForground(){
         print("app enterd forground")
         today = days.first(where: { formatter.string(from: $0.date) == formatter.string(from: Date.init()) }) ?? Day.init()
-        today.goalAmount = days[days.count - 1].goalAmount
+        if !days.isEmpty{
+            today.goalAmount = days[days.count - 1].goalAmount
+        } else {
+            today.goalAmount = Drink.init(typeOfDrink: "water", amountOfDrink: 3)
+        }
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
     }
@@ -122,6 +135,16 @@ class StartVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
+        
+        //  Request access to write dietaryWater data to HealthStore
+        self.healthStore?.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
+            if (!success) {
+                //  request was not successful, handle user denial
+                return
+            }
+            
+        })
+        
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -132,13 +155,6 @@ class StartVC: UIViewController {
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForground), name: UIApplication.willEnterForegroundNotification, object: nil)
-        
-        //Too clean the UserDate use the code commented out
-        
-        //let domain = Bundle.main.bundleIdentifier!
-        //UserDefaults.standard.removePersistentDomain(forName: domain)
-        //UserDefaults.standard.synchronize()
-        
         formatter.dateFormat = "EEEE - dd/MM/yy"
         days = Day.loadDay()
         for day in days {
@@ -149,6 +165,22 @@ class StartVC: UIViewController {
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
+    }
+    
+    func saveConsumedWater(_ waterAmount: Double, _ date: Date) {
+        guard let dietaryWater = HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
+            fatalError("dietary water is no longer available in HealthKit")
+        }
+        let waterConsumed = HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
+        let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
+                                                   start: date, end: date)
+        HKHealthStore().save(waterConsumedSample) { (success, error) in
+            if let error = error {
+                print("Error Saving water consumtion: \(error.localizedDescription)")
+            } else {
+                print("Successfully saved water consumtion")
+            }
+        }
     }
     
     /**
@@ -253,10 +285,10 @@ class StartVC: UIViewController {
      ```
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
+        saveConsumedWater(Double(drinkConsumed.amountOfDrink), Date.init())
         var consumedL = Float(consumedAmount.text!)!
         consumedL += Float(drinkConsumed.amountOfDrink)
-        drinkConsumed.amountOfDrink = consumedL
-        today.consumedAmount = drinkConsumed
+        today.consumedAmount.amountOfDrink = consumedL
         if today.consumedAmount.amountOfDrink <= 0.0{
             today.consumedAmount.amountOfDrink = 0
         }

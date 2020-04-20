@@ -177,35 +177,68 @@
                                     <action selector="exit:" destination="qsM-Pb-Rvt" eventType="touchUpInside" id="PRE-AM-BBs"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R2I-qq-plc" userLabel="HelpButton">
-                                <rect key="frame" x="147" y="428.5" width="120" height="39"/>
-                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="23"/>
-                                <state key="normal" title="How to use">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                            </button>
-                            <imageView hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="toturial-1" translatesAutoresizingMaskIntoConstraints="NO" id="tQk-1J-iov">
-                                <rect key="frame" x="0.0" y="106" width="414" height="746"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fff-ot-rA8">
+                                <rect key="frame" x="20" y="124" width="374" height="718"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="equalCentering" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="bTf-vt-3ad">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="98"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="56o-tS-aiS" userLabel="HealthAccess">
+                                                <rect key="frame" x="0.0" y="0.0" width="374" height="39"/>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="23"/>
+                                                <state key="normal" title="Healt app access">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R2I-qq-plc" userLabel="HelpButton">
+                                                <rect key="frame" x="0.0" y="59" width="374" height="39"/>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="23"/>
+                                                <state key="normal" title="How to use">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u9j-4W-Cnz" userLabel="clearHistory">
+                                        <rect key="frame" x="0.0" y="679" width="374" height="39"/>
+                                        <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="23"/>
+                                        <state key="normal" title="REMOVE DATA">
+                                            <color key="titleColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="clearData:" destination="hPy-Nu-KYm" eventType="touchUpInside" id="JMv-d3-T8z"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </imageView>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="bTf-vt-3ad" secondAttribute="trailing" id="5U9-Uj-Uiy"/>
+                                    <constraint firstItem="u9j-4W-Cnz" firstAttribute="top" relation="greaterThanOrEqual" secondItem="bTf-vt-3ad" secondAttribute="bottom" constant="10" id="6ib-VY-Qfe"/>
+                                    <constraint firstItem="u9j-4W-Cnz" firstAttribute="leading" secondItem="fff-ot-rA8" secondAttribute="leading" id="ThV-pU-vmf"/>
+                                    <constraint firstAttribute="trailing" secondItem="u9j-4W-Cnz" secondAttribute="trailing" id="enG-Eh-A6Z"/>
+                                    <constraint firstItem="bTf-vt-3ad" firstAttribute="leading" secondItem="fff-ot-rA8" secondAttribute="leading" id="g1f-At-GZp"/>
+                                    <constraint firstItem="bTf-vt-3ad" firstAttribute="top" secondItem="fff-ot-rA8" secondAttribute="top" id="gIv-Wd-Jhd"/>
+                                    <constraint firstAttribute="bottom" secondItem="u9j-4W-Cnz" secondAttribute="bottom" id="lLH-20-Vny"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="tQk-1J-iov" secondAttribute="trailing" id="DC3-pp-dJd"/>
-                            <constraint firstItem="R2I-qq-plc" firstAttribute="centerX" secondItem="nDf-Jp-aQs" secondAttribute="centerX" id="L2C-vo-CLY"/>
-                            <constraint firstItem="R2I-qq-plc" firstAttribute="centerY" secondItem="nDf-Jp-aQs" secondAttribute="centerY" id="Myg-o6-OMd"/>
-                            <constraint firstItem="LhN-cg-DML" firstAttribute="bottom" secondItem="tQk-1J-iov" secondAttribute="bottom" constant="10" id="NyB-Y2-QbZ"/>
+                            <constraint firstItem="fff-ot-rA8" firstAttribute="top" secondItem="Kcw-zp-J3F" secondAttribute="bottom" constant="20" id="1sd-Oj-6Kl"/>
+                            <constraint firstItem="fff-ot-rA8" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="Bgt-SQ-TnZ"/>
+                            <constraint firstItem="LhN-cg-DML" firstAttribute="bottom" secondItem="fff-ot-rA8" secondAttribute="bottom" constant="20" id="RxT-TH-Ywv"/>
+                            <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="fff-ot-rA8" secondAttribute="trailing" constant="20" id="UVd-HL-D07"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="top" secondItem="LhN-cg-DML" secondAttribute="top" constant="20" id="c2x-w7-4rE"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="width" secondItem="Kcw-zp-J3F" secondAttribute="height" multiplier="1:1" id="mdk-aY-3AR"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rhB-fV-ebC"/>
-                            <constraint firstItem="tQk-1J-iov" firstAttribute="top" secondItem="Kcw-zp-J3F" secondAttribute="bottomMargin" constant="10" id="s6i-d8-XvX"/>
-                            <constraint firstItem="tQk-1J-iov" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" id="uiQ-6L-USb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LhN-cg-DML"/>
                     </view>
                     <connections>
+                        <outlet property="clearButton" destination="u9j-4W-Cnz" id="aKV-9S-orr"/>
+                        <outlet property="exitButton" destination="Kcw-zp-J3F" id="6x9-tt-2Ew"/>
+                        <outlet property="healthAccessButton" destination="56o-tS-aiS" id="yS6-yP-wXq"/>
                         <outlet property="helpButton" destination="R2I-qq-plc" id="30f-U6-Iyd"/>
-                        <outlet property="imageToturial" destination="tQk-1J-iov" id="4C1-sf-4jn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ial-Rb-9pZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -364,13 +397,13 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRX-89-1yb" userLabel="About Button">
-                                <rect key="frame" x="30" y="782.5" width="50" height="49"/>
+                                <rect key="frame" x="30" y="782" width="50" height="50.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="7P3-Ip-PUn"/>
                                     <constraint firstAttribute="width" secondItem="bRX-89-1yb" secondAttribute="height" multiplier="1:1" id="xvH-o6-Qxd"/>
                                 </constraints>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" backgroundImage="questionmark.circle" catalog="system">
+                                <state key="normal" backgroundImage="gear" catalog="system">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -421,8 +454,7 @@
         <image name="Flask" width="157" height="258.5"/>
         <image name="Glass" width="160" height="193"/>
         <image name="calendar.circle" catalog="system" width="128" height="121"/>
-        <image name="questionmark.circle" catalog="system" width="128" height="121"/>
-        <image name="toturial-1" width="933" height="1538"/>
+        <image name="gear" catalog="system" width="128" height="119"/>
         <image name="xmark.circle" catalog="system" width="128" height="121"/>
     </resources>
 </document>
