@@ -46,8 +46,7 @@ class AboutVC: UIViewController {
                 helpButton.isHidden = true
                 clearButton.isHidden = true
             case healthAccessButton:
-                let healthKitMAnager = HealthKitManager()
-                _ = healthKitMAnager.authorizeHealtKit()
+                HealthKitManager.init()
             default:
             break
         }

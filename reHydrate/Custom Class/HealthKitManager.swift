@@ -13,6 +13,9 @@ class HealthKitManager {
     
     let healtStore = HKHealthStore()
     
+    init() {
+        authorizeHealtKit()
+    }
     
     func authorizeHealtKit()-> Bool{
         var isEnabled = true
@@ -20,9 +23,11 @@ class HealthKitManager {
         if HKHealthStore.isHealthDataAvailable() {
             let waterCount = NSSet(object: HKQuantityType.quantityType(forIdentifier: .dietaryWater)!)
             
-            healtStore.requestAuthorization(toShare: (waterCount as! Set<HKSampleType>), read: (waterCount as! Set<HKObjectType>)) {
-                (success, error) -> Void in
-                isEnabled = success
+            healtStore.requestAuthorization(toShare: (waterCount as! Set<HKSampleType>),
+                                            read: (waterCount as! Set<HKObjectType>)) {
+                                                (success, error) -> Void in
+                                                isEnabled = success
+                                                print(error ?? "no errors")
             }
         } else {
             isEnabled = false
@@ -30,5 +35,8 @@ class HealthKitManager {
         return isEnabled
     }
     
+    func saveConsumed(){
+        
+    }
     
 }
