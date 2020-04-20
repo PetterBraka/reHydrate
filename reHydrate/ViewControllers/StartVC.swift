@@ -132,13 +132,6 @@ class StartVC: UIViewController {
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForground), name: UIApplication.willEnterForegroundNotification, object: nil)
-        
-        //Too clean the UserDate use the code commented out
-        
-        //let domain = Bundle.main.bundleIdentifier!
-        //UserDefaults.standard.removePersistentDomain(forName: domain)
-        //UserDefaults.standard.synchronize()
-        
         formatter.dateFormat = "EEEE - dd/MM/yy"
         days = Day.loadDay()
         for day in days {
