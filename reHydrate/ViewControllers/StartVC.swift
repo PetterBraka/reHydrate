@@ -33,6 +33,14 @@ class StartVC: UIViewController {
     var today = Day.init()
     let formatter = DateFormatter()
     
+    var healthStore: HKHealthStore?
+    
+    var typesToShare : Set<HKSampleType> {
+        let waterType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
+        return [waterType]
+    }
+    
+    
     @objc func tap(_ sender: UIGestureRecognizer){
         let drink = Drink.init()
         switch sender.view {
@@ -123,6 +131,16 @@ class StartVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
+        
+        //  Request access to write dietaryWater data to HealthStore
+        self.healthStore?.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
+            if (!success) {
+                //  request was not successful, handle user denial
+                return
+            }
+            
+        })
+        
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -143,6 +161,33 @@ class StartVC: UIViewController {
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
+    }
+    
+    func saveConsumedWater(water: Double, date: Date) {
+        
+        //1.  Make sure the body mass type exists
+        guard let dietaryWater = HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
+            fatalError("dietary water is no longer available in HealthKit")
+        }
+        
+        //2.  Use the Count HKUnit to create a body mass quantity
+        let waterConsumed = HKQuantity(unit: HKUnit.liter(),
+                                          doubleValue: water)
+        
+        let waterConsumedSample = HKQuantitySample(type: dietaryWater,
+                                                   quantity: waterConsumed,
+                                                   start: date,
+                                                   end: date)
+        
+        //3.  Save the same to HealthKit
+        HKHealthStore().save(waterConsumedSample) { (success, error) in
+            
+            if let error = error {
+                print("Error Saving water consumtion: \(error.localizedDescription)")
+            } else {
+                print("Successfully saved water consumtion")
+            }
+        }
     }
     
     /**
@@ -298,6 +343,7 @@ class StartVC: UIViewController {
      */
     func updateUI(){
         Day.saveDay(days)
+        saveConsumedWater(water: Double(today.consumedAmount.amountOfDrink), date: Date.init())
         if (today.goalAmount.amountOfDrink.rounded(.up) == today.goalAmount.amountOfDrink.rounded(.down)){
             goalAmount.text = String(format: "%.0f", today.goalAmount.amountOfDrink)
         } else {
