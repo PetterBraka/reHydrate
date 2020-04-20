@@ -84,21 +84,23 @@ public class Day: NSObject, Codable {
         let decoder = JSONDecoder()
         if  let object = UserDefaults.standard.value(forKey: "days") as? Data {
             do {
-                let days = try decoder.decode([Day].self, from: object)
-                
+                var days = try decoder.decode([Day].self, from: object)
+                if !days.isEmpty {
+                    days.sort(by: {$0.date < $1.date})
+                }
                 for day in days {
                     if days.firstIndex(of: day) == 0 {
                         print("---------------------------------------------")
                     }
                     let formatter = DateFormatter()
-                    formatter.dateFormat = "EEEE - dd/MM/yy"
-                    print("|Date - ", formatter.string(from: day.date), "\t\t\t\t\t|")
+                    formatter.dateFormat = "EEE - dd/MM/yy"
+                    print("|Date", formatter.string(from: day.date), "\t\t\t\t\t\t|")
                     print("|Goal:", "\t\t\t\t\t\t\t\t\t\t|")
-                    print("|    Drink type - ", day.goalAmount.typeOfDrink, "\t\t\t\t\t|")
-                    print("|    Drink amount - ", day.goalAmount.amountOfDrink, "\t\t\t\t\t|")
+                    print("| - Drink type - ", day.goalAmount.typeOfDrink, "\t\t\t\t\t|")
+                    print("| - Drink amount - ", day.goalAmount.amountOfDrink, "\t\t\t\t\t|")
                     print("|Consumed Drink: \t\t\t\t\t\t\t|")
-                    print("|    Drink type - ", day.consumedAmount.typeOfDrink, "\t\t\t\t\t|")
-                    print("|    Drink amount - ", String(format: "%.1f",day.consumedAmount.amountOfDrink), "\t\t\t\t\t|")
+                    print("| - Drink type - ", day.consumedAmount.typeOfDrink, "\t\t\t\t\t|")
+                    print("| - Drink amount - ", day.consumedAmount.amountOfDrink, "\t\t\t\t\t|")
                     print("---------------------------------------------")
                 }
                 return days
