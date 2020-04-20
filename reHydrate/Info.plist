@@ -58,5 +58,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSHealthShareUsageDescription</key>
+	<string>To save your water consumtion</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>To load your water consumtion</string>
 </dict>
 </plist>
