@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import HealthKit
 
 class AboutVC: UIViewController {
     
     @IBOutlet weak var helpButton: UIButton!
     @IBOutlet weak var exitButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
+    @IBOutlet weak var healthAccessButton: UIButton!
     
     @IBAction func exit(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -43,7 +45,9 @@ class AboutVC: UIViewController {
                 helpImage.contentMode = .scaleAspectFit
                 helpButton.isHidden = true
                 clearButton.isHidden = true
-                
+            case healthAccessButton:
+                let healthKitMAnager = HealthKitManager()
+                _ = healthKitMAnager.authorizeHealtKit()
             default:
             break
         }
@@ -52,7 +56,6 @@ class AboutVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
-        // Do any additional setup after loading the view.
     }
     
     func setUpButtons(){
@@ -66,7 +69,14 @@ class AboutVC: UIViewController {
         clearButton.layer.borderColor = UIColor.red.cgColor
         clearButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
+        healthAccessButton.layer.borderWidth = 3
+        healthAccessButton.layer.cornerRadius = 20
+        healthAccessButton.layer.borderColor = UIColor.lightGray.cgColor
+        healthAccessButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
+        let healthTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
         let helpTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
+        healthAccessButton.addGestureRecognizer(healthTapGesture)
         helpButton.addGestureRecognizer(helpTapGesture)
         
     }
