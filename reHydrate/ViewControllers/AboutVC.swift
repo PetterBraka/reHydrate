@@ -16,6 +16,15 @@ class AboutVC: UIViewController {
     @IBOutlet weak var clearButton: UIButton!
     @IBOutlet weak var healthButton: UIButton!
     
+    /**
+     Will clear all the saved data from past days.
+     
+     - parameter sender: - **view** that called the function.
+     
+     # Notes: #
+     1. will remove all the saved data.
+     
+     */
     @IBAction func clearData(_ sender: Any) {
         let clearDataAlert = UIAlertController(title: "Clearing data", message: "are you sure you want to delete all save data?", preferredStyle: .alert)
         clearDataAlert.addAction(UIAlertAction(title: "keep data", style: .cancel, handler: nil))
@@ -27,6 +36,12 @@ class AboutVC: UIViewController {
         self.present(clearDataAlert, animated: true, completion: nil)
     }
     
+    /**
+     Will check which **view** that called this function.
+     
+     - parameter sender: - **view** that called the function.
+     
+     */
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
             case helpButton:
@@ -57,6 +72,17 @@ class AboutVC: UIViewController {
         setUpButtons()
     }
     
+    /**
+     Setting upp the listeners and aperients of the buttons.
+     
+     # Example #
+     ```
+     override func viewDidLoad() {
+     super.viewDidLoad()
+     setUpButtons()
+     }
+     ```
+     */
     func setUpButtons(){
         helpButton.layer.borderWidth = 3
         helpButton.layer.cornerRadius = 20
