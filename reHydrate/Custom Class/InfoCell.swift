@@ -12,6 +12,8 @@ class InfoCell: UITableViewCell {
     @IBOutlet weak var titleOfCard: 	UILabel!
     @IBOutlet weak var typeOfDrink: 	UILabel!
     @IBOutlet weak var amountOfDrink: 	UILabel!
+    @IBOutlet var lables: [UILabel]!
+    var darkMode						= Bool()
     
     /**
      Will sett the valuse for a **UITableViewCell**.
@@ -35,5 +37,26 @@ class InfoCell: UITableViewCell {
         }
         typeOfDrink.text 	= drink.typeOfDrink
         amountOfDrink.text 	= String(drink.amountOfDrink)
+    }
+    
+    func changeAppearentce(_ darkMode: Bool){
+        self.darkMode = darkMode
+        self.backgroundColor = .clear
+        if darkMode {
+            titleOfCard.textColor 	= .white
+            typeOfDrink.textColor 	= .white
+            amountOfDrink.textColor = .white
+            for lable in lables {
+                lable.textColor 	= .white
+            }
+        } else {
+            titleOfCard.textColor 	= .black
+            typeOfDrink.textColor 	= .black
+            amountOfDrink.textColor = .black
+            for lable in lables {
+                lable.textColor     = .black
+            }
+        }
+        
     }
 }
