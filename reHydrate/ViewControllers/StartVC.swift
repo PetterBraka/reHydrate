@@ -12,21 +12,21 @@ import CoreData
 import FSCalendar
 
 class StartVC: UIViewController {
-    @IBOutlet weak var currentDay: UILabel!
-    @IBOutlet weak var historyButton: UIButton!
-    @IBOutlet weak var optionsStack: UIStackView!
-    @IBOutlet weak var aboutButton: UIButton!
-    @IBOutlet weak var smallStack: UIStackView!
-    @IBOutlet weak var mediumStack: UIStackView!
-    @IBOutlet weak var largeStack: UIStackView!
-    @IBOutlet weak var goalAmount: UILabel!
-    @IBOutlet weak var consumedAmount: UILabel!
-    @IBOutlet weak var smallOption: UIButton!
-    @IBOutlet weak var smallOptionLabel: UILabel!
-    @IBOutlet weak var mediumOption: UIButton!
-    @IBOutlet weak var mediumOptionLabel: UILabel!
-    @IBOutlet weak var largeOption: UIButton!
-    @IBOutlet weak var largeOptionLabel: UILabel!
+    @IBOutlet weak var currentDay: 			UILabel!
+    @IBOutlet weak var historyButton: 		UIButton!
+    @IBOutlet weak var optionsStack: 		UIStackView!
+    @IBOutlet weak var aboutButton: 		UIButton!
+    @IBOutlet weak var smallStack: 			UIStackView!
+    @IBOutlet weak var mediumStack: 		UIStackView!
+    @IBOutlet weak var largeStack: 			UIStackView!
+    @IBOutlet weak var goalAmount: 			UILabel!
+    @IBOutlet weak var consumedAmount: 		UILabel!
+    @IBOutlet weak var smallOption: 		UIButton!
+    @IBOutlet weak var smallOptionLabel: 	UILabel!
+    @IBOutlet weak var mediumOption: 		UIButton!
+    @IBOutlet weak var mediumOptionLabel: 	UILabel!
+    @IBOutlet weak var largeOption: 		UIButton!
+    @IBOutlet weak var largeOptionLabel: 	UILabel!
     
     let defaults 			= UserDefaults.standard
     var days: [Day] 		= []
@@ -35,7 +35,7 @@ class StartVC: UIViewController {
     
     var healthStore: 		HKHealthStore?
     var typesToShare: 		Set<HKSampleType> {
-        let waterType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
+        let waterType 		= HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
         return [waterType]
     }
     
