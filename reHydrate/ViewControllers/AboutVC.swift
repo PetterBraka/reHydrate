@@ -9,7 +9,6 @@
 import UIKit
 import HealthKit
 
-
 struct settingOptions {
     var isOpened: 	Bool
     var setting: 	String
@@ -17,10 +16,11 @@ struct settingOptions {
 }
 
 class AboutVC: UIViewController {
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var exitButton: UIButton!
     
-    
+    var darkMode					= true
     let helpImage 					= UIImageView.init(image: UIImage.init(named: "toturial-1"))
     var selectedRow: IndexPath 		= IndexPath()
     var settings: [settingOptions] 	= [
@@ -57,10 +57,108 @@ class AboutVC: UIViewController {
         helpImage.addGestureRecognizer(helpTapRecognizer)
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableView.delegate 		= self
+        tableView.dataSource 	= self
+        
+        darkMode = UserDefaults.standard.bool(forKey: "darkMode")
+        changeAppearance()
     }
     
+    /**
+     Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
+     
+     # Notes: #
+     1. This will change all the colors off this screen.
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
+    func changeAppearance(){
+        UserDefaults.standard.set(darkMode, forKey: "darkMode")
+        if !darkMode {
+            self.view.backgroundColor 	= .white
+            tableView.backgroundColor 	= .white
+            exitButton.tintColor		= .black
+        } else{
+            self.view.backgroundColor 	= hexStringToUIColor(hex: "#212121")
+            tableView.backgroundColor 	= hexStringToUIColor(hex: "#212121")
+            exitButton.tintColor		= .lightGray
+        }
+    }
+    
+    /**
+     Changing the appearance of the **UITableView** deppending on if the users prefrence for dark mode or light mode.
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
+    func changeTableViewAppearants(){
+        var section = 0
+        while section < tableView.numberOfSections && tableView.numberOfSections != 0{
+            let headerCell = tableView.headerView(forSection: section) as! SettingsHeader
+            headerCell.setHeaderAppairents(self.darkMode)
+            var row = 0
+            while row < tableView.numberOfRows(inSection: section) {
+                let cell = tableView.cellForRow(at: IndexPath(row: row, section: section)) as? SettingOptionCell ?? nil
+                if cell != nil {
+                    cell!.settCellAppairents(darkMode)
+                }
+                row += 1
+            }
+            section += 1
+        }
+    }
+    
+    
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    /**
+     Will handle the gestures form the **UITableView**.
+     
+     - parameter sender: - The **UIGestureRecognizer** that called the function.
+     
+     # Notes: #
+     1. case for "how to use" will create a image and hide the **UITableView**. If the user clicks the image it will dismiss and show the **UITableView**
+     2. case for "remove data" will ask the user if the user want to remove all saved data.
+     3. Default case for the tapping any other header cell. This case will then expand the header and show the cells in that section.
+     */
     @objc func expandOrCollapsSection(_ sender: UIGestureRecognizer){
         guard let section = sender.view?.tag else { return }
         switch section {
@@ -93,13 +191,17 @@ class AboutVC: UIViewController {
                     let indexPath 			= IndexPath(row: row, section: section)
                     indexPaths.append(indexPath)
                 }
+                let header = tableView.headerView(forSection: section) as! SettingsHeader
                 let ioOpend 				= settings[section].isOpened
                 settings[section].isOpened 	= !ioOpend
                 if ioOpend {
+                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
                     tableView.deleteRows(at: indexPaths, with: .fade)
                 } else {
                     tableView.insertRows(at: indexPaths, with: .fade)
-            }
+                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
+            	}
+            
         }
     }
 }
@@ -107,8 +209,10 @@ class AboutVC: UIViewController {
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell 		= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
-        cell.setting 	= settings[indexPath.section].options[indexPath.row]
+        let cell 				= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
+        cell.setting 			= settings[indexPath.section].options[indexPath.row]
+        cell.selectionStyle 	= .none
+        cell.settCellAppairents(darkMode)
         return cell
     }
     
@@ -134,6 +238,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         if settings[section].options.isEmpty{
             cell.button.removeFromSuperview()
         }
+        cell.setHeaderAppairents(darkMode)
         return cell
     }
     
@@ -146,8 +251,18 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-
+        switch indexPath {
+            case IndexPath(row: 0, section: 0):
+                darkMode = false
+                changeAppearance()
+            changeTableViewAppearants()
+            case IndexPath(row: 1, section: 0):
+                darkMode = true
+                changeAppearance()
+            changeTableViewAppearants()
+            default:
+            break
+        }
     }
 }
 
