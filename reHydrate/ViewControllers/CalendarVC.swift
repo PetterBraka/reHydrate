@@ -11,9 +11,9 @@ import FSCalendar
 
 class CalendarVC: UIViewController {
     
-    var drinks: [Drink] = []
-    var days: [Day] = []
-    let formatter = DateFormatter()
+    var drinks: [Drink] 		= []
+    var days: [Day] 			= []
+    let formatter 				= DateFormatter()
     
     @IBOutlet weak var titleDate: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
@@ -31,14 +31,14 @@ class CalendarVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        formatter.dateFormat = "EEE - dd/MM/yy"
-        days = Day.loadDay()
+        days                            = Day.loadDay()
+        formatter.dateFormat 			= "EEE - dd/MM/yy"
         getDrinks(Date.init())
-        tableView.isScrollEnabled = false
-        tableView.delegate = self
-        tableView.dataSource = self
-        calendar.delegate = self
-        calendar.dataSource = self
+        tableView.isScrollEnabled 		= false
+        tableView.delegate 				= self
+        tableView.dataSource 			= self
+        calendar.delegate 				= self
+        calendar.dataSource 			= self
         calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cell")
     }
     

@@ -174,34 +174,8 @@
                                 <state key="normal" backgroundImage="xmark.circle" catalog="system"/>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="1HE-4s-fHG">
-                                <rect key="frame" x="0.0" y="124" width="394" height="718"/>
+                                <rect key="frame" x="20" y="124" width="374" height="718"/>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="settingCell" rowHeight="50" id="3R4-ZC-wPp" customClass="SettingsCell" customModule="reHydrate" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="394" height="50"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3R4-ZC-wPp" id="ObQ-lE-jgu">
-                                            <rect key="frame" x="0.0" y="0.0" width="394" height="50"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="setting" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zM1-Zm-20P">
-                                                    <rect key="frame" x="35" y="13.5" width="66.5" height="23.5"/>
-                                                    <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="20"/>
-                                                    <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstItem="zM1-Zm-20P" firstAttribute="leading" secondItem="ObQ-lE-jgu" secondAttribute="leadingMargin" constant="15" id="5bD-Km-lCR"/>
-                                                <constraint firstItem="zM1-Zm-20P" firstAttribute="centerY" secondItem="ObQ-lE-jgu" secondAttribute="centerY" id="anG-Fv-N0i"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="settingLable" destination="zM1-Zm-20P" id="eDG-HD-hDw"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -212,7 +186,7 @@
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="top" secondItem="LhN-cg-DML" secondAttribute="top" constant="20" id="c2x-w7-4rE"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="width" secondItem="Kcw-zp-J3F" secondAttribute="height" multiplier="1:1" id="mdk-aY-3AR"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rhB-fV-ebC"/>
-                            <constraint firstItem="1HE-4s-fHG" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" id="rkm-0e-we7"/>
+                            <constraint firstItem="1HE-4s-fHG" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rkm-0e-we7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LhN-cg-DML"/>
                     </view>

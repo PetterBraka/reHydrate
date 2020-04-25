@@ -10,8 +10,8 @@ import UIKit
 import FSCalendar
 
 class Drink: NSObject, Codable {
-    var typeOfDrink: String
-    var amountOfDrink: Float
+    var typeOfDrink: 	String
+    var amountOfDrink: 	Float
     
     /**
      Default initializer for **Drink**
@@ -22,8 +22,8 @@ class Drink: NSObject, Codable {
      ```
      */
     required override init() {
-        self.typeOfDrink = "water"
-        self.amountOfDrink = 0
+        self.typeOfDrink 	= "water"
+        self.amountOfDrink 	= 0
     }
 
     /**
@@ -38,8 +38,8 @@ class Drink: NSObject, Codable {
      ```
      */
     init(typeOfDrink: String, amountOfDrink: Float ) {
-        self.typeOfDrink = typeOfDrink
-        self.amountOfDrink = amountOfDrink
+        self.typeOfDrink 	= typeOfDrink
+        self.amountOfDrink 	= amountOfDrink
     }
     
     /**

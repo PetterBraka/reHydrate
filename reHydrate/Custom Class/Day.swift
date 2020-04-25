@@ -10,8 +10,8 @@ import UIKit
 import FSCalendar
 
 public class Day: NSObject, Codable {
-    var date: Date
-    var goalAmount: Drink
+    var date: 			Date
+    var goalAmount: 	Drink
     var consumedAmount: Drink
     
     /**
@@ -23,8 +23,8 @@ public class Day: NSObject, Codable {
      ```
      */
     required override init() {
-        self.date = Date.init()
-        self.goalAmount = Drink.init()
+        self.date 			= Date.init()
+        self.goalAmount 	= Drink.init()
         self.consumedAmount = Drink.init()
     }
     
@@ -41,8 +41,8 @@ public class Day: NSObject, Codable {
      ```
      */
     init(date: Date, goalAmount: Drink, consumedAmount: Drink ) {
-        self.date = date
-        self.goalAmount = goalAmount
+        self.date 			= date
+        self.goalAmount 	= goalAmount
         self.consumedAmount = consumedAmount
         
     }
@@ -81,8 +81,8 @@ public class Day: NSObject, Codable {
      ```
      */
     static func loadDay()-> [Day] {
-        let decoder = JSONDecoder()
-        if  let object = UserDefaults.standard.value(forKey: "days") as? Data {
+        let decoder 	= JSONDecoder()
+        if  let object 	= UserDefaults.standard.value(forKey: "days") as? Data {
             do {
                 var days = try decoder.decode([Day].self, from: object)
                 if !days.isEmpty {
@@ -94,13 +94,13 @@ public class Day: NSObject, Codable {
                     }
                     let formatter = DateFormatter()
                     formatter.dateFormat = "EEE - dd/MM/yy"
-                    print("|Date", formatter.string(from: day.date), "\t\t\t\t\t\t|")
-                    print("|Goal:", "\t\t\t\t\t\t\t\t\t\t|")
-                    print("| - Drink type - ", day.goalAmount.typeOfDrink, "\t\t\t\t\t|")
-                    print("| - Drink amount - ", day.goalAmount.amountOfDrink, "\t\t\t\t\t|")
-                    print("|Consumed Drink: \t\t\t\t\t\t\t|")
-                    print("| - Drink type - ", day.consumedAmount.typeOfDrink, "\t\t\t\t\t|")
-                    print("| - Drink amount - ",String(format: "%.2f", day.consumedAmount.amountOfDrink), "\t\t\t\t\t|")
+                    print("|Date", formatter.string(from: day.date))
+                    print("|Goal:")
+                    print("| - Drink type - ", day.goalAmount.typeOfDrink)
+                    print("| - Drink amount - ", day.goalAmount.amountOfDrink)
+                    print("|Consumed Drink:")
+                    print("| - Drink type - ", day.consumedAmount.typeOfDrink)
+                    print("| - Drink amount - ",String(format: "%.2f", day.consumedAmount.amountOfDrink))
                     print("---------------------------------------------")
                 }
                 return days

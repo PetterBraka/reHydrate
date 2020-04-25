@@ -9,9 +9,9 @@
 import UIKit
 
 class InfoCell: UITableViewCell {
-    @IBOutlet weak var titleOfCard: UILabel!
-    @IBOutlet weak var typeOfDrink: UILabel!
-    @IBOutlet weak var amountOfDrink: UILabel!
+    @IBOutlet weak var titleOfCard: 	UILabel!
+    @IBOutlet weak var typeOfDrink: 	UILabel!
+    @IBOutlet weak var amountOfDrink: 	UILabel!
     
     /**
      Will sett the valuse for a **UITableViewCell**.
@@ -33,7 +33,7 @@ class InfoCell: UITableViewCell {
         default:
             break
         }
-        typeOfDrink.text = drink.typeOfDrink
-        amountOfDrink.text = String(drink.amountOfDrink)
+        typeOfDrink.text 	= drink.typeOfDrink
+        amountOfDrink.text 	= String(drink.amountOfDrink)
     }
 }
