@@ -24,6 +24,13 @@ class SettingOptionCell: UITableViewCell {
         return lable
         }()
     var darkMode = Bool()
+    let activated: UIButton = {
+        let button = UIButton()
+        button.setTitle("", for: .normal)
+        button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -38,11 +45,32 @@ class SettingOptionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    fileprivate func setActivatedButtonConstraints() {
+        activated.widthAnchor.constraint(equalToConstant: 25).isActive                        = true
+        activated.heightAnchor.constraint(equalToConstant: 25).isActive                       = true
+        activated.centerYAnchor.constraint(equalTo: option.centerYAnchor).isActive            = true
+        activated.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive     = true
+    }
+    
     func settCellAppairents(_ darkMode: Bool){
         if darkMode {
+            if option.text == String("dark mode").capitalized{
+                self.addSubview(activated)
+                activated.tintColor = .lightGray
+                setActivatedButtonConstraints()
+            } else {
+                activated.removeFromSuperview()
+            }
             option.textColor = .white
             self.backgroundColor = hexStringToUIColor(hex: "#212121")
         } else {
+            if option.text == String("light mode").capitalized{
+                self.addSubview(activated)
+                activated.tintColor = .black
+                setActivatedButtonConstraints()
+            } else {
+                activated.removeFromSuperview()
+            }
             option.textColor = .black
             self.backgroundColor = .white
         }

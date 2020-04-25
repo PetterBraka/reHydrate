@@ -147,13 +147,17 @@ class AboutVC: UIViewController {
                     let indexPath 			= IndexPath(row: row, section: section)
                     indexPaths.append(indexPath)
                 }
+                let header = tableView.headerView(forSection: section) as! SettingsHeader
                 let ioOpend 				= settings[section].isOpened
                 settings[section].isOpened 	= !ioOpend
                 if ioOpend {
+                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
                     tableView.deleteRows(at: indexPaths, with: .fade)
                 } else {
                     tableView.insertRows(at: indexPaths, with: .fade)
-            }
+                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
+            	}
+            
         }
     }
 }
