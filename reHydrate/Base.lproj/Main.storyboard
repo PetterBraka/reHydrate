@@ -178,7 +178,7 @@
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="LhN-cg-DML" firstAttribute="bottom" secondItem="1HE-4s-fHG" secondAttribute="bottom" constant="20" id="E3U-iF-9I3"/>
                             <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="1HE-4s-fHG" secondAttribute="trailing" constant="20" id="T56-yq-0CB"/>

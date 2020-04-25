@@ -9,7 +9,6 @@
 import UIKit
 import HealthKit
 
-
 struct settingOptions {
     var isOpened: 	Bool
     var setting: 	String
@@ -17,10 +16,11 @@ struct settingOptions {
 }
 
 class AboutVC: UIViewController {
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var exitButton: UIButton!
     
-    
+    var darkMode					= true
     let helpImage 					= UIImageView.init(image: UIImage.init(named: "toturial-1"))
     var selectedRow: IndexPath 		= IndexPath()
     var settings: [settingOptions] 	= [
@@ -57,8 +57,62 @@ class AboutVC: UIViewController {
         helpImage.addGestureRecognizer(helpTapRecognizer)
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableView.delegate 		= self
+        tableView.dataSource 	= self
+        
+        let mode = UserDefaults.standard.bool(forKey: "darkMode")
+        if mode != nil {darkMode = mode}
+        changeDarkMode()
+    }
+    func changeDarkMode(){
+        UserDefaults.standard.set(darkMode, forKey: "darkMode")
+        if !darkMode {
+            self.view.backgroundColor 	= .white
+            tableView.backgroundColor 	= .white
+            exitButton.tintColor		= .black
+        } else{
+            self.view.backgroundColor 	= hexStringToUIColor(hex: "#212121")
+            tableView.backgroundColor 	= hexStringToUIColor(hex: "#212121")
+            exitButton.tintColor		= .lightGray
+        }
+    }
+    func changeTableViewAppearants(){
+        var section = 0
+        while section < tableView.numberOfSections && tableView.numberOfSections != 0{
+            let headerCell = tableView.headerView(forSection: section) as! SettingsHeader
+            headerCell.setHeaderAppairents(self.darkMode)
+            var row = 0
+            while row < tableView.numberOfRows(inSection: section) {
+                let cell = tableView.cellForRow(at: IndexPath(row: row, section: section)) as? SettingOptionCell ?? nil
+                if cell != nil {
+                    cell!.settCellAppairents(darkMode)
+                }
+                row += 1
+            }
+            section += 1
+        }
+    }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
     
     @objc func expandOrCollapsSection(_ sender: UIGestureRecognizer){
@@ -107,8 +161,10 @@ class AboutVC: UIViewController {
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell 		= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
-        cell.setting 	= settings[indexPath.section].options[indexPath.row]
+        let cell 				= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
+        cell.setting 			= settings[indexPath.section].options[indexPath.row]
+        cell.selectionStyle 	= .none
+        cell.settCellAppairents(darkMode)
         return cell
     }
     
@@ -134,6 +190,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         if settings[section].options.isEmpty{
             cell.button.removeFromSuperview()
         }
+        cell.setHeaderAppairents(darkMode)
         return cell
     }
     
@@ -146,8 +203,18 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-
+        switch indexPath {
+            case IndexPath(row: 0, section: 0):
+                darkMode = false
+                changeDarkMode()
+            changeTableViewAppearants()
+            case IndexPath(row: 1, section: 0):
+                darkMode = true
+                changeDarkMode()
+            changeTableViewAppearants()
+            default:
+            break
+        }
     }
 }
 
