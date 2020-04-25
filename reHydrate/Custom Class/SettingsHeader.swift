@@ -40,7 +40,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
         return view
     }()
     var darkMode = Bool()
-    
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         self.isUserInteractionEnabled 	= true
@@ -53,21 +53,44 @@ class SettingsHeader: UITableViewHeaderFooterView {
         contentView.addSubview(container)
         container.addSubview(title)
         container.addSubview(button)
-        title.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 10).isActive       = true
-        button.heightAnchor.constraint(equalToConstant: 25).isActive							= true
-        button.widthAnchor.constraint(equalToConstant: 25).isActive								= true
-        button.rightAnchor.constraint(equalTo: container.rightAnchor).isActive    				= true
-        button.centerYAnchor.constraint(equalTo: title.centerYAnchor).isActive					= true
-        
-        container.topAnchor.constraint(equalTo:contentView.topAnchor).isActive                 	= true
-        container.leftAnchor.constraint(equalTo:contentView.leftAnchor).isActive 				= true
-        container.rightAnchor.constraint(equalTo:contentView.rightAnchor).isActive             	= true
-        container.bottomAnchor.constraint(equalTo:contentView.bottomAnchor).isActive         	= true
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    /**
+     Setting all the constraints for the views.
+     
+     # Example #
+     ```
+     container.addSubview(title)
+     container.addSubview(button)
+     setConstraints()
+     ```
+     */
+    fileprivate func setConstraints() {
+        title.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 10).isActive       = true
+        button.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
+        button.widthAnchor.constraint(equalToConstant: 25).isActive                                = true
+        button.rightAnchor.constraint(equalTo: container.rightAnchor).isActive                    = true
+        button.centerYAnchor.constraint(equalTo: title.centerYAnchor).isActive                    = true
+        
+        container.topAnchor.constraint(equalTo:contentView.topAnchor).isActive                     = true
+        container.leftAnchor.constraint(equalTo:contentView.leftAnchor).isActive                 = true
+        container.rightAnchor.constraint(equalTo:contentView.rightAnchor).isActive                 = true
+        container.bottomAnchor.constraint(equalTo:contentView.bottomAnchor).isActive             = true
+    }
+    
+    /**
+     Changes the apparentce of the **SettingsHeader** deppending on the users preferents.
+     
+     # Example #
+     ```
+     setHeaderAppairents(darkMode)
+     ```
+     */
     func setHeaderAppairents(_ darkMode: Bool){
         if darkMode {
             button.tintColor = .lightGray
@@ -83,6 +106,19 @@ class SettingsHeader: UITableViewHeaderFooterView {
         }
     }
     
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
     func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         

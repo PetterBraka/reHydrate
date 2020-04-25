@@ -170,7 +170,6 @@ class StartVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
-        
         //  Request access to write dietaryWater data to HealthStore
         self.healthStore?.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
             if (!success) {
@@ -178,9 +177,14 @@ class StartVC: UIViewController {
                 return
             }
         })
-        changeAppearance()
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
+            if self.traitCollection.userInterfaceStyle == .dark {
+                darkMode = true
+            } else {
+                darkMode = false
+            }
+            UserDefaults.standard.set(darkMode, forKey: "darkMode")
             let storyboard 						= UIStoryboard(name: "Main", bundle: nil)
             let aboutScreen 					= storyboard.instantiateViewController(withIdentifier: "about")
             aboutScreen.modalPresentationStyle 	= .fullScreen
@@ -204,6 +208,17 @@ class StartVC: UIViewController {
         changeAppearance()
     }
     
+    /**
+     Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
+     
+     # Notes: #
+     1. This will change all the colors off this screen.
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
     func changeAppearance() {
         darkMode = UserDefaults.standard.bool(forKey: "darkMode")
         if darkMode == true {
@@ -223,6 +238,20 @@ class StartVC: UIViewController {
         }
     }
     
+    
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
     func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         

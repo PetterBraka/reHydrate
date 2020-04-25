@@ -60,11 +60,22 @@ class AboutVC: UIViewController {
         tableView.delegate 		= self
         tableView.dataSource 	= self
         
-        let mode = UserDefaults.standard.bool(forKey: "darkMode")
-        if mode != nil {darkMode = mode}
-        changeDarkMode()
+        darkMode = UserDefaults.standard.bool(forKey: "darkMode")
+        changeAppearance()
     }
-    func changeDarkMode(){
+    
+    /**
+     Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
+     
+     # Notes: #
+     1. This will change all the colors off this screen.
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
+    func changeAppearance(){
         UserDefaults.standard.set(darkMode, forKey: "darkMode")
         if !darkMode {
             self.view.backgroundColor 	= .white
@@ -76,6 +87,15 @@ class AboutVC: UIViewController {
             exitButton.tintColor		= .lightGray
         }
     }
+    
+    /**
+     Changing the appearance of the **UITableView** deppending on if the users prefrence for dark mode or light mode.
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
     func changeTableViewAppearants(){
         var section = 0
         while section < tableView.numberOfSections && tableView.numberOfSections != 0{
@@ -93,6 +113,20 @@ class AboutVC: UIViewController {
         }
     }
     
+    
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
     func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
@@ -115,6 +149,16 @@ class AboutVC: UIViewController {
         )
     }
     
+    /**
+     Will handle the gestures form the **UITableView**.
+     
+     - parameter sender: - The **UIGestureRecognizer** that called the function.
+     
+     # Notes: #
+     1. case for "how to use" will create a image and hide the **UITableView**. If the user clicks the image it will dismiss and show the **UITableView**
+     2. case for "remove data" will ask the user if the user want to remove all saved data.
+     3. Default case for the tapping any other header cell. This case will then expand the header and show the cells in that section.
+     */
     @objc func expandOrCollapsSection(_ sender: UIGestureRecognizer){
         guard let section = sender.view?.tag else { return }
         switch section {
@@ -210,11 +254,11 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath {
             case IndexPath(row: 0, section: 0):
                 darkMode = false
-                changeDarkMode()
+                changeAppearance()
             changeTableViewAppearants()
             case IndexPath(row: 1, section: 0):
                 darkMode = true
-                changeDarkMode()
+                changeAppearance()
             changeTableViewAppearants()
             default:
             break

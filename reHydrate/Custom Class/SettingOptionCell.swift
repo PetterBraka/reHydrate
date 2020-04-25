@@ -45,6 +45,14 @@ class SettingOptionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /**
+     Setting the constraints for the activate button.
+     
+     # Example #
+     ```
+     setActivatedButtonConstraints()
+     ```
+     */
     fileprivate func setActivatedButtonConstraints() {
         activated.widthAnchor.constraint(equalToConstant: 25).isActive                        = true
         activated.heightAnchor.constraint(equalToConstant: 25).isActive                       = true
@@ -52,6 +60,14 @@ class SettingOptionCell: UITableViewCell {
         activated.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive     = true
     }
     
+    /**
+     Changes the apparentce of the **SettingOptionCell** deppending on the users preferents.
+     
+     # Example #
+     ```
+     settCellAppairents(darkMode)
+     ```
+     */
     func settCellAppairents(_ darkMode: Bool){
         if darkMode {
             if option.text == String("dark mode").capitalized{
@@ -76,6 +92,19 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
     func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
