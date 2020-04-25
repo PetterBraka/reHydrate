@@ -172,73 +172,27 @@
                                 </constraints>
                                 <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" backgroundImage="xmark.circle" catalog="system"/>
-                                <connections>
-                                    <action selector="exit:" destination="hPy-Nu-KYm" eventType="touchUpInside" id="6aF-Ov-Z54"/>
-                                    <action selector="exit:" destination="qsM-Pb-Rvt" eventType="touchUpInside" id="PRE-AM-BBs"/>
-                                </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fff-ot-rA8">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="1HE-4s-fHG">
                                 <rect key="frame" x="20" y="124" width="374" height="718"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="equalCentering" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="bTf-vt-3ad">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="98"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="56o-tS-aiS" userLabel="HealthAccess">
-                                                <rect key="frame" x="0.0" y="0.0" width="374" height="39"/>
-                                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="23"/>
-                                                <state key="normal" title="Healt app access">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R2I-qq-plc" userLabel="HelpButton">
-                                                <rect key="frame" x="0.0" y="59" width="374" height="39"/>
-                                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="23"/>
-                                                <state key="normal" title="How to use">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u9j-4W-Cnz" userLabel="clearHistory">
-                                        <rect key="frame" x="0.0" y="679" width="374" height="39"/>
-                                        <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="23"/>
-                                        <state key="normal" title="REMOVE DATA">
-                                            <color key="titleColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="clearData:" destination="hPy-Nu-KYm" eventType="touchUpInside" id="JMv-d3-T8z"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="bTf-vt-3ad" secondAttribute="trailing" id="5U9-Uj-Uiy"/>
-                                    <constraint firstItem="u9j-4W-Cnz" firstAttribute="top" relation="greaterThanOrEqual" secondItem="bTf-vt-3ad" secondAttribute="bottom" constant="10" id="6ib-VY-Qfe"/>
-                                    <constraint firstItem="u9j-4W-Cnz" firstAttribute="leading" secondItem="fff-ot-rA8" secondAttribute="leading" id="ThV-pU-vmf"/>
-                                    <constraint firstAttribute="trailing" secondItem="u9j-4W-Cnz" secondAttribute="trailing" id="enG-Eh-A6Z"/>
-                                    <constraint firstItem="bTf-vt-3ad" firstAttribute="leading" secondItem="fff-ot-rA8" secondAttribute="leading" id="g1f-At-GZp"/>
-                                    <constraint firstItem="bTf-vt-3ad" firstAttribute="top" secondItem="fff-ot-rA8" secondAttribute="top" id="gIv-Wd-Jhd"/>
-                                    <constraint firstAttribute="bottom" secondItem="u9j-4W-Cnz" secondAttribute="bottom" id="lLH-20-Vny"/>
-                                </constraints>
-                            </view>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="fff-ot-rA8" firstAttribute="top" secondItem="Kcw-zp-J3F" secondAttribute="bottom" constant="20" id="1sd-Oj-6Kl"/>
-                            <constraint firstItem="fff-ot-rA8" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="Bgt-SQ-TnZ"/>
-                            <constraint firstItem="LhN-cg-DML" firstAttribute="bottom" secondItem="fff-ot-rA8" secondAttribute="bottom" constant="20" id="RxT-TH-Ywv"/>
-                            <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="fff-ot-rA8" secondAttribute="trailing" constant="20" id="UVd-HL-D07"/>
+                            <constraint firstItem="LhN-cg-DML" firstAttribute="bottom" secondItem="1HE-4s-fHG" secondAttribute="bottom" constant="20" id="E3U-iF-9I3"/>
+                            <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="1HE-4s-fHG" secondAttribute="trailing" constant="20" id="T56-yq-0CB"/>
+                            <constraint firstItem="1HE-4s-fHG" firstAttribute="top" secondItem="Kcw-zp-J3F" secondAttribute="bottom" constant="20" id="TPB-Oh-Lgx"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="top" secondItem="LhN-cg-DML" secondAttribute="top" constant="20" id="c2x-w7-4rE"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="width" secondItem="Kcw-zp-J3F" secondAttribute="height" multiplier="1:1" id="mdk-aY-3AR"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rhB-fV-ebC"/>
+                            <constraint firstItem="1HE-4s-fHG" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rkm-0e-we7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LhN-cg-DML"/>
                     </view>
                     <connections>
-                        <outlet property="clearButton" destination="u9j-4W-Cnz" id="aKV-9S-orr"/>
                         <outlet property="exitButton" destination="Kcw-zp-J3F" id="6x9-tt-2Ew"/>
-                        <outlet property="healthAccessButton" destination="56o-tS-aiS" id="yS6-yP-wXq"/>
-                        <outlet property="helpButton" destination="R2I-qq-plc" id="30f-U6-Iyd"/>
+                        <outlet property="tableView" destination="1HE-4s-fHG" id="evH-Ui-m8r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ial-Rb-9pZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

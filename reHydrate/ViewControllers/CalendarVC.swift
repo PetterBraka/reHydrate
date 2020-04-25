@@ -11,30 +11,47 @@ import FSCalendar
 
 class CalendarVC: UIViewController {
     
-    var drinks: [Drink] = []
-    var days: [Day] = []
-    let formatter = DateFormatter()
+    var drinks: [Drink] 		= []
+    var days: [Day] 			= []
+    let formatter 				= DateFormatter()
     
     @IBOutlet weak var titleDate: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var tableView: UITableView!
+    
+    /**
+     Will dismiss the page and go back to the main page.
+     
+     - parameter sender: - **view** that called the function.
+    
+     */
     @IBAction func exit(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        formatter.dateFormat = "EEE - dd/MM/yy"
-        days = Day.loadDay()
+        days                            = Day.loadDay()
+        formatter.dateFormat 			= "EEE - dd/MM/yy"
         getDrinks(Date.init())
-        tableView.isScrollEnabled = false
-        tableView.delegate = self
-        tableView.dataSource = self
-        calendar.delegate = self
-        calendar.dataSource = self
+        tableView.isScrollEnabled 		= false
+        tableView.delegate 				= self
+        tableView.dataSource 			= self
+        calendar.delegate 				= self
+        calendar.dataSource 			= self
         calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cell")
     }
     
+    /**
+     Will find the drinks, depending on the date past in and update UI
+     
+     - parameter dateOfDay: - The date of you want the drinks from.
+     
+     # Example #
+     ```
+     getDrinks(Date.init())
+     ```
+     */
     func getDrinks(_ dateOfDay: Date){
         titleDate.text = formatter.string(from: dateOfDay)
         if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
@@ -79,9 +96,10 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let stringDate = formatter.string(from: date)
-        print(stringDate)
         
+        //Checks if the date has data stored.
         if days.contains(where: { formatter.string(from: $0.date) == stringDate }){
+            print(stringDate)
             return 1
         }
         

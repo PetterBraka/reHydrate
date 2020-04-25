@@ -12,65 +12,75 @@ import CoreData
 import FSCalendar
 
 class StartVC: UIViewController {
-    @IBOutlet weak var currentDay: UILabel!
-    @IBOutlet weak var historyButton: UIButton!
-    @IBOutlet weak var optionsStack: UIStackView!
-    @IBOutlet weak var aboutButton: UIButton!
-    @IBOutlet weak var smallStack: UIStackView!
-    @IBOutlet weak var mediumStack: UIStackView!
-    @IBOutlet weak var largeStack: UIStackView!
-    @IBOutlet weak var goalAmount: UILabel!
-    @IBOutlet weak var consumedAmount: UILabel!
-    @IBOutlet weak var smallOption: UIButton!
-    @IBOutlet weak var smallOptionLabel: UILabel!
-    @IBOutlet weak var mediumOption: UIButton!
-    @IBOutlet weak var mediumOptionLabel: UILabel!
-    @IBOutlet weak var largeOption: UIButton!
-    @IBOutlet weak var largeOptionLabel: UILabel!
+    @IBOutlet weak var currentDay: 			UILabel!
+    @IBOutlet weak var historyButton: 		UIButton!
+    @IBOutlet weak var optionsStack: 		UIStackView!
+    @IBOutlet weak var aboutButton: 		UIButton!
+    @IBOutlet weak var smallStack: 			UIStackView!
+    @IBOutlet weak var mediumStack: 		UIStackView!
+    @IBOutlet weak var largeStack: 			UIStackView!
+    @IBOutlet weak var goalAmount: 			UILabel!
+    @IBOutlet weak var consumedAmount: 		UILabel!
+    @IBOutlet weak var smallOption: 		UIButton!
+    @IBOutlet weak var smallOptionLabel: 	UILabel!
+    @IBOutlet weak var mediumOption: 		UIButton!
+    @IBOutlet weak var mediumOptionLabel: 	UILabel!
+    @IBOutlet weak var largeOption: 		UIButton!
+    @IBOutlet weak var largeOptionLabel: 	UILabel!
     
-    let defaults = UserDefaults.standard
-    var days: [Day] = []
-    var today = Day.init()
-    let formatter = DateFormatter()
+    let defaults 			= UserDefaults.standard
+    var days: [Day] 		= []
+    var today 				= Day.init()
+    let formatter 			= DateFormatter()
     
-    var healthStore: HKHealthStore?
-    
-    var typesToShare : Set<HKSampleType> {
-        let waterType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
+    var healthStore: 		HKHealthStore?
+    var typesToShare: 		Set<HKSampleType> {
+        let waterType 		= HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
         return [waterType]
     }
     
     
+    /**
+     Will check which view that called this function
+     
+     - parameter sender: - **View** that called this function.
+     
+     */
     @objc func tap(_ sender: UIGestureRecognizer){
         let drink = Drink.init()
         switch sender.view {
         case smallOption:
             print("small short-press")
-            let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType = "water"
-            drink.amountOfDrink = drinkAmount
-            drink.typeOfDrink = drinkType
+            let drinkAmount 		= getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType 			= "water"
+            drink.amountOfDrink 	= drinkAmount
+            drink.typeOfDrink 		= drinkType
         case mediumOption:
             print("medium short-press")
-            let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType = "water"
-            drink.amountOfDrink = drinkAmount
-            drink.typeOfDrink = drinkType
+            let drinkAmount 		= getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType 			= "water"
+            drink.amountOfDrink 	= drinkAmount
+            drink.typeOfDrink 		= drinkType
         case largeOption:
             print("large short-press")
-            let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType = "water"
-            drink.amountOfDrink = drinkAmount
-            drink.typeOfDrink = drinkType
+            let drinkAmount 		= getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType 			= "water"
+            drink.amountOfDrink 	= drinkAmount
+            drink.typeOfDrink 		= drinkType
         default:
             break
         }
         updateConsumtion(drink)
     }
     
+    /**
+     Will check which button view that called the function.
+     
+     - parameter sender: - **view** that called this function.
+     */
     @objc func long(_ sender: UIGestureRecognizer){
-        if sender.state == .began {
-            let drink = Drink.init()
+        if sender.state 	== .began {
+            let drink 		= Drink.init()
             switch sender.view {
             case smallOption:
                 print("small long-press")
@@ -84,14 +94,14 @@ class StartVC: UIViewController {
             case goalAmount:
                 let alert = UIAlertController(title: "Change goal", message: "Can you enter the amount you want as a goal in liters?", preferredStyle: .alert)
                 alert.addTextField(configurationHandler: {(_ textField: UITextField) in
-                    textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                    textField.font = UIFont(name: "American typewriter", size: 18)
-                    textField.keyboardType = .decimalPad
-                    textField.textAlignment = .center
+                    textField.attributedPlaceholder 	= NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                    textField.font 						= UIFont(name: "American typewriter", size: 18)
+                    textField.keyboardType 				= .decimalPad
+                    textField.textAlignment 			= .center
                 })
-                let doneButton = UIAlertAction(title: "done" , style: .default) {_ in
-                    let newGoal = (alert.textFields?.first!.text!)! as NSString
-                    if newGoal != "" {
+                let doneButton 							= UIAlertAction(title: "done" , style: .default) {_ in
+                    let newGoal 						= (alert.textFields?.first!.text!)! as NSString
+                    if newGoal 							!= "" {
                         self.today.goalAmount.amountOfDrink = newGoal.floatValue
                         self.updateUI()
                     }
@@ -105,29 +115,51 @@ class StartVC: UIViewController {
         }
     }
     
+    /**
+     Will sett day to this day and if the day  is saved and then update UI.
+     */
     @objc func didMoveToForground(){
         print("app enterd forground")
         today = days.first(where: { formatter.string(from: $0.date) == formatter.string(from: Date.init()) }) ?? Day.init()
-        if !days.isEmpty{
-            today.goalAmount = days[days.count - 1].goalAmount
+        if days.count 			< 0{
+            today.goalAmount 	= days[days.count - 1].goalAmount
         } else {
-            today.goalAmount = Drink.init(typeOfDrink: "water", amountOfDrink: 3)
+            today.goalAmount 	= Drink.init(typeOfDrink: "water", amountOfDrink: 3)
         }
+        loadDrinkOptions()
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
     }
     
-    @IBAction func about(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let aboutScreen = storyboard.instantiateViewController(withIdentifier: "about")
-        aboutScreen.modalPresentationStyle = .fullScreen
+    /**
+     Will open the settings page in full screen.
+     
+     - parameter sender: - **view** that called this function.
+     
+     # Notes: #
+     1. This will only be called when the user click the settings button.
+     
+     */
+    @IBAction func about(_ sender: UIButton) {
+        let storyboard 							= UIStoryboard(name: "Main", bundle: nil)
+        let aboutScreen 						= storyboard.instantiateViewController(withIdentifier: "about")
+        aboutScreen.modalPresentationStyle 		= .fullScreen
         self.present(aboutScreen, animated: true, completion: nil)
     }
     
-    @IBAction func history(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let calendarScreen = storyboard.instantiateViewController(withIdentifier: "calendar")
-        calendarScreen.modalPresentationStyle = .fullScreen
+    /**
+     Will open the calendar page in full screen.
+     
+     - parameter sender: - **view** that called this function.
+  
+     # Notes: #
+     1. This will only be called when the user click the history button.
+     
+     */
+    @IBAction func history(_ sender: UIButton) {
+        let storyboard 							= UIStoryboard(name: "Main", bundle: nil)
+        let calendarScreen 						= storyboard.instantiateViewController(withIdentifier: "calendar")
+        calendarScreen.modalPresentationStyle 	= .fullScreen
         self.present(calendarScreen, animated: true, completion: nil)
     }
     
@@ -139,17 +171,16 @@ class StartVC: UIViewController {
         //  Request access to write dietaryWater data to HealthStore
         self.healthStore?.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
             if (!success) {
-                //  request was not successful, handle user denial
+                print("Was not authorization by the user")
                 return
             }
-            
         })
         
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let aboutScreen = storyboard.instantiateViewController(withIdentifier: "about")
-            aboutScreen.modalPresentationStyle = .fullScreen
+            let storyboard 						= UIStoryboard(name: "Main", bundle: nil)
+            let aboutScreen 					= storyboard.instantiateViewController(withIdentifier: "about")
+            aboutScreen.modalPresentationStyle 	= .fullScreen
             self.present(aboutScreen, animated: true, completion: nil)
         }
         
@@ -167,22 +198,6 @@ class StartVC: UIViewController {
         Thread.sleep(forTimeInterval: 0.5)
     }
     
-    func saveConsumedWater(_ waterAmount: Double, _ date: Date) {
-        guard let dietaryWater = HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
-            fatalError("dietary water is no longer available in HealthKit")
-        }
-        let waterConsumed = HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
-        let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
-                                                   start: date, end: date)
-        HKHealthStore().save(waterConsumedSample) { (success, error) in
-            if let error = error {
-                print("Error Saving water consumtion: \(error.localizedDescription)")
-            } else {
-                print("Successfully saved water consumtion")
-            }
-        }
-    }
-    
     /**
      Setting upp the listeners and aperients of the buttons.
      
@@ -196,20 +211,18 @@ class StartVC: UIViewController {
      */
     func setUpButtons(){
         //setting up an gesture recognizer for each button.
-        let smallOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let smallOptionLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
-        smallOptionLongGesture.minimumPressDuration = 0.5
+        let smallOptionTapGesture 		= UITapGestureRecognizer(target: self, action: #selector(tap))
+        let smallOptionLongGesture 		= UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let mediumOptionTapGesture 		= UITapGestureRecognizer(target: self, action: #selector(tap))
+        let mediumOptionLongGesture 	= UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let largeOptionTapGesture 		= UITapGestureRecognizer(target: self, action: #selector(tap))
+        let largeOptionLongGesture 		= UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let changeGoalLongGesture 		= UILongPressGestureRecognizer(target: self, action: #selector(long))
         
-        let mediumOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let mediumOptionLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
-        mediumOptionLongGesture.minimumPressDuration = 0.5
-        
-        let largeOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let largeOptionLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
-        largeOptionLongGesture.minimumPressDuration = 0.5
-        
-        let changeGoalLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))
-        changeGoalLongGesture.minimumPressDuration = 0.2
+        smallOptionLongGesture.minimumPressDuration 	= 0.2
+        mediumOptionLongGesture.minimumPressDuration 	= 0.2
+        largeOptionLongGesture.minimumPressDuration		= 0.2
+        changeGoalLongGesture.minimumPressDuration 		= 0.2
         
         //adding the gesture recognizer for each option.
         smallOption.addGestureRecognizer(smallOptionTapGesture)
@@ -240,15 +253,14 @@ class StartVC: UIViewController {
         var amount = Float.init()
         for view in optionStack.subviews {
             if view is UILabel{
-                let label = view as! UILabel
-                var stringAmount = label.text
-                _ = stringAmount?.popLast()
-                _ = stringAmount?.popLast()
-                amount = Float(stringAmount!)!
+                let label 			= view as! UILabel
+                var stringAmount 	= label.text
+                _ 					= stringAmount?.popLast()
+                _ 					= stringAmount?.popLast()
+                amount 				= Float(stringAmount!)!
             }
         }
-        amount = convertToL(Double(amount))
-        return amount
+        return convertToL(Double(amount))
     }
     
     /**
@@ -285,12 +297,12 @@ class StartVC: UIViewController {
      ```
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
-        saveConsumedWater(Double(drinkConsumed.amountOfDrink), Date.init())
-        var consumedL = Float(consumedAmount.text!)!
-        consumedL += Float(drinkConsumed.amountOfDrink)
-        today.consumedAmount.amountOfDrink = consumedL
-        if today.consumedAmount.amountOfDrink <= 0.0{
-            today.consumedAmount.amountOfDrink = 0
+        exportDrinkToHealth(Double(drinkConsumed.amountOfDrink), Date.init())
+        var consumedL 								= Float(consumedAmount.text!)!
+        consumedL 									+= Float(drinkConsumed.amountOfDrink)
+        today.consumedAmount.amountOfDrink 			= consumedL
+        if today.consumedAmount.amountOfDrink 		<= 0.0{
+            today.consumedAmount.amountOfDrink 		= 0
         }
         insertDay(today)
         updateUI()
@@ -324,7 +336,7 @@ class StartVC: UIViewController {
     }
     
     /**
-     Updates the consumed amount in the UI
+     Updates the  in the UI
      
      # Notes: #
      1. Should be called when the amount off drinks has been changed
@@ -337,40 +349,56 @@ class StartVC: UIViewController {
     func updateUI(){
         Day.saveDay(days)
         if (today.goalAmount.amountOfDrink.rounded(.up) == today.goalAmount.amountOfDrink.rounded(.down)){
-            goalAmount.text = String(format: "%.0f", today.goalAmount.amountOfDrink)
+            goalAmount.text 		= String(format: "%.0f", today.goalAmount.amountOfDrink)
         } else {
-            let stringFormatGoal = getStringFormat(today.goalAmount.amountOfDrink)
-            goalAmount.text = String(format: stringFormatGoal, today.goalAmount.amountOfDrink)
+            let stringFormatGoal 	= getStringFormat(today.goalAmount.amountOfDrink)
+            goalAmount.text 		= String(format: stringFormatGoal, today.goalAmount.amountOfDrink)
         }
-        let stringFormatConsumed = getStringFormat(today.consumedAmount.amountOfDrink)
-        consumedAmount.text = String(format: stringFormatConsumed, today.consumedAmount.amountOfDrink)
+        let stringFormatConsumed 	= getStringFormat(today.consumedAmount.amountOfDrink)
+        consumedAmount.text 		= String(format: stringFormatConsumed, today.consumedAmount.amountOfDrink)
     }
     
+    /**
+     Will create a popup window that will remove a drink or open a new popup window were you can edit a drink option. This function will update the labels.
+     
+     - parameter sender: -The **View** that called this function.
+     - parameter drink: -The **Drink** you want to edit or remove.
+     - parameter optionLabel: -The **UILable** corresponding to the drink.
+     
+     # Notes: #
+     1. This should only be called when you want to give the user the option to edit or remove an drink.
+     
+     # Example #
+     ```
+     popUpOptions(sender, drink, mediumOptionLabel)
+     ```
+     */
     func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
-        let alerContorller = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        let editOption = UIAlertAction(title: "Edit option", style: .default) {_ in
-            let editAlert = UIAlertController(title: "Change drink amount", message: nil, preferredStyle: .alert)
+        let alerContorller 		= UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        let editOption 			= UIAlertAction(title: "Edit option", style: .default) {_ in
+            let editAlert 		= UIAlertController(title: "Change drink amount", message: nil, preferredStyle: .alert)
             editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
                 textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                textField.font = UIFont(name: "American typewriter", size: 18)
-                textField.keyboardType = .decimalPad
-                textField.textAlignment = .center
+                textField.font 				= UIFont(name: "American typewriter", size: 18)
+                textField.keyboardType 		= .decimalPad
+                textField.textAlignment 	= .center
             })
             let done = UIAlertAction(title: "done", style: .default) {_ in
                 let newValue = (editAlert.textFields?.first!.text!)! as NSString
                 if newValue != "" {
                     optionLabel.text = (editAlert.textFields?.first!.text!)! as String
                     optionLabel.text?.append("ml")
+                    self.saveDrinkOptions()
                 }
             }
             editAlert.addAction(done)
             self.present(editAlert, animated: true, completion: nil)
         }
-        let removeAmount = UIAlertAction(title: "Remove drink", style: .default) {_ in
-            let drinkAmount = -self.getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType = "water"
-            drink.amountOfDrink = drinkAmount
-            drink.typeOfDrink = drinkType
+        let removeAmount 			= UIAlertAction(title: "Remove drink", style: .default) {_ in
+            let drinkAmount 		= -self.getDrinkAmount(sender.view?.superview as! UIStackView)
+            let drinkType 			= "water"
+            drink.amountOfDrink 	= drinkAmount
+            drink.typeOfDrink 		= drinkType
             self.updateConsumtion(drink)
         }
         alerContorller.addAction(editOption)
@@ -379,12 +407,94 @@ class StartVC: UIViewController {
         self.present(alerContorller, animated: true, completion: nil)
     }
     
-    func getNumberOfDecimalDigits(_ number: Float)-> Int {
+    /**
+     Will export a drink to the health app
+     
+     - parameter waterAmount: - The amount of water the drink contains.
+     - parameter date: -The date the drink was consumed.
+     - warning: Will print an error if it wasn't able to export the drink, or if it was successfull.
+     
+     # Example #
+     ```
+     
+     exportDrinkToHealth(200, Date.init())
+     ```
+     */
+    func exportDrinkToHealth(_ waterAmount: Double, _ date: Date) {
+        guard let dietaryWater = HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
+            fatalError("dietary water is no longer available in HealthKit")
+        }
+        let waterConsumed 			= HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
+        let waterConsumedSample 	= HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
+                                                   start: date, end: date)
+        HKHealthStore().save(waterConsumedSample) { (success, error) in
+            if let error = error {
+                print("Error Saving water consumtion: \(error.localizedDescription)")
+            } else {
+                print("Successfully saved water consumtion")
+            }
+        }
+    }
+    
+    /**
+     Will save each drink option to UserDefaults
+     
+     # Notes: #
+     1. This function will save the labels of the drink options what ever they are.
+     2. This should only be called after the user has change the value of a drink.
+     
+     # Example #
+     ```
+     saveDrinkOptions()
+     ```
+     */
+    func saveDrinkOptions(){
+        UserDefaults.standard.set(smallOptionLabel.text, 	forKey: "smallDrinkOption")
+        UserDefaults.standard.set(mediumOptionLabel.text,	forKey: "mediumDrinkOption")
+        UserDefaults.standard.set(largeOptionLabel.text, 	forKey: "largeDrinkOption")
+    }
+    
+    /**
+     Will load each of the drinking options from UserDefaults
+     
+     # Notes: #
+     1. This function will load the trings coresponding to each button, but if the loaded value is empty it will use the default set.
+     2. This should only be called when the app launches or are brought to the foreground.
+     
+     # Example #
+     ```
+     loadDrtinkOptions()
+     ```
+     */
+    func loadDrinkOptions(){
+        let small 		= UserDefaults.standard.string(forKey: "smallDrinkOption") 	?? ""
+        let medium 		= UserDefaults.standard.string(forKey: "mediumDrinkOption") ?? ""
+        let large 		= UserDefaults.standard.string(forKey: "largeDrinkOption") 	?? ""
+        
+        if small != "" && medium != "" && large != "" {
+            smallOptionLabel.text 		= small
+            mediumOptionLabel.text 		= medium
+            largeOptionLabel.text 		= large
+        }
+    }
+    
+    /**
+     Will return the number of digits in a float
+     
+     - parameter number: - A **Float** with unknown number of didgets.
+     - returns: An **Int** with the number of digits
+     
+     # Example #
+     ```
+     String(format: "%.\(String(getNumberOfDigits(numberOfDigits)))f", number)
+     ```
+     */
+    func getNumberOfDigits(_ number: Float)-> Int {
         var stringOfNumber = number.description
         if stringOfNumber.contains("."){
-            while stringOfNumber.removeFirst() != "." {
-                let numberOfDigits = stringOfNumber.count - 1
-                if numberOfDigits < 3 {
+            while stringOfNumber.removeFirst() 	!= "." {
+                let numberOfDigits 				= stringOfNumber.count - 1
+                if numberOfDigits 				< 3 {
                     return numberOfDigits
                     
                 } else {
@@ -395,8 +505,19 @@ class StartVC: UIViewController {
         return 0
     }
     
+    /**
+     Will return a **String** format for displaying the number of digets in a number, but it will not allow more than two.
+     
+     - parameter number: - The **Float** you want to use
+     - returns: The **string** format
+     
+     # Example #
+     ```
+     let string = getStringFormat(3.14)
+     ```
+     */
     func getStringFormat(_ number: Float)-> String{
-        return "%.\(String(getNumberOfDecimalDigits(number)))f"
+        return "%.\(String(getNumberOfDigits(number)))f"
     }
     
     deinit {
@@ -405,6 +526,20 @@ class StartVC: UIViewController {
 }
 
 extension UIApplication {
+    
+    /**
+     Will check if it is the first time the app is ever launched on this phone
+     
+     - returns: **Bool** true if its the first time false if not.
+     
+     # Example #
+     ```
+     if UIApplication.isFirstLaunch() {
+         print("first time to launch this app")
+         //Do something
+     }
+     ```
+     */
     class func isFirstLaunch() -> Bool {
         if !UserDefaults.standard.bool(forKey: "firstTimeLaunched") {
             UserDefaults.standard.set(true, forKey: "firstTimeLaunched")
