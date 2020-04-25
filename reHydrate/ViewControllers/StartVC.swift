@@ -12,6 +12,7 @@ import CoreData
 import FSCalendar
 
 class StartVC: UIViewController {
+    @IBOutlet var lables: [UILabel]!
     @IBOutlet weak var currentDay: 			UILabel!
     @IBOutlet weak var historyButton: 		UIButton!
     @IBOutlet weak var optionsStack: 		UIStackView!
@@ -32,6 +33,7 @@ class StartVC: UIViewController {
     var days: [Day] 		= []
     var today 				= Day.init()
     let formatter 			= DateFormatter()
+    var darkMode			= Bool()
     
     var healthStore: 		HKHealthStore?
     var typesToShare: 		Set<HKSampleType> {
@@ -120,6 +122,7 @@ class StartVC: UIViewController {
      */
     @objc func didMoveToForground(){
         print("app enterd forground")
+        changeAppearance()
         today = days.first(where: { formatter.string(from: $0.date) == formatter.string(from: Date.init()) }) ?? Day.init()
         if days.count 			< 0{
             today.goalAmount 	= days[days.count - 1].goalAmount
@@ -167,7 +170,6 @@ class StartVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
-        
         //  Request access to write dietaryWater data to HealthStore
         self.healthStore?.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
             if (!success) {
@@ -175,15 +177,19 @@ class StartVC: UIViewController {
                 return
             }
         })
-        
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
+            if self.traitCollection.userInterfaceStyle == .dark {
+                darkMode = true
+            } else {
+                darkMode = false
+            }
+            UserDefaults.standard.set(darkMode, forKey: "darkMode")
             let storyboard 						= UIStoryboard(name: "Main", bundle: nil)
             let aboutScreen 					= storyboard.instantiateViewController(withIdentifier: "about")
             aboutScreen.modalPresentationStyle 	= .fullScreen
             self.present(aboutScreen, animated: true, completion: nil)
         }
-        
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForground), name: UIApplication.willEnterForegroundNotification, object: nil)
         formatter.dateFormat = "EEEE - dd/MM/yy"
@@ -196,6 +202,76 @@ class StartVC: UIViewController {
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        changeAppearance()
+    }
+    
+    /**
+     Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
+     
+     # Notes: #
+     1. This will change all the colors off this screen.
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
+    func changeAppearance() {
+        darkMode = UserDefaults.standard.bool(forKey: "darkMode")
+        if darkMode == true {
+            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+            aboutButton.tintColor = .lightGray
+            historyButton.tintColor = .lightGray
+            for lable in lables {
+                lable.textColor = .white
+            }
+        } else {
+            self.view.backgroundColor = .white
+            historyButton.tintColor = .black
+            aboutButton.tintColor = .black
+            for lable in lables {
+                lable.textColor = .black
+            }
+        }
+    }
+    
+    
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
     
     /**
