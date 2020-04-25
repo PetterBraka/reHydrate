@@ -27,7 +27,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
         let button			= UIButton()
         button.tintColor    = .lightGray
         button.setTitle("", for: .normal)
-        button.setImage( UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
+        button.setBackgroundImage( UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints	= false
         return button
     }()
@@ -54,8 +54,8 @@ class SettingsHeader: UITableViewHeaderFooterView {
         container.addSubview(title)
         container.addSubview(button)
         title.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 10).isActive       = true
-        button.heightAnchor.constraint(equalToConstant: 50).isActive							= true
-        button.widthAnchor.constraint(equalToConstant: 50).isActive								= true
+        button.heightAnchor.constraint(equalToConstant: 25).isActive							= true
+        button.widthAnchor.constraint(equalToConstant: 25).isActive								= true
         button.rightAnchor.constraint(equalTo: container.rightAnchor).isActive    				= true
         button.centerYAnchor.constraint(equalTo: title.centerYAnchor).isActive					= true
         
@@ -77,6 +77,9 @@ class SettingsHeader: UITableViewHeaderFooterView {
             button.tintColor = .black
             title.textColor = .black
             container.backgroundColor = .white
+        }
+        if title.text == String("remove data").uppercased(){
+            title.textColor = .systemRed
         }
     }
     
