@@ -39,7 +39,15 @@ class InfoCell: UITableViewCell {
         amountOfDrink.text 	= String(drink.amountOfDrink)
     }
     
-    func changeAppearentce(_ darkMode: Bool){
+    /**
+     Changing the appearance of the **InfoCell** deppending on if the users prefrence for dark mode or light mode.
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
+    func changeAppearance(_ darkMode: Bool){
         self.darkMode = darkMode
         self.backgroundColor = .clear
         if darkMode {

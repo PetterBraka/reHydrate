@@ -45,6 +45,17 @@ class CalendarVC: UIViewController {
         changeAppearance()
     }
     
+    /**
+     Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
+     
+     # Notes: #
+     1. This will change all the colors off this screen.
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
     func changeAppearance(){
         calendar.appearance.titleFont = UIFont(name: "American typewriter", size: 15)
         calendar.appearance.weekdayFont = UIFont(name: "American typewriter", size: 18)
@@ -66,6 +77,20 @@ class CalendarVC: UIViewController {
         }
     }
     
+    
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
     func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
@@ -121,7 +146,7 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
         cell.setLabels(drinks[indexPath.row], indexPath.row)
         cell.selectionStyle = .none
-        cell.changeAppearentce(darkMode)
+        cell.changeAppearance(darkMode)
         return cell
     }
 }
