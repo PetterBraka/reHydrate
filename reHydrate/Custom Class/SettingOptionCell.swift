@@ -9,23 +9,30 @@
 import UIKit
 
 class SettingOptionCell: UITableViewCell {
+    var darkMode                = Bool()
+    var metricUnits				= Bool()
     var setting: String? {
         didSet {
             guard let string 	= setting else {return}
-            option.text 		= string.capitalized
+            titleOption.text 		= string
         }
     }
-    let option: UILabel = {
-        let lable 			= UILabel()
-        lable.text 			= "test"
-        lable.textColor 	= UIColor.white
-        lable.font 			= UIFont(name: "AmericanTypewriter", size: 17)
+    let titleOption: UILabel 		= {
+        let lable 				= UILabel()
+        lable.text 				= "test"
+        lable.font 				= UIFont(name: "AmericanTypewriter", size: 17)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
         }()
-    var darkMode = Bool()
-    let activated: UIButton = {
-        let button = UIButton()
+    let subTitle: UILabel 		= {
+        let lable 				= UILabel()
+        lable.text 				= "subText"
+        lable.font 				= UIFont(name: "AmericanTypewriter", size: 13)
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    let activatedOption: UIButton     = {
+        let button                = UIButton()
         button.setTitle("", for: .normal)
         button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -34,15 +41,28 @@ class SettingOptionCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        settCellAppairents(darkMode)
-        self.addSubview(option)
-        option.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive 	= true
-        option.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive 			= true
-        self.backgroundColor 															= .none
+        settCellAppairents(darkMode, true)
+        self.addSubview(titleOption)
+        self.addSubview(activatedOption)
+        settButtonConstraints()
+        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive 				= true
+        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive 						= true
+        self.backgroundColor 																			= .none
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func addSubTitle(_ string: String){
+        subTitle.text = string
+        self.addSubview(subTitle)
+        self.removeConstraints(self.constraints)
+        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -10).isActive		= true
+        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive    			= true
+        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive 			= true
+        subTitle.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 10).isActive			= true
+        settButtonConstraints()
     }
     
     /**
@@ -53,11 +73,11 @@ class SettingOptionCell: UITableViewCell {
      setActivatedButtonConstraints()
      ```
      */
-    fileprivate func setActivatedButtonConstraints() {
-        activated.widthAnchor.constraint(equalToConstant: 25).isActive                        = true
-        activated.heightAnchor.constraint(equalToConstant: 25).isActive                       = true
-        activated.centerYAnchor.constraint(equalTo: option.centerYAnchor).isActive            = true
-        activated.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive     = true
+    func settButtonConstraints() {
+        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                    		= true
+        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                   		= true
+        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive 			= true
+        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive 		= true
     }
     
     /**
@@ -68,27 +88,47 @@ class SettingOptionCell: UITableViewCell {
      settCellAppairents(darkMode)
      ```
      */
-    func settCellAppairents(_ darkMode: Bool){
-        if darkMode {
-            if option.text == String("dark mode").capitalized{
-                self.addSubview(activated)
-                activated.tintColor = .lightGray
-                setActivatedButtonConstraints()
-            } else {
-                activated.removeFromSuperview()
-            }
-            option.textColor = .white
+    func settCellAppairents(_ dark: Bool,_ metric: Bool){
+        if dark{
+            activatedOption.tintColor     = .lightGray
+            titleOption.textColor         = .white
+            subTitle.textColor            = .white
             self.backgroundColor = hexStringToUIColor(hex: "#212121")
         } else {
-            if option.text == String("light mode").capitalized{
-                self.addSubview(activated)
-                activated.tintColor = .black
-                setActivatedButtonConstraints()
-            } else {
-                activated.removeFromSuperview()
-            }
-            option.textColor = .black
-            self.backgroundColor = .white
+            activatedOption.tintColor     = .black
+            titleOption.textColor         = .black
+            subTitle.textColor            = .black
+            self.backgroundColor          = .white
+        }
+        switch titleOption.text {
+            case "Dark Mode":
+                if dark{
+                    activatedOption.isHidden = false
+                } else {
+                    activatedOption.isHidden = true
+                }
+            case "Light Mode":
+                if !dark{
+                    activatedOption.isHidden = false
+                } else {
+                    activatedOption.isHidden = true
+                }
+            case "Metric System":
+                if metric{
+                    activatedOption.isHidden = false
+                } else {
+                    activatedOption.isHidden = true
+                }
+                break
+            case "Imperial System":
+                if !metric{
+                    activatedOption.isHidden = false
+                } else {
+                    activatedOption.isHidden = true
+                }
+                break
+            default:
+                break
         }
     }
     
