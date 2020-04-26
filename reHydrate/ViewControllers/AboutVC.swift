@@ -55,16 +55,16 @@ class AboutVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let helpTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let exitTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
+        let helpTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
         helpImage.addGestureRecognizer(helpTapRecognizer)
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         tableView.delegate 		= self
         tableView.dataSource 	= self
-        
-        darkMode = UserDefaults.standard.bool(forKey: "darkMode")
+        metricUnits				= UserDefaults.standard.bool(forKey: "metricUnit")
+        darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         changeAppearance()
     }
     

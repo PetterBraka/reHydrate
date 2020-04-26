@@ -12,8 +12,9 @@ class InfoCell: UITableViewCell {
     @IBOutlet weak var titleOfCard: 	UILabel!
     @IBOutlet weak var typeOfDrink: 	UILabel!
     @IBOutlet weak var amountOfDrink: 	UILabel!
-    @IBOutlet var lables: [UILabel]!
+    @IBOutlet var lables: 				[UILabel]!
     var darkMode						= Bool()
+    var metricUnits						= Bool()
     
     /**
      Will sett the valuse for a **UITableViewCell**.
@@ -36,7 +37,8 @@ class InfoCell: UITableViewCell {
             break
         }
         typeOfDrink.text 	= drink.typeOfDrink
-        amountOfDrink.text 	= String(drink.amountOfDrink)
+        amountOfDrink.text	= String(format: "%.2f", drink.amountOfDrink)
+        amountOfDrink.text?.append("L")
     }
     
     /**
@@ -65,6 +67,12 @@ class InfoCell: UITableViewCell {
                 lable.textColor     = .black
             }
         }
-        
+    }
+    
+    func changeToImperial(_ drink: Drink){
+        let volume = Measurement(value: Double(drink.amountOfDrink), unit: UnitVolume.liters)
+        let convertedValue = volume.converted(to: UnitVolume.imperialPints).value
+        amountOfDrink.text = String(format: "%.2f", convertedValue)
+        amountOfDrink.text?.append("pt")
     }
 }

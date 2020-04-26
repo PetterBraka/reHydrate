@@ -387,6 +387,7 @@
                         <outlet property="consumedAmount" destination="PgI-WQ-LzU" id="6ub-NT-E7F"/>
                         <outlet property="currentDay" destination="JhD-0d-RlU" id="Lfo-Qr-yGq"/>
                         <outlet property="goalAmount" destination="Lld-rv-Oqo" id="E2j-mB-OBV"/>
+                        <outlet property="goalPrefix" destination="LrS-k0-AEy" id="DPa-qh-jci"/>
                         <outlet property="historyButton" destination="wLA-TR-sU9" id="yQh-4F-fse"/>
                         <outlet property="largeOption" destination="R8b-pY-RjC" id="CYQ-fz-BBk"/>
                         <outlet property="largeOptionLabel" destination="ocS-6z-OwM" id="CAz-ro-Hgo"/>

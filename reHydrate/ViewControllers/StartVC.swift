@@ -22,6 +22,7 @@ class StartVC: UIViewController {
     @IBOutlet weak var largeStack: 			UIStackView!
     @IBOutlet weak var goalAmount: 			UILabel!
     @IBOutlet weak var consumedAmount: 		UILabel!
+    @IBOutlet weak var goalPrefix: 			UILabel!
     @IBOutlet weak var smallOption: 		UIButton!
     @IBOutlet weak var smallOptionLabel: 	UILabel!
     @IBOutlet weak var mediumOption: 		UIButton!
@@ -211,10 +212,6 @@ class StartVC: UIViewController {
         changeAppearance()
     }
     
-    func changeUnitSystem(){
-        
-    }
-    
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
      
@@ -336,10 +333,8 @@ class StartVC: UIViewController {
         for view in optionStack.subviews {
             if view is UILabel{
                 let label 			= view as! UILabel
-                var stringAmount 	= label.text
-                _ 					= stringAmount?.popLast()
-                _ 					= stringAmount?.popLast()
-                amount 				= Float(stringAmount!)!
+                let stringAmount 	= label.text!.components(separatedBy:CharacterSet.decimalDigits.inverted).joined()
+                amount 				= Float(stringAmount)!
             }
         }
         return convertToL(Double(amount))
@@ -359,10 +354,9 @@ class StartVC: UIViewController {
      amount = convertToL(Double(amount))
      ```
      */
-    func convertToL(_ milliliters: Double) -> Float {
-        var measurment = Measurement(value: milliliters, unit: UnitVolume.milliliters)
-        measurment.convert(to: UnitVolume.liters)
-        return Float(measurment.value)
+    func convertToL(_ amount: Double) -> Float {
+        let measurment = Measurement(value: amount, unit: UnitVolume.milliliters)
+        return Float(measurment.converted(to: UnitVolume.liters).value)
     }
     
     /**

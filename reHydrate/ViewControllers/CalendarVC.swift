@@ -147,8 +147,12 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
         cell.setLabels(drinks[indexPath.row], indexPath.row)
+        cell.metricUnits = true
         cell.selectionStyle = .none
         cell.changeAppearance(darkMode)
+        if !metricUnits {
+            cell.changeToImperial(drinks[indexPath.row])
+        }
         return cell
     }
 }
