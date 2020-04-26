@@ -41,7 +41,7 @@ class SettingOptionCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        settCellAppairents(darkMode, true)
+        settCellAppairents(darkMode, metricUnits)
         self.addSubview(titleOption)
         self.addSubview(activatedOption)
         settButtonConstraints()
