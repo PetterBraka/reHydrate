@@ -34,6 +34,7 @@ class StartVC: UIViewController {
     var today 				= Day.init()
     let formatter 			= DateFormatter()
     var darkMode			= Bool()
+    var metricUnits			= Bool()
     
     var healthStore: 		HKHealthStore?
     var typesToShare: 		Set<HKSampleType> {
@@ -205,7 +206,13 @@ class StartVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        darkMode 		= UserDefaults.standard.bool(forKey: "darkMode")
+        metricUnits		= UserDefaults.standard.bool(forKey: "metricUnits")
         changeAppearance()
+    }
+    
+    func changeUnitSystem(){
+        
     }
     
     /**
@@ -220,7 +227,6 @@ class StartVC: UIViewController {
      ```
      */
     func changeAppearance() {
-        darkMode = UserDefaults.standard.bool(forKey: "darkMode")
         if darkMode == true {
             self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
             aboutButton.tintColor = .lightGray

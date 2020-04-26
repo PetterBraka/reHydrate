@@ -14,6 +14,7 @@ class CalendarVC: UIViewController {
     var drinks: [Drink] 		= []
     var days: [Day] 			= []
     var darkMode				= Bool()
+    var metricUnits				= Bool()
     let formatter 				= DateFormatter()
     
     @IBOutlet weak var titleDate: UILabel!
@@ -35,13 +36,14 @@ class CalendarVC: UIViewController {
         days                            = Day.loadDay()
         formatter.dateFormat 			= "EEE - dd/MM/yy"
         getDrinks(Date.init())
+        darkMode 						= UserDefaults.standard.bool(forKey: "darkMode")
+        metricUnits 					= UserDefaults.standard.bool(forKey: "metricUnits")
         tableView.isScrollEnabled 		= false
         tableView.delegate 				= self
         tableView.dataSource 			= self
         calendar.delegate 				= self
         calendar.dataSource 			= self
         calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cell")
-        darkMode = UserDefaults.standard.bool(forKey: "darkMode")
         changeAppearance()
     }
     
