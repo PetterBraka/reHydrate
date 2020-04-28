@@ -95,45 +95,10 @@ class StartVC: UIViewController {
             case largeOption:
                 print("large long-press")
                 popUpOptions(sender, drink, largeOptionLabel)
-            case goalAmount:
-                let alert = UIAlertController(title: "Change goal", message: "Can you enter the amount you want as a goal in liters?", preferredStyle: .alert)
-                alert.addTextField(configurationHandler: {(_ textField: UITextField) in
-                    textField.attributedPlaceholder 	= NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                    textField.font 						= UIFont(name: "American typewriter", size: 18)
-                    textField.keyboardType 				= .decimalPad
-                    textField.textAlignment 			= .center
-                })
-                let doneButton 							= UIAlertAction(title: "done" , style: .default) {_ in
-                    let newGoal 						= (alert.textFields?.first!.text!)! as NSString
-                    if newGoal 							!= "" {
-                        self.today.goalAmount.amountOfDrink = newGoal.floatValue
-                        self.updateUI()
-                    }
-                }
-                alert.addAction(doneButton)
-                self.present(alert, animated: true, completion: nil)
-                
             default:
                 break
             }
         }
-    }
-    
-    /**
-     Will sett day to this day and if the day  is saved and then update UI.
-     */
-    @objc func didMoveToForground(){
-        print("app enterd forground")
-        changeAppearance()
-        today = days.first(where: { formatter.string(from: $0.date) == formatter.string(from: Date.init()) }) ?? Day.init()
-        if days.count 			< 0{
-            today.goalAmount 	= days[days.count - 1].goalAmount
-        } else {
-            today.goalAmount 	= Drink.init(typeOfDrink: "water", amountOfDrink: 3)
-        }
-        loadDrinkOptions()
-        updateUI()
-        currentDay.text = formatter.string(from: Date.init())
     }
     
     /**
@@ -187,29 +152,33 @@ class StartVC: UIViewController {
                 darkMode = false
             }
             UserDefaults.standard.set(darkMode, forKey: "darkMode")
-            let storyboard 						= UIStoryboard(name: "Main", bundle: nil)
-            let aboutScreen 					= storyboard.instantiateViewController(withIdentifier: "about")
-            aboutScreen.modalPresentationStyle 	= .fullScreen
-            self.present(aboutScreen, animated: true, completion: nil)
         }
+        formatter.dateFormat 	= "EEEE - dd/MM/yy"
+        days 					= Day.loadDay()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForground), name: UIApplication.willEnterForegroundNotification, object: nil)
-        formatter.dateFormat = "EEEE - dd/MM/yy"
-        days = Day.loadDay()
-        for day in days {
-            if formatter.string(from: day.date) == formatter.string(from: Date.init()){
-                today = day
-            }
-        }
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("Main screen will appear")
         darkMode 		= UserDefaults.standard.bool(forKey: "darkMode")
         metricUnits		= UserDefaults.standard.bool(forKey: "metricUnits")
+        currentDay.text = formatter.string(from: Date.init())
+        self.today 		= days.last ?? Day.init()
+        days 			= Day.loadDay()
+        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
+            today 		= days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
+        } else if !days.isEmpty {
+            today.goalAmount = days.last!.goalAmount
+        } else {
+            today 		= Day.init()
+            insertDay(today)
+        }
+        loadDrinkOptions()
         changeAppearance()
+        updateUI()
     }
     
     /**
@@ -240,7 +209,6 @@ class StartVC: UIViewController {
             }
         }
     }
-    
     
     /**
      Will convert an string of a hex color code to **UIColor**
