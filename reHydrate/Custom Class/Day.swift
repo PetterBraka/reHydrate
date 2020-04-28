@@ -24,7 +24,7 @@ public class Day: NSObject, Codable {
      */
     required override init() {
         self.date 			= Date.init()
-        self.goalAmount 	= Drink.init()
+        self.goalAmount 	= Drink.init(typeOfDrink: "water", amountOfDrink: 3)
         self.consumedAmount = Drink.init()
     }
     
@@ -65,6 +65,21 @@ public class Day: NSObject, Codable {
         } catch {
             print(error)
         }
+        for day in days {
+            if days.firstIndex(of: day) == 0 {
+                print("------------------Saving---------------------")
+            }
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEE - dd/MM/yy"
+            print("|Date", formatter.string(from: day.date))
+            print("|Goal:")
+            print("| - Drink type - ", day.goalAmount.typeOfDrink)
+            print("| - Drink amount - ", day.goalAmount.amountOfDrink)
+            print("|Consumed Drink:")
+            print("| - Drink type - ", day.consumedAmount.typeOfDrink)
+            print("| - Drink amount - ",String(format: "%.2f", day.consumedAmount.amountOfDrink))
+            print("---------------------------------------------")
+        }
         
         
     }
@@ -90,7 +105,7 @@ public class Day: NSObject, Codable {
                 }
                 for day in days {
                     if days.firstIndex(of: day) == 0 {
-                        print("---------------------------------------------")
+                        print("------------------Loading-------------------")
                     }
                     let formatter = DateFormatter()
                     formatter.dateFormat = "EEE - dd/MM/yy"

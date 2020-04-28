@@ -65,6 +65,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		331EA7C324583B7C002D752E /* Custom Cells */ = {
+			isa = PBXGroup;
+			children = (
+				3359BB6F24461D620008EF6A /* InfoCell.swift */,
+				33FE29D724506FF000BE7634 /* SettingsHeader.swift */,
+				3319AA32245334130049C676 /* SettingOptionCell.swift */,
+			);
+			path = "Custom Cells";
+			sourceTree = "<group>";
+		};
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
+				331EA7C324583B7C002D752E /* Custom Cells */,
 				33902D3E244744C4004BE39C /* Custom Class */,
 				33902D3D2447449F004BE39C /* ViewControllers */,
 				3378767624378A9400F5A732 /* AppDelegate.swift */,
@@ -112,9 +123,6 @@
 		33902D3E244744C4004BE39C /* Custom Class */ = {
 			isa = PBXGroup;
 			children = (
-				3359BB6F24461D620008EF6A /* InfoCell.swift */,
-				33FE29D724506FF000BE7634 /* SettingsHeader.swift */,
-				3319AA32245334130049C676 /* SettingOptionCell.swift */,
 				33FC8428243A4A2600848B7C /* Day.swift */,
 				33FC8426243A47A800848B7C /* Drink.swift */,
 				339037F62450A29A00E54E8F /* DropDownButton.swift */,

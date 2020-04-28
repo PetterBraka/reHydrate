@@ -22,13 +22,12 @@ class AboutVC: UIViewController {
     
     var darkMode					= true
     var metricUnits					= true
-    
     let helpImage 					= UIImageView.init(image: UIImage.init(named: "toturial-1"))
     var selectedRow: IndexPath 		= IndexPath()
     var settings: [settingOptions] 	= [
         settingOptions(isOpened: false, setting: "appearance", options: ["Light Mode", "Dark Mode"]),
         settingOptions(isOpened: false, setting: "unit system", options: ["Metric System", "Imperial System"]),
-        settingOptions(isOpened: false, setting: "change goal", options: ["goal"]),
+        settingOptions(isOpened: false, setting: "change goal", options: ["Goal"]),
         settingOptions(isOpened: false, setting: "how to use", options: []),
         settingOptions(isOpened: false, setting: "remove data", options: [])]
     
@@ -63,10 +62,12 @@ class AboutVC: UIViewController {
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         tableView.delegate 		= self
         tableView.dataSource 	= self
-        metricUnits				= UserDefaults.standard.bool(forKey: "metricUnit")
+        metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
         darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         changeAppearance()
     }
+    
+    
     
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
@@ -108,14 +109,13 @@ class AboutVC: UIViewController {
             while row < tableView.numberOfRows(inSection: section) {
                 let cell = tableView.cellForRow(at: IndexPath(row: row, section: section)) as? SettingOptionCell ?? nil
                 if cell != nil {
-                    cell?.settCellAppairents(darkMode, metricUnits)
+                    cell?.setCellAppairents(darkMode, metricUnits)
                 }
                 row += 1
             }
             section += 1
         }
     }
-    
     
     /**
      Will convert an string of a hex color code to **UIColor**
@@ -211,11 +211,16 @@ class AboutVC: UIViewController {
 
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return settings[section].isOpened ? settings[section].options.count : 0
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell 				= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
         cell.setting 			= settings[indexPath.section].options[indexPath.row]
         cell.selectionStyle 	= .none
-        cell.settCellAppairents(darkMode, metricUnits)
+        cell.setCellAppairents(darkMode, metricUnits)
         switch indexPath {
             case IndexPath(row: 0, section: 1):
                 cell.addSubTitle( "Units: \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
@@ -230,10 +235,6 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settings[section].isOpened ? settings[section].options.count : 0
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -256,6 +257,10 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         }
         cell.setHeaderAppairents(darkMode)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
