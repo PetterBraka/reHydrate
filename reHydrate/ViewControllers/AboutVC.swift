@@ -21,12 +21,13 @@ class AboutVC: UIViewController {
     @IBOutlet weak var exitButton: UIButton!
     
     var darkMode					= true
+    var metricUnits					= true
     let helpImage 					= UIImageView.init(image: UIImage.init(named: "toturial-1"))
     var selectedRow: IndexPath 		= IndexPath()
     var settings: [settingOptions] 	= [
-        settingOptions(isOpened: false, setting: "appearance", options: ["light mode", "dark mode"]),
-        settingOptions(isOpened: false, setting: "unit system", options: ["liters & milli liters", "ounzes"]),
-        settingOptions(isOpened: false, setting: "change goal", options: ["goal"]),
+        settingOptions(isOpened: false, setting: "appearance", options: ["Light Mode", "Dark Mode"]),
+        settingOptions(isOpened: false, setting: "unit system", options: ["Metric System", "Imperial System"]),
+        settingOptions(isOpened: false, setting: "change goal", options: ["Goal"]),
         settingOptions(isOpened: false, setting: "how to use", options: []),
         settingOptions(isOpened: false, setting: "remove data", options: [])]
     
@@ -40,6 +41,8 @@ class AboutVC: UIViewController {
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
             case exitButton:
+                UserDefaults.standard.set(darkMode, forKey: "darkMode")
+                UserDefaults.standard.set(metricUnits, forKey: "metricUnits")
                 self.dismiss(animated: true, completion: nil)
             case helpImage:
                 helpImage.removeFromSuperview()
@@ -51,18 +54,20 @@ class AboutVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let helpTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let exitTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
+        let helpTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
         helpImage.addGestureRecognizer(helpTapRecognizer)
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         tableView.delegate 		= self
         tableView.dataSource 	= self
-        
-        darkMode = UserDefaults.standard.bool(forKey: "darkMode")
+        metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
+        darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         changeAppearance()
     }
+    
+    
     
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
@@ -76,7 +81,6 @@ class AboutVC: UIViewController {
      ```
      */
     func changeAppearance(){
-        UserDefaults.standard.set(darkMode, forKey: "darkMode")
         if !darkMode {
             self.view.backgroundColor 	= .white
             tableView.backgroundColor 	= .white
@@ -105,14 +109,13 @@ class AboutVC: UIViewController {
             while row < tableView.numberOfRows(inSection: section) {
                 let cell = tableView.cellForRow(at: IndexPath(row: row, section: section)) as? SettingOptionCell ?? nil
                 if cell != nil {
-                    cell!.settCellAppairents(darkMode)
+                    cell?.setCellAppairents(darkMode, metricUnits)
                 }
                 row += 1
             }
             section += 1
         }
     }
-    
     
     /**
      Will convert an string of a hex color code to **UIColor**
@@ -208,16 +211,30 @@ class AboutVC: UIViewController {
 
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return settings[section].isOpened ? settings[section].options.count : 0
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell 				= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
         cell.setting 			= settings[indexPath.section].options[indexPath.row]
         cell.selectionStyle 	= .none
-        cell.settCellAppairents(darkMode)
+        cell.setCellAppairents(darkMode, metricUnits)
+        switch indexPath {
+            case IndexPath(row: 0, section: 1):
+                cell.addSubTitle( "Units: \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
+            case IndexPath(row: 1, section: 1):
+                cell.addSubTitle( "Units: \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
+            default:
+            break
+        }
+        
         return cell
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settings[section].isOpened ? settings[section].options.count : 0
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -242,6 +259,10 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView 					= UIView()
         let separatorView 				= UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
@@ -252,14 +273,20 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
-            case IndexPath(row: 0, section: 0):
+            case IndexPath(row: 0, section: 0): // light mode selected
                 darkMode = false
                 changeAppearance()
-            changeTableViewAppearants()
-            case IndexPath(row: 1, section: 0):
+                changeTableViewAppearants()
+            case IndexPath(row: 1, section: 0): // dark mode selected
                 darkMode = true
                 changeAppearance()
-            changeTableViewAppearants()
+                changeTableViewAppearants()
+            case IndexPath(row: 0, section: 1): // Metric is selected
+                metricUnits = true
+                changeTableViewAppearants()
+            case IndexPath(row: 1, section: 1): // imperial is selected
+                metricUnits = false
+                changeTableViewAppearants()
             default:
             break
         }
