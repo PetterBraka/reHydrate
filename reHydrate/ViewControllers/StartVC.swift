@@ -66,16 +66,13 @@ class StartVC: UIViewController {
         switch sender.view {
         case smallOption:
             print("small short-press")
-            let drinkAmount = Measurement.init(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
-            drink.amountOfDrink = Float(drinkAmount.converted(to: .liters).value)
+            drink.amountOfDrink = drinkOptions[0].amountOfDrink
         case mediumOption:
             print("medium short-press")
-            let drinkAmount = Measurement.init(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
-            drink.amountOfDrink = Float(drinkAmount.converted(to: .liters).value)
+            drink.amountOfDrink = drinkOptions[1].amountOfDrink
         case largeOption:
             print("large short-press")
-            let drinkAmount = Measurement.init(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
-            drink.amountOfDrink = Float(drinkAmount.converted(to: .liters).value)
+            drink.amountOfDrink = drinkOptions[2].amountOfDrink
         default:
             break
         }
@@ -92,19 +89,13 @@ class StartVC: UIViewController {
             switch sender.view {
             case smallOption:
                 print("small long-press")
-                let drinkAmount = Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
-                let drink = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
-                popUpOptions(sender, drink, smallOptionLabel)
+                popUpOptions(sender, drinkOptions[0], smallOptionLabel)
             case mediumOption:
                 print("medium long-press")
-                let drinkAmount = Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
-                let drink = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
-                popUpOptions(sender, drink, mediumOptionLabel)
+                popUpOptions(sender, drinkOptions[1], mediumOptionLabel)
             case largeOption:
                 print("large long-press")
-                let drinkAmount = Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
-                let drink = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
-                popUpOptions(sender, drink, largeOptionLabel)
+                popUpOptions(sender, drinkOptions[2], largeOptionLabel)
             default:
                 break
             }
@@ -306,10 +297,14 @@ class StartVC: UIViewController {
      ```
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
-        exportDrinkToHealth(Double(drinkConsumed.amountOfDrink), Date.init())
-        today.consumedAmount.amountOfDrink 		+= drinkConsumed.amountOfDrink
+        let drinkAmount = Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
+        let drink = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
+        exportDrinkToHealth(Double(drink.amountOfDrink), Date.init())
+        today.consumedAmount.amountOfDrink 		+= drink.amountOfDrink
         if today.consumedAmount.amountOfDrink 	<= 0.0{
             today.consumedAmount.amountOfDrink 	= 0
+        } else {
+            
         }
         insertDay(today)
         updateUI()
@@ -355,30 +350,43 @@ class StartVC: UIViewController {
      */
     func updateUI(){
         Day.saveDay(days)
-        // Mark: Update UI for goal
-        if (today.goalAmount.amountOfDrink.rounded(.up) == today.goalAmount.amountOfDrink.rounded(.down)){
-            goalAmount.text 		= String(format: "%.0f", today.goalAmount.amountOfDrink)
+        let day = Day()
+        let goalAmount 		= Measurement(value: Double(today.goalAmount.amountOfDrink), unit: UnitVolume.liters)
+        let consumedAmount 	= Measurement(value: Double(today.consumedAmount.amountOfDrink), unit: UnitVolume.liters)
+        let smallDrink 		= Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
+        let mediumDrink 	= Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
+        let largeDrink 		= Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
+        if metricUnits {
+            day.goalAmount.amountOfDrink 		= Float(goalAmount.converted(to: .liters).value)
+            day.consumedAmount.amountOfDrink 	= Float(consumedAmount.converted(to: .liters).value)
+            let roundedSmallDrink 				= smallDrink.converted(to: .milliliters).value.rounded()
+            let roundedMediumDrink 				= mediumDrink.converted(to: .milliliters).value.rounded()
+            let roundedLargeDrink 				= largeDrink.converted(to: .milliliters).value.rounded()
+            smallOptionLabel.text 				= String(format: "%.0f", roundedSmallDrink)
+            mediumOptionLabel.text 				= String(format: "%.0f", roundedMediumDrink)
+            largeOptionLabel.text 				= String(format: "%.0f", roundedLargeDrink)
         } else {
-            let stringFormatGoal 	= getStringFormat(today.goalAmount.amountOfDrink)
-            goalAmount.text 		= String(format: stringFormatGoal, today.goalAmount.amountOfDrink)
+            day.goalAmount.amountOfDrink 		= Float(goalAmount.converted(to: .imperialPints).value)
+            day.consumedAmount.amountOfDrink 	= Float(consumedAmount.converted(to: .imperialPints).value)
+            let small 							= smallDrink.converted(to: .imperialFluidOunces).value
+            let medium 							= mediumDrink.converted(to: .imperialFluidOunces).value
+            let large 							= largeDrink.converted(to: .imperialFluidOunces).value
+            smallOptionLabel.text 				= String(format: "%.2f", small)
+            mediumOptionLabel.text 				= String(format: "%.2f", medium)
+            largeOptionLabel.text 				= String(format: "%.2f", large)
+        }
+        // Mark: Update UI for goal
+        if (today.goalAmount.amountOfDrink.rounded(.up) == day.goalAmount.amountOfDrink.rounded(.down)){
+            self.goalAmount.text 		= String(format: "%.0f", day.goalAmount.amountOfDrink)
+        } else {
+            let stringFormatGoal 	= getStringFormat(day.goalAmount.amountOfDrink)
+            self.goalAmount.text 		= String(format: stringFormatGoal, day.goalAmount.amountOfDrink)
         }
         // Mark: Update UI for consumed amount
         let stringFormatConsumed 	= getStringFormat(today.consumedAmount.amountOfDrink)
-        consumedAmount.text 		= String(format: stringFormatConsumed, today.consumedAmount.amountOfDrink)
+        self.consumedAmount.text 		= String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
         
         // Mark: Update UI for drink options
-        for drink in drinkOptions {
-            switch drinkOptions.firstIndex(of: drink)! {
-                case 0:
-                    smallOptionLabel.text = String(format: "%.0f", drink.amountOfDrink)
-                case 1:
-                    mediumOptionLabel.text = String(format: "%.0f", drink.amountOfDrink)
-                case 2:
-                    largeOptionLabel.text = String(format: "%.0f", drink.amountOfDrink)
-                default:
-                break
-            }
-        }
         for lable in unitLable{
             if metricUnits {
                 lable.text 		= "\(UnitVolume.milliliters.symbol)"
