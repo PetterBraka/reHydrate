@@ -29,6 +29,8 @@ class StartVC: UIViewController {
     @IBOutlet weak var mediumOptionLabel: 	UILabel!
     @IBOutlet weak var largeOption: 		UIButton!
     @IBOutlet weak var largeOptionLabel: 	UILabel!
+    @IBOutlet weak var titleUnit: 			UILabel!
+    @IBOutlet var unitLable: 				[UILabel]!
     
     let defaults 			= UserDefaults.standard
     var days: [Day] 		= []
@@ -36,6 +38,15 @@ class StartVC: UIViewController {
     let formatter 			= DateFormatter()
     var darkMode			= Bool()
     var metricUnits			= Bool()
+    var drinkOptions		= [Drink(), Drink(), Drink()]
+    
+    let unitLableDrinkOptions: UILabel = {
+        let lable                     = UILabel()
+        lable.text                     = "ml"
+        lable.font                     = UIFont(name: "AmericanTypewriter", size: 17)
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
     
     var healthStore: 		HKHealthStore?
     var typesToShare: 		Set<HKSampleType> {
@@ -55,22 +66,16 @@ class StartVC: UIViewController {
         switch sender.view {
         case smallOption:
             print("small short-press")
-            let drinkAmount 		= getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType 			= "water"
-            drink.amountOfDrink 	= drinkAmount
-            drink.typeOfDrink 		= drinkType
+            let drinkAmount = Measurement.init(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
+            drink.amountOfDrink = Float(drinkAmount.converted(to: .liters).value)
         case mediumOption:
             print("medium short-press")
-            let drinkAmount 		= getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType 			= "water"
-            drink.amountOfDrink 	= drinkAmount
-            drink.typeOfDrink 		= drinkType
+            let drinkAmount = Measurement.init(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
+            drink.amountOfDrink = Float(drinkAmount.converted(to: .liters).value)
         case largeOption:
             print("large short-press")
-            let drinkAmount 		= getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType 			= "water"
-            drink.amountOfDrink 	= drinkAmount
-            drink.typeOfDrink 		= drinkType
+            let drinkAmount = Measurement.init(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
+            drink.amountOfDrink = Float(drinkAmount.converted(to: .liters).value)
         default:
             break
         }
@@ -84,16 +89,21 @@ class StartVC: UIViewController {
      */
     @objc func long(_ sender: UIGestureRecognizer){
         if sender.state 	== .began {
-            let drink 		= Drink.init()
             switch sender.view {
             case smallOption:
                 print("small long-press")
+                let drinkAmount = Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
+                let drink = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
                 popUpOptions(sender, drink, smallOptionLabel)
             case mediumOption:
                 print("medium long-press")
+                let drinkAmount = Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
+                let drink = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
                 popUpOptions(sender, drink, mediumOptionLabel)
             case largeOption:
                 print("large long-press")
+                let drinkAmount = Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
+                let drink = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
                 popUpOptions(sender, drink, largeOptionLabel)
             default:
                 break
@@ -110,7 +120,7 @@ class StartVC: UIViewController {
      1. This will only be called when the user click the settings button.
      
      */
-    @IBAction func about(_ sender: UIButton) {
+    @IBAction func settings(_ sender: UIButton) {
         let storyboard 							= UIStoryboard(name: "Main", bundle: nil)
         let aboutScreen 						= storyboard.instantiateViewController(withIdentifier: "about")
         aboutScreen.modalPresentationStyle 		= .fullScreen
@@ -283,51 +293,6 @@ class StartVC: UIViewController {
     }
     
     /**
-     will return the amount off drink
-     
-     - parameter optionStack: - **UIStackView** containg the button and the label under the button.
-     - returns: A **Float** with the amount.
-     
-     # Notes: #
-     1. paramenters the **UIStackView** containg the button clicked on and the label describing the value of the button.
-     
-     # Example #
-     ```
-     let drinkAmount = getDrinkAmount(sender.view?.superview as! UIStackView)
-     ```
-     */
-    func getDrinkAmount(_ optionStack: UIStackView)-> Float {
-        var amount = Float.init()
-        for view in optionStack.subviews {
-            if view is UILabel{
-                let label 			= view as! UILabel
-                let stringAmount 	= label.text!.components(separatedBy:CharacterSet.decimalDigits.inverted).joined()
-                amount 				= Float(stringAmount)!
-            }
-        }
-        return convertToL(Double(amount))
-    }
-    
-    /**
-     Converts an value parst inn of type **milliliters**
-     
-     - parameter milliliters: - An value in milliliters.
-     - returns: A **Float** of the amount in liters
-     
-     # Notes: #
-     1. Paramenters must be milliters. It will only convert from millilters to liters.
-     
-     # Example #
-     ```
-     amount = convertToL(Double(amount))
-     ```
-     */
-    func convertToL(_ amount: Double) -> Float {
-        let measurment = Measurement(value: amount, unit: UnitVolume.milliliters)
-        return Float(measurment.converted(to: UnitVolume.liters).value)
-    }
-    
-    /**
      Updates the amount consumed in the Day
      
      - parameter drinkConsumed: - The drink the user chose.
@@ -342,11 +307,9 @@ class StartVC: UIViewController {
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
         exportDrinkToHealth(Double(drinkConsumed.amountOfDrink), Date.init())
-        var consumedL 								= Float(consumedAmount.text!)!
-        consumedL 									+= Float(drinkConsumed.amountOfDrink)
-        today.consumedAmount.amountOfDrink 			= consumedL
-        if today.consumedAmount.amountOfDrink 		<= 0.0{
-            today.consumedAmount.amountOfDrink 		= 0
+        today.consumedAmount.amountOfDrink 		+= drinkConsumed.amountOfDrink
+        if today.consumedAmount.amountOfDrink 	<= 0.0{
+            today.consumedAmount.amountOfDrink 	= 0
         }
         insertDay(today)
         updateUI()
@@ -392,14 +355,39 @@ class StartVC: UIViewController {
      */
     func updateUI(){
         Day.saveDay(days)
+        // Mark: Update UI for goal
         if (today.goalAmount.amountOfDrink.rounded(.up) == today.goalAmount.amountOfDrink.rounded(.down)){
             goalAmount.text 		= String(format: "%.0f", today.goalAmount.amountOfDrink)
         } else {
             let stringFormatGoal 	= getStringFormat(today.goalAmount.amountOfDrink)
             goalAmount.text 		= String(format: stringFormatGoal, today.goalAmount.amountOfDrink)
         }
+        // Mark: Update UI for consumed amount
         let stringFormatConsumed 	= getStringFormat(today.consumedAmount.amountOfDrink)
         consumedAmount.text 		= String(format: stringFormatConsumed, today.consumedAmount.amountOfDrink)
+        
+        // Mark: Update UI for drink options
+        for drink in drinkOptions {
+            switch drinkOptions.firstIndex(of: drink)! {
+                case 0:
+                    smallOptionLabel.text = String(format: "%.0f", drink.amountOfDrink)
+                case 1:
+                    mediumOptionLabel.text = String(format: "%.0f", drink.amountOfDrink)
+                case 2:
+                    largeOptionLabel.text = String(format: "%.0f", drink.amountOfDrink)
+                default:
+                break
+            }
+        }
+        for lable in unitLable{
+            if metricUnits {
+                lable.text 		= "\(UnitVolume.milliliters.symbol)"
+                titleUnit.text 	= "\(UnitVolume.liters.symbol)"
+            } else {
+                lable.text 		= "\(UnitVolume.imperialFluidOunces.symbol)"
+                titleUnit.text 	= "\(UnitVolume.imperialPints.symbol)"
+            }
+        }
     }
     
     /**
@@ -428,10 +416,19 @@ class StartVC: UIViewController {
                 textField.textAlignment 	= .center
             })
             let done = UIAlertAction(title: "done", style: .default) {_ in
-                let newValue = (editAlert.textFields?.first!.text!)! as NSString
+                let newValue = (editAlert.textFields?.first!.text!)! as String
                 if newValue != "" {
-                    optionLabel.text = (editAlert.textFields?.first!.text!)! as String
-                    optionLabel.text?.append("ml")
+                    let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).value
+                    switch optionLabel {
+                        case self.smallOptionLabel:
+                            self.drinkOptions[0].amountOfDrink = Float(drinkAmount)
+                        case self.mediumOptionLabel:
+                            self.drinkOptions[1].amountOfDrink = Float(drinkAmount)
+                        case self.largeOptionLabel:
+                            self.drinkOptions[2].amountOfDrink = Float(drinkAmount)
+                        default:
+                        break
+                    }
                     self.saveDrinkOptions()
                 }
             }
@@ -439,11 +436,8 @@ class StartVC: UIViewController {
             self.present(editAlert, animated: true, completion: nil)
         }
         let removeAmount 			= UIAlertAction(title: "Remove drink", style: .default) {_ in
-            let drinkAmount 		= -self.getDrinkAmount(sender.view?.superview as! UIStackView)
-            let drinkType 			= "water"
-            drink.amountOfDrink 	= drinkAmount
-            drink.typeOfDrink 		= drinkType
-            self.updateConsumtion(drink)
+            let removeDrink = Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amountOfDrink)
+            self.updateConsumtion(removeDrink)
         }
         alerContorller.addAction(editOption)
         alerContorller.addAction(removeAmount)
@@ -493,9 +487,10 @@ class StartVC: UIViewController {
      ```
      */
     func saveDrinkOptions(){
-        UserDefaults.standard.set(smallOptionLabel.text, 	forKey: "smallDrinkOption")
-        UserDefaults.standard.set(mediumOptionLabel.text,	forKey: "mediumDrinkOption")
-        UserDefaults.standard.set(largeOptionLabel.text, 	forKey: "largeDrinkOption")
+        UserDefaults.standard.set(drinkOptions[0].amountOfDrink, 	forKey: "smallDrinkOption")
+        UserDefaults.standard.set(drinkOptions[1].amountOfDrink,	forKey: "mediumDrinkOption")
+        UserDefaults.standard.set(drinkOptions[2].amountOfDrink, 	forKey: "largeDrinkOption")
+        updateUI()
     }
     
     /**
@@ -511,15 +506,13 @@ class StartVC: UIViewController {
      ```
      */
     func loadDrinkOptions(){
-        let small 		= UserDefaults.standard.string(forKey: "smallDrinkOption") 	?? ""
-        let medium 		= UserDefaults.standard.string(forKey: "mediumDrinkOption") ?? ""
-        let large 		= UserDefaults.standard.string(forKey: "largeDrinkOption") 	?? ""
+        let small 		= UserDefaults.standard.float(forKey: "smallDrinkOption")
+        let medium 		= UserDefaults.standard.float(forKey: "mediumDrinkOption")
+        let large 		= UserDefaults.standard.float(forKey: "largeDrinkOption")
         
-        if small != "" && medium != "" && large != "" {
-            smallOptionLabel.text 		= small
-            mediumOptionLabel.text 		= medium
-            largeOptionLabel.text 		= large
-        }
+        drinkOptions[0] = Drink(typeOfDrink: "water", amountOfDrink: Float(small))
+        drinkOptions[1] = Drink(typeOfDrink: "water", amountOfDrink: Float(medium))
+        drinkOptions[2] = Drink(typeOfDrink: "water", amountOfDrink: Float(large))
     }
     
     /**
