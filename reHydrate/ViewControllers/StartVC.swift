@@ -417,17 +417,32 @@ class StartVC: UIViewController {
             let done = UIAlertAction(title: "done", style: .default) {_ in
                 let newValue = (editAlert.textFields?.first!.text!)! as String
                 if newValue != "" {
-                    let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).value
-                    switch optionLabel {
-                        case self.smallOptionLabel:
-                            self.drinkOptions[0].amountOfDrink = Float(drinkAmount)
-                        case self.mediumOptionLabel:
-                            self.drinkOptions[1].amountOfDrink = Float(drinkAmount)
-                        case self.largeOptionLabel:
-                            self.drinkOptions[2].amountOfDrink = Float(drinkAmount)
-                        default:
-                        break
-                    }
+                    if self.metricUnits {
+                        let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
+                        switch optionLabel {
+                            case self.smallOptionLabel:
+                                self.drinkOptions[0].amountOfDrink = Float(drinkAmount.value)
+                            case self.mediumOptionLabel:
+                                self.drinkOptions[1].amountOfDrink = Float(drinkAmount.value)
+                            case self.largeOptionLabel:
+                                self.drinkOptions[2].amountOfDrink = Float(drinkAmount.value)
+                            default:
+                                break
+                        }
+                    } else {
+                            let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.imperialFluidOunces)
+                                .converted(to: .milliliters)
+                            switch optionLabel {
+                                case self.smallOptionLabel:
+                                    self.drinkOptions[0].amountOfDrink = Float(drinkAmount.value)
+                                case self.mediumOptionLabel:
+                                    self.drinkOptions[1].amountOfDrink = Float(drinkAmount.value)
+                                case self.largeOptionLabel:
+                                    self.drinkOptions[2].amountOfDrink = Float(drinkAmount.value)
+                                default:
+                                    break
+                            }
+                        }
                     self.saveDrinkOptions()
                 }
             }
