@@ -40,14 +40,6 @@ class StartVC: UIViewController {
     var metricUnits			= Bool()
     var drinkOptions		= [Drink(), Drink(), Drink()]
     
-    let unitLableDrinkOptions: UILabel = {
-        let lable                     = UILabel()
-        lable.text                     = "ml"
-        lable.font                     = UIFont(name: "AmericanTypewriter", size: 17)
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        return lable
-    }()
-    
     var healthStore: 		HKHealthStore?
     var typesToShare: 		Set<HKSampleType> {
         let waterType 		= HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
@@ -164,17 +156,17 @@ class StartVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("Main screen will appear")
-        darkMode 		= UserDefaults.standard.bool(forKey: "darkMode")
-        metricUnits		= UserDefaults.standard.bool(forKey: "metricUnits")
-        currentDay.text = formatter.string(from: Date.init())
-        self.today 		= days.last ?? Day.init()
-        days 			= Day.loadDay()
+        darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
+        metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
+        currentDay.text 		= formatter.string(from: Date.init())
+        self.today 				= days.last ?? Day.init()
+        days 					= Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
-            today 		= days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
+            today 				= days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
         } else if !days.isEmpty {
-            today.goalAmount = days.last!.goalAmount
+            today.goalAmount 	= days.last!.goalAmount
         } else {
-            today 		= Day.init()
+            today 				= Day.init()
             insertDay(today)
         }
         loadDrinkOptions()
@@ -195,18 +187,18 @@ class StartVC: UIViewController {
      */
     func changeAppearance() {
         if darkMode == true {
-            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
-            aboutButton.tintColor = .lightGray
-            historyButton.tintColor = .lightGray
+            self.view.backgroundColor 	= hexStringToUIColor(hex: "#212121")
+            aboutButton.tintColor 		= .lightGray
+            historyButton.tintColor 	= .lightGray
             for lable in lables {
-                lable.textColor = .white
+                lable.textColor 		= .white
             }
         } else {
-            self.view.backgroundColor = .white
-            historyButton.tintColor = .black
-            aboutButton.tintColor = .black
+            self.view.backgroundColor 	= .white
+            historyButton.tintColor 	= .black
+            aboutButton.tintColor 		= .black
             for lable in lables {
-                lable.textColor = .black
+                lable.textColor 		= .black
             }
         }
     }
@@ -297,8 +289,8 @@ class StartVC: UIViewController {
      ```
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
-        let drinkAmount = Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
-        let drink = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
+        let drinkAmount 	= Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
+        let drink 			= Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
         exportDrinkToHealth(Double(drink.amountOfDrink), Date.init())
         today.consumedAmount.amountOfDrink 		+= drink.amountOfDrink
         if today.consumedAmount.amountOfDrink 	<= 0.0{
@@ -375,25 +367,24 @@ class StartVC: UIViewController {
             mediumOptionLabel.text 				= String(format: "%.2f", medium)
             largeOptionLabel.text 				= String(format: "%.2f", large)
         }
-        // Mark: Update UI for goal
-        if (today.goalAmount.amountOfDrink.rounded(.up) == day.goalAmount.amountOfDrink.rounded(.down)){
-            self.goalAmount.text 		= String(format: "%.0f", day.goalAmount.amountOfDrink)
-        } else {
-            let stringFormatGoal 	= getStringFormat(day.goalAmount.amountOfDrink)
-            self.goalAmount.text 		= String(format: stringFormatGoal, day.goalAmount.amountOfDrink)
-        }
-        // Mark: Update UI for consumed amount
-        let stringFormatConsumed 	= getStringFormat(today.consumedAmount.amountOfDrink)
-        self.consumedAmount.text 		= String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
         
-        // Mark: Update UI for drink options
+        if (today.goalAmount.amountOfDrink.rounded(.up) == day.goalAmount.amountOfDrink.rounded(.down)){
+            self.goalAmount.text 				= String(format: "%.0f", day.goalAmount.amountOfDrink)
+        } else {
+            let stringFormatGoal 				= getStringFormat(day.goalAmount.amountOfDrink)
+            self.goalAmount.text 				= String(format: stringFormatGoal, day.goalAmount.amountOfDrink)
+        }
+        
+        let stringFormatConsumed 				= getStringFormat(today.consumedAmount.amountOfDrink)
+        self.consumedAmount.text 				= String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
+        
         for lable in unitLable{
             if metricUnits {
-                lable.text 		= "\(UnitVolume.milliliters.symbol)"
-                titleUnit.text 	= "\(UnitVolume.liters.symbol)"
+                lable.text 						= "\(UnitVolume.milliliters.symbol)"
+                titleUnit.text 					= "\(UnitVolume.liters.symbol)"
             } else {
-                lable.text 		= "\(UnitVolume.imperialFluidOunces.symbol)"
-                titleUnit.text 	= "\(UnitVolume.imperialPints.symbol)"
+                lable.text 						= "\(UnitVolume.imperialFluidOunces.symbol)"
+                titleUnit.text 					= "\(UnitVolume.imperialPints.symbol)"
             }
         }
     }
@@ -443,8 +434,8 @@ class StartVC: UIViewController {
             editAlert.addAction(done)
             self.present(editAlert, animated: true, completion: nil)
         }
-        let removeAmount 			= UIAlertAction(title: "Remove drink", style: .default) {_ in
-            let removeDrink = Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amountOfDrink)
+        let removeAmount 		= UIAlertAction(title: "Remove drink", style: .default) {_ in
+            let removeDrink 	= Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amountOfDrink)
             self.updateConsumtion(removeDrink)
         }
         alerContorller.addAction(editOption)
@@ -467,11 +458,11 @@ class StartVC: UIViewController {
      ```
      */
     func exportDrinkToHealth(_ waterAmount: Double, _ date: Date) {
-        guard let dietaryWater = HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
+        guard let dietaryWater 	= HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
             fatalError("dietary water is no longer available in HealthKit")
         }
-        let waterConsumed 			= HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
-        let waterConsumedSample 	= HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
+        let waterConsumed 		= HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
+        let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
                                                    start: date, end: date)
         HKHealthStore().save(waterConsumedSample) { (success, error) in
             if let error = error {
