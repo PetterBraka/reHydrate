@@ -225,7 +225,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 0, section: 1):
                 cell.addSubTitle( "Units: \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
             case IndexPath(row: 1, section: 1):
-                cell.addSubTitle( "Units: \(UnitVolume.imperialFluidOunces.symbol), \(UnitVolume.imperialPints.symbol)")
+                cell.addSubTitle( "Units: \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
             default:
             break
         }
