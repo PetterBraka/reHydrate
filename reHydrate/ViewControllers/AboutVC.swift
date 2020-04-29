@@ -152,7 +152,33 @@ class AboutVC: UIViewController {
         )
     }
     
-    /**
+    fileprivate func setConstraints(_ titleAppLable: UILabel, _ toturialVC: UIViewController, _ dayLable: UILabel, _ summaryLable: UILabel, _ drinkOptionStack: UIStackView, _ smallDrinkLable: UILabel, _ mediumDrinkLable: UILabel, _ largeDrinkLable: UILabel, _ settingsButton: UIButton, _ calendarButton: UIButton, _ explanationLabel: UILabel) {
+        titleAppLable.heightAnchor.constraint(equalToConstant: 68).isActive = true
+        titleAppLable.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive = true
+        titleAppLable.topAnchor.constraint(equalTo: toturialVC.view.topAnchor, constant: 55).isActive = true
+        dayLable.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive = true
+        dayLable.topAnchor.constraint(equalTo: titleAppLable.bottomAnchor, constant: 40).isActive = true
+        summaryLable.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive = true
+        summaryLable.topAnchor.constraint(equalTo: dayLable.bottomAnchor, constant: 10).isActive = true
+        drinkOptionStack.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor, constant: 20).isActive = true
+        drinkOptionStack.topAnchor.constraint(equalTo: summaryLable.bottomAnchor, constant: 20).isActive = true
+        smallDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[0].centerXAnchor).isActive = true
+        mediumDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[1].centerXAnchor).isActive = true
+        largeDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[2].centerXAnchor).isActive = true
+        smallDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive = true
+        mediumDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive = true
+        largeDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive = true
+        settingsButton.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 30).isActive = true
+        settingsButton.bottomAnchor.constraint(equalTo: toturialVC.view.bottomAnchor, constant: -30).isActive = true
+        calendarButton.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: -30).isActive = true
+        calendarButton.bottomAnchor.constraint(equalTo: toturialVC.view.bottomAnchor, constant: -30).isActive = true
+        explanationLabel.centerYAnchor.constraint(equalTo: toturialVC.view.centerYAnchor,constant: 80).isActive = true
+        explanationLabel.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive = true
+    }
+    
+    
+
+/**
      Will handle the gestures form the **UITableView**.
      
      - parameter sender: - The **UIGestureRecognizer** that called the function.
@@ -167,16 +193,171 @@ class AboutVC: UIViewController {
         switch section {
             case settings.firstIndex(where: {$0.setting == "how to use"}):
                 print("help pressed")
-                self.view.addSubview(helpImage)
                 
-                helpImage.translatesAutoresizingMaskIntoConstraints 								= false
-                helpImage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive 		= true
-                helpImage.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive 	= true
-                helpImage.topAnchor.constraint(equalTo: self.exitButton.bottomAnchor).isActive 		= true
-                helpImage.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive 		= true
-                helpImage.isUserInteractionEnabled 													= true
-                helpImage.contentMode 																= .scaleAspectFit
-                tableView.isHidden 																	= true
+                let toturialVC 						= UIViewController()
+                let toolBar         				= UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: toturialVC.view.frame.width, height: 40)))
+                let flexibleSpace     				= UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+                let skipButton         				= UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector())
+                skipButton.tag						= 1
+                let nextButton						= UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector())
+                nextButton.tag						= 2
+                toolBar.setItems([skipButton, flexibleSpace], animated: false)
+                toolBar.sizeToFit()
+                let dayLable: UILabel 				= {
+                    let lable 						= UILabel()
+                    lable.textAlignment 			= .center
+                    lable.text 						= "Monday - 05/10/20"
+                    lable.font 						= UIFont(name: "AmericanTypeWriter-Bold", size: 20)
+                    lable.translatesAutoresizingMaskIntoConstraints = false
+                    return lable
+                }()
+                let summaryLable: UILabel 			= {
+                    let lable 						= UILabel()
+                    lable.textAlignment 			= .center
+                    lable.text 						= "1.25 / 3L"
+                    lable.font 						= UIFont(name: "AmericanTypeWriter-Bold", size: 40)
+                    lable.translatesAutoresizingMaskIntoConstraints = false
+                    return lable
+                }()
+                let drinkOptionStack: UIStackView 	= {
+                    let stack 						= UIStackView()
+                    stack.axis 						= .horizontal
+                    stack.spacing 					= 15
+                    stack.alignment 				= .bottom
+                    stack.distribution 				= .equalSpacing
+                    let smallDrink 					= UIImageView()
+                    smallDrink.image 				= UIImage(named: "Glass")
+                    smallDrink.contentMode 			= .scaleAspectFit
+                    let mediumDrink 				= UIImageView()
+                    mediumDrink.image 				= UIImage(named: "Bottle")
+                    mediumDrink.contentMode 		= .scaleAspectFit
+                    let largeDrink 					= UIImageView()
+                    largeDrink.image 				= UIImage(named: "Flask")
+                    largeDrink.contentMode 			= .scaleAspectFit
+                    smallDrink.translatesAutoresizingMaskIntoConstraints 	= false
+                    mediumDrink.translatesAutoresizingMaskIntoConstraints 	= false
+                    largeDrink.translatesAutoresizingMaskIntoConstraints 	= false
+                    stack.addArrangedSubview(smallDrink)
+                    stack.addArrangedSubview(mediumDrink)
+                    stack.addArrangedSubview(largeDrink)
+                    smallDrink.heightAnchor.constraint(equalToConstant: 70).isActive 	= true
+                    smallDrink.widthAnchor.constraint(equalToConstant: 50).isActive 	= true
+                    mediumDrink.heightAnchor.constraint(equalToConstant: 120).isActive 	= true
+                    mediumDrink.widthAnchor.constraint(equalToConstant: 80).isActive 	= true
+                    largeDrink.heightAnchor.constraint(equalToConstant: 140).isActive 	= true
+                    largeDrink.widthAnchor.constraint(equalToConstant: 80).isActive 	= true
+                    stack.translatesAutoresizingMaskIntoConstraints = false
+                    return stack
+                }()
+                let smallDrinkLable: UILabel 		= {
+                    let lable 						= UILabel()
+                    lable.textAlignment 			= .center
+                    lable.text 						= "300ml"
+                    lable.font 						= UIFont(name: "AmericanTypeWriter", size: 17)
+                    lable.translatesAutoresizingMaskIntoConstraints = false
+                    return lable
+                }()
+                let mediumDrinkLable: UILabel 		= {
+                    let lable 						= UILabel()
+                    lable.textAlignment 			= .center
+                    lable.text 						= "500ml"
+                    lable.font 						= UIFont(name: "AmericanTypeWriter", size: 17)
+                    lable.translatesAutoresizingMaskIntoConstraints = false
+                    return lable
+                }()
+                let largeDrinkLable: UILabel 		= {
+                    let lable 						= UILabel()
+                    lable.textAlignment 			= .center
+                    lable.text 						= "750ml"
+                    lable.font 						= UIFont(name: "AmericanTypeWriter", size: 17)
+                    lable.translatesAutoresizingMaskIntoConstraints = false
+                    return lable
+                }()
+                let settingsButton: UIButton 		= {
+                    let button 						= UIButton()
+                    button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
+                    button.setTitle("", for: .normal)
+                    button.translatesAutoresizingMaskIntoConstraints 				= false
+                    button.widthAnchor.constraint(equalToConstant: 50).isActive 	= true
+                    button.heightAnchor.constraint(equalToConstant: 50).isActive 	= true
+                    return button
+                }()
+                let calendarButton: UIButton 		= {
+                    let button 						= UIButton()
+                    button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
+                    button.setTitle("", for: .normal)
+                    button.translatesAutoresizingMaskIntoConstraints 				= false
+                    button.widthAnchor.constraint(equalToConstant: 50).isActive 	= true
+                    button.heightAnchor.constraint(equalToConstant: 50).isActive 	= true
+                    return button
+                }()
+                let explanationLabel: UILabel 		= {
+                    let lable 						= UILabel()
+                    lable.text 						= "This is the lable for explaingn the highlighted objects"
+                    lable.font 						= UIFont(name: "AmericanTypewriter", size: 18)
+                    lable.textAlignment 			= .center
+                    lable.numberOfLines 			= 0
+                    lable.translatesAutoresizingMaskIntoConstraints 			= false
+                    lable.widthAnchor.constraint(equalToConstant: 250).isActive = true
+                    return lable
+                }()
+                if darkMode{
+                    toturialVC.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+                    // Mark: Lables
+                    titleAppLable.textColor 		= .white
+                    dayLable.textColor 				= .white
+                    summaryLable.textColor 			= .white
+                    smallDrinkLable.textColor 		= .white
+                    mediumDrinkLable.textColor 		= .white
+                    largeDrinkLable.textColor 		= .white
+                    explanationLabel.textColor 		= .white
+                    // Mark: Buttons
+                    settingsButton.tintColor		= .lightGray
+                    calendarButton.tintColor		= .lightGray
+                } else {
+                    toturialVC.view.backgroundColor = .white
+                    // Mark: Lables
+                    titleAppLable.textColor 		= .black
+                    dayLable.textColor 				= .black
+                    summaryLable.textColor 			= .black
+                    smallDrinkLable.textColor 		= .black
+                    mediumDrinkLable.textColor 		= .black
+                    largeDrinkLable.textColor 		= .black
+                    explanationLabel.textColor 		= .black
+                    // Mark: Buttons
+                    settingsButton.tintColor 		= .black
+                    calendarButton.tintColor 		= .black
+                }
+                
+                toturialVC.view.addSubview(titleAppLable)
+                toturialVC.view.addSubview(dayLable)
+                toturialVC.view.addSubview(summaryLable)
+                toturialVC.view.addSubview(drinkOptionStack)
+                toturialVC.view.addSubview(smallDrinkLable)
+                toturialVC.view.addSubview(mediumDrinkLable)
+                toturialVC.view.addSubview(largeDrinkLable)
+                toturialVC.view.addSubview(settingsButton)
+                toturialVC.view.addSubview(calendarButton)
+                toturialVC.view.addSubview(explanationLabel)
+                
+                setConstraints(titleAppLable, toturialVC, dayLable,
+                               summaryLable, drinkOptionStack,
+                               smallDrinkLable, mediumDrinkLable,
+                               largeDrinkLable, settingsButton,
+                               calendarButton, explanationLabel)
+                
+                toturialVC.modalPresentationStyle = .fullScreen
+                self.present(toturialVC, animated: true, completion: nil)
+                
+//                self.view.addSubview(helpImage)
+//                helpImage.translatesAutoresizingMaskIntoConstraints 								= false
+//                helpImage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive 		= true
+//                helpImage.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive 	= true
+//                helpImage.topAnchor.constraint(equalTo: self.exitButton.bottomAnchor).isActive 		= true
+//                helpImage.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive 		= true
+//                helpImage.isUserInteractionEnabled 													= true
+//                helpImage.contentMode 																= .scaleAspectFit
+//                tableView.isHidden 																	= true
             
             case settings.firstIndex(where: {$0.setting == "remove data"}):
                 // This will clear all the saved data from past days.
