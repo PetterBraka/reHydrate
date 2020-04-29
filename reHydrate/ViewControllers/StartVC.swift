@@ -159,8 +159,7 @@ class StartVC: UIViewController {
         darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
         currentDay.text 		= formatter.string(from: Date.init())
-        self.today 				= days.last ?? Day.init()
-        days 					= Day.loadDay()
+        days                    = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
             today 				= days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
         } else if !days.isEmpty {
