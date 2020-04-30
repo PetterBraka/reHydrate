@@ -143,7 +143,7 @@ class StartVC: UIViewController {
         }
         let notification 	= UNMutableNotificationContent()
         notification.title 	= "You should have some water"
-        notification.body 	= "It has been a long time since you had some water. I think you need some more."
+        notification.body 	= "It has been a long time since you had some water, why don't you have some."
         
         let alertDate = Date().addingTimeInterval(3600)
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: alertDate)
