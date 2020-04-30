@@ -38,7 +38,9 @@ class StartVC: UIViewController {
     let formatter 			= DateFormatter()
     var darkMode			= Bool()
     var metricUnits			= Bool()
-    var drinkOptions		= [Drink(), Drink(), Drink()]
+    var drinkOptions		= [Drink(typeOfDrink: "water", amountOfDrink: 300),
+                               Drink(typeOfDrink: "water", amountOfDrink: 500),
+                               Drink(typeOfDrink: "water", amountOfDrink: 750)]
     
     var healthStore: 		HKHealthStore?
     var typesToShare: 		Set<HKSampleType> {
@@ -159,8 +161,7 @@ class StartVC: UIViewController {
         darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
         currentDay.text 		= formatter.string(from: Date.init())
-        self.today 				= days.last ?? Day.init()
-        days 					= Day.loadDay()
+        days                    = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
             today 				= days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
         } else if !days.isEmpty {
@@ -379,6 +380,11 @@ class StartVC: UIViewController {
         self.consumedAmount.text 				= String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
         
         for lable in unitLable{
+            if darkMode {
+                lable.textColor 				= .white
+            } else {
+                lable.textColor					= .black
+            }
             if metricUnits {
                 lable.text 						= "\(UnitVolume.milliliters.symbol)"
                 titleUnit.text 					= "\(UnitVolume.liters.symbol)"
