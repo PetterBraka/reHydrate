@@ -30,10 +30,10 @@ class SettingOptionCell: UITableViewCell {
         textField.setRightPadding(20)
         return textField
     }()
-    let titleOption: UILabel 		= {
-        let lable 					= UILabel()
-        lable.text 					= "test"
-        lable.font 					= UIFont(name: "AmericanTypewriter", size: 17)
+    let titleOption: UILabel 	= {
+        let lable 				= UILabel()
+        lable.text 				= "test"
+        lable.font 				= UIFont(name: "AmericanTypewriter", size: 17)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
         }()
@@ -44,8 +44,8 @@ class SettingOptionCell: UITableViewCell {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let activatedOption: UIButton     = {
-        let button                = UIButton()
+    let activatedOption: UIButton 	= {
+        let button					= UIButton()
         button.setTitle("", for: .normal)
         button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -57,9 +57,9 @@ class SettingOptionCell: UITableViewCell {
         self.addSubview(titleOption)
         self.addSubview(activatedOption)
         setButtonConstraints()
-        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive 				= true
-        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive 						= true
-        self.backgroundColor 																			= .none
+        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive	= true
+        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive			= true
+        self.backgroundColor																= .none
     }
     
     required init?(coder: NSCoder) {
@@ -70,10 +70,10 @@ class SettingOptionCell: UITableViewCell {
         subTitle.text = string
         self.addSubview(subTitle)
         self.removeConstraints(self.constraints)
-        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -10).isActive		= true
-        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive    			= true
-        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive 			= true
-        subTitle.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 10).isActive			= true
+        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -10).isActive	= true
+        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive    		= true
+        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive 		= true
+        subTitle.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 10).isActive		= true
         setButtonConstraints()
     }
     
@@ -86,10 +86,10 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                    		= true
-        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                   		= true
-        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive 			= true
-        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive 		= true
+        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                    	= true
+        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                   	= true
+        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive 		= true
+        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive 	= true
     }
     
     /**
@@ -102,17 +102,17 @@ class SettingOptionCell: UITableViewCell {
      */
     func setCellAppairents(_ dark: Bool,_ metric: Bool){
         if dark{
-            activatedOption.tintColor     	= .lightGray
-            titleOption.textColor         	= .white
-            subTitle.textColor            	= .white
-            textField.textColor				= .white
-            self.backgroundColor 			= hexStringToUIColor(hex: "#212121")
+            activatedOption.tintColor	= .lightGray
+            titleOption.textColor		= .white
+            subTitle.textColor			= .white
+            textField.textColor			= .white
+            self.backgroundColor 		= hexStringToUIColor(hex: "#212121")
         } else {
-            activatedOption.tintColor     	= .black
-            titleOption.textColor         	= .black
-            subTitle.textColor            	= .black
-            textField.textColor				= .black
-            self.backgroundColor          	= .white
+            activatedOption.tintColor	= .black
+            titleOption.textColor		= .black
+            subTitle.textColor			= .black
+            textField.textColor			= .black
+            self.backgroundColor		= .white
         }
         switch titleOption.text?.lowercased() {
             case "dark mode":
@@ -173,10 +173,10 @@ class SettingOptionCell: UITableViewCell {
         
         textField.inputAccessoryView = toolBar
         
-        picker.frame 			= CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
-        picker.delegate			= self
-        picker.dataSource 		= self
-        textField.inputView 	= picker
+        picker.frame 		= CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
+        picker.delegate		= self
+        picker.dataSource 	= self
+        textField.inputView = picker
     }
     
     @objc func doneClicked(){
@@ -265,7 +265,7 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
             case 0, 1, 3:
                 return numberArray[row]
             case 2:
-                return ","
+                return "."
             default:
                 return ""
         }
@@ -284,7 +284,7 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
             case 0, 1, 3:
             updateTextField(numberArray[row], component)
             case 2:
-            updateTextField(",", component)
+            updateTextField(".", component)
             default:
             break
         }
