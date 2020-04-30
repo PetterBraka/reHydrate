@@ -38,7 +38,9 @@ class StartVC: UIViewController {
     let formatter 			= DateFormatter()
     var darkMode			= Bool()
     var metricUnits			= Bool()
-    var drinkOptions		= [Drink(), Drink(), Drink()]
+    var drinkOptions		= [Drink(typeOfDrink: "water", amountOfDrink: 300),
+                               Drink(typeOfDrink: "water", amountOfDrink: 500),
+                               Drink(typeOfDrink: "water", amountOfDrink: 750)]
     
     var healthStore: 		HKHealthStore?
     var typesToShare: 		Set<HKSampleType> {
