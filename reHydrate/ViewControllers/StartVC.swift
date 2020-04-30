@@ -378,6 +378,11 @@ class StartVC: UIViewController {
         self.consumedAmount.text 				= String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
         
         for lable in unitLable{
+            if darkMode {
+                lable.textColor 				= .white
+            } else {
+                lable.textColor					= .black
+            }
             if metricUnits {
                 lable.text 						= "\(UnitVolume.milliliters.symbol)"
                 titleUnit.text 					= "\(UnitVolume.liters.symbol)"
