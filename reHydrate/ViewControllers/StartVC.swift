@@ -132,6 +132,26 @@ class StartVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.requestAuthorization(options: .alert) { (granted, error ) in
+            // enable or disable if needed.
+            if granted {
+                print("We have permission to send notifications")
+            } else {
+                print("We don't have the option to send notifications")
+            }
+        }
+        let notification 	= UNMutableNotificationContent()
+        notification.title 	= "You should have some water"
+        notification.body 	= "It has been a long time since you had some water, why don't you have some."
+        
+        let alertDate = Date().addingTimeInterval(3600)
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: alertDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        let uuidString = UUID().uuidString
+        let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+        notificationCenter.add(request, withCompletionHandler: nil)
+        
         //  Request access to write dietaryWater data to HealthStore
         self.healthStore?.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
             if (!success) {
@@ -420,7 +440,7 @@ class StartVC: UIViewController {
                 textField.keyboardType 		= .decimalPad
                 textField.textAlignment 	= .center
             })
-            let done = UIAlertAction(title: "done", style: .default) {_ in
+            let done = UIAlertAction(title: "Done", style: .default) {_ in
                 let newValue = (editAlert.textFields?.first!.text!)! as String
                 if newValue != "" {
                     if self.metricUnits {
