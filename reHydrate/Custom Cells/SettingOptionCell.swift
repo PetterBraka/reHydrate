@@ -105,11 +105,13 @@ class SettingOptionCell: UITableViewCell {
             activatedOption.tintColor     	= .lightGray
             titleOption.textColor         	= .white
             subTitle.textColor            	= .white
+            textField.textColor				= .white
             self.backgroundColor 			= hexStringToUIColor(hex: "#212121")
         } else {
             activatedOption.tintColor     	= .black
             titleOption.textColor         	= .black
             subTitle.textColor            	= .black
+            textField.textColor				= .black
             self.backgroundColor          	= .white
         }
         switch titleOption.text?.lowercased() {
