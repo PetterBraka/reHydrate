@@ -14,24 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    var healthStore: HKHealthStore?
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        
-        if HKHealthStore.isHealthDataAvailable() {
-            healthStore = HKHealthStore()
-            
-            //  set root view controller's healthStore reference to app delegate's healthStore Instance
-            if let vc = self.window?.rootViewController as? StartVC {
-                vc.healthStore = self.healthStore
-            } else {
-                NSLog("unable to get rootViewControler")
-            }
-        }
-        
-        return true
-    }
 
     // MARK: UISceneSession Lifecycle
 
