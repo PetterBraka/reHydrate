@@ -36,18 +36,11 @@ class StartVC: UIViewController {
     var days: [Day] 		= []
     var today 				= Day.init()
     let formatter 			= DateFormatter()
-    var darkMode			= Bool()
-    var metricUnits			= Bool()
+    var darkMode			= true
+    var metricUnits			= true
     var drinkOptions		= [Drink(typeOfDrink: "water", amountOfDrink: 300),
                                Drink(typeOfDrink: "water", amountOfDrink: 500),
                                Drink(typeOfDrink: "water", amountOfDrink: 750)]
-    
-    var healthStore: 		HKHealthStore?
-    var typesToShare: 		Set<HKSampleType> {
-        let waterType 		= HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
-        return [waterType]
-    }
-    
     
     /**
      Will check which view that called this function
@@ -128,7 +121,6 @@ class StartVC: UIViewController {
         self.present(calendarScreen, animated: true, completion: nil)
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
@@ -144,23 +136,19 @@ class StartVC: UIViewController {
         let notification 	= UNMutableNotificationContent()
         notification.title 	= "You should have some water"
         notification.body 	= "It has been a long time since you had some water, why don't you have some."
-        
+
         let alertDate = Date().addingTimeInterval(3600)
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: alertDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
         notificationCenter.add(request, withCompletionHandler: nil)
+
         
-        //  Request access to write dietaryWater data to HealthStore
-        self.healthStore?.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
-            if (!success) {
-                print("Was not authorization by the user")
-                return
-            }
-        })
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
+            metricUnits = true
+            UserDefaults.standard.set(metricUnits, forKey: "metricUnits")
             if self.traitCollection.userInterfaceStyle == .dark {
                 darkMode = true
             } else {
@@ -168,9 +156,13 @@ class StartVC: UIViewController {
             }
             UserDefaults.standard.set(darkMode, forKey: "darkMode")
         }
+        setUpHealth()
         formatter.dateFormat 	= "EEEE - dd/MM/yy"
         days 					= Day.loadDay()
         
+        smallOptionLabel.text     = String(drinkOptions[0].amountOfDrink)
+        mediumOptionLabel.text     = String(drinkOptions[1].amountOfDrink)
+        largeOptionLabel.text     = String(drinkOptions[2].amountOfDrink)
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
@@ -193,6 +185,23 @@ class StartVC: UIViewController {
         loadDrinkOptions()
         changeAppearance()
         updateUI()
+    }
+    
+    fileprivate func setUpHealth() {
+        //  Request access to write dietaryWater data to HealthStore
+        if HKHealthStore.isHealthDataAvailable(){
+            let healthStore = HKHealthStore()
+            var typesToShare:         Set<HKSampleType> {
+                let waterType         = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
+                return [waterType]
+            }
+            healthStore.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
+                if (!success) {
+                    print("Was not authorization by the user")
+                    return
+                }
+            })
+        }
     }
     
     /**
@@ -550,9 +559,12 @@ class StartVC: UIViewController {
         let medium 		= UserDefaults.standard.float(forKey: "mediumDrinkOption")
         let large 		= UserDefaults.standard.float(forKey: "largeDrinkOption")
         
-        drinkOptions[0] = Drink(typeOfDrink: "water", amountOfDrink: Float(small))
-        drinkOptions[1] = Drink(typeOfDrink: "water", amountOfDrink: Float(medium))
-        drinkOptions[2] = Drink(typeOfDrink: "water", amountOfDrink: Float(large))
+        
+        if small != 0 || medium != 0 || large != 0  {
+            drinkOptions[0] = Drink(typeOfDrink: "water", amountOfDrink: Float(small))
+            drinkOptions[1] = Drink(typeOfDrink: "water", amountOfDrink: Float(medium))
+            drinkOptions[2] = Drink(typeOfDrink: "water", amountOfDrink: Float(large))
+        }
     }
     
     /**

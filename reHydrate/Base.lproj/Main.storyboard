@@ -470,7 +470,7 @@
     <resources>
         <image name="Bottle" width="187" height="308"/>
         <image name="Flask" width="157" height="258.5"/>
-        <image name="Glass" width="160" height="193"/>
+        <image name="Glass" width="242.5" height="292.5"/>
         <image name="calendar.circle" catalog="system" width="128" height="121"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="xmark.circle" catalog="system" width="128" height="121"/>
