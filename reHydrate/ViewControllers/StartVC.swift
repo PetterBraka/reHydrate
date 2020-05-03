@@ -121,30 +121,6 @@ class StartVC: UIViewController {
         self.present(calendarScreen, animated: true, completion: nil)
     }
     
-    /**
-     Will be called when the app enters the foreground. Then it will update the date for to saved data for this day or create a new instance of **Day**
-     
-     # Example #
-     ```
-     override func viewDidLoad() {
-     	NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
-     }
-     ```
-     */
-    @objc func didMoveToForeground(){
-        currentDay.text         = formatter.string(from: Date.init())
-        days                    = Day.loadDay()
-        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
-            today                 = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
-        } else {
-            today                 = Day.init()
-            if !days.isEmpty {
-                today.goalAmount     = days.last!.goalAmount
-            }
-            insertDay(today)
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
@@ -168,8 +144,6 @@ class StartVC: UIViewController {
         let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
         notificationCenter.add(request, withCompletionHandler: nil)
 
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
@@ -198,6 +172,16 @@ class StartVC: UIViewController {
         print("Main screen will appear")
         darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
+        currentDay.text 		= formatter.string(from: Date.init())
+        days                    = Day.loadDay()
+        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
+            today 				= days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
+        } else if !days.isEmpty {
+            today.goalAmount 	= days.last!.goalAmount
+        } else {
+            today 				= Day.init()
+            insertDay(today)
+        }
         loadDrinkOptions()
         changeAppearance()
         updateUI()
