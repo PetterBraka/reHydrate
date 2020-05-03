@@ -170,8 +170,6 @@ class StartVC: UIViewController {
         notificationCenter.add(request, withCompletionHandler: nil)
 
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
-        
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
             metricUnits = true
@@ -199,6 +197,16 @@ class StartVC: UIViewController {
         print("Main screen will appear")
         darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
+        currentDay.text 		= formatter.string(from: Date.init())
+        days                    = Day.loadDay()
+        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
+            today 				= days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
+        } else if !days.isEmpty {
+            today.goalAmount 	= days.last!.goalAmount
+        } else {
+            today 				= Day.init()
+            insertDay(today)
+        }
         loadDrinkOptions()
         changeAppearance()
         updateUI()
