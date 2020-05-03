@@ -168,7 +168,8 @@ class StartVC: UIViewController {
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
         notificationCenter.add(request, withCompletionHandler: nil)
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
