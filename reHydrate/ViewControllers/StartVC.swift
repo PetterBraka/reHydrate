@@ -143,6 +143,7 @@ class StartVC: UIViewController {
             }
             insertDay(today)
         }
+        updateUI()
     }
     
     override func viewDidLoad() {
