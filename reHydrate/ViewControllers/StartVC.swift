@@ -121,7 +121,17 @@ class StartVC: UIViewController {
         self.present(calendarScreen, animated: true, completion: nil)
     }
     
-    @objc func didMoveToForground(){
+    /**
+     Will be called when the app enters the foreground. Then it will update the date for to saved data for this day or create a new instance of **Day**
+     
+     # Example #
+     ```
+     override func viewDidLoad() {
+     	NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+     }
+     ```
+     */
+    @objc func didMoveToForeground(){
         currentDay.text         = formatter.string(from: Date.init())
         days                    = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
@@ -159,7 +169,7 @@ class StartVC: UIViewController {
         notificationCenter.add(request, withCompletionHandler: nil)
 
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
