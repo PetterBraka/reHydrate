@@ -395,30 +395,10 @@ class AboutVC: UIViewController {
                 toolBar.addSubview(skipButton)
                 toolBar.addSubview(nextButton)
                 
-                toolBar.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 0).isActive					= true
-                toolBar.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: 0).isActive					= true
-                toolBar.topAnchor.constraint(equalTo: toturialVC.view.topAnchor, constant: 0).isActive						= true
-                toolBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive									= true
-                skipButton.leftAnchor.constraint(equalTo: toolBar.leftAnchor, constant: 20).isActive						= true
-                skipButton.topAnchor.constraint(equalTo: toolBar.topAnchor, constant: 50).isActive							= true
-                nextButton.rightAnchor.constraint(equalTo: toolBar.rightAnchor, constant: -20).isActive						= true
-                nextButton.topAnchor.constraint(equalTo: toolBar.topAnchor, constant: 50).isActive							= true
-                dayLable.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive							= true
-                dayLable.topAnchor.constraint(equalTo: toolBar.bottomAnchor, constant: 40).isActive							= true
-                summaryLable.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive						= true
-                summaryLable.topAnchor.constraint(equalTo: dayLable.bottomAnchor, constant: 10).isActive                    = true
-                drinkOptionStack.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor, constant: 20).isActive    = true
-                drinkOptionStack.topAnchor.constraint(equalTo: summaryLable.bottomAnchor, constant: 20).isActive            = true
-                smallDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[0].centerXAnchor).isActive		= true
-                mediumDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[1].centerXAnchor).isActive		= true
-                largeDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[2].centerXAnchor).isActive		= true
-                smallDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive						= true
-                mediumDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive						= true
-                largeDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive						= true
-                settingsButton.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 30).isActive            = true
-                settingsButton.bottomAnchor.constraint(equalTo: toturialVC.view.bottomAnchor, constant: -30).isActive		= true
-                calendarButton.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: -30).isActive			= true
-                calendarButton.bottomAnchor.constraint(equalTo: toturialVC.view.bottomAnchor, constant: -30).isActive		= true
+                setToolBarConstraints()
+                setSummaryAndDayLableConstraints()
+                setDrinkOptionsConstraints()
+                setSettingsAndCalendarConstraints()
                 explanationLabel.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor,constant: 40).isActive			= true
                 explanationLabel.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive					= true
                 
@@ -473,6 +453,42 @@ class AboutVC: UIViewController {
             	}
             
         }
+    }
+    
+    fileprivate func setToolBarConstraints() {
+        toolBar.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 0).isActive     = true
+        toolBar.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: 0).isActive   = true
+        toolBar.topAnchor.constraint(equalTo: toturialVC.view.topAnchor, constant: 0).isActive       = true
+        toolBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive                  = true
+        skipButton.leftAnchor.constraint(equalTo: toolBar.leftAnchor, constant: 20).isActive         = true
+        skipButton.topAnchor.constraint(equalTo: toolBar.topAnchor, constant: 50).isActive           = true
+        nextButton.rightAnchor.constraint(equalTo: toolBar.rightAnchor, constant: -20).isActive      = true
+        nextButton.topAnchor.constraint(equalTo: toolBar.topAnchor, constant: 50).isActive           = true
+    }
+    
+    fileprivate func setSummaryAndDayLableConstraints() {
+        dayLable.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive           = true
+        dayLable.topAnchor.constraint(equalTo: toolBar.bottomAnchor, constant: 40).isActive          = true
+        summaryLable.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive       = true
+        summaryLable.topAnchor.constraint(equalTo: dayLable.bottomAnchor, constant: 10).isActive     = true
+    }
+    
+    fileprivate func setDrinkOptionsConstraints() {
+        drinkOptionStack.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor, constant: 20).isActive   = true
+        drinkOptionStack.topAnchor.constraint(equalTo: summaryLable.bottomAnchor, constant: 20).isActive           = true
+        smallDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[0].centerXAnchor).isActive     = true
+        mediumDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[1].centerXAnchor).isActive    = true
+        largeDrinkLable.centerXAnchor.constraint(equalTo: drinkOptionStack.subviews[2].centerXAnchor).isActive     = true
+        smallDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive                      = true
+        mediumDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive                     = true
+        largeDrinkLable.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor).isActive                      = true
+    }
+    
+    fileprivate func setSettingsAndCalendarConstraints() {
+        settingsButton.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 30).isActive            = true
+        settingsButton.bottomAnchor.constraint(equalTo: toturialVC.view.bottomAnchor, constant: -30).isActive       = true
+        calendarButton.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: -30).isActive         = true
+        calendarButton.bottomAnchor.constraint(equalTo: toturialVC.view.bottomAnchor, constant: -30).isActive       = true
     }
 }
 

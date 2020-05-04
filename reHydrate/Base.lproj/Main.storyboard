@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -28,8 +28,11 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="o2e-5w-ghe" userLabel="calendar" customClass="FSCalendar">
-                                <rect key="frame" x="20" y="452" width="374" height="390"/>
+                                <rect key="frame" x="20" y="592" width="374" height="250"/>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="NNo-Op-CGf"/>
+                                </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="firstWeekday">
                                         <integer key="value" value="2"/>
@@ -50,11 +53,8 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uvX-sI-VpH">
-                                <rect key="frame" x="20" y="124" width="374" height="318"/>
+                                <rect key="frame" x="20" y="124" width="374" height="458"/>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="318" id="FjO-tL-TZ2"/>
-                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="customCell" id="THh-W5-kCw" customClass="InfoCell" customModule="reHydrate" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="374" height="109.5"/>
@@ -99,12 +99,15 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="hvE-DP-Niq" firstAttribute="leading" secondItem="kc5-Me-ZPn" secondAttribute="leadingMargin" constant="10" id="1Cz-ql-cHG"/>
+                                                <constraint firstItem="nir-QR-BdA" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="il3-Ts-nqj" secondAttribute="trailing" constant="8" symbolic="YES" id="4ta-qs-AAv"/>
+                                                <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="CT8-IX-hai" secondAttribute="trailing" constant="305" id="9hN-YI-zDy"/>
+                                                <constraint firstItem="CT8-IX-hai" firstAttribute="leading" secondItem="kc5-Me-ZPn" secondAttribute="leadingMargin" constant="5" id="Ggs-yH-bHK"/>
+                                                <constraint firstItem="ega-AA-yLO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hvE-DP-Niq" secondAttribute="trailing" constant="8" symbolic="YES" id="Gru-KE-u2T"/>
                                                 <constraint firstItem="il3-Ts-nqj" firstAttribute="leading" secondItem="kc5-Me-ZPn" secondAttribute="leadingMargin" constant="10" id="R41-5J-T6y"/>
                                                 <constraint firstItem="il3-Ts-nqj" firstAttribute="centerY" secondItem="kc5-Me-ZPn" secondAttribute="centerY" id="Vjh-bs-03i"/>
                                                 <constraint firstItem="hvE-DP-Niq" firstAttribute="top" secondItem="il3-Ts-nqj" secondAttribute="bottom" constant="2.5" id="YKb-f0-3XA"/>
                                                 <constraint firstItem="CT8-IX-hai" firstAttribute="top" secondItem="kc5-Me-ZPn" secondAttribute="topMargin" constant="5" id="aAQ-ue-cob"/>
                                                 <constraint firstItem="nir-QR-BdA" firstAttribute="centerY" secondItem="il3-Ts-nqj" secondAttribute="centerY" id="c1Z-4f-O1i"/>
-                                                <constraint firstItem="CT8-IX-hai" firstAttribute="leading" secondItem="kc5-Me-ZPn" secondAttribute="leadingMargin" constant="5" id="goc-gc-tTi"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="nir-QR-BdA" secondAttribute="trailing" constant="20" id="j5Y-dR-nUo"/>
                                                 <constraint firstItem="ega-AA-yLO" firstAttribute="centerY" secondItem="hvE-DP-Niq" secondAttribute="centerY" id="kll-Oe-oum"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="ega-AA-yLO" secondAttribute="trailing" constant="20" id="liq-nG-DmE"/>
@@ -156,7 +159,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ODf-g0-l9z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="181" y="78"/>
+            <point key="canvasLocation" x="233" y="77"/>
         </scene>
         <!--AboutVC-->
         <scene sceneID="MAa-36-twE">
@@ -210,16 +213,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="reHydrate" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mv3-wG-t6B">
-                                <rect key="frame" x="49.5" y="55" width="315" height="68"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="68" id="TUV-Ay-sOz"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="60"/>
+                                <rect key="frame" x="76" y="55" width="262.5" height="61.5"/>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="50"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="top" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="glR-cI-Sws" userLabel="dateGoalStack">
-                                <rect key="frame" x="129" y="163" width="156" height="104.5"/>
+                                <rect key="frame" x="129" y="156.5" width="156" height="104.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day - dd/MM/yy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JhD-0d-RlU" userLabel="dayAndDate">
                                         <rect key="frame" x="0.0" y="0.0" width="156" height="23.5"/>
@@ -259,7 +259,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleAspectFit" distribution="equalSpacing" alignment="bottom" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="30z-KG-YOx" userLabel="optionStack">
-                                <rect key="frame" x="72" y="287.5" width="270" height="160"/>
+                                <rect key="frame" x="72" y="281" width="270" height="160"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="0VJ-0V-Yee" userLabel="smallStack">
                                         <rect key="frame" x="0.0" y="70.5" width="80" height="89.5"/>
@@ -279,18 +279,18 @@
                                                 <rect key="frame" x="0.0" y="70" width="80" height="19.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="300" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sdP-iI-Na9">
-                                                        <rect key="frame" x="0.0" y="1" width="48" height="17.5"/>
+                                                        <rect key="frame" x="0.0" y="1" width="29" height="17.5"/>
                                                         <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="15"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ml" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JNR-1u-grG" userLabel="Unit Lable">
-                                                        <rect key="frame" x="50" y="0.0" width="30" height="19.5"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="ml" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JNR-1u-grG" userLabel="Unit Lable">
+                                                        <rect key="frame" x="31" y="0.0" width="49" height="19.5"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="anl-7y-DAH"/>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="anl-7y-DAH"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="AmericanTypewriter-Condensed" family="American Typewriter" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -328,10 +328,10 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ml" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zkd-M2-Zpi" userLabel="Unit Lable">
                                                         <rect key="frame" x="50" y="0.5" width="30" height="19.5"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="oPC-mO-PkJ"/>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="oPC-mO-PkJ"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="AmericanTypewriter-Condensed" family="American Typewriter" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -369,10 +369,10 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ml" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tL0-8B-i3u" userLabel="Unit Lable">
                                                         <rect key="frame" x="50" y="0.5" width="30" height="19.5"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="VzS-M7-1mf"/>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="VzS-M7-1mf"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="AmericanTypewriter-Condensed" family="American Typewriter" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
