@@ -8,7 +8,6 @@
 
 import UIKit
 import HealthKit
-import CoreData
 import FSCalendar
 
 class StartVC: UIViewController {
@@ -150,7 +149,7 @@ class StartVC: UIViewController {
         super.viewDidLoad()
         setUpButtons()
         let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.requestAuthorization(options: .alert) { (granted, error ) in
+        notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error ) in
             // enable or disable if needed.
             if granted {
                 print("We have permission to send notifications")
@@ -158,22 +157,26 @@ class StartVC: UIViewController {
                 print("We don't have the option to send notifications")
             }
         }
-        let notification 	= UNMutableNotificationContent()
-        notification.title 	= "You should have some water"
-        notification.body 	= "It has been a long time since you had some water, why don't you have some."
+        notificationCenter.removeAllDeliveredNotifications()
+        notificationCenter.removeAllPendingNotificationRequests()
+        
+        // The actual notification the user will receive
+        let notification    = UNMutableNotificationContent()
+        notification.title  = "You should have some water"
+        notification.body   = "It has been a long time since you had some water, why don't you have some."
+        notification.categoryIdentifier = "reminder"
+        notification.sound  = .default
 
-        let alertDate = Date().addingTimeInterval(3600)
-        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: alertDate)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+        let trigger     = UNTimeIntervalNotificationTrigger(timeInterval: (60*30), repeats: true)
+        let uuidString  = UUID().uuidString
+        let request     = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
         notificationCenter.add(request, withCompletionHandler: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
-            metricUnits = true
+            metricUnits  = true
             UserDefaults.standard.set(metricUnits, forKey: "metricUnits")
             if self.traitCollection.userInterfaceStyle == .dark {
                 darkMode = true
@@ -183,12 +186,12 @@ class StartVC: UIViewController {
             UserDefaults.standard.set(darkMode, forKey: "darkMode")
         }
         setUpHealth()
-        formatter.dateFormat 	= "EEEE - dd/MM/yy"
-        days 					= Day.loadDay()
+        formatter.dateFormat   = "EEEE - dd/MM/yy"
+        days                   = Day.loadDay()
         
-        smallOptionLabel.text     = String(drinkOptions[0].amountOfDrink)
-        mediumOptionLabel.text     = String(drinkOptions[1].amountOfDrink)
-        largeOptionLabel.text     = String(drinkOptions[2].amountOfDrink)
+        smallOptionLabel.text  = String(drinkOptions[0].amountOfDrink)
+        mediumOptionLabel.text = String(drinkOptions[1].amountOfDrink)
+        largeOptionLabel.text  = String(drinkOptions[2].amountOfDrink)
         updateUI()
         currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
@@ -196,16 +199,16 @@ class StartVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("Main screen will appear")
-        darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
-        metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
-        currentDay.text 		= formatter.string(from: Date.init())
-        days                    = Day.loadDay()
+        darkMode             = UserDefaults.standard.bool(forKey: "darkMode")
+        metricUnits          = UserDefaults.standard.bool(forKey: "metricUnits")
+        currentDay.text      = formatter.string(from: Date.init())
+        days                 = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
-            today 				= days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
+            today            = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
         } else if !days.isEmpty {
-            today.goalAmount 	= days.last!.goalAmount
+            today.goalAmount = days.last!.goalAmount
         } else {
-            today 				= Day.init()
+            today            = Day.init()
             insertDay(today)
         }
         loadDrinkOptions()
@@ -217,8 +220,8 @@ class StartVC: UIViewController {
         //  Request access to write dietaryWater data to HealthStore
         if HKHealthStore.isHealthDataAvailable(){
             let healthStore = HKHealthStore()
-            var typesToShare:         Set<HKSampleType> {
-                let waterType         = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
+            var typesToShare: Set<HKSampleType> {
+                let waterType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
                 return [waterType]
             }
             healthStore.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
@@ -243,18 +246,18 @@ class StartVC: UIViewController {
      */
     func changeAppearance() {
         if darkMode == true {
-            self.view.backgroundColor 	= hexStringToUIColor(hex: "#212121")
-            aboutButton.tintColor 		= .lightGray
-            historyButton.tintColor 	= .lightGray
+            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+            aboutButton.tintColor     = .lightGray
+            historyButton.tintColor   = .lightGray
             for lable in lables {
-                lable.textColor 		= .white
+                lable.textColor       = .white
             }
         } else {
-            self.view.backgroundColor 	= .white
-            historyButton.tintColor 	= .black
-            aboutButton.tintColor 		= .black
+            self.view.backgroundColor = .white
+            historyButton.tintColor   = .black
+            aboutButton.tintColor     = .black
             for lable in lables {
-                lable.textColor 		= .black
+                lable.textColor       = .black
             }
         }
     }
@@ -307,18 +310,18 @@ class StartVC: UIViewController {
      */
     func setUpButtons(){
         //setting up an gesture recognizer for each button.
-        let smallOptionTapGesture 		= UITapGestureRecognizer(target: self, action: #selector(tap))
-        let smallOptionLongGesture 		= UILongPressGestureRecognizer(target: self, action: #selector(long))
-        let mediumOptionTapGesture 		= UITapGestureRecognizer(target: self, action: #selector(tap))
-        let mediumOptionLongGesture 	= UILongPressGestureRecognizer(target: self, action: #selector(long))
-        let largeOptionTapGesture 		= UITapGestureRecognizer(target: self, action: #selector(tap))
-        let largeOptionLongGesture 		= UILongPressGestureRecognizer(target: self, action: #selector(long))
-        let changeGoalLongGesture 		= UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let smallOptionTapGesture    = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let smallOptionLongGesture   = UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let mediumOptionTapGesture   = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let mediumOptionLongGesture  = UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let largeOptionTapGesture    = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let largeOptionLongGesture   = UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let changeGoalLongGesture    = UILongPressGestureRecognizer(target: self, action: #selector(long))
         
-        smallOptionLongGesture.minimumPressDuration 	= 0.2
-        mediumOptionLongGesture.minimumPressDuration 	= 0.2
-        largeOptionLongGesture.minimumPressDuration		= 0.2
-        changeGoalLongGesture.minimumPressDuration 		= 0.2
+        smallOptionLongGesture.minimumPressDuration  = 0.2
+        mediumOptionLongGesture.minimumPressDuration = 0.2
+        largeOptionLongGesture.minimumPressDuration	 = 0.2
+        changeGoalLongGesture.minimumPressDuration 	 = 0.2
         
         //adding the gesture recognizer for each option.
         smallOption.addGestureRecognizer(smallOptionTapGesture)
@@ -345,12 +348,12 @@ class StartVC: UIViewController {
      ```
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
-        let drinkAmount 	= Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
-        let drink 			= Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
+        let drinkAmount  = Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
+        let drink        = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
         exportDrinkToHealth(Double(drink.amountOfDrink), Date.init())
-        today.consumedAmount.amountOfDrink 		+= drink.amountOfDrink
-        if today.consumedAmount.amountOfDrink 	<= 0.0{
-            today.consumedAmount.amountOfDrink 	= 0
+        today.consumedAmount.amountOfDrink     += drink.amountOfDrink
+        if today.consumedAmount.amountOfDrink  <= 0.0{
+            today.consumedAmount.amountOfDrink  = 0
         } else {
             
         }
@@ -399,53 +402,53 @@ class StartVC: UIViewController {
     func updateUI(){
         Day.saveDay(days)
         let day = Day()
-        let goalAmount 		= Measurement(value: Double(today.goalAmount.amountOfDrink), unit: UnitVolume.liters)
-        let consumedAmount 	= Measurement(value: Double(today.consumedAmount.amountOfDrink), unit: UnitVolume.liters)
-        let smallDrink 		= Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
-        let mediumDrink 	= Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
-        let largeDrink 		= Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
+        let goalAmount     = Measurement(value: Double(today.goalAmount.amountOfDrink), unit: UnitVolume.liters)
+        let consumedAmount = Measurement(value: Double(today.consumedAmount.amountOfDrink), unit: UnitVolume.liters)
+        let smallDrink 	   = Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
+        let mediumDrink    = Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
+        let largeDrink 	   = Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
         if metricUnits {
-            day.goalAmount.amountOfDrink 		= Float(goalAmount.converted(to: .liters).value)
-            day.consumedAmount.amountOfDrink 	= Float(consumedAmount.converted(to: .liters).value)
-            let roundedSmallDrink 				= smallDrink.converted(to: .milliliters).value.rounded()
-            let roundedMediumDrink 				= mediumDrink.converted(to: .milliliters).value.rounded()
-            let roundedLargeDrink 				= largeDrink.converted(to: .milliliters).value.rounded()
-            smallOptionLabel.text 				= String(format: "%.0f", roundedSmallDrink)
-            mediumOptionLabel.text 				= String(format: "%.0f", roundedMediumDrink)
-            largeOptionLabel.text 				= String(format: "%.0f", roundedLargeDrink)
+            day.goalAmount.amountOfDrink     = Float(goalAmount.converted(to: .liters).value)
+            day.consumedAmount.amountOfDrink = Float(consumedAmount.converted(to: .liters).value)
+            let roundedSmallDrink            = smallDrink.converted(to: .milliliters).value.rounded()
+            let roundedMediumDrink           = mediumDrink.converted(to: .milliliters).value.rounded()
+            let roundedLargeDrink            = largeDrink.converted(to: .milliliters).value.rounded()
+            smallOptionLabel.text            = String(format: "%.0f", roundedSmallDrink)
+            mediumOptionLabel.text           = String(format: "%.0f", roundedMediumDrink)
+            largeOptionLabel.text            = String(format: "%.0f", roundedLargeDrink)
         } else {
-            day.goalAmount.amountOfDrink 		= Float(goalAmount.converted(to: .imperialPints).value)
-            day.consumedAmount.amountOfDrink 	= Float(consumedAmount.converted(to: .imperialPints).value)
-            let small 							= smallDrink.converted(to: .imperialFluidOunces).value
-            let medium 							= mediumDrink.converted(to: .imperialFluidOunces).value
-            let large 							= largeDrink.converted(to: .imperialFluidOunces).value
-            smallOptionLabel.text 				= String(format: "%.2f", small)
-            mediumOptionLabel.text 				= String(format: "%.2f", medium)
-            largeOptionLabel.text 				= String(format: "%.2f", large)
+            day.goalAmount.amountOfDrink     = Float(goalAmount.converted(to: .imperialPints).value)
+            day.consumedAmount.amountOfDrink = Float(consumedAmount.converted(to: .imperialPints).value)
+            let small                        = smallDrink.converted(to: .imperialFluidOunces).value
+            let medium                       = mediumDrink.converted(to: .imperialFluidOunces).value
+            let large                        = largeDrink.converted(to: .imperialFluidOunces).value
+            smallOptionLabel.text            = String(format: "%.2f", small)
+            mediumOptionLabel.text           = String(format: "%.2f", medium)
+            largeOptionLabel.text            = String(format: "%.2f", large)
         }
         
         if (today.goalAmount.amountOfDrink.rounded(.up) == day.goalAmount.amountOfDrink.rounded(.down)){
-            self.goalAmount.text 				= String(format: "%.0f", day.goalAmount.amountOfDrink)
+            self.goalAmount.text  = String(format: "%.0f", day.goalAmount.amountOfDrink)
         } else {
-            let stringFormatGoal 				= getStringFormat(day.goalAmount.amountOfDrink)
-            self.goalAmount.text 				= String(format: stringFormatGoal, day.goalAmount.amountOfDrink)
+            let stringFormatGoal  = getStringFormat(day.goalAmount.amountOfDrink)
+            self.goalAmount.text  = String(format: stringFormatGoal, day.goalAmount.amountOfDrink)
         }
         
-        let stringFormatConsumed 				= getStringFormat(today.consumedAmount.amountOfDrink)
-        self.consumedAmount.text 				= String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
+        let stringFormatConsumed  = getStringFormat(today.consumedAmount.amountOfDrink)
+        self.consumedAmount.text  = String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
         
         for lable in unitLable{
             if darkMode {
-                lable.textColor 				= .white
+                lable.textColor = .white
             } else {
-                lable.textColor					= .black
+                lable.textColor = .black
             }
             if metricUnits {
-                lable.text 						= "\(UnitVolume.milliliters.symbol)"
-                titleUnit.text 					= "\(UnitVolume.liters.symbol)"
+                lable.text      = "\(UnitVolume.milliliters.symbol)"
+                titleUnit.text  = "\(UnitVolume.liters.symbol)"
             } else {
-                lable.text 						= "\(UnitVolume.imperialFluidOunces.symbol)"
-                titleUnit.text 					= "\(UnitVolume.imperialPints.symbol)"
+                lable.text      = "\(UnitVolume.imperialFluidOunces.symbol)"
+                titleUnit.text  = "\(UnitVolume.imperialPints.symbol)"
             }
         }
     }
@@ -466,14 +469,14 @@ class StartVC: UIViewController {
      ```
      */
     func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
-        let alerContorller 		= UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        let editOption 			= UIAlertAction(title: "Edit option", style: .default) {_ in
-            let editAlert 		= UIAlertController(title: "Change drink amount", message: nil, preferredStyle: .alert)
+        let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        let editOption      = UIAlertAction(title: "Edit option", style: .default) {_ in
+            let editAlert   = UIAlertController(title: "Change drink amount", message: nil, preferredStyle: .alert)
             editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
                 textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                textField.font 				= UIFont(name: "American typewriter", size: 18)
-                textField.keyboardType 		= .decimalPad
-                textField.textAlignment 	= .center
+                textField.font          = UIFont(name: "American typewriter", size: 18)
+                textField.keyboardType  = .decimalPad
+                textField.textAlignment = .center
             })
             let done = UIAlertAction(title: "Done", style: .default) {_ in
                 let newValue = (editAlert.textFields?.first!.text!)! as String
@@ -510,8 +513,8 @@ class StartVC: UIViewController {
             editAlert.addAction(done)
             self.present(editAlert, animated: true, completion: nil)
         }
-        let removeAmount 		= UIAlertAction(title: "Remove drink", style: .default) {_ in
-            let removeDrink 	= Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amountOfDrink)
+        let removeAmount    = UIAlertAction(title: "Remove drink", style: .default) {_ in
+            let removeDrink = Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amountOfDrink)
             self.updateConsumtion(removeDrink)
         }
         alerContorller.addAction(editOption)
@@ -537,7 +540,7 @@ class StartVC: UIViewController {
         guard let dietaryWater 	= HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
             fatalError("dietary water is no longer available in HealthKit")
         }
-        let waterConsumed 		= HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
+        let waterConsumed       = HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
         let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
                                                    start: date, end: date)
         HKHealthStore().save(waterConsumedSample) { (success, error) in
@@ -562,9 +565,9 @@ class StartVC: UIViewController {
      ```
      */
     func saveDrinkOptions(){
-        UserDefaults.standard.set(drinkOptions[0].amountOfDrink, 	forKey: "smallDrinkOption")
-        UserDefaults.standard.set(drinkOptions[1].amountOfDrink,	forKey: "mediumDrinkOption")
-        UserDefaults.standard.set(drinkOptions[2].amountOfDrink, 	forKey: "largeDrinkOption")
+        UserDefaults.standard.set(drinkOptions[0].amountOfDrink, forKey: "smallDrinkOption")
+        UserDefaults.standard.set(drinkOptions[1].amountOfDrink, forKey: "mediumDrinkOption")
+        UserDefaults.standard.set(drinkOptions[2].amountOfDrink, forKey: "largeDrinkOption")
         updateUI()
     }
     
@@ -581,9 +584,9 @@ class StartVC: UIViewController {
      ```
      */
     func loadDrinkOptions(){
-        let small 		= UserDefaults.standard.float(forKey: "smallDrinkOption")
-        let medium 		= UserDefaults.standard.float(forKey: "mediumDrinkOption")
-        let large 		= UserDefaults.standard.float(forKey: "largeDrinkOption")
+        let small   = UserDefaults.standard.float(forKey: "smallDrinkOption")
+        let medium  = UserDefaults.standard.float(forKey: "mediumDrinkOption")
+        let large   = UserDefaults.standard.float(forKey: "largeDrinkOption")
         
         
         if small != 0 || medium != 0 || large != 0  {
@@ -607,9 +610,9 @@ class StartVC: UIViewController {
     func getNumberOfDigits(_ number: Float)-> Int {
         var stringOfNumber = number.description
         if stringOfNumber.contains("."){
-            while stringOfNumber.removeFirst() 	!= "." {
-                let numberOfDigits 				= stringOfNumber.count - 1
-                if numberOfDigits 				< 3 {
+            while stringOfNumber.removeFirst() != "." {
+                let numberOfDigits = stringOfNumber.count - 1
+                if numberOfDigits  < 3 {
                     return numberOfDigits
                     
                 } else {
