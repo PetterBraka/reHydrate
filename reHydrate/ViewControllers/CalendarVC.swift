@@ -33,16 +33,21 @@ class CalendarVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        days                            = Day.loadDay()
-        formatter.dateFormat 			= "EEE - dd/MM/yy"
+        days                    = Day.loadDay()
+        formatter.dateFormat    = "EEE - dd/MM/yy"
         getDrinks(Date.init())
-        darkMode 						= UserDefaults.standard.bool(forKey: "darkMode")
-        metricUnits 					= UserDefaults.standard.bool(forKey: "metricUnits")
-        tableView.isScrollEnabled 		= false
-        tableView.delegate 				= self
-        tableView.dataSource 			= self
-        calendar.delegate 				= self
-        calendar.dataSource 			= self
+        darkMode                = UserDefaults.standard.bool(forKey: "darkMode")
+        metricUnits             = UserDefaults.standard.bool(forKey: "metricUnits")
+        let screenHeight        = UIScreen.main.bounds.height
+        if screenHeight < 700 {
+            tableView.isScrollEnabled = true
+        } else {
+            tableView.isScrollEnabled = false
+        }
+        tableView.delegate      = self
+        tableView.dataSource    = self
+        calendar.delegate       = self
+        calendar.dataSource     = self
         calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cell")
         changeAppearance()
     }
