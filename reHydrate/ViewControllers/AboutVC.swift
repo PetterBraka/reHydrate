@@ -29,6 +29,7 @@ class AboutVC: UIViewController {
         settingOptions(isOpened: false, setting: "appearance", options: ["Light Mode", "Dark Mode"]),
         settingOptions(isOpened: false, setting: "chang unit system", options: ["Metric System", "Imperial System"]),
         settingOptions(isOpened: false, setting: "change goal", options: ["Goal"]),
+        settingOptions(isOpened: false, setting: "reminders", options: []),
         settingOptions(isOpened: false, setting: "how to use", options: []),
         settingOptions(isOpened: false, setting: "remove data", options: [])]
     
@@ -54,7 +55,7 @@ class AboutVC: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    let dayLable: UILabel	= {
+    let dayLable: UILabel	    = {
         let lable			= UILabel()
         lable.textAlignment	= .center
         lable.text			= "Monday - 05/10/20"
@@ -70,7 +71,7 @@ class AboutVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let drinkOptionStack: UIStackView	= {
+    let drinkOptionStack: UIStackView = {
         let stack						= UIStackView()
         stack.axis						= .horizontal
         stack.spacing					= 15
@@ -101,7 +102,7 @@ class AboutVC: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    let smallDrinkLable: UILabel	= {
+    let smallDrinkLable: UILabel	  = {
         let lable					= UILabel()
         lable.textAlignment			= .center
         lable.text					= "300ml"
@@ -109,7 +110,7 @@ class AboutVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let mediumDrinkLable: UILabel	= {
+    let mediumDrinkLable: UILabel	  = {
         let lable					= UILabel()
         lable.textAlignment			= .center
         lable.text					= "500ml"
@@ -117,7 +118,7 @@ class AboutVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let largeDrinkLable: UILabel	= {
+    let largeDrinkLable: UILabel	  = {
         let lable					= UILabel()
         lable.textAlignment			= .center
         lable.text					= "750ml"
@@ -125,7 +126,7 @@ class AboutVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let settingsButton: UIButton	= {
+    let settingsButton: UIButton	  = {
         let button					= UIButton()
         button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
         button.setTitle("", for: .normal)
@@ -134,7 +135,7 @@ class AboutVC: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 50).isActive     = true
         return button
     }()
-    let calendarButton: UIButton	= {
+    let calendarButton: UIButton	  = {
         let button					= UIButton()
         button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
         button.setTitle("", for: .normal)
@@ -143,7 +144,7 @@ class AboutVC: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 50).isActive     = true
         return button
     }()
-    let explanationLabel: UILabel	= {
+    let explanationLabel: UILabel	  = {
         let lable					= UILabel()
         lable.text					= "Explain whats showed"
         lable.font					= UIFont(name: "AmericanTypewriter-Bold", size: 25)
@@ -184,12 +185,11 @@ class AboutVC: UIViewController {
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         tableView.delegate 		= self
         tableView.dataSource 	= self
+        settings[3].isOpened    = UserDefaults.standard.bool(forKey: "reminder")
         metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
         darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         changeAppearance()
     }
-    
-    
     
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
@@ -204,13 +204,13 @@ class AboutVC: UIViewController {
      */
     func changeAppearance(){
         if !darkMode {
-            self.view.backgroundColor 	= .white
-            tableView.backgroundColor 	= .white
-            exitButton.tintColor		= .black
+            self.view.backgroundColor = .white
+            tableView.backgroundColor = .white
+            exitButton.tintColor      = .black
         } else{
-            self.view.backgroundColor 	= hexStringToUIColor(hex: "#212121")
-            tableView.backgroundColor 	= hexStringToUIColor(hex: "#212121")
-            exitButton.tintColor		= .lightGray
+            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+            tableView.backgroundColor = hexStringToUIColor(hex: "#212121")
+            exitButton.tintColor      = .lightGray
         }
     }
     
@@ -274,72 +274,37 @@ class AboutVC: UIViewController {
         )
     }
     
-    @objc func skip(_ sender: UIBarButtonItem){
-        toturialVC.dismiss(animated: true, completion: nil)
-    }
-    @objc func nextClick(_ sender: UIBarButtonItem){
-        print("Go to next view")
-        stage += 1
+    func setReminders(){
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeAllDeliveredNotifications()
+        notificationCenter.removeAllPendingNotificationRequests()
         
-        switch stage {
-            case 1:
-                explanationLabel.text = "Here are you consumed amount and your goal for the day."
-                dayLable.textColor = hexStringToUIColor(hex: "#666666")
-                if darkMode {
-                    summaryLable.textColor = .white
-                } else {
-                    summaryLable.textColor = .black
-            	}
-            case 2:
-                summaryLable.textColor = hexStringToUIColor(hex: "#666666")
-                let imageArray = [UIImage(named: "Glass"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
-                var position = 0
-                while position < drinkOptionStack.subviews.count {
-                    let drink = drinkOptionStack.subviews[position] as! UIImageView
-                    drink.image = imageArray[position]
-                    position += 1
-                }
-                if darkMode {
-                    smallDrinkLable.textColor 	= .white
-                    mediumDrinkLable.textColor 	= .white
-                    largeDrinkLable.textColor 	= .white
-                } else {
-                    smallDrinkLable.textColor 	= .black
-                    mediumDrinkLable.textColor 	= .black
-                    largeDrinkLable.textColor 	= .black
-                }
-                explanationLabel.text = "Here are the different drinks you can use. Click on a drink to add it to your total amount."
-            case 3:
-                for drink in drinkOptionStack.subviews {
-                    let drinkOption 	= drink as! UIImageView
-                    drinkOption.image 	= drinkOption.image?.grayed
-                }
-                smallDrinkLable.textColor 	= hexStringToUIColor(hex: "#666666")
-                mediumDrinkLable.textColor	= hexStringToUIColor(hex: "#666666")
-                largeDrinkLable.textColor 	= hexStringToUIColor(hex: "#666666")
-                if darkMode {
-                    settingsButton.tintColor = .lightGray
-                } else {
-                    settingsButton.tintColor = .black
-                }
-                explanationLabel.text = "Click on this to go to app settings."
-            case 4:
-                settingsButton.tintColor = hexStringToUIColor(hex: "#666666")
-                if darkMode {
-                    calendarButton.tintColor = .lightGray
-                } else {
-                    calendarButton.tintColor = .black
-                }
-                explanationLabel.text = "Click on this to see your history."
-                nextButton.setTitle("Done", for: .normal)
-            case 5:
-                toturialVC.dismiss(animated: true, completion: nil)
-            default:
-                break
+        let startHour = 7
+        let endHour = 23
+        
+        let totalHours = endHour - startHour
+        let totalNotifications = totalHours * 2
+        
+        for i in 0...totalNotifications {
+            var date = DateComponents()
+            date.hour = startHour + i / 2
+            date.minute = 30 * (i % 2)
+            print("setting reminder for \(date.hour!):\(date.minute!)")
+            
+            let notification = UNMutableNotificationContent()
+            notification.title = "You should have some water"
+            notification.body = "It has been a long time since you had some water, why don't you have some."
+            notification.categoryIdentifier = "reminder"
+            notification.sound  = .default
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+            let uuidString = UUID().uuidString
+            let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+            notificationCenter.add(request, withCompletionHandler: nil)
         }
     }
-
-/**
+    
+    /**
      Will handle the gestures form the **UITableView**.
      
      - parameter sender: - The **UIGestureRecognizer** that called the function.
@@ -367,6 +332,8 @@ class AboutVC: UIViewController {
                     // Mark: Buttons
                     settingsButton.tintColor		= .lightGray
                     calendarButton.tintColor		= .lightGray
+                    nextButton.setTitleColor(.white, for: .normal)
+                    skipButton.setTitleColor(.white, for: .normal)
                 } else {
                     toturialVC.view.backgroundColor = .white
                     // Mark: Lables
@@ -379,8 +346,9 @@ class AboutVC: UIViewController {
                     // Mark: Buttons
                     settingsButton.tintColor 		= .black
                     calendarButton.tintColor 		= .black
+                    nextButton.setTitleColor(.black, for: .normal)
+                    skipButton.setTitleColor(.black, for: .normal)
                 }
-                
                 
                 toturialVC.view.addSubview(toolBar)
                 toturialVC.view.addSubview(dayLable)
@@ -399,19 +367,14 @@ class AboutVC: UIViewController {
                 setSummaryAndDayLableConstraints()
                 setDrinkOptionsConstraints()
                 setSettingsAndCalendarConstraints()
-                explanationLabel.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor,constant: 40).isActive			= true
-                explanationLabel.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive					= true
+                explanationLabel.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor,constant: 40).isActive = true
+                explanationLabel.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive          = true
                 
                 skipButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.skip(_:))))
                 nextButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.nextClick(_:))))
                 
                 nextButton.setTitle("Next", for: .normal)
-                if darkMode {
-                    dayLable.textColor = .white
-                } else {
-                    dayLable.textColor = .black
-                }
-                summaryLable.textColor = hexStringToUIColor(hex: "#666666")
+                summaryLable.textColor  = hexStringToUIColor(hex: "#666666")
                 for drink in drinkOptionStack.subviews {
                     let drinkOption 	= drink as! UIImageView
                     drinkOption.image 	= drinkOption.image?.grayed
@@ -435,6 +398,19 @@ class AboutVC: UIViewController {
                     UserDefaults.standard.synchronize()}))
                 
                 self.present(clearDataAlert, animated: true, completion: nil)
+            case settings.firstIndex(where: {$0.setting == "reminders"}):
+                let header = tableView.headerView(forSection: section) as! SettingsHeader
+                settings[section].isOpened   = !settings[section].isOpened
+                if settings[section].isOpened {
+                    header.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                    setReminders()
+                } else {
+                    header.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                    let center = UNUserNotificationCenter.current()
+                    center.removeAllPendingNotificationRequests()
+                    center.removeAllDeliveredNotifications()
+                }
+                UserDefaults.standard.set(settings[section].isOpened, forKey: "reminder")
             default:
                 var indexPaths 				= [IndexPath]()
                 for row in settings[section].options.indices {
@@ -442,16 +418,81 @@ class AboutVC: UIViewController {
                     indexPaths.append(indexPath)
                 }
                 let header = tableView.headerView(forSection: section) as! SettingsHeader
-                let ioOpend 				= settings[section].isOpened
-                settings[section].isOpened 	= !ioOpend
-                if ioOpend {
+                let isOpened 				= settings[section].isOpened
+                settings[section].isOpened 	= !isOpened
+                if isOpened {
                     header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
                     tableView.deleteRows(at: indexPaths, with: .fade)
                 } else {
                     tableView.insertRows(at: indexPaths, with: .fade)
                     header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
-            	}
-            
+            }
+        }
+    }
+    
+    @objc func skip(_ sender: UIBarButtonItem){
+        toturialVC.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func nextClick(_ sender: UIBarButtonItem){
+        print("Go to next view")
+        stage += 1
+        
+        switch stage {
+            case 1:
+                explanationLabel.text = "Here are you consumed amount and your goal for the day."
+                dayLable.textColor = hexStringToUIColor(hex: "#666666")
+                if darkMode {
+                    summaryLable.textColor = .white
+                } else {
+                    summaryLable.textColor = .black
+            }
+            case 2:
+                summaryLable.textColor = hexStringToUIColor(hex: "#666666")
+                let imageArray = [UIImage(named: "Glass"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
+                var position = 0
+                while position < drinkOptionStack.subviews.count {
+                    let drink = drinkOptionStack.subviews[position] as! UIImageView
+                    drink.image = imageArray[position]
+                    position += 1
+                }
+                if darkMode {
+                    smallDrinkLable.textColor     = .white
+                    mediumDrinkLable.textColor     = .white
+                    largeDrinkLable.textColor     = .white
+                } else {
+                    smallDrinkLable.textColor     = .black
+                    mediumDrinkLable.textColor     = .black
+                    largeDrinkLable.textColor     = .black
+                }
+                explanationLabel.text = "Here are the different drinks you can use. Click on a drink to add it to your total amount."
+            case 3:
+                for drink in drinkOptionStack.subviews {
+                    let drinkOption     = drink as! UIImageView
+                    drinkOption.image     = drinkOption.image?.grayed
+                }
+                smallDrinkLable.textColor     = hexStringToUIColor(hex: "#666666")
+                mediumDrinkLable.textColor    = hexStringToUIColor(hex: "#666666")
+                largeDrinkLable.textColor     = hexStringToUIColor(hex: "#666666")
+                if darkMode {
+                    settingsButton.tintColor = .lightGray
+                } else {
+                    settingsButton.tintColor = .black
+                }
+                explanationLabel.text = "Click on this to go to app settings."
+            case 4:
+                settingsButton.tintColor = hexStringToUIColor(hex: "#666666")
+                if darkMode {
+                    calendarButton.tintColor = .lightGray
+                } else {
+                    calendarButton.tintColor = .black
+                }
+                explanationLabel.text = "Click on this to see your history."
+                nextButton.setTitle("Done", for: .normal)
+            case 5:
+                toturialVC.dismiss(animated: true, completion: nil)
+            default:
+                break
         }
     }
     
@@ -471,14 +512,14 @@ class AboutVC: UIViewController {
      ```
      */
     fileprivate func setToolBarConstraints() {
-        toolBar.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 0).isActive     = true
-        toolBar.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: 0).isActive   = true
-        toolBar.topAnchor.constraint(equalTo: toturialVC.view.topAnchor, constant: 0).isActive       = true
-        toolBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive                  = true
-        skipButton.leftAnchor.constraint(equalTo: toolBar.leftAnchor, constant: 20).isActive         = true
-        skipButton.topAnchor.constraint(equalTo: toolBar.topAnchor, constant: 50).isActive           = true
-        nextButton.rightAnchor.constraint(equalTo: toolBar.rightAnchor, constant: -20).isActive      = true
-        nextButton.topAnchor.constraint(equalTo: toolBar.topAnchor, constant: 50).isActive           = true
+        toolBar.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 0).isActive      = true
+        toolBar.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: 0).isActive    = true
+        toolBar.topAnchor.constraint(equalTo: toturialVC.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        toolBar.heightAnchor.constraint(equalToConstant: 50).isActive                                 = true
+        skipButton.leftAnchor.constraint(equalTo: toolBar.leftAnchor, constant: 20).isActive          = true
+        skipButton.centerYAnchor.constraint(equalTo: toolBar.centerYAnchor).isActive                  = true
+        nextButton.rightAnchor.constraint(equalTo: toolBar.rightAnchor, constant: -20).isActive       = true
+        nextButton.centerYAnchor.constraint(equalTo: toolBar.centerYAnchor).isActive                  = true
     }
     
     /**
@@ -588,11 +629,19 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         switch cell.title.text?.uppercased() {
             case String("remove data").uppercased():
                 cell.title.textColor = .systemRed
+            case String("reminders").uppercased():
+                if settings[3].isOpened {
+                    cell.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                } else {
+                    cell.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+            	}
             default:
             break
         }
         if settings[section].options.isEmpty{
-            cell.button.removeFromSuperview()
+            if cell.title.text != "REMINDERS"{
+                cell.button.removeFromSuperview()
+            }
         }
         cell.setHeaderAppairents(darkMode)
         return cell
@@ -626,6 +675,8 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 1, section: 1): // imperial is selected
                 metricUnits = false
                 changeTableViewAppearants()
+            case IndexPath(row: 0, section: 3):
+                setReminders() // setts notifications between 7 and 23
             default:
             break
         }
