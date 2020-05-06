@@ -404,11 +404,13 @@ class AboutVC: UIViewController {
                 if settings[section].isOpened {
                     header.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     setReminders()
+                    showToast("Reminders set for every 30 minuts from 7 am to 11 pm")
                 } else {
                     header.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
                     let center = UNUserNotificationCenter.current()
                     center.removeAllPendingNotificationRequests()
                     center.removeAllDeliveredNotifications()
+                    showToast("Removed all reminders")
                 }
                 UserDefaults.standard.set(settings[section].isOpened, forKey: "reminder")
             default:
@@ -428,6 +430,36 @@ class AboutVC: UIViewController {
                     header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
             }
         }
+    }
+    
+    func showToast(_ message: String) {
+        let toastLabel = UIButton()
+        if darkMode {
+            toastLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
+            toastLabel.setTitleColor(UIColor.white, for: .normal)
+        } else {
+            toastLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+            toastLabel.setTitleColor(UIColor.black, for: .normal)
+        }
+        toastLabel.setTitle(message, for: .normal)
+        toastLabel.titleLabel?.font = UIFont(name: "AmericanTypewriter", size: 18.0)
+        toastLabel.titleLabel?.textAlignment = .center
+        toastLabel.titleLabel?.numberOfLines = 0
+        toastLabel.isUserInteractionEnabled = false
+        toastLabel.alpha = 1
+        toastLabel.contentEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+        toastLabel.layer.cornerRadius = 10
+        toastLabel.clipsToBounds = true
+        self.view.addSubview(toastLabel)
+        toastLabel.translatesAutoresizingMaskIntoConstraints = false
+        toastLabel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -50).isActive = true
+        toastLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 50).isActive = true
+        toastLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -50).isActive = true
+        UIView.animate(withDuration: 0.5, delay: 1.5, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
     
     @objc func skip(_ sender: UIBarButtonItem){
