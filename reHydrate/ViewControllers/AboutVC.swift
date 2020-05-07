@@ -17,6 +17,8 @@ struct settingOptions {
 
 class AboutVC: UIViewController {
     
+    // MARK: - Variabels
+    
     @IBOutlet weak var tableView:  UITableView!
     @IBOutlet weak var exitButton: UIButton!
     var darkMode                   = true
@@ -30,6 +32,8 @@ class AboutVC: UIViewController {
         settingOptions(isOpened: false, setting: "reminders", options: []),
         settingOptions(isOpened: false, setting: "how to use", options: []),
         settingOptions(isOpened: false, setting: "remove data", options: [])]
+    
+    //MARK: - Tap controller
     
     /**
      Will check which **view** that called this function.
@@ -66,6 +70,8 @@ class AboutVC: UIViewController {
         darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         changeAppearance()
     }
+    
+    // MARK: - Appearance change
     
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
@@ -150,6 +156,8 @@ class AboutVC: UIViewController {
         )
     }
     
+    // MARK: - Notifications
+    
     /**
      Will set a notification for every half hour between 7 am and 11pm.
      
@@ -175,11 +183,7 @@ class AboutVC: UIViewController {
             date.minute = 30 * (i % 2)
             print("setting reminder for \(date.hour!):\(date.minute!)")
             
-            let notification = UNMutableNotificationContent()
-            notification.title = "You should have some water"
-            notification.body = "It has been a long time since you had some water, why don't you have some."
-            notification.categoryIdentifier = "reminder"
-            notification.sound  = .default
+            let notification = getReminder()
             
             let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
             let uuidString = UUID().uuidString
@@ -189,66 +193,57 @@ class AboutVC: UIViewController {
     }
     
     /**
-     Will handle the gestures form the **UITableView**.
-     
-     - parameter sender: - The **UIGestureRecognizer** that called the function.
+     Will return a random **UNMutableNotificationContent** a notifcation message.
      
      # Notes: #
-     1. case for "how to use" will create a image and hide the **UITableView**. If the user clicks the image it will dismiss and show the **UITableView**
-     2. case for "remove data" will ask the user if the user want to remove all saved data.
-     3. Default case for the tapping any other header cell. This case will then expand the header and show the cells in that section.
+     1. This will pick out a message randomly so you could get the same message twice.
+     
+     # Example #
+     ```
+     let notification = getReminder()
+     ```
      */
-    @objc func expandOrCollapsSection(_ sender: UIGestureRecognizer){
-        guard let section = sender.view?.tag else { return }
-        switch section {
-            case settings.firstIndex(where: {$0.setting == "how to use"}):
-                print("help pressed")
-                let tutorialVC = TutorialVC()
-                tutorialVC.modalPresentationStyle = .fullScreen
-                self.present(tutorialVC, animated: true, completion: nil)
-            case settings.firstIndex(where: {$0.setting == "remove data"}):
-                // This will clear all the saved data from past days.
-                let clearDataAlert = UIAlertController(title: "Clearing data.", message: "Are you sure you want to delete all save data?", preferredStyle: .alert)
-                clearDataAlert.addAction(UIAlertAction(title: "Keep data", style: .cancel, handler: nil))
-                clearDataAlert.addAction(UIAlertAction(title: "REMOVE OLD DATA", style: .destructive, handler: {_ in
-                    let domain = Bundle.main.bundleIdentifier!
-                    UserDefaults.standard.removePersistentDomain(forName: domain)
-                    UserDefaults.standard.synchronize()}))
-                
-                self.present(clearDataAlert, animated: true, completion: nil)
-            case settings.firstIndex(where: {$0.setting == "reminders"}):
-                let header = tableView.headerView(forSection: section) as! SettingsHeader
-                settings[section].isOpened = !settings[section].isOpened
-                if settings[section].isOpened {
-                    header.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
-                    setReminders()
-                    sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
-                } else {
-                    header.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
-                    let center = UNUserNotificationCenter.current()
-                    center.removeAllPendingNotificationRequests()
-                    center.removeAllDeliveredNotifications()
-                    sendToastMessage("all reminders are removed", 1)
-                }
-                UserDefaults.standard.set(settings[section].isOpened, forKey: "reminder")
-            default:
-                var indexPaths 				= [IndexPath]()
-                for row in settings[section].options.indices {
-                    let indexPath 			= IndexPath(row: row, section: section)
-                    indexPaths.append(indexPath)
-                }
-                let header = tableView.headerView(forSection: section) as! SettingsHeader
-                let isOpened 				= settings[section].isOpened
-                settings[section].isOpened 	= !isOpened
-                if isOpened {
-                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
-                    tableView.deleteRows(at: indexPaths, with: .fade)
-                } else {
-                    tableView.insertRows(at: indexPaths, with: .fade)
-                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
-            }
+    func getReminder()-> UNMutableNotificationContent{
+        struct reminder {
+            var title = String()
+            var body  = String()
         }
+        let reminderMessages: [reminder] = [
+            reminder(title: "You should have some water",
+                     body: "It has been a long time since you had some water, why don't you have some."),
+            reminder(title: "Hi, have you heard about the Sahara?",
+                     body: "I suggest not having that as an idol. Have some water."),
+            reminder(title: "Water what is that?",
+                     body: "Have you remembered to drink water? I suggest that you have some."),
+            reminder(title: "Hey, would you mind if i asked you a question?",
+                     body: "Wouldn't it be great with some water?"),
+            reminder(title: "What about some water?",
+                     body: "Hey, maybe you should give your brain something to run on?"),
+            reminder(title: "Just a little reminder",
+                     body: "There is a thing called water maybe you should have some."),
+            reminder(title: "I know you don't like it",
+                     body: "But have some water it's not going to hurt you"),
+            reminder(title: "What is blue and refreshing?",
+                     body: "Water. It is water why not have some"),
+            reminder(title: "Have some drink water",
+                     body: "You need to hydrate. have some water"),
+            reminder(title: "Why arent you thirsty by now",
+                     body: "You should have some water."),
+            reminder(title: "Hello there",
+                     body: "General Kenobi, would you like some water?"),
+            reminder(title: "Hey there me again",
+                     body: "I think you should have some water")
+        ]
+        let randomInt = Int.random(in: 0...reminderMessages.count - 1)
+        let notification = UNMutableNotificationContent()
+        notification.title = reminderMessages[randomInt].title
+        notification.body  = reminderMessages[randomInt].body
+        notification.categoryIdentifier = "reminder"
+        notification.sound  = .default
+        return notification
     }
+    
+    // MARK: - Temp message
     
     /**
      Will create a toast message and display it on the bottom of the screen.
@@ -296,6 +291,70 @@ class AboutVC: UIViewController {
             toastLabel.removeFromSuperview()
         })
     }
+    
+    //MARK: - Section controll of tableView
+    
+    /**
+     Will handle the gestures form the **UITableView**.
+     
+     - parameter sender: - The **UIGestureRecognizer** that called the function.
+     
+     # Notes: #
+     1. case for "how to use" will create a image and hide the **UITableView**. If the user clicks the image it will dismiss and show the **UITableView**
+     2. case for "remove data" will ask the user if the user want to remove all saved data.
+     3. Default case for the tapping any other header cell. This case will then expand the header and show the cells in that section.
+     */
+    @objc func expandOrCollapsSection(_ sender: UIGestureRecognizer){
+        guard let section = sender.view?.tag else { return }
+        switch section {
+            case settings.firstIndex(where: {$0.setting == "how to use"}):
+                print("help pressed")
+                let tutorialVC = TutorialVC()
+                tutorialVC.modalPresentationStyle = .fullScreen
+                self.present(tutorialVC, animated: true, completion: nil)
+            case settings.firstIndex(where: {$0.setting == "remove data"}):
+                // This will clear all the saved data from past days.
+                let clearDataAlert = UIAlertController(title: "Clearing data.", message: "Are you sure you want to delete all save data?", preferredStyle: .alert)
+                clearDataAlert.addAction(UIAlertAction(title: "Keep data", style: .cancel, handler: nil))
+                clearDataAlert.addAction(UIAlertAction(title: "REMOVE OLD DATA", style: .destructive, handler: {_ in
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()}))
+                
+                self.present(clearDataAlert, animated: true, completion: nil)
+            case settings.firstIndex(where: {$0.setting == "reminders"}):
+                let header = tableView.headerView(forSection: section) as! SettingsHeader
+                settings[section].isOpened = !settings[section].isOpened
+                if settings[section].isOpened {
+                    header.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                    setReminders()
+                    sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
+                } else {
+                    header.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                    let center = UNUserNotificationCenter.current()
+                    center.removeAllPendingNotificationRequests()
+                    center.removeAllDeliveredNotifications()
+                    sendToastMessage("all reminders are removed", 1)
+                }
+                UserDefaults.standard.set(settings[section].isOpened, forKey: "reminder")
+            default:
+                var indexPaths                 = [IndexPath]()
+                for row in settings[section].options.indices {
+                    let indexPath             = IndexPath(row: row, section: section)
+                    indexPaths.append(indexPath)
+                }
+                let header = tableView.headerView(forSection: section) as! SettingsHeader
+                let isOpened                 = settings[section].isOpened
+                settings[section].isOpened     = !isOpened
+                if isOpened {
+                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
+                    tableView.deleteRows(at: indexPaths, with: .fade)
+                } else {
+                    tableView.insertRows(at: indexPaths, with: .fade)
+                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
+            }
+        }
+    }
 }
 
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
@@ -304,6 +363,8 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settings[section].isOpened ? settings[section].options.count : 0
     }
+    
+    //MARK: - Creates a cell
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell 				= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
@@ -329,6 +390,8 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         return settings.count
     }
+    
+    //MARK: - Creates a section
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell 			= tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
@@ -367,6 +430,8 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         footerView.addSubview(separatorView)
         return footerView
     }
+    
+    //MARK: - Cell controlls of TableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
