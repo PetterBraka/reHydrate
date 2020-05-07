@@ -275,6 +275,14 @@ class AboutVC: UIViewController {
         )
     }
     
+    /**
+     Will set a notification for every half hour between 7 am and 11pm.
+     
+     # Example #
+     ```
+     setReminders()
+     ```
+     */
     func setReminders(){
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllDeliveredNotifications()
@@ -438,6 +446,17 @@ class AboutVC: UIViewController {
         }
     }
     
+    /**
+     Will create a toast message and display it on the bottom of the screen.
+     
+     - parameter message: - **String** that will be displayed on the screen.
+     - parameter messageDelay: - a **Double** of how long the message will be displayed.
+     
+     # Example #
+     ```
+     sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
+     ```
+     */
     func sendToastMessage(_ message: String, _ messageDelay: Double) {
         let toastLabel = UIButton()
         toastLabel.setTitle(message, for: .normal)
@@ -728,6 +747,17 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
 }
 
 extension UIImage {
+    
+    /**
+     Will create a greayed out version of the image.
+     
+     - returns: The image grayed out.
+     
+     # Example #
+     ```
+     imageView.image  = imageView.image?.grayed
+     ```
+     */
     var grayed: UIImage {
         guard let ciImage = CIImage(image: self)
             else { return self }
