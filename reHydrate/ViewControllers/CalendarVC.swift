@@ -20,6 +20,7 @@ class CalendarVC: UIViewController {
     @IBOutlet weak var titleDate: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var exitButton: UIButton!
     
     /**
      Will dismiss the page and go back to the main page.
@@ -68,19 +69,21 @@ class CalendarVC: UIViewController {
         calendar.appearance.weekdayFont = UIFont(name: "American typewriter", size: 18)
         calendar.appearance.headerTitleFont = UIFont(name: "American typewriter", size: 20)
         if darkMode {
-            calendar.backgroundColor 				= hexStringToUIColor(hex: "#212121")
-            self.view.backgroundColor 				= hexStringToUIColor(hex: "#212121")
-            tableView.backgroundColor 				= hexStringToUIColor(hex: "#212121")
-            titleDate.textColor 					= .white
-            calendar.appearance.headerTitleColor 	= .white
-            calendar.appearance.weekdayTextColor	= .systemBlue
+            calendar.backgroundColor              = hexStringToUIColor(hex: "#212121")
+            self.view.backgroundColor             = hexStringToUIColor(hex: "#212121")
+            tableView.backgroundColor             = hexStringToUIColor(hex: "#212121")
+            titleDate.textColor                   = .white
+            calendar.appearance.headerTitleColor  = .white
+            calendar.appearance.weekdayTextColor  = .systemBlue
+            exitButton.tintColor                  = .lightGray
         } else {
-            calendar.backgroundColor				= .white
-            calendar.appearance.headerTitleColor 	= .black
-            calendar.appearance.titleDefaultColor 	= .black
-            self.view.backgroundColor 				= .white
-            tableView.backgroundColor 				= .white
-            titleDate.textColor 					= .black
+            calendar.backgroundColor              = .white
+            calendar.appearance.headerTitleColor  = .black
+            calendar.appearance.titleDefaultColor = .black
+            self.view.backgroundColor             = .white
+            tableView.backgroundColor             = .white
+            titleDate.textColor                   = .black
+            exitButton.tintColor                  = .black
         }
     }
     
