@@ -11,6 +11,9 @@ import HealthKit
 import FSCalendar
 
 class StartVC: UIViewController {
+    
+    //MARK: - IBOutlets
+    
     @IBOutlet var lables: [UILabel]!
     @IBOutlet weak var currentDay: 			UILabel!
     @IBOutlet weak var historyButton: 		UIButton!
@@ -31,6 +34,8 @@ class StartVC: UIViewController {
     @IBOutlet weak var titleUnit: 			UILabel!
     @IBOutlet var unitLable: 				[UILabel]!
     
+    //MARK: - Variables
+    
     let defaults 			= UserDefaults.standard
     var days: [Day] 		= []
     var today 				= Day.init()
@@ -40,6 +45,8 @@ class StartVC: UIViewController {
     var drinkOptions		= [Drink(typeOfDrink: "water", amountOfDrink: 300),
                                Drink(typeOfDrink: "water", amountOfDrink: 500),
                                Drink(typeOfDrink: "water", amountOfDrink: 750)]
+    
+    //MARK: - Touch controlls
     
     /**
      Will check which view that called this function
@@ -193,6 +200,8 @@ class StartVC: UIViewController {
         updateUI()
     }
     
+    //MARK: - HealthKit
+    
     fileprivate func setUpHealth() {
         //  Request access to write dietaryWater data to HealthStore
         if HKHealthStore.isHealthDataAvailable(){
@@ -209,6 +218,37 @@ class StartVC: UIViewController {
             })
         }
     }
+    
+    /**
+     Will export a drink to the health app
+     
+     - parameter waterAmount: - The amount of water the drink contains.
+     - parameter date: -The date the drink was consumed.
+     - warning: Will print an error if it wasn't able to export the drink, or if it was successfull.
+     
+     # Example #
+     ```
+     
+     exportDrinkToHealth(200, Date.init())
+     ```
+     */
+    func exportDrinkToHealth(_ waterAmount: Double, _ date: Date) {
+        guard let dietaryWater     = HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
+            fatalError("dietary water is no longer available in HealthKit")
+        }
+        let waterConsumed       = HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
+        let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
+                                                   start: date, end: date)
+        HKHealthStore().save(waterConsumedSample) { (success, error) in
+            if let error = error {
+                print("Error Saving water consumtion: \(error.localizedDescription)")
+            } else {
+                print("Successfully saved water consumtion")
+            }
+        }
+    }
+    
+    //MARK: - Appearance
     
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
@@ -310,6 +350,8 @@ class StartVC: UIViewController {
         largeOption.addGestureRecognizer(largeOptionLongGesture)
         goalAmount.addGestureRecognizer(changeGoalLongGesture)
     }
+    
+    //MARK: - Update View
     
     /**
      Updates the amount consumed in the Day
@@ -500,34 +542,7 @@ class StartVC: UIViewController {
         self.present(alerContorller, animated: true, completion: nil)
     }
     
-    /**
-     Will export a drink to the health app
-     
-     - parameter waterAmount: - The amount of water the drink contains.
-     - parameter date: -The date the drink was consumed.
-     - warning: Will print an error if it wasn't able to export the drink, or if it was successfull.
-     
-     # Example #
-     ```
-     
-     exportDrinkToHealth(200, Date.init())
-     ```
-     */
-    func exportDrinkToHealth(_ waterAmount: Double, _ date: Date) {
-        guard let dietaryWater 	= HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
-            fatalError("dietary water is no longer available in HealthKit")
-        }
-        let waterConsumed       = HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
-        let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
-                                                   start: date, end: date)
-        HKHealthStore().save(waterConsumedSample) { (success, error) in
-            if let error = error {
-                print("Error Saving water consumtion: \(error.localizedDescription)")
-            } else {
-                print("Successfully saved water consumtion")
-            }
-        }
-    }
+    //MARK: - Save and Load
     
     /**
      Will save each drink option to UserDefaults
@@ -572,6 +587,8 @@ class StartVC: UIViewController {
             drinkOptions[2] = Drink(typeOfDrink: "water", amountOfDrink: Float(large))
         }
     }
+    
+    //MARK: - String formatting
     
     /**
      Will return the number of digits in a float
