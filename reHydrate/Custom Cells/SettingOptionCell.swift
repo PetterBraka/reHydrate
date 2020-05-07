@@ -9,9 +9,11 @@
 import UIKit
 
 class SettingOptionCell: UITableViewCell {
-    var numberArray 			= ["0", "1","2","3","4","5","6","7","8","9"]
-    var componentString 		= ["","",",",""]
-    let picker 					= UIPickerView()
+    var numberArray       = ["0", "1","2","3","4","5","6","7","8","9"]
+    var componentString   = ["","",",",""]
+    let picker            = UIPickerView()
+    var notificationStart = Int()
+    var notificationEnd   = Int()
     var setting: String? {
         didSet {
             guard let string 	= setting else {return}
@@ -102,17 +104,19 @@ class SettingOptionCell: UITableViewCell {
      */
     func setCellAppairents(_ dark: Bool,_ metric: Bool){
         if dark{
-            activatedOption.tintColor	= .lightGray
-            titleOption.textColor		= .white
-            subTitle.textColor			= .white
-            textField.textColor			= .white
-            self.backgroundColor 		= hexStringToUIColor(hex: "#212121")
+            activatedOption.tintColor       = .lightGray
+            titleOption.textColor           = .white
+            subTitle.textColor              = .white
+            textField.textColor             = .white
+            self.backgroundColor            = hexStringToUIColor(hex: "#212121")
+            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
-            activatedOption.tintColor	= .black
-            titleOption.textColor		= .black
-            subTitle.textColor			= .black
-            textField.textColor			= .black
-            self.backgroundColor		= .white
+            activatedOption.tintColor       = .black
+            titleOption.textColor           = .black
+            subTitle.textColor              = .black
+            textField.textColor             = .black
+            self.backgroundColor            = .white
+            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.darkGray])
         }
         switch titleOption.text?.lowercased() {
             case "dark mode":
@@ -133,21 +137,15 @@ class SettingOptionCell: UITableViewCell {
                 } else {
                     activatedOption.isHidden = true
                 }
-                break
             case "imperial system":
                 if !metric{
                     activatedOption.isHidden = false
                 } else {
                     activatedOption.isHidden = true
                 }
-                break
             case "goal":
-                activatedOption.isHidden 	= true
-                titleOption.text 			= "Set your goal"
-                let days = Day.loadDay()
-                if !days.isEmpty {
-                    textField.text = String(days.last!.goalAmount.amountOfDrink)
-                }
+                activatedOption.isHidden    = true
+                titleOption.text            = "Set your goal"
                 setUpPickerView()
             
             default:
@@ -155,6 +153,35 @@ class SettingOptionCell: UITableViewCell {
         }
         UserDefaults.standard.set(dark, forKey: "darkMode")
         UserDefaults.standard.set(metric, forKey: "metricUnits")
+    }
+    
+    fileprivate func setUpDatePicker() {
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .time
+        datePicker.locale = .current
+        datePicker.addTarget(self, action: #selector(handleInput), for: .valueChanged)
+        
+        self.addSubview(textField)
+        textField.translatesAutoresizingMaskIntoConstraints                                 = false
+        textField.heightAnchor.constraint(equalToConstant: 35).isActive                     = true
+        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 90).isActive         = true
+        textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
+        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
+        textField.inputView = datePicker
+        
+        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        toolBar.sizeToFit()
+        textField.inputAccessoryView = toolBar
+    }
+    
+    @objc func handleInput(_ sender: UIDatePicker ){
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = .current
+        textField.text = formatter.string(from: sender.date)
     }
     
     func setUpPickerView() {
@@ -181,20 +208,22 @@ class SettingOptionCell: UITableViewCell {
     
     @objc func doneClicked(){
         textField.endEditing(true)
-        var component = 0
-        while component < picker.numberOfComponents {
-            let value = numberArray[picker.selectedRow(inComponent: component)]
-            switch component {
-                case 0, 1, 3:
-                    updateTextField(String(value), component)
-                case 2:
-                	updateTextField(".", component)
-                default:
-                break
+        if titleOption.text?.lowercased() == "set your goal" {
+            var component = 0
+            while component < picker.numberOfComponents {
+                let value = numberArray[picker.selectedRow(inComponent: component)]
+                switch component {
+                    case 0, 1, 3:
+                        updateTextField(String(value), component)
+                    case 2:
+                        updateTextField(".", component)
+                    default:
+                        break
+                }
+                component += 1
             }
-            component += 1
+            updateGoal()
         }
-        updateGoal()
     }
     
     func updateGoal(){

@@ -10,145 +10,147 @@ import UIKit
 import HealthKit
 
 struct settingOptions {
-    var isOpened: 	Bool
-    var setting: 	String
-    var options: 	[String]
+    var isOpened: Bool
+    var setting:  String
+    var options:  [String]
 }
 
 class AboutVC: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableView:  UITableView!
     @IBOutlet weak var exitButton: UIButton!
-    let toturialVC					= UIViewController()
-    var darkMode					= true
-    var metricUnits					= true
-    var stage						= 0
-    let helpImage 					= UIImageView.init(image: UIImage.init(named: "toturial-1"))
-    var selectedRow: IndexPath 		= IndexPath()
-    var settings: [settingOptions] 	= [
+    let toturialVC                 = UIViewController()
+    var darkMode                   = true
+    var metricUnits                = true
+    var stage                      = 0
+    let helpImage                  = UIImageView.init(image: UIImage.init(named: "toturial-1"))
+    var selectedRow: IndexPath     = IndexPath()
+    var settings: [settingOptions] = [
         settingOptions(isOpened: false, setting: "appearance", options: ["Light Mode", "Dark Mode"]),
         settingOptions(isOpened: false, setting: "chang unit system", options: ["Metric System", "Imperial System"]),
         settingOptions(isOpened: false, setting: "change goal", options: ["Goal"]),
+        settingOptions(isOpened: false, setting: "reminders", options: []),
         settingOptions(isOpened: false, setting: "how to use", options: []),
         settingOptions(isOpened: false, setting: "remove data", options: [])]
     
-    let toolBar: UIView			= {
-        let view				= UIView()
-        view.backgroundColor	= .opaqueSeparator
+    let toolBar: UIView      = {
+        let view             = UIView()
+        view.backgroundColor = .opaqueSeparator
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    let skipButton: UIButton	= {
-        let button				= UIButton()
-        button.titleLabel?.font = UIFont(name: "AmericanRypeWriter", size: 25)
+    let skipButton: UIButton    = {
+        let button              = UIButton()
+        button.titleLabel?.font = UIFont(name: "AmericanTypewriter", size: 20)
         button.setTitle("skip", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    let nextButton: UIButton	= {
-        let button				= UIButton()
-        button.titleLabel?.font	= UIFont(name: "AmericanRypeWriter", size: 25)
+    let nextButton: UIButton    = {
+        let button              = UIButton()
+        button.titleLabel?.font	= UIFont(name: "AmericanTypewriter", size: 20)
         button.setTitle("next", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    let dayLable: UILabel	= {
-        let lable			= UILabel()
+    let dayLable: UILabel   = {
+        let lable           = UILabel()
         lable.textAlignment	= .center
-        lable.text			= "Monday - 05/10/20"
-        lable.font			= UIFont(name: "AmericanTypeWriter-Bold", size: 20)
+        lable.text          = "Monday - 05/10/20"
+        lable.font          = UIFont(name: "AmericanTypeWriter-Bold", size: 20)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let summaryLable: UILabel	= {
-        let lable				= UILabel()
-        lable.text				= "1.25 / 3L"
-        lable.font				= UIFont(name: "AmericanTypeWriter-Bold", size: 40)
-        lable.textAlignment		= .center
+    let summaryLable: UILabel = {
+        let lable             = UILabel()
+        lable.text            = "1.25 / 3L"
+        lable.font            = UIFont(name: "AmericanTypeWriter-Bold", size: 40)
+        lable.textAlignment   = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let drinkOptionStack: UIStackView	= {
-        let stack						= UIStackView()
-        stack.axis						= .horizontal
-        stack.spacing					= 15
-        stack.alignment					= .bottom
-        stack.distribution				= .equalSpacing
-        let smallDrink					= UIImageView()
-        smallDrink.image				= UIImage(named: "Glass")
-        smallDrink.contentMode			= .scaleAspectFit
-        let mediumDrink					= UIImageView()
-        mediumDrink.image				= UIImage(named: "Bottle")
-        mediumDrink.contentMode			= .scaleAspectFit
-        let largeDrink					= UIImageView()
-        largeDrink.image				= UIImage(named: "Flask")
-        largeDrink.contentMode			= .scaleAspectFit
+    let drinkOptionStack: UIStackView = {
+        let stack               = UIStackView()
+        stack.axis              = .horizontal
+        stack.spacing           = 15
+        stack.alignment         = .bottom
+        stack.distribution      = .equalSpacing
+        let smallDrink          = UIImageView()
+        smallDrink.image        = UIImage(named: "Glass")
+        smallDrink.contentMode  = .scaleAspectFit
+        let mediumDrink         = UIImageView()
+        mediumDrink.image       = UIImage(named: "Bottle")
+        mediumDrink.contentMode = .scaleAspectFit
+        let largeDrink          = UIImageView()
+        largeDrink.image        = UIImage(named: "Flask")
+        largeDrink.contentMode  = .scaleAspectFit
         
-        smallDrink.translatesAutoresizingMaskIntoConstraints	= false
-        mediumDrink.translatesAutoresizingMaskIntoConstraints	= false
-        largeDrink.translatesAutoresizingMaskIntoConstraints	= false
+        smallDrink.translatesAutoresizingMaskIntoConstraints  = false
+        mediumDrink.translatesAutoresizingMaskIntoConstraints = false
+        largeDrink.translatesAutoresizingMaskIntoConstraints  = false
         stack.addArrangedSubview(smallDrink)
         stack.addArrangedSubview(mediumDrink)
         stack.addArrangedSubview(largeDrink)
-        smallDrink.heightAnchor.constraint(equalToConstant: 70).isActive	= true
-        smallDrink.widthAnchor.constraint(equalToConstant: 50).isActive		= true
-        mediumDrink.heightAnchor.constraint(equalToConstant: 120).isActive	= true
-        mediumDrink.widthAnchor.constraint(equalToConstant: 80).isActive	= true
-        largeDrink.heightAnchor.constraint(equalToConstant: 140).isActive	= true
-        largeDrink.widthAnchor.constraint(equalToConstant: 80).isActive		= true
+        smallDrink.heightAnchor.constraint(equalToConstant: 70).isActive   = true
+        smallDrink.widthAnchor.constraint(equalToConstant: 50).isActive    = true
+        mediumDrink.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        mediumDrink.widthAnchor.constraint(equalToConstant: 80).isActive   = true
+        largeDrink.heightAnchor.constraint(equalToConstant: 140).isActive  = true
+        largeDrink.widthAnchor.constraint(equalToConstant: 80).isActive    = true
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    let smallDrinkLable: UILabel	= {
-        let lable					= UILabel()
-        lable.textAlignment			= .center
-        lable.text					= "300ml"
-        lable.font					= UIFont(name: "AmericanTypeWriter", size: 17)
+    let smallDrinkLable: UILabel = {
+        let lable           = UILabel()
+        lable.textAlignment = .center
+        lable.text          = "300ml"
+        lable.font          = UIFont(name: "AmericanTypeWriter", size: 17)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let mediumDrinkLable: UILabel	= {
-        let lable					= UILabel()
-        lable.textAlignment			= .center
-        lable.text					= "500ml"
-        lable.font					= UIFont(name: "AmericanTypeWriter", size: 17)
+    let mediumDrinkLable: UILabel = {
+        let lable           = UILabel()
+        lable.textAlignment = .center
+        lable.text          = "500ml"
+        lable.font          = UIFont(name: "AmericanTypeWriter", size: 17)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let largeDrinkLable: UILabel	= {
-        let lable					= UILabel()
-        lable.textAlignment			= .center
-        lable.text					= "750ml"
-        lable.font					= UIFont(name: "AmericanTypeWriter", size: 17)
+    let largeDrinkLable: UILabel = {
+        let lable           = UILabel()
+        lable.textAlignment = .center
+        lable.text          = "750ml"
+        lable.font          = UIFont(name: "AmericanTypeWriter", size: 17)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let settingsButton: UIButton	= {
-        let button					= UIButton()
+    let settingsButton: UIButton = {
+        let button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
         button.setTitle("", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints                 = false
-        button.widthAnchor.constraint(equalToConstant: 50).isActive     = true
-        button.heightAnchor.constraint(equalToConstant: 50).isActive     = true
+        button.translatesAutoresizingMaskIntoConstraints             = false
+        button.widthAnchor.constraint(equalToConstant: 50).isActive  = true
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return button
     }()
-    let calendarButton: UIButton	= {
-        let button					= UIButton()
+    let calendarButton: UIButton = {
+        let button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
         button.setTitle("", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints                 = false
-        button.widthAnchor.constraint(equalToConstant: 50).isActive     = true
-        button.heightAnchor.constraint(equalToConstant: 50).isActive     = true
+        button.translatesAutoresizingMaskIntoConstraints             = false
+        button.widthAnchor.constraint(equalToConstant: 50).isActive  = true
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return button
     }()
-    let explanationLabel: UILabel	= {
-        let lable					= UILabel()
-        lable.text					= "Explain whats showed"
-        lable.font					= UIFont(name: "AmericanTypewriter-Bold", size: 25)
-        lable.textAlignment			= .center
-        lable.numberOfLines			= 0
+    let explanationLabel: UILabel = {
+        let lable                 = UILabel()
+        lable.text                = "Explain whats showed"
+        lable.font                = UIFont(name: "AmericanTypewriter", size: 22)
+        lable.textAlignment       = .center
+        lable.baselineAdjustment  = .alignCenters
+        lable.numberOfLines	      = 0
         lable.translatesAutoresizingMaskIntoConstraints             = false
         lable.widthAnchor.constraint(equalToConstant: 250).isActive = true
         return lable
@@ -184,12 +186,11 @@ class AboutVC: UIViewController {
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         tableView.delegate 		= self
         tableView.dataSource 	= self
+        settings[3].isOpened    = UserDefaults.standard.bool(forKey: "reminder")
         metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
         darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
         changeAppearance()
     }
-    
-    
     
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
@@ -204,13 +205,13 @@ class AboutVC: UIViewController {
      */
     func changeAppearance(){
         if !darkMode {
-            self.view.backgroundColor 	= .white
-            tableView.backgroundColor 	= .white
-            exitButton.tintColor		= .black
+            self.view.backgroundColor = .white
+            tableView.backgroundColor = .white
+            exitButton.tintColor      = .black
         } else{
-            self.view.backgroundColor 	= hexStringToUIColor(hex: "#212121")
-            tableView.backgroundColor 	= hexStringToUIColor(hex: "#212121")
-            exitButton.tintColor		= .lightGray
+            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+            tableView.backgroundColor = hexStringToUIColor(hex: "#212121")
+            exitButton.tintColor      = .lightGray
         }
     }
     
@@ -274,72 +275,45 @@ class AboutVC: UIViewController {
         )
     }
     
-    @objc func skip(_ sender: UIBarButtonItem){
-        toturialVC.dismiss(animated: true, completion: nil)
-    }
-    @objc func nextClick(_ sender: UIBarButtonItem){
-        print("Go to next view")
-        stage += 1
+    /**
+     Will set a notification for every half hour between 7 am and 11pm.
+     
+     # Example #
+     ```
+     setReminders()
+     ```
+     */
+    func setReminders(){
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeAllDeliveredNotifications()
+        notificationCenter.removeAllPendingNotificationRequests()
         
-        switch stage {
-            case 1:
-                explanationLabel.text = "Here are you consumed amount and your goal for the day."
-                dayLable.textColor = hexStringToUIColor(hex: "#666666")
-                if darkMode {
-                    summaryLable.textColor = .white
-                } else {
-                    summaryLable.textColor = .black
-            	}
-            case 2:
-                summaryLable.textColor = hexStringToUIColor(hex: "#666666")
-                let imageArray = [UIImage(named: "Glass"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
-                var position = 0
-                while position < drinkOptionStack.subviews.count {
-                    let drink = drinkOptionStack.subviews[position] as! UIImageView
-                    drink.image = imageArray[position]
-                    position += 1
-                }
-                if darkMode {
-                    smallDrinkLable.textColor 	= .white
-                    mediumDrinkLable.textColor 	= .white
-                    largeDrinkLable.textColor 	= .white
-                } else {
-                    smallDrinkLable.textColor 	= .black
-                    mediumDrinkLable.textColor 	= .black
-                    largeDrinkLable.textColor 	= .black
-                }
-                explanationLabel.text = "Here are the different drinks you can use. Click on a drink to add it to your total amount."
-            case 3:
-                for drink in drinkOptionStack.subviews {
-                    let drinkOption 	= drink as! UIImageView
-                    drinkOption.image 	= drinkOption.image?.grayed
-                }
-                smallDrinkLable.textColor 	= hexStringToUIColor(hex: "#666666")
-                mediumDrinkLable.textColor	= hexStringToUIColor(hex: "#666666")
-                largeDrinkLable.textColor 	= hexStringToUIColor(hex: "#666666")
-                if darkMode {
-                    settingsButton.tintColor = .lightGray
-                } else {
-                    settingsButton.tintColor = .black
-                }
-                explanationLabel.text = "Click on this to go to app settings."
-            case 4:
-                settingsButton.tintColor = hexStringToUIColor(hex: "#666666")
-                if darkMode {
-                    calendarButton.tintColor = .lightGray
-                } else {
-                    calendarButton.tintColor = .black
-                }
-                explanationLabel.text = "Click on this to see your history."
-                nextButton.setTitle("Done", for: .normal)
-            case 5:
-                toturialVC.dismiss(animated: true, completion: nil)
-            default:
-                break
+        let startHour = 7
+        let endHour = 23
+        
+        let totalHours = endHour - startHour
+        let totalNotifications = totalHours * 2
+        
+        for i in 0...totalNotifications {
+            var date = DateComponents()
+            date.hour = startHour + i / 2
+            date.minute = 30 * (i % 2)
+            print("setting reminder for \(date.hour!):\(date.minute!)")
+            
+            let notification = UNMutableNotificationContent()
+            notification.title = "You should have some water"
+            notification.body = "It has been a long time since you had some water, why don't you have some."
+            notification.categoryIdentifier = "reminder"
+            notification.sound  = .default
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+            let uuidString = UUID().uuidString
+            let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+            notificationCenter.add(request, withCompletionHandler: nil)
         }
     }
-
-/**
+    
+    /**
      Will handle the gestures form the **UITableView**.
      
      - parameter sender: - The **UIGestureRecognizer** that called the function.
@@ -367,6 +341,10 @@ class AboutVC: UIViewController {
                     // Mark: Buttons
                     settingsButton.tintColor		= .lightGray
                     calendarButton.tintColor		= .lightGray
+                    // Mark: Toolbar
+                    toolBar.backgroundColor         = .darkGray
+                    nextButton.setTitleColor(.white, for: .normal)
+                    skipButton.setTitleColor(.white, for: .normal)
                 } else {
                     toturialVC.view.backgroundColor = .white
                     // Mark: Lables
@@ -379,8 +357,11 @@ class AboutVC: UIViewController {
                     // Mark: Buttons
                     settingsButton.tintColor 		= .black
                     calendarButton.tintColor 		= .black
+                    // Mark: Toolbar
+                    toolBar.backgroundColor         = hexStringToUIColor(hex: "#d1d1d1")
+                    nextButton.setTitleColor(.black, for: .normal)
+                    skipButton.setTitleColor(.black, for: .normal)
                 }
-                
                 
                 toturialVC.view.addSubview(toolBar)
                 toturialVC.view.addSubview(dayLable)
@@ -399,29 +380,25 @@ class AboutVC: UIViewController {
                 setSummaryAndDayLableConstraints()
                 setDrinkOptionsConstraints()
                 setSettingsAndCalendarConstraints()
-                explanationLabel.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor,constant: 40).isActive			= true
-                explanationLabel.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive					= true
+                explanationLabel.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor, constant: 40).isActive = true
+                explanationLabel.bottomAnchor.constraint(lessThanOrEqualTo: settingsButton.topAnchor, constant: -40).isActive  = true
+                explanationLabel.centerXAnchor.constraint(equalTo: toturialVC.view.centerXAnchor).isActive = true
                 
                 skipButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.skip(_:))))
                 nextButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.nextClick(_:))))
                 
                 nextButton.setTitle("Next", for: .normal)
-                if darkMode {
-                    dayLable.textColor = .white
-                } else {
-                    dayLable.textColor = .black
-                }
                 summaryLable.textColor = hexStringToUIColor(hex: "#666666")
                 for drink in drinkOptionStack.subviews {
-                    let drinkOption 	= drink as! UIImageView
-                    drinkOption.image 	= drinkOption.image?.grayed
+                    let drinkOption    = drink as! UIImageView
+                    drinkOption.image  = drinkOption.image?.grayed
                 }
-                smallDrinkLable.textColor 	= hexStringToUIColor(hex: "#666666")
-                mediumDrinkLable.textColor 	= hexStringToUIColor(hex: "#666666")
-                largeDrinkLable.textColor 	= hexStringToUIColor(hex: "#666666")
-                settingsButton.tintColor 	= hexStringToUIColor(hex: "#666666")
-                calendarButton.tintColor 	= hexStringToUIColor(hex: "#666666")
-                explanationLabel.text 		= "Here is the current day."
+                smallDrinkLable.textColor  = hexStringToUIColor(hex: "#666666")
+                mediumDrinkLable.textColor = hexStringToUIColor(hex: "#666666")
+                largeDrinkLable.textColor  = hexStringToUIColor(hex: "#666666")
+                settingsButton.tintColor   = hexStringToUIColor(hex: "#666666")
+                calendarButton.tintColor   = hexStringToUIColor(hex: "#666666")
+                explanationLabel.text      = "This is the current day."
                 
                 toturialVC.modalPresentationStyle = .fullScreen
                 self.present(toturialVC, animated: true, completion: nil)
@@ -435,6 +412,21 @@ class AboutVC: UIViewController {
                     UserDefaults.standard.synchronize()}))
                 
                 self.present(clearDataAlert, animated: true, completion: nil)
+            case settings.firstIndex(where: {$0.setting == "reminders"}):
+                let header = tableView.headerView(forSection: section) as! SettingsHeader
+                settings[section].isOpened = !settings[section].isOpened
+                if settings[section].isOpened {
+                    header.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                    setReminders()
+                    sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
+                } else {
+                    header.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                    let center = UNUserNotificationCenter.current()
+                    center.removeAllPendingNotificationRequests()
+                    center.removeAllDeliveredNotifications()
+                    sendToastMessage("all reminders are removed", 1)
+                }
+                UserDefaults.standard.set(settings[section].isOpened, forKey: "reminder")
             default:
                 var indexPaths 				= [IndexPath]()
                 for row in settings[section].options.indices {
@@ -442,16 +434,128 @@ class AboutVC: UIViewController {
                     indexPaths.append(indexPath)
                 }
                 let header = tableView.headerView(forSection: section) as! SettingsHeader
-                let ioOpend 				= settings[section].isOpened
-                settings[section].isOpened 	= !ioOpend
-                if ioOpend {
+                let isOpened 				= settings[section].isOpened
+                settings[section].isOpened 	= !isOpened
+                if isOpened {
                     header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
                     tableView.deleteRows(at: indexPaths, with: .fade)
                 } else {
                     tableView.insertRows(at: indexPaths, with: .fade)
                     header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
-            	}
-            
+            }
+        }
+    }
+    
+    /**
+     Will create a toast message and display it on the bottom of the screen.
+     
+     - parameter message: - **String** that will be displayed on the screen.
+     - parameter messageDelay: - a **Double** of how long the message will be displayed.
+     
+     # Example #
+     ```
+     sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
+     ```
+     */
+    func sendToastMessage(_ message: String, _ messageDelay: Double) {
+        let toastLabel = UIButton()
+        toastLabel.setTitle(message, for: .normal)
+        toastLabel.titleLabel?.font          = UIFont(name: "AmericanTypewriter", size: 18.0)
+        toastLabel.titleLabel?.textAlignment = .center
+        toastLabel.titleLabel?.numberOfLines = 0
+        if settings[3].isOpened {
+            toastLabel.contentEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+        } else {
+            toastLabel.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        }
+        if darkMode {
+            toastLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.9)
+            toastLabel.setTitleColor(UIColor.white, for: .normal)
+        } else {
+            toastLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.9)
+            toastLabel.setTitleColor(UIColor.black, for: .normal)
+        }
+        toastLabel.isUserInteractionEnabled = false
+        toastLabel.layer.cornerRadius       = 10
+        toastLabel.clipsToBounds            = true
+        toastLabel.alpha                    = 1
+        self.view.addSubview(toastLabel)
+        toastLabel.translatesAutoresizingMaskIntoConstraints = false
+        toastLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                      = true
+        toastLabel.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive       = true
+        toastLabel.leftAnchor.constraint(greaterThanOrEqualTo: self.view.leftAnchor, constant: 50).isActive = true
+        toastLabel.rightAnchor.constraint(lessThanOrEqualTo: self.view.rightAnchor, constant: -50).isActive = true
+        toastLabel.sizeToFit()
+        UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
+    }
+    
+    @objc func skip(_ sender: UIBarButtonItem){
+        toturialVC.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func nextClick(_ sender: UIBarButtonItem){
+        print("Go to next view")
+        stage += 1
+        
+        switch stage {
+            case 1:
+                explanationLabel.text = "This is your consumed amount and your goal for the day."
+                dayLable.textColor = hexStringToUIColor(hex: "#666666")
+                if darkMode {
+                    summaryLable.textColor = .white
+                } else {
+                    summaryLable.textColor = .black
+            }
+            case 2:
+                summaryLable.textColor = hexStringToUIColor(hex: "#666666")
+                let imageArray = [UIImage(named: "Glass"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
+                var position = 0
+                while position < drinkOptionStack.subviews.count {
+                    let drink = drinkOptionStack.subviews[position] as! UIImageView
+                    drink.image = imageArray[position]
+                    position += 1
+                }
+                if darkMode {
+                    smallDrinkLable.textColor  = .white
+                    mediumDrinkLable.textColor = .white
+                    largeDrinkLable.textColor  = .white
+                } else {
+                    smallDrinkLable.textColor  = .black
+                    mediumDrinkLable.textColor = .black
+                    largeDrinkLable.textColor  = .black
+                }
+                explanationLabel.text = "This is the different drink options you can use. Tap on a drink to add it to your total amount."
+            case 3:
+                for drink in drinkOptionStack.subviews {
+                    let drinkOption   = drink as! UIImageView
+                    drinkOption.image = drinkOption.image?.grayed
+                }
+                smallDrinkLable.textColor    = hexStringToUIColor(hex: "#666666")
+                mediumDrinkLable.textColor   = hexStringToUIColor(hex: "#666666")
+                largeDrinkLable.textColor    = hexStringToUIColor(hex: "#666666")
+                if darkMode {
+                    settingsButton.tintColor = .lightGray
+                } else {
+                    settingsButton.tintColor = .black
+                }
+                explanationLabel.text    = "Tap on this to go to settings."
+            case 4:
+                settingsButton.tintColor = hexStringToUIColor(hex: "#666666")
+                if darkMode {
+                    calendarButton.tintColor = .lightGray
+                } else {
+                    calendarButton.tintColor = .black
+                }
+                explanationLabel.text = "Tap on this to see your history."
+                nextButton.setTitle("Done", for: .normal)
+            case 5:
+                toturialVC.dismiss(animated: true, completion: nil)
+            default:
+                break
         }
     }
     
@@ -471,14 +575,14 @@ class AboutVC: UIViewController {
      ```
      */
     fileprivate func setToolBarConstraints() {
-        toolBar.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 0).isActive     = true
-        toolBar.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: 0).isActive   = true
-        toolBar.topAnchor.constraint(equalTo: toturialVC.view.topAnchor, constant: 0).isActive       = true
-        toolBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive                  = true
-        skipButton.leftAnchor.constraint(equalTo: toolBar.leftAnchor, constant: 20).isActive         = true
-        skipButton.topAnchor.constraint(equalTo: toolBar.topAnchor, constant: 50).isActive           = true
-        nextButton.rightAnchor.constraint(equalTo: toolBar.rightAnchor, constant: -20).isActive      = true
-        nextButton.topAnchor.constraint(equalTo: toolBar.topAnchor, constant: 50).isActive           = true
+        toolBar.leftAnchor.constraint(equalTo: toturialVC.view.leftAnchor, constant: 0).isActive      = true
+        toolBar.rightAnchor.constraint(equalTo: toturialVC.view.rightAnchor, constant: 0).isActive    = true
+        toolBar.topAnchor.constraint(equalTo: toturialVC.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        toolBar.heightAnchor.constraint(equalToConstant: 50).isActive                                 = true
+        skipButton.leftAnchor.constraint(equalTo: toolBar.leftAnchor, constant: 20).isActive          = true
+        skipButton.centerYAnchor.constraint(equalTo: toolBar.centerYAnchor).isActive                  = true
+        nextButton.rightAnchor.constraint(equalTo: toolBar.rightAnchor, constant: -20).isActive       = true
+        nextButton.centerYAnchor.constraint(equalTo: toolBar.centerYAnchor).isActive                  = true
     }
     
     /**
@@ -588,11 +692,19 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         switch cell.title.text?.uppercased() {
             case String("remove data").uppercased():
                 cell.title.textColor = .systemRed
+            case String("reminders").uppercased():
+                if settings[3].isOpened {
+                    cell.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                } else {
+                    cell.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+            	}
             default:
             break
         }
         if settings[section].options.isEmpty{
-            cell.button.removeFromSuperview()
+            if cell.title.text != "REMINDERS"{
+                cell.button.removeFromSuperview()
+            }
         }
         cell.setHeaderAppairents(darkMode)
         return cell
@@ -626,6 +738,8 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 1, section: 1): // imperial is selected
                 metricUnits = false
                 changeTableViewAppearants()
+            case IndexPath(row: 0, section: 3):
+                setReminders() // setts notifications between 7 and 23
             default:
             break
         }
@@ -633,6 +747,17 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
 }
 
 extension UIImage {
+    
+    /**
+     Will create a greayed out version of the image.
+     
+     - returns: The image grayed out.
+     
+     # Example #
+     ```
+     imageView.image  = imageView.image?.grayed
+     ```
+     */
     var grayed: UIImage {
         guard let ciImage = CIImage(image: self)
             else { return self }

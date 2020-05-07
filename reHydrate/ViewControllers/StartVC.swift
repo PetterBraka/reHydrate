@@ -148,29 +148,6 @@ class StartVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpButtons()
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error ) in
-            // enable or disable if needed.
-            if granted {
-                print("We have permission to send notifications")
-            } else {
-                print("We don't have the option to send notifications")
-            }
-        }
-        notificationCenter.removeAllDeliveredNotifications()
-        notificationCenter.removeAllPendingNotificationRequests()
-        
-        // The actual notification the user will receive
-        let notification    = UNMutableNotificationContent()
-        notification.title  = "You should have some water"
-        notification.body   = "It has been a long time since you had some water, why don't you have some."
-        notification.categoryIdentifier = "reminder"
-        notification.sound  = .default
-
-        let trigger     = UNTimeIntervalNotificationTrigger(timeInterval: (60*30), repeats: true)
-        let uuidString  = UUID().uuidString
-        let request     = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
-        notificationCenter.add(request, withCompletionHandler: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         
