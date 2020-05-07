@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3319AA32245334130049C676 /* SettingOptionCell.swift */; };
+		333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BD5F8246424FF0041D90A /* TutorialVC.swift */; };
 		3359BB7024461D620008EF6A /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3359BB6F24461D620008EF6A /* InfoCell.swift */; };
 		3378767724378A9400F5A732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767624378A9400F5A732 /* AppDelegate.swift */; };
 		3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767824378A9400F5A732 /* SceneDelegate.swift */; };
@@ -28,6 +29,7 @@
 /* Begin PBXFileReference section */
 		3310709A244DBCD3008365A3 /* reHydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reHydrate.entitlements; sourceTree = "<group>"; };
 		3319AA32245334130049C676 /* SettingOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOptionCell.swift; sourceTree = "<group>"; };
+		333BD5F8246424FF0041D90A /* TutorialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVC.swift; sourceTree = "<group>"; };
 		3359BB6F24461D620008EF6A /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767624378A9400F5A732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				3378767A24378A9400F5A732 /* StartVC.swift */,
 				33FC842E243B992600848B7C /* CalendarVC.swift */,
 				3389E0AA2448A61300DD7B58 /* AboutVC.swift */,
+				333BD5F8246424FF0041D90A /* TutorialVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 				33FC8427243A47A800848B7C /* Drink.swift in Sources */,
 				33FC842F243B992600848B7C /* CalendarVC.swift in Sources */,
 				3389E0AB2448A61300DD7B58 /* AboutVC.swift in Sources */,
+				333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */,
 				3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */,
 				33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */,
 				33FC8429243A4A2600848B7C /* Day.swift in Sources */,
