@@ -135,6 +135,8 @@ class TutorialVC: UIViewController {
     var darkMode                  = true
     var metricUnits               = true
     
+    //MARK: - Touch controll
+    
     @objc func skip(_ sender: UIBarButtonItem){
         self.dismiss(animated: true, completion: nil)
     }
@@ -248,6 +250,8 @@ class TutorialVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    //MARK: - Change appearance
+    
     /**
      Will change the appearance of this **UIViewController**
      
@@ -291,6 +295,43 @@ class TutorialVC: UIViewController {
             skipButton.setTitleColor(.black, for: .normal)
         }
     }
+    
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    //MARK: - Set constraints
     
     /**
      sets all the constraints for the toolBar and all the buttons in it.
@@ -382,40 +423,5 @@ class TutorialVC: UIViewController {
         settingsButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
         calendarButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive   = true
         calendarButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
     }
 }

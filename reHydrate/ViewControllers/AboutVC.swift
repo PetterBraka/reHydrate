@@ -71,7 +71,7 @@ class AboutVC: UIViewController {
         changeAppearance()
     }
     
-    // MARK: - Appearance change
+    // MARK: - Change appearance
     
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
