@@ -144,12 +144,22 @@ class SettingOptionCell: UITableViewCell {
                     activatedOption.isHidden = true
                 }
             case "goal":
-                activatedOption.isHidden    = true
-                titleOption.text            = "Set your goal"
+                activatedOption.isHidden = true
+                titleOption.text         = "Set your goal"
                 setUpPickerView()
-            
+            case "turn on reminders", "turn off reminders":
+                activatedOption.isHidden = false
+            case "starting time:", "ending time:":
+            	setUpDatePicker()
+                activatedOption.isHidden = true
+            case "frequency:" :
+                activatedOption.isHidden = true
+                let minutePicker = UIDatePicker()
+                minutePicker.datePickerMode = .time
+                
+                break
             default:
-                activatedOption.isHidden 	= true
+                activatedOption.isHidden = true
         }
         UserDefaults.standard.set(dark, forKey: "darkMode")
         UserDefaults.standard.set(metric, forKey: "metricUnits")
@@ -159,7 +169,19 @@ class SettingOptionCell: UITableViewCell {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .time
         datePicker.locale = .current
-        datePicker.addTarget(self, action: #selector(handleInput), for: .valueChanged)
+        let calendar = NSCalendar.current
+        var components = calendar.dateComponents([.hour, .minute], from: Date())
+        let endTimer = UserDefaults.standard.double(forKey: "endingTime")
+        let startTimer = UserDefaults.standard.double(forKey: "startignTime")
+        if titleOption.text?.lowercased() == "starting time:"{
+            components.hour = Int(startTimer.rounded(.down))
+            components.minute = 00
+        } else if titleOption.text?.lowercased() == "ending time:" {
+            components.hour = Int(endTimer.rounded(.down))
+            components.minute = 00
+        }
+        datePicker.setDate(calendar.date(from: components)!, animated: true)
+        datePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
         
         self.addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints                                 = false
@@ -168,6 +190,11 @@ class SettingOptionCell: UITableViewCell {
         textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
         textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
         textField.inputView = datePicker
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = .current
+        textField.text = formatter.string(from: datePicker.date)
         
         let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -208,22 +235,187 @@ class SettingOptionCell: UITableViewCell {
     
     @objc func doneClicked(){
         textField.endEditing(true)
-        if titleOption.text?.lowercased() == "set your goal" {
-            var component = 0
-            while component < picker.numberOfComponents {
-                let value = numberArray[picker.selectedRow(inComponent: component)]
-                switch component {
-                    case 0, 1, 3:
-                        updateTextField(String(value), component)
-                    case 2:
-                        updateTextField(".", component)
-                    default:
-                        break
+        switch titleOption.text?.lowercased() {
+            case "set your goal":
+                var component = 0
+                while component < picker.numberOfComponents {
+                    let value = numberArray[picker.selectedRow(inComponent: component)]
+                    switch component {
+                        case 0, 1, 3:
+                            updateTextField(String(value), component)
+                        case 2:
+                            updateTextField(".", component)
+                        default:
+                            break
+                    }
+                    component += 1
                 }
-                component += 1
-            }
-            updateGoal()
+                updateGoal()
+            case "starting time:":
+                let time = textField.text!
+                var tempString = String()
+                for char in time {
+                    if char == ":"{
+                        tempString.append(".")
+                    } else {
+                        tempString.append(char)
+                    }
+                }
+                let timeAsDouble = Double(tempString)!
+                print(timeAsDouble)
+                UserDefaults.standard.set(timeAsDouble, forKey: "startignTime")
+                let endTimer = UserDefaults.standard.double(forKey: "endingTime")
+                setReminders(Int(timeAsDouble.rounded(.down)), Int(endTimer.rounded(.down)))
+                sendToastMessage("Reminders set from \(timeAsDouble) to \(endTimer)", 4)
+            case "ending time:":
+                let time = textField.text!
+                var tempString = String()
+                for char in time {
+                    if char == ":"{
+                        tempString.append(".")
+                    } else {
+                        tempString.append(char)
+                    }
+                }
+                let timeAsDouble = Double(tempString)!
+                print(timeAsDouble)
+                UserDefaults.standard.set(timeAsDouble, forKey: "endingTime")
+                let startTimer = UserDefaults.standard.double(forKey: "startignTime")
+                setReminders(Int(startTimer.rounded(.down)), Int(timeAsDouble.rounded(.down)))
+                sendToastMessage("Reminders set from \(String(format: "%.0f", startTimer)) to \(String(format: "%.0f", timeAsDouble))", 4)
+            default:
+                break
         }
+    }
+    
+    // MARK: - Notifications
+    
+    /**
+     Will set a notification for every half hour between 7 am and 11pm.
+     
+     # Example #
+     ```
+     setReminders()
+     ```
+     */
+    func setReminders(_ startHour: Int, _ endHour: Int){
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeAllDeliveredNotifications()
+        notificationCenter.removeAllPendingNotificationRequests()
+        
+        let intervals = 30
+        
+        let totalHours = endHour - startHour
+        let totalNotifications = totalHours * 60 / intervals
+        
+        for i in 0...totalNotifications {
+            var date = DateComponents()
+            date.hour = startHour + (intervals * i) / 60
+            date.minute = (intervals * i) % 60
+            print("setting reminder for \(date.hour!):\(date.minute!)")
+            let notification = getReminder()
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+            let uuidString = UUID().uuidString
+            let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+            notificationCenter.add(request, withCompletionHandler: nil)
+        }
+    }
+    
+    /**
+     Will return a random **UNMutableNotificationContent** a notifcation message.
+     
+     # Notes: #
+     1. This will pick out a message randomly so you could get the same message twice.
+     
+     # Example #
+     ```
+     let notification = getReminder()
+     ```
+     */
+    func getReminder()-> UNMutableNotificationContent{
+        struct reminder {
+            var title = String()
+            var body  = String()
+        }
+        let reminderMessages: [reminder] = [
+            reminder(title: "You should have some water",
+                     body:  "It has been a long time since you had some water, why don't you have some."),
+            reminder(title: "Hi, have you heard about the Sahara?",
+                     body:  "I suggest not having that as an idol. Have some water."),
+            reminder(title: "Water what is that?",
+                     body:  "Have you remembered to drink water? I suggest that you have some."),
+            reminder(title: "Hey, would you mind if i asked you a question?",
+                     body:  "Wouldn't it be great with some water?"),
+            reminder(title: "What about some water?",
+                     body:  "Hey, maybe you should give your brain something to run on?"),
+            reminder(title: "Just a little reminder",
+                     body:  "There is a thing called water maybe you should have some."),
+            reminder(title: "I know you don't like it",
+                     body:  "But have some water it's not going to hurt you"),
+            reminder(title: "What is blue and refreshing?",
+                     body:  "Water. It is water why not have some"),
+            reminder(title: "Have some drink water",
+                     body:  "You need to hydrate. have some water"),
+            reminder(title: "Why aren't you thirsty by now",
+                     body:  "You should have some water."),
+            reminder(title: "Hello there",
+                     body:  "General Kenobi, would you like some water?"),
+            reminder(title: "Hey there me again",
+                     body:  "I think you should have some water")
+        ]
+        let randomInt = Int.random(in: 0...reminderMessages.count - 1)
+        let notification = UNMutableNotificationContent()
+        notification.title = reminderMessages[randomInt].title
+        notification.body  = reminderMessages[randomInt].body
+        notification.categoryIdentifier = "reminder"
+        notification.sound  = .default
+        return notification
+    }
+    
+    // MARK: - Temp message
+    
+    /**
+     Will create a toast message and display it on the bottom of the screen.
+     
+     - parameter message: - **String** that will be displayed on the screen.
+     - parameter messageDelay: - a **Double** of how long the message will be displayed.
+     
+     # Example #
+     ```
+     sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
+     ```
+     */
+    func sendToastMessage(_ message: String, _ messageDelay: Double) {
+        let toastLabel = UIButton()
+        toastLabel.setTitle(message, for: .normal)
+        toastLabel.titleLabel?.font          = UIFont(name: "AmericanTypewriter", size: 18.0)
+        toastLabel.titleLabel?.textAlignment = .center
+        toastLabel.titleLabel?.numberOfLines = 0
+        toastLabel.contentEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+        if titleOption.textColor == UIColor.white {
+            toastLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.9)
+            toastLabel.setTitleColor(UIColor.white, for: .normal)
+        } else {
+            toastLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.9)
+            toastLabel.setTitleColor(UIColor.black, for: .normal)
+        }
+        toastLabel.isUserInteractionEnabled = false
+        toastLabel.layer.cornerRadius       = 10
+        toastLabel.clipsToBounds            = true
+        toastLabel.alpha                    = 1
+        self.superview!.superview!.addSubview(toastLabel)
+        toastLabel.translatesAutoresizingMaskIntoConstraints = false
+        toastLabel.centerXAnchor.constraint(equalTo: self.superview!.centerXAnchor).isActive                      = true
+        toastLabel.centerYAnchor.constraint(equalTo: self.superview!.bottomAnchor, constant: -100).isActive       = true
+        toastLabel.leftAnchor.constraint(greaterThanOrEqualTo: self.superview!.leftAnchor, constant: 50).isActive = true
+        toastLabel.rightAnchor.constraint(lessThanOrEqualTo: self.superview!.rightAnchor, constant: -50).isActive = true
+        toastLabel.sizeToFit()
+        UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
     
     func updateGoal(){
