@@ -88,10 +88,18 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                    	= true
-        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                   	= true
-        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive 		= true
-        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive 	= true
+        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                        = true
+        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                       = true
+        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive      = true
+        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive  = true
+    }
+    
+    fileprivate func setTextFieldConstraints() {
+        textField.translatesAutoresizingMaskIntoConstraints                                 = false
+        textField.heightAnchor.constraint(equalToConstant: 35).isActive                     = true
+        textField.rightAnchor.constraint(equalTo: self.rightAnchor ).isActive               = true
+        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive        = true
+        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
     }
     
     /**
@@ -154,15 +162,67 @@ class SettingOptionCell: UITableViewCell {
                 activatedOption.isHidden = true
             case "frequency:" :
                 activatedOption.isHidden = true
-                let minutePicker = UIDatePicker()
-                minutePicker.datePickerMode = .time
-                
-                break
+                setUpMinutePicker()
             default:
                 activatedOption.isHidden = true
         }
         UserDefaults.standard.set(dark, forKey: "darkMode")
         UserDefaults.standard.set(metric, forKey: "metricUnits")
+    }
+    
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    //MARK: - Set-up pickers
+    
+    fileprivate func setUpPickerView() {
+        self.addSubview(textField)
+        setTextFieldConstraints()
+        
+        let toolBar 		= UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
+        let flexibleSpace 	= UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton 		= UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        toolBar.sizeToFit()
+        
+        textField.inputAccessoryView = toolBar
+        
+        picker.frame 		= CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
+        picker.delegate		= self
+        picker.dataSource 	= self
+        textField.inputView = picker
     }
     
     fileprivate func setUpDatePicker() {
@@ -184,11 +244,7 @@ class SettingOptionCell: UITableViewCell {
         datePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
         
         self.addSubview(textField)
-        textField.translatesAutoresizingMaskIntoConstraints                                 = false
-        textField.heightAnchor.constraint(equalToConstant: 35).isActive                     = true
-        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 90).isActive         = true
-        textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
-        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
+        setTextFieldConstraints()
         textField.inputView = datePicker
         
         let formatter = DateFormatter()
@@ -204,33 +260,48 @@ class SettingOptionCell: UITableViewCell {
         textField.inputAccessoryView = toolBar
     }
     
+    fileprivate func setUpMinutePicker() {
+        let minutePicker = UIDatePicker()
+        minutePicker.datePickerMode = .countDownTimer
+        minutePicker.minuteInterval = 10
+        var components = DateComponents()
+        components.minute = UserDefaults.standard.integer(forKey: "reminderInterval")
+        let date = Calendar.current.date(from: components)!
+        minutePicker.setDate(date, animated: true)
+        
+        minutePicker.addTarget(self, action: #selector(handleInput), for: .valueChanged)
+        
+        self.addSubview(textField)
+        setTextFieldConstraints()
+        textField.inputView = minutePicker
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = .current
+        textField.text = formatter.string(from: minutePicker.date)
+        
+        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        toolBar.sizeToFit()
+        textField.inputAccessoryView = toolBar
+    }
+    
     @objc func handleInput(_ sender: UIDatePicker ){
+        if titleOption.text?.lowercased() == "frequency:" {
+            if (sender.countDownDuration > 2.9*60*60) {
+                var components = DateComponents()
+                components.hour = 2
+                components.minute = 50
+                let date = Calendar.current.date(from: components)!
+                sender.setDate(date, animated: true)
+            }
+        }
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         formatter.locale = .current
         textField.text = formatter.string(from: sender.date)
-    }
-    
-    func setUpPickerView() {
-        self.addSubview(textField)
-        textField.translatesAutoresizingMaskIntoConstraints 									= false
-        textField.heightAnchor.constraint(equalToConstant: 35).isActive 						= true
-        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 90).isActive 			= true
-        textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive 	= true
-        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive 		= true
-        
-        let toolBar 		= UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
-        let flexibleSpace 	= UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton 		= UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
-        toolBar.sizeToFit()
-        
-        textField.inputAccessoryView = toolBar
-        
-        picker.frame 		= CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
-        picker.delegate		= self
-        picker.dataSource 	= self
-        textField.inputView = picker
     }
     
     @objc func doneClicked(){
@@ -265,8 +336,9 @@ class SettingOptionCell: UITableViewCell {
                 print(timeAsDouble)
                 UserDefaults.standard.set(timeAsDouble, forKey: "startignTime")
                 let endTimer = UserDefaults.standard.double(forKey: "endingTime")
-                setReminders(Int(timeAsDouble.rounded(.down)), Int(endTimer.rounded(.down)))
-                sendToastMessage("Reminders set from \(timeAsDouble) to \(endTimer)", 4)
+                let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
+                setReminders(Int(timeAsDouble.rounded(.down)), Int(endTimer.rounded(.down)), intervals)
+                sendToastMessage("Reminders set from \(String(format: "%.0f", timeAsDouble)) to \(String(format: "%.0f", endTimer))", 4)
             case "ending time:":
                 let time = textField.text!
                 var tempString = String()
@@ -280,9 +352,28 @@ class SettingOptionCell: UITableViewCell {
                 let timeAsDouble = Double(tempString)!
                 print(timeAsDouble)
                 UserDefaults.standard.set(timeAsDouble, forKey: "endingTime")
+                let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
                 let startTimer = UserDefaults.standard.double(forKey: "startignTime")
-                setReminders(Int(startTimer.rounded(.down)), Int(timeAsDouble.rounded(.down)))
+                setReminders(Int(startTimer.rounded(.down)), Int(timeAsDouble.rounded(.down)), intervals)
                 sendToastMessage("Reminders set from \(String(format: "%.0f", startTimer)) to \(String(format: "%.0f", timeAsDouble))", 4)
+            case "frequency:":
+                let time = textField.text!
+                
+                let formatter = DateFormatter()
+                formatter.dateFormat = "hh:mm"
+                let date = formatter.date(from: time)
+                let calendar = Calendar.current
+                
+                let currentDateComponent = calendar.dateComponents([.hour, .minute], from: date!)
+                let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
+                
+                print("numberOfMinutes : ", numberOfMinutes)
+                UserDefaults.standard.set(numberOfMinutes, forKey: "reminderInterval")
+                let startTimer = UserDefaults.standard.double(forKey: "startignTime")
+                let endTimer = UserDefaults.standard.double(forKey: "endingTime")
+                setReminders(Int(startTimer.rounded(.down)), Int(endTimer.rounded(.down)), numberOfMinutes)
+                sendToastMessage("The frequency of reminders are \(numberOfMinutes) minutes", 4)
+                break
             default:
                 break
         }
@@ -298,12 +389,12 @@ class SettingOptionCell: UITableViewCell {
      setReminders()
      ```
      */
-    func setReminders(_ startHour: Int, _ endHour: Int){
+    func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
         
-        let intervals = 30
+        let intervals = frequency
         
         let totalHours = endHour - startHour
         let totalNotifications = totalHours * 60 / intervals
@@ -373,8 +464,6 @@ class SettingOptionCell: UITableViewCell {
         return notification
     }
     
-    // MARK: - Temp message
-    
     /**
      Will create a toast message and display it on the bottom of the screen.
      
@@ -427,44 +516,11 @@ class SettingOptionCell: UITableViewCell {
             Day.saveDay(days)
         }
     }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
-    }
 }
 
 extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
+    
+    //MARK: - UIPickerVeiw
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 4
@@ -525,6 +581,7 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
 }
 
 extension UITextField {
+    //MARK: TextField padding
     func setLeftPadding(_ amount:CGFloat){
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
         self.leftView = paddingView
