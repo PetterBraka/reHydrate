@@ -29,7 +29,10 @@ class AboutVC: UIViewController {
         settingOptions(isOpened: false, setting: "appearance", options: ["Light Mode", "Dark Mode"]),
         settingOptions(isOpened: false, setting: "chang unit system", options: ["Metric System", "Imperial System"]),
         settingOptions(isOpened: false, setting: "change goal", options: ["Goal"]),
-        settingOptions(isOpened: false, setting: "reminders", options: []),
+        settingOptions(isOpened: false, setting: "reminders", options: ["Turn on reminders",
+                                                                        "Starting time:",
+                                                                        "Ending time:",
+                                                                        "Frequency:"]),
         settingOptions(isOpened: false, setting: "how to use", options: []),
         settingOptions(isOpened: false, setting: "remove data", options: [])]
     
@@ -171,9 +174,11 @@ class AboutVC: UIViewController {
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
         
-        let startHour = 7
-        let endHour   = 23
-        let intervals = 22
+        let startTimer = UserDefaults.standard.double(forKey: "startignTime")
+        let endTimer = UserDefaults.standard.double(forKey: "endingTime")
+        let startHour = Int(startTimer.rounded(.down))
+        let endHour   = Int(endTimer.rounded(.down))
+        let intervals = 30
         
         let totalHours = endHour - startHour
         let totalNotifications = totalHours * 60 / intervals
@@ -320,23 +325,7 @@ class AboutVC: UIViewController {
                     let domain = Bundle.main.bundleIdentifier!
                     UserDefaults.standard.removePersistentDomain(forName: domain)
                     UserDefaults.standard.synchronize()}))
-                
                 self.present(clearDataAlert, animated: true, completion: nil)
-            case settings.firstIndex(where: {$0.setting == "reminders"}):
-                let header = tableView.headerView(forSection: section) as! SettingsHeader
-                settings[section].isOpened = !settings[section].isOpened
-                if settings[section].isOpened {
-                    header.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
-                    setReminders()
-                    sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
-                } else {
-                    header.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
-                    let center = UNUserNotificationCenter.current()
-                    center.removeAllPendingNotificationRequests()
-                    center.removeAllDeliveredNotifications()
-                    sendToastMessage("all reminders are removed", 1)
-                }
-                UserDefaults.standard.set(settings[section].isOpened, forKey: "reminder")
             default:
                 var indexPaths                 = [IndexPath]()
                 for row in settings[section].options.indices {
@@ -360,11 +349,11 @@ class AboutVC: UIViewController {
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     
     
+    //MARK: - Creates a cell
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settings[section].isOpened ? settings[section].options.count : 0
     }
-    
-    //MARK: - Creates a cell
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell 				= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
@@ -376,6 +365,14 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                 cell.addSubTitle( "Units: \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
             case IndexPath(row: 1, section: 1):
                 cell.addSubTitle( "Units: \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
+            case IndexPath(row: 0, section: 3):
+                if settings[3].isOpened {
+                    cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                    cell.titleOption.text = "Turn off reminders"
+                } else {
+                    cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                    cell.titleOption.text = "Turn on reminders"
+            }
             default:
             break
         }
@@ -401,12 +398,6 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         switch cell.title.text?.uppercased() {
             case String("remove data").uppercased():
                 cell.title.textColor = .systemRed
-            case String("reminders").uppercased():
-                if settings[3].isOpened {
-                    cell.button.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
-                } else {
-                    cell.button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
-            	}
             default:
             break
         }
@@ -449,8 +440,23 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 1, section: 1): // imperial is selected
                 metricUnits = false
                 changeTableViewAppearants()
-            case IndexPath(row: 0, section: 3):
-                setReminders() // setts notifications between 7 and 23
+            case IndexPath(row: 0, section: 3): // setts notifications between 7 and 23
+                let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
+                settings[3].isOpened = !settings[3].isOpened
+                if settings[3].isOpened {
+                    cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                    cell.titleOption.text = "Turn off reminders"
+                    setReminders()
+                    sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
+                } else {
+                    cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                    cell.titleOption.text = "Turn on reminders"
+                    let center = UNUserNotificationCenter.current()
+                    center.removeAllPendingNotificationRequests()
+                    center.removeAllDeliveredNotifications()
+                    sendToastMessage("all reminders are removed", 1)
+                }
+                UserDefaults.standard.set(settings[3].isOpened, forKey: "reminder")
             default:
             break
         }
