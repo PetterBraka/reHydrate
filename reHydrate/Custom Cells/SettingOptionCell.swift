@@ -88,10 +88,18 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                    	= true
-        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                   	= true
-        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive 		= true
-        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive 	= true
+        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                        = true
+        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                       = true
+        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive      = true
+        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive  = true
+    }
+    
+    fileprivate func setTextFieldConstraints() {
+        textField.translatesAutoresizingMaskIntoConstraints                                 = false
+        textField.heightAnchor.constraint(equalToConstant: 35).isActive                     = true
+        textField.rightAnchor.constraint(equalTo: self.rightAnchor ).isActive               = true
+        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive        = true
+        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
     }
     
     /**
@@ -144,96 +152,22 @@ class SettingOptionCell: UITableViewCell {
                     activatedOption.isHidden = true
                 }
             case "goal":
-                activatedOption.isHidden    = true
-                titleOption.text            = "Set your goal"
+                activatedOption.isHidden = true
+                titleOption.text         = "Set your goal"
                 setUpPickerView()
-            
+            case "turn on reminders", "turn off reminders":
+                activatedOption.isHidden = false
+            case "starting time:", "ending time:":
+            	setUpDatePicker()
+                activatedOption.isHidden = true
+            case "frequency:" :
+                activatedOption.isHidden = true
+                setUpMinutePicker()
             default:
-                activatedOption.isHidden 	= true
+                activatedOption.isHidden = true
         }
         UserDefaults.standard.set(dark, forKey: "darkMode")
         UserDefaults.standard.set(metric, forKey: "metricUnits")
-    }
-    
-    fileprivate func setUpDatePicker() {
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .time
-        datePicker.locale = .current
-        datePicker.addTarget(self, action: #selector(handleInput), for: .valueChanged)
-        
-        self.addSubview(textField)
-        textField.translatesAutoresizingMaskIntoConstraints                                 = false
-        textField.heightAnchor.constraint(equalToConstant: 35).isActive                     = true
-        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 90).isActive         = true
-        textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
-        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
-        textField.inputView = datePicker
-        
-        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
-        toolBar.sizeToFit()
-        textField.inputAccessoryView = toolBar
-    }
-    
-    @objc func handleInput(_ sender: UIDatePicker ){
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.locale = .current
-        textField.text = formatter.string(from: sender.date)
-    }
-    
-    func setUpPickerView() {
-        self.addSubview(textField)
-        textField.translatesAutoresizingMaskIntoConstraints 									= false
-        textField.heightAnchor.constraint(equalToConstant: 35).isActive 						= true
-        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 90).isActive 			= true
-        textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive 	= true
-        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive 		= true
-        
-        let toolBar 		= UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
-        let flexibleSpace 	= UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton 		= UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
-        toolBar.sizeToFit()
-        
-        textField.inputAccessoryView = toolBar
-        
-        picker.frame 		= CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
-        picker.delegate		= self
-        picker.dataSource 	= self
-        textField.inputView = picker
-    }
-    
-    @objc func doneClicked(){
-        textField.endEditing(true)
-        if titleOption.text?.lowercased() == "set your goal" {
-            var component = 0
-            while component < picker.numberOfComponents {
-                let value = numberArray[picker.selectedRow(inComponent: component)]
-                switch component {
-                    case 0, 1, 3:
-                        updateTextField(String(value), component)
-                    case 2:
-                        updateTextField(".", component)
-                    default:
-                        break
-                }
-                component += 1
-            }
-            updateGoal()
-        }
-    }
-    
-    func updateGoal(){
-        let days = Day.loadDay()
-        let newGoal = Float(textField.text!)!
-        if newGoal != 0 {
-            days[days.count - 1].goalAmount.amountOfDrink = newGoal
-            print(days[days.count - 1].goalAmount.amountOfDrink)
-            Day.saveDay(days)
-        }
     }
     
     /**
@@ -270,9 +204,323 @@ class SettingOptionCell: UITableViewCell {
             alpha: CGFloat(1.0)
         )
     }
+    
+    //MARK: - Set-up pickers
+    
+    fileprivate func setUpPickerView() {
+        self.addSubview(textField)
+        setTextFieldConstraints()
+        
+        let toolBar 		= UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
+        let flexibleSpace 	= UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton 		= UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        toolBar.sizeToFit()
+        
+        textField.inputAccessoryView = toolBar
+        
+        picker.frame 		= CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
+        picker.delegate		= self
+        picker.dataSource 	= self
+        textField.inputView = picker
+    }
+    
+    fileprivate func setUpDatePicker() {
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .time
+        datePicker.locale = .current
+        let calendar = NSCalendar.current
+        var components = calendar.dateComponents([.hour, .minute], from: Date())
+        let endTimer = UserDefaults.standard.double(forKey: "endingTime")
+        let startTimer = UserDefaults.standard.double(forKey: "startignTime")
+        if titleOption.text?.lowercased() == "starting time:"{
+            components.hour = Int(startTimer.rounded(.down))
+            components.minute = 00
+        } else if titleOption.text?.lowercased() == "ending time:" {
+            components.hour = Int(endTimer.rounded(.down))
+            components.minute = 00
+        }
+        datePicker.setDate(calendar.date(from: components)!, animated: true)
+        datePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
+        
+        self.addSubview(textField)
+        setTextFieldConstraints()
+        textField.inputView = datePicker
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = .current
+        textField.text = formatter.string(from: datePicker.date)
+        
+        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        toolBar.sizeToFit()
+        textField.inputAccessoryView = toolBar
+    }
+    
+    fileprivate func setUpMinutePicker() {
+        let minutePicker = UIDatePicker()
+        minutePicker.datePickerMode = .countDownTimer
+        minutePicker.minuteInterval = 10
+        var components = DateComponents()
+        components.minute = UserDefaults.standard.integer(forKey: "reminderInterval")
+        let date = Calendar.current.date(from: components)!
+        minutePicker.setDate(date, animated: true)
+        
+        minutePicker.addTarget(self, action: #selector(handleInput), for: .valueChanged)
+        
+        self.addSubview(textField)
+        setTextFieldConstraints()
+        textField.inputView = minutePicker
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = .current
+        textField.text = formatter.string(from: minutePicker.date)
+        
+        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        toolBar.sizeToFit()
+        textField.inputAccessoryView = toolBar
+    }
+    
+    @objc func handleInput(_ sender: UIDatePicker ){
+        if titleOption.text?.lowercased() == "frequency:" {
+            if (sender.countDownDuration > 2.9*60*60) {
+                var components = DateComponents()
+                components.hour = 2
+                components.minute = 50
+                let date = Calendar.current.date(from: components)!
+                sender.setDate(date, animated: true)
+            }
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = .current
+        textField.text = formatter.string(from: sender.date)
+    }
+    
+    @objc func doneClicked(){
+        textField.endEditing(true)
+        switch titleOption.text?.lowercased() {
+            case "set your goal":
+                var component = 0
+                while component < picker.numberOfComponents {
+                    let value = numberArray[picker.selectedRow(inComponent: component)]
+                    switch component {
+                        case 0, 1, 3:
+                            updateTextField(String(value), component)
+                        case 2:
+                            updateTextField(".", component)
+                        default:
+                            break
+                    }
+                    component += 1
+                }
+                updateGoal()
+            case "starting time:":
+                let time = textField.text!
+                var tempString = String()
+                for char in time {
+                    if char == ":"{
+                        tempString.append(".")
+                    } else {
+                        tempString.append(char)
+                    }
+                }
+                let timeAsDouble = Double(tempString)!
+                print(timeAsDouble)
+                UserDefaults.standard.set(timeAsDouble, forKey: "startignTime")
+                let endTimer = UserDefaults.standard.double(forKey: "endingTime")
+                let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
+                setReminders(Int(timeAsDouble.rounded(.down)), Int(endTimer.rounded(.down)), intervals)
+                sendToastMessage("Reminders set from \(String(format: "%.0f", timeAsDouble)) to \(String(format: "%.0f", endTimer))", 4)
+            case "ending time:":
+                let time = textField.text!
+                var tempString = String()
+                for char in time {
+                    if char == ":"{
+                        tempString.append(".")
+                    } else {
+                        tempString.append(char)
+                    }
+                }
+                let timeAsDouble = Double(tempString)!
+                print(timeAsDouble)
+                UserDefaults.standard.set(timeAsDouble, forKey: "endingTime")
+                let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
+                let startTimer = UserDefaults.standard.double(forKey: "startignTime")
+                setReminders(Int(startTimer.rounded(.down)), Int(timeAsDouble.rounded(.down)), intervals)
+                sendToastMessage("Reminders set from \(String(format: "%.0f", startTimer)) to \(String(format: "%.0f", timeAsDouble))", 4)
+            case "frequency:":
+                let time = textField.text!
+                
+                let formatter = DateFormatter()
+                formatter.dateFormat = "hh:mm"
+                let date = formatter.date(from: time)
+                let calendar = Calendar.current
+                
+                let currentDateComponent = calendar.dateComponents([.hour, .minute], from: date!)
+                let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
+                
+                print("numberOfMinutes : ", numberOfMinutes)
+                UserDefaults.standard.set(numberOfMinutes, forKey: "reminderInterval")
+                let startTimer = UserDefaults.standard.double(forKey: "startignTime")
+                let endTimer = UserDefaults.standard.double(forKey: "endingTime")
+                setReminders(Int(startTimer.rounded(.down)), Int(endTimer.rounded(.down)), numberOfMinutes)
+                sendToastMessage("The frequency of reminders are \(numberOfMinutes) minutes", 4)
+                break
+            default:
+                break
+        }
+    }
+    
+    // MARK: - Notifications
+    
+    /**
+     Will set a notification for every half hour between 7 am and 11pm.
+     
+     # Example #
+     ```
+     setReminders()
+     ```
+     */
+    func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeAllDeliveredNotifications()
+        notificationCenter.removeAllPendingNotificationRequests()
+        
+        let intervals = frequency
+        
+        let totalHours = endHour - startHour
+        let totalNotifications = totalHours * 60 / intervals
+        
+        for i in 0...totalNotifications {
+            var date = DateComponents()
+            date.hour = startHour + (intervals * i) / 60
+            date.minute = (intervals * i) % 60
+            print("setting reminder for \(date.hour!):\(date.minute!)")
+            let notification = getReminder()
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+            let uuidString = UUID().uuidString
+            let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+            notificationCenter.add(request, withCompletionHandler: nil)
+        }
+    }
+    
+    /**
+     Will return a random **UNMutableNotificationContent** a notifcation message.
+     
+     # Notes: #
+     1. This will pick out a message randomly so you could get the same message twice.
+     
+     # Example #
+     ```
+     let notification = getReminder()
+     ```
+     */
+    func getReminder()-> UNMutableNotificationContent{
+        struct reminder {
+            var title = String()
+            var body  = String()
+        }
+        let reminderMessages: [reminder] = [
+            reminder(title: "You should have some water",
+                     body:  "It has been a long time since you had some water, why don't you have some."),
+            reminder(title: "Hi, have you heard about the Sahara?",
+                     body:  "I suggest not having that as an idol. Have some water."),
+            reminder(title: "Water what is that?",
+                     body:  "Have you remembered to drink water? I suggest that you have some."),
+            reminder(title: "Hey, would you mind if i asked you a question?",
+                     body:  "Wouldn't it be great with some water?"),
+            reminder(title: "What about some water?",
+                     body:  "Hey, maybe you should give your brain something to run on?"),
+            reminder(title: "Just a little reminder",
+                     body:  "There is a thing called water maybe you should have some."),
+            reminder(title: "I know you don't like it",
+                     body:  "But have some water it's not going to hurt you"),
+            reminder(title: "What is blue and refreshing?",
+                     body:  "Water. It is water why not have some"),
+            reminder(title: "Have some drink water",
+                     body:  "You need to hydrate. have some water"),
+            reminder(title: "Why aren't you thirsty by now",
+                     body:  "You should have some water."),
+            reminder(title: "Hello there",
+                     body:  "General Kenobi, would you like some water?"),
+            reminder(title: "Hey there me again",
+                     body:  "I think you should have some water")
+        ]
+        let randomInt = Int.random(in: 0...reminderMessages.count - 1)
+        let notification = UNMutableNotificationContent()
+        notification.title = reminderMessages[randomInt].title
+        notification.body  = reminderMessages[randomInt].body
+        notification.categoryIdentifier = "reminder"
+        notification.sound  = .default
+        return notification
+    }
+    
+    /**
+     Will create a toast message and display it on the bottom of the screen.
+     
+     - parameter message: - **String** that will be displayed on the screen.
+     - parameter messageDelay: - a **Double** of how long the message will be displayed.
+     
+     # Example #
+     ```
+     sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
+     ```
+     */
+    func sendToastMessage(_ message: String, _ messageDelay: Double) {
+        let toastLabel = UIButton()
+        toastLabel.setTitle(message, for: .normal)
+        toastLabel.titleLabel?.font          = UIFont(name: "AmericanTypewriter", size: 18.0)
+        toastLabel.titleLabel?.textAlignment = .center
+        toastLabel.titleLabel?.numberOfLines = 0
+        toastLabel.contentEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+        if titleOption.textColor == UIColor.white {
+            toastLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.9)
+            toastLabel.setTitleColor(UIColor.white, for: .normal)
+        } else {
+            toastLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.9)
+            toastLabel.setTitleColor(UIColor.black, for: .normal)
+        }
+        toastLabel.isUserInteractionEnabled = false
+        toastLabel.layer.cornerRadius       = 10
+        toastLabel.clipsToBounds            = true
+        toastLabel.alpha                    = 1
+        self.superview!.superview!.addSubview(toastLabel)
+        toastLabel.translatesAutoresizingMaskIntoConstraints = false
+        toastLabel.centerXAnchor.constraint(equalTo: self.superview!.centerXAnchor).isActive                      = true
+        toastLabel.centerYAnchor.constraint(equalTo: self.superview!.bottomAnchor, constant: -100).isActive       = true
+        toastLabel.leftAnchor.constraint(greaterThanOrEqualTo: self.superview!.leftAnchor, constant: 50).isActive = true
+        toastLabel.rightAnchor.constraint(lessThanOrEqualTo: self.superview!.rightAnchor, constant: -50).isActive = true
+        toastLabel.sizeToFit()
+        UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
+    }
+    
+    func updateGoal(){
+        let days = Day.loadDay()
+        let newGoal = Float(textField.text!)!
+        if newGoal != 0 {
+            days[days.count - 1].goalAmount.amountOfDrink = newGoal
+            print(days[days.count - 1].goalAmount.amountOfDrink)
+            Day.saveDay(days)
+        }
+    }
 }
 
 extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
+    
+    //MARK: - UIPickerVeiw
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 4
@@ -333,6 +581,7 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
 }
 
 extension UITextField {
+    //MARK: TextField padding
     func setLeftPadding(_ amount:CGFloat){
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
         self.leftView = paddingView
