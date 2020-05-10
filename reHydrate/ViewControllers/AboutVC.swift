@@ -108,31 +108,6 @@ class AboutVC: UIViewController {
     }
     
     /**
-     Changing the appearance of the **UITableView** deppending on if the users prefrence for dark mode or light mode.
-     
-     # Example #
-     ```
-     changeAppearance()
-     ```
-     */
-    func changeTableViewAppearants(){
-        var section 	= 0
-        while section 	< tableView.numberOfSections && tableView.numberOfSections != 0{
-            let headerCell = tableView.headerView(forSection: section) as! SettingsHeader
-            headerCell.setHeaderAppairents(self.darkMode)
-            var row 	= 0
-            while row 	< tableView.numberOfRows(inSection: section) {
-                let cell = tableView.cellForRow(at: IndexPath(row: row, section: section)) as? SettingOptionCell ?? nil
-                if cell != nil {
-                    cell?.setCellAppairents(darkMode, metricUnits)
-                }
-                row += 1
-            }
-            section += 1
-        }
-    }
-    
-    /**
      Will convert an string of a hex color code to **UIColor**
      
      - parameter hex: - A **String** whit the hex color code.
@@ -345,7 +320,7 @@ class AboutVC: UIViewController {
                 } else {
                     tableView.insertRows(at: indexPaths, with: .fade)
                     header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
-            }
+             }
         }
     }
 }
@@ -395,10 +370,10 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     //MARK: - Creates a section
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell 			= tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
-        cell.setting 		= settings[section]
+        let cell     = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
+        cell.setting = settings[section]
         cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expandOrCollapsSection)))
-        cell.tag 			= section
+        cell.tag = section
         switch cell.title.text?.uppercased() {
             case String("remove data").uppercased():
                 cell.title.textColor = .systemRed
@@ -406,9 +381,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                 break
         }
         if settings[section].options.isEmpty{
-            if cell.title.text != "REMINDERS"{
-                cell.button.removeFromSuperview()
-            }
+            cell.button.removeFromSuperview()
         }
         cell.setHeaderAppairents(darkMode)
         return cell
@@ -433,17 +406,17 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 0, section: 0): // light mode selected
                 darkMode = false
                 changeAppearance()
-                changeTableViewAppearants()
+                tableView.reloadData()
             case IndexPath(row: 1, section: 0): // dark mode selected
                 darkMode = true
                 changeAppearance()
-                changeTableViewAppearants()
+                tableView.reloadData()
             case IndexPath(row: 0, section: 1): // Metric is selected
                 metricUnits = true
-                changeTableViewAppearants()
+                tableView.reloadData()
             case IndexPath(row: 1, section: 1): // imperial is selected
                 metricUnits = false
-                changeTableViewAppearants()
+                tableView.reloadData()
             case IndexPath(row: 0, section: 3): // setts notifications between 7 and 23
                 let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
                 settings[3].isOpened = !settings[3].isOpened
