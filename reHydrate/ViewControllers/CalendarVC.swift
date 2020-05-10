@@ -54,6 +54,30 @@ class CalendarVC: UIViewController {
     }
     
     /**
+     Will find the drinks, depending on the date past in and update UI
+     
+     - parameter dateOfDay: - The date of you want the drinks from.
+     
+     # Example #
+     ```
+     getDrinks(Date.init())
+     ```
+     */
+    func getDrinks(_ dateOfDay: Date){
+        titleDate.text = formatter.string(from: dateOfDay)
+        if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
+            let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
+            drinks.append(day.goalAmount)
+            drinks.append(day.consumedAmount)
+        } else {
+            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
+            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
+        }
+    }
+    
+    //MARK: - Change appearence
+    
+    /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
      
      # Notes: #
@@ -86,7 +110,6 @@ class CalendarVC: UIViewController {
             exitButton.tintColor                  = .black
         }
     }
-    
     
     /**
      Will convert an string of a hex color code to **UIColor**
@@ -122,31 +145,12 @@ class CalendarVC: UIViewController {
             alpha: CGFloat(1.0)
         )
     }
-    
-    /**
-     Will find the drinks, depending on the date past in and update UI
-     
-     - parameter dateOfDay: - The date of you want the drinks from.
-     
-     # Example #
-     ```
-     getDrinks(Date.init())
-     ```
-     */
-    func getDrinks(_ dateOfDay: Date){
-        titleDate.text = formatter.string(from: dateOfDay)
-        if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
-            let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
-            drinks.append(day.goalAmount)
-            drinks.append(day.consumedAmount)
-        } else {
-            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
-            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
-        }
-    }
 }
 
 extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
+    
+    //MARK: - Set up tableVeiw
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
@@ -166,6 +170,8 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
 }
 
 extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
+    
+    //MARK: - Set up calander
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
         let cell = calendar.dequeueReusableCell(withIdentifier: "cell", for: date, at: position)
