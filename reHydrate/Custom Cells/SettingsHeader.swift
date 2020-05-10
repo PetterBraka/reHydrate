@@ -16,26 +16,26 @@ class SettingsHeader: UITableViewHeaderFooterView {
         }
     }
     var title: UILabel 	= {
-        let lable 		= UILabel()
-        lable.text 		= "Test"
-        lable.font 		= UIFont(name: "AmericanTypewriter", size: 20)
+        let lable       = UILabel()
+        lable.text      = "Test"
+        lable.font      = UIFont(name: "AmericanTypewriter", size: 20)
         lable.textColor = .white
         lable.translatesAutoresizingMaskIntoConstraints	= false
         return lable
     }()
-    var button: UIButton 	= {
-        let button			= UIButton()
-        button.tintColor    = .lightGray
+    var button: UIButton = {
+        let button       = UIButton()
+        button.tintColor = .lightGray
         button.setTitle("", for: .normal)
         button.setBackgroundImage( UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints	= false
         return button
     }()
     var container: UIView = {
-       let view 				= UIView()
-        view.clipsToBounds		= true
-        view.backgroundColor	= .none
-        view.isUserInteractionEnabled					= true
+       let view              = UIView()
+        view.clipsToBounds   = true
+        view.backgroundColor = .none
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints	= false
         return view
     }()
@@ -71,16 +71,16 @@ class SettingsHeader: UITableViewHeaderFooterView {
      ```
      */
     fileprivate func setConstraints() {
-        title.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 10).isActive	= true
-        button.heightAnchor.constraint(equalToConstant: 25).isActive						= true
-        button.widthAnchor.constraint(equalToConstant: 25).isActive							= true
-        button.rightAnchor.constraint(equalTo: container.rightAnchor).isActive				= true
-        button.centerYAnchor.constraint(equalTo: title.centerYAnchor).isActive				= true
+        title.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 10).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 25).isActive                      = true
+        button.widthAnchor.constraint(equalToConstant: 25).isActive                       = true
+        button.rightAnchor.constraint(equalTo: container.rightAnchor).isActive            = true
+        button.centerYAnchor.constraint(equalTo: title.centerYAnchor).isActive            = true
         
-        container.topAnchor.constraint(equalTo:contentView.topAnchor).isActive				= true
-        container.leftAnchor.constraint(equalTo:contentView.leftAnchor).isActive			= true
-        container.rightAnchor.constraint(equalTo:contentView.rightAnchor).isActive			= true
-        container.bottomAnchor.constraint(equalTo:contentView.bottomAnchor).isActive		= true
+        container.topAnchor.constraint(equalTo:contentView.topAnchor).isActive            = true
+        container.leftAnchor.constraint(equalTo:contentView.leftAnchor).isActive          = true
+        container.rightAnchor.constraint(equalTo:contentView.rightAnchor).isActive        = true
+        container.bottomAnchor.constraint(equalTo:contentView.bottomAnchor).isActive      = true
     }
     
     /**
