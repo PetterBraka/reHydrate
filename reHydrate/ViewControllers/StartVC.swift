@@ -167,6 +167,12 @@ class StartVC: UIViewController {
             } else {
                 darkMode = false
             }
+            let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
+            let endDate  = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
+            let intervals = 30
+            UserDefaults.standard.set(startDate, forKey: "startignTime")
+            UserDefaults.standard.set(endDate, forKey: "endingTime")
+            UserDefaults.standard.set(intervals, forKey: "reminderInterval")
             UserDefaults.standard.set(darkMode, forKey: "darkMode")
         }
         setUpHealth()

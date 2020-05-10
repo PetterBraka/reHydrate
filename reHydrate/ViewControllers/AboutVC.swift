@@ -62,6 +62,14 @@ class AboutVC: UIViewController {
         super.viewDidLoad()
         let exitTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
         let helpTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+            if success {
+                print("we are allowed to send notifications.")
+            } else {
+                print("we are not allowed to send notifications.")
+            }
+        }
         exitButton.addGestureRecognizer(exitTapRecognizer)
         helpImage.addGestureRecognizer(helpTapRecognizer)
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
@@ -169,16 +177,12 @@ class AboutVC: UIViewController {
      setReminders()
      ```
      */
-    func setReminders(){
+    func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
         
-        let startTimer = UserDefaults.standard.double(forKey: "startignTime")
-        let endTimer = UserDefaults.standard.double(forKey: "endingTime")
-        let startHour = Int(startTimer.rounded(.down))
-        let endHour   = Int(endTimer.rounded(.down))
-        let intervals = 30
+        let intervals = frequency
         
         let totalHours = endHour - startHour
         let totalNotifications = totalHours * 60 / intervals
@@ -366,7 +370,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 1, section: 1):
                 cell.addSubTitle( "Units: \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
             case IndexPath(row: 0, section: 3):
-                if settings[3].isOpened {
+                if !settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = "Turn off reminders"
                 } else {
@@ -374,7 +378,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                     cell.titleOption.text = "Turn on reminders"
             }
             default:
-            break
+                break
         }
         
         return cell
@@ -399,7 +403,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case String("remove data").uppercased():
                 cell.title.textColor = .systemRed
             default:
-            break
+                break
         }
         if settings[section].options.isEmpty{
             if cell.title.text != "REMINDERS"{
@@ -446,8 +450,13 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                 if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = "Turn off reminders"
-                    setReminders()
-                    sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
+                    let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+                    let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+                    let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+                    let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+                    let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
+                    setReminders(startTimer.hour!, endTimer.hour!, intervals)
+                    sendToastMessage("Reminders set from \(startTimer.hour!) to \(endTimer.hour!)", 4)
                 } else {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
                     cell.titleOption.text = "Turn on reminders"
@@ -458,7 +467,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                 }
                 UserDefaults.standard.set(settings[3].isOpened, forKey: "reminder")
             default:
-            break
+                break
         }
     }
 }
