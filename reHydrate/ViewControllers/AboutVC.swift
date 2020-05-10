@@ -30,9 +30,9 @@ class AboutVC: UIViewController {
         settingOptions(isOpened: false, setting: "chang unit system", options: ["Metric System", "Imperial System"]),
         settingOptions(isOpened: false, setting: "change goal", options: ["Goal"]),
         settingOptions(isOpened: false, setting: "reminders", options: ["Turn on reminders",
-                                                                        "Starting time:",
-                                                                        "Ending time:",
-                                                                        "Frequency:"]),
+                                                                        "Starting time",
+                                                                        "Ending time",
+                                                                        "Frequency"]),
         settingOptions(isOpened: false, setting: "how to use", options: []),
         settingOptions(isOpened: false, setting: "remove data", options: [])]
     
