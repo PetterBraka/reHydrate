@@ -157,10 +157,10 @@ class SettingOptionCell: UITableViewCell {
                 setUpPickerView()
             case "turn on reminders", "turn off reminders":
                 activatedOption.isHidden = false
-            case "starting time:", "ending time:":
+            case "starting time", "ending time":
             	setUpDatePicker()
                 activatedOption.isHidden = true
-            case "frequency:" :
+            case "frequency" :
                 activatedOption.isHidden = true
                 setUpMinutePicker()
             default:
@@ -231,14 +231,16 @@ class SettingOptionCell: UITableViewCell {
         datePicker.locale = .current
         let calendar = NSCalendar.current
         var components = calendar.dateComponents([.hour, .minute], from: Date())
-        let endTimer = UserDefaults.standard.double(forKey: "endingTime")
-        let startTimer = UserDefaults.standard.double(forKey: "startignTime")
-        if titleOption.text?.lowercased() == "starting time:"{
-            components.hour = Int(startTimer.rounded(.down))
-            components.minute = 00
-        } else if titleOption.text?.lowercased() == "ending time:" {
-            components.hour = Int(endTimer.rounded(.down))
-            components.minute = 00
+        let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+        let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+        let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+        let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+        if titleOption.text?.lowercased() == "starting time"{
+            components.hour = startTimer.hour
+            components.minute = startTimer.minute
+        } else if titleOption.text?.lowercased() == "ending time" {
+            components.hour = endTimer.hour
+            components.minute = endTimer.minute
         }
         datePicker.setDate(calendar.date(from: components)!, animated: true)
         datePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
@@ -267,9 +269,8 @@ class SettingOptionCell: UITableViewCell {
         var components = DateComponents()
         components.minute = UserDefaults.standard.integer(forKey: "reminderInterval")
         let date = Calendar.current.date(from: components)!
-        minutePicker.setDate(date, animated: true)
-        
-        minutePicker.addTarget(self, action: #selector(handleInput), for: .valueChanged)
+        minutePicker.setDate(date, animated: false)
+        minutePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
         
         self.addSubview(textField)
         setTextFieldConstraints()
@@ -289,18 +290,39 @@ class SettingOptionCell: UITableViewCell {
     }
     
     @objc func handleInput(_ sender: UIDatePicker ){
-        if titleOption.text?.lowercased() == "frequency:" {
-            if (sender.countDownDuration > 2.9*60*60) {
-                var components = DateComponents()
-                components.hour = 2
-                components.minute = 50
-                let date = Calendar.current.date(from: components)!
-                sender.setDate(date, animated: true)
-            }
-        }
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         formatter.locale = .current
+        switch titleOption.text?.lowercased() {
+            case "starting time":
+                let startDate = sender.date
+                var endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+                if endDate <= startDate {
+                    endDate = endDate - 1 * 60
+                    sender.setDate(endDate, animated: true)
+                }
+                UserDefaults.standard.set(startDate, forKey: "startignTime")
+                break
+            case "ending time":
+                let endDate = sender.date
+                var startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+                if endDate <= startDate {
+                    startDate = startDate + 1 * 60
+                    sender.setDate(startDate, animated: true)
+                }
+                UserDefaults.standard.set(endDate, forKey: "endingTime")
+                break
+            case "frequency":
+                if sender.countDownDuration > 2.5 * 60 * 60{
+                    var components = DateComponents()
+                    components.hour = 2
+                    components.minute = 50
+                    let date = Calendar.current.date(from: components)!
+                    sender.setDate(date, animated: true)
+                }
+            default:
+            break
+        }
         textField.text = formatter.string(from: sender.date)
     }
     
@@ -322,41 +344,15 @@ class SettingOptionCell: UITableViewCell {
                     component += 1
                 }
                 updateGoal()
-            case "starting time:":
-                let time = textField.text!
-                var tempString = String()
-                for char in time {
-                    if char == ":"{
-                        tempString.append(".")
-                    } else {
-                        tempString.append(char)
-                    }
-                }
-                let timeAsDouble = Double(tempString)!
-                print(timeAsDouble)
-                UserDefaults.standard.set(timeAsDouble, forKey: "startignTime")
-                let endTimer = UserDefaults.standard.double(forKey: "endingTime")
+            case "starting time" , "ending time":
+                let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+                let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
                 let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
-                setReminders(Int(timeAsDouble.rounded(.down)), Int(endTimer.rounded(.down)), intervals)
-                sendToastMessage("Reminders set from \(String(format: "%.0f", timeAsDouble)) to \(String(format: "%.0f", endTimer))", 4)
-            case "ending time:":
-                let time = textField.text!
-                var tempString = String()
-                for char in time {
-                    if char == ":"{
-                        tempString.append(".")
-                    } else {
-                        tempString.append(char)
-                    }
-                }
-                let timeAsDouble = Double(tempString)!
-                print(timeAsDouble)
-                UserDefaults.standard.set(timeAsDouble, forKey: "endingTime")
-                let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
-                let startTimer = UserDefaults.standard.double(forKey: "startignTime")
-                setReminders(Int(startTimer.rounded(.down)), Int(timeAsDouble.rounded(.down)), intervals)
-                sendToastMessage("Reminders set from \(String(format: "%.0f", startTimer)) to \(String(format: "%.0f", timeAsDouble))", 4)
-            case "frequency:":
+                setReminders(startTimer.hour!, endTimer.hour!, intervals)
+                sendToastMessage("Reminders set from \(startTimer.hour!) to \(endTimer.hour!)", 4)
+            case "frequency":
                 let time = textField.text!
                 
                 let formatter = DateFormatter()
@@ -369,9 +365,11 @@ class SettingOptionCell: UITableViewCell {
                 
                 print("numberOfMinutes : ", numberOfMinutes)
                 UserDefaults.standard.set(numberOfMinutes, forKey: "reminderInterval")
-                let startTimer = UserDefaults.standard.double(forKey: "startignTime")
-                let endTimer = UserDefaults.standard.double(forKey: "endingTime")
-                setReminders(Int(startTimer.rounded(.down)), Int(endTimer.rounded(.down)), numberOfMinutes)
+                let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+                let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+                setReminders(startTimer.hour!, endTimer.hour!, numberOfMinutes)
                 sendToastMessage("The frequency of reminders are \(numberOfMinutes) minutes", 4)
                 break
             default:
