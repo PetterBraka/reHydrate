@@ -180,19 +180,19 @@
                                 <state key="normal" backgroundImage="xmark.circle" catalog="system"/>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="1HE-4s-fHG">
-                                <rect key="frame" x="20" y="124" width="374" height="718"/>
+                                <rect key="frame" x="0.0" y="124" width="414" height="718"/>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="LhN-cg-DML" firstAttribute="bottom" secondItem="1HE-4s-fHG" secondAttribute="bottom" constant="20" id="E3U-iF-9I3"/>
-                            <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="1HE-4s-fHG" secondAttribute="trailing" constant="20" id="T56-yq-0CB"/>
+                            <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="1HE-4s-fHG" secondAttribute="trailing" id="T56-yq-0CB"/>
                             <constraint firstItem="1HE-4s-fHG" firstAttribute="top" secondItem="Kcw-zp-J3F" secondAttribute="bottom" constant="20" id="TPB-Oh-Lgx"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="top" secondItem="LhN-cg-DML" secondAttribute="top" constant="20" id="c2x-w7-4rE"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="width" secondItem="Kcw-zp-J3F" secondAttribute="height" multiplier="1:1" id="mdk-aY-3AR"/>
                             <constraint firstItem="Kcw-zp-J3F" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rhB-fV-ebC"/>
-                            <constraint firstItem="1HE-4s-fHG" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rkm-0e-we7"/>
+                            <constraint firstItem="1HE-4s-fHG" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" id="rkm-0e-we7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LhN-cg-DML"/>
                     </view>

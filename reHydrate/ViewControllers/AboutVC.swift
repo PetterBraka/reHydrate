@@ -33,8 +33,8 @@ class AboutVC: UIViewController {
                                                                         "Starting time",
                                                                         "Ending time",
                                                                         "Frequency"]),
-        settingOptions(isOpened: false, setting: "how to use", options: []),
-        settingOptions(isOpened: false, setting: "remove data", options: [])]
+        settingOptions(isOpened: false, setting: "instructions", options: ["How to use"]),
+        settingOptions(isOpened: false, setting: "danger zone", options: ["Remove date"])]
     
     //MARK: - Tap controller
     
@@ -288,41 +288,15 @@ class AboutVC: UIViewController {
      2. case for "remove data" will ask the user if the user want to remove all saved data.
      3. Default case for the tapping any other header cell. This case will then expand the header and show the cells in that section.
      */
-    @objc func expandOrCollapsSection(_ sender: UIGestureRecognizer){
-        guard let section = sender.view?.tag else { return }
-        switch section {
-            case settings.firstIndex(where: {$0.setting == "how to use"}):
-                print("help pressed")
-                let tutorialVC = TutorialVC()
-                tutorialVC.modalPresentationStyle = .fullScreen
-                self.present(tutorialVC, animated: true, completion: nil)
-            case settings.firstIndex(where: {$0.setting == "remove data"}):
-                // This will clear all the saved data from past days.
-                let clearDataAlert = UIAlertController(title: "Clearing data.", message: "Are you sure you want to delete all save data?", preferredStyle: .alert)
-                clearDataAlert.addAction(UIAlertAction(title: "Keep data", style: .cancel, handler: nil))
-                clearDataAlert.addAction(UIAlertAction(title: "REMOVE OLD DATA", style: .destructive, handler: {_ in
-                    let domain = Bundle.main.bundleIdentifier!
-                    UserDefaults.standard.removePersistentDomain(forName: domain)
-                    UserDefaults.standard.synchronize()}))
-                self.present(clearDataAlert, animated: true, completion: nil)
-            default:
-                var indexPaths                 = [IndexPath]()
-                for row in settings[section].options.indices {
-                    let indexPath             = IndexPath(row: row, section: section)
-                    indexPaths.append(indexPath)
-                }
-                let header = tableView.headerView(forSection: section) as! SettingsHeader
-                let isOpened                 = settings[section].isOpened
-                settings[section].isOpened     = !isOpened
-                if isOpened {
-                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
-                    tableView.deleteRows(at: indexPaths, with: .fade)
-                } else {
-                    tableView.insertRows(at: indexPaths, with: .fade)
-                    header.button.setBackgroundImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
-             }
-        }
-    }
+//    @objc func expandOrCollapsSection(_ sender: UIGestureRecognizer){
+//        guard let section = sender.view?.tag else { return }
+//        switch section {
+//            case settings.firstIndex(where: {$0.setting == "how to use"}):
+//            case settings.firstIndex(where: {$0.setting == "remove data"}):
+//            default:
+//                break
+//        }
+//    }
 }
 
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
@@ -331,13 +305,13 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     //MARK: - Creates a cell
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settings[section].isOpened ? settings[section].options.count : 0
+        return settings[section].options.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell 				= tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
-        cell.setting 			= settings[indexPath.section].options[indexPath.row]
-        cell.selectionStyle 	= .none
+        let cell            = tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
+        cell.setting        = settings[indexPath.section].options[indexPath.row]
+        cell.selectionStyle = .none
         cell.setCellAppairents(darkMode, metricUnits)
         switch indexPath {
             case IndexPath(row: 0, section: 1):
@@ -351,8 +325,16 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                 } else {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
                     cell.titleOption.text = "Turn on reminders"
-            }
+                }
+                break
+            case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
+                 IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3):
+                break
+            case IndexPath(row: 0, section: 5):
+                cell.titleOption.textColor = .systemRed
+                cell.subTitle.removeFromSuperview()
             default:
+                cell.textField.removeFromSuperview()
                 break
         }
         
@@ -372,31 +354,14 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell     = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
         cell.setting = settings[section]
-        cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expandOrCollapsSection)))
+//        cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expandOrCollapsSection)))
         cell.tag = section
-        switch cell.title.text?.uppercased() {
-            case String("remove data").uppercased():
-                cell.title.textColor = .systemRed
-            default:
-                break
-        }
-        if settings[section].options.isEmpty{
-            cell.button.removeFromSuperview()
-        }
         cell.setHeaderAppairents(darkMode)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView 					= UIView()
-        let separatorView 				= UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
-        separatorView.backgroundColor 	= UIColor.lightGray
-        footerView.addSubview(separatorView)
-        return footerView
     }
     
     //MARK: - Cell controlls of TableView
@@ -439,6 +404,20 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                     sendToastMessage("all reminders are removed", 1)
                 }
                 UserDefaults.standard.set(settings[3].isOpened, forKey: "reminder")
+            case IndexPath(row: 0, section: 4):
+                print("help pressed")
+                let tutorialVC = TutorialVC()
+                tutorialVC.modalPresentationStyle = .fullScreen
+                self.present(tutorialVC, animated: true, completion: nil)
+            case IndexPath(row: 0, section: 5):
+                // This will clear all the saved data from past days.
+                let clearDataAlert = UIAlertController(title: "Clearing data.", message: "Are you sure you want to delete all save data?", preferredStyle: .alert)
+                clearDataAlert.addAction(UIAlertAction(title: "Keep data", style: .cancel, handler: nil))
+                clearDataAlert.addAction(UIAlertAction(title: "REMOVE OLD DATA", style: .destructive, handler: {_ in
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()}))
+                self.present(clearDataAlert, animated: true, completion: nil)
             default:
                 break
         }

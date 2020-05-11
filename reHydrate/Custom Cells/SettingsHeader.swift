@@ -18,23 +18,15 @@ class SettingsHeader: UITableViewHeaderFooterView {
     var title: UILabel 	= {
         let lable       = UILabel()
         lable.text      = "Test"
-        lable.font      = UIFont(name: "AmericanTypewriter", size: 20)
+        lable.font      = UIFont(name: "AmericanTypewriter", size: 18)
         lable.textColor = .white
         lable.translatesAutoresizingMaskIntoConstraints	= false
         return lable
     }()
-    var button: UIButton = {
-        let button       = UIButton()
-        button.tintColor = .lightGray
-        button.setTitle("", for: .normal)
-        button.setBackgroundImage( UIImage(systemName: "arrowtriangle.right.fill"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints	= false
-        return button
-    }()
     var container: UIView = {
        let view              = UIView()
         view.clipsToBounds   = true
-        view.backgroundColor = .none
+        view.backgroundColor = .lightGray
         view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints	= false
         return view
@@ -52,7 +44,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
         setHeaderAppairents(darkMode)
         contentView.addSubview(container)
         container.addSubview(title)
-        container.addSubview(button)
+//        container.addSubview(button)
         setConstraints()
     }
     
@@ -72,10 +64,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
      */
     fileprivate func setConstraints() {
         title.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 10).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 25).isActive                      = true
-        button.widthAnchor.constraint(equalToConstant: 25).isActive                       = true
-        button.rightAnchor.constraint(equalTo: container.rightAnchor).isActive            = true
-        button.centerYAnchor.constraint(equalTo: title.centerYAnchor).isActive            = true
+        title.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
         
         container.topAnchor.constraint(equalTo:contentView.topAnchor).isActive            = true
         container.leftAnchor.constraint(equalTo:contentView.leftAnchor).isActive          = true
@@ -93,16 +82,13 @@ class SettingsHeader: UITableViewHeaderFooterView {
      */
     func setHeaderAppairents(_ darkMode: Bool){
         if darkMode {
-            button.tintColor	= .lightGray
+//            button.tintColor	= .lightGray
             title.textColor 	= .white
-            container.backgroundColor = hexStringToUIColor(hex: "#212121")
+            container.backgroundColor = hexStringToUIColor(hex: "#404040")
         } else {
-            button.tintColor 	= .black
+//            button.tintColor 	= .black
             title.textColor 	= .black
-            container.backgroundColor = .white
-        }
-        if title.text == String("remove data").uppercased(){
-            title.textColor 	= .systemRed
+            container.backgroundColor = hexStringToUIColor(hex: "#d9d9d9")
         }
     }
     
@@ -140,6 +126,4 @@ class SettingsHeader: UITableViewHeaderFooterView {
             alpha: CGFloat(1.0)
         )
     }
-    
-    
 }
