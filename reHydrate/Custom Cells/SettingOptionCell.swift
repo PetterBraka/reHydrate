@@ -35,7 +35,7 @@ class SettingOptionCell: UITableViewCell {
     let titleOption: UILabel 	= {
         let lable 				= UILabel()
         lable.text 				= "test"
-        lable.font 				= UIFont(name: "AmericanTypewriter", size: 17)
+        lable.font 				= UIFont(name: "AmericanTypewriter", size: 15)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
         }()
@@ -88,16 +88,16 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                        = true
-        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                       = true
-        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive      = true
-        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive  = true
+        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                                  = true
+        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                                 = true
+        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
+        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
     }
     
     fileprivate func setTextFieldConstraints() {
         textField.translatesAutoresizingMaskIntoConstraints                                 = false
         textField.heightAnchor.constraint(equalToConstant: 35).isActive                     = true
-        textField.rightAnchor.constraint(equalTo: self.rightAnchor ).isActive               = true
+        textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20).isActive = true
         textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive        = true
         textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
     }
@@ -353,14 +353,15 @@ class SettingOptionCell: UITableViewCell {
                 setReminders(startTimer.hour!, endTimer.hour!, intervals)
                 sendToastMessage("Reminders set from \(startTimer.hour!) to \(endTimer.hour!)", 4)
             case "frequency":
-                let time = textField.text!
-                
                 let formatter = DateFormatter()
-                formatter.dateFormat = "hh:mm"
-                let date = formatter.date(from: time)
+                formatter.dateFormat = "HH:mm"
+                formatter.locale = .current
+                let picker = textField.inputView as! UIDatePicker
+                textField.text = formatter.string(from: picker.date)
+                
                 let calendar = Calendar.current
                 
-                let currentDateComponent = calendar.dateComponents([.hour, .minute], from: date!)
+                let currentDateComponent = calendar.dateComponents([.hour, .minute], from: picker.date)
                 let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
                 
                 print("numberOfMinutes : ", numberOfMinutes)
