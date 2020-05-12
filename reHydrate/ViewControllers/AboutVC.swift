@@ -27,8 +27,8 @@ class AboutVC: UIViewController {
     var selectedRow: IndexPath     = IndexPath()
     var settings: [settingOptions] = [
         settingOptions(isOpened: false, setting: "appearance", options: ["Light Mode", "Dark Mode"]),
-        settingOptions(isOpened: false, setting: "chang unit system", options: ["Metric System", "Imperial System"]),
-        settingOptions(isOpened: false, setting: "change goal", options: ["Goal"]),
+        settingOptions(isOpened: false, setting: "unit system", options: ["Metric System", "Imperial System"]),
+        settingOptions(isOpened: false, setting: "goal settings", options: ["Goal"]),
         settingOptions(isOpened: false, setting: "reminders", options: ["Turn on reminders",
                                                                         "Starting time",
                                                                         "Ending time",
@@ -278,25 +278,6 @@ class AboutVC: UIViewController {
     
     //MARK: - Section controll of tableView
     
-    /**
-     Will handle the gestures form the **UITableView**.
-     
-     - parameter sender: - The **UIGestureRecognizer** that called the function.
-     
-     # Notes: #
-     1. case for "how to use" will create a image and hide the **UITableView**. If the user clicks the image it will dismiss and show the **UITableView**
-     2. case for "remove data" will ask the user if the user want to remove all saved data.
-     3. Default case for the tapping any other header cell. This case will then expand the header and show the cells in that section.
-     */
-//    @objc func expandOrCollapsSection(_ sender: UIGestureRecognizer){
-//        guard let section = sender.view?.tag else { return }
-//        switch section {
-//            case settings.firstIndex(where: {$0.setting == "how to use"}):
-//            case settings.firstIndex(where: {$0.setting == "remove data"}):
-//            default:
-//                break
-//        }
-//    }
 }
 
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
@@ -309,9 +290,9 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell            = tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
-        cell.setting        = settings[indexPath.section].options[indexPath.row]
-        cell.selectionStyle = .none
+        let cell             = tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
+        cell.setting         = settings[indexPath.section].options[indexPath.row]
+        cell.selectionStyle  = .none
         cell.setCellAppairents(darkMode, metricUnits)
         switch indexPath {
             case IndexPath(row: 0, section: 1):
@@ -354,7 +335,6 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell     = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
         cell.setting = settings[section]
-//        cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expandOrCollapsSection)))
         cell.tag = section
         cell.setHeaderAppairents(darkMode)
         return cell
@@ -410,7 +390,6 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                 tutorialVC.modalPresentationStyle = .fullScreen
                 self.present(tutorialVC, animated: true, completion: nil)
             case IndexPath(row: 0, section: 5):
-                // This will clear all the saved data from past days.
                 let clearDataAlert = UIAlertController(title: "Clearing data.", message: "Are you sure you want to delete all save data?", preferredStyle: .alert)
                 clearDataAlert.addAction(UIAlertAction(title: "Keep data", style: .cancel, handler: nil))
                 clearDataAlert.addAction(UIAlertAction(title: "REMOVE OLD DATA", style: .destructive, handler: {_ in
