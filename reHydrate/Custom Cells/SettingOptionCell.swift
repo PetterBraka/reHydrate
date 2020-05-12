@@ -399,6 +399,8 @@ class SettingOptionCell: UITableViewCell {
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
         
+        UserDefaults.standard.set(true, forKey: "reminders")
+        
         let intervals = frequency
         
         let totalHours = endHour - startHour
