@@ -72,13 +72,13 @@ class AboutVC: UIViewController {
         }
         exitButton.addGestureRecognizer(exitTapRecognizer)
         helpImage.addGestureRecognizer(helpTapRecognizer)
+        settings[3].isOpened = UserDefaults.standard.bool(forKey: "reminders")
+        metricUnits          = UserDefaults.standard.bool(forKey: "metricUnits")
+        darkMode             = UserDefaults.standard.bool(forKey: "darkMode")
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
-        tableView.delegate 		= self
-        tableView.dataSource 	= self
-        settings[3].isOpened    = UserDefaults.standard.bool(forKey: "reminder")
-        metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
-        darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
+        tableView.delegate   = self
+        tableView.dataSource = self
         changeAppearance()
     }
     
@@ -156,6 +156,8 @@ class AboutVC: UIViewController {
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
+        
+        UserDefaults.standard.set(true, forKey: "reminders")
         
         let intervals = frequency
         
@@ -300,7 +302,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 1, section: 1):
                 cell.addSubTitle( "Units: \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
             case IndexPath(row: 0, section: 3):
-                if !settings[3].isOpened {
+                if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = "Turn off reminders"
                 } else {
@@ -381,9 +383,9 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                     let center = UNUserNotificationCenter.current()
                     center.removeAllPendingNotificationRequests()
                     center.removeAllDeliveredNotifications()
+                    UserDefaults.standard.set(false, forKey: "reminders")
                     sendToastMessage("all reminders are removed", 1)
                 }
-                UserDefaults.standard.set(settings[3].isOpened, forKey: "reminder")
             case IndexPath(row: 0, section: 4):
                 print("help pressed")
                 let tutorialVC = TutorialVC()
