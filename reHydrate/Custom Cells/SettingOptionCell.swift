@@ -154,6 +154,12 @@ class SettingOptionCell: UITableViewCell {
             case "goal":
                 activatedOption.isHidden = true
                 titleOption.text         = "Set your goal"
+                let days = Day.loadDay()
+                if !days.isEmpty{
+                    textField.text = String(describing: days.last!.goalAmount.amountOfDrink)
+                } else {
+                    textField.text = "3"
+                }
                 setUpPickerView()
             case "turn on reminders", "turn off reminders":
                 activatedOption.isHidden = false
