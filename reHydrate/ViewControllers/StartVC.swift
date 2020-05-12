@@ -659,8 +659,8 @@ extension UIApplication {
      ```
      */
     class func isFirstLaunch() -> Bool {
-        if !UserDefaults.standard.bool(forKey: "firstTimeLaunched") {
-            UserDefaults.standard.set(true, forKey: "firstTimeLaunched")
+        if !UserDefaults.standard.bool(forKey: "version1.7") {
+            UserDefaults.standard.set(true, forKey: "version1.7")
             UserDefaults.standard.synchronize()
             return true
         }
