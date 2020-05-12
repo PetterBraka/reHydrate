@@ -72,13 +72,13 @@ class AboutVC: UIViewController {
         }
         exitButton.addGestureRecognizer(exitTapRecognizer)
         helpImage.addGestureRecognizer(helpTapRecognizer)
+        settings[3].isOpened = UserDefaults.standard.bool(forKey: "reminders")
+        metricUnits          = UserDefaults.standard.bool(forKey: "metricUnits")
+        darkMode             = UserDefaults.standard.bool(forKey: "darkMode")
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
-        tableView.delegate 		= self
-        tableView.dataSource 	= self
-        settings[3].isOpened    = UserDefaults.standard.bool(forKey: "reminder")
-        metricUnits				= UserDefaults.standard.bool(forKey: "metricUnits")
-        darkMode 				= UserDefaults.standard.bool(forKey: "darkMode")
+        tableView.delegate   = self
+        tableView.dataSource = self
         changeAppearance()
     }
     
@@ -157,6 +157,8 @@ class AboutVC: UIViewController {
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
         
+        UserDefaults.standard.set(true, forKey: "reminders")
+        
         let intervals = frequency
         
         let totalHours = endHour - startHour
@@ -194,30 +196,29 @@ class AboutVC: UIViewController {
         }
         let reminderMessages: [reminder] = [
             reminder(title: "You should have some water",
-                     body:  "It has been a long time since you had some water, why don't you have some."),
+                     body:  "It has been a long time since you had some water, why don't you have some"),
             reminder(title: "Hi, have you heard about the Sahara?",
-                     body:  "I suggest not having that as an idol. Have some water."),
-            reminder(title: "Water what is that?",
-                     body:  "Have you remembered to drink water? I suggest that you have some."),
+                     body:  "I suggest not having that as an idol. Have some water"),
+            reminder(title: "Water - what is that?",
+                     body:  "Have you remembered to drink water? I suggest that you have some"),
             reminder(title: "Hey, would you mind if i asked you a question?",
-                     body:  "Wouldn't it be great with some water?"),
+                     body:  "Wouldn't it be great to have some water?"),
             reminder(title: "What about some water?",
                      body:  "Hey, maybe you should give your brain something to run on?"),
-            reminder(title: "Just a little reminder",
-                     body:  "There is a thing called water maybe you should have some."),
+            reminder(title: "Just a little reminder.",
+                     body:  "There is a thing called water; maybe you should have some"),
             reminder(title: "I know you don't like it",
-                     body:  "But have some water it's not going to hurt you"),
+                     body:  "But have some water - it's not going to hurt you"),
             reminder(title: "What is blue and refreshing?",
-                     body:  "Water. It is water why not have some"),
-            reminder(title: "Have some drink water",
-                     body:  "You need to hydrate. have some water"),
+                     body:  "Water. It’s water. Drink some"),
+            reminder(title: "Have some water",
+                     body:  "You need to hydrate. Have some water"),
             reminder(title: "Why aren't you thirsty by now",
-                     body:  "You should have some water."),
+                     body:  "You should have some water"),
             reminder(title: "Hello there",
                      body:  "General Kenobi, would you like some water?"),
-            reminder(title: "Hey there me again",
-                     body:  "I think you should have some water")
-        ]
+            reminder(title: "Hey there, me again",
+                     body:  "I think you should have some water")]
         let randomInt = Int.random(in: 0...reminderMessages.count - 1)
         let notification = UNMutableNotificationContent()
         notification.title = reminderMessages[randomInt].title
@@ -300,7 +301,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 1, section: 1):
                 cell.addSubTitle( "Units: \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
             case IndexPath(row: 0, section: 3):
-                if !settings[3].isOpened {
+                if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = "Turn off reminders"
                 } else {
@@ -381,9 +382,9 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                     let center = UNUserNotificationCenter.current()
                     center.removeAllPendingNotificationRequests()
                     center.removeAllDeliveredNotifications()
+                    UserDefaults.standard.set(false, forKey: "reminders")
                     sendToastMessage("all reminders are removed", 1)
                 }
-                UserDefaults.standard.set(settings[3].isOpened, forKey: "reminder")
             case IndexPath(row: 0, section: 4):
                 print("help pressed")
                 let tutorialVC = TutorialVC()
