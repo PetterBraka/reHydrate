@@ -126,10 +126,15 @@ class StartVC: UIViewController {
      
      */
     @IBAction func history(_ sender: UIButton) {
-        let storyboard 							= UIStoryboard(name: "Main", bundle: nil)
-        let calendarScreen 						= storyboard.instantiateViewController(withIdentifier: "calendar")
+        let calendarScreen  = CalendarVC()
+        let transition      = CATransition()
+        transition.duration = 0.4
+        transition.type     = .push
+        transition.subtype  = .fromRight
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        view.window!.layer.add(transition, forKey: kCATransition)
         calendarScreen.modalPresentationStyle 	= .fullScreen
-        self.present(calendarScreen, animated: true, completion: nil)
+        self.present(calendarScreen, animated: false, completion: nil)
     }
     
     /**
