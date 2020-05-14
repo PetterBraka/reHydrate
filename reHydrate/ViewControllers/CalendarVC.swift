@@ -11,16 +11,38 @@ import FSCalendar
 
 class CalendarVC: UIViewController {
     
-    var drinks: [Drink] 		= []
-    var days: [Day] 			= []
-    var darkMode				= Bool()
-    var metricUnits				= Bool()
-    let formatter 				= DateFormatter()
-    
-    @IBOutlet weak var titleDate: UILabel!
-    @IBOutlet weak var calendar: FSCalendar!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var exitButton: UIButton!
+    var drinks: [Drink] = []
+    var days: [Day]     = []
+    var darkMode        = Bool()
+    var metricUnits     = Bool()
+    let formatter       = DateFormatter()
+    let defaults        = UserDefaults.standard
+    var exitButton: UIButton    = {
+        let button = UIButton()
+        button.setTitle("", for: .normal)
+        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    var titleDate:  UILabel     = {
+        var lable  = UILabel()
+        lable.text = "Mon - 11/05/20"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 20)
+        lable.textAlignment = .center
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var tableView:  UITableView = {
+        var tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    var calendar:   FSCalendar  = {
+        var calendar = FSCalendar()
+        calendar.translatesAutoresizingMaskIntoConstraints = false
+        return calendar
+    }()
     
     /**
      Will dismiss the page and go back to the main page.
@@ -28,29 +50,77 @@ class CalendarVC: UIViewController {
      - parameter sender: - **view** that called the function.
     
      */
-    @IBAction func exit(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+    @objc func tap(_ sender: UIGestureRecognizer){
+        switch sender.view {
+            case exitButton:
+                let transition      = CATransition()
+                transition.duration = 0.4
+                transition.type     = .push
+                transition.subtype  = .fromLeft
+                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                view.window!.layer.add(transition, forKey: kCATransition)
+                self.dismiss(animated: false, completion: nil)
+            default:
+            break
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        days                    = Day.loadDay()
-        formatter.dateFormat    = "EEE - dd/MM/yy"
+        days                 = Day.loadDay()
+        formatter.dateFormat = "EEE - dd/MM/yy"
         getDrinks(Date.init())
-        darkMode                = UserDefaults.standard.bool(forKey: "darkMode")
-        metricUnits             = UserDefaults.standard.bool(forKey: "metricUnits")
-        let screenHeight        = UIScreen.main.bounds.height
-        if screenHeight < 700 {
+        setUpUI()
+        changeAppearance()
+    }
+    
+    func setUpUI(){
+        self.view.addSubview(exitButton)
+        self.view.addSubview(titleDate)
+        self.view.addSubview(tableView)
+        self.view.addSubview(calendar)
+        
+        let screenHeight = UIScreen.main.bounds.height
+        if screenHeight  < 700 {
             tableView.isScrollEnabled = true
         } else {
             tableView.isScrollEnabled = false
         }
-        tableView.delegate      = self
-        tableView.dataSource    = self
-        calendar.delegate       = self
-        calendar.dataSource     = self
-        calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cell")
-        changeAppearance()
+        
+        darkMode             = defaults.bool(forKey: "darkMode")
+        metricUnits          = defaults.bool(forKey: "metricUnits")
+        tableView.delegate   = self
+        tableView.dataSource = self
+        calendar.delegate    = self
+        calendar.dataSource  = self
+        tableView.register(InfoCell.self, forCellReuseIdentifier: "customCell")
+        calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "calendarCell")
+        
+        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        exitButton.addGestureRecognizer(exitTapRecognizer)
+        
+        setConstraints()
+    }
+    
+    func setConstraints(){
+        exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        exitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        exitButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        
+        titleDate.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        titleDate.leftAnchor.constraint(equalTo: exitButton.rightAnchor, constant: 10).isActive = true
+        titleDate.centerYAnchor.constraint(equalTo: exitButton.centerYAnchor).isActive = true
+        
+        tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
+        tableView.topAnchor.constraint(equalTo: titleDate.bottomAnchor,constant: 20).isActive = true
+        
+        calendar.heightAnchor.constraint(equalToConstant: 350).isActive = true
+        calendar.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 10).isActive = true
+        calendar.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        calendar.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
+        calendar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
     }
     
     /**
@@ -99,10 +169,12 @@ class CalendarVC: UIViewController {
             titleDate.textColor                   = .white
             calendar.appearance.headerTitleColor  = .white
             calendar.appearance.weekdayTextColor  = .systemBlue
+            calendar.appearance.titleDefaultColor = .white
             exitButton.tintColor                  = .lightGray
         } else {
             calendar.backgroundColor              = .white
             calendar.appearance.headerTitleColor  = .black
+            calendar.appearance.weekdayTextColor  = .systemBlue
             calendar.appearance.titleDefaultColor = .black
             self.view.backgroundColor             = .white
             tableView.backgroundColor             = .white
@@ -174,7 +246,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     //MARK: - Set up calander
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
-        let cell = calendar.dequeueReusableCell(withIdentifier: "cell", for: date, at: position)
+        let cell = calendar.dequeueReusableCell(withIdentifier: "calendarCell", for: date, at: position)
         return cell
     }
     
