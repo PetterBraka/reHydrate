@@ -228,7 +228,7 @@
                                                     <constraint firstAttribute="width" secondItem="wib-TY-MgY" secondAttribute="height" multiplier="123:170" id="34Y-7v-fgR"/>
                                                     <constraint firstAttribute="height" constant="70" id="ROC-eA-bdJ"/>
                                                 </constraints>
-                                                <state key="normal" backgroundImage="Glass">
+                                                <state key="normal" backgroundImage="Cup">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium"/>
                                                 </state>
@@ -427,8 +427,8 @@
     </scenes>
     <resources>
         <image name="Bottle" width="187" height="308"/>
+        <image name="Cup" width="240" height="290"/>
         <image name="Flask" width="157" height="258.5"/>
-        <image name="Glass" width="240" height="290"/>
         <image name="calendar.circle" catalog="system" width="128" height="121"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="xmark.circle" catalog="system" width="128" height="121"/>
