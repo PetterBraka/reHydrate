@@ -105,10 +105,15 @@ class StartVC: UIViewController {
      
      */
     @IBAction func settings(_ sender: UIButton) {
-        let storyboard 							= UIStoryboard(name: "Main", bundle: nil)
-        let aboutScreen 						= storyboard.instantiateViewController(withIdentifier: "about")
-        aboutScreen.modalPresentationStyle 		= .fullScreen
-        self.present(aboutScreen, animated: true, completion: nil)
+        let aboutScreen = SettingsVC()
+        aboutScreen.modalPresentationStyle = .fullScreen
+        let transition      = CATransition()
+        transition.duration = 0.4
+        transition.type     = .push
+        transition.subtype  = .fromLeft
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        view.window!.layer.add(transition, forKey: kCATransition)
+        present(aboutScreen, animated: false, completion: nil)
     }
     
     /**

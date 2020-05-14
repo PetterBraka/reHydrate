@@ -226,6 +226,7 @@ class TutorialVC: UIViewController {
         setSummaryAndDayLableConstraints()
         setDrinkOptionsConstraints()
         setSettingsAndCalendarConstraints()
+        
         explanationLabel.topAnchor.constraint(equalTo: drinkOptionStack.bottomAnchor, constant: 40).isActive = true
         explanationLabel.bottomAnchor.constraint(lessThanOrEqualTo: settingsButton.topAnchor, constant: -40).isActive  = true
         explanationLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -247,7 +248,6 @@ class TutorialVC: UIViewController {
         explanationLabel.text      = "This is the current day."
         
         self.modalPresentationStyle = .fullScreen
-        // Do any additional setup after loading the view.
     }
     
     //MARK: - Change appearance
