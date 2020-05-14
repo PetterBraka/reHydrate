@@ -54,7 +54,7 @@ class TutorialVC: UIViewController {
         stack.alignment         = .bottom
         stack.distribution      = .equalSpacing
         let smallDrink          = UIImageView()
-        smallDrink.image        = UIImage(named: "Glass")
+        smallDrink.image        = UIImage(named: "Cup")
         smallDrink.contentMode  = .scaleAspectFit
         let mediumDrink         = UIImageView()
         mediumDrink.image       = UIImage(named: "Bottle")
@@ -156,7 +156,7 @@ class TutorialVC: UIViewController {
             }
             case 2:
                 summaryLable.textColor = hexStringToUIColor(hex: "#666666")
-                let imageArray = [UIImage(named: "Glass"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
+                let imageArray = [UIImage(named: "Cup"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
                 var position = 0
                 while position < drinkOptionStack.subviews.count {
                     let drink = drinkOptionStack.subviews[position] as! UIImageView
