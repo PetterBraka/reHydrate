@@ -162,49 +162,6 @@
             </objects>
             <point key="canvasLocation" x="233" y="77"/>
         </scene>
-        <!--AboutVC-->
-        <scene sceneID="MAa-36-twE">
-            <objects>
-                <viewController storyboardIdentifier="about" id="hPy-Nu-KYm" customClass="AboutVC" customModule="reHydrate" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="nDf-Jp-aQs">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kcw-zp-J3F" userLabel="exit">
-                                <rect key="frame" x="20" y="64.5" width="40" height="39"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Kcw-zp-J3F" secondAttribute="height" multiplier="1:1" id="H88-py-1WI"/>
-                                    <constraint firstAttribute="width" constant="40" id="V1D-i5-9gH"/>
-                                </constraints>
-                                <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" backgroundImage="xmark.circle" catalog="system"/>
-                            </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="1HE-4s-fHG">
-                                <rect key="frame" x="0.0" y="124" width="414" height="718"/>
-                                <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="LhN-cg-DML" firstAttribute="bottom" secondItem="1HE-4s-fHG" secondAttribute="bottom" constant="20" id="E3U-iF-9I3"/>
-                            <constraint firstItem="LhN-cg-DML" firstAttribute="trailing" secondItem="1HE-4s-fHG" secondAttribute="trailing" id="T56-yq-0CB"/>
-                            <constraint firstItem="1HE-4s-fHG" firstAttribute="top" secondItem="Kcw-zp-J3F" secondAttribute="bottom" constant="20" id="TPB-Oh-Lgx"/>
-                            <constraint firstItem="Kcw-zp-J3F" firstAttribute="top" secondItem="LhN-cg-DML" secondAttribute="top" constant="20" id="c2x-w7-4rE"/>
-                            <constraint firstItem="Kcw-zp-J3F" firstAttribute="width" secondItem="Kcw-zp-J3F" secondAttribute="height" multiplier="1:1" id="mdk-aY-3AR"/>
-                            <constraint firstItem="Kcw-zp-J3F" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" constant="20" id="rhB-fV-ebC"/>
-                            <constraint firstItem="1HE-4s-fHG" firstAttribute="leading" secondItem="LhN-cg-DML" secondAttribute="leading" id="rkm-0e-we7"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="LhN-cg-DML"/>
-                    </view>
-                    <connections>
-                        <outlet property="exitButton" destination="Kcw-zp-J3F" id="6x9-tt-2Ew"/>
-                        <outlet property="tableView" destination="1HE-4s-fHG" id="evH-Ui-m8r"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ial-Rb-9pZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1088.4057971014493" y="77.678571428571431"/>
-        </scene>
         <!--StartVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -471,7 +428,7 @@
     <resources>
         <image name="Bottle" width="187" height="308"/>
         <image name="Flask" width="157" height="258.5"/>
-        <image name="Glass" width="242.5" height="292.5"/>
+        <image name="Glass" width="240" height="290"/>
         <image name="calendar.circle" catalog="system" width="128" height="121"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="xmark.circle" catalog="system" width="128" height="121"/>
