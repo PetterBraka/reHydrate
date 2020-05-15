@@ -92,6 +92,16 @@ class SettingsVC: UIViewController {
         changeAppearance()
     }
     
+    //MARK: - Set up of UI
+    
+    /**
+     Will set up the UI and must be called at the launche of the view.
+     
+     # Example #
+     ```
+     setUpUI()
+     ```
+     */
     func setUpUI(){
         self.view.addSubview(exitButton)
         self.view.addSubview(tableView)
@@ -108,6 +118,20 @@ class SettingsVC: UIViewController {
         tableView.dataSource = self
     }
     
+    /**
+     Will sett the constraints for all the views in the view.
+     
+     # Notes: #
+     1. The setUPUI must be called first and add all of the views.
+     
+     # Example #
+     ```
+     func setUpUI(){
+     //Add the views
+     setConstraints()
+     }
+     ```
+     */
     func setConstraints(){
         
         exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true

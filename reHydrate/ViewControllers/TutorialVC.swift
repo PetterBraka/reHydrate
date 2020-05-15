@@ -132,30 +132,39 @@ class TutorialVC: UIViewController {
         return lable
     }()
     var stage                     = 0
+    var explanationText: [String] = ["This is the current day.",
+                                     "This is your consumed amount and your goal for the day.",
+                                     "This is the different drink options you can use. Tap on a drink to add it to your total amount.",
+                                     "Tap on this to go to settings.",
+                                     "Tap on this to see your history."]
     var darkMode                  = true
     var metricUnits               = true
     
     //MARK: - Touch controll
     
+    /**
+     Will close the toturial view
+     */
     @objc func skip(_ sender: UIBarButtonItem){
         self.dismiss(animated: true, completion: nil)
     }
     
+    /**
+     Will go through the different stages in the toturial.
+     */
     @objc func nextClick(_ sender: UIBarButtonItem){
-        print("Go to next view")
         stage += 1
-        
+        print("Go to next stage \(stage) in tutorial")
+        changeAppearance()
         switch stage {
             case 1:
-                explanationLabel.text = "This is your consumed amount and your goal for the day."
-                dayLable.textColor = hexStringToUIColor(hex: "#666666")
+                explanationLabel.text = explanationText[stage]
                 if darkMode {
                     summaryLable.textColor = .white
                 } else {
                     summaryLable.textColor = .black
             }
             case 2:
-                summaryLable.textColor = hexStringToUIColor(hex: "#666666")
                 let imageArray = [UIImage(named: "Cup"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
                 var position = 0
                 while position < drinkOptionStack.subviews.count {
@@ -172,31 +181,28 @@ class TutorialVC: UIViewController {
                     mediumDrinkLable.textColor = .black
                     largeDrinkLable.textColor  = .black
                 }
-                explanationLabel.text = "This is the different drink options you can use. Tap on a drink to add it to your total amount."
+                explanationLabel.text = explanationText[stage]
             case 3:
                 for drink in drinkOptionStack.subviews {
                     let drinkOption   = drink as! UIImageView
                     drinkOption.image = drinkOption.image?.grayed
                 }
-                smallDrinkLable.textColor    = hexStringToUIColor(hex: "#666666")
-                mediumDrinkLable.textColor   = hexStringToUIColor(hex: "#666666")
-                largeDrinkLable.textColor    = hexStringToUIColor(hex: "#666666")
                 if darkMode {
                     settingsButton.tintColor = .lightGray
                 } else {
                     settingsButton.tintColor = .black
                 }
-                explanationLabel.text    = "Tap on this to go to settings."
+                explanationLabel.text = explanationText[stage]
             case 4:
-                settingsButton.tintColor = hexStringToUIColor(hex: "#666666")
                 if darkMode {
                     calendarButton.tintColor = .lightGray
                 } else {
                     calendarButton.tintColor = .black
                 }
-                explanationLabel.text = "Tap on this to see your history."
+                explanationLabel.text = explanationText[stage]
                 nextButton.setTitle("Done", for: .normal)
             case 5:
+                stage = 0
                 self.dismiss(animated: true, completion: nil)
             default:
                 break
@@ -205,10 +211,21 @@ class TutorialVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         darkMode = UserDefaults.standard.bool(forKey: "darkMode")
-        changeAppearance()
-        
+        setUpUI()
+    }
+    
+    //MARK: - Set up of UI
+    
+    /**
+     Will set up the UI and must be called at the launche of the view.
+     
+     # Example #
+     ```
+     setUpUI()
+     ```
+     */
+    func setUpUI(){
         self.view.addSubview(toolBar)
         self.view.addSubview(dayLable)
         self.view.addSubview(summaryLable)
@@ -235,100 +252,17 @@ class TutorialVC: UIViewController {
         nextButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.nextClick(_:))))
         
         nextButton.setTitle("Next", for: .normal)
-        summaryLable.textColor = hexStringToUIColor(hex: "#666666")
         for drink in drinkOptionStack.subviews {
             let drinkOption    = drink as! UIImageView
             drinkOption.image  = drinkOption.image?.grayed
         }
-        smallDrinkLable.textColor  = hexStringToUIColor(hex: "#666666")
-        mediumDrinkLable.textColor = hexStringToUIColor(hex: "#666666")
-        largeDrinkLable.textColor  = hexStringToUIColor(hex: "#666666")
-        settingsButton.tintColor   = hexStringToUIColor(hex: "#666666")
-        calendarButton.tintColor   = hexStringToUIColor(hex: "#666666")
-        explanationLabel.text      = "This is the current day."
-        
-        self.modalPresentationStyle = .fullScreen
-    }
-    
-    //MARK: - Change appearance
-    
-    /**
-     Will change the appearance of this **UIViewController**
-     
-     # Example #
-     ```
-     changeAppearance()
-     ```
-     */
-    func changeAppearance(){
-        if darkMode{
-            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
-            // Mark: Lables
-            dayLable.textColor         = .white
-            summaryLable.textColor     = .white
-            smallDrinkLable.textColor  = .white
-            mediumDrinkLable.textColor = .white
-            largeDrinkLable.textColor  = .white
-            explanationLabel.textColor = .white
-            // Mark: Buttons
-            settingsButton.tintColor   = .lightGray
-            calendarButton.tintColor   = .lightGray
-            // Mark: Toolbar
-            toolBar.backgroundColor    = .darkGray
-            nextButton.setTitleColor(.white, for: .normal)
-            skipButton.setTitleColor(.white, for: .normal)
+        changeAppearance()
+        if darkMode {
+            dayLable.textColor = .white
         } else {
-            self.view.backgroundColor = .white
-            // Mark: Lables
-            dayLable.textColor         = .black
-            summaryLable.textColor     = .black
-            smallDrinkLable.textColor  = .black
-            mediumDrinkLable.textColor = .black
-            largeDrinkLable.textColor  = .black
-            explanationLabel.textColor = .black
-            // Mark: Buttons
-            settingsButton.tintColor   = .black
-            calendarButton.tintColor   = .black
-            // Mark: Toolbar
-            toolBar.backgroundColor    = hexStringToUIColor(hex: "#d1d1d1")
-            nextButton.setTitleColor(.black, for: .normal)
-            skipButton.setTitleColor(.black, for: .normal)
+            dayLable.textColor = .black
         }
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
+        explanationLabel.text      = explanationText[stage]
     }
     
     //MARK: - Set constraints
@@ -423,5 +357,76 @@ class TutorialVC: UIViewController {
         settingsButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
         calendarButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive   = true
         calendarButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
+    }
+    
+    //MARK: - Change appearance
+    
+    /**
+     Will change the appearance of this **UIViewController**
+     
+     # Example #
+     ```
+     changeAppearance()
+     ```
+     */
+    func changeAppearance(){
+        if darkMode {
+            self.view.backgroundColor  = hexStringToUIColor(hex: "#212121")
+            dayLable.textColor         = hexStringToUIColor(hex: "#404040")
+            summaryLable.textColor     = hexStringToUIColor(hex: "#404040")
+            smallDrinkLable.textColor  = hexStringToUIColor(hex: "#404040")
+            mediumDrinkLable.textColor = hexStringToUIColor(hex: "#404040")
+            largeDrinkLable.textColor  = hexStringToUIColor(hex: "#404040")
+            settingsButton.tintColor   = hexStringToUIColor(hex: "#404040")
+            calendarButton.tintColor   = hexStringToUIColor(hex: "#404040")
+        } else {
+            self.view.backgroundColor  = .white
+            dayLable.textColor         = hexStringToUIColor(hex: "#c9c9c9")
+            summaryLable.textColor     = hexStringToUIColor(hex: "#c9c9c9")
+            smallDrinkLable.textColor  = hexStringToUIColor(hex: "#c9c9c9")
+            mediumDrinkLable.textColor = hexStringToUIColor(hex: "#c9c9c9")
+            largeDrinkLable.textColor  = hexStringToUIColor(hex: "#c9c9c9")
+            settingsButton.tintColor   = hexStringToUIColor(hex: "#c9c9c9")
+            calendarButton.tintColor   = hexStringToUIColor(hex: "#c9c9c9")
+            toolBar.backgroundColor    = hexStringToUIColor(hex: "#d1d1d1")
+            nextButton.setTitleColor(.black, for: .normal)
+            skipButton.setTitleColor(.black, for: .normal)
+            explanationLabel.textColor = .black
+        }
+    }
+    
+    /**
+     Will convert an string of a hex color code to **UIColor**
+     
+     - parameter hex: - A **String** whit the hex color code.
+     
+     # Notes: #
+     1. This will need an **String** in a hex coded style.
+     
+     # Example #
+     ```
+     let color: UIColor = hexStringToUIColor ("#212121")
+     ```
+     */
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
 }
