@@ -76,8 +76,8 @@ class InfoCell: UITableViewCell {
         typeOfDrink.centerYAnchor.constraint(equalTo: drinkTypeTitle.centerYAnchor).isActive              = true
         typeOfDrink.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
         
-        drinkAmountTitle.topAnchor.constraint(equalTo: drinkTypeTitle.bottomAnchor, constant: 5).isActive   = true
-        drinkAmountTitle.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 10).isActive = true
+        drinkAmountTitle.topAnchor.constraint(equalTo: drinkTypeTitle.bottomAnchor, constant: 5).isActive     = true
+        drinkAmountTitle.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 10).isActive   = true
         
         amountOfDrink.centerYAnchor.constraint(equalTo: drinkAmountTitle.centerYAnchor).isActive              = true
         amountOfDrink.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive   = true
@@ -95,17 +95,10 @@ class InfoCell: UITableViewCell {
      cell.setLabels(drinks[indexPath.row], indexPath.row)
      ```
      */
-    func setLabels(_ drink: Drink, _ possistion: Int){
-        switch possistion {
-        case 0:
-            titleOfCard.text = "Goal:"
-        case 1:
-            titleOfCard.text = "Consumed:"
-        default:
-            break
-        }
-        typeOfDrink.text 	= drink.typeOfDrink.capitalized
-        amountOfDrink.text	= String(format: "%.2f", drink.amountOfDrink)
+    func setLabels(_ title: String, _ drink: Drink){
+        titleOfCard.text    = title
+        typeOfDrink.text    = drink.typeOfDrink.capitalized
+        amountOfDrink.text  = String(format: "%.2f", drink.amountOfDrink)
         amountOfDrink.text?.append("L")
     }
     
