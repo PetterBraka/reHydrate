@@ -275,8 +275,7 @@ class StartVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setUpUI()
+        createDrinkStack()
         formatter.dateFormat = "EEEE - dd/MM/yy"
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),
@@ -286,7 +285,7 @@ class StartVC: UIViewController {
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
             metricUnits  = true
-            UserDefaults.standard.set(metricUnits, forKey: "metricUnits")
+            defaults.set(metricUnits, forKey: "metricUnits")
             if self.traitCollection.userInterfaceStyle == .dark {
                 darkMode = true
             } else {
@@ -295,10 +294,10 @@ class StartVC: UIViewController {
             let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
             let endDate  = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
             let intervals = 30
-            UserDefaults.standard.set(startDate, forKey: "startignTime")
-            UserDefaults.standard.set(endDate,   forKey: "endingTime")
-            UserDefaults.standard.set(intervals, forKey: "reminderInterval")
-            UserDefaults.standard.set(darkMode,  forKey: "darkMode")
+            defaults.set(startDate, forKey: "startignTime")
+            defaults.set(endDate,   forKey: "endingTime")
+            defaults.set(intervals, forKey: "reminderInterval")
+            defaults.set(darkMode,  forKey: "darkMode")
         }
         setUpHealth()
         days = Day.loadDay()
@@ -308,8 +307,8 @@ class StartVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("Main screen will appear")
-        darkMode             = UserDefaults.standard.bool(forKey: "darkMode")
-        metricUnits          = UserDefaults.standard.bool(forKey: "metricUnits")
+        darkMode             = defaults.bool(forKey: "darkMode")
+        metricUnits          = defaults.bool(forKey: "metricUnits")
         currentDay.text      = formatter.string(from: Date.init())
         days                 = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
@@ -321,6 +320,7 @@ class StartVC: UIViewController {
             insertDay(today)
         }
         loadDrinkOptions()
+        setUpUI()
         changeAppearance()
         updateUI()
     }
@@ -328,7 +328,7 @@ class StartVC: UIViewController {
     //MARK: - Set up of UI
     
     /**
-     Will set up the UI and must be called at the launche of the view.
+     Will set up the UI and must be called when the view will appear.
      
      # Example #
      ```
@@ -336,7 +336,9 @@ class StartVC: UIViewController {
      ```
      */
     func setUpUI(){
-        createDrinkStack()
+        for view in self.view.subviews{
+            view.removeFromSuperview()
+        }
         //Adding the views
         self.view.addSubview(appTitle)
         self.view.addSubview(currentDay)
@@ -363,13 +365,14 @@ class StartVC: UIViewController {
      
      # Example #
      ```
-     func setUpUI(){
-          //Add the views
-          setConstraints()
+     override func viewDidLoad() {
+         super.viewDidLoad()
+         createDrinkStack()
      }
      ```
      */
     func setConstraints(){
+        
         appTitle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                           = true
         appTitle.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         
@@ -377,7 +380,11 @@ class StartVC: UIViewController {
         currentDay.topAnchor.constraint(equalTo: appTitle.bottomAnchor, constant: 20).isActive = true
         
         // Constraints for the summery lables(Where the user can see the consumed amount and the goal)
-        summerySplitter.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -10).isActive = true
+        if metricUnits{
+            summerySplitter.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor, constant: -10).isActive = true
+        } else {
+            summerySplitter.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor, constant: -30).isActive = true
+        }
         summerySplitter.topAnchor.constraint(equalTo: currentDay.bottomAnchor, constant: 5).isActive       = true
         
         consumedAmount.centerYAnchor.constraint(equalTo: summerySplitter.centerYAnchor).isActive = true
@@ -392,12 +399,15 @@ class StartVC: UIViewController {
         // Constraints for the drink options and the lables.
         smallOption.widthAnchor.constraint(equalToConstant:  50).isActive   = true
         smallOption.heightAnchor.constraint(equalToConstant: 75).isActive   = true
+        smallLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 60).isActive = true
         
         mediumOption.widthAnchor.constraint(equalToConstant:   80).isActive = true
         mediumOption.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        mediumLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 60).isActive = true
         
         largeOption.widthAnchor.constraint(equalToConstant:  90).isActive   = true
         largeOption.heightAnchor.constraint(equalToConstant: 160).isActive  = true
+        largeLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 60).isActive = true
         
         drinkStack.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                          = true
         drinkStack.topAnchor.constraint(lessThanOrEqualTo: summerySplitter.bottomAnchor, constant: 80).isActive = true
@@ -865,9 +875,9 @@ class StartVC: UIViewController {
      ```
      */
     func saveDrinkOptions(){
-        UserDefaults.standard.set(drinkOptions[0].amountOfDrink, forKey: "smallDrinkOption")
-        UserDefaults.standard.set(drinkOptions[1].amountOfDrink, forKey: "mediumDrinkOption")
-        UserDefaults.standard.set(drinkOptions[2].amountOfDrink, forKey: "largeDrinkOption")
+        defaults.set(drinkOptions[0].amountOfDrink, forKey: "smallDrinkOption")
+        defaults.set(drinkOptions[1].amountOfDrink, forKey: "mediumDrinkOption")
+        defaults.set(drinkOptions[2].amountOfDrink, forKey: "largeDrinkOption")
         updateUI()
     }
     
@@ -884,9 +894,9 @@ class StartVC: UIViewController {
      ```
      */
     func loadDrinkOptions(){
-        let small   = UserDefaults.standard.float(forKey: "smallDrinkOption")
-        let medium  = UserDefaults.standard.float(forKey: "mediumDrinkOption")
-        let large   = UserDefaults.standard.float(forKey: "largeDrinkOption")
+        let small   = defaults.float(forKey: "smallDrinkOption")
+        let medium  = defaults.float(forKey: "mediumDrinkOption")
+        let large   = defaults.float(forKey: "largeDrinkOption")
         
         
         if small != 0 || medium != 0 || large != 0  {
