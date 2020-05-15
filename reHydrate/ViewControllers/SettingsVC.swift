@@ -18,7 +18,7 @@ struct settingOptions {
 class SettingsVC: UIViewController {
     
     // MARK: - Variabels
-    
+    let defaults                   = UserDefaults.standard
     var tableView: UITableView     = UITableView()
     var exitButton: UIButton       = {
         let button = UIButton()
@@ -54,8 +54,8 @@ class SettingsVC: UIViewController {
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
             case exitButton:
-                UserDefaults.standard.set(darkMode, forKey: "darkMode")
-                UserDefaults.standard.set(metricUnits, forKey: "metricUnits")
+                defaults.set(darkMode, forKey: "darkMode")
+                defaults.set(metricUnits, forKey: "metricUnits")
                 let transition      = CATransition()
                 transition.duration = 0.4
                 transition.type     = .push
@@ -84,9 +84,9 @@ class SettingsVC: UIViewController {
         }
         self.modalPresentationStyle = .fullScreen
         
-        settings[3].isOpened = UserDefaults.standard.bool(forKey: "reminders")
-        metricUnits          = UserDefaults.standard.bool(forKey: "metricUnits")
-        darkMode             = UserDefaults.standard.bool(forKey: "darkMode")
+        settings[3].isOpened = defaults.bool(forKey: "reminders")
+        metricUnits          = defaults.bool(forKey: "metricUnits")
+        darkMode             = defaults.bool(forKey: "darkMode")
         
         setUpUI()
         changeAppearance()
@@ -221,7 +221,7 @@ class SettingsVC: UIViewController {
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
         
-        UserDefaults.standard.set(true, forKey: "reminders")
+        defaults.set(true, forKey: "reminders")
         
         let intervals = frequency
         
@@ -433,11 +433,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = "Turn off reminders"
-                    let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+                    let startDate = defaults.object(forKey: "startignTime") as! Date
                     let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                    let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+                    let endDate = defaults.object(forKey: "endingTime") as! Date
                     let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                    let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
+                    let intervals = defaults.integer(forKey: "reminderInterval")
                     setReminders(startTimer.hour!, endTimer.hour!, intervals)
                     sendToastMessage("Reminders set from \(startTimer.hour!) to \(endTimer.hour!)", 4)
                 } else {
@@ -446,7 +446,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     let center = UNUserNotificationCenter.current()
                     center.removeAllPendingNotificationRequests()
                     center.removeAllDeliveredNotifications()
-                    UserDefaults.standard.set(false, forKey: "reminders")
+                    defaults.set(false, forKey: "reminders")
                     sendToastMessage("all reminders are removed", 1)
                 }
             case IndexPath(row: 0, section: 4):
@@ -459,8 +459,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 clearDataAlert.addAction(UIAlertAction(title: "Keep data", style: .cancel, handler: nil))
                 clearDataAlert.addAction(UIAlertAction(title: "REMOVE OLD DATA", style: .destructive, handler: {_ in
                     let domain = Bundle.main.bundleIdentifier!
-                    UserDefaults.standard.removePersistentDomain(forName: domain)
-                    UserDefaults.standard.synchronize()}))
+                    self.defaults.removePersistentDomain(forName: domain)
+                    self.defaults.synchronize()}))
                 self.present(clearDataAlert, animated: true, completion: nil)
             default:
                 break
