@@ -12,39 +12,162 @@ import FSCalendar
 
 class StartVC: UIViewController {
     
-    //MARK: - IBOutlets
-    
-    @IBOutlet var lables: [UILabel]!
-    @IBOutlet weak var currentDay: 			UILabel!
-    @IBOutlet weak var historyButton: 		UIButton!
-    @IBOutlet weak var optionsStack: 		UIStackView!
-    @IBOutlet weak var aboutButton: 		UIButton!
-    @IBOutlet weak var smallStack: 			UIStackView!
-    @IBOutlet weak var mediumStack: 		UIStackView!
-    @IBOutlet weak var largeStack: 			UIStackView!
-    @IBOutlet weak var goalAmount: 			UILabel!
-    @IBOutlet weak var consumedAmount: 		UILabel!
-    @IBOutlet weak var goalPrefix: 			UILabel!
-    @IBOutlet weak var smallOption: 		UIButton!
-    @IBOutlet weak var smallOptionLabel: 	UILabel!
-    @IBOutlet weak var mediumOption: 		UIButton!
-    @IBOutlet weak var mediumOptionLabel: 	UILabel!
-    @IBOutlet weak var largeOption: 		UIButton!
-    @IBOutlet weak var largeOptionLabel: 	UILabel!
-    @IBOutlet weak var titleUnit: 			UILabel!
-    @IBOutlet var unitLable: 				[UILabel]!
-    
     //MARK: - Variables
     
-    let defaults 			= UserDefaults.standard
-    var days: [Day] 		= []
-    var today 				= Day.init()
-    let formatter 			= DateFormatter()
-    var darkMode			= true
-    var metricUnits			= true
-    var drinkOptions		= [Drink(typeOfDrink: "water", amountOfDrink: 300),
-                               Drink(typeOfDrink: "water", amountOfDrink: 500),
-                               Drink(typeOfDrink: "water", amountOfDrink: 750)]
+    var appTitle: UILabel        = {
+        let lable  = UILabel()
+        lable.text = "reHydrate"
+        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 50)
+        lable.textAlignment = .center
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var currentDay: UILabel      = {
+        let lable  = UILabel()
+        lable.text = "Day - dd/MM/yy"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 20)
+        lable.textAlignment = .center
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var consumedAmount: UILabel  = {
+        let lable  = UILabel()
+        lable.text = "0"
+        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
+        lable.textAlignment = .right
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var summerySplitter: UILabel = {
+        let lable  = UILabel()
+        lable.text = "/"
+        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
+        lable.textAlignment = .center
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var goalAmount: UILabel      = {
+        let lable  = UILabel()
+        lable.text = "3"
+        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
+        lable.textAlignment = .center
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var goalPrefix: UILabel      = {
+        let lable  = UILabel()
+        lable.text = ""
+        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
+        lable.textAlignment = .left
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var smallOption: UIButton    = {
+        var button = UIButton()
+        button.setBackgroundImage(UIImage(named: "Cup"), for: .normal)
+        button.setTitle("", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .bottom
+        return button
+    }()
+    var smallLabel: UILabel      = {
+        let lable  = UILabel()
+        lable.text = "300"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 17)
+        lable.textAlignment = .right
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var smallPrefix: UILabel     = {
+        let lable  = UILabel()
+        lable.text = "ml"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.textAlignment = .left
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var mediumOption: UIButton   = {
+        var button = UIButton()
+        button.setBackgroundImage(UIImage(named: "Bottle"), for: .normal)
+        button.setTitle("", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .bottom
+        return button
+    }()
+    var mediumLabel: UILabel     = {
+        let lable  = UILabel()
+        lable.text = "500"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.textAlignment = .right
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var mediumPrefix: UILabel    = {
+        let lable  = UILabel()
+        lable.text = "ml"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.textAlignment = .left
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var largeOption: UIButton    = {
+        var button = UIButton()
+        button.setBackgroundImage(UIImage(named: "Flask"), for: .normal)
+        button.setTitle("", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .bottom
+        return button
+    }()
+    var largeLabel: UILabel      = {
+        let lable  = UILabel()
+        lable.text = "750"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.textAlignment = .right
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var largePrefix: UILabel     = {
+        let lable  = UILabel()
+        lable.text = "ml"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.textAlignment = .left
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    let drinkStack: UIStackView  = {
+        let stack = UIStackView()
+        stack.axis      = .horizontal
+        stack.alignment = .bottom
+        stack.distribution = .fillEqually
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    var settingsButton: UIButton = {
+        var button = UIButton()
+        button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
+        button.setTitle("", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .scaleAspectFit
+        return button
+    }()
+    var calendarButton: UIButton = {
+        var button = UIButton()
+        button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
+        button.setTitle("", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .scaleAspectFit
+        return button
+    }()
+    
+    let defaults     = UserDefaults.standard
+    var days: [Day]  = []
+    var today        = Day.init()
+    let formatter    = DateFormatter()
+    var darkMode     = true
+    var metricUnits  = true
+    var drinkOptions = [Drink(typeOfDrink: "water", amountOfDrink: 300),
+                        Drink(typeOfDrink: "water", amountOfDrink: 500),
+                        Drink(typeOfDrink: "water", amountOfDrink: 750)]
     
     //MARK: - Touch controlls
     
@@ -53,6 +176,11 @@ class StartVC: UIViewController {
      
      - parameter sender: - **View** that called this function.
      
+     # Notes: #
+     1. case 1, 2, 3 will add that amount to the consumed amount
+     2. case 4 will open the settings page in fullscreen
+     3. case 5 will open the calendar page in fullscreen
+     
      */
     @objc func tap(_ sender: UIGestureRecognizer){
         let drink = Drink.init()
@@ -60,71 +188,64 @@ class StartVC: UIViewController {
         case smallOption:
             print("small short-press")
             drink.amountOfDrink = drinkOptions[0].amountOfDrink
+            updateConsumtion(drink)
         case mediumOption:
             print("medium short-press")
             drink.amountOfDrink = drinkOptions[1].amountOfDrink
+            updateConsumtion(drink)
         case largeOption:
             print("large short-press")
             drink.amountOfDrink = drinkOptions[2].amountOfDrink
+            updateConsumtion(drink)
+        case settingsButton:
+            let aboutScreen = SettingsVC()
+            aboutScreen.modalPresentationStyle = .fullScreen
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromLeft
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            present(aboutScreen, animated: false, completion: nil)
+        case calendarButton:
+            let calendarScreen  = CalendarVC()
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromRight
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            calendarScreen.modalPresentationStyle     = .fullScreen
+            self.present(calendarScreen, animated: false, completion: nil)
         default:
             break
         }
-        updateConsumtion(drink)
     }
     
     /**
      Will check which button view that called the function.
      
      - parameter sender: - **view** that called this function.
+     
+     # Notes: #
+     1. case 1, 2, 3 and will ask the usr if the user wants to change or remove a drink from the consumed amount.
      */
     @objc func long(_ sender: UIGestureRecognizer){
         if sender.state 	== .began {
             switch sender.view {
             case smallOption:
                 print("small long-press")
-                popUpOptions(sender, drinkOptions[0], smallOptionLabel)
+                popUpOptions(sender, drinkOptions[0], smallLabel)
             case mediumOption:
                 print("medium long-press")
-                popUpOptions(sender, drinkOptions[1], mediumOptionLabel)
+                popUpOptions(sender, drinkOptions[1], mediumLabel)
             case largeOption:
                 print("large long-press")
-                popUpOptions(sender, drinkOptions[2], largeOptionLabel)
+                popUpOptions(sender, drinkOptions[2], largeLabel)
             default:
                 break
             }
         }
-    }
-    
-    /**
-     Will open the settings page in full screen.
-     
-     - parameter sender: - **view** that called this function.
-     
-     # Notes: #
-     1. This will only be called when the user click the settings button.
-     
-     */
-    @IBAction func settings(_ sender: UIButton) {
-        let storyboard 							= UIStoryboard(name: "Main", bundle: nil)
-        let aboutScreen 						= storyboard.instantiateViewController(withIdentifier: "about")
-        aboutScreen.modalPresentationStyle 		= .fullScreen
-        self.present(aboutScreen, animated: true, completion: nil)
-    }
-    
-    /**
-     Will open the calendar page in full screen.
-     
-     - parameter sender: - **view** that called this function.
-  
-     # Notes: #
-     1. This will only be called when the user click the history button.
-     
-     */
-    @IBAction func history(_ sender: UIButton) {
-        let storyboard 							= UIStoryboard(name: "Main", bundle: nil)
-        let calendarScreen 						= storyboard.instantiateViewController(withIdentifier: "calendar")
-        calendarScreen.modalPresentationStyle 	= .fullScreen
-        self.present(calendarScreen, animated: true, completion: nil)
     }
     
     /**
@@ -154,9 +275,13 @@ class StartVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpButtons()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        setUpUI()
+        formatter.dateFormat = "EEEE - dd/MM/yy"
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
         
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
@@ -171,19 +296,13 @@ class StartVC: UIViewController {
             let endDate  = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
             let intervals = 30
             UserDefaults.standard.set(startDate, forKey: "startignTime")
-            UserDefaults.standard.set(endDate, forKey: "endingTime")
+            UserDefaults.standard.set(endDate,   forKey: "endingTime")
             UserDefaults.standard.set(intervals, forKey: "reminderInterval")
-            UserDefaults.standard.set(darkMode, forKey: "darkMode")
+            UserDefaults.standard.set(darkMode,  forKey: "darkMode")
         }
         setUpHealth()
-        formatter.dateFormat   = "EEEE - dd/MM/yy"
-        days                   = Day.loadDay()
-        
-        smallOptionLabel.text  = String(drinkOptions[0].amountOfDrink)
-        mediumOptionLabel.text = String(drinkOptions[1].amountOfDrink)
-        largeOptionLabel.text  = String(drinkOptions[2].amountOfDrink)
+        days = Day.loadDay()
         updateUI()
-        currentDay.text = formatter.string(from: Date.init())
         Thread.sleep(forTimeInterval: 0.5)
     }
     
@@ -206,8 +325,214 @@ class StartVC: UIViewController {
         updateUI()
     }
     
+    //MARK: - Set up of UI
+    
+    /**
+     Will set up the UI and must be called at the launche of the view.
+     
+     # Example #
+     ```
+     setUpUI()
+     ```
+     */
+    func setUpUI(){
+        createDrinkStack()
+        //Adding the views
+        self.view.addSubview(appTitle)
+        self.view.addSubview(currentDay)
+        self.view.addSubview(consumedAmount)
+        self.view.addSubview(summerySplitter)
+        self.view.addSubview(goalAmount)
+        self.view.addSubview(goalPrefix)
+        self.view.addSubview(drinkStack)
+        self.view.addSubview(settingsButton)
+        self.view.addSubview(calendarButton)
+        setConstraints()
+        setUpButtons()
+        currentDay.text  = formatter.string(from: Date.init())
+        smallLabel.text  = String(drinkOptions[0].amountOfDrink)
+        mediumLabel.text = String(drinkOptions[1].amountOfDrink)
+        largeLabel.text  = String(drinkOptions[2].amountOfDrink)
+    }
+    
+    /**
+     Will sett the constraints for all the views in the view.
+     
+     # Notes: #
+     1. The setUPUI must be called first and add all of the views.
+     
+     # Example #
+     ```
+     func setUpUI(){
+          //Add the views
+          setConstraints()
+     }
+     ```
+     */
+    func setConstraints(){
+        appTitle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                           = true
+        appTitle.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        
+        currentDay.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive         = true
+        currentDay.topAnchor.constraint(equalTo: appTitle.bottomAnchor, constant: 20).isActive = true
+        
+        // Constraints for the summery lables(Where the user can see the consumed amount and the goal)
+        summerySplitter.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -10).isActive = true
+        summerySplitter.topAnchor.constraint(equalTo: currentDay.bottomAnchor, constant: 5).isActive       = true
+        
+        consumedAmount.centerYAnchor.constraint(equalTo: summerySplitter.centerYAnchor).isActive = true
+        consumedAmount.rightAnchor.constraint(equalTo: summerySplitter.leftAnchor).isActive      = true
+        
+        goalAmount.centerYAnchor.constraint(equalTo: summerySplitter.centerYAnchor).isActive = true
+        goalAmount.leftAnchor.constraint(equalTo: summerySplitter.rightAnchor).isActive      = true
+        
+        goalPrefix.centerYAnchor.constraint(equalTo: summerySplitter.centerYAnchor).isActive = true
+        goalPrefix.leftAnchor.constraint(equalTo: goalAmount.rightAnchor).isActive           = true
+        
+        // Constraints for the drink options and the lables.
+        smallOption.widthAnchor.constraint(equalToConstant:  50).isActive   = true
+        smallOption.heightAnchor.constraint(equalToConstant: 75).isActive   = true
+        
+        mediumOption.widthAnchor.constraint(equalToConstant:   80).isActive = true
+        mediumOption.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        
+        largeOption.widthAnchor.constraint(equalToConstant:  90).isActive   = true
+        largeOption.heightAnchor.constraint(equalToConstant: 160).isActive  = true
+        
+        drinkStack.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                          = true
+        drinkStack.topAnchor.constraint(lessThanOrEqualTo: summerySplitter.bottomAnchor, constant: 80).isActive = true
+        
+        // Constraints for the buttons
+        settingsButton.widthAnchor.constraint(equalToConstant: 50).isActive  = true
+        settingsButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        settingsButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive      = true
+        settingsButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
+        
+        calendarButton.widthAnchor.constraint(equalToConstant: 50).isActive  = true
+        calendarButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        calendarButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive   = true
+        calendarButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
+        
+    }
+    
+    /**
+     Setting upp the listeners and aperients of the buttons.
+     
+     # Example #
+     ```
+     override func viewDidLoad() {
+     super.viewDidLoad()
+     setUpButtons()
+     }
+     ```
+     */
+    func setUpButtons(){
+        //setting up an gesture recognizer for each button.
+        let settingsTapGesture       = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let calendarTapGesture       = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let smallOptionTapGesture    = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let mediumOptionTapGesture   = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let largeOptionTapGesture    = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let smallOptionLongGesture   = UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let mediumOptionLongGesture  = UILongPressGestureRecognizer(target: self, action: #selector(long))
+        let largeOptionLongGesture   = UILongPressGestureRecognizer(target: self, action: #selector(long))
+        
+        
+        smallOptionLongGesture.minimumPressDuration  = 0.2
+        mediumOptionLongGesture.minimumPressDuration = 0.2
+        largeOptionLongGesture.minimumPressDuration     = 0.2
+        
+        //adding the gesture recognizer for each option.
+        settingsButton.addGestureRecognizer(settingsTapGesture)
+        calendarButton.addGestureRecognizer(calendarTapGesture)
+        smallOption.addGestureRecognizer(smallOptionTapGesture)
+        mediumOption.addGestureRecognizer(mediumOptionTapGesture)
+        largeOption.addGestureRecognizer(largeOptionTapGesture)
+        
+        smallOption.addGestureRecognizer(smallOptionLongGesture)
+        mediumOption.addGestureRecognizer(mediumOptionLongGesture)
+        largeOption.addGestureRecognizer(largeOptionLongGesture)
+    }
+    
+    /**
+     Will create a stack for the drink options and add the labels corresponding too the drink option.
+     
+     # Example #
+     ```
+     func setUPUI(){
+         crateDrinkStack()
+         self.view.addSubView(drinkStack)
+     }
+     ```
+     */
+    func createDrinkStack(){
+    let smallStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .vertical
+        stack.alignment = .center
+        return stack
+    }()
+    let smallLableStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .horizontal
+        stack.alignment = .bottom
+        stack.distribution = .fillProportionally
+        return stack
+    }()
+    smallLableStack.addArrangedSubview(smallLabel)
+    smallLableStack.addArrangedSubview(smallPrefix)
+    smallStack.addArrangedSubview(smallOption)
+    smallStack.addArrangedSubview(smallLableStack)
+    let mediumStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .vertical
+        stack.alignment = .center
+        return stack
+    }()
+    let mediumLableStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .horizontal
+        stack.alignment = .center
+        stack.distribution = .fillProportionally
+        return stack
+    }()
+    mediumLableStack.addArrangedSubview(mediumLabel)
+    mediumLableStack.addArrangedSubview(mediumPrefix)
+    mediumStack.addArrangedSubview(mediumOption)
+    mediumStack.addArrangedSubview(mediumLableStack)
+    let largeStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .vertical
+        stack.alignment = .center
+        stack.distribution = .equalCentering
+        return stack
+    }()
+    let largeLableStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .horizontal
+        stack.alignment = .bottom
+        stack.distribution = .fillProportionally
+        return stack
+    }()
+    largeLableStack.addArrangedSubview(largeLabel)
+    largeLableStack.addArrangedSubview(largePrefix)
+    largeStack.addArrangedSubview(largeOption)
+    largeStack.addArrangedSubview(largeLableStack)
+    drinkStack.addArrangedSubview(smallStack)
+    drinkStack.addArrangedSubview(mediumStack)
+    drinkStack.addArrangedSubview(largeStack)
+}
+    
     //MARK: - HealthKit
     
+    /**
+     Will ask for premitions to use the health data for water consumtion. it will only write not read.
+     
+     # Example #
+     ```
+     setUpHealth()
+     ```
+     */
     fileprivate func setUpHealth() {
         //  Request access to write dietaryWater data to HealthStore
         if HKHealthStore.isHealthDataAvailable(){
@@ -269,19 +594,37 @@ class StartVC: UIViewController {
      */
     func changeAppearance() {
         if darkMode == true {
-            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
-            aboutButton.tintColor     = .lightGray
-            historyButton.tintColor   = .lightGray
-            for lable in lables {
-                lable.textColor       = .white
-            }
+            self.view.backgroundColor         = hexStringToUIColor(hex: "#212121")
+            appTitle.textColor                = .white
+            currentDay.textColor              = .white
+            consumedAmount.textColor          = .white
+            summerySplitter.textColor         = .white
+            goalAmount.textColor              = .white
+            goalPrefix.textColor              = .white
+            smallLabel.textColor        = .white
+            smallPrefix.textColor  = .white
+            mediumLabel.textColor       = .white
+            mediumPrefix.textColor = .white
+            largeLabel.textColor        = .white
+            largePrefix.textColor  = .white
+            settingsButton.tintColor             = .lightGray
+            calendarButton.tintColor           = .lightGray
         } else {
             self.view.backgroundColor = .white
-            historyButton.tintColor   = .black
-            aboutButton.tintColor     = .black
-            for lable in lables {
-                lable.textColor       = .black
-            }
+            appTitle.textColor                = .black
+            currentDay.textColor              = .black
+            consumedAmount.textColor          = .black
+            summerySplitter.textColor         = .black
+            goalAmount.textColor              = .black
+            goalPrefix.textColor              = .black
+            smallLabel.textColor        = .black
+            smallPrefix.textColor  = .black
+            mediumLabel.textColor       = .black
+            mediumPrefix.textColor = .black
+            largeLabel.textColor        = .black
+            largePrefix.textColor  = .black
+            calendarButton.tintColor           = .black
+            settingsButton.tintColor             = .black
         }
     }
     
@@ -318,43 +661,6 @@ class StartVC: UIViewController {
             blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
             alpha: CGFloat(1.0)
         )
-    }
-    
-    /**
-     Setting upp the listeners and aperients of the buttons.
-     
-     # Example #
-     ```
-     override func viewDidLoad() {
-     super.viewDidLoad()
-     setUpButtons()
-     }
-     ```
-     */
-    func setUpButtons(){
-        //setting up an gesture recognizer for each button.
-        let smallOptionTapGesture    = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let smallOptionLongGesture   = UILongPressGestureRecognizer(target: self, action: #selector(long))
-        let mediumOptionTapGesture   = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let mediumOptionLongGesture  = UILongPressGestureRecognizer(target: self, action: #selector(long))
-        let largeOptionTapGesture    = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let largeOptionLongGesture   = UILongPressGestureRecognizer(target: self, action: #selector(long))
-        let changeGoalLongGesture    = UILongPressGestureRecognizer(target: self, action: #selector(long))
-        
-        smallOptionLongGesture.minimumPressDuration  = 0.2
-        mediumOptionLongGesture.minimumPressDuration = 0.2
-        largeOptionLongGesture.minimumPressDuration	 = 0.2
-        changeGoalLongGesture.minimumPressDuration 	 = 0.2
-        
-        //adding the gesture recognizer for each option.
-        smallOption.addGestureRecognizer(smallOptionTapGesture)
-        mediumOption.addGestureRecognizer(mediumOptionTapGesture)
-        largeOption.addGestureRecognizer(largeOptionTapGesture)
-        
-        smallOption.addGestureRecognizer(smallOptionLongGesture)
-        mediumOption.addGestureRecognizer(mediumOptionLongGesture)
-        largeOption.addGestureRecognizer(largeOptionLongGesture)
-        goalAmount.addGestureRecognizer(changeGoalLongGesture)
     }
     
     //MARK: - Update View
@@ -438,18 +744,18 @@ class StartVC: UIViewController {
             let roundedSmallDrink            = smallDrink.converted(to: .milliliters).value.rounded()
             let roundedMediumDrink           = mediumDrink.converted(to: .milliliters).value.rounded()
             let roundedLargeDrink            = largeDrink.converted(to: .milliliters).value.rounded()
-            smallOptionLabel.text            = String(format: "%.0f", roundedSmallDrink)
-            mediumOptionLabel.text           = String(format: "%.0f", roundedMediumDrink)
-            largeOptionLabel.text            = String(format: "%.0f", roundedLargeDrink)
+            smallLabel.text            = String(format: "%.0f", roundedSmallDrink)
+            mediumLabel.text           = String(format: "%.0f", roundedMediumDrink)
+            largeLabel.text            = String(format: "%.0f", roundedLargeDrink)
         } else {
             day.goalAmount.amountOfDrink     = Float(goalAmount.converted(to: .imperialPints).value)
             day.consumedAmount.amountOfDrink = Float(consumedAmount.converted(to: .imperialPints).value)
             let small                        = smallDrink.converted(to: .imperialFluidOunces).value
             let medium                       = mediumDrink.converted(to: .imperialFluidOunces).value
             let large                        = largeDrink.converted(to: .imperialFluidOunces).value
-            smallOptionLabel.text            = String(format: "%.2f", small)
-            mediumOptionLabel.text           = String(format: "%.2f", medium)
-            largeOptionLabel.text            = String(format: "%.2f", large)
+            smallLabel.text            = String(format: "%.2f", small)
+            mediumLabel.text           = String(format: "%.2f", medium)
+            largeLabel.text            = String(format: "%.2f", large)
         }
         
         if (today.goalAmount.amountOfDrink.rounded(.up) == day.goalAmount.amountOfDrink.rounded(.down)){
@@ -461,20 +767,16 @@ class StartVC: UIViewController {
         
         let stringFormatConsumed  = getStringFormat(today.consumedAmount.amountOfDrink)
         self.consumedAmount.text  = String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
-        
-        for lable in unitLable{
-            if darkMode {
-                lable.textColor = .white
-            } else {
-                lable.textColor = .black
-            }
-            if metricUnits {
-                lable.text      = "\(UnitVolume.milliliters.symbol)"
-                titleUnit.text  = "\(UnitVolume.liters.symbol)"
-            } else {
-                lable.text      = "\(UnitVolume.imperialFluidOunces.symbol)"
-                titleUnit.text  = "\(UnitVolume.imperialPints.symbol)"
-            }
+        if metricUnits {
+            smallPrefix.text  = "\(UnitVolume.milliliters.symbol)"
+            mediumPrefix.text = "\(UnitVolume.milliliters.symbol)"
+            largePrefix.text  = "\(UnitVolume.milliliters.symbol)"
+            goalPrefix.text              = "\(UnitVolume.liters.symbol)"
+        } else {
+            smallPrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
+            mediumPrefix.text = "\(UnitVolume.imperialFluidOunces.symbol)"
+            largePrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
+            goalPrefix.text              = "\(UnitVolume.imperialPints.symbol)"
         }
     }
     
@@ -509,11 +811,11 @@ class StartVC: UIViewController {
                     if self.metricUnits {
                         let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
                         switch optionLabel {
-                            case self.smallOptionLabel:
+                            case self.smallLabel:
                                 self.drinkOptions[0].amountOfDrink = Float(drinkAmount.value)
-                            case self.mediumOptionLabel:
+                            case self.mediumLabel:
                                 self.drinkOptions[1].amountOfDrink = Float(drinkAmount.value)
-                            case self.largeOptionLabel:
+                            case self.largeLabel:
                                 self.drinkOptions[2].amountOfDrink = Float(drinkAmount.value)
                             default:
                                 break
@@ -522,11 +824,11 @@ class StartVC: UIViewController {
                             let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.imperialFluidOunces)
                                 .converted(to: .milliliters)
                             switch optionLabel {
-                                case self.smallOptionLabel:
+                                case self.smallLabel:
                                     self.drinkOptions[0].amountOfDrink = Float(drinkAmount.value)
-                                case self.mediumOptionLabel:
+                                case self.mediumLabel:
                                     self.drinkOptions[1].amountOfDrink = Float(drinkAmount.value)
-                                case self.largeOptionLabel:
+                                case self.largeLabel:
                                     self.drinkOptions[2].amountOfDrink = Float(drinkAmount.value)
                                 default:
                                     break

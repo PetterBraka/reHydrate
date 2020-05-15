@@ -35,16 +35,15 @@ class SettingsHeader: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        self.isUserInteractionEnabled 	= true
-        self.backgroundView 			= {
-            let background 				= UIView()
-            background.backgroundColor 	= .none
+        self.isUserInteractionEnabled  = true
+        self.backgroundView            = {
+            let background             = UIView()
+            background.backgroundColor = .none
             return background
         }()
         setHeaderAppairents(darkMode)
         contentView.addSubview(container)
         container.addSubview(title)
-//        container.addSubview(button)
         setConstraints()
     }
     
@@ -64,7 +63,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
      */
     fileprivate func setConstraints() {
         title.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 10).isActive = true
-        title.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        title.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive         = true
         
         container.topAnchor.constraint(equalTo:contentView.topAnchor).isActive            = true
         container.leftAnchor.constraint(equalTo:contentView.leftAnchor).isActive          = true
@@ -82,12 +81,10 @@ class SettingsHeader: UITableViewHeaderFooterView {
      */
     func setHeaderAppairents(_ darkMode: Bool){
         if darkMode {
-//            button.tintColor	= .lightGray
-            title.textColor 	= .white
+            title.textColor = .white
             container.backgroundColor = hexStringToUIColor(hex: "#404040")
         } else {
-//            button.tintColor 	= .black
-            title.textColor 	= .black
+            title.textColor = .black
             container.backgroundColor = hexStringToUIColor(hex: "#d9d9d9")
         }
     }

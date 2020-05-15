@@ -15,12 +15,19 @@ struct settingOptions {
     var options:  [String]
 }
 
-class AboutVC: UIViewController {
+class SettingsVC: UIViewController {
     
     // MARK: - Variabels
     
-    @IBOutlet weak var tableView:  UITableView!
-    @IBOutlet weak var exitButton: UIButton!
+    var tableView: UITableView     = UITableView()
+    var exitButton: UIButton       = {
+        let button = UIButton()
+        button.setTitle("", for: .normal)
+        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var darkMode                   = true
     var metricUnits                = true
     let helpImage                  = UIImageView.init(image: UIImage.init(named: "toturial-1"))
@@ -49,7 +56,13 @@ class AboutVC: UIViewController {
             case exitButton:
                 UserDefaults.standard.set(darkMode, forKey: "darkMode")
                 UserDefaults.standard.set(metricUnits, forKey: "metricUnits")
-                self.dismiss(animated: true, completion: nil)
+                let transition      = CATransition()
+                transition.duration = 0.4
+                transition.type     = .push
+                transition.subtype  = .fromRight
+                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                view.window!.layer.add(transition, forKey: kCATransition)
+                self.dismiss(animated: false, completion: nil)
             case helpImage:
                 helpImage.removeFromSuperview()
                 tableView.isHidden = false
@@ -60,8 +73,7 @@ class AboutVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let exitTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
-        let helpTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
+        
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
             if success {
@@ -70,16 +82,68 @@ class AboutVC: UIViewController {
                 print("we are not allowed to send notifications.")
             }
         }
-        exitButton.addGestureRecognizer(exitTapRecognizer)
-        helpImage.addGestureRecognizer(helpTapRecognizer)
+        self.modalPresentationStyle = .fullScreen
+        
         settings[3].isOpened = UserDefaults.standard.bool(forKey: "reminders")
         metricUnits          = UserDefaults.standard.bool(forKey: "metricUnits")
         darkMode             = UserDefaults.standard.bool(forKey: "darkMode")
+        
+        setUpUI()
+        changeAppearance()
+    }
+    
+    //MARK: - Set up of UI
+    
+    /**
+     Will set up the UI and must be called at the launche of the view.
+     
+     # Example #
+     ```
+     setUpUI()
+     ```
+     */
+    func setUpUI(){
+        self.view.addSubview(exitButton)
+        self.view.addSubview(tableView)
+        
+        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let helpTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        exitButton.addGestureRecognizer(exitTapRecognizer)
+        helpImage.addGestureRecognizer(helpTapRecognizer)
+        
+        setConstraints()
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         tableView.delegate   = self
         tableView.dataSource = self
-        changeAppearance()
+    }
+    
+    /**
+     Will sett the constraints for all the views in the view.
+     
+     # Notes: #
+     1. The setUPUI must be called first and add all of the views.
+     
+     # Example #
+     ```
+     func setUpUI(){
+     //Add the views
+     setConstraints()
+     }
+     ```
+     */
+    func setConstraints(){
+        
+        exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        exitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        exitButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: exitButton.bottomAnchor, constant: 10).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor).isActive = true
     }
     
     // MARK: - Change appearance
@@ -281,7 +345,7 @@ class AboutVC: UIViewController {
     
 }
 
-extension AboutVC: UITableViewDelegate, UITableViewDataSource{
+extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     
     //MARK: - Creates a cell
