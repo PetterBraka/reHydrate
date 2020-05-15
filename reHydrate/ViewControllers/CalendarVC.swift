@@ -208,6 +208,28 @@ class CalendarVC: UIViewController {
     }
     
     /**
+     Will take the averag of the last days upto 7 days and return a float.
+     
+     - returns: **Float** The average consumtion
+     
+     # Example #
+     ```
+     let average = getAverage()
+     ```
+     */
+    func getAverage()-> Float {
+        let average = Drink()
+        for day in days {
+            average.amountOfDrink += day.consumedAmount.amountOfDrink
+        }
+        if days.count > 7 {
+            return average.amountOfDrink / 7
+        } else {
+            return average.amountOfDrink / Float(days.count)
+        }
+    }
+    
+    /**
      Will convert an string of a hex color code to **UIColor**
      
      - parameter hex: - A **String** whit the hex color code.
@@ -248,20 +270,29 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
     //MARK: - Set up tableVeiw
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
-        cell.setLabels(drinks[indexPath.row], indexPath.row)
-        cell.metricUnits = true
-        cell.selectionStyle = .none
-        cell.changeAppearance(darkMode)
-        if !metricUnits {
-            cell.changeToImperial(drinks[indexPath.row])
-        }
-        return cell
+            switch indexPath.row {
+                case 0:
+                    cell.setLabels("Goal", drinks[indexPath.row])
+                case 1:
+                    cell.setLabels("Consumed", drinks[indexPath.row])
+                case 2:
+                    let average = Drink(typeOfDrink: "water", amountOfDrink: getAverage())
+                    cell.setLabels("Average over the last 7 days", average)
+                default:
+                break
+            }
+            cell.metricUnits = true
+            cell.selectionStyle = .none
+            cell.changeAppearance(darkMode)
+            if !metricUnits {
+                cell.changeToImperial(drinks[indexPath.row])
+            }
+            return cell
     }
 }
 
