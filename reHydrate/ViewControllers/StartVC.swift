@@ -175,6 +175,7 @@ class StartVC: UIViewController {
      Will check which view that called this function
      
      - parameter sender: - **View** that called this function.
+     
      # Notes: #
      1. case 1, 2, 3 will add that amount to the consumed amount
      2. case 4 will open the settings page in fullscreen
@@ -225,6 +226,9 @@ class StartVC: UIViewController {
      Will check which button view that called the function.
      
      - parameter sender: - **view** that called this function.
+     
+     # Notes: #
+     1. case 1, 2, 3 and will ask the usr if the user wants to change or remove a drink from the consumed amount.
      */
     @objc func long(_ sender: UIGestureRecognizer){
         if sender.state 	== .began {
@@ -321,9 +325,19 @@ class StartVC: UIViewController {
         updateUI()
     }
     
+    //MARK: - Set up of UI
+    
+    /**
+     Will set up the UI and must be called at the launche of the view.
+     
+     # Example #
+     ```
+     setUpUI()
+     ```
+     */
     func setUpUI(){
-        
         createDrinkStack()
+        //Adding the views
         self.view.addSubview(appTitle)
         self.view.addSubview(currentDay)
         self.view.addSubview(consumedAmount)
@@ -341,6 +355,20 @@ class StartVC: UIViewController {
         largeLabel.text  = String(drinkOptions[2].amountOfDrink)
     }
     
+    /**
+     Will sett the constraints for all the views in the view.
+     
+     # Notes: #
+     1. The setUPUI must be called first and add all of the views.
+     
+     # Example #
+     ```
+     func setUpUI(){
+          //Add the views
+          setConstraints()
+     }
+     ```
+     */
     func setConstraints(){
         appTitle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                           = true
         appTitle.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
@@ -348,6 +376,7 @@ class StartVC: UIViewController {
         currentDay.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive         = true
         currentDay.topAnchor.constraint(equalTo: appTitle.bottomAnchor, constant: 20).isActive = true
         
+        // Constraints for the summery lables(Where the user can see the consumed amount and the goal)
         summerySplitter.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -10).isActive = true
         summerySplitter.topAnchor.constraint(equalTo: currentDay.bottomAnchor, constant: 5).isActive       = true
         
@@ -360,6 +389,7 @@ class StartVC: UIViewController {
         goalPrefix.centerYAnchor.constraint(equalTo: summerySplitter.centerYAnchor).isActive = true
         goalPrefix.leftAnchor.constraint(equalTo: goalAmount.rightAnchor).isActive           = true
         
+        // Constraints for the drink options and the lables.
         smallOption.widthAnchor.constraint(equalToConstant:  50).isActive   = true
         smallOption.heightAnchor.constraint(equalToConstant: 75).isActive   = true
         
@@ -369,9 +399,10 @@ class StartVC: UIViewController {
         largeOption.widthAnchor.constraint(equalToConstant:  90).isActive   = true
         largeOption.heightAnchor.constraint(equalToConstant: 160).isActive  = true
         
-        drinkStack.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                = true
+        drinkStack.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                          = true
         drinkStack.topAnchor.constraint(lessThanOrEqualTo: summerySplitter.bottomAnchor, constant: 80).isActive = true
         
+        // Constraints for the buttons
         settingsButton.widthAnchor.constraint(equalToConstant: 50).isActive  = true
         settingsButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         settingsButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive      = true
@@ -423,66 +454,85 @@ class StartVC: UIViewController {
         largeOption.addGestureRecognizer(largeOptionLongGesture)
     }
     
-    fileprivate func createDrinkStack(){
-        let smallStack: UIStackView = {
-            let stack       = UIStackView()
-            stack.axis      = .vertical
-            stack.alignment = .center
-            return stack
-        }()
-        let smallLableStack: UIStackView = {
-            let stack       = UIStackView()
-            stack.axis      = .horizontal
-            stack.alignment = .bottom
-            stack.distribution = .fillProportionally
-            return stack
-        }()
-        smallLableStack.addArrangedSubview(smallLabel)
-        smallLableStack.addArrangedSubview(smallPrefix)
-        smallStack.addArrangedSubview(smallOption)
-        smallStack.addArrangedSubview(smallLableStack)
-        let mediumStack: UIStackView = {
-            let stack       = UIStackView()
-            stack.axis      = .vertical
-            stack.alignment = .center
-            return stack
-        }()
-        let mediumLableStack: UIStackView = {
-            let stack       = UIStackView()
-            stack.axis      = .horizontal
-            stack.alignment = .center
-            stack.distribution = .fillProportionally
-            return stack
-        }()
-        mediumLableStack.addArrangedSubview(mediumLabel)
-        mediumLableStack.addArrangedSubview(mediumPrefix)
-        mediumStack.addArrangedSubview(mediumOption)
-        mediumStack.addArrangedSubview(mediumLableStack)
-        let largeStack: UIStackView = {
-            let stack       = UIStackView()
-            stack.axis      = .vertical
-            stack.alignment = .center
-            stack.distribution = .equalCentering
-            return stack
-        }()
-        let largeLableStack: UIStackView = {
-            let stack       = UIStackView()
-            stack.axis      = .horizontal
-            stack.alignment = .bottom
-            stack.distribution = .fillProportionally
-            return stack
-        }()
-        largeLableStack.addArrangedSubview(largeLabel)
-        largeLableStack.addArrangedSubview(largePrefix)
-        largeStack.addArrangedSubview(largeOption)
-        largeStack.addArrangedSubview(largeLableStack)
-        drinkStack.addArrangedSubview(smallStack)
-        drinkStack.addArrangedSubview(mediumStack)
-        drinkStack.addArrangedSubview(largeStack)
-    }
+    /**
+     Will create a stack for the drink options and add the labels corresponding too the drink option.
+     
+     # Example #
+     ```
+     func setUPUI(){
+         crateDrinkStack()
+         self.view.addSubView(drinkStack)
+     }
+     ```
+     */
+    func createDrinkStack(){
+    let smallStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .vertical
+        stack.alignment = .center
+        return stack
+    }()
+    let smallLableStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .horizontal
+        stack.alignment = .bottom
+        stack.distribution = .fillProportionally
+        return stack
+    }()
+    smallLableStack.addArrangedSubview(smallLabel)
+    smallLableStack.addArrangedSubview(smallPrefix)
+    smallStack.addArrangedSubview(smallOption)
+    smallStack.addArrangedSubview(smallLableStack)
+    let mediumStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .vertical
+        stack.alignment = .center
+        return stack
+    }()
+    let mediumLableStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .horizontal
+        stack.alignment = .center
+        stack.distribution = .fillProportionally
+        return stack
+    }()
+    mediumLableStack.addArrangedSubview(mediumLabel)
+    mediumLableStack.addArrangedSubview(mediumPrefix)
+    mediumStack.addArrangedSubview(mediumOption)
+    mediumStack.addArrangedSubview(mediumLableStack)
+    let largeStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .vertical
+        stack.alignment = .center
+        stack.distribution = .equalCentering
+        return stack
+    }()
+    let largeLableStack: UIStackView = {
+        let stack       = UIStackView()
+        stack.axis      = .horizontal
+        stack.alignment = .bottom
+        stack.distribution = .fillProportionally
+        return stack
+    }()
+    largeLableStack.addArrangedSubview(largeLabel)
+    largeLableStack.addArrangedSubview(largePrefix)
+    largeStack.addArrangedSubview(largeOption)
+    largeStack.addArrangedSubview(largeLableStack)
+    drinkStack.addArrangedSubview(smallStack)
+    drinkStack.addArrangedSubview(mediumStack)
+    drinkStack.addArrangedSubview(largeStack)
+}
     
     //MARK: - HealthKit
     
+    /**
+     Will ask for premitions to use the health data for water consumtion. it will only write not read.
+     
+     # Example #
+     ```
+     setUpHealth()
+     ```
+     */
     fileprivate func setUpHealth() {
         //  Request access to write dietaryWater data to HealthStore
         if HKHealthStore.isHealthDataAvailable(){
