@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  reHydrate
+
+  Created by Petter vang Brakalsvålet on 16/05/2020.
+  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
+*/
+
+"EditDrink" = "Edit drink";
+"RemoveDrink" = "Take away this drink";
+"Cancel" = "Cancel";
+"ChangeAmount" = "Change the amount";
+"EnterNewValue" = "Enter new value";
+"Done" = "Done";
