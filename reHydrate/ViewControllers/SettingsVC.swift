@@ -30,18 +30,25 @@ class SettingsVC: UIViewController {
     }()
     var darkMode                   = true
     var metricUnits                = true
-    let helpImage                  = UIImageView.init(image: UIImage.init(named: "toturial-1"))
     var selectedRow: IndexPath     = IndexPath()
     var settings: [settingOptions] = [
-        settingOptions(isOpened: false, setting: "appearance", options: ["Light Mode", "Dark Mode"]),
-        settingOptions(isOpened: false, setting: "unit system", options: ["Metric System", "Imperial System"]),
-        settingOptions(isOpened: false, setting: "goal settings", options: ["Goal"]),
-        settingOptions(isOpened: false, setting: "reminders", options: ["Turn on reminders",
-                                                                        "Starting time",
-                                                                        "Ending time",
-                                                                        "Frequency"]),
-        settingOptions(isOpened: false, setting: "instructions", options: ["How to use"]),
-        settingOptions(isOpened: false, setting: "danger zone", options: ["Remove date"])]
+        settingOptions(isOpened: false, setting: NSLocalizedString("Appearance", comment: "Header title"),
+                       options: [NSLocalizedString("LightMode", comment: "settings option"),
+                                 NSLocalizedString("DarkMode", comment: "settings option")]),
+        settingOptions(isOpened: false, setting: NSLocalizedString("UnitSystem", comment: "Header title"),
+                       options: [NSLocalizedString("MetricSystem", comment: "settings option"),
+                                 NSLocalizedString("ImperialSystem", comment: "settings option")]),
+        settingOptions(isOpened: false, setting: NSLocalizedString("ChangeGoal", comment: "Header title"),
+                       options: [NSLocalizedString("SetYourGoal", comment: "settings option")]),
+        settingOptions(isOpened: false, setting: NSLocalizedString("Reminders", comment: "Header title"),
+                       options: [NSLocalizedString("TurnOnReminders", comment: "settings option"),
+                                 NSLocalizedString("StartingTime", comment: "settings option"),
+                                 NSLocalizedString("EndingTime", comment: "settings option"),
+                                 NSLocalizedString("Frequency", comment: "settings option")]),
+        settingOptions(isOpened: false, setting: NSLocalizedString("Introductions", comment: "Header title"),
+                       options: [NSLocalizedString("HowToUse", comment: "settings option")]),
+        settingOptions(isOpened: false, setting: NSLocalizedString("DangerZone", comment: "Header title"),
+                       options: [NSLocalizedString("RemoveData", comment: "settings option")])]
     
     //MARK: - Tap controller
     
@@ -63,9 +70,6 @@ class SettingsVC: UIViewController {
                 transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 view.window!.layer.add(transition, forKey: kCATransition)
                 self.dismiss(animated: false, completion: nil)
-            case helpImage:
-                helpImage.removeFromSuperview()
-                tableView.isHidden = false
             default:
                 break
         }
@@ -107,9 +111,7 @@ class SettingsVC: UIViewController {
         self.view.addSubview(tableView)
         
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let helpTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
-        helpImage.addGestureRecognizer(helpTapRecognizer)
         
         setConstraints()
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
@@ -259,30 +261,30 @@ class SettingsVC: UIViewController {
             var body  = String()
         }
         let reminderMessages: [reminder] = [
-            reminder(title: "You should have some water",
-                     body:  "It has been a long time since you had some water, why don't you have some"),
-            reminder(title: "Hi, have you heard about the Sahara?",
-                     body:  "I suggest not having that as an idol. Have some water"),
-            reminder(title: "Water - what is that?",
-                     body:  "Have you remembered to drink water? I suggest that you have some"),
-            reminder(title: "Hey, would you mind if i asked you a question?",
-                     body:  "Wouldn't it be great to have some water?"),
-            reminder(title: "What about some water?",
-                     body:  "Hey, maybe you should give your brain something to run on?"),
-            reminder(title: "Just a little reminder.",
-                     body:  "There is a thing called water; maybe you should have some"),
-            reminder(title: "I know you don't like it",
-                     body:  "But have some water - it's not going to hurt you"),
-            reminder(title: "What is blue and refreshing?",
-                     body:  "Water. It’s water. Drink some"),
-            reminder(title: "Have some water",
-                     body:  "You need to hydrate. Have some water"),
-            reminder(title: "Why aren't you thirsty by now",
-                     body:  "You should have some water"),
-            reminder(title: "Hello there",
-                     body:  "General Kenobi, would you like some water?"),
-            reminder(title: "Hey there, me again",
-                     body:  "I think you should have some water")]
+            reminder(title: NSLocalizedString("reminder1Title", comment: "First reminder title"),
+                     body:  NSLocalizedString("reminder1Body", comment: "First reminder body")),
+            reminder(title: NSLocalizedString("reminder2Title", comment: "Second reminder title"),
+                     body:  NSLocalizedString("reminder2Body", comment: "Second reminder body")),
+            reminder(title: NSLocalizedString("reminder3Title", comment: "third reminder title"),
+                     body:  NSLocalizedString("reminder3Body", comment: "third reminder body")),
+            reminder(title: NSLocalizedString("reminder4Title", comment: "forth reminder title"),
+                     body:  NSLocalizedString("reminder4Body", comment: "forth reminder body")),
+            reminder(title: NSLocalizedString("reminder5Title", comment: "fifth reminder title"),
+                     body:  NSLocalizedString("reminder5Body", comment: "fifth reminder body")),
+            reminder(title: NSLocalizedString("reminder6Title", comment: "sixth reminder title"),
+                     body:  NSLocalizedString("reminder6Body", comment: "sixth reminder body")),
+            reminder(title: NSLocalizedString("reminder7Title", comment: "seventh reminder title"),
+                     body:  NSLocalizedString("reminder7Body", comment: "seventh reminder body")),
+            reminder(title: NSLocalizedString("reminder8Title", comment: "eighth reminder title"),
+                     body:  NSLocalizedString("reminder8Body", comment: "eighth reimder body")),
+            reminder(title: NSLocalizedString("reminder9Title", comment: "ninth reminder title"),
+                     body:  NSLocalizedString("reminder9Body", comment: "ninth reminder body")),
+            reminder(title: NSLocalizedString("reminder10Title", comment: "tenth reminder title"),
+                     body:  NSLocalizedString("reminder10Body", comment: "tenth reminder body")),
+            reminder(title: NSLocalizedString("reminder11Title", comment: "eleventh reminder title"),
+                     body:  NSLocalizedString("reminder11Body", comment: "eleventh reminder body")),
+            reminder(title: NSLocalizedString("reminder12Title", comment: "twelfth reminder title"),
+                     body:  NSLocalizedString("reminder12Body", comment: "twelfth reminder body"))]
         let randomInt = Int.random(in: 0...reminderMessages.count - 1)
         let notification = UNMutableNotificationContent()
         notification.title = reminderMessages[randomInt].title
@@ -361,16 +363,16 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         cell.setCellAppairents(darkMode, metricUnits)
         switch indexPath {
             case IndexPath(row: 0, section: 1):
-                cell.addSubTitle( "Units: \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
+                cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
             case IndexPath(row: 1, section: 1):
-                cell.addSubTitle( "Units: \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
+                cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
             case IndexPath(row: 0, section: 3):
                 if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
-                    cell.titleOption.text = "Turn off reminders"
+                    cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                 } else {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
-                    cell.titleOption.text = "Turn on reminders"
+                    cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                 }
                 break
             case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
@@ -432,22 +434,22 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 settings[3].isOpened = !settings[3].isOpened
                 if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
-                    cell.titleOption.text = "Turn off reminders"
+                    cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                     let startDate = defaults.object(forKey: "startignTime") as! Date
                     let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
                     let endDate = defaults.object(forKey: "endingTime") as! Date
                     let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
                     let intervals = defaults.integer(forKey: "reminderInterval")
                     setReminders(startTimer.hour!, endTimer.hour!, intervals)
-                    sendToastMessage("Reminders set from \(startTimer.hour!) to \(endTimer.hour!)", 4)
+                    sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
                 } else {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
-                    cell.titleOption.text = "Turn on reminders"
+                    cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                     let center = UNUserNotificationCenter.current()
                     center.removeAllPendingNotificationRequests()
                     center.removeAllDeliveredNotifications()
                     defaults.set(false, forKey: "reminders")
-                    sendToastMessage("all reminders are removed", 1)
+                    sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
                 }
             case IndexPath(row: 0, section: 4):
                 print("help pressed")
@@ -455,9 +457,17 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 tutorialVC.modalPresentationStyle = .fullScreen
                 self.present(tutorialVC, animated: true, completion: nil)
             case IndexPath(row: 0, section: 5):
-                let clearDataAlert = UIAlertController(title: "Clearing data.", message: "Are you sure you want to delete all save data?", preferredStyle: .alert)
-                clearDataAlert.addAction(UIAlertAction(title: "Keep data", style: .cancel, handler: nil))
-                clearDataAlert.addAction(UIAlertAction(title: "REMOVE OLD DATA", style: .destructive, handler: {_ in
+                let clearDataAlert = UIAlertController(title: NSLocalizedString("ClearingDataAlert",
+                                                                                comment: "Title for clearing data alert"),
+                                                       message: NSLocalizedString("ClearingDataBody",
+                                                                                  comment: "body for clearing data alert"),
+                                                       preferredStyle: .alert)
+                clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataKeepData",
+                                                                                comment: "Keep data option"),
+                                                       style: .cancel, handler: nil))
+                clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataRemoveData",
+                                                                                comment: "Remove old data option"),
+                                                       style: .destructive, handler: {_ in
                     let domain = Bundle.main.bundleIdentifier!
                     self.defaults.removePersistentDomain(forName: domain)
                     self.defaults.synchronize()}))

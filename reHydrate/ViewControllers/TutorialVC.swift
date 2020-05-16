@@ -379,6 +379,9 @@ class TutorialVC: UIViewController {
             largeDrinkLable.textColor  = hexStringToUIColor(hex: "#404040")
             settingsButton.tintColor   = hexStringToUIColor(hex: "#404040")
             calendarButton.tintColor   = hexStringToUIColor(hex: "#404040")
+            nextButton.setTitleColor(.black, for: .normal)
+            skipButton.setTitleColor(.black, for: .normal)
+            explanationLabel.textColor = .white
         } else {
             self.view.backgroundColor  = .white
             dayLable.textColor         = hexStringToUIColor(hex: "#c9c9c9")

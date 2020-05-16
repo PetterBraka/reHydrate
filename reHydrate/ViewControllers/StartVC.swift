@@ -291,6 +291,13 @@ class StartVC: UIViewController {
             } else {
                 darkMode = false
             }
+            let current = UNUserNotificationCenter.current()
+            current.getNotificationSettings(completionHandler: { (settings) in
+                if settings.authorizationStatus == .authorized {
+                    current.removeAllPendingNotificationRequests()
+                    current.removeAllDeliveredNotifications()
+                }
+            })
             let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
             let endDate  = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
             let intervals = 30
@@ -604,37 +611,37 @@ class StartVC: UIViewController {
      */
     func changeAppearance() {
         if darkMode == true {
-            self.view.backgroundColor         = hexStringToUIColor(hex: "#212121")
-            appTitle.textColor                = .white
-            currentDay.textColor              = .white
-            consumedAmount.textColor          = .white
-            summerySplitter.textColor         = .white
-            goalAmount.textColor              = .white
-            goalPrefix.textColor              = .white
-            smallLabel.textColor        = .white
-            smallPrefix.textColor  = .white
-            mediumLabel.textColor       = .white
-            mediumPrefix.textColor = .white
-            largeLabel.textColor        = .white
-            largePrefix.textColor  = .white
-            settingsButton.tintColor             = .lightGray
-            calendarButton.tintColor           = .lightGray
+            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+            appTitle.textColor        = .white
+            currentDay.textColor      = .white
+            consumedAmount.textColor  = .white
+            summerySplitter.textColor = .white
+            goalAmount.textColor      = .white
+            goalPrefix.textColor      = .white
+            smallLabel.textColor      = .white
+            smallPrefix.textColor     = .white
+            mediumLabel.textColor     = .white
+            mediumPrefix.textColor    = .white
+            largeLabel.textColor      = .white
+            largePrefix.textColor     = .white
+            settingsButton.tintColor  = .lightGray
+            calendarButton.tintColor  = .lightGray
         } else {
             self.view.backgroundColor = .white
-            appTitle.textColor                = .black
-            currentDay.textColor              = .black
-            consumedAmount.textColor          = .black
-            summerySplitter.textColor         = .black
-            goalAmount.textColor              = .black
-            goalPrefix.textColor              = .black
-            smallLabel.textColor        = .black
-            smallPrefix.textColor  = .black
-            mediumLabel.textColor       = .black
-            mediumPrefix.textColor = .black
-            largeLabel.textColor        = .black
-            largePrefix.textColor  = .black
-            calendarButton.tintColor           = .black
-            settingsButton.tintColor             = .black
+            appTitle.textColor        = .black
+            currentDay.textColor      = .black
+            consumedAmount.textColor  = .black
+            summerySplitter.textColor = .black
+            goalAmount.textColor      = .black
+            goalPrefix.textColor      = .black
+            smallLabel.textColor      = .black
+            smallPrefix.textColor     = .black
+            mediumLabel.textColor     = .black
+            mediumPrefix.textColor    = .black
+            largeLabel.textColor      = .black
+            largePrefix.textColor     = .black
+            calendarButton.tintColor  = .black
+            settingsButton.tintColor  = .black
         }
     }
     
