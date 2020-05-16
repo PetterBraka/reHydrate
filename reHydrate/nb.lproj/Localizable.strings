@@ -6,9 +6,66 @@
   Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 */
 
-"Cancel"    = "Avbryt";
-"EditDrink" = "Endre drikke";
-"RemoveDrink"  = "Fjern denne drinken";
-"ChangeAmount" = "Endre mengde drikke";
+"Done"          = "Ferdig";
+"Cancel"        = "Avbryt";
+"EditDrink"     = "Endre drikke";
+"RemoveDrink"   = "Fjern denne drinken";
+"ChangeAmount"  = "Endre mengde drikke";
 "EnterNewValue" = "Angi ny verdi";
-"Done" = "Ferdig";
+
+"Appearance"       = "Utseende";
+"LightMode"        = "Lys modus";
+"DarkMode"         = "mørk modus";
+"UnitSystem"       = "Enhets system";
+"Units"            = "Enheter";
+"MetricSystem"     = "Metrisk system";
+"ImperialSystem"   = "Imperial system";
+"ChangeGoal"       = "Ender mål";
+"SetYourGoal"      = "Set ditt mål";
+"Reminders"        = "Påminnelser";
+"TurnOnReminders"  = "Skru på påminnelser";
+"TurnOffReminders" = "Skru av påminnelser";
+"StartingTime"     = "Start";
+"EndingTime"       = "Slutt";
+"Frequency"        = "Frekvens";
+"Introductions"    = "Introduksjon";
+"HowToUse"         = "Hvordan bruke appen";
+"DangerZone"       = "Faresone";
+"RemoveData"       = "Fjern data";
+
+//reminders
+"reminder1Title"  = "Skulle ikke hatt litt vann?";
+"reminder1Body"   = "Det er en stund siden du har hatt vann.";
+"reminder2Title"  = "Hei har du hørt om Sahara?";
+"reminder2Body"   = "Anbefaler ikke å ha det som et forbilde. Drikk litt vann.";
+"reminder3Title"  = "Vann - hva er det?";
+"reminder3Body"   = "Du må huske å drikke vann. Jeg foreslår at du tar deg litt.";
+"reminder4Title"  = "Hei, kan jeg stille deg et spørsmål?";
+"reminder4Body"   = "Hadde det ikke vært godt med litt vann?";
+"reminder5Title"  = "Hva med litt vann?";
+"reminder5Body"   = "Hei, kanskje du skal gi hjernen din noe å gå på?";
+"reminder6Title"  = "En liten påminnelse.";
+"reminder6Body"   = "Det er noe som hetter vann. kanskje du burde drikke litt?";
+"reminder7Title"  = "Jeg vet du ikke liker det, men kanskje du skulle hatt litt vann.";
+"reminder7Body"   = "Det kan ikke skade.";
+"reminder8Title"  = "Hva er blått og forfriskende?";
+"reminder8Body"   = "Vann. det er vann. Kanskje du burde ha litt.";
+"reminder9Title"  = "Drikk litt vann.";
+"reminder9Body"   = "Du må hydrere deg. Drikk litt vann.";
+"reminder10Title" = "Er du ikke tørst enda?";
+"reminder10Body"  = "Du bør ha litt vann.";
+"reminder11Title" = "Hei du.";
+"reminder11Body"  = "Skulle ikke tatt deg litt vann da?";
+"reminder12Title" = "Heisan meg igjen.";
+"reminder12Body"  = "Jeg tror du burde drikke litt vann.";
+
+"To"                   = "til";
+"Minutes"              = "minutter";
+"RemindersSetFrom"     = "Påminnelser satt fra";
+"RemoveRemindersToast" = "Alle påminnelser er fjernet";
+"FrequencyReminder"    = "Mellomrom mellom påminnelser er";
+
+"ClearingDataAlert"    = "Fjerner data";
+"ClearingDataBody"     = "Er du sikker på at du vill fjerne all data?";
+"ClearDataKeepData"    = "Behold data";
+"ClearDataRemoveData"  = "Fjern gammel data";

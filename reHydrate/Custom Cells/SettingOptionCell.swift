@@ -127,33 +127,32 @@ class SettingOptionCell: UITableViewCell {
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.darkGray])
         }
         switch titleOption.text?.lowercased() {
-            case "dark mode":
+            case NSLocalizedString("DarkMode", comment: "").lowercased():
                 if dark{
                     activatedOption.isHidden = false
                 } else {
                     activatedOption.isHidden = true
                 }
-            case "light mode":
+            case NSLocalizedString("LightMode", comment: "").lowercased():
                 if !dark{
                     activatedOption.isHidden = false
                 } else {
                     activatedOption.isHidden = true
                 }
-            case "metric system":
+            case NSLocalizedString("MetricSystem", comment: "").lowercased():
                 if metric{
                     activatedOption.isHidden = false
                 } else {
                     activatedOption.isHidden = true
                 }
-            case "imperial system":
+            case NSLocalizedString("ImperialSystem", comment: "").lowercased():
                 if !metric{
                     activatedOption.isHidden = false
                 } else {
                     activatedOption.isHidden = true
                 }
-            case "goal":
+            case NSLocalizedString("SetYourGoal", comment: "").lowercased():
                 activatedOption.isHidden = true
-                titleOption.text         = "Set your goal"
                 let days = Day.loadDay()
                 if !days.isEmpty{
                     textField.text = String(describing: days.last!.goalAmount.amountOfDrink)
@@ -161,12 +160,14 @@ class SettingOptionCell: UITableViewCell {
                     textField.text = "3"
                 }
                 setUpPickerView()
-            case "turn on reminders", "turn off reminders":
+            case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
+                 NSLocalizedString("TurnOffReminders", comment: "").lowercased():
                 activatedOption.isHidden = false
-            case "starting time", "ending time":
+            case NSLocalizedString("StartingTime", comment: "").lowercased(),
+                 NSLocalizedString("EndingTime", comment: "").lowercased():
             	setUpDatePicker()
                 activatedOption.isHidden = true
-            case "frequency" :
+            case NSLocalizedString("Frequency", comment: "").lowercased():
                 activatedOption.isHidden = true
                 setUpMinutePicker()
             default:
@@ -241,10 +242,10 @@ class SettingOptionCell: UITableViewCell {
         let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
         let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
         let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-        if titleOption.text?.lowercased() == "starting time"{
+        if titleOption.text?.lowercased() == NSLocalizedString("StartingTime", comment: "").lowercased(){
             components.hour = startTimer.hour
             components.minute = startTimer.minute
-        } else if titleOption.text?.lowercased() == "ending time" {
+        } else if titleOption.text?.lowercased() == NSLocalizedString("EndingTime", comment: "").lowercased() {
             components.hour = endTimer.hour
             components.minute = endTimer.minute
         }
@@ -271,7 +272,7 @@ class SettingOptionCell: UITableViewCell {
     fileprivate func setUpMinutePicker() {
         let minutePicker = UIDatePicker()
         minutePicker.datePickerMode = .countDownTimer
-        minutePicker.minuteInterval = 10
+        minutePicker.minuteInterval = 1
         var components = DateComponents()
         components.minute = UserDefaults.standard.integer(forKey: "reminderInterval")
         let date = Calendar.current.date(from: components)!
@@ -300,7 +301,7 @@ class SettingOptionCell: UITableViewCell {
         formatter.dateFormat = "HH:mm"
         formatter.locale = .current
         switch titleOption.text?.lowercased() {
-            case "starting time":
+            case NSLocalizedString("StartingTime", comment: "").lowercased():
                 let startDate = sender.date
                 var endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
                 if endDate <= startDate {
@@ -309,7 +310,7 @@ class SettingOptionCell: UITableViewCell {
                 }
                 UserDefaults.standard.set(startDate, forKey: "startignTime")
                 break
-            case "ending time":
+            case NSLocalizedString("EndingTime", comment: "").lowercased():
                 let endDate = sender.date
                 var startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
                 if endDate <= startDate {
@@ -318,7 +319,7 @@ class SettingOptionCell: UITableViewCell {
                 }
                 UserDefaults.standard.set(endDate, forKey: "endingTime")
                 break
-            case "frequency":
+            case NSLocalizedString("Frequency", comment: "").lowercased():
                 if sender.countDownDuration > 2.5 * 60 * 60{
                     var components = DateComponents()
                     components.hour = 2
@@ -335,7 +336,7 @@ class SettingOptionCell: UITableViewCell {
     @objc func doneClicked(){
         textField.endEditing(true)
         switch titleOption.text?.lowercased() {
-            case "set your goal":
+            case NSLocalizedString("SetYourGoal", comment: "").lowercased():
                 var component = 0
                 while component < picker.numberOfComponents {
                     let value = numberArray[picker.selectedRow(inComponent: component)]
@@ -350,19 +351,27 @@ class SettingOptionCell: UITableViewCell {
                     component += 1
                 }
                 updateGoal()
-            case "starting time" , "ending time":
+            case NSLocalizedString("StartingTime", comment: "").lowercased(),
+                 NSLocalizedString("EndingTime", comment: "").lowercased():
                 let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
                 let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
                 let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
                 let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
                 let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
                 setReminders(startTimer.hour!, endTimer.hour!, intervals)
-                sendToastMessage("Reminders set from \(startTimer.hour!) to \(endTimer.hour!)", 4)
-            case "frequency":
+                sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
+            case NSLocalizedString("Frequency", comment: "").lowercased():
                 let formatter = DateFormatter()
                 formatter.dateFormat = "HH:mm"
                 formatter.locale = .current
                 let picker = textField.inputView as! UIDatePicker
+                if picker.countDownDuration > 2.5 * 60 * 60{
+                    var components = DateComponents()
+                    components.hour = 2
+                    components.minute = 50
+                    let date = Calendar.current.date(from: components)!
+                    picker.setDate(date, animated: true)
+                }
                 textField.text = formatter.string(from: picker.date)
                 
                 let calendar = Calendar.current
@@ -377,7 +386,7 @@ class SettingOptionCell: UITableViewCell {
                 let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
                 let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
                 setReminders(startTimer.hour!, endTimer.hour!, numberOfMinutes)
-                sendToastMessage("The frequency of reminders are \(numberOfMinutes) minutes", 4)
+                sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
                 break
             default:
                 break
@@ -437,31 +446,30 @@ class SettingOptionCell: UITableViewCell {
             var body  = String()
         }
         let reminderMessages: [reminder] = [
-            reminder(title: "You should have some water",
-                     body:  "It has been a long time since you had some water, why don't you have some."),
-            reminder(title: "Hi, have you heard about the Sahara?",
-                     body:  "I suggest not having that as an idol. Have some water."),
-            reminder(title: "Water what is that?",
-                     body:  "Have you remembered to drink water? I suggest that you have some."),
-            reminder(title: "Hey, would you mind if i asked you a question?",
-                     body:  "Wouldn't it be great with some water?"),
-            reminder(title: "What about some water?",
-                     body:  "Hey, maybe you should give your brain something to run on?"),
-            reminder(title: "Just a little reminder",
-                     body:  "There is a thing called water maybe you should have some."),
-            reminder(title: "I know you don't like it",
-                     body:  "But have some water it's not going to hurt you"),
-            reminder(title: "What is blue and refreshing?",
-                     body:  "Water. It is water why not have some"),
-            reminder(title: "Have some drink water",
-                     body:  "You need to hydrate. have some water"),
-            reminder(title: "Why aren't you thirsty by now",
-                     body:  "You should have some water."),
-            reminder(title: "Hello there",
-                     body:  "General Kenobi, would you like some water?"),
-            reminder(title: "Hey there me again",
-                     body:  "I think you should have some water")
-        ]
+            reminder(title: NSLocalizedString("reminder1Title", comment: "First reminder title"),
+                     body:  NSLocalizedString("reminder1Body", comment: "First reminder body")),
+            reminder(title: NSLocalizedString("reminder2Title", comment: "Second reminder title"),
+                     body:  NSLocalizedString("reminder2Body", comment: "Second reminder body")),
+            reminder(title: NSLocalizedString("reminder3Title", comment: "third reminder title"),
+                     body:  NSLocalizedString("reminder3Body", comment: "third reminder body")),
+            reminder(title: NSLocalizedString("reminder4Title", comment: "forth reminder title"),
+                     body:  NSLocalizedString("reminder4Body", comment: "forth reminder body")),
+            reminder(title: NSLocalizedString("reminder5Title", comment: "fifth reminder title"),
+                     body:  NSLocalizedString("reminder5Body", comment: "fifth reminder body")),
+            reminder(title: NSLocalizedString("reminder6Title", comment: "sixth reminder title"),
+                     body:  NSLocalizedString("reminder6Body", comment: "sixth reminder body")),
+            reminder(title: NSLocalizedString("reminder7Title", comment: "seventh reminder title"),
+                     body:  NSLocalizedString("reminder7Body", comment: "seventh reminder body")),
+            reminder(title: NSLocalizedString("reminder8Title", comment: "eighth reminder title"),
+                     body:  NSLocalizedString("reminder8Body", comment: "eighth reimder body")),
+            reminder(title: NSLocalizedString("reminder9Title", comment: "ninth reminder title"),
+                     body:  NSLocalizedString("reminder9Body", comment: "ninth reminder body")),
+            reminder(title: NSLocalizedString("reminder10Title", comment: "tenth reminder title"),
+                     body:  NSLocalizedString("reminder10Body", comment: "tenth reminder body")),
+            reminder(title: NSLocalizedString("reminder11Title", comment: "eleventh reminder title"),
+                     body:  NSLocalizedString("reminder11Body", comment: "eleventh reminder body")),
+            reminder(title: NSLocalizedString("reminder12Title", comment: "twelfth reminder title"),
+                     body:  NSLocalizedString("reminder12Body", comment: "twelfth reminder body"))]
         let randomInt = Int.random(in: 0...reminderMessages.count - 1)
         let notification = UNMutableNotificationContent()
         notification.title = reminderMessages[randomInt].title
