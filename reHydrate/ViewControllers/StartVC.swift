@@ -259,7 +259,7 @@ class StartVC: UIViewController {
      ```
      */
     @objc func didMoveToForeground(){
-        currentDay.text         = formatter.string(from: Date.init())
+        currentDay.text         = formatter.string(from: Date.init()).localizedCapitalized
         days                    = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
             today                 = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
@@ -291,6 +291,13 @@ class StartVC: UIViewController {
             } else {
                 darkMode = false
             }
+            let current = UNUserNotificationCenter.current()
+            current.getNotificationSettings(completionHandler: { (settings) in
+                if settings.authorizationStatus == .authorized {
+                    current.removeAllPendingNotificationRequests()
+                    current.removeAllDeliveredNotifications()
+                }
+            })
             let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
             let endDate  = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
             let intervals = 30
@@ -309,7 +316,7 @@ class StartVC: UIViewController {
         print("Main screen will appear")
         darkMode             = defaults.bool(forKey: "darkMode")
         metricUnits          = defaults.bool(forKey: "metricUnits")
-        currentDay.text      = formatter.string(from: Date.init())
+        currentDay.text      = formatter.string(from: Date.init()).localizedCapitalized
         days                 = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
             today            = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
@@ -351,7 +358,7 @@ class StartVC: UIViewController {
         self.view.addSubview(calendarButton)
         setConstraints()
         setUpButtons()
-        currentDay.text  = formatter.string(from: Date.init())
+        currentDay.text  = formatter.string(from: Date.init()).localizedCapitalized
         smallLabel.text  = String(drinkOptions[0].amountOfDrink)
         mediumLabel.text = String(drinkOptions[1].amountOfDrink)
         largeLabel.text  = String(drinkOptions[2].amountOfDrink)
@@ -604,37 +611,37 @@ class StartVC: UIViewController {
      */
     func changeAppearance() {
         if darkMode == true {
-            self.view.backgroundColor         = hexStringToUIColor(hex: "#212121")
-            appTitle.textColor                = .white
-            currentDay.textColor              = .white
-            consumedAmount.textColor          = .white
-            summerySplitter.textColor         = .white
-            goalAmount.textColor              = .white
-            goalPrefix.textColor              = .white
-            smallLabel.textColor        = .white
-            smallPrefix.textColor  = .white
-            mediumLabel.textColor       = .white
-            mediumPrefix.textColor = .white
-            largeLabel.textColor        = .white
-            largePrefix.textColor  = .white
-            settingsButton.tintColor             = .lightGray
-            calendarButton.tintColor           = .lightGray
+            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+            appTitle.textColor        = .white
+            currentDay.textColor      = .white
+            consumedAmount.textColor  = .white
+            summerySplitter.textColor = .white
+            goalAmount.textColor      = .white
+            goalPrefix.textColor      = .white
+            smallLabel.textColor      = .white
+            smallPrefix.textColor     = .white
+            mediumLabel.textColor     = .white
+            mediumPrefix.textColor    = .white
+            largeLabel.textColor      = .white
+            largePrefix.textColor     = .white
+            settingsButton.tintColor  = .lightGray
+            calendarButton.tintColor  = .lightGray
         } else {
             self.view.backgroundColor = .white
-            appTitle.textColor                = .black
-            currentDay.textColor              = .black
-            consumedAmount.textColor          = .black
-            summerySplitter.textColor         = .black
-            goalAmount.textColor              = .black
-            goalPrefix.textColor              = .black
-            smallLabel.textColor        = .black
-            smallPrefix.textColor  = .black
-            mediumLabel.textColor       = .black
-            mediumPrefix.textColor = .black
-            largeLabel.textColor        = .black
-            largePrefix.textColor  = .black
-            calendarButton.tintColor           = .black
-            settingsButton.tintColor             = .black
+            appTitle.textColor        = .black
+            currentDay.textColor      = .black
+            consumedAmount.textColor  = .black
+            summerySplitter.textColor = .black
+            goalAmount.textColor      = .black
+            goalPrefix.textColor      = .black
+            smallLabel.textColor      = .black
+            smallPrefix.textColor     = .black
+            mediumLabel.textColor     = .black
+            mediumPrefix.textColor    = .black
+            largeLabel.textColor      = .black
+            largePrefix.textColor     = .black
+            calendarButton.tintColor  = .black
+            settingsButton.tintColor  = .black
         }
     }
     
@@ -807,30 +814,33 @@ class StartVC: UIViewController {
      */
     func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
         let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        let editOption      = UIAlertAction(title: "Edit option", style: .default) {_ in
-            let editAlert   = UIAlertController(title: "Change drink amount", message: nil, preferredStyle: .alert)
+        let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink", comment:
+            "popup view option for editing the drink options."), style: .default) {_ in
+            let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"),
+                                                message: nil, preferredStyle: .alert)
             editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
-                textField.attributedPlaceholder = NSAttributedString(string: "Enter new value", attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
                 textField.font          = UIFont(name: "American typewriter", size: 18)
                 textField.keyboardType  = .decimalPad
                 textField.textAlignment = .center
             })
-            let done = UIAlertAction(title: "Done", style: .default) {_ in
-                let newValue = (editAlert.textFields?.first!.text!)! as String
-                if newValue != "" {
-                    if self.metricUnits {
-                        let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
-                        switch optionLabel {
-                            case self.smallLabel:
-                                self.drinkOptions[0].amountOfDrink = Float(drinkAmount.value)
-                            case self.mediumLabel:
-                                self.drinkOptions[1].amountOfDrink = Float(drinkAmount.value)
-                            case self.largeLabel:
-                                self.drinkOptions[2].amountOfDrink = Float(drinkAmount.value)
-                            default:
-                                break
-                        }
-                    } else {
+                let done = UIAlertAction(title: NSLocalizedString("Done", comment: "The done option of a popup view"),
+                                         style: .default) {_ in
+                    let newValue = (editAlert.textFields?.first!.text!)! as String
+                    if newValue != "" {
+                        if self.metricUnits {
+                            let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
+                            switch optionLabel {
+                                case self.smallLabel:
+                                    self.drinkOptions[0].amountOfDrink = Float(drinkAmount.value)
+                                case self.mediumLabel:
+                                    self.drinkOptions[1].amountOfDrink = Float(drinkAmount.value)
+                                case self.largeLabel:
+                                    self.drinkOptions[2].amountOfDrink = Float(drinkAmount.value)
+                                default:
+                                    break
+                            }
+                        } else {
                             let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.imperialFluidOunces)
                                 .converted(to: .milliliters)
                             switch optionLabel {
@@ -844,19 +854,21 @@ class StartVC: UIViewController {
                                     break
                             }
                         }
-                    self.saveDrinkOptions()
+                        self.saveDrinkOptions()
+                    }
                 }
-            }
-            editAlert.addAction(done)
-            self.present(editAlert, animated: true, completion: nil)
+                editAlert.addAction(done)
+                self.present(editAlert, animated: true, completion: nil)
         }
-        let removeAmount    = UIAlertAction(title: "Remove drink", style: .default) {_ in
-            let removeDrink = Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amountOfDrink)
-            self.updateConsumtion(removeDrink)
+        let removeAmount = UIAlertAction(title: NSLocalizedString("RemoveDrink", comment:
+            "popup view option for removeing the drink amount."), style: .default) {_ in
+                let removeDrink = Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amountOfDrink)
+                self.updateConsumtion(removeDrink)
         }
         alerContorller.addAction(editOption)
         alerContorller.addAction(removeAmount)
-        alerContorller.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        alerContorller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:
+            "popup view option for cancel."), style: .destructive, handler: nil))
         self.present(alerContorller, animated: true, completion: nil)
     }
     

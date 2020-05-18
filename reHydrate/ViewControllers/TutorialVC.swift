@@ -18,7 +18,7 @@ class TutorialVC: UIViewController {
     let skipButton: UIButton  = {
         let button              = UIButton()
         button.titleLabel?.font = UIFont(name: "AmericanTypewriter", size: 20)
-        button.setTitle("skip", for: .normal)
+        button.setTitle(NSLocalizedString("Skip", comment: "Skip button in toolbar"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -26,15 +26,17 @@ class TutorialVC: UIViewController {
     let nextButton: UIButton  = {
         let button = UIButton()
         button.titleLabel?.font = UIFont(name: "AmericanTypewriter", size: 20)
-        button.setTitle("next", for: .normal)
+        button.setTitle(NSLocalizedString("Next", comment: "Next button in toolbar"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     let dayLable: UILabel     = {
         let lable           = UILabel()
+        let formatter       = DateFormatter()
+        formatter.dateFormat = "EEEE - dd/MM/yy"
         lable.textAlignment = .center
-        lable.text          = "Monday - 05/10/20"
+        lable.text          = formatter.string(from: Date()).capitalized
         lable.font          = UIFont(name: "AmericanTypeWriter-Bold", size: 20)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -132,11 +134,11 @@ class TutorialVC: UIViewController {
         return lable
     }()
     var stage                     = 0
-    var explanationText: [String] = ["This is the current day.",
-                                     "This is your consumed amount and your goal for the day.",
-                                     "This is the different drink options you can use. Tap on a drink to add it to your total amount.",
-                                     "Tap on this to go to settings.",
-                                     "Tap on this to see your history."]
+    var explanationText: [String] = [NSLocalizedString("ExplenationDay", comment: "Explenation of day"),
+                                     NSLocalizedString("ExplenationSummary", comment: "Explenation of summary"),
+                                     NSLocalizedString("ExplenationDrinks", comment: "Explenation of drink options"),
+                                     NSLocalizedString("ExplenationSettings", comment: "Explenation of settings button"),
+                                     NSLocalizedString("ExplenationCalendar", comment: "Explenation of calendar button")]
     var darkMode                  = true
     var metricUnits               = true
     
@@ -154,7 +156,7 @@ class TutorialVC: UIViewController {
      */
     @objc func nextClick(_ sender: UIBarButtonItem){
         stage += 1
-        print("Go to next stage \(stage) in tutorial")
+        print("Go to stage \(stage) in tutorial")
         changeAppearance()
         switch stage {
             case 1:
@@ -200,7 +202,7 @@ class TutorialVC: UIViewController {
                     calendarButton.tintColor = .black
                 }
                 explanationLabel.text = explanationText[stage]
-                nextButton.setTitle("Done", for: .normal)
+                nextButton.setTitle(NSLocalizedString("Done", comment: "Done button in toolbar"), for: .normal)
             case 5:
                 stage = 0
                 self.dismiss(animated: true, completion: nil)
@@ -251,7 +253,7 @@ class TutorialVC: UIViewController {
         skipButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.skip(_:))))
         nextButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.nextClick(_:))))
         
-        nextButton.setTitle("Next", for: .normal)
+        nextButton.setTitle(NSLocalizedString("Next", comment: "Next button in toolbar"), for: .normal)
         for drink in drinkOptionStack.subviews {
             let drinkOption    = drink as! UIImageView
             drinkOption.image  = drinkOption.image?.grayed
@@ -379,6 +381,9 @@ class TutorialVC: UIViewController {
             largeDrinkLable.textColor  = hexStringToUIColor(hex: "#404040")
             settingsButton.tintColor   = hexStringToUIColor(hex: "#404040")
             calendarButton.tintColor   = hexStringToUIColor(hex: "#404040")
+            nextButton.setTitleColor(.white, for: .normal)
+            skipButton.setTitleColor(.white, for: .normal)
+            explanationLabel.textColor = .white
         } else {
             self.view.backgroundColor  = .white
             dayLable.textColor         = hexStringToUIColor(hex: "#c9c9c9")
