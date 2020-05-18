@@ -6,6 +6,7 @@
   Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 */
 
+// StartVC
 "Done"          = "Done";
 "Cancel"        = "Cancel";
 "EditDrink"     = "Edit drink";
@@ -13,6 +14,7 @@
 "ChangeAmount"  = "Change the amount";
 "EnterNewValue" = "Enter new value";
 
+// Settings
 "Appearance"       = "Apperance";
 "LightMode"        = "Light mode";
 "DarkMode"         = "Dark Mode";
@@ -33,7 +35,7 @@
 "DangerZone"       = "Danger zone";
 "RemoveData"       = "Remove data";
 
-//reminders
+// Reminders
 "reminder1Title"  = "You should have some water.";
 "reminder1Body"   = "It has been a long time since you had some water, why don't you have some.";
 "reminder2Title"  = "Hi, have you heard about the Sahara?";
@@ -70,3 +72,10 @@
 "ClearDataKeepData"    = "Keep data";
 "ClearDataRemoveData"  = "REMOVE OLD DATA";
 
+"ExplenationDay"       = "This is the current day.";
+"ExplenationSummary"   = "This is your consumed amount and your goal for the day.";
+"ExplenationDrinks"    = "This is the different drink options you can use. Tap on a drink to add it to your total amount.";
+"ExplenationSettings"  = "Tap on this to go to settings.";
+"ExplenationCalendar"  = "Tap on this to see your history.";
+"Skip" = "Skip";
+"Next" = "Next";
