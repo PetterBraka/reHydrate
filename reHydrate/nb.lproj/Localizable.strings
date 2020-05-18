@@ -6,6 +6,7 @@
   Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 */
 
+//StartVC
 "Done"          = "Ferdig";
 "Cancel"        = "Avbryt";
 "EditDrink"     = "Endre drikke";
@@ -13,6 +14,7 @@
 "ChangeAmount"  = "Endre mengde drikke";
 "EnterNewValue" = "Angi ny verdi";
 
+// settingsVC
 "Appearance"       = "Utseende";
 "LightMode"        = "Lys modus";
 "DarkMode"         = "mørk modus";
@@ -29,7 +31,7 @@
 "EndingTime"       = "Slutt";
 "Frequency"        = "Frekvens";
 "Introductions"    = "Introduksjon";
-"HowToUse"         = "Hvordan bruke appen";
+"HowToUse"         = "Bruksanvisning";
 "DangerZone"       = "Faresone";
 "RemoveData"       = "Fjern data";
 
@@ -69,3 +71,12 @@
 "ClearingDataBody"     = "Er du sikker på at du vill fjerne all data?";
 "ClearDataKeepData"    = "Behold data";
 "ClearDataRemoveData"  = "Fjern gammel data";
+
+// TutorialVC
+"ExplenationDay"       = "Dette er dagen i dag.";
+"ExplenationSummary"   = "Dette er hvor mye du har drikket og hva ditt mål er.";
+"ExplenationDrinks"    = "Dette er dine valg muligheter av drikke, du kan endre på disse ved å holde på den.";
+"ExplenationSettings"  = "Trykk her for å gå til innstillinger";
+"ExplenationCalendar"  = "Trykk her for å gå til kalenderen";
+"Skip" = "Hopp over";
+"Next" = "Neste";
