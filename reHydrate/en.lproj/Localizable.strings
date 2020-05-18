@@ -86,4 +86,4 @@
 "Consumed"           = "Consumed";
 "DrinkType"          = "Drink type";
 "DrinkAmount"        = "Drink amount";
-"AverageOverTheLast" = "Average over the last 7 days";
+"AverageOverTheLast" = "Average consumed";
