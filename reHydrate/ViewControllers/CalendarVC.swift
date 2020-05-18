@@ -103,6 +103,7 @@ class CalendarVC: UIViewController {
         tableView.dataSource = self
         calendar.delegate    = self
         calendar.dataSource  = self
+        calendar.locale      = .current
         tableView.register(InfoCell.self, forCellReuseIdentifier: "customCell")
         calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "calendarCell")
         
@@ -158,7 +159,7 @@ class CalendarVC: UIViewController {
      ```
      */
     func getDrinks(_ dateOfDay: Date){
-        titleDate.text = formatter.string(from: dateOfDay)
+        titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
         if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
             let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
             drinks.append(day.goalAmount)
@@ -277,12 +278,12 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
             switch indexPath.row {
                 case 0:
-                    cell.setLabels("Goal", drinks[indexPath.row])
+                    cell.setLabels(NSLocalizedString("Goal", comment: "Title of cell"), drinks[indexPath.row])
                 case 1:
-                    cell.setLabels("Consumed", drinks[indexPath.row])
+                    cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"), drinks[indexPath.row])
                 case 2:
                     let average = Drink(typeOfDrink: "water", amountOfDrink: getAverage())
-                    cell.setLabels("Average over the last 7 days", average)
+                    cell.setLabels(NSLocalizedString("AverageOverTheLast", comment: "Title of cell"), average)
                 default:
                 break
             }
