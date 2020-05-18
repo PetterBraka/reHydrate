@@ -79,3 +79,11 @@
 "ExplenationCalendar"  = "Tap on this to see your history.";
 "Skip" = "Skip";
 "Next" = "Next";
+
+// Calendar
+"Goal"               = "Goal";
+"Water"              = "Water";
+"Consumed"           = "Consumed";
+"DrinkType"          = "Drink type";
+"DrinkAmount"        = "Drink amount";
+"AverageOverTheLast" = "Average over the last 7 days";

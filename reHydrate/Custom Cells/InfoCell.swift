@@ -18,7 +18,7 @@ class InfoCell: UITableViewCell {
     }()
     var drinkTypeTitle: UILabel   = {
         let lable  = UILabel()
-        lable.text = "- Drink type"
+        lable.text = "- \(NSLocalizedString("DrinkType", comment: "Drink type of cell"))"
         lable.font = UIFont(name: "AmericanTypewriter", size: 17)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -33,7 +33,7 @@ class InfoCell: UITableViewCell {
     }()
     var drinkAmountTitle: UILabel = {
         let lable  = UILabel()
-        lable.text = "- Drink amount"
+        lable.text = "- \(NSLocalizedString("DrinkAmount", comment: "Drink amount of cell"))"
         lable.font = UIFont(name: "AmericanTypewriter", size: 17)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -97,7 +97,7 @@ class InfoCell: UITableViewCell {
      */
     func setLabels(_ title: String, _ drink: Drink){
         titleOfCard.text    = title
-        typeOfDrink.text    = drink.typeOfDrink.capitalized
+        typeOfDrink.text    = NSLocalizedString("Water", comment: "Type of drink in cell")
         amountOfDrink.text  = String(format: "%.2f", drink.amountOfDrink)
         amountOfDrink.text?.append("L")
     }

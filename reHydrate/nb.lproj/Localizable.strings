@@ -80,3 +80,11 @@
 "ExplenationCalendar"  = "Trykk her for å gå til kalenderen";
 "Skip" = "Hopp over";
 "Next" = "Neste";
+
+// Calendar
+"Goal"               = "Mål";
+"Water"              = "vann";
+"Consumed"           = "Drukket";
+"DrinkType"          = "Drikke";
+"DrinkAmount"        = "Drukket mengde";
+"AverageOverTheLast" = "Gjennomsnitt over de siste 7 dager";
