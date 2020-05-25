@@ -223,11 +223,7 @@ class CalendarVC: UIViewController {
         for day in days {
             average.amountOfDrink += day.consumedAmount.amountOfDrink
         }
-        if days.count > 7 {
-            return average.amountOfDrink / 7
-        } else {
-            return average.amountOfDrink / Float(days.count)
-        }
+        return average.amountOfDrink / Float(days.count)
     }
     
     /**
