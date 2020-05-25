@@ -28,7 +28,7 @@ class CalendarVC: UIViewController {
     var titleDate:  UILabel     = {
         var lable  = UILabel()
         lable.text = "Mon - 11/05/20"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 20)
+        lable.font = UIFont(name: "AmericanTypewriter", size: 25)
         lable.textAlignment = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -139,10 +139,10 @@ class CalendarVC: UIViewController {
         
         tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
         tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
-        tableView.topAnchor.constraint(equalTo: titleDate.bottomAnchor,constant: 20).isActive = true
+        tableView.topAnchor.constraint(equalTo: titleDate.bottomAnchor,constant: 30).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: calendar.topAnchor, constant: -20).isActive = true
         
-        calendar.heightAnchor.constraint(equalToConstant: 350).isActive = true
-        calendar.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 10).isActive = true
+        calendar.topAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 10).isActive = true
         calendar.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
         calendar.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
         calendar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
@@ -267,19 +267,17 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
     //MARK: - Set up tableVeiw
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
             switch indexPath.row {
                 case 0:
-                    cell.setLabels(NSLocalizedString("Goal", comment: "Title of cell"), drinks[indexPath.row])
+                    cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"), "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
                 case 1:
-                    cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"), drinks[indexPath.row])
-                case 2:
                     let average = Drink(typeOfDrink: "water", amountOfDrink: getAverage())
-                    cell.setLabels(NSLocalizedString("AverageOverTheLast", comment: "Title of cell"), average)
+                    cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(format: "%.2f",average.amountOfDrink))
                 default:
                 break
             }

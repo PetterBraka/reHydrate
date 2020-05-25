@@ -12,36 +12,14 @@ class InfoCell: UITableViewCell {
     var titleOfCard: UILabel      = {
         let lable  = UILabel()
         lable.text = "Title"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 20)
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        return lable
-    }()
-    var drinkTypeTitle: UILabel   = {
-        let lable  = UILabel()
-        lable.text = "- \(NSLocalizedString("DrinkType", comment: "Drink type of cell"))"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 17)
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        return lable
-    }()
-    var typeOfDrink: UILabel      = {
-        let lable  = UILabel()
-        lable.text = "water"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 17)
-        lable.textAlignment = .right
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        return lable
-    }()
-    var drinkAmountTitle: UILabel = {
-        let lable  = UILabel()
-        lable.text = "- \(NSLocalizedString("DrinkAmount", comment: "Drink amount of cell"))"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 17)
+        lable.font = UIFont(name: "AmericanTypewriter", size: 23)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
     var amountOfDrink: UILabel    = {
         let lable  = UILabel()
         lable.text = "0.0L"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 17)
+        lable.font = UIFont(name: "AmericanTypewriter", size: 20)
         lable.textAlignment = .right
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -53,9 +31,6 @@ class InfoCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.contentView.addSubview(titleOfCard)
-        self.contentView.addSubview(drinkTypeTitle)
-        self.contentView.addSubview(typeOfDrink)
-        self.contentView.addSubview(drinkAmountTitle)
         self.contentView.addSubview(amountOfDrink)
         setConstraints()
         changeAppearance(darkMode)
@@ -66,20 +41,11 @@ class InfoCell: UITableViewCell {
     }
     
     func setConstraints(){
-        titleOfCard.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5).isActive                 = true
+        titleOfCard.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive                = true
         titleOfCard.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 5).isActive               = true
         titleOfCard.rightAnchor.constraint(lessThanOrEqualTo: self.contentView.rightAnchor, constant: 300).isActive = true
         
-        drinkTypeTitle.topAnchor.constraint(equalTo: titleOfCard.bottomAnchor, constant: 5).isActive      = true
-        drinkTypeTitle.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 10).isActive = true
-        
-        typeOfDrink.centerYAnchor.constraint(equalTo: drinkTypeTitle.centerYAnchor).isActive              = true
-        typeOfDrink.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
-        
-        drinkAmountTitle.topAnchor.constraint(equalTo: drinkTypeTitle.bottomAnchor, constant: 5).isActive     = true
-        drinkAmountTitle.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 10).isActive   = true
-        
-        amountOfDrink.centerYAnchor.constraint(equalTo: drinkAmountTitle.centerYAnchor).isActive              = true
+        amountOfDrink.centerYAnchor.constraint(equalTo: titleOfCard.centerYAnchor).isActive                   = true
         amountOfDrink.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive   = true
         amountOfDrink.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10).isActive = true
     }
@@ -95,10 +61,9 @@ class InfoCell: UITableViewCell {
      cell.setLabels(drinks[indexPath.row], indexPath.row)
      ```
      */
-    func setLabels(_ title: String, _ drink: Drink){
+    func setLabels(_ title: String, _ drink: String){
         titleOfCard.text    = title
-        typeOfDrink.text    = NSLocalizedString("Water", comment: "Type of drink in cell")
-        amountOfDrink.text  = String(format: "%.2f", drink.amountOfDrink)
+        amountOfDrink.text  = drink
         amountOfDrink.text?.append("L")
     }
     
@@ -115,17 +80,10 @@ class InfoCell: UITableViewCell {
         self.backgroundColor = .clear
         if darkMode {
             titleOfCard.textColor      = .white
-            typeOfDrink.textColor      = .white
             amountOfDrink.textColor    = .white
-            drinkTypeTitle.textColor   = .white
-            drinkAmountTitle.textColor = .white
         } else {
             titleOfCard.textColor      = .black
-            typeOfDrink.textColor      = .black
-            amountOfDrink.textColor    = .black
-            drinkTypeTitle.textColor   = .black
-            drinkAmountTitle.textColor = .black
-        }
+            amountOfDrink.textColor    = .black        }
     }
     
     func changeToImperial(_ drink: Drink){
