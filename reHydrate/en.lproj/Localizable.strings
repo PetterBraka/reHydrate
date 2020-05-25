@@ -30,7 +30,7 @@
 "StartingTime"     = "Starting time";
 "EndingTime"       = "Ending time";
 "Frequency"        = "Frequency";
-"Introductions"    = "Introduction";
+"Introductions"    = "General";
 "HowToUse"         = "How to use";
 "DangerZone"       = "Danger zone";
 "RemoveData"       = "Remove data";
@@ -83,7 +83,7 @@
 // Calendar
 "Goal"               = "Goal";
 "Water"              = "Water";
+"Average"            = "Average";
 "Consumed"           = "Consumed";
 "DrinkType"          = "Drink type";
 "DrinkAmount"        = "Drink amount";
-"AverageOverTheLast" = "Average consumed";
