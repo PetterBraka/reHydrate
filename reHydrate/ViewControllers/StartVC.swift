@@ -38,7 +38,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var summerySplitter: UILabel = {
+    var summarySplitter: UILabel = {
         let lable  = UILabel()
         lable.text = "/"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -61,6 +61,14 @@ class StartVC: UIViewController {
         lable.textAlignment = .left
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
+    }()
+    var summaryStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis      = .horizontal
+        stack.alignment = .center
+        stack.distribution = .equalSpacing
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     var smallOption: UIButton    = {
         var button = UIButton()
@@ -276,6 +284,7 @@ class StartVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createDrinkStack()
+        createSummaryStack()
         formatter.dateFormat = "EEEE - dd/MM/yy"
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),
@@ -349,10 +358,7 @@ class StartVC: UIViewController {
         //Adding the views
         self.view.addSubview(appTitle)
         self.view.addSubview(currentDay)
-        self.view.addSubview(consumedAmount)
-        self.view.addSubview(summerySplitter)
-        self.view.addSubview(goalAmount)
-        self.view.addSubview(goalPrefix)
+        self.view.addSubview(summaryStack)
         self.view.addSubview(drinkStack)
         self.view.addSubview(settingsButton)
         self.view.addSubview(calendarButton)
@@ -387,21 +393,8 @@ class StartVC: UIViewController {
         currentDay.topAnchor.constraint(equalTo: appTitle.bottomAnchor, constant: 20).isActive = true
         
         // Constraints for the summery lables(Where the user can see the consumed amount and the goal)
-        if metricUnits{
-            summerySplitter.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor, constant: -10).isActive = true
-        } else {
-            summerySplitter.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor, constant: -30).isActive = true
-        }
-        summerySplitter.topAnchor.constraint(equalTo: currentDay.bottomAnchor, constant: 5).isActive       = true
-        
-        consumedAmount.centerYAnchor.constraint(equalTo: summerySplitter.centerYAnchor).isActive = true
-        consumedAmount.rightAnchor.constraint(equalTo: summerySplitter.leftAnchor).isActive      = true
-        
-        goalAmount.centerYAnchor.constraint(equalTo: summerySplitter.centerYAnchor).isActive = true
-        goalAmount.leftAnchor.constraint(equalTo: summerySplitter.rightAnchor).isActive      = true
-        
-        goalPrefix.centerYAnchor.constraint(equalTo: summerySplitter.centerYAnchor).isActive = true
-        goalPrefix.leftAnchor.constraint(equalTo: goalAmount.rightAnchor).isActive           = true
+        summaryStack.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor).isActive = true
+        summaryStack.topAnchor.constraint(equalTo: currentDay.bottomAnchor, constant: 5).isActive = true
         
         // Constraints for the drink options and the lables.
         smallOption.widthAnchor.constraint(equalToConstant:  50).isActive   = true
@@ -417,7 +410,7 @@ class StartVC: UIViewController {
         largeLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 60).isActive = true
         
         drinkStack.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                          = true
-        drinkStack.topAnchor.constraint(lessThanOrEqualTo: summerySplitter.bottomAnchor, constant: 80).isActive = true
+        drinkStack.topAnchor.constraint(lessThanOrEqualTo: summarySplitter.bottomAnchor, constant: 80).isActive = true
         
         // Constraints for the buttons
         settingsButton.widthAnchor.constraint(equalToConstant: 50).isActive  = true
@@ -457,7 +450,7 @@ class StartVC: UIViewController {
         
         smallOptionLongGesture.minimumPressDuration  = 0.2
         mediumOptionLongGesture.minimumPressDuration = 0.2
-        largeOptionLongGesture.minimumPressDuration     = 0.2
+        largeOptionLongGesture.minimumPressDuration  = 0.2
         
         //adding the gesture recognizer for each option.
         settingsButton.addGestureRecognizer(settingsTapGesture)
@@ -469,6 +462,13 @@ class StartVC: UIViewController {
         smallOption.addGestureRecognizer(smallOptionLongGesture)
         mediumOption.addGestureRecognizer(mediumOptionLongGesture)
         largeOption.addGestureRecognizer(largeOptionLongGesture)
+    }
+    
+    func createSummaryStack(){
+        summaryStack.addArrangedSubview(consumedAmount)
+        summaryStack.addArrangedSubview(summarySplitter)
+        summaryStack.addArrangedSubview(goalAmount)
+        summaryStack.addArrangedSubview(goalPrefix)
     }
     
     /**
@@ -615,7 +615,7 @@ class StartVC: UIViewController {
             appTitle.textColor        = .white
             currentDay.textColor      = .white
             consumedAmount.textColor  = .white
-            summerySplitter.textColor = .white
+            summarySplitter.textColor = .white
             goalAmount.textColor      = .white
             goalPrefix.textColor      = .white
             smallLabel.textColor      = .white
@@ -631,7 +631,7 @@ class StartVC: UIViewController {
             appTitle.textColor        = .black
             currentDay.textColor      = .black
             consumedAmount.textColor  = .black
-            summerySplitter.textColor = .black
+            summarySplitter.textColor = .black
             goalAmount.textColor      = .black
             goalPrefix.textColor      = .black
             smallLabel.textColor      = .black
