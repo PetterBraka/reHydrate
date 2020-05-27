@@ -43,6 +43,7 @@ class CalendarVC: UIViewController {
         calendar.translatesAutoresizingMaskIntoConstraints = false
         return calendar
     }()
+    fileprivate let gregorian = Calendar(identifier: .gregorian)
     
     /**
      Will dismiss the page and go back to the main page.
@@ -105,7 +106,7 @@ class CalendarVC: UIViewController {
         calendar.dataSource  = self
         calendar.locale      = .current
         tableView.register(InfoCell.self, forCellReuseIdentifier: "customCell")
-        calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "calendarCell")
+        calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
         
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
@@ -187,19 +188,20 @@ class CalendarVC: UIViewController {
         calendar.appearance.titleFont = UIFont(name: "American typewriter", size: 15)
         calendar.appearance.weekdayFont = UIFont(name: "American typewriter", size: 18)
         calendar.appearance.headerTitleFont = UIFont(name: "American typewriter", size: 20)
+        calendar.appearance.borderRadius = 1
         if darkMode {
             calendar.backgroundColor              = hexStringToUIColor(hex: "#212121")
             self.view.backgroundColor             = hexStringToUIColor(hex: "#212121")
             tableView.backgroundColor             = hexStringToUIColor(hex: "#212121")
             titleDate.textColor                   = .white
             calendar.appearance.headerTitleColor  = .white
-            calendar.appearance.weekdayTextColor  = .systemBlue
+            calendar.appearance.weekdayTextColor  = hexStringToUIColor(hex: "#cfcfcf")
             calendar.appearance.titleDefaultColor = .white
             exitButton.tintColor                  = .lightGray
         } else {
             calendar.backgroundColor              = .white
             calendar.appearance.headerTitleColor  = .black
-            calendar.appearance.weekdayTextColor  = .systemBlue
+            calendar.appearance.weekdayTextColor  = .black
             calendar.appearance.titleDefaultColor = .black
             self.view.backgroundColor             = .white
             tableView.backgroundColor             = .white
@@ -281,13 +283,13 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
                 default:
                 break
             }
-            cell.metricUnits = true
-            cell.selectionStyle = .none
-            cell.changeAppearance(darkMode)
-            if !metricUnits {
-                cell.changeToImperial(drinks[indexPath.row])
-            }
-            return cell
+        cell.metricUnits = true
+        cell.selectionStyle = .none
+        cell.changeAppearance(darkMode)
+        if !metricUnits {
+            cell.changeToImperial(drinks[indexPath.row])
+        }
+        return cell
     }
 }
 
@@ -296,26 +298,92 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     //MARK: - Set up calander
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
-        let cell = calendar.dequeueReusableCell(withIdentifier: "calendarCell", for: date, at: position)
+        let cell = calendar.dequeueReusableCell(withIdentifier: "calendarCell", for: date, at: position) as! CalendarCell
+        self.configure(cell: cell, for: date, at: position)
         return cell
     }
     
+    func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
+        if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: date)}){
+            return UIImage(named: "Water-drop")?.renderResizedImage(newWidth: 19)
+        }
+        return nil
+    }
+    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        self.configureVisibleCells()
         print(date.description)
         drinks.removeAll()
         getDrinks(date)
         tableView.reloadData()
     }
     
-    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        let stringDate = formatter.string(from: date)
-        
-        //Checks if the date has data stored.
-        if days.contains(where: { formatter.string(from: $0.date) == stringDate }){
-            print(stringDate)
-            return 1
+    private func configureVisibleCells() {
+        calendar.visibleCells().forEach { (cell) in
+            let date = calendar.date(for: cell)
+            let position = calendar.monthPosition(for: cell)
+            self.configure(cell: cell, for: date!, at: position)
         }
+    }
+    
+    private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
         
-        return 0
+        let diyCell = (cell as! CalendarCell)
+        // Custom today layer
+        diyCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
+        // Configure selection layer
+        
+        if calendar.selectedDates.isEmpty {
+            if self.gregorian.isDateInToday(date) {
+                diyCell.todayHighlighter.isHidden = true
+                diyCell.selectionLayer.isHidden = false
+                diyCell.selectionType = SelectionType.single
+            } else {
+                diyCell.todayHighlighter.isHidden = true
+                diyCell.selectionLayer.isHidden = true
+            }
+        } else {
+            
+            var selectionType = SelectionType.none
+            
+            if calendar.selectedDates.contains(date) {
+                if calendar.selectedDates.contains(date) {
+                    selectionType = .single
+                }
+            }
+            else {
+                selectionType = .none
+            }
+            if selectionType == .none {
+                diyCell.selectionLayer.isHidden = true
+                return
+            }
+            if formatter.string(from: Date()) == formatter.string(from: date){
+                diyCell.todayHighlighter.isHidden = true
+                diyCell.selectionLayer.isHidden = false
+                diyCell.selectionType = selectionType
+            } else {
+                diyCell.selectionLayer.isHidden = false
+                diyCell.selectionType = selectionType
+            }
+            if position != .current {
+                calendar.setCurrentPage(date, animated: true)
+            }
+        }
+    }
+}
+
+extension UIImage {
+    func renderResizedImage (newWidth: CGFloat) -> UIImage {
+        let scale = newWidth / self.size.width
+        let newHeight = self.size.height * scale
+        let newSize = CGSize(width: newWidth, height: newHeight)
+        
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        
+        let image = renderer.image { (context) in
+            self.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: newSize))
+        }
+        return image
     }
 }
