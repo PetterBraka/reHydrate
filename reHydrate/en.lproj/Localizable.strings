@@ -33,6 +33,8 @@
 "Introductions"    = "General";
 "HowToUse"         = "How to use";
 "DangerZone"       = "Danger zone";
+"OpenAppSettings"  = "Open app settings";
+"OpenHealthApp"    = "Open the health app";
 "RemoveData"       = "Remove data";
 
 // Reminders

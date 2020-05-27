@@ -33,6 +33,8 @@
 "Introductions"    = "Generelt";
 "HowToUse"         = "Bruksanvisning";
 "DangerZone"       = "Faresone";
+"OpenAppSettings"  = "Åpne app innstillinger";
+"OpenHealthApp"    = "Åpne helse appen";
 "RemoveData"       = "Fjern data";
 
 //reminders
