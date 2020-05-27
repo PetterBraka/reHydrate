@@ -48,7 +48,9 @@ class SettingsVC: UIViewController {
         settingOptions(isOpened: false, setting: NSLocalizedString("Introductions", comment: "Header title"),
                        options: [NSLocalizedString("HowToUse", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("DangerZone", comment: "Header title"),
-                       options: [NSLocalizedString("RemoveData", comment: "settings option")])]
+                       options: [NSLocalizedString("OpenAppSettings", comment: "settings option"),
+                                 NSLocalizedString("OpenHealthApp", comment: "settings option"),
+                                 NSLocalizedString("RemoveData", comment: "settings option")])]
     
     //MARK: - Tap controller
     
@@ -378,7 +380,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
                  IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3):
                 break
-            case IndexPath(row: 0, section: 5):
+            case IndexPath(row: 2, section: 5):
                 cell.titleOption.textColor = .systemRed
                 cell.subTitle.removeFromSuperview()
             default:
@@ -429,7 +431,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 1, section: 1): // imperial is selected
                 metricUnits = false
                 tableView.reloadData()
-            case IndexPath(row: 0, section: 3): // setts notifications between 7 and 23
+            case IndexPath(row: 0, section: 3): // setts notifications
                 let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
                 settings[3].isOpened = !settings[3].isOpened
                 if settings[3].isOpened {
@@ -457,6 +459,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 tutorialVC.modalPresentationStyle = .fullScreen
                 self.present(tutorialVC, animated: true, completion: nil)
             case IndexPath(row: 0, section: 5):
+                if let url = URL(string:UIApplication.openSettingsURLString) {
+                    if UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+            }
+            case IndexPath(row: 1, section: 5):
+                UIApplication.shared.open(URL(string: "x-apple-health://")!)
+            case IndexPath(row: 2, section: 5):
                 let clearDataAlert = UIAlertController(title: NSLocalizedString("ClearingDataAlert",
                                                                                 comment: "Title for clearing data alert"),
                                                        message: NSLocalizedString("ClearingDataBody",
