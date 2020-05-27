@@ -49,7 +49,7 @@ class CalendarVC: UIViewController {
      Will dismiss the page and go back to the main page.
      
      - parameter sender: - **view** that called the function.
-    
+     
      */
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
@@ -62,7 +62,7 @@ class CalendarVC: UIViewController {
                 view.window!.layer.add(transition, forKey: kCATransition)
                 self.dismiss(animated: false, completion: nil)
             default:
-            break
+                break
         }
     }
     
@@ -274,15 +274,16 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
-            switch indexPath.row {
-                case 0:
-                    cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"), "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
-                case 1:
-                    let average = Drink(typeOfDrink: "water", amountOfDrink: getAverage())
-                    cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(format: "%.2f",average.amountOfDrink))
-                default:
+        switch indexPath.row {
+            case 0:
+                cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
+                               "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
+            case 1:
+                let average = Drink(typeOfDrink: "water", amountOfDrink: getAverage())
+                cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(format: "%.2f",average.amountOfDrink))
+            default:
                 break
-            }
+        }
         cell.metricUnits = true
         cell.selectionStyle = .none
         cell.changeAppearance(darkMode)
@@ -343,15 +344,13 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
                 diyCell.selectionLayer.isHidden = true
             }
         } else {
-            
             var selectionType = SelectionType.none
             
             if calendar.selectedDates.contains(date) {
                 if calendar.selectedDates.contains(date) {
                     selectionType = .single
                 }
-            }
-            else {
+            } else {
                 selectionType = .none
             }
             if selectionType == .none {
