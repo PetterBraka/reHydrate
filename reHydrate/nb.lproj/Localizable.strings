@@ -30,7 +30,7 @@
 "StartingTime"     = "Start";
 "EndingTime"       = "Slutt";
 "Frequency"        = "Frekvens";
-"Introductions"    = "Introduksjon";
+"Introductions"    = "Generelt";
 "HowToUse"         = "Bruksanvisning";
 "DangerZone"       = "Faresone";
 "RemoveData"       = "Fjern data";
@@ -84,7 +84,7 @@
 // Calendar
 "Goal"               = "Mål";
 "Water"              = "vann";
+"Average"            = "Gjennomsnitt";
 "Consumed"           = "Drukket";
 "DrinkType"          = "Drikke";
 "DrinkAmount"        = "Drukket mengde";
-"AverageOverTheLast" = "Gjennomsnittlig drukket";
