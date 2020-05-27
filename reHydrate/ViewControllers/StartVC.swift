@@ -14,7 +14,7 @@ class StartVC: UIViewController {
     
     //MARK: - Variables
     
-    var appTitle: UILabel        = {
+    var appTitle: UILabel         = {
         let lable  = UILabel()
         lable.text = "reHydrate"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 50)
@@ -22,7 +22,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var currentDay: UILabel      = {
+    var currentDay: UILabel       = {
         let lable  = UILabel()
         lable.text = "Day - dd/MM/yy"
         lable.font = UIFont(name: "AmericanTypewriter", size: 20)
@@ -30,7 +30,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var consumedAmount: UILabel  = {
+    var consumedAmount: UILabel   = {
         let lable  = UILabel()
         lable.text = "0"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -38,7 +38,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var summarySplitter: UILabel = {
+    var summarySplitter: UILabel  = {
         let lable  = UILabel()
         lable.text = "/"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -46,7 +46,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var goalAmount: UILabel      = {
+    var goalAmount: UILabel       = {
         let lable  = UILabel()
         lable.text = "3"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -54,7 +54,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var goalPrefix: UILabel      = {
+    var goalPrefix: UILabel       = {
         let lable  = UILabel()
         lable.text = ""
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -70,7 +70,7 @@ class StartVC: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    var smallOption: UIButton    = {
+    var smallOption: UIButton     = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(named: "Cup"), for: .normal)
         button.setTitle("", for: .normal)
@@ -78,7 +78,7 @@ class StartVC: UIViewController {
         button.contentMode = .bottom
         return button
     }()
-    var smallLabel: UILabel      = {
+    var smallLabel: UILabel       = {
         let lable  = UILabel()
         lable.text = "300"
         lable.font = UIFont(name: "AmericanTypewriter", size: 17)
@@ -86,7 +86,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var smallPrefix: UILabel     = {
+    var smallPrefix: UILabel      = {
         let lable  = UILabel()
         lable.text = "ml"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -94,7 +94,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var mediumOption: UIButton   = {
+    var mediumOption: UIButton    = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(named: "Bottle"), for: .normal)
         button.setTitle("", for: .normal)
@@ -102,7 +102,7 @@ class StartVC: UIViewController {
         button.contentMode = .bottom
         return button
     }()
-    var mediumLabel: UILabel     = {
+    var mediumLabel: UILabel      = {
         let lable  = UILabel()
         lable.text = "500"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -110,7 +110,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var mediumPrefix: UILabel    = {
+    var mediumPrefix: UILabel     = {
         let lable  = UILabel()
         lable.text = "ml"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -118,7 +118,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var largeOption: UIButton    = {
+    var largeOption: UIButton     = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(named: "Flask"), for: .normal)
         button.setTitle("", for: .normal)
@@ -126,7 +126,7 @@ class StartVC: UIViewController {
         button.contentMode = .bottom
         return button
     }()
-    var largeLabel: UILabel      = {
+    var largeLabel: UILabel       = {
         let lable  = UILabel()
         lable.text = "750"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -134,7 +134,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var largePrefix: UILabel     = {
+    var largePrefix: UILabel      = {
         let lable  = UILabel()
         lable.text = "ml"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -142,7 +142,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let drinkStack: UIStackView  = {
+    let drinkStack: UIStackView   = {
         let stack = UIStackView()
         stack.axis      = .horizontal
         stack.alignment = .bottom
@@ -150,7 +150,7 @@ class StartVC: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    var settingsButton: UIButton = {
+    var settingsButton: UIButton  = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
         button.setTitle("", for: .normal)
@@ -158,7 +158,7 @@ class StartVC: UIViewController {
         button.contentMode = .scaleAspectFit
         return button
     }()
-    var calendarButton: UIButton = {
+    var calendarButton: UIButton  = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
         button.setTitle("", for: .normal)
@@ -464,6 +464,17 @@ class StartVC: UIViewController {
         largeOption.addGestureRecognizer(largeOptionLongGesture)
     }
     
+    /**
+     Will crate a stack for all the summary lables.
+     
+     # Example #
+     ```
+     func setUPUI(){
+         createSummaryStack()
+         self.view.addSubView(summaryStack)
+     }
+     ```
+     */
     func createSummaryStack(){
         summaryStack.addArrangedSubview(consumedAmount)
         summaryStack.addArrangedSubview(summarySplitter)
