@@ -213,7 +213,7 @@ class TutorialVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        darkMode = UserDefaults.standard.bool(forKey: "darkMode")
+        darkMode = UserDefaults.standard.bool(forKey: darkModeString)
         setUpUI()
     }
     
@@ -373,65 +373,30 @@ class TutorialVC: UIViewController {
      */
     func changeAppearance(){
         if darkMode {
-            self.view.backgroundColor  = hexStringToUIColor(hex: "#212121")
-            dayLable.textColor         = hexStringToUIColor(hex: "#404040")
-            summaryLable.textColor     = hexStringToUIColor(hex: "#404040")
-            smallDrinkLable.textColor  = hexStringToUIColor(hex: "#404040")
-            mediumDrinkLable.textColor = hexStringToUIColor(hex: "#404040")
-            largeDrinkLable.textColor  = hexStringToUIColor(hex: "#404040")
-            settingsButton.tintColor   = hexStringToUIColor(hex: "#404040")
-            calendarButton.tintColor   = hexStringToUIColor(hex: "#404040")
+            self.view.backgroundColor  = UIColor().hexStringToUIColor("#212121")
+            dayLable.textColor         = UIColor().hexStringToUIColor("#404040")
+            summaryLable.textColor     = UIColor().hexStringToUIColor("#404040")
+            smallDrinkLable.textColor  = UIColor().hexStringToUIColor("#404040")
+            mediumDrinkLable.textColor = UIColor().hexStringToUIColor("#404040")
+            largeDrinkLable.textColor  = UIColor().hexStringToUIColor("#404040")
+            settingsButton.tintColor   = UIColor().hexStringToUIColor("#404040")
+            calendarButton.tintColor   = UIColor().hexStringToUIColor("#404040")
             nextButton.setTitleColor(.white, for: .normal)
             skipButton.setTitleColor(.white, for: .normal)
             explanationLabel.textColor = .white
         } else {
             self.view.backgroundColor  = .white
-            dayLable.textColor         = hexStringToUIColor(hex: "#c9c9c9")
-            summaryLable.textColor     = hexStringToUIColor(hex: "#c9c9c9")
-            smallDrinkLable.textColor  = hexStringToUIColor(hex: "#c9c9c9")
-            mediumDrinkLable.textColor = hexStringToUIColor(hex: "#c9c9c9")
-            largeDrinkLable.textColor  = hexStringToUIColor(hex: "#c9c9c9")
-            settingsButton.tintColor   = hexStringToUIColor(hex: "#c9c9c9")
-            calendarButton.tintColor   = hexStringToUIColor(hex: "#c9c9c9")
-            toolBar.backgroundColor    = hexStringToUIColor(hex: "#d1d1d1")
+            dayLable.textColor         = UIColor().hexStringToUIColor("#c9c9c9")
+            summaryLable.textColor     = UIColor().hexStringToUIColor("#c9c9c9")
+            smallDrinkLable.textColor  = UIColor().hexStringToUIColor("#c9c9c9")
+            mediumDrinkLable.textColor = UIColor().hexStringToUIColor("#c9c9c9")
+            largeDrinkLable.textColor  = UIColor().hexStringToUIColor("#c9c9c9")
+            settingsButton.tintColor   = UIColor().hexStringToUIColor("#c9c9c9")
+            calendarButton.tintColor   = UIColor().hexStringToUIColor("#c9c9c9")
+            toolBar.backgroundColor    = UIColor().hexStringToUIColor("#d1d1d1")
             nextButton.setTitleColor(.black, for: .normal)
             skipButton.setTitleColor(.black, for: .normal)
             explanationLabel.textColor = .black
         }
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
     }
 }
