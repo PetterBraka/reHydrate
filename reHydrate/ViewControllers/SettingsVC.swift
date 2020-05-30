@@ -46,7 +46,8 @@ class SettingsVC: UIViewController {
                                  NSLocalizedString("EndingTime", comment: "settings option"),
                                  NSLocalizedString("Frequency", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("Introductions", comment: "Header title"),
-                       options: [NSLocalizedString("HowToUse", comment: "settings option")]),
+                       options: [NSLocalizedString("Language", comment: "setting option"),
+                                 NSLocalizedString("HowToUse", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("DangerZone", comment: "Header title"),
                        options: [NSLocalizedString("OpenAppSettings", comment: "settings option"),
                                  NSLocalizedString("OpenHealthApp", comment: "settings option"),
@@ -63,8 +64,8 @@ class SettingsVC: UIViewController {
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
             case exitButton:
-                defaults.set(darkMode, forKey: "darkMode")
-                defaults.set(metricUnits, forKey: "metricUnits")
+                defaults.set(darkMode, forKey: darkModeString)
+                defaults.set(metricUnits, forKey: metricUnitsString)
                 let transition      = CATransition()
                 transition.duration = 0.4
                 transition.type     = .push
@@ -79,7 +80,6 @@ class SettingsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
             if success {
@@ -90,9 +90,9 @@ class SettingsVC: UIViewController {
         }
         self.modalPresentationStyle = .fullScreen
         
-        settings[3].isOpened = defaults.bool(forKey: "reminders")
-        metricUnits          = defaults.bool(forKey: "metricUnits")
-        darkMode             = defaults.bool(forKey: "darkMode")
+        settings[3].isOpened = defaults.bool(forKey: remindersString)
+        metricUnits          = defaults.bool(forKey: metricUnitsString)
+        darkMode             = defaults.bool(forKey: darkModeString)
         
         setUpUI()
         changeAppearance()
@@ -169,45 +169,10 @@ class SettingsVC: UIViewController {
             tableView.backgroundColor = .white
             exitButton.tintColor      = .black
         } else{
-            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
-            tableView.backgroundColor = hexStringToUIColor(hex: "#212121")
+            self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
+            tableView.backgroundColor = UIColor().hexStringToUIColor("#212121")
             exitButton.tintColor      = .lightGray
         }
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
     }
     
     // MARK: - Notifications
@@ -225,7 +190,7 @@ class SettingsVC: UIViewController {
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
         
-        defaults.set(true, forKey: "reminders")
+        defaults.set(true, forKey: remindersString)
         
         let intervals = frequency
         
@@ -378,7 +343,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 }
                 break
             case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
-                 IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3):
+                 IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
+                 IndexPath(row: 0, section: 4):
                 break
             case IndexPath(row: 2, section: 5):
                 cell.titleOption.textColor = .systemRed
@@ -437,11 +403,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
-                    let startDate = defaults.object(forKey: "startignTime") as! Date
+                    let startDate = defaults.object(forKey: startingTimeString) as! Date
                     let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                    let endDate = defaults.object(forKey: "endingTime") as! Date
+                    let endDate = defaults.object(forKey: endingTimeString) as! Date
                     let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                    let intervals = defaults.integer(forKey: "reminderInterval")
+                    let intervals = defaults.integer(forKey: reminderIntervalString)
                     setReminders(startTimer.hour!, endTimer.hour!, intervals)
                     sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
                 } else {
@@ -450,10 +416,12 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     let center = UNUserNotificationCenter.current()
                     center.removeAllPendingNotificationRequests()
                     center.removeAllDeliveredNotifications()
-                    defaults.set(false, forKey: "reminders")
+                    defaults.set(false, forKey: remindersString)
                     sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
                 }
             case IndexPath(row: 0, section: 4):
+                break
+            case IndexPath(row: 1, section: 4):
                 print("help pressed")
                 let tutorialVC = TutorialVC()
                 tutorialVC.modalPresentationStyle = .fullScreen
@@ -485,26 +453,5 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             default:
                 break
         }
-    }
-}
-
-extension UIImage {
-    
-    /**
-     Will create a greayed out version of the image.
-     
-     - returns: The image grayed out.
-     
-     # Example #
-     ```
-     imageView.image  = imageView.image?.grayed
-     ```
-     */
-    var grayed: UIImage {
-        guard let ciImage = CIImage(image: self)
-            else { return self }
-        let filterParameters = [ kCIInputColorKey: CIColor.white, kCIInputIntensityKey: 1.0 ] as [String: Any]
-        let grayscale = ciImage.applyingFilter("CIColorMonochrome", parameters: filterParameters)
-        return UIImage(ciImage: grayscale)
     }
 }

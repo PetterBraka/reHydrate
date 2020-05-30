@@ -9,7 +9,7 @@
 import UIKit
 
 class SettingOptionCell: UITableViewCell {
-    var numberArray       = ["0", "1","2","3","4","5","6","7","8","9"]
+    var pickerArray       = ["0", "1","2","3","4","5","6","7","8","9"]
     var componentString   = ["","",",",""]
     let picker            = UIPickerView()
     var notificationStart = Int()
@@ -116,7 +116,7 @@ class SettingOptionCell: UITableViewCell {
             titleOption.textColor           = .white
             subTitle.textColor              = .white
             textField.textColor             = .white
-            self.backgroundColor            = hexStringToUIColor(hex: "#212121")
+            self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
             activatedOption.tintColor       = .black
@@ -159,6 +159,8 @@ class SettingOptionCell: UITableViewCell {
                 } else {
                     textField.text = "3"
                 }
+                pickerArray     = ["0", "1","2","3","4","5","6","7","8","9"]
+                componentString = ["","",",",""]
                 setUpPickerView()
             case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
                  NSLocalizedString("TurnOffReminders", comment: "").lowercased():
@@ -170,46 +172,19 @@ class SettingOptionCell: UITableViewCell {
             case NSLocalizedString("Frequency", comment: "").lowercased():
                 activatedOption.isHidden = true
                 setUpMinutePicker()
+            case NSLocalizedString("Language", comment: "").lowercased():
+                activatedOption.isHidden = true
+                pickerArray     = [NSLocalizedString("en", comment: ""), NSLocalizedString("nb", comment: "")]
+                componentString = [""]
+                textField.placeholder = "language"
+                let language = UserDefaults.standard.array(forKey: "AppleLanguages")
+                textField.text = NSLocalizedString(language!.first as! String, comment: "")
+                setUpPickerView()
             default:
                 activatedOption.isHidden = true
         }
-        UserDefaults.standard.set(dark, forKey: "darkMode")
-        UserDefaults.standard.set(metric, forKey: "metricUnits")
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
+        UserDefaults.standard.set(dark, forKey: darkModeString)
+        UserDefaults.standard.set(metric, forKey: metricUnitsString)
     }
     
     //MARK: - Set-up pickers
@@ -218,17 +193,17 @@ class SettingOptionCell: UITableViewCell {
         self.addSubview(textField)
         setTextFieldConstraints()
         
-        let toolBar 		= UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
-        let flexibleSpace 	= UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton 		= UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
         toolBar.setItems([flexibleSpace, doneButton], animated: false)
         toolBar.sizeToFit()
         
         textField.inputAccessoryView = toolBar
         
-        picker.frame 		= CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
-        picker.delegate		= self
-        picker.dataSource 	= self
+        picker.frame        = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
+        picker.delegate     = self
+        picker.dataSource   = self
         textField.inputView = picker
     }
     
@@ -238,14 +213,14 @@ class SettingOptionCell: UITableViewCell {
         datePicker.locale = .current
         let calendar = NSCalendar.current
         var components = calendar.dateComponents([.hour, .minute], from: Date())
-        let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
         let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-        let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
         let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-        if titleOption.text?.lowercased() == NSLocalizedString("StartingTime", comment: "").lowercased(){
+        if titleOption.text?.lowercased() == NSLocalizedString(startingTimeString, comment: "").lowercased(){
             components.hour = startTimer.hour
             components.minute = startTimer.minute
-        } else if titleOption.text?.lowercased() == NSLocalizedString("EndingTime", comment: "").lowercased() {
+        } else if titleOption.text?.lowercased() == NSLocalizedString(endingTimeString, comment: "").lowercased() {
             components.hour = endTimer.hour
             components.minute = endTimer.minute
         }
@@ -274,7 +249,7 @@ class SettingOptionCell: UITableViewCell {
         minutePicker.datePickerMode = .countDownTimer
         minutePicker.minuteInterval = 1
         var components = DateComponents()
-        components.minute = UserDefaults.standard.integer(forKey: "reminderInterval")
+        components.minute = UserDefaults.standard.integer(forKey: reminderIntervalString)
         let date = Calendar.current.date(from: components)!
         minutePicker.setDate(date, animated: false)
         minutePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
@@ -303,21 +278,21 @@ class SettingOptionCell: UITableViewCell {
         switch titleOption.text?.lowercased() {
             case NSLocalizedString("StartingTime", comment: "").lowercased():
                 let startDate = sender.date
-                var endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+                var endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
                 if endDate <= startDate {
                     endDate = endDate - 1 * 60
                     sender.setDate(endDate, animated: true)
                 }
-                UserDefaults.standard.set(startDate, forKey: "startignTime")
+                UserDefaults.standard.set(startDate, forKey: startingTimeString)
                 break
             case NSLocalizedString("EndingTime", comment: "").lowercased():
                 let endDate = sender.date
-                var startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+                var startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
                 if endDate <= startDate {
                     startDate = startDate + 1 * 60
                     sender.setDate(startDate, animated: true)
                 }
-                UserDefaults.standard.set(endDate, forKey: "endingTime")
+                UserDefaults.standard.set(endDate, forKey: endingTimeString)
                 break
             case NSLocalizedString("Frequency", comment: "").lowercased():
                 if sender.countDownDuration > 2.5 * 60 * 60{
@@ -339,7 +314,7 @@ class SettingOptionCell: UITableViewCell {
             case NSLocalizedString("SetYourGoal", comment: "").lowercased():
                 var component = 0
                 while component < picker.numberOfComponents {
-                    let value = numberArray[picker.selectedRow(inComponent: component)]
+                    let value = pickerArray[picker.selectedRow(inComponent: component)]
                     switch component {
                         case 0, 1, 3:
                             updateTextField(String(value), component)
@@ -353,11 +328,11 @@ class SettingOptionCell: UITableViewCell {
                 updateGoal()
             case NSLocalizedString("StartingTime", comment: "").lowercased(),
                  NSLocalizedString("EndingTime", comment: "").lowercased():
-                let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+                let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
                 let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+                let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
                 let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                let intervals = UserDefaults.standard.integer(forKey: "reminderInterval")
+                let intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
                 setReminders(startTimer.hour!, endTimer.hour!, intervals)
                 sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
             case NSLocalizedString("Frequency", comment: "").lowercased():
@@ -380,17 +355,45 @@ class SettingOptionCell: UITableViewCell {
                 let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
                 
                 print("numberOfMinutes : ", numberOfMinutes)
-                UserDefaults.standard.set(numberOfMinutes, forKey: "reminderInterval")
-                let startDate = UserDefaults.standard.object(forKey: "startignTime") as! Date
+                UserDefaults.standard.set(numberOfMinutes, forKey: reminderIntervalString)
+                let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
                 let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                let endDate = UserDefaults.standard.object(forKey: "endingTime") as! Date
+                let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
                 let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
                 setReminders(startTimer.hour!, endTimer.hour!, numberOfMinutes)
                 sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
                 break
+            case NSLocalizedString("Language", comment: "").lowercased():
+                if NSLocalizedString("nb", comment: "") == textField.text {
+                    // This is done so that network calls now have the Accept-Language as "hi" (Using Alamofire) Check if you can remove these
+                    UserDefaults.standard.set(["nb"], forKey: "AppleLanguages")
+                    UserDefaults.standard.synchronize()
+                    
+                    // Update the language by swaping bundle
+                    Bundle.setLanguage("nb")
+                } else {
+                    // This is done so that network calls now have the Accept-Language as "hi" (Using Alamofire) Check if you can remove these
+                    UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
+                    UserDefaults.standard.synchronize()
+                    
+                    // Update the language by swaping bundle
+                    Bundle.setLanguage("en")
+                }
+                break
             default:
                 break
         }
+    }
+    
+    func languageButtonAction() {
+        // This is done so that network calls now have the Accept-Language as "hi" (Using Alamofire) Check if you can remove these
+        UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
+        UserDefaults.standard.synchronize()
+        
+        // Update the language by swaping bundle
+        Bundle.setLanguage("en")
+        
+        // Done to reintantiate the storyboards instantly
     }
     
     // MARK: - Notifications
@@ -408,7 +411,7 @@ class SettingOptionCell: UITableViewCell {
         notificationCenter.removeAllDeliveredNotifications()
         notificationCenter.removeAllPendingNotificationRequests()
         
-        UserDefaults.standard.set(true, forKey: "reminders")
+        UserDefaults.standard.set(true, forKey: remindersString)
         
         let intervals = frequency
         
@@ -538,33 +541,49 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
     //MARK: - UIPickerVeiw
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 4
+        if NSLocalizedString("Language", comment: "") == titleOption.text {
+            return 1
+        } else {
+            return 4
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch component {
-            case 0, 1, 3:
-                return numberArray.count
-            case 2:
-                return 1
-            default:
-            return 0
+        if NSLocalizedString("Language", comment: "") == titleOption.text {
+            return pickerArray.count
+        } else {
+            switch component {
+                case 0, 1, 3:
+                    return pickerArray.count
+                case 2:
+                    return 1
+                default:
+                    return 0
+            }
         }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch component {
-            case 0, 1, 3:
-                return numberArray[row]
-            case 2:
-                return "."
-            default:
-                return ""
+        if NSLocalizedString("Language", comment: "") == titleOption.text {
+            return pickerArray[row]
+        } else {
+            switch component {
+                case 0, 1, 3:
+                    return pickerArray[row]
+                case 2:
+                    return "."
+                default:
+                    return ""
+            }
         }
     }
     
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        return 35
+        if NSLocalizedString("Language", comment: "") == titleOption.text {
+            return 150
+        } else {
+            return 35
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
@@ -572,13 +591,17 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        switch component {
-            case 0, 1, 3:
-            updateTextField(numberArray[row], component)
-            case 2:
-            updateTextField(".", component)
-            default:
-            break
+        if NSLocalizedString("Language", comment: "") == titleOption.text {
+            updateTextField(pickerArray[row], component)
+        } else {
+            switch component {
+                case 0, 1, 3:
+                    updateTextField(pickerArray[row], component)
+                case 2:
+                    updateTextField(".", component)
+                default:
+                    break
+            }
         }
     }
     
@@ -595,16 +618,3 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
     }
 }
 
-extension UITextField {
-    //MARK: TextField padding
-    func setLeftPadding(_ amount:CGFloat){
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
-        self.leftView = paddingView
-        self.leftViewMode = .always
-    }
-    func setRightPadding(_ amount:CGFloat) {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
-        self.rightView = paddingView
-        self.rightViewMode = .always
-    }
-}

@@ -31,6 +31,9 @@
 "EndingTime"       = "Ending time";
 "Frequency"        = "Frequency";
 "Introductions"    = "General";
+"Language"         = "Language";
+"en"               = "English";
+"nb"               = "Norwegian";
 "HowToUse"         = "How to use";
 "DangerZone"       = "Danger zone";
 "OpenAppSettings"  = "Open app settings";

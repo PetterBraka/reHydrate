@@ -10,6 +10,18 @@ import UIKit
 import HealthKit
 import FSCalendar
 
+let versionString = "version1.7"
+
+let darkModeString          = "darkMode"
+let metricUnitsString       = "metricUnits"
+let startingTimeString      = "startignTime"
+let endingTimeString        = "endingTime"
+let remindersString         = "reminders"
+let reminderIntervalString  = "reminderInterval"
+let smallDrinkOptionString  = "smallDrinkOption"
+let mediumDrinkOptionString = "mediumDrinkOption"
+let largeDrinkOptionString  = "largeDrinkOption"
+
 class StartVC: UIViewController {
     
     //MARK: - Variables
@@ -294,7 +306,7 @@ class StartVC: UIViewController {
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
             metricUnits  = true
-            defaults.set(metricUnits, forKey: "metricUnits")
+            defaults.set(metricUnits, forKey: metricUnitsString)
             if self.traitCollection.userInterfaceStyle == .dark {
                 darkMode = true
             } else {
@@ -310,10 +322,10 @@ class StartVC: UIViewController {
             let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
             let endDate  = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
             let intervals = 30
-            defaults.set(startDate, forKey: "startignTime")
-            defaults.set(endDate,   forKey: "endingTime")
-            defaults.set(intervals, forKey: "reminderInterval")
-            defaults.set(darkMode,  forKey: "darkMode")
+            defaults.set(startDate, forKey: startingTimeString)
+            defaults.set(endDate,   forKey: endingTimeString)
+            defaults.set(intervals, forKey: reminderIntervalString)
+            defaults.set(darkMode,  forKey: darkModeString)
         }
         setUpHealth()
         days = Day.loadDay()
@@ -323,8 +335,8 @@ class StartVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("Main screen will appear")
-        darkMode             = defaults.bool(forKey: "darkMode")
-        metricUnits          = defaults.bool(forKey: "metricUnits")
+        darkMode             = defaults.bool(forKey: darkModeString)
+        metricUnits          = defaults.bool(forKey: metricUnitsString)
         currentDay.text      = formatter.string(from: Date.init()).localizedCapitalized
         days                 = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
@@ -622,7 +634,7 @@ class StartVC: UIViewController {
      */
     func changeAppearance() {
         if darkMode == true {
-            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+            self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
             appTitle.textColor        = .white
             currentDay.textColor      = .white
             consumedAmount.textColor  = .white
@@ -654,41 +666,6 @@ class StartVC: UIViewController {
             calendarButton.tintColor  = .black
             settingsButton.tintColor  = .black
         }
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
     }
     
     //MARK: - Update View
@@ -898,9 +875,9 @@ class StartVC: UIViewController {
      ```
      */
     func saveDrinkOptions(){
-        defaults.set(drinkOptions[0].amountOfDrink, forKey: "smallDrinkOption")
-        defaults.set(drinkOptions[1].amountOfDrink, forKey: "mediumDrinkOption")
-        defaults.set(drinkOptions[2].amountOfDrink, forKey: "largeDrinkOption")
+        defaults.set(drinkOptions[0].amountOfDrink, forKey: smallDrinkOptionString)
+        defaults.set(drinkOptions[1].amountOfDrink, forKey: mediumDrinkOptionString)
+        defaults.set(drinkOptions[2].amountOfDrink, forKey: largeDrinkOptionString)
         updateUI()
     }
     
@@ -917,9 +894,9 @@ class StartVC: UIViewController {
      ```
      */
     func loadDrinkOptions(){
-        let small   = defaults.float(forKey: "smallDrinkOption")
-        let medium  = defaults.float(forKey: "mediumDrinkOption")
-        let large   = defaults.float(forKey: "largeDrinkOption")
+        let small   = defaults.float(forKey: smallDrinkOptionString)
+        let medium  = defaults.float(forKey: mediumDrinkOptionString)
+        let large   = defaults.float(forKey: largeDrinkOptionString)
         
         
         if small != 0 || medium != 0 || large != 0  {
@@ -975,30 +952,5 @@ class StartVC: UIViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(UIApplication.willEnterForegroundNotification)
-    }
-}
-
-extension UIApplication {
-    
-    /**
-     Will check if it is the first time the app is ever launched on this phone
-     
-     - returns: **Bool** true if its the first time false if not.
-     
-     # Example #
-     ```
-     if UIApplication.isFirstLaunch() {
-         print("first time to launch this app")
-         //Do something
-     }
-     ```
-     */
-    class func isFirstLaunch() -> Bool {
-        if !UserDefaults.standard.bool(forKey: "version1.7") {
-            UserDefaults.standard.set(true, forKey: "version1.7")
-            UserDefaults.standard.synchronize()
-            return true
-        }
-        return false
     }
 }
