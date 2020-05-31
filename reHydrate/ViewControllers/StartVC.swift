@@ -11,6 +11,7 @@ import HealthKit
 import FSCalendar
 
 let versionString = "version1.7"
+let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
 let metricUnitsString       = "metricUnits"
@@ -298,6 +299,8 @@ class StartVC: UIViewController {
         createDrinkStack()
         createSummaryStack()
         formatter.dateFormat = "EEEE - dd/MM/yy"
+        let local = defaults.array(forKey: appleLanguagesString)
+        formatter.locale = Locale(identifier: local?.first as! String)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),
                                                name: UIApplication.willEnterForegroundNotification,

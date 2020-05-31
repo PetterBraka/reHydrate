@@ -11,7 +11,7 @@ import UIKit
 
 var bundleKey: UInt8 = 0
 
-class AnyLanguageBundle: Bundle {
+class LanguageBundle: Bundle {
     
     override func localizedString(forKey key: String,
                                   value: String?,
@@ -33,7 +33,7 @@ extension Bundle {
         
         defer {
             
-            object_setClass(Bundle.main, AnyLanguageBundle.self)
+            object_setClass(Bundle.main, LanguageBundle.self)
         }
         
         objc_setAssociatedObject(Bundle.main, &bundleKey,    Bundle.main.path(forResource: language, ofType: "lproj"), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
