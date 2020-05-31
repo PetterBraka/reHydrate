@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "66776D7E-7D3A-44F0-AC8C-106BBA5E0D01"
+            uuid = "EF89C92D-E496-4AA3-A47A-F8F9ACBD05E1"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "reHydrate/Custom Cells/SettingOptionCell.swift"
+            filePath = "reHydrate/ViewControllers/StartVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "370"
-            endingLineNumber = "370"
-            landmarkName = "doneClicked()"
+            startingLineNumber = "302"
+            endingLineNumber = "302"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

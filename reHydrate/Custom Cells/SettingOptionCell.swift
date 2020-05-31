@@ -14,6 +14,12 @@ class SettingOptionCell: UITableViewCell {
     let picker            = UIPickerView()
     var notificationStart = Int()
     var notificationEnd   = Int()
+    let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = .current
+        return formatter
+    }()
     var setting: String? {
         didSet {
             guard let string 	= setting else {return}
@@ -336,9 +342,6 @@ class SettingOptionCell: UITableViewCell {
                 setReminders(startTimer.hour!, endTimer.hour!, intervals)
                 sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
             case NSLocalizedString("Frequency", comment: "").lowercased():
-                let formatter = DateFormatter()
-                formatter.dateFormat = "HH:mm"
-                formatter.locale = .current
                 let picker = textField.inputView as! UIDatePicker
                 if picker.countDownDuration > 2.5 * 60 * 60{
                     var components = DateComponents()
@@ -364,20 +367,15 @@ class SettingOptionCell: UITableViewCell {
                 sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
                 break
             case NSLocalizedString("Language", comment: "").lowercased():
-                if NSLocalizedString("nb", comment: "") == textField.text {
-                    // This is done so that network calls now have the Accept-Language as "hi" (Using Alamofire) Check if you can remove these
-                    UserDefaults.standard.set(["nb"], forKey: "AppleLanguages")
-                    UserDefaults.standard.synchronize()
-                    
-                    // Update the language by swaping bundle
-                    Bundle.setLanguage("nb")
-                } else {
-                    // This is done so that network calls now have the Accept-Language as "hi" (Using Alamofire) Check if you can remove these
-                    UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
-                    UserDefaults.standard.synchronize()
-                    
-                    // Update the language by swaping bundle
-                    Bundle.setLanguage("en")
+                let picker = textField.inputView as! UIPickerView
+                textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
+                switch textField.text?.lowercased() {
+                    case NSLocalizedString("nb", comment: "").lowercased():
+                        languageButtonAction("nb")
+                    case NSLocalizedString("en", comment: ""):
+                        languageButtonAction("en")
+                    default:
+                        languageButtonAction("en")
                 }
                 break
             default:
@@ -385,15 +383,15 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     
-    func languageButtonAction() {
-        // This is done so that network calls now have the Accept-Language as "hi" (Using Alamofire) Check if you can remove these
-        UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
+    func languageButtonAction(_ language: String) {
+        UserDefaults.standard.set([language], forKey: appleLanguagesString)
         UserDefaults.standard.synchronize()
         
         // Update the language by swaping bundle
-        Bundle.setLanguage("en")
+        Bundle.setLanguage(language)
         
         // Done to reintantiate the storyboards instantly
+        UIApplication.shared.windows.first(where: {$0.isKeyWindow})?.rootViewController = StartVC()
     }
     
     // MARK: - Notifications
