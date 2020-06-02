@@ -139,7 +139,14 @@ class TutorialVC: UIViewController {
                                      NSLocalizedString("ExplenationDrinks", comment: "Explenation of drink options"),
                                      NSLocalizedString("ExplenationSettings", comment: "Explenation of settings button"),
                                      NSLocalizedString("ExplenationCalendar", comment: "Explenation of calendar button")]
-    var darkMode                  = true
+    var darkMode                  = true {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return darkMode ? .lightContent : .darkContent
+    }
     var metricUnits               = true
     
     //MARK: - Touch controll

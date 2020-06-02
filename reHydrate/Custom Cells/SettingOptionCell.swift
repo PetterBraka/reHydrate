@@ -64,24 +64,48 @@ class SettingOptionCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.addSubview(titleOption)
         self.addSubview(activatedOption)
+        setTitleConstraints()
         setButtonConstraints()
-        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive	= true
-        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive			= true
-        self.backgroundColor																= .none
+        self.backgroundColor = .none
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addSubTitle(_ string: String){
-        subTitle.text = string
+    /**
+     Adds a subtitle under the title lable
+     
+     - parameter : subTitle - the **String** you wnat to display under the title.
+     
+     # Example #
+     ```
+     addSubTitle("subtitle")
+     ```
+     */
+    func addSubTitle(_ subtitle: String){
+        subTitle.text = subtitle
         self.addSubview(subTitle)
         self.removeConstraints(self.constraints)
-        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -10).isActive	= true
-        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive    		= true
-        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive 		= true
-        subTitle.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 10).isActive		= true
+        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -10).isActive = true
+        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive        = true
+        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive    = true
+        subTitle.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 10).isActive     = true
+        setButtonConstraints()
+    }
+    
+    /**
+     Setting constraints for the tilte lable.
+     
+     # Example #
+     ```
+     setTitleConstraints()
+     ```
+     */
+    func setTitleConstraints(){
+        self.removeConstraints(self.constraints)
+        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive = true
+        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive         = true
         setButtonConstraints()
     }
     
@@ -109,7 +133,7 @@ class SettingOptionCell: UITableViewCell {
     }
     
     /**
-     Changes the apparentce of the **SettingOptionCell** deppending on the users preferents.
+     Changes the apparentce of a **SettingOptionCell** deppending on the users preferents.
      
      # Example #
      ```
@@ -123,6 +147,7 @@ class SettingOptionCell: UITableViewCell {
             subTitle.textColor              = .white
             textField.textColor             = .white
             self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
+            
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
             activatedOption.tintColor       = .black
@@ -168,6 +193,7 @@ class SettingOptionCell: UITableViewCell {
                 pickerArray     = ["0", "1","2","3","4","5","6","7","8","9"]
                 componentString = ["","",",",""]
                 setUpPickerView()
+                break
             case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
                  NSLocalizedString("TurnOffReminders", comment: "").lowercased():
                 activatedOption.isHidden = false
@@ -180,12 +206,19 @@ class SettingOptionCell: UITableViewCell {
                 setUpMinutePicker()
             case NSLocalizedString("Language", comment: "").lowercased():
                 activatedOption.isHidden = true
-                pickerArray     = [NSLocalizedString("en", comment: ""), NSLocalizedString("nb", comment: "")]
+                pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
                 componentString = [""]
-                textField.placeholder = "language"
-                let language = UserDefaults.standard.array(forKey: "AppleLanguages")
-                textField.text = NSLocalizedString(language!.first as! String, comment: "")
                 setUpPickerView()
+                textField.placeholder = "language"
+                let picker = textField.inputView as! UIPickerView
+                let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
+                if pickerArray.contains(language.first!){
+                    textField.text = NSLocalizedString(language.first!, comment: "")
+                    picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(language.first!, comment: "")) ?? 0, inComponent: 0, animated: true)
+                } else {
+                    textField.text = NSLocalizedString(appLanguages[0], comment: "")
+                    picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
+                }
             default:
                 activatedOption.isHidden = true
         }
@@ -193,8 +226,16 @@ class SettingOptionCell: UITableViewCell {
         UserDefaults.standard.set(metric, forKey: metricUnitsString)
     }
     
-    //MARK: - Set-up pickers
+    //MARK: - Set-up PickerView
     
+    /**
+     Setting up a **UIPickerView** for a **UITextField**
+     
+     # Example #
+     ```
+     setUpPickerView()
+     ```
+     */
     fileprivate func setUpPickerView() {
         self.addSubview(textField)
         setTextFieldConstraints()
@@ -213,24 +254,38 @@ class SettingOptionCell: UITableViewCell {
         textField.inputView = picker
     }
     
+    // MARK: - SetUp DatePicker
+    
+    /**
+     Setting up a **UIDatePicker** for a **UITextField**
+     
+     # Example #
+     ```
+     setUpPickerView()
+     ```
+     */
     fileprivate func setUpDatePicker() {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .time
         datePicker.locale = .current
+        datePicker.minuteInterval = 10
         let calendar = NSCalendar.current
         var components = calendar.dateComponents([.hour, .minute], from: Date())
         let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
         let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
         let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
         let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-        if titleOption.text?.lowercased() == NSLocalizedString(startingTimeString, comment: "").lowercased(){
+        if titleOption.text?.lowercased() == NSLocalizedString("StartingTime", comment: "").lowercased(){
             components.hour = startTimer.hour
             components.minute = startTimer.minute
-        } else if titleOption.text?.lowercased() == NSLocalizedString(endingTimeString, comment: "").lowercased() {
+            datePicker.setDate(startDate, animated: true)
+            textField.text = formatter.string(from: startDate)
+        } else if titleOption.text?.lowercased() == NSLocalizedString("EndingTime", comment: "").lowercased() {
             components.hour = endTimer.hour
             components.minute = endTimer.minute
+            datePicker.setDate(endDate, animated: true)
+            textField.text = formatter.string(from: endDate)
         }
-        datePicker.setDate(calendar.date(from: components)!, animated: true)
         datePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
         
         self.addSubview(textField)
@@ -240,7 +295,6 @@ class SettingOptionCell: UITableViewCell {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         formatter.locale = .current
-        textField.text = formatter.string(from: datePicker.date)
         
         let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -250,10 +304,20 @@ class SettingOptionCell: UITableViewCell {
         textField.inputAccessoryView = toolBar
     }
     
+    //MARK: - SetUp MinutePicker
+    
+    /**
+     Setting up a **UIDatePicker** for a **UITextField**
+     
+     # Example #
+     ```
+     setUpPickerView()
+     ```
+     */
     fileprivate func setUpMinutePicker() {
         let minutePicker = UIDatePicker()
         minutePicker.datePickerMode = .countDownTimer
-        minutePicker.minuteInterval = 1
+        minutePicker.minuteInterval = 10
         var components = DateComponents()
         components.minute = UserDefaults.standard.integer(forKey: reminderIntervalString)
         let date = Calendar.current.date(from: components)!
@@ -371,113 +435,33 @@ class SettingOptionCell: UITableViewCell {
                 textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
                 switch textField.text?.lowercased() {
                     case NSLocalizedString("nb", comment: "").lowercased():
-                        languageButtonAction("nb")
+                        setAppLanguage("nb")
+                        break
                     case NSLocalizedString("en", comment: ""):
-                        languageButtonAction("en")
+                        setAppLanguage("en")
                     default:
-                        languageButtonAction("en")
+                        setAppLanguage("en")
+                }
+                let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+                let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+                var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
+                if intervals == 0 {
+                    intervals = 60
+                }
+                let current = UNUserNotificationCenter.current()
+                current.getPendingNotificationRequests { (pendingNotifcations) in
+                    if !pendingNotifcations.isEmpty{
+                        current.removeAllDeliveredNotifications()
+                        current.removeAllPendingNotificationRequests()
+                        setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
+                    }
                 }
                 break
             default:
                 break
         }
-    }
-    
-    func languageButtonAction(_ language: String) {
-        UserDefaults.standard.set([language], forKey: appleLanguagesString)
-        UserDefaults.standard.synchronize()
-        
-        // Update the language by swaping bundle
-        Bundle.setLanguage(language)
-        
-        // Done to reintantiate the storyboards instantly
-        UIApplication.shared.windows.first(where: {$0.isKeyWindow})?.rootViewController = StartVC()
-    }
-    
-    // MARK: - Notifications
-    
-    /**
-     Will set a notification for every half hour between 7 am and 11pm.
-     
-     # Example #
-     ```
-     setReminders()
-     ```
-     */
-    func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removeAllDeliveredNotifications()
-        notificationCenter.removeAllPendingNotificationRequests()
-        
-        UserDefaults.standard.set(true, forKey: remindersString)
-        
-        let intervals = frequency
-        
-        let totalHours = endHour - startHour
-        let totalNotifications = totalHours * 60 / intervals
-        
-        for i in 0...totalNotifications {
-            var date = DateComponents()
-            date.hour = startHour + (intervals * i) / 60
-            date.minute = (intervals * i) % 60
-            print("setting reminder for \(date.hour!):\(date.minute!)")
-            let notification = getReminder()
-            
-            let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
-            let uuidString = UUID().uuidString
-            let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
-            notificationCenter.add(request, withCompletionHandler: nil)
-        }
-    }
-    
-    /**
-     Will return a random **UNMutableNotificationContent** a notifcation message.
-     
-     # Notes: #
-     1. This will pick out a message randomly so you could get the same message twice.
-     
-     # Example #
-     ```
-     let notification = getReminder()
-     ```
-     */
-    func getReminder()-> UNMutableNotificationContent{
-        struct reminder {
-            var title = String()
-            var body  = String()
-        }
-        let reminderMessages: [reminder] = [
-            reminder(title: NSLocalizedString("reminder1Title", comment: "First reminder title"),
-                     body:  NSLocalizedString("reminder1Body", comment: "First reminder body")),
-            reminder(title: NSLocalizedString("reminder2Title", comment: "Second reminder title"),
-                     body:  NSLocalizedString("reminder2Body", comment: "Second reminder body")),
-            reminder(title: NSLocalizedString("reminder3Title", comment: "third reminder title"),
-                     body:  NSLocalizedString("reminder3Body", comment: "third reminder body")),
-            reminder(title: NSLocalizedString("reminder4Title", comment: "forth reminder title"),
-                     body:  NSLocalizedString("reminder4Body", comment: "forth reminder body")),
-            reminder(title: NSLocalizedString("reminder5Title", comment: "fifth reminder title"),
-                     body:  NSLocalizedString("reminder5Body", comment: "fifth reminder body")),
-            reminder(title: NSLocalizedString("reminder6Title", comment: "sixth reminder title"),
-                     body:  NSLocalizedString("reminder6Body", comment: "sixth reminder body")),
-            reminder(title: NSLocalizedString("reminder7Title", comment: "seventh reminder title"),
-                     body:  NSLocalizedString("reminder7Body", comment: "seventh reminder body")),
-            reminder(title: NSLocalizedString("reminder8Title", comment: "eighth reminder title"),
-                     body:  NSLocalizedString("reminder8Body", comment: "eighth reimder body")),
-            reminder(title: NSLocalizedString("reminder9Title", comment: "ninth reminder title"),
-                     body:  NSLocalizedString("reminder9Body", comment: "ninth reminder body")),
-            reminder(title: NSLocalizedString("reminder10Title", comment: "tenth reminder title"),
-                     body:  NSLocalizedString("reminder10Body", comment: "tenth reminder body")),
-            reminder(title: NSLocalizedString("reminder11Title", comment: "eleventh reminder title"),
-                     body:  NSLocalizedString("reminder11Body", comment: "eleventh reminder body")),
-            reminder(title: NSLocalizedString("reminder12Title", comment: "twelfth reminder title"),
-                     body:  NSLocalizedString("reminder12Body", comment: "twelfth reminder body"))]
-        let randomInt = Int.random(in: 0...reminderMessages.count - 1)
-        let notification = UNMutableNotificationContent()
-        notification.title = reminderMessages[randomInt].title
-        notification.body  = reminderMessages[randomInt].body
-        notification.categoryIdentifier = "reminder"
-        notification.sound  = .default
-        return notification
     }
     
     /**

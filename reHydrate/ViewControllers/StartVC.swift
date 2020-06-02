@@ -10,7 +10,7 @@ import UIKit
 import HealthKit
 import FSCalendar
 
-let versionString = "version1.7"
+let versionString = "version1.8"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -22,6 +22,7 @@ let reminderIntervalString  = "reminderInterval"
 let smallDrinkOptionString  = "smallDrinkOption"
 let mediumDrinkOptionString = "mediumDrinkOption"
 let largeDrinkOptionString  = "largeDrinkOption"
+let appLanguages = ["en", "nb"]
 
 class StartVC: UIViewController {
     
@@ -184,7 +185,14 @@ class StartVC: UIViewController {
     var days: [Day]  = []
     var today        = Day.init()
     let formatter    = DateFormatter()
-    var darkMode     = true
+    var darkMode     = true {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return darkMode ? .lightContent : .darkContent
+    }
     var metricUnits  = true
     var drinkOptions = [Drink(typeOfDrink: "water", amountOfDrink: 300),
                         Drink(typeOfDrink: "water", amountOfDrink: 500),
@@ -315,20 +323,32 @@ class StartVC: UIViewController {
             } else {
                 darkMode = false
             }
-            let current = UNUserNotificationCenter.current()
-            current.getNotificationSettings(completionHandler: { (settings) in
-                if settings.authorizationStatus == .authorized {
-                    current.removeAllPendingNotificationRequests()
-                    current.removeAllDeliveredNotifications()
-                }
-            })
             let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
-            let endDate  = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
+            let startTime = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+            let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
+            let endTime   = Calendar.current.dateComponents([.hour, .minute], from: endDate)
             let intervals = 30
             defaults.set(startDate, forKey: startingTimeString)
             defaults.set(endDate,   forKey: endingTimeString)
             defaults.set(intervals, forKey: reminderIntervalString)
             defaults.set(darkMode,  forKey: darkModeString)
+            let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
+            if !appLanguages.contains(language[0]){
+                setAppLanguage(appLanguages[0])
+            }
+            let current = UNUserNotificationCenter.current()
+            current.getNotificationSettings(completionHandler: { (settings) in
+                if settings.authorizationStatus == .authorized {
+                    current.getPendingNotificationRequests { (notificationRequests) in
+                        if !notificationRequests.isEmpty {
+                            current.removeAllPendingNotificationRequests()
+                            current.removeAllDeliveredNotifications()
+                            setReminders(startTime.hour ?? 8, endTime.hour ?? 23, intervals)
+                            
+                        }
+                    }
+                }
+            })
         }
         setUpHealth()
         days = Day.loadDay()
@@ -956,4 +976,15 @@ class StartVC: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(UIApplication.willEnterForegroundNotification)
     }
+}
+
+func setAppLanguage(_ language: String) {
+    UserDefaults.standard.set([language], forKey: appleLanguagesString)
+    UserDefaults.standard.synchronize()
+    
+    // Update the language by swaping bundle
+    Bundle.setLanguage(language)
+    
+    // Done to reintantiate the storyboards instantly
+    UIApplication.shared.windows.first(where: {$0.isKeyWindow})?.rootViewController = StartVC()
 }

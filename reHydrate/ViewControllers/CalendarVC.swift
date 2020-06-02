@@ -13,7 +13,14 @@ class CalendarVC: UIViewController {
     
     var drinks: [Drink] = []
     var days: [Day]     = []
-    var darkMode        = Bool()
+    var darkMode        = true {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return darkMode ? .lightContent : .darkContent
+    }
     var metricUnits     = Bool()
     let formatter       = DateFormatter()
     let defaults        = UserDefaults.standard
@@ -70,6 +77,8 @@ class CalendarVC: UIViewController {
         super.viewDidLoad()
         days                 = Day.loadDay()
         formatter.dateFormat = "EEE - dd/MM/yy"
+        let local = defaults.array(forKey: appleLanguagesString)
+        formatter.locale = Locale(identifier: local?.first as! String)
         getDrinks(Date.init())
         setUpUI()
         changeAppearance()
