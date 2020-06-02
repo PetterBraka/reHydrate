@@ -10,11 +10,25 @@ import UIKit
 import HealthKit
 import FSCalendar
 
+let versionString = "version1.8"
+let appleLanguagesString = "AppleLanguages"
+
+let darkModeString          = "darkMode"
+let metricUnitsString       = "metricUnits"
+let startingTimeString      = "startignTime"
+let endingTimeString        = "endingTime"
+let remindersString         = "reminders"
+let reminderIntervalString  = "reminderInterval"
+let smallDrinkOptionString  = "smallDrinkOption"
+let mediumDrinkOptionString = "mediumDrinkOption"
+let largeDrinkOptionString  = "largeDrinkOption"
+let appLanguages = ["en", "nb"]
+
 class StartVC: UIViewController {
     
     //MARK: - Variables
     
-    var appTitle: UILabel        = {
+    var appTitle: UILabel         = {
         let lable  = UILabel()
         lable.text = "reHydrate"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 50)
@@ -22,7 +36,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var currentDay: UILabel      = {
+    var currentDay: UILabel       = {
         let lable  = UILabel()
         lable.text = "Day - dd/MM/yy"
         lable.font = UIFont(name: "AmericanTypewriter", size: 20)
@@ -30,7 +44,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var consumedAmount: UILabel  = {
+    var consumedAmount: UILabel   = {
         let lable  = UILabel()
         lable.text = "0"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -38,7 +52,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var summarySplitter: UILabel = {
+    var summarySplitter: UILabel  = {
         let lable  = UILabel()
         lable.text = "/"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -46,7 +60,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var goalAmount: UILabel      = {
+    var goalAmount: UILabel       = {
         let lable  = UILabel()
         lable.text = "3"
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -54,7 +68,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var goalPrefix: UILabel      = {
+    var goalPrefix: UILabel       = {
         let lable  = UILabel()
         lable.text = ""
         lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
@@ -70,7 +84,7 @@ class StartVC: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    var smallOption: UIButton    = {
+    var smallOption: UIButton     = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(named: "Cup"), for: .normal)
         button.setTitle("", for: .normal)
@@ -78,7 +92,7 @@ class StartVC: UIViewController {
         button.contentMode = .bottom
         return button
     }()
-    var smallLabel: UILabel      = {
+    var smallLabel: UILabel       = {
         let lable  = UILabel()
         lable.text = "300"
         lable.font = UIFont(name: "AmericanTypewriter", size: 17)
@@ -86,7 +100,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var smallPrefix: UILabel     = {
+    var smallPrefix: UILabel      = {
         let lable  = UILabel()
         lable.text = "ml"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -94,7 +108,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var mediumOption: UIButton   = {
+    var mediumOption: UIButton    = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(named: "Bottle"), for: .normal)
         button.setTitle("", for: .normal)
@@ -102,7 +116,7 @@ class StartVC: UIViewController {
         button.contentMode = .bottom
         return button
     }()
-    var mediumLabel: UILabel     = {
+    var mediumLabel: UILabel      = {
         let lable  = UILabel()
         lable.text = "500"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -110,7 +124,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var mediumPrefix: UILabel    = {
+    var mediumPrefix: UILabel     = {
         let lable  = UILabel()
         lable.text = "ml"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -118,7 +132,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var largeOption: UIButton    = {
+    var largeOption: UIButton     = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(named: "Flask"), for: .normal)
         button.setTitle("", for: .normal)
@@ -126,7 +140,7 @@ class StartVC: UIViewController {
         button.contentMode = .bottom
         return button
     }()
-    var largeLabel: UILabel      = {
+    var largeLabel: UILabel       = {
         let lable  = UILabel()
         lable.text = "750"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -134,7 +148,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var largePrefix: UILabel     = {
+    var largePrefix: UILabel      = {
         let lable  = UILabel()
         lable.text = "ml"
         lable.font = UIFont(name: "AmericanTypewriter", size: 16)
@@ -142,7 +156,7 @@ class StartVC: UIViewController {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let drinkStack: UIStackView  = {
+    let drinkStack: UIStackView   = {
         let stack = UIStackView()
         stack.axis      = .horizontal
         stack.alignment = .bottom
@@ -150,7 +164,7 @@ class StartVC: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    var settingsButton: UIButton = {
+    var settingsButton: UIButton  = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
         button.setTitle("", for: .normal)
@@ -158,7 +172,7 @@ class StartVC: UIViewController {
         button.contentMode = .scaleAspectFit
         return button
     }()
-    var calendarButton: UIButton = {
+    var calendarButton: UIButton  = {
         var button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
         button.setTitle("", for: .normal)
@@ -171,7 +185,14 @@ class StartVC: UIViewController {
     var days: [Day]  = []
     var today        = Day.init()
     let formatter    = DateFormatter()
-    var darkMode     = true
+    var darkMode     = true {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return darkMode ? .lightContent : .darkContent
+    }
     var metricUnits  = true
     var drinkOptions = [Drink(typeOfDrink: "water", amountOfDrink: 300),
                         Drink(typeOfDrink: "water", amountOfDrink: 500),
@@ -286,6 +307,8 @@ class StartVC: UIViewController {
         createDrinkStack()
         createSummaryStack()
         formatter.dateFormat = "EEEE - dd/MM/yy"
+        let local = defaults.array(forKey: appleLanguagesString)
+        formatter.locale = Locale(identifier: local?.first as! String)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),
                                                name: UIApplication.willEnterForegroundNotification,
@@ -294,26 +317,38 @@ class StartVC: UIViewController {
         if UIApplication.isFirstLaunch() {
             print("first time to launch this app")
             metricUnits  = true
-            defaults.set(metricUnits, forKey: "metricUnits")
+            defaults.set(metricUnits, forKey: metricUnitsString)
             if self.traitCollection.userInterfaceStyle == .dark {
                 darkMode = true
             } else {
                 darkMode = false
             }
+            let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
+            let startTime = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+            let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
+            let endTime   = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+            let intervals = 30
+            defaults.set(startDate, forKey: startingTimeString)
+            defaults.set(endDate,   forKey: endingTimeString)
+            defaults.set(intervals, forKey: reminderIntervalString)
+            defaults.set(darkMode,  forKey: darkModeString)
+            let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
+            if !appLanguages.contains(language[0]){
+                setAppLanguage(appLanguages[0])
+            }
             let current = UNUserNotificationCenter.current()
             current.getNotificationSettings(completionHandler: { (settings) in
                 if settings.authorizationStatus == .authorized {
-                    current.removeAllPendingNotificationRequests()
-                    current.removeAllDeliveredNotifications()
+                    current.getPendingNotificationRequests { (notificationRequests) in
+                        if !notificationRequests.isEmpty {
+                            current.removeAllPendingNotificationRequests()
+                            current.removeAllDeliveredNotifications()
+                            setReminders(startTime.hour ?? 8, endTime.hour ?? 23, intervals)
+                            
+                        }
+                    }
                 }
             })
-            let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
-            let endDate  = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
-            let intervals = 30
-            defaults.set(startDate, forKey: "startignTime")
-            defaults.set(endDate,   forKey: "endingTime")
-            defaults.set(intervals, forKey: "reminderInterval")
-            defaults.set(darkMode,  forKey: "darkMode")
         }
         setUpHealth()
         days = Day.loadDay()
@@ -323,8 +358,8 @@ class StartVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("Main screen will appear")
-        darkMode             = defaults.bool(forKey: "darkMode")
-        metricUnits          = defaults.bool(forKey: "metricUnits")
+        darkMode             = defaults.bool(forKey: darkModeString)
+        metricUnits          = defaults.bool(forKey: metricUnitsString)
         currentDay.text      = formatter.string(from: Date.init()).localizedCapitalized
         days                 = Day.loadDay()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
@@ -464,6 +499,17 @@ class StartVC: UIViewController {
         largeOption.addGestureRecognizer(largeOptionLongGesture)
     }
     
+    /**
+     Will crate a stack for all the summary lables.
+     
+     # Example #
+     ```
+     func setUPUI(){
+         createSummaryStack()
+         self.view.addSubView(summaryStack)
+     }
+     ```
+     */
     func createSummaryStack(){
         summaryStack.addArrangedSubview(consumedAmount)
         summaryStack.addArrangedSubview(summarySplitter)
@@ -611,7 +657,7 @@ class StartVC: UIViewController {
      */
     func changeAppearance() {
         if darkMode == true {
-            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
+            self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
             appTitle.textColor        = .white
             currentDay.textColor      = .white
             consumedAmount.textColor  = .white
@@ -643,41 +689,6 @@ class StartVC: UIViewController {
             calendarButton.tintColor  = .black
             settingsButton.tintColor  = .black
         }
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
     }
     
     //MARK: - Update View
@@ -887,9 +898,9 @@ class StartVC: UIViewController {
      ```
      */
     func saveDrinkOptions(){
-        defaults.set(drinkOptions[0].amountOfDrink, forKey: "smallDrinkOption")
-        defaults.set(drinkOptions[1].amountOfDrink, forKey: "mediumDrinkOption")
-        defaults.set(drinkOptions[2].amountOfDrink, forKey: "largeDrinkOption")
+        defaults.set(drinkOptions[0].amountOfDrink, forKey: smallDrinkOptionString)
+        defaults.set(drinkOptions[1].amountOfDrink, forKey: mediumDrinkOptionString)
+        defaults.set(drinkOptions[2].amountOfDrink, forKey: largeDrinkOptionString)
         updateUI()
     }
     
@@ -906,9 +917,9 @@ class StartVC: UIViewController {
      ```
      */
     func loadDrinkOptions(){
-        let small   = defaults.float(forKey: "smallDrinkOption")
-        let medium  = defaults.float(forKey: "mediumDrinkOption")
-        let large   = defaults.float(forKey: "largeDrinkOption")
+        let small   = defaults.float(forKey: smallDrinkOptionString)
+        let medium  = defaults.float(forKey: mediumDrinkOptionString)
+        let large   = defaults.float(forKey: largeDrinkOptionString)
         
         
         if small != 0 || medium != 0 || large != 0  {
@@ -967,27 +978,13 @@ class StartVC: UIViewController {
     }
 }
 
-extension UIApplication {
+func setAppLanguage(_ language: String) {
+    UserDefaults.standard.set([language], forKey: appleLanguagesString)
+    UserDefaults.standard.synchronize()
     
-    /**
-     Will check if it is the first time the app is ever launched on this phone
-     
-     - returns: **Bool** true if its the first time false if not.
-     
-     # Example #
-     ```
-     if UIApplication.isFirstLaunch() {
-         print("first time to launch this app")
-         //Do something
-     }
-     ```
-     */
-    class func isFirstLaunch() -> Bool {
-        if !UserDefaults.standard.bool(forKey: "version1.7") {
-            UserDefaults.standard.set(true, forKey: "version1.7")
-            UserDefaults.standard.synchronize()
-            return true
-        }
-        return false
-    }
+    // Update the language by swaping bundle
+    Bundle.setLanguage(language)
+    
+    // Done to reintantiate the storyboards instantly
+    UIApplication.shared.windows.first(where: {$0.isKeyWindow})?.rootViewController = StartVC()
 }

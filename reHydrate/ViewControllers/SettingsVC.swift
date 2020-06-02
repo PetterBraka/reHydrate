@@ -28,7 +28,14 @@ class SettingsVC: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    var darkMode                   = true
+    var darkMode                   = true {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return darkMode ? .lightContent : .darkContent
+    }
     var metricUnits                = true
     var selectedRow: IndexPath     = IndexPath()
     var settings: [settingOptions] = [
@@ -46,9 +53,12 @@ class SettingsVC: UIViewController {
                                  NSLocalizedString("EndingTime", comment: "settings option"),
                                  NSLocalizedString("Frequency", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("Introductions", comment: "Header title"),
-                       options: [NSLocalizedString("HowToUse", comment: "settings option")]),
+                       options: [NSLocalizedString("Language", comment: "setting option"),
+                                 NSLocalizedString("HowToUse", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("DangerZone", comment: "Header title"),
-                       options: [NSLocalizedString("RemoveData", comment: "settings option")])]
+                       options: [NSLocalizedString("OpenAppSettings", comment: "settings option"),
+                                 NSLocalizedString("OpenHealthApp", comment: "settings option"),
+                                 NSLocalizedString("RemoveData", comment: "settings option")])]
     
     //MARK: - Tap controller
     
@@ -61,8 +71,8 @@ class SettingsVC: UIViewController {
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
             case exitButton:
-                defaults.set(darkMode, forKey: "darkMode")
-                defaults.set(metricUnits, forKey: "metricUnits")
+                defaults.set(darkMode, forKey: darkModeString)
+                defaults.set(metricUnits, forKey: metricUnitsString)
                 let transition      = CATransition()
                 transition.duration = 0.4
                 transition.type     = .push
@@ -77,7 +87,6 @@ class SettingsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
             if success {
@@ -88,9 +97,9 @@ class SettingsVC: UIViewController {
         }
         self.modalPresentationStyle = .fullScreen
         
-        settings[3].isOpened = defaults.bool(forKey: "reminders")
-        metricUnits          = defaults.bool(forKey: "metricUnits")
-        darkMode             = defaults.bool(forKey: "darkMode")
+        settings[3].isOpened = defaults.bool(forKey: remindersString)
+        metricUnits          = defaults.bool(forKey: metricUnitsString)
+        darkMode             = defaults.bool(forKey: darkModeString)
         
         setUpUI()
         changeAppearance()
@@ -135,7 +144,6 @@ class SettingsVC: UIViewController {
      ```
      */
     func setConstraints(){
-        
         exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         exitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
@@ -167,131 +175,10 @@ class SettingsVC: UIViewController {
             tableView.backgroundColor = .white
             exitButton.tintColor      = .black
         } else{
-            self.view.backgroundColor = hexStringToUIColor(hex: "#212121")
-            tableView.backgroundColor = hexStringToUIColor(hex: "#212121")
+            self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
+            tableView.backgroundColor = UIColor().hexStringToUIColor("#212121")
             exitButton.tintColor      = .lightGray
         }
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
-    }
-    
-    // MARK: - Notifications
-    
-    /**
-     Will set a notification for every half hour between 7 am and 11pm.
-     
-     # Example #
-     ```
-     setReminders()
-     ```
-     */
-    func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removeAllDeliveredNotifications()
-        notificationCenter.removeAllPendingNotificationRequests()
-        
-        defaults.set(true, forKey: "reminders")
-        
-        let intervals = frequency
-        
-        let totalHours = endHour - startHour
-        let totalNotifications = totalHours * 60 / intervals
-        
-        for i in 0...totalNotifications {
-            var date = DateComponents()
-            date.hour = startHour + (intervals * i) / 60
-            date.minute = (intervals * i) % 60
-            print("setting reminder for \(date.hour!):\(date.minute!)")
-            let notification = getReminder()
-            
-            let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
-            let uuidString = UUID().uuidString
-            let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
-            notificationCenter.add(request, withCompletionHandler: nil)
-        }
-    }
-    
-    /**
-     Will return a random **UNMutableNotificationContent** a notifcation message.
-     
-     # Notes: #
-     1. This will pick out a message randomly so you could get the same message twice.
-     
-     # Example #
-     ```
-     let notification = getReminder()
-     ```
-     */
-    func getReminder()-> UNMutableNotificationContent{
-        struct reminder {
-            var title = String()
-            var body  = String()
-        }
-        let reminderMessages: [reminder] = [
-            reminder(title: NSLocalizedString("reminder1Title", comment: "First reminder title"),
-                     body:  NSLocalizedString("reminder1Body", comment: "First reminder body")),
-            reminder(title: NSLocalizedString("reminder2Title", comment: "Second reminder title"),
-                     body:  NSLocalizedString("reminder2Body", comment: "Second reminder body")),
-            reminder(title: NSLocalizedString("reminder3Title", comment: "third reminder title"),
-                     body:  NSLocalizedString("reminder3Body", comment: "third reminder body")),
-            reminder(title: NSLocalizedString("reminder4Title", comment: "forth reminder title"),
-                     body:  NSLocalizedString("reminder4Body", comment: "forth reminder body")),
-            reminder(title: NSLocalizedString("reminder5Title", comment: "fifth reminder title"),
-                     body:  NSLocalizedString("reminder5Body", comment: "fifth reminder body")),
-            reminder(title: NSLocalizedString("reminder6Title", comment: "sixth reminder title"),
-                     body:  NSLocalizedString("reminder6Body", comment: "sixth reminder body")),
-            reminder(title: NSLocalizedString("reminder7Title", comment: "seventh reminder title"),
-                     body:  NSLocalizedString("reminder7Body", comment: "seventh reminder body")),
-            reminder(title: NSLocalizedString("reminder8Title", comment: "eighth reminder title"),
-                     body:  NSLocalizedString("reminder8Body", comment: "eighth reimder body")),
-            reminder(title: NSLocalizedString("reminder9Title", comment: "ninth reminder title"),
-                     body:  NSLocalizedString("reminder9Body", comment: "ninth reminder body")),
-            reminder(title: NSLocalizedString("reminder10Title", comment: "tenth reminder title"),
-                     body:  NSLocalizedString("reminder10Body", comment: "tenth reminder body")),
-            reminder(title: NSLocalizedString("reminder11Title", comment: "eleventh reminder title"),
-                     body:  NSLocalizedString("reminder11Body", comment: "eleventh reminder body")),
-            reminder(title: NSLocalizedString("reminder12Title", comment: "twelfth reminder title"),
-                     body:  NSLocalizedString("reminder12Body", comment: "twelfth reminder body"))]
-        let randomInt = Int.random(in: 0...reminderMessages.count - 1)
-        let notification = UNMutableNotificationContent()
-        notification.title = reminderMessages[randomInt].title
-        notification.body  = reminderMessages[randomInt].body
-        notification.categoryIdentifier = "reminder"
-        notification.sound  = .default
-        return notification
     }
     
     // MARK: - Temp message
@@ -376,13 +263,18 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 }
                 break
             case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
-                 IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3):
+                 IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
+                 IndexPath(row: 0, section: 4):
+                cell.subTitle.removeFromSuperview()
                 break
-            case IndexPath(row: 0, section: 5):
+            case IndexPath(row: 2, section: 5):
                 cell.titleOption.textColor = .systemRed
                 cell.subTitle.removeFromSuperview()
             default:
                 cell.textField.removeFromSuperview()
+                cell.subTitle.removeFromSuperview()
+                cell.setTitleConstraints()
+                cell.setButtonConstraints()
                 break
         }
         
@@ -429,17 +321,17 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 1, section: 1): // imperial is selected
                 metricUnits = false
                 tableView.reloadData()
-            case IndexPath(row: 0, section: 3): // setts notifications between 7 and 23
+            case IndexPath(row: 0, section: 3): // setts notifications
                 let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
                 settings[3].isOpened = !settings[3].isOpened
                 if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
-                    let startDate = defaults.object(forKey: "startignTime") as! Date
+                    let startDate = defaults.object(forKey: startingTimeString) as! Date
                     let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                    let endDate = defaults.object(forKey: "endingTime") as! Date
+                    let endDate = defaults.object(forKey: endingTimeString) as! Date
                     let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                    let intervals = defaults.integer(forKey: "reminderInterval")
+                    let intervals = defaults.integer(forKey: reminderIntervalString)
                     setReminders(startTimer.hour!, endTimer.hour!, intervals)
                     sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
                 } else {
@@ -448,15 +340,25 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     let center = UNUserNotificationCenter.current()
                     center.removeAllPendingNotificationRequests()
                     center.removeAllDeliveredNotifications()
-                    defaults.set(false, forKey: "reminders")
+                    defaults.set(false, forKey: remindersString)
                     sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
                 }
             case IndexPath(row: 0, section: 4):
+                break
+            case IndexPath(row: 1, section: 4):
                 print("help pressed")
                 let tutorialVC = TutorialVC()
                 tutorialVC.modalPresentationStyle = .fullScreen
                 self.present(tutorialVC, animated: true, completion: nil)
             case IndexPath(row: 0, section: 5):
+                if let url = URL(string:UIApplication.openSettingsURLString) {
+                    if UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+            }
+            case IndexPath(row: 1, section: 5):
+                UIApplication.shared.open(URL(string: "x-apple-health://")!)
+            case IndexPath(row: 2, section: 5):
                 let clearDataAlert = UIAlertController(title: NSLocalizedString("ClearingDataAlert",
                                                                                 comment: "Title for clearing data alert"),
                                                        message: NSLocalizedString("ClearingDataBody",
@@ -478,23 +380,88 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
-extension UIImage {
+// MARK: - Notifications
+
+/**
+ Will set a notification for every half hour between 7 am and 11pm.
+ 
+ # Example #
+ ```
+ setReminders()
+ ```
+ */
+func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
+    let notificationCenter = UNUserNotificationCenter.current()
+    notificationCenter.removeAllDeliveredNotifications()
+    notificationCenter.removeAllPendingNotificationRequests()
     
-    /**
-     Will create a greayed out version of the image.
-     
-     - returns: The image grayed out.
-     
-     # Example #
-     ```
-     imageView.image  = imageView.image?.grayed
-     ```
-     */
-    var grayed: UIImage {
-        guard let ciImage = CIImage(image: self)
-            else { return self }
-        let filterParameters = [ kCIInputColorKey: CIColor.white, kCIInputIntensityKey: 1.0 ] as [String: Any]
-        let grayscale = ciImage.applyingFilter("CIColorMonochrome", parameters: filterParameters)
-        return UIImage(ciImage: grayscale)
+    UserDefaults.standard.set(true, forKey: remindersString)
+    
+    let intervals = frequency
+    
+    let totalHours = endHour - startHour
+    let totalNotifications = totalHours * 60 / intervals
+    
+    for i in 0...totalNotifications {
+        var date = DateComponents()
+        date.hour = startHour + (intervals * i) / 60
+        date.minute = (intervals * i) % 60
+        print("setting reminder for \(date.hour!):\(date.minute!)")
+        let notification = getReminder()
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+        let uuidString = UUID().uuidString
+        let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+        notificationCenter.add(request, withCompletionHandler: nil)
     }
+}
+
+/**
+ Will return a random **UNMutableNotificationContent** a notifcation message.
+ 
+ # Notes: #
+ 1. This will pick out a message randomly so you could get the same message twice.
+ 
+ # Example #
+ ```
+ let notification = getReminder()
+ ```
+ */
+func getReminder()-> UNMutableNotificationContent{
+    struct reminder {
+        var title = String()
+        var body  = String()
+    }
+    let reminderMessages: [reminder] = [
+        reminder(title: NSLocalizedString("reminder1Title", comment: "First reminder title"),
+                 body:  NSLocalizedString("reminder1Body", comment: "First reminder body")),
+        reminder(title: NSLocalizedString("reminder2Title", comment: "Second reminder title"),
+                 body:  NSLocalizedString("reminder2Body", comment: "Second reminder body")),
+        reminder(title: NSLocalizedString("reminder3Title", comment: "third reminder title"),
+                 body:  NSLocalizedString("reminder3Body", comment: "third reminder body")),
+        reminder(title: NSLocalizedString("reminder4Title", comment: "forth reminder title"),
+                 body:  NSLocalizedString("reminder4Body", comment: "forth reminder body")),
+        reminder(title: NSLocalizedString("reminder5Title", comment: "fifth reminder title"),
+                 body:  NSLocalizedString("reminder5Body", comment: "fifth reminder body")),
+        reminder(title: NSLocalizedString("reminder6Title", comment: "sixth reminder title"),
+                 body:  NSLocalizedString("reminder6Body", comment: "sixth reminder body")),
+        reminder(title: NSLocalizedString("reminder7Title", comment: "seventh reminder title"),
+                 body:  NSLocalizedString("reminder7Body", comment: "seventh reminder body")),
+        reminder(title: NSLocalizedString("reminder8Title", comment: "eighth reminder title"),
+                 body:  NSLocalizedString("reminder8Body", comment: "eighth reimder body")),
+        reminder(title: NSLocalizedString("reminder9Title", comment: "ninth reminder title"),
+                 body:  NSLocalizedString("reminder9Body", comment: "ninth reminder body")),
+        reminder(title: NSLocalizedString("reminder10Title", comment: "tenth reminder title"),
+                 body:  NSLocalizedString("reminder10Body", comment: "tenth reminder body")),
+        reminder(title: NSLocalizedString("reminder11Title", comment: "eleventh reminder title"),
+                 body:  NSLocalizedString("reminder11Body", comment: "eleventh reminder body")),
+        reminder(title: NSLocalizedString("reminder12Title", comment: "twelfth reminder title"),
+                 body:  NSLocalizedString("reminder12Body", comment: "twelfth reminder body"))]
+    let randomInt = Int.random(in: 0...reminderMessages.count - 1)
+    let notification = UNMutableNotificationContent()
+    notification.title = reminderMessages[randomInt].title
+    notification.body  = reminderMessages[randomInt].body
+    notification.categoryIdentifier = "reminder"
+    notification.sound  = .default
+    return notification
 }

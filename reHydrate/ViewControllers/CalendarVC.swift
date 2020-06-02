@@ -13,7 +13,14 @@ class CalendarVC: UIViewController {
     
     var drinks: [Drink] = []
     var days: [Day]     = []
-    var darkMode        = Bool()
+    var darkMode        = true {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return darkMode ? .lightContent : .darkContent
+    }
     var metricUnits     = Bool()
     let formatter       = DateFormatter()
     let defaults        = UserDefaults.standard
@@ -70,6 +77,8 @@ class CalendarVC: UIViewController {
         super.viewDidLoad()
         days                 = Day.loadDay()
         formatter.dateFormat = "EEE - dd/MM/yy"
+        let local = defaults.array(forKey: appleLanguagesString)
+        formatter.locale = Locale(identifier: local?.first as! String)
         getDrinks(Date.init())
         setUpUI()
         changeAppearance()
@@ -98,8 +107,8 @@ class CalendarVC: UIViewController {
             tableView.isScrollEnabled = false
         }
         
-        darkMode             = defaults.bool(forKey: "darkMode")
-        metricUnits          = defaults.bool(forKey: "metricUnits")
+        darkMode             = defaults.bool(forKey: darkModeString)
+        metricUnits          = defaults.bool(forKey: metricUnitsString)
         tableView.delegate   = self
         tableView.dataSource = self
         calendar.delegate    = self
@@ -190,12 +199,12 @@ class CalendarVC: UIViewController {
         calendar.appearance.headerTitleFont = UIFont(name: "American typewriter", size: 20)
         calendar.appearance.borderRadius = 1
         if darkMode {
-            calendar.backgroundColor              = hexStringToUIColor(hex: "#212121")
-            self.view.backgroundColor             = hexStringToUIColor(hex: "#212121")
-            tableView.backgroundColor             = hexStringToUIColor(hex: "#212121")
+            calendar.backgroundColor              = UIColor().hexStringToUIColor("#212121")
+            self.view.backgroundColor             = UIColor().hexStringToUIColor("#212121")
+            tableView.backgroundColor             = UIColor().hexStringToUIColor("#212121")
             titleDate.textColor                   = .white
             calendar.appearance.headerTitleColor  = .white
-            calendar.appearance.weekdayTextColor  = hexStringToUIColor(hex: "#cfcfcf")
+            calendar.appearance.weekdayTextColor  = UIColor().hexStringToUIColor("#cfcfcf")
             calendar.appearance.titleDefaultColor = .white
             exitButton.tintColor                  = .lightGray
         } else {
@@ -226,41 +235,6 @@ class CalendarVC: UIViewController {
             average.amountOfDrink += day.consumedAmount.amountOfDrink
         }
         return average.amountOfDrink / Float(days.count)
-    }
-    
-    /**
-     Will convert an string of a hex color code to **UIColor**
-     
-     - parameter hex: - A **String** whit the hex color code.
-     
-     # Notes: #
-     1. This will need an **String** in a hex coded style.
-     
-     # Example #
-     ```
-     let color: UIColor = hexStringToUIColor ("#212121")
-     ```
-     */
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
     }
 }
 
@@ -369,20 +343,5 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
                 calendar.setCurrentPage(date, animated: true)
             }
         }
-    }
-}
-
-extension UIImage {
-    func renderResizedImage (newWidth: CGFloat) -> UIImage {
-        let scale = newWidth / self.size.width
-        let newHeight = self.size.height * scale
-        let newSize = CGSize(width: newWidth, height: newHeight)
-        
-        let renderer = UIGraphicsImageRenderer(size: newSize)
-        
-        let image = renderer.image { (context) in
-            self.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: newSize))
-        }
-        return image
     }
 }
