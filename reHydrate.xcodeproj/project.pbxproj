@@ -21,7 +21,6 @@
 		33C431912482769B00E8EECA /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C431902482769B00E8EECA /* Extenstions.swift */; };
 		33C4319324827F2700E8EECA /* BundleExtension.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C4319224827F2700E8EECA /* BundleExtension.swift .swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
-		33F32134243D115600E61D27 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33F32133243D115600E61D27 /* CoreData.framework */; };
 		33FC8427243A47A800848B7C /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8426243A47A800848B7C /* Drink.swift */; };
 		33FC8429243A4A2600848B7C /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8428243A4A2600848B7C /* Day.swift */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
@@ -66,7 +65,6 @@
 			files = (
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */,
-				33F32134243D115600E61D27 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
