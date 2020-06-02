@@ -34,8 +34,8 @@ class SettingOptionCell: UITableViewCell {
         textField.layer.borderColor 	= UIColor.lightGray.cgColor
         textField.font 					= UIFont(name: "AmericanTypewriter", size: 17)
         textField.textAlignment 		= .center
-        textField.setLeftPadding(20)
-        textField.setRightPadding(20)
+        textField.setLeftPadding(10)
+        textField.setRightPadding(10)
         return textField
     }()
     let titleOption: UILabel 	= {
@@ -212,7 +212,7 @@ class SettingOptionCell: UITableViewCell {
                 textField.placeholder = "language"
                 let picker = textField.inputView as! UIPickerView
                 let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
-                if pickerArray.contains(language.first!){
+                if pickerArray.contains(NSLocalizedString(language[0], comment: "")){
                     textField.text = NSLocalizedString(language.first!, comment: "")
                     picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(language.first!, comment: "")) ?? 0, inComponent: 0, animated: true)
                 } else {
