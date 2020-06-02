@@ -31,8 +31,13 @@
 "EndingTime"       = "Ending time";
 "Frequency"        = "Frequency";
 "Introductions"    = "General";
+"Language"         = "Language";
+"en"               = "English";
+"nb"               = "Norsk";
 "HowToUse"         = "How to use";
 "DangerZone"       = "Danger zone";
+"OpenAppSettings"  = "Open app settings";
+"OpenHealthApp"    = "Open the health app";
 "RemoveData"       = "Remove data";
 
 // Reminders
@@ -81,9 +86,9 @@
 "Next" = "Next";
 
 // Calendar
-"Goal"               = "Goal";
-"Water"              = "Water";
-"Average"            = "Average";
-"Consumed"           = "Consumed";
-"DrinkType"          = "Drink type";
-"DrinkAmount"        = "Drink amount";
+"Goal"        = "Goal";
+"Water"       = "Water";
+"Average"     = "Average";
+"Consumed"    = "Consumed";
+"DrinkType"   = "Drink type";
+"DrinkAmount" = "Drink amount";

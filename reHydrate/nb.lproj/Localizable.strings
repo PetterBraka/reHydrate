@@ -17,7 +17,7 @@
 // settingsVC
 "Appearance"       = "Utseende";
 "LightMode"        = "Lys modus";
-"DarkMode"         = "mørk modus";
+"DarkMode"         = "Mørk modus";
 "UnitSystem"       = "Enhets system";
 "Units"            = "Enheter";
 "MetricSystem"     = "Metrisk system";
@@ -27,12 +27,17 @@
 "Reminders"        = "Påminnelser";
 "TurnOnReminders"  = "Skru på påminnelser";
 "TurnOffReminders" = "Skru av påminnelser";
-"StartingTime"     = "Start";
-"EndingTime"       = "Slutt";
+"StartingTime"     = "Start tid";
+"EndingTime"       = "Slutt tid";
 "Frequency"        = "Frekvens";
 "Introductions"    = "Generelt";
-"HowToUse"         = "Bruksanvisning";
+"Language"         = "Språk";
+"en"               = "English";
+"nb"               = "Norsk";
+"HowToUse"         = "Guide";
 "DangerZone"       = "Faresone";
+"OpenAppSettings"  = "Åpne app innstillinger";
+"OpenHealthApp"    = "Åpne helse appen";
 "RemoveData"       = "Fjern data";
 
 //reminders
