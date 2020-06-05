@@ -79,11 +79,13 @@ class CalendarVC: UIViewController {
         formatter.dateFormat = "EEE - dd/MM/yy"
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         getDrinks(Date.init())
         setUpUI()
         changeAppearance()
     }
-    
     //MARK: - Set up of UI
     
     /**
@@ -116,7 +118,7 @@ class CalendarVC: UIViewController {
         calendar.locale      = .current
         tableView.register(InfoCell.self, forCellReuseIdentifier: "customCell")
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
-        
+        calendar.allowsMultipleSelection = true
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
         
@@ -156,28 +158,6 @@ class CalendarVC: UIViewController {
         calendar.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
         calendar.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
         calendar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
-    }
-    
-    /**
-     Will find the drinks, depending on the date past in and update UI
-     
-     - parameter dateOfDay: - The date of you want the drinks from.
-     
-     # Example #
-     ```
-     getDrinks(Date.init())
-     ```
-     */
-    func getDrinks(_ dateOfDay: Date){
-        titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
-        if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
-            let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
-            drinks.append(day.goalAmount)
-            drinks.append(day.consumedAmount)
-        } else {
-            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
-            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
-        }
     }
     
     //MARK: - Change appearence
@@ -220,6 +200,29 @@ class CalendarVC: UIViewController {
     }
     
     /**
+     Will find the drinks, depending on the date past in and update UI
+     
+     - parameter dateOfDay: - The date of you want the drinks from.
+     
+     # Example #
+     ```
+     getDrinks(Date.init())
+     ```
+     */
+    func getDrinks(_ dateOfDay: Date){
+        print(formatter.string(from: dateOfDay))
+        titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
+        if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
+            let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
+            drinks.append(day.goalAmount)
+            drinks.append(day.consumedAmount)
+        } else {
+            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
+            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
+        }
+    }
+    
+    /**
      Will take the averag of the last days upto 7 days and return a float.
      
      - returns: **Float** The average consumtion
@@ -235,6 +238,19 @@ class CalendarVC: UIViewController {
             average.amountOfDrink += day.consumedAmount.amountOfDrink
         }
         return average.amountOfDrink / Float(days.count)
+    }
+    
+    func getAverage(_ startDate: Date,_ endDate: Date)-> Float {
+        var average = Float()
+        var x = Float(0)
+        for day in calendar.selectedDates {
+            if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
+                let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
+                average += selectedDay?.consumedAmount.amountOfDrink ?? 0
+            }
+            x += 1
+        }
+        return average / x
     }
 }
 
@@ -287,10 +303,22 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.configureVisibleCells()
-        print(date.description)
-        drinks.removeAll()
-        getDrinks(date)
+        print("selected \(formatter.string(from: date))")
         tableView.reloadData()
+        self.drinks.removeAll()
+        self.getDrinks(date)
+        calendar.selectedDates.forEach { (date) in
+            print(formatter.string(from: date))
+        }
+        if calendar.selectedDates.count > 1 {
+            let dates = calendar.selectedDates.sorted(by: {$0 < $1})
+            let average = getAverage(dates.first!, dates.last!.addingTimeInterval(86400))
+            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
+        }
+    }
+    func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        self.configureVisibleCells()
+        print("deselected \(formatter.string(from: date))")
     }
     
     private func configureVisibleCells() {
@@ -303,44 +331,53 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
         
-        let diyCell = (cell as! CalendarCell)
+        let customCell = (cell as! CalendarCell)
         // Custom today layer
-        diyCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
+        customCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
         // Configure selection layer
-        
         if calendar.selectedDates.isEmpty {
             if self.gregorian.isDateInToday(date) {
-                diyCell.todayHighlighter.isHidden = true
-                diyCell.selectionLayer.isHidden = false
-                diyCell.selectionType = SelectionType.single
+                customCell.todayHighlighter.isHidden = true
+                customCell.selectionLayer.isHidden = false
+                customCell.selectionType = SelectionType.single
             } else {
-                diyCell.todayHighlighter.isHidden = true
-                diyCell.selectionLayer.isHidden = true
+                customCell.todayHighlighter.isHidden = true
+                customCell.selectionLayer.isHidden = true
             }
-        } else {
+        } else if position == .current {
             var selectionType = SelectionType.none
             
             if calendar.selectedDates.contains(date) {
+                let previousDate = self.gregorian.date(byAdding: .day, value: -1, to: date)!
+                let nextDate = self.gregorian.date(byAdding: .day, value: 1, to: date)!
                 if calendar.selectedDates.contains(date) {
-                    selectionType = .single
+                    if calendar.selectedDates.contains(previousDate) && calendar.selectedDates.contains(nextDate) {
+                        selectionType = .middle
+                    }
+                    else if calendar.selectedDates.contains(previousDate) && calendar.selectedDates.contains(date) {
+                        selectionType = .rightBorder
+                    }
+                    else if calendar.selectedDates.contains(nextDate) {
+                        selectionType = .leftBorder
+                    }
+                    else {
+                        selectionType = .single
+                    }
+                } else {
+                    selectionType = .none
                 }
-            } else {
-                selectionType = .none
             }
             if selectionType == .none {
-                diyCell.selectionLayer.isHidden = true
+                customCell.selectionLayer.isHidden = true
                 return
             }
             if formatter.string(from: Date()) == formatter.string(from: date){
-                diyCell.todayHighlighter.isHidden = true
-                diyCell.selectionLayer.isHidden = false
-                diyCell.selectionType = selectionType
+                customCell.todayHighlighter.isHidden = true
+                customCell.selectionLayer.isHidden = false
+                customCell.selectionType = selectionType
             } else {
-                diyCell.selectionLayer.isHidden = false
-                diyCell.selectionType = selectionType
-            }
-            if position != .current {
-                calendar.setCurrentPage(date, animated: true)
+                customCell.selectionLayer.isHidden = false
+                customCell.selectionType = selectionType
             }
         }
     }
