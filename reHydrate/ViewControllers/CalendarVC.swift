@@ -316,6 +316,11 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
             print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "d/M"
+            let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
+            consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
+                           "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
             averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
                 "\(String(format: "%.2f", average))")
@@ -339,6 +344,11 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
             print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "d/M"
+            let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
+            consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
+                "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
         }
     }
     
