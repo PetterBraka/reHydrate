@@ -36,6 +36,7 @@ class CalendarVC: UIViewController {
         var lable  = UILabel()
         lable.text = "Mon - 11/05/20"
         lable.font = UIFont(name: "AmericanTypewriter", size: 25)
+        lable.numberOfLines = 0
         lable.textAlignment = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -229,10 +230,10 @@ class CalendarVC: UIViewController {
      
      # Example #
      ```
-     let average = getAverage()
+     let average = getAverageFor()
      ```
      */
-    func getAverage()-> Float {
+    func getAverageFor()-> Float {
         let average = Drink()
         for day in days {
             average.amountOfDrink += day.consumedAmount.amountOfDrink
@@ -240,7 +241,7 @@ class CalendarVC: UIViewController {
         return average.amountOfDrink / Float(days.count)
     }
     
-    func getAverage(_ startDate: Date,_ endDate: Date)-> Float {
+    func getAverageFor(_ startDate: Date,_ endDate: Date)-> Float {
         var average = Float()
         var x = Float(0)
         for day in calendar.selectedDates {
@@ -269,7 +270,7 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
                 cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
                                "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
             case 1:
-                let average = Drink(typeOfDrink: "water", amountOfDrink: getAverage())
+                let average = Drink(typeOfDrink: "water", amountOfDrink: getAverageFor())
                 cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(format: "%.2f",average.amountOfDrink))
             default:
                 break
@@ -312,13 +313,33 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         }
         if calendar.selectedDates.count > 1 {
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
-            let average = getAverage(dates.first!, dates.last!.addingTimeInterval(86400))
+            let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
             print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
+            titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
+            let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
+            averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
+                "\(String(format: "%.2f", average))")
         }
     }
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.configureVisibleCells()
         print("deselected \(formatter.string(from: date))")
+        tableView.reloadData()
+        self.drinks.removeAll()
+        if calendar.selectedDates.count == 1 {
+            self.getDrinks(calendar.selectedDates[0])
+        } else {
+            self.getDrinks(date)
+        }
+        calendar.selectedDates.forEach { (date) in
+            print(formatter.string(from: date))
+        }
+        if calendar.selectedDates.count > 1 {
+            let dates = calendar.selectedDates.sorted(by: {$0 < $1})
+            let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
+            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
+            titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
+        }
     }
     
     private func configureVisibleCells() {
@@ -344,7 +365,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
                 customCell.todayHighlighter.isHidden = true
                 customCell.selectionLayer.isHidden = true
             }
-        } else if position == .current {
+        } else {
             var selectionType = SelectionType.none
             
             if calendar.selectedDates.contains(date) {
