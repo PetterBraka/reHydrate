@@ -12,6 +12,9 @@ import FSCalendar
 enum SelectionType : Int {
     case none
     case single
+    case leftBorder
+    case middle
+    case rightBorder
 }
 
 class CalendarCell: FSCalendarCell {
@@ -54,6 +57,18 @@ class CalendarCell: FSCalendarCell {
         self.backgroundView?.frame = self.bounds.insetBy(dx: 1, dy: 1)
         self.todayHighlighter.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: self.contentView.bounds.height + 5)
         self.selectionLayer.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: self.contentView.bounds.height + 5)
+        if selectionType == .middle {
+            self.selectionLayer.image = UIImage(named: "MidSelected")
+        }
+        else if selectionType == .leftBorder {
+            self.selectionLayer.image = UIImage(named: "LeftSelected")
+        }
+        else if selectionType == .rightBorder {
+            self.selectionLayer.image = UIImage(named: "RightSelected")
+        }
+        else if selectionType == .single {
+            self.selectionLayer.image = UIImage(named: "circle")
+        }
     }
     
     override func configureAppearance() {
