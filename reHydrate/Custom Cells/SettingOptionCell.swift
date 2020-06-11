@@ -242,8 +242,10 @@ class SettingOptionCell: UITableViewCell {
         
         let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        let doneButton    = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(doneClicked))
+        let cancelButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelClicked))
+        cancelButton.tintColor = .red
+        toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
         toolBar.sizeToFit()
         
         textField.inputAccessoryView = toolBar
@@ -299,7 +301,9 @@ class SettingOptionCell: UITableViewCell {
         let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        let cancelButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelClicked))
+        cancelButton.tintColor = .red
+        toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
         toolBar.sizeToFit()
         textField.inputAccessoryView = toolBar
     }
@@ -335,8 +339,10 @@ class SettingOptionCell: UITableViewCell {
         
         let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
-        toolBar.setItems([flexibleSpace, doneButton], animated: false)
+        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(doneClicked))
+        let cancelButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelClicked))
+        cancelButton.tintColor = .red
+        toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
         toolBar.sizeToFit()
         textField.inputAccessoryView = toolBar
     }
@@ -376,6 +382,10 @@ class SettingOptionCell: UITableViewCell {
             break
         }
         textField.text = formatter.string(from: sender.date)
+    }
+    
+    @objc func cancelClicked(){
+        textField.endEditing(true)
     }
     
     @objc func doneClicked(){
