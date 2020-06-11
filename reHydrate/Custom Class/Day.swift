@@ -67,7 +67,7 @@ public class Day: NSObject, Codable {
         }
         for day in days {
             if days.firstIndex(of: day) == 0 {
-                print("------------------Saving---------------------")
+                print("-------------------Saving--------------------")
             }
             let formatter = DateFormatter()
             formatter.dateFormat = "EEE - dd/MM/yy"
@@ -105,7 +105,7 @@ public class Day: NSObject, Codable {
                 }
                 for day in days {
                     if days.firstIndex(of: day) == 0 {
-                        print("------------------Loading-------------------")
+                        print("------------------Loading--------------------")
                     }
                     let formatter = DateFormatter()
                     formatter.dateFormat = "EEE - dd/MM/yy"

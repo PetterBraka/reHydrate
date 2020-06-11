@@ -248,11 +248,35 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         cell.setting         = settings[indexPath.section].options[indexPath.row]
         cell.selectionStyle  = .none
         cell.setCellAppairents(darkMode, metricUnits)
+        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+        let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+        let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+        var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
+        if intervals == 0 {
+            intervals = 60
+        }
         switch indexPath {
             case IndexPath(row: 0, section: 1):
                 cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
+                let current = UNUserNotificationCenter.current()
+                current.getPendingNotificationRequests { (pendingNotifcations) in
+                    if !pendingNotifcations.isEmpty{
+                        current.removeAllDeliveredNotifications()
+                        current.removeAllPendingNotificationRequests()
+                        setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
+                    }
+            }
             case IndexPath(row: 1, section: 1):
                 cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
+                let current = UNUserNotificationCenter.current()
+                current.getPendingNotificationRequests { (pendingNotifcations) in
+                    if !pendingNotifcations.isEmpty{
+                        current.removeAllDeliveredNotifications()
+                        current.removeAllPendingNotificationRequests()
+                        setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
+                    }
+            }
             case IndexPath(row: 0, section: 3):
                 if settings[3].isOpened {
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
@@ -378,90 +402,4 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 break
         }
     }
-}
-
-// MARK: - Notifications
-
-/**
- Will set a notification for every half hour between 7 am and 11pm.
- 
- # Example #
- ```
- setReminders()
- ```
- */
-func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
-    let notificationCenter = UNUserNotificationCenter.current()
-    notificationCenter.removeAllDeliveredNotifications()
-    notificationCenter.removeAllPendingNotificationRequests()
-    
-    UserDefaults.standard.set(true, forKey: remindersString)
-    
-    let intervals = frequency
-    
-    let totalHours = endHour - startHour
-    let totalNotifications = totalHours * 60 / intervals
-    
-    for i in 0...totalNotifications {
-        var date = DateComponents()
-        date.hour = startHour + (intervals * i) / 60
-        date.minute = (intervals * i) % 60
-        print("setting reminder for \(date.hour!):\(date.minute!)")
-        let notification = getReminder()
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
-        let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
-        notificationCenter.add(request, withCompletionHandler: nil)
-    }
-}
-
-/**
- Will return a random **UNMutableNotificationContent** a notifcation message.
- 
- # Notes: #
- 1. This will pick out a message randomly so you could get the same message twice.
- 
- # Example #
- ```
- let notification = getReminder()
- ```
- */
-func getReminder()-> UNMutableNotificationContent{
-    struct reminder {
-        var title = String()
-        var body  = String()
-    }
-    let reminderMessages: [reminder] = [
-        reminder(title: NSLocalizedString("reminder1Title", comment: "First reminder title"),
-                 body:  NSLocalizedString("reminder1Body", comment: "First reminder body")),
-        reminder(title: NSLocalizedString("reminder2Title", comment: "Second reminder title"),
-                 body:  NSLocalizedString("reminder2Body", comment: "Second reminder body")),
-        reminder(title: NSLocalizedString("reminder3Title", comment: "third reminder title"),
-                 body:  NSLocalizedString("reminder3Body", comment: "third reminder body")),
-        reminder(title: NSLocalizedString("reminder4Title", comment: "forth reminder title"),
-                 body:  NSLocalizedString("reminder4Body", comment: "forth reminder body")),
-        reminder(title: NSLocalizedString("reminder5Title", comment: "fifth reminder title"),
-                 body:  NSLocalizedString("reminder5Body", comment: "fifth reminder body")),
-        reminder(title: NSLocalizedString("reminder6Title", comment: "sixth reminder title"),
-                 body:  NSLocalizedString("reminder6Body", comment: "sixth reminder body")),
-        reminder(title: NSLocalizedString("reminder7Title", comment: "seventh reminder title"),
-                 body:  NSLocalizedString("reminder7Body", comment: "seventh reminder body")),
-        reminder(title: NSLocalizedString("reminder8Title", comment: "eighth reminder title"),
-                 body:  NSLocalizedString("reminder8Body", comment: "eighth reimder body")),
-        reminder(title: NSLocalizedString("reminder9Title", comment: "ninth reminder title"),
-                 body:  NSLocalizedString("reminder9Body", comment: "ninth reminder body")),
-        reminder(title: NSLocalizedString("reminder10Title", comment: "tenth reminder title"),
-                 body:  NSLocalizedString("reminder10Body", comment: "tenth reminder body")),
-        reminder(title: NSLocalizedString("reminder11Title", comment: "eleventh reminder title"),
-                 body:  NSLocalizedString("reminder11Body", comment: "eleventh reminder body")),
-        reminder(title: NSLocalizedString("reminder12Title", comment: "twelfth reminder title"),
-                 body:  NSLocalizedString("reminder12Body", comment: "twelfth reminder body"))]
-    let randomInt = Int.random(in: 0...reminderMessages.count - 1)
-    let notification = UNMutableNotificationContent()
-    notification.title = reminderMessages[randomInt].title
-    notification.body  = reminderMessages[randomInt].body
-    notification.categoryIdentifier = "reminder"
-    notification.sound  = .default
-    return notification
 }

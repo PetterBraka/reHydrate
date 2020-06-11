@@ -10,7 +10,7 @@ import UIKit
 import HealthKit
 import FSCalendar
 
-let versionString = "version2"
+let versionString = "version2.2"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -24,7 +24,7 @@ let mediumDrinkOptionString = "mediumDrinkOption"
 let largeDrinkOptionString  = "largeDrinkOption"
 let appLanguages = ["en", "nb"]
 
-class StartVC: UIViewController {
+class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
     //MARK: - Variables
     
@@ -277,6 +277,8 @@ class StartVC: UIViewController {
         }
     }
     
+    //MARK: - Screen Appear
+    
     /**
      Will be called when the app enters the foreground. Then it will update the date for to saved data for this day or create a new instance of **Day**
      
@@ -309,6 +311,11 @@ class StartVC: UIViewController {
         formatter.dateFormat = "EEEE - dd/MM/yy"
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
+        UNUserNotificationCenter.current().getNotificationSettings { (notificationSetting) in
+            if notificationSetting.authorizationStatus == .authorized {
+                UNUserNotificationCenter.current().delegate = self
+            }
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),
                                                name: UIApplication.willEnterForegroundNotification,
@@ -353,7 +360,6 @@ class StartVC: UIViewController {
         setUpHealth()
         days = Day.loadDay()
         updateUI()
-        Thread.sleep(forTimeInterval: 0.5)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -460,6 +466,8 @@ class StartVC: UIViewController {
         
     }
     
+    //MARK: - SetUp UIButton
+    
     /**
      Setting upp the listeners and aperients of the buttons.
      
@@ -498,6 +506,8 @@ class StartVC: UIViewController {
         mediumOption.addGestureRecognizer(mediumOptionLongGesture)
         largeOption.addGestureRecognizer(largeOptionLongGesture)
     }
+    
+    //MARK: - SetUp UIViewStack
     
     /**
      Will crate a stack for all the summary lables.
@@ -691,7 +701,7 @@ class StartVC: UIViewController {
         }
     }
     
-    //MARK: - Update View
+    //MARK: - Update consmed
     
     /**
      Updates the amount consumed in the Day
@@ -746,6 +756,8 @@ class StartVC: UIViewController {
             }
         }
     }
+    
+    //MARK: - Update View
     
     /**
      Updates the  in the UI
@@ -929,6 +941,27 @@ class StartVC: UIViewController {
         }
     }
     
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.actionIdentifier == "small" {
+            print("small button was pressed")
+            updateConsumtion(drinkOptions[0])
+            completionHandler()
+        } else if response.actionIdentifier == "medium"{
+            print("medium button was pressed")
+            updateConsumtion(drinkOptions[1])
+            completionHandler()
+        } else if response.actionIdentifier == "large"{
+            print("large button was pressed")
+            updateConsumtion(drinkOptions[2])
+            completionHandler()
+        } else {
+            print("button was pressed")
+        }
+        
+    }
+    
     //MARK: - String formatting
     
     /**
@@ -987,4 +1020,125 @@ func setAppLanguage(_ language: String) {
     
     // Done to reintantiate the storyboards instantly
     UIApplication.shared.windows.first(where: {$0.isKeyWindow})?.rootViewController = StartVC()
+}
+
+// MARK: - Notifications
+
+/**
+ Will set a notification for every half hour between 7 am and 11pm.
+ 
+ # Example #
+ ```
+ setReminders()
+ ```
+ */
+func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
+    let notificationCenter = UNUserNotificationCenter.current()
+    notificationCenter.removeAllDeliveredNotifications()
+    notificationCenter.removeAllPendingNotificationRequests()
+    
+    UserDefaults.standard.set(true, forKey: remindersString)
+    
+    let intervals = frequency
+    
+    let totalHours = endHour - startHour
+    let totalNotifications = totalHours * 60 / intervals
+    
+    var drinkOptions = [Drink(), Drink(), Drink()]
+    let small   = UserDefaults.standard.float(forKey: smallDrinkOptionString)
+    let medium  = UserDefaults.standard.float(forKey: mediumDrinkOptionString)
+    let large   = UserDefaults.standard.float(forKey: largeDrinkOptionString)
+    
+    let metricUnits = UserDefaults.standard.bool(forKey: metricUnitsString)
+    var unit = String()
+    if small != 0 || medium != 0 || large != 0  {
+        drinkOptions[0] = Drink(typeOfDrink: "water", amountOfDrink: Float(small))
+        drinkOptions[1] = Drink(typeOfDrink: "water", amountOfDrink: Float(medium))
+        drinkOptions[2] = Drink(typeOfDrink: "water", amountOfDrink: Float(large))
+    }
+    var smallDrink = String()
+    var mediumDrink = String()
+    var largeDrink = String()
+    if metricUnits {
+        smallDrink = String(format: "%.0f", Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters).value)
+        mediumDrink = String(format: "%.0f", Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters).value)
+        largeDrink = String(format: "%.0f", Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters).value)
+        unit = "ml"
+    } else {
+        smallDrink = String(format: "%.2f", Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        mediumDrink = String(format: "%.2f", Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        largeDrink = String(format: "%.2f", Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        unit = "fl oz"
+    }
+    for i in 0...totalNotifications {
+        var date = DateComponents()
+        date.hour = startHour + (intervals * i) / 60
+        date.minute = (intervals * i) % 60
+        print("setting reminder for \(date.hour!):\(date.minute!)")
+        let notification = getReminder()
+        let smallDrinkAction = UNNotificationAction(identifier: "small", title: "\(NSLocalizedString("Add", comment: "")) \(smallDrink)\(unit)",
+            options: UNNotificationActionOptions(rawValue: 0))
+        let mediumDrinkAction = UNNotificationAction(identifier: "medium", title: "\(NSLocalizedString("Add", comment: "")) \(mediumDrink)\(unit)",
+            options: UNNotificationActionOptions(rawValue: 0))
+        let largeDrinkAction = UNNotificationAction(identifier: "large", title: "\(NSLocalizedString("Add", comment: "")) \(largeDrink)\(unit)",
+            options: UNNotificationActionOptions(rawValue: 0))
+        let category = UNNotificationCategory(identifier: "reminders", actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction], intentIdentifiers: [], options: .customDismissAction)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+        let uuidString = UUID().uuidString
+        let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+        notificationCenter.add(request, withCompletionHandler: nil)
+        notificationCenter.setNotificationCategories([category])
+    }
+    
+    
+}
+
+/**
+ Will return a random **UNMutableNotificationContent** a notifcation message.
+ 
+ # Notes: #
+ 1. This will pick out a message randomly so you could get the same message twice.
+ 
+ # Example #
+ ```
+ let notification = getReminder()
+ ```
+ */
+func getReminder()-> UNMutableNotificationContent{
+    struct reminder {
+        var title = String()
+        var body  = String()
+    }
+    let reminderMessages: [reminder] = [
+        reminder(title: NSLocalizedString("reminder1Title", comment: "First reminder title"),
+                 body:  NSLocalizedString("reminder1Body", comment: "First reminder body")),
+        reminder(title: NSLocalizedString("reminder2Title", comment: "Second reminder title"),
+                 body:  NSLocalizedString("reminder2Body", comment: "Second reminder body")),
+        reminder(title: NSLocalizedString("reminder3Title", comment: "third reminder title"),
+                 body:  NSLocalizedString("reminder3Body", comment: "third reminder body")),
+        reminder(title: NSLocalizedString("reminder4Title", comment: "forth reminder title"),
+                 body:  NSLocalizedString("reminder4Body", comment: "forth reminder body")),
+        reminder(title: NSLocalizedString("reminder5Title", comment: "fifth reminder title"),
+                 body:  NSLocalizedString("reminder5Body", comment: "fifth reminder body")),
+        reminder(title: NSLocalizedString("reminder6Title", comment: "sixth reminder title"),
+                 body:  NSLocalizedString("reminder6Body", comment: "sixth reminder body")),
+        reminder(title: NSLocalizedString("reminder7Title", comment: "seventh reminder title"),
+                 body:  NSLocalizedString("reminder7Body", comment: "seventh reminder body")),
+        reminder(title: NSLocalizedString("reminder8Title", comment: "eighth reminder title"),
+                 body:  NSLocalizedString("reminder8Body", comment: "eighth reimder body")),
+        reminder(title: NSLocalizedString("reminder9Title", comment: "ninth reminder title"),
+                 body:  NSLocalizedString("reminder9Body", comment: "ninth reminder body")),
+        reminder(title: NSLocalizedString("reminder10Title", comment: "tenth reminder title"),
+                 body:  NSLocalizedString("reminder10Body", comment: "tenth reminder body")),
+        reminder(title: NSLocalizedString("reminder11Title", comment: "eleventh reminder title"),
+                 body:  NSLocalizedString("reminder11Body", comment: "eleventh reminder body")),
+        reminder(title: NSLocalizedString("reminder12Title", comment: "twelfth reminder title"),
+                 body:  NSLocalizedString("reminder12Body", comment: "twelfth reminder body"))]
+    let randomInt = Int.random(in: 0...reminderMessages.count - 1)
+    let notification = UNMutableNotificationContent()
+    notification.title = reminderMessages[randomInt].title
+    notification.body  = reminderMessages[randomInt].body
+    notification.categoryIdentifier = "reminders"
+    notification.sound  = .default
+    return notification
 }
