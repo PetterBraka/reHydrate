@@ -7,6 +7,7 @@
 */
 
 //StartVC
+"Add"           = "Legg til";
 "Done"          = "Ferdig";
 "Cancel"        = "Avbryt";
 "EditDrink"     = "Endre drikke";
