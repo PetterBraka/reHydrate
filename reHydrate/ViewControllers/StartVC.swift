@@ -750,7 +750,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         } else {
             if days.contains(where: {formatter.string(from: $0.date) ==
                 formatter.string(from: dayToInsert.date) }) {
-                days[days.firstIndex(of: dayToInsert)!] = dayToInsert
+                days[days.firstIndex(of: dayToInsert) ?? days.count - 1] = dayToInsert
             } else {
                 days.append(dayToInsert)
             }

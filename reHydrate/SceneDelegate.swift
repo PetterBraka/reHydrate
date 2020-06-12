@@ -24,6 +24,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = StartVC()
         window?.makeKeyAndVisible()
     }
+    
+    func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        
+        let reqVC = StartVC()
+        reqVC.loadDrinkOptions()
+        reqVC.days = Day.loadDay()
+        
+        if reqVC.days.contains(where: {reqVC.formatter.string(from: $0.date) == reqVC.formatter.string(from: Date.init())}){
+            reqVC.today = reqVC.days.first(where: {reqVC.formatter.string(from: $0.date) == reqVC.formatter.string(from: Date())}) ?? reqVC.days[reqVC.days.count - 1]
+        } else {
+            reqVC.today = Day.init()
+            if reqVC.days.isEmpty {
+                reqVC.today.goalAmount = reqVC.days.last!.goalAmount
+            }
+            reqVC.insertDay(reqVC.today)
+        }
+        
+        let drinks = reqVC.drinkOptions
+        
+        switch shortcutItem.localizedTitle {
+            case "Add small drink":
+                reqVC.updateConsumtion(drinks[0])
+            case "Add medium drink":
+                reqVC.updateConsumtion(drinks[1])
+            case "Add large drink":
+                reqVC.updateConsumtion(drinks[2])
+            default:
+                break
+        }
+    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
