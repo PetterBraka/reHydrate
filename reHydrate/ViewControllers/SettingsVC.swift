@@ -41,7 +41,8 @@ class SettingsVC: UIViewController {
     var settings: [settingOptions] = [
         settingOptions(isOpened: false, setting: NSLocalizedString("Appearance", comment: "Header title"),
                        options: [NSLocalizedString("LightMode", comment: "settings option"),
-                                 NSLocalizedString("DarkMode", comment: "settings option")]),
+                                 NSLocalizedString("DarkMode", comment: "settings option"),
+                                 NSLocalizedString("AppIcon", comment: "setting option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("UnitSystem", comment: "Header title"),
                        options: [NSLocalizedString("MetricSystem", comment: "settings option"),
                                  NSLocalizedString("ImperialSystem", comment: "settings option")]),
@@ -254,7 +255,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
         var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
         if intervals == 0 {
-            intervals = 60
+            intervals = 30
         }
         switch indexPath {
             case IndexPath(row: 0, section: 1):
@@ -266,7 +267,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                         current.removeAllPendingNotificationRequests()
                         setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
                     }
-            }
+                }
+                break
             case IndexPath(row: 1, section: 1):
                 cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
                 let current = UNUserNotificationCenter.current()
@@ -279,16 +281,17 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             }
             case IndexPath(row: 0, section: 3):
                 if settings[3].isOpened {
-                    cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                    cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                 } else {
-                    cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                    cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
                     cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                 }
                 break
             case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
                  IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
                  IndexPath(row: 0, section: 4):
+                cell.imageForCell.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.circle.fill"), for: .normal)
                 cell.subTitle.removeFromSuperview()
                 break
             case IndexPath(row: 2, section: 5):
@@ -339,6 +342,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 darkMode = true
                 changeAppearance()
                 tableView.reloadData()
+            case IndexPath(row: 2, section: 0): // Change app icon
+                let appIconVC = AppIconVC()
+                appIconVC.modalPresentationStyle = .fullScreen
+                self.present(appIconVC, animated: true, completion: nil)
+                break
             case IndexPath(row: 0, section: 1): // Metric is selected
                 metricUnits = true
                 tableView.reloadData()
@@ -349,7 +357,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
                 settings[3].isOpened = !settings[3].isOpened
                 if settings[3].isOpened {
-                    cell.activatedOption.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                    cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                     let startDate = defaults.object(forKey: startingTimeString) as! Date
                     let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
@@ -359,7 +367,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     setReminders(startTimer.hour!, endTimer.hour!, intervals)
                     sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
                 } else {
-                    cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                    cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
                     cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                     let center = UNUserNotificationCenter.current()
                     center.removeAllPendingNotificationRequests()

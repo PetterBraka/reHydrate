@@ -228,13 +228,13 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             updateConsumtion(drink)
         case settingsButton:
             let aboutScreen = SettingsVC()
-            aboutScreen.modalPresentationStyle = .fullScreen
             let transition      = CATransition()
             transition.duration = 0.4
             transition.type     = .push
             transition.subtype  = .fromLeft
             transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             view.window!.layer.add(transition, forKey: kCATransition)
+            aboutScreen.modalPresentationStyle = .fullScreen
             present(aboutScreen, animated: false, completion: nil)
         case calendarButton:
             let calendarScreen  = CalendarVC()
