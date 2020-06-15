@@ -78,6 +78,9 @@ class AppIconVC: UIViewController{
         tableView.register(AppIconCell.self, forCellReuseIdentifier: "cell")
         tableView.delegate   = self
         tableView.dataSource = self
+        
+        let selectedIcon = UIApplication.shared.alternateIconName
+        tableView.selectRow(at: IndexPath(row: icons.firstIndex(of: selectedIcon!) ?? 0, section: 0), animated: false, scrollPosition: .none)
     }
     
     /**
@@ -179,15 +182,11 @@ extension AppIconVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if UIApplication.shared.supportsAlternateIcons {
-            if indexPath.row == 0 {
-                UIApplication.shared.setAlternateIconName(nil)
-            } else {
-                UIApplication.shared.setAlternateIconName("\(icons[indexPath.row])") { (error) in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    } else {
-                        print("selected icon is \(self.icons[indexPath.row])")
-                    }
+            UIApplication.shared.setAlternateIconName("\(icons[indexPath.row])") { (error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                } else {
+                    print("selected icon is \(self.icons[indexPath.row])")
                 }
             }
         } else {
