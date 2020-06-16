@@ -20,6 +20,7 @@
 "LightMode"        = "Lys modus";
 "DarkMode"         = "Mørk modus";
 "UnitSystem"       = "Enhets system";
+"AppIcon"          = "Endre app icon";
 "Units"            = "Enheter";
 "MetricSystem"     = "Metrisk system";
 "ImperialSystem"   = "Imperial system";

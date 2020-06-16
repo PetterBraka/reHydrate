@@ -19,6 +19,7 @@
 "Appearance"       = "Apperance";
 "LightMode"        = "Light mode";
 "DarkMode"         = "Dark Mode";
+"AppIcon"          = "Cange app icon";
 "UnitSystem"       = "Unit system";
 "Units"            = "Units";
 "MetricSystem"     = "Metric system";
