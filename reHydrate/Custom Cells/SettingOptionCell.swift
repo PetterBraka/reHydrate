@@ -26,34 +26,34 @@ class SettingOptionCell: UITableViewCell {
             titleOption.text 	= string
         }
     }
-    var textField: UITextField 			= {
-        let textField 					= UITextField()
-        textField.placeholder 			= "value"
-        textField.layer.borderWidth 	= 2
-        textField.layer.cornerRadius 	= 5
-        textField.layer.borderColor 	= UIColor.lightGray.cgColor
-        textField.font 					= UIFont(name: "AmericanTypewriter", size: 17)
-        textField.textAlignment 		= .center
+    var textField: UITextField       = {
+        let textField                = UITextField()
+        textField.placeholder        = "value"
+        textField.layer.borderWidth  = 2
+        textField.layer.cornerRadius = 5
+        textField.layer.borderColor  = UIColor.lightGray.cgColor
+        textField.font               = UIFont(name: "AmericanTypewriter", size: 17)
+        textField.textAlignment      = .center
         textField.setLeftPadding(10)
         textField.setRightPadding(10)
         return textField
     }()
     let titleOption: UILabel 	= {
-        let lable 				= UILabel()
-        lable.text 				= "test"
-        lable.font 				= UIFont(name: "AmericanTypewriter", size: 15)
+        let lable   = UILabel()
+        lable.text  = "test"
+        lable.font  = UIFont(name: "AmericanTypewriter", size: 15)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
         }()
-    let subTitle: UILabel 		= {
-        let lable 				= UILabel()
-        lable.text 				= "subText"
-        lable.font 				= UIFont(name: "AmericanTypewriter", size: 13)
+    let subTitle: UILabel = {
+        let lable  = UILabel()
+        lable.text = "subText"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 13)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let activatedOption: UIButton 	= {
-        let button					= UIButton()
+    var imageForCell: UIButton = {
+        let button = UIButton()
         button.setTitle("", for: .normal)
         button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -63,7 +63,7 @@ class SettingOptionCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.addSubview(titleOption)
-        self.addSubview(activatedOption)
+        self.addSubview(imageForCell)
         setTitleConstraints()
         setButtonConstraints()
         self.backgroundColor = .none
@@ -118,10 +118,17 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        activatedOption.widthAnchor.constraint(equalToConstant: 25).isActive                                  = true
-        activatedOption.heightAnchor.constraint(equalToConstant: 25).isActive                                 = true
-        activatedOption.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
-        activatedOption.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
+        imageForCell.widthAnchor.constraint(equalToConstant: 25).isActive                                  = true
+        imageForCell.heightAnchor.constraint(equalToConstant: 25).isActive                                 = true
+        imageForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
+        imageForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
+    }
+    
+    func setButtonConstraints(_ size: CGFloat) {
+        imageForCell.widthAnchor.constraint(equalToConstant: size).isActive                                = true
+        imageForCell.heightAnchor.constraint(equalToConstant: size).isActive                               = true
+        imageForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
+        imageForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
     }
     
     fileprivate func setTextFieldConstraints() {
@@ -142,7 +149,7 @@ class SettingOptionCell: UITableViewCell {
      */
     func setCellAppairents(_ dark: Bool,_ metric: Bool){
         if dark{
-            activatedOption.tintColor       = .lightGray
+            imageForCell.tintColor          = .lightGray
             titleOption.textColor           = .white
             subTitle.textColor              = .white
             textField.textColor             = .white
@@ -150,7 +157,7 @@ class SettingOptionCell: UITableViewCell {
             
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
-            activatedOption.tintColor       = .black
+            imageForCell.tintColor          = .darkGray
             titleOption.textColor           = .black
             subTitle.textColor              = .black
             textField.textColor             = .black
@@ -159,31 +166,28 @@ class SettingOptionCell: UITableViewCell {
         }
         switch titleOption.text?.lowercased() {
             case NSLocalizedString("DarkMode", comment: "").lowercased():
+                imageForCell.isHidden = false
                 if dark{
-                    activatedOption.isHidden = false
+                    imageForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
                 } else {
-                    activatedOption.isHidden = true
-                }
-            case NSLocalizedString("LightMode", comment: "").lowercased():
-                if !dark{
-                    activatedOption.isHidden = false
-                } else {
-                    activatedOption.isHidden = true
+                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                 }
             case NSLocalizedString("MetricSystem", comment: "").lowercased():
+                imageForCell.isHidden = false
                 if metric{
-                    activatedOption.isHidden = false
+                    imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                 } else {
-                    activatedOption.isHidden = true
+                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                 }
             case NSLocalizedString("ImperialSystem", comment: "").lowercased():
+                imageForCell.isHidden = false
                 if !metric{
-                    activatedOption.isHidden = false
+                    imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                 } else {
-                    activatedOption.isHidden = true
+                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                 }
             case NSLocalizedString("SetYourGoal", comment: "").lowercased():
-                activatedOption.isHidden = true
+                imageForCell.isHidden = true
                 let days = Day.loadDay()
                 if !days.isEmpty{
                     textField.text = String(describing: days.last!.goalAmount.amountOfDrink)
@@ -196,16 +200,16 @@ class SettingOptionCell: UITableViewCell {
                 break
             case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
                  NSLocalizedString("TurnOffReminders", comment: "").lowercased():
-                activatedOption.isHidden = false
+                imageForCell.isHidden = false
             case NSLocalizedString("StartingTime", comment: "").lowercased(),
                  NSLocalizedString("EndingTime", comment: "").lowercased():
             	setUpDatePicker()
-                activatedOption.isHidden = true
+                imageForCell.isHidden = true
             case NSLocalizedString("Frequency", comment: "").lowercased():
-                activatedOption.isHidden = true
+                imageForCell.isHidden = true
                 setUpMinutePicker()
             case NSLocalizedString("Language", comment: "").lowercased():
-                activatedOption.isHidden = true
+                imageForCell.isHidden = true
                 pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
                 componentString = [""]
                 setUpPickerView()
@@ -219,8 +223,12 @@ class SettingOptionCell: UITableViewCell {
                     textField.text = NSLocalizedString(appLanguages[0], comment: "")
                     picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
                 }
+//            case NSLocalizedString("AppIcon", comment: "").lowercased():
+//                imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
+//            case NSLocalizedString("HowToUse", comment: "").lowercased():
+//                imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
             default:
-                activatedOption.isHidden = true
+                imageForCell.isHidden = true
         }
         UserDefaults.standard.set(dark, forKey: darkModeString)
         UserDefaults.standard.set(metric, forKey: metricUnitsString)
