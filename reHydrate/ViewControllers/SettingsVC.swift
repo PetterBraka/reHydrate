@@ -40,8 +40,7 @@ class SettingsVC: UIViewController {
     var selectedRow: IndexPath     = IndexPath()
     var settings: [settingOptions] = [
         settingOptions(isOpened: false, setting: NSLocalizedString("Appearance", comment: "Header title"),
-                       options: [NSLocalizedString("LightMode", comment: "settings option"),
-                                 NSLocalizedString("DarkMode", comment: "settings option"),
+                       options: [NSLocalizedString("DarkMode", comment: "settings option"),
                                  NSLocalizedString("AppIcon", comment: "setting option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("UnitSystem", comment: "Header title"),
                        options: [NSLocalizedString("MetricSystem", comment: "settings option"),
@@ -258,6 +257,13 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             intervals = 30
         }
         switch indexPath {
+            case IndexPath(row: 1, section: 0), IndexPath(row: 1, section: 4), IndexPath(row: 0, section: 5),
+                 IndexPath(row: 1, section: 5):
+                cell.imageForCell.isHidden = false
+                cell.imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
+                cell.subTitle.removeFromSuperview()
+                cell.setTitleConstraints()
+                cell.setButtonConstraints()
             case IndexPath(row: 0, section: 1):
                 cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
                 let current = UNUserNotificationCenter.current()
@@ -291,12 +297,16 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
                  IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
                  IndexPath(row: 0, section: 4):
-                cell.imageForCell.setBackgroundImage(UIImage(systemName: "arrowtriangle.right.circle.fill"), for: .normal)
                 cell.subTitle.removeFromSuperview()
                 break
             case IndexPath(row: 2, section: 5):
+                cell.imageForCell.isHidden = false
+                cell.imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
+                cell.imageForCell.tintColor = .systemRed
                 cell.titleOption.textColor = .systemRed
                 cell.subTitle.removeFromSuperview()
+                cell.setTitleConstraints()
+                cell.setButtonConstraints()
             default:
                 cell.textField.removeFromSuperview()
                 cell.subTitle.removeFromSuperview()
@@ -334,15 +344,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
-            case IndexPath(row: 0, section: 0): // light mode selected
-                darkMode = false
+            case IndexPath(row: 0, section: 0): // dark mode selected
+                darkMode = !darkMode
                 changeAppearance()
                 tableView.reloadData()
-            case IndexPath(row: 1, section: 0): // dark mode selected
-                darkMode = true
-                changeAppearance()
-                tableView.reloadData()
-            case IndexPath(row: 2, section: 0): // Change app icon
+            case IndexPath(row: 1, section: 0): // Change app icon
                 let appIconVC = AppIconVC()
                 appIconVC.modalPresentationStyle = .fullScreen
                 self.present(appIconVC, animated: true, completion: nil)

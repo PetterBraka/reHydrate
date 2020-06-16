@@ -79,8 +79,8 @@ class AppIconVC: UIViewController{
         tableView.delegate   = self
         tableView.dataSource = self
         
-        let selectedIcon = UIApplication.shared.alternateIconName
-        tableView.selectRow(at: IndexPath(row: icons.firstIndex(of: selectedIcon!) ?? 0, section: 0), animated: false, scrollPosition: .none)
+        let selectedIcon = UIApplication.shared.alternateIconName ?? "Black"
+        tableView.selectRow(at: IndexPath(row: icons.firstIndex(of: selectedIcon) ?? 0, section: 0), animated: false, scrollPosition: .none)
     }
     
     /**
@@ -166,13 +166,7 @@ extension AppIconVC: UITableViewDelegate, UITableViewDataSource{
             break
         }
         cell.imageForCell.setBackgroundImage(UIImage(named: icons[indexPath.row]), for: .normal)
-        if darkMode {
-            cell.textLabel?.textColor = .white
-            cell.backgroundColor = UIColor().hexStringToUIColor("#212121")
-        } else {
-            cell.textLabel?.textColor = .black
-            cell.backgroundColor = .white
-        }
+        cell.setCellAppairents(darkMode)
         return cell
     }
     
