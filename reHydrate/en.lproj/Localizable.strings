@@ -19,7 +19,7 @@
 "Appearance"       = "Apperance";
 "LightMode"        = "Light mode";
 "DarkMode"         = "Dark Mode";
-"AppIcon"          = "Cange app icon";
+"AppIcon"          = "Change app icon";
 "UnitSystem"       = "Unit system";
 "Units"            = "Units";
 "MetricSystem"     = "Metric system";
@@ -94,3 +94,14 @@
 "Consumed"    = "Consumed";
 "DrinkType"   = "Drink type";
 "DrinkAmount" = "Drink amount";
+
+// AppIcon
+"Black"  = "Black";
+"White"  = "White";
+"Blue"   = "Blue";
+"Green"  = "Green";
+"Orange" = "Orange";
+"Pink"   = "Pink";
+"Purple" = "Purple";
+"Red"    = "Red";
+"Yellow" = "Yellow";

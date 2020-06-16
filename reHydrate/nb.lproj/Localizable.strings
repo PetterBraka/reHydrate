@@ -95,3 +95,14 @@
 "Consumed"           = "Drukket";
 "DrinkType"          = "Drikke";
 "DrinkAmount"        = "Drukket mengde";
+
+// AppIcon
+"Black"  = "Svart";
+"White"  = "Hvit";
+"Blue"   = "Blå";
+"Green"  = "Grønn";
+"Orange" = "Oransje";
+"Pink"   = "Rosa";
+"Purple" = "Lilla";
+"Red"    = "Rød";
+"Yellow" = "Gul";

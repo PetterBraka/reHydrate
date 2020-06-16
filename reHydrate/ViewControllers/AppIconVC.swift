@@ -18,7 +18,15 @@ class AppIconVC: UIViewController{
                  "PurpleBlack", "PurpleWhite",
                  "RedBlack",    "RedWhite",
                  "YellowBlack", "YellowWhite"]
-    let iconNames = ["Black", "White", "Blue", "Green", "Orange", "Pink", "Purple", "Red", "Yellow"]
+    let iconNames = [NSLocalizedString("Black", comment: ""),
+                     NSLocalizedString("White", comment: ""),
+                     NSLocalizedString("Blue", comment: ""),
+                     NSLocalizedString("Green", comment: ""),
+                     NSLocalizedString("Orange", comment: ""),
+                     NSLocalizedString("Pink", comment: ""),
+                     NSLocalizedString("Purple", comment: ""),
+                     NSLocalizedString("Red", comment: ""),
+                     NSLocalizedString("Yellow", comment: "")]
     var tableView: UITableView = UITableView()
     var exitButton: UIButton   = {
         let button = UIButton()
