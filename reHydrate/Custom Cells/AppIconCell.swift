@@ -37,6 +37,18 @@ class AppIconCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setCellAppairents(_ dark: Bool){
+        if dark{
+            imageForCell.tintColor = .lightGray
+            title.textColor        = .white
+            self.backgroundColor   = UIColor().hexStringToUIColor("#212121")
+        } else {
+            imageForCell.tintColor = .black
+            title.textColor        = .black
+            self.backgroundColor   = .white
+        }
+    }
+    
     /**
      Setting constraints for the tilte lable.
      
@@ -47,9 +59,11 @@ class AppIconCell: UITableViewCell {
      */
     func setTitleConstraints(){
         self.removeConstraints(self.constraints)
-        title.leftAnchor.constraint(equalTo: imageForCell.rightAnchor, constant: 20).isActive = true
-        title.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive                  = true
+        title.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20).isActive = true
+        title.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive                     = true
     }
+    
+    
     
     /**
      Setting the constraints for the activate button.
@@ -60,10 +74,10 @@ class AppIconCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        imageForCell.widthAnchor.constraint(equalToConstant: 60).isActive                               = true
-        imageForCell.heightAnchor.constraint(equalToConstant: 60).isActive                              = true
-        imageForCell.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20).isActive = true
-        imageForCell.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive   = true
+        imageForCell.widthAnchor.constraint(equalToConstant: 60).isActive                                    = true
+        imageForCell.heightAnchor.constraint(equalToConstant: 60).isActive                                   = true
+        imageForCell.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive        = true
+        imageForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive   = true
         imageForCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10).isActive = true
     }
 }

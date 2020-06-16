@@ -52,7 +52,7 @@ class SettingOptionCell: UITableViewCell {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    let imageForCell: UIButton = {
+    var imageForCell: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -124,6 +124,13 @@ class SettingOptionCell: UITableViewCell {
         imageForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
     }
     
+    func setButtonConstraints(_ size: CGFloat) {
+        imageForCell.widthAnchor.constraint(equalToConstant: size).isActive                                = true
+        imageForCell.heightAnchor.constraint(equalToConstant: size).isActive                               = true
+        imageForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
+        imageForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
+    }
+    
     fileprivate func setTextFieldConstraints() {
         textField.translatesAutoresizingMaskIntoConstraints                                 = false
         textField.heightAnchor.constraint(equalToConstant: 35).isActive                     = true
@@ -150,7 +157,7 @@ class SettingOptionCell: UITableViewCell {
             
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
-            imageForCell.tintColor          = .black
+            imageForCell.tintColor          = .darkGray
             titleOption.textColor           = .black
             subTitle.textColor              = .black
             textField.textColor             = .black
@@ -159,28 +166,25 @@ class SettingOptionCell: UITableViewCell {
         }
         switch titleOption.text?.lowercased() {
             case NSLocalizedString("DarkMode", comment: "").lowercased():
+                imageForCell.isHidden = false
                 if dark{
-                    imageForCell.isHidden = false
+                    imageForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
                 } else {
-                    imageForCell.isHidden = true
-                }
-            case NSLocalizedString("LightMode", comment: "").lowercased():
-                if !dark{
-                    imageForCell.isHidden = false
-                } else {
-                    imageForCell.isHidden = true
+                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                 }
             case NSLocalizedString("MetricSystem", comment: "").lowercased():
+                imageForCell.isHidden = false
                 if metric{
-                    imageForCell.isHidden = false
+                    imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                 } else {
-                    imageForCell.isHidden = true
+                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                 }
             case NSLocalizedString("ImperialSystem", comment: "").lowercased():
+                imageForCell.isHidden = false
                 if !metric{
-                    imageForCell.isHidden = false
+                    imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                 } else {
-                    imageForCell.isHidden = true
+                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                 }
             case NSLocalizedString("SetYourGoal", comment: "").lowercased():
                 imageForCell.isHidden = true
@@ -219,6 +223,10 @@ class SettingOptionCell: UITableViewCell {
                     textField.text = NSLocalizedString(appLanguages[0], comment: "")
                     picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
                 }
+//            case NSLocalizedString("AppIcon", comment: "").lowercased():
+//                imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
+//            case NSLocalizedString("HowToUse", comment: "").lowercased():
+//                imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
             default:
                 imageForCell.isHidden = true
         }
