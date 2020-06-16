@@ -8,15 +8,6 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
 	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>Black</string>
-			</array>
-			<key>UIPrerenderedIcon</key>
-			<false/>
-		</dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
 			<key>Black</key>
@@ -24,15 +15,6 @@
 				<key>CFBundleIconFiles</key>
 				<array>
 					<string>Black</string>
-				</array>
-				<key>Icon alredy includes gloss effects</key>
-				<false/>
-			</dict>
-			<key>White</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>White</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
@@ -145,6 +127,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
+			<key>White</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>White</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>YellowBlack</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -163,6 +154,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
+		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>Black</string>
+			</array>
+			<key>UIPrerenderedIcon</key>
+			<false/>
 		</dict>
 		<key>UINewsstandIcon</key>
 		<dict>
