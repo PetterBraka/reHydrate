@@ -1,8 +1,8 @@
-# reHydrate <h1>
+# reHydrate
 
 This is a project for creating an app that can track your water consumption through the day. It will send you reminders through the day to remind you to drink more water.
 
-# Technology used: <h2> 
+### Technology used:
 - UIKit
 - HealthKit
 - FSCalendar
