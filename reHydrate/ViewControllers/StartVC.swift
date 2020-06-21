@@ -339,6 +339,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             defaults.set(endDate,   forKey: endingTimeString)
             defaults.set(intervals, forKey: reminderIntervalString)
             defaults.set(darkMode,  forKey: darkModeString)
+            saveDrinkOptions()
             let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
             if !appLanguages.contains(language[0]){
                 setAppLanguage(appLanguages[0])
@@ -929,16 +930,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     func loadDrinkOptions(){
-        let small   = defaults.float(forKey: smallDrinkOptionString)
-        let medium  = defaults.float(forKey: mediumDrinkOptionString)
-        let large   = defaults.float(forKey: largeDrinkOptionString)
-        
-        
-        if small != 0 || medium != 0 || large != 0  {
-            drinkOptions[0] = Drink(typeOfDrink: "water", amountOfDrink: Float(small))
-            drinkOptions[1] = Drink(typeOfDrink: "water", amountOfDrink: Float(medium))
-            drinkOptions[2] = Drink(typeOfDrink: "water", amountOfDrink: Float(large))
-        }
+        drinkOptions[0].amountOfDrink = defaults.float(forKey: smallDrinkOptionString)
+        drinkOptions[1].amountOfDrink = defaults.float(forKey: mediumDrinkOptionString)
+        drinkOptions[2].amountOfDrink = defaults.float(forKey: largeDrinkOptionString)
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -1044,30 +1038,24 @@ func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
     let totalHours = endHour - startHour
     let totalNotifications = totalHours * 60 / intervals
     
-    var drinkOptions = [Drink(), Drink(), Drink()]
     let small   = UserDefaults.standard.float(forKey: smallDrinkOptionString)
     let medium  = UserDefaults.standard.float(forKey: mediumDrinkOptionString)
     let large   = UserDefaults.standard.float(forKey: largeDrinkOptionString)
     
     let metricUnits = UserDefaults.standard.bool(forKey: metricUnitsString)
     var unit = String()
-    if small != 0 || medium != 0 || large != 0  {
-        drinkOptions[0] = Drink(typeOfDrink: "water", amountOfDrink: Float(small))
-        drinkOptions[1] = Drink(typeOfDrink: "water", amountOfDrink: Float(medium))
-        drinkOptions[2] = Drink(typeOfDrink: "water", amountOfDrink: Float(large))
-    }
     var smallDrink = String()
     var mediumDrink = String()
     var largeDrink = String()
     if metricUnits {
-        smallDrink = String(format: "%.0f", Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters).value)
-        mediumDrink = String(format: "%.0f", Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters).value)
-        largeDrink = String(format: "%.0f", Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters).value)
+        smallDrink = String(format: "%.0f", Measurement(value: Double(small), unit: UnitVolume.milliliters).value)
+        mediumDrink = String(format: "%.0f", Measurement(value: Double(medium), unit: UnitVolume.milliliters).value)
+        largeDrink = String(format: "%.0f", Measurement(value: Double(large), unit: UnitVolume.milliliters).value)
         unit = "ml"
     } else {
-        smallDrink = String(format: "%.2f", Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
-        mediumDrink = String(format: "%.2f", Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
-        largeDrink = String(format: "%.2f", Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        smallDrink = String(format: "%.2f", Measurement(value: Double(small), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        mediumDrink = String(format: "%.2f", Measurement(value: Double(medium), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        largeDrink = String(format: "%.2f", Measurement(value: Double(large), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
         unit = "fl oz"
     }
     for i in 0...totalNotifications {
