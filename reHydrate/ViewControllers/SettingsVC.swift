@@ -204,11 +204,7 @@ class SettingsVC: UIViewController {
         toastLabel.titleLabel?.font          = UIFont(name: "AmericanTypewriter", size: 18.0)
         toastLabel.titleLabel?.textAlignment = .center
         toastLabel.titleLabel?.numberOfLines = 0
-        if settings[3].isOpened {
-            toastLabel.contentEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
-        } else {
-            toastLabel.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        }
+        toastLabel.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         if darkMode {
             toastLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.9)
             toastLabel.setTitleColor(UIColor.white, for: .normal)
@@ -373,6 +369,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
                     settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
                     settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
+                    tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
                     cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
                     cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                     let startDate = defaults.object(forKey: startingTimeString) as! Date
@@ -384,6 +381,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
                 } else {
                     settings[3].options.removeLast(3)
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
                     cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
                     cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                     let center = UNUserNotificationCenter.current()
@@ -392,7 +390,6 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     defaults.set(false, forKey: remindersString)
                     sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
                 }
-                tableView.reloadData()
             case IndexPath(row: 0, section: 4):
                 break
             case IndexPath(row: 1, section: 4):
