@@ -62,6 +62,4 @@ class Drink: NSObject, Codable {
             return false
         }
     }
-    
-    
 }
