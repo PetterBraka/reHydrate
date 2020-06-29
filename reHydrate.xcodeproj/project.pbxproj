@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3319AA32245334130049C676 /* SettingOptionCell.swift */; };
+		332B2D6324A1631800646D3E /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8428243A4A2600848B7C /* Day.swift */; };
+		332B2D6424A1631B00646D3E /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8426243A47A800848B7C /* Drink.swift */; };
 		333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BD5F8246424FF0041D90A /* TutorialVC.swift */; };
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
 		334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334281E224977ADB00A3CF12 /* AppIconVC.swift */; };
@@ -661,6 +663,8 @@
 			files = (
 				33D24C3424A0CC2200C7A23C /* NotificationController.swift in Sources */,
 				33D24C3224A0CC2200C7A23C /* ExtensionDelegate.swift in Sources */,
+				332B2D6324A1631800646D3E /* Day.swift in Sources */,
+				332B2D6424A1631B00646D3E /* Drink.swift in Sources */,
 				33D24C3024A0CC2200C7A23C /* InterfaceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
