@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import FSCalendar
 
 public class Day: NSObject, Codable {
-    var date: 			Date
-    var goalAmount: 	Drink
-    var consumedAmount: Drink
+    var date:     Date
+    var goal:     Drink
+    var consumed: Drink
     
     /**
      Default initializer for **Day**
@@ -24,8 +23,8 @@ public class Day: NSObject, Codable {
      */
     required override init() {
         self.date 			= Date.init()
-        self.goalAmount 	= Drink.init(typeOfDrink: "water", amountOfDrink: 3)
-        self.consumedAmount = Drink.init()
+        self.goal 	= Drink.init(typeOfDrink: "water", amountOfDrink: 3)
+        self.consumed = Drink.init()
     }
     
     /**
@@ -42,8 +41,8 @@ public class Day: NSObject, Codable {
      */
     init(date: Date, goalAmount: Drink, consumedAmount: Drink ) {
         self.date 			= date
-        self.goalAmount 	= goalAmount
-        self.consumedAmount = consumedAmount
+        self.goal 	= goalAmount
+        self.consumed = consumedAmount
         
     }
     
@@ -55,10 +54,10 @@ public class Day: NSObject, Codable {
      
      # Example #
      ```
-     Day.saveDay(days)
+     Day.saveDays(days)
      ```
      */
-    static func saveDay(_ days : [Day]) {
+    static func saveDays(_ days : [Day]) {
         do {
             let object = try JSONEncoder().encode(days)
             UserDefaults.standard.set(object, forKey: "days")
@@ -73,11 +72,11 @@ public class Day: NSObject, Codable {
             formatter.dateFormat = "EEE - dd/MM/yy"
             print("|Date", formatter.string(from: day.date))
             print("|Goal:")
-            print("| - Drink type - ", day.goalAmount.typeOfDrink)
-            print("| - Drink amount - ", day.goalAmount.amountOfDrink)
+            print("| - Drink type - ", day.goal.typeOfDrink)
+            print("| - Drink amount - ", day.goal.amountOfDrink)
             print("|Consumed Drink:")
-            print("| - Drink type - ", day.consumedAmount.typeOfDrink)
-            print("| - Drink amount - ",String(format: "%.2f", day.consumedAmount.amountOfDrink))
+            print("| - Drink type - ", day.consumed.typeOfDrink)
+            print("| - Drink amount - ",String(format: "%.2f", day.consumed.amountOfDrink))
             print("---------------------------------------------")
         }
         
@@ -92,10 +91,10 @@ public class Day: NSObject, Codable {
      
      # Example #
      ```
-     days = Day.loadDay()
+     days = Day.loadDays()
      ```
      */
-    static func loadDay()-> [Day] {
+    static func loadDays()-> [Day] {
         let decoder 	= JSONDecoder()
         if  let object 	= UserDefaults.standard.value(forKey: "days") as? Data {
             do {
@@ -111,11 +110,11 @@ public class Day: NSObject, Codable {
                     formatter.dateFormat = "EEE - dd/MM/yy"
                     print("|Date", formatter.string(from: day.date))
                     print("|Goal:")
-                    print("| - Drink type - ", day.goalAmount.typeOfDrink)
-                    print("| - Drink amount - ", day.goalAmount.amountOfDrink)
+                    print("| - Drink type - ", day.goal.typeOfDrink)
+                    print("| - Drink amount - ", day.goal.amountOfDrink)
                     print("|Consumed Drink:")
-                    print("| - Drink type - ", day.consumedAmount.typeOfDrink)
-                    print("| - Drink amount - ",String(format: "%.2f", day.consumedAmount.amountOfDrink))
+                    print("| - Drink type - ", day.consumed.typeOfDrink)
+                    print("| - Drink amount - ",String(format: "%.2f", day.consumed.amountOfDrink))
                     print("---------------------------------------------")
                 }
                 return days

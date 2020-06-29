@@ -414,12 +414,26 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataKeepData",
                                                                                 comment: "Keep data option"),
                                                        style: .cancel, handler: nil))
-                clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataRemoveData",
-                                                                                comment: "Remove old data option"),
-                                                       style: .destructive, handler: {_ in
+                clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataRemoveData", comment: "Remove old data option"), style: .destructive, handler: {_ in
                     let domain = Bundle.main.bundleIdentifier!
                     self.defaults.removePersistentDomain(forName: domain)
-                    self.defaults.synchronize()}))
+                    self.defaults.synchronize()
+                    let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
+                    let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
+                    let intervals = 30
+                    self.defaults.set(startDate, forKey: startingTimeString)
+                    self.defaults.set(endDate,   forKey: endingTimeString)
+                    self.defaults.set(intervals, forKey: reminderIntervalString)
+                    self.defaults.set(self.darkMode,  forKey: darkModeString)
+                    self.defaults.set(self.metricUnits, forKey: metricUnitsString)
+                    let transition      = CATransition()
+                    transition.duration = 0.4
+                    transition.type     = .push
+                    transition.subtype  = .fromRight
+                    transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                    self.view.window!.layer.add(transition, forKey: kCATransition)
+                    self.dismiss(animated: false, completion: nil)
+                }))
                 self.present(clearDataAlert, animated: true, completion: nil)
             default:
                 break

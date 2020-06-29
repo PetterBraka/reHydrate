@@ -9,6 +9,7 @@
 import UIKit
 import HealthKit
 import FSCalendar
+import WatchConnectivity
 
 let versionString = "version2.6"
 let appleLanguagesString = "AppleLanguages"
@@ -22,6 +23,7 @@ let reminderIntervalString  = "reminderInterval"
 let smallDrinkOptionString  = "smallDrinkOption"
 let mediumDrinkOptionString = "mediumDrinkOption"
 let largeDrinkOptionString  = "largeDrinkOption"
+
 let appLanguages = ["en", "nb"]
 
 class StartVC: UIViewController, UNUserNotificationCenterDelegate {
@@ -291,13 +293,13 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      */
     @objc func didMoveToForeground(){
         currentDay.text         = formatter.string(from: Date.init()).localizedCapitalized
-        days                    = Day.loadDay()
+        days                    = Day.loadDays()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
             today                 = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
         } else {
             today                 = Day.init()
             if !days.isEmpty {
-                today.goalAmount     = days.last!.goalAmount
+                today.goal     = days.last!.goal
             }
             insertDay(today)
         }
@@ -359,7 +361,14 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             })
         }
         setUpHealth()
-        days = Day.loadDay()
+        days = Day.loadDays()
+        
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+        
         updateUI()
     }
     
@@ -368,11 +377,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         darkMode             = defaults.bool(forKey: darkModeString)
         metricUnits          = defaults.bool(forKey: metricUnitsString)
         currentDay.text      = formatter.string(from: Date.init()).localizedCapitalized
-        days                 = Day.loadDay()
+        days                 = Day.loadDays()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
             today            = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
         } else if !days.isEmpty {
-            today.goalAmount = days.last!.goalAmount
+            today.goal = days.last!.goal
         } else {
             today            = Day.init()
             insertDay(today)
@@ -721,9 +730,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let drinkAmount  = Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
         let drink        = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
         exportDrinkToHealth(Double(drink.amountOfDrink), Date.init())
-        today.consumedAmount.amountOfDrink     += drink.amountOfDrink
-        if today.consumedAmount.amountOfDrink  <= 0.0{
-            today.consumedAmount.amountOfDrink  = 0
+        today.consumed.amountOfDrink     += drink.amountOfDrink
+        if today.consumed.amountOfDrink  <= 0.0{
+            today.consumed.amountOfDrink  = 0
         } else {
             
         }
@@ -771,53 +780,53 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      updateUI()
      ```
      */
-    func updateUI(){
-        Day.saveDay(days)
+    @objc func updateUI(){
+        Day.saveDays(days)
         let day = Day()
-        let goalAmount     = Measurement(value: Double(today.goalAmount.amountOfDrink), unit: UnitVolume.liters)
-        let consumedAmount = Measurement(value: Double(today.consumedAmount.amountOfDrink), unit: UnitVolume.liters)
-        let smallDrink 	   = Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
+        let goalAmount     = Measurement(value: Double(today.goal.amountOfDrink), unit: UnitVolume.liters)
+        let consumedAmount = Measurement(value: Double(today.consumed.amountOfDrink), unit: UnitVolume.liters)
+        let smallDrink     = Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
         let mediumDrink    = Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
-        let largeDrink 	   = Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
+        let largeDrink     = Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
         if metricUnits {
-            day.goalAmount.amountOfDrink     = Float(goalAmount.converted(to: .liters).value)
-            day.consumedAmount.amountOfDrink = Float(consumedAmount.converted(to: .liters).value)
-            let roundedSmallDrink            = smallDrink.converted(to: .milliliters).value.rounded()
-            let roundedMediumDrink           = mediumDrink.converted(to: .milliliters).value.rounded()
-            let roundedLargeDrink            = largeDrink.converted(to: .milliliters).value.rounded()
+            day.goal.amountOfDrink     = Float(goalAmount.converted(to: .liters).value)
+            day.consumed.amountOfDrink = Float(consumedAmount.converted(to: .liters).value)
+            let roundedSmallDrink      = smallDrink.converted(to: .milliliters).value.rounded()
+            let roundedMediumDrink     = mediumDrink.converted(to: .milliliters).value.rounded()
+            let roundedLargeDrink      = largeDrink.converted(to: .milliliters).value.rounded()
             smallLabel.text            = String(format: "%.0f", roundedSmallDrink)
             mediumLabel.text           = String(format: "%.0f", roundedMediumDrink)
             largeLabel.text            = String(format: "%.0f", roundedLargeDrink)
         } else {
-            day.goalAmount.amountOfDrink     = Float(goalAmount.converted(to: .imperialPints).value)
-            day.consumedAmount.amountOfDrink = Float(consumedAmount.converted(to: .imperialPints).value)
-            let small                        = smallDrink.converted(to: .imperialFluidOunces).value
-            let medium                       = mediumDrink.converted(to: .imperialFluidOunces).value
-            let large                        = largeDrink.converted(to: .imperialFluidOunces).value
+            day.goal.amountOfDrink     = Float(goalAmount.converted(to: .imperialPints).value)
+            day.consumed.amountOfDrink = Float(consumedAmount.converted(to: .imperialPints).value)
+            let small                  = smallDrink.converted(to: .imperialFluidOunces).value
+            let medium                 = mediumDrink.converted(to: .imperialFluidOunces).value
+            let large                  = largeDrink.converted(to: .imperialFluidOunces).value
             smallLabel.text            = String(format: "%.2f", small)
             mediumLabel.text           = String(format: "%.2f", medium)
             largeLabel.text            = String(format: "%.2f", large)
         }
         
-        if (today.goalAmount.amountOfDrink.rounded(.up) == day.goalAmount.amountOfDrink.rounded(.down)){
-            self.goalAmount.text  = String(format: "%.0f", day.goalAmount.amountOfDrink)
+        if (today.goal.amountOfDrink.rounded(.up) == day.goal.amountOfDrink.rounded(.down)){
+            self.goalAmount.text  = String(format: "%.0f", day.goal.amountOfDrink)
         } else {
-            let stringFormatGoal  = getStringFormat(day.goalAmount.amountOfDrink)
-            self.goalAmount.text  = String(format: stringFormatGoal, day.goalAmount.amountOfDrink)
+            let stringFormatGoal  = getStringFormat(day.goal.amountOfDrink)
+            self.goalAmount.text  = String(format: stringFormatGoal, day.goal.amountOfDrink)
         }
         
-        let stringFormatConsumed  = getStringFormat(today.consumedAmount.amountOfDrink)
-        self.consumedAmount.text  = String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
+        let stringFormatConsumed  = getStringFormat(today.consumed.amountOfDrink)
+        self.consumedAmount.text  = String(format: stringFormatConsumed, day.consumed.amountOfDrink)
         if metricUnits {
             smallPrefix.text  = "\(UnitVolume.milliliters.symbol)"
             mediumPrefix.text = "\(UnitVolume.milliliters.symbol)"
             largePrefix.text  = "\(UnitVolume.milliliters.symbol)"
-            goalPrefix.text              = "\(UnitVolume.liters.symbol)"
+            goalPrefix.text   = "\(UnitVolume.liters.symbol)"
         } else {
             smallPrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
             mediumPrefix.text = "\(UnitVolume.imperialFluidOunces.symbol)"
             largePrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
-            goalPrefix.text              = "\(UnitVolume.imperialPints.symbol)"
+            goalPrefix.text   = "\(UnitVolume.imperialPints.symbol)"
         }
     }
     
@@ -933,6 +942,15 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         drinkOptions[0].amountOfDrink = defaults.float(forKey: smallDrinkOptionString)
         drinkOptions[1].amountOfDrink = defaults.float(forKey: mediumDrinkOptionString)
         drinkOptions[2].amountOfDrink = defaults.float(forKey: largeDrinkOptionString)
+        
+        if  drinkOptions[0].amountOfDrink == 0 ||
+            drinkOptions[1].amountOfDrink == 0 ||
+            drinkOptions[2].amountOfDrink == 0 {
+            
+            drinkOptions[0].amountOfDrink = 300
+            drinkOptions[1].amountOfDrink = 500
+            drinkOptions[2].amountOfDrink = 750
+        }
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -976,7 +994,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 let numberOfDigits = stringOfNumber.count - 1
                 if numberOfDigits  < 3 {
                     return numberOfDigits
-                    
                 } else {
                     return 2
                 }
@@ -1044,23 +1061,23 @@ func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
     
     let metricUnits = UserDefaults.standard.bool(forKey: metricUnitsString)
     var unit = String()
-    var smallDrink = String()
+    var smallDrink  = String()
     var mediumDrink = String()
-    var largeDrink = String()
+    var largeDrink  = String()
     if metricUnits {
-        smallDrink = String(format: "%.0f", Measurement(value: Double(small), unit: UnitVolume.milliliters).value)
+        smallDrink  = String(format: "%.0f", Measurement(value: Double(small), unit: UnitVolume.milliliters).value)
         mediumDrink = String(format: "%.0f", Measurement(value: Double(medium), unit: UnitVolume.milliliters).value)
-        largeDrink = String(format: "%.0f", Measurement(value: Double(large), unit: UnitVolume.milliliters).value)
+        largeDrink  = String(format: "%.0f", Measurement(value: Double(large), unit: UnitVolume.milliliters).value)
         unit = "ml"
     } else {
-        smallDrink = String(format: "%.2f", Measurement(value: Double(small), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        smallDrink  = String(format: "%.2f", Measurement(value: Double(small), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
         mediumDrink = String(format: "%.2f", Measurement(value: Double(medium), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
-        largeDrink = String(format: "%.2f", Measurement(value: Double(large), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        largeDrink  = String(format: "%.2f", Measurement(value: Double(large), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
         unit = "fl oz"
     }
     for i in 0...totalNotifications {
-        var date = DateComponents()
-        date.hour = startHour + (intervals * i) / 60
+        var date    = DateComponents()
+        date.hour   = startHour + (intervals * i) / 60
         date.minute = (intervals * i) % 60
         print("setting reminder for \(date.hour!):\(date.minute!)")
         let notification = getReminder()
@@ -1129,4 +1146,53 @@ func getReminder()-> UNMutableNotificationContent{
     notification.categoryIdentifier = "reminders"
     notification.sound  = .default
     return notification
+}
+
+extension StartVC: WCSessionDelegate {
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if (activationState == .activated) {
+            print("Connected")
+        } else {
+            print(error!.localizedDescription)
+            
+        }
+    }
+    
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        print("disconnecting from watch")
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        print("watch not connected")
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        print("\(String(describing: message["consumed"]))\(String(describing: message["date"]))")
+        if formatter.string(from: today.date) == message["date"] as! String {
+            let messageConsumed = message["consumed"]!
+            let numberFormatter = NumberFormatter()
+            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            if today.consumed.amountOfDrink < consumed {
+                today.consumed.amountOfDrink = consumed
+                print("todays amount was updated")
+                insertDay(today)
+                Day.saveDays(days)
+            }
+        }
+    }
+    
+    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        print("\(String(describing: userInfo["consumed"]))\(String(describing: userInfo["date"]))")
+        if formatter.string(from: today.date) ==
+            userInfo["date"] as! String {
+            let messageConsumed = userInfo["consumed"] as! String
+            let numberFormatter = NumberFormatter()
+            let consumed = numberFormatter.number(from: messageConsumed)!.floatValue
+            if today.consumed.amountOfDrink < consumed {
+                today.consumed.amountOfDrink = consumed
+                print("todays amount was updated")
+            }
+        }
+    }
+    
 }
