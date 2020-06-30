@@ -390,10 +390,15 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         setUpUI()
         changeAppearance()
         updateUI()
+        let responce = ["phoneDate": formatter.string(from: today.date),
+                        "phoneGoal": String(today.goal.amountOfDrink),
+                        "phoneConsumed": String(today.consumed.amountOfDrink)]
+        WCSession.default.sendMessage(responce, replyHandler: nil) { (error) in
+            print(error.localizedDescription)
+        }
     }
     
     //MARK: - Set up of UI
-    
     /**
      Will set up the UI and must be called when the view will appear.
      
@@ -477,7 +482,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - SetUp UIButton
-    
     /**
      Setting upp the listeners and aperients of the buttons.
      
@@ -518,7 +522,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - SetUp UIViewStack
-    
     /**
      Will crate a stack for all the summary lables.
      
@@ -607,7 +610,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
 }
     
     //MARK: - HealthKit
-    
     /**
      Will ask for premitions to use the health data for water consumtion. it will only write not read.
      
@@ -663,7 +665,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - Change appearance
-    
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
      
@@ -712,7 +713,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - Update consmed
-    
     /**
      Updates the amount consumed in the Day
      
@@ -768,7 +768,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - Update View
-    
     /**
      Updates the  in the UI
      
@@ -827,6 +826,18 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             mediumPrefix.text = "\(UnitVolume.imperialFluidOunces.symbol)"
             largePrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
             goalPrefix.text   = "\(UnitVolume.imperialPints.symbol)"
+        }
+        if WCSession.isSupported(){
+            let message = ["phoneDate": formatter.string(from: today.date),
+                          "phoneGoal": String(today.goal.amountOfDrink),
+                          "phoneConsumed": String(today.consumed.amountOfDrink)]
+            if WCSession.default.isReachable{
+                WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                    print(error.localizedDescription)
+                }
+            } else {
+                WCSession.default.transferUserInfo(message)
+            }
         }
     }
     
@@ -906,7 +917,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - Save and Load
-    
     /**
      Will save each drink option to UserDefaults
      
@@ -975,7 +985,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - String formatting
-    
     /**
      Will return the number of digits in a float
      
@@ -1019,6 +1028,61 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
     deinit {
         NotificationCenter.default.removeObserver(UIApplication.willEnterForegroundNotification)
+    }
+}
+
+extension StartVC: WCSessionDelegate {
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if (activationState == .activated) {
+            print("Connected")
+        } else {
+            print(error!.localizedDescription)
+            
+        }
+    }
+    
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        print("disconnecting from watch")
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        print("watch not connected")
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        print("sent data with sendMessage \(String(describing: message["consumed"]))\(String(describing: message["date"]))")
+        if formatter.string(from: today.date) == message["date"] as! String {
+            let messageConsumed = message["consumed"]!
+            let numberFormatter = NumberFormatter()
+            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            if today.consumed.amountOfDrink < consumed {
+                today.consumed.amountOfDrink = consumed
+                print("todays amount was updated")
+                insertDay(today)
+                Day.saveDays(days)
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+            }
+        }
+    }
+    
+    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        print("sent data with transferUserInfo \(String(describing: userInfo["consumed"]))\(String(describing: userInfo["date"]))")
+        if formatter.string(from: today.date) == userInfo["date"] as! String {
+            let messageConsumed = userInfo["consumed"]!
+            let numberFormatter = NumberFormatter()
+            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            if today.consumed.amountOfDrink < consumed {
+                today.consumed.amountOfDrink = consumed
+                print("todays amount was updated")
+                insertDay(today)
+                Day.saveDays(days)
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+            }
+        }
     }
 }
 
@@ -1146,53 +1210,4 @@ func getReminder()-> UNMutableNotificationContent{
     notification.categoryIdentifier = "reminders"
     notification.sound  = .default
     return notification
-}
-
-extension StartVC: WCSessionDelegate {
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        if (activationState == .activated) {
-            print("Connected")
-        } else {
-            print(error!.localizedDescription)
-            
-        }
-    }
-    
-    func sessionDidBecomeInactive(_ session: WCSession) {
-        print("disconnecting from watch")
-    }
-    
-    func sessionDidDeactivate(_ session: WCSession) {
-        print("watch not connected")
-    }
-    
-    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        print("\(String(describing: message["consumed"]))\(String(describing: message["date"]))")
-        if formatter.string(from: today.date) == message["date"] as! String {
-            let messageConsumed = message["consumed"]!
-            let numberFormatter = NumberFormatter()
-            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            if today.consumed.amountOfDrink < consumed {
-                today.consumed.amountOfDrink = consumed
-                print("todays amount was updated")
-                insertDay(today)
-                Day.saveDays(days)
-            }
-        }
-    }
-    
-    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        print("\(String(describing: userInfo["consumed"]))\(String(describing: userInfo["date"]))")
-        if formatter.string(from: today.date) ==
-            userInfo["date"] as! String {
-            let messageConsumed = userInfo["consumed"] as! String
-            let numberFormatter = NumberFormatter()
-            let consumed = numberFormatter.number(from: messageConsumed)!.floatValue
-            if today.consumed.amountOfDrink < consumed {
-                today.consumed.amountOfDrink = consumed
-                print("todays amount was updated")
-            }
-        }
-    }
-    
 }
