@@ -322,7 +322,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                                                object: nil)
         
         if UIApplication.isFirstLaunch() {
-            print("first time to launch this app")
+            print("first time to launch this version of the app")
             metricUnits  = true
             defaults.set(metricUnits, forKey: metricUnitsString)
             if self.traitCollection.userInterfaceStyle == .dark {
