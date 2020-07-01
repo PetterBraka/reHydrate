@@ -10,7 +10,7 @@ import UIKit
 import HealthKit
 import FSCalendar
 
-let versionString = "version2.6"
+let versionString = "version3"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
