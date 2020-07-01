@@ -11,7 +11,7 @@ import HealthKit
 import FSCalendar
 import WatchConnectivity
 
-let versionString = "version2.6"
+let versionString = "version3.1"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -1050,17 +1050,21 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        print("sent data with sendMessage \(String(describing: message["consumed"]))\(String(describing: message["date"]))")
+        print("sent data with transferUserInfo")
+        print(String(describing: message["consumed"]))
+        print(String(describing: message["date"]))
         if formatter.string(from: today.date) == message["date"] as! String {
             let messageConsumed = message["consumed"]!
             let numberFormatter = NumberFormatter()
             let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
             if today.consumed.amountOfDrink < consumed {
+                let drinkAmountAdded = consumed - today.consumed.amountOfDrink
                 today.consumed.amountOfDrink = consumed
                 print("todays amount was updated")
-                insertDay(today)
-                Day.saveDays(days)
                 DispatchQueue.main.async {
+                    self.insertDay(self.today)
+                    Day.saveDays(self.days)
+                    self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
                     self.updateUI()
                 }
             }
@@ -1068,17 +1072,21 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        print("sent data with transferUserInfo \(String(describing: userInfo["consumed"]))\(String(describing: userInfo["date"]))")
+        print("sent data with transferUserInfo")
+        print(String(describing: userInfo["consumed"]))
+        print(String(describing: userInfo["date"]))
         if formatter.string(from: today.date) == userInfo["date"] as! String {
             let messageConsumed = userInfo["consumed"]!
             let numberFormatter = NumberFormatter()
             let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
             if today.consumed.amountOfDrink < consumed {
+                let drinkAmountAdded = consumed - today.consumed.amountOfDrink
                 today.consumed.amountOfDrink = consumed
                 print("todays amount was updated")
-                insertDay(today)
-                Day.saveDays(days)
                 DispatchQueue.main.async {
+                    self.insertDay(self.today)
+                    Day.saveDays(self.days)
+                    self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
                     self.updateUI()
                 }
             }
