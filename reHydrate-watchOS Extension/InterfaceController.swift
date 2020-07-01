@@ -138,7 +138,10 @@ extension InterfaceController: WCSessionDelegate{
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        print("sent data with sendMessage \(String(describing: message["phoneConsumed"]))\(String(describing: message["phoneDate"]))")
+        print("sent data with sendMessage")
+        print(String(describing: message["phoneConsumed"]))
+        print(String(describing: message["phoneConsumed"]))
+        print(String(describing: message["phoneDate"]))
         if formatter.string(from: today.date) == message["phoneDate"] as! String {
             let messageConsumed = message["phoneConsumed"]!
             let numberFormatter = NumberFormatter()
@@ -157,7 +160,10 @@ extension InterfaceController: WCSessionDelegate{
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        print("sent data with transferUserInfo \(String(describing: userInfo["phoneConsumed"]))\(String(describing: userInfo["phoneDate"]))")
+        print("sent data with transferUserInfo")
+        print(String(describing: userInfo["phoneConsumed"]))
+        print(String(describing: userInfo["phoneConsumed"]))
+        print(String(describing: userInfo["phoneDate"]))
         if formatter.string(from: today.date) == userInfo["phoneDate"] as! String {
             let messageConsumed = userInfo["phoneConsumed"]!
             let numberFormatter = NumberFormatter()
