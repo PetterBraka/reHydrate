@@ -45,17 +45,6 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         // Configure interface objects here.
         days = Day.loadDays()
-        if WCSession.isSupported(){
-            let session = WCSession.default
-            session.delegate = self
-            session.activate()
-        }
-    }
-    
-    override func willActivate() {
-        // This method is called when watch view controller is about to be visible to user
-        super.willActivate()
-        
         //ask the phone for the goal and the consumed amount.
         
         formatter.dateFormat = "EEEE - dd/MM/yy"
@@ -68,6 +57,18 @@ class InterfaceController: WKInterfaceController {
             insertDay(today)
         }
         updateSummary()
+        if WCSession.isSupported(){
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+    }
+    
+    override func willActivate() {
+        // This method is called when watch view controller is about to be visible to user
+        super.willActivate()
+        
+        
     }
     
     override func didDeactivate() {

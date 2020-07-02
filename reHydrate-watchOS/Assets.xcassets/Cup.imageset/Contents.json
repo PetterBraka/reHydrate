@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Glass@1x.png",
+      "filename" : "Glass@1x 2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Glass@2x.png",
+      "filename" : "Glass@2x 2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Glass@3x.png",
+      "filename" : "Glass@3x 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
