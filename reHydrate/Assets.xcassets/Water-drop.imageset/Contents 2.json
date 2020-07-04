@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "icons8-water-96.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "White@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

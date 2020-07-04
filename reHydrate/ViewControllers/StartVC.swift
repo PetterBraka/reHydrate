@@ -9,8 +9,9 @@
 import UIKit
 import HealthKit
 import FSCalendar
+import WatchConnectivity
 
-let versionString = "version3"
+let versionString = "version3.1"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -22,6 +23,7 @@ let reminderIntervalString  = "reminderInterval"
 let smallDrinkOptionString  = "smallDrinkOption"
 let mediumDrinkOptionString = "mediumDrinkOption"
 let largeDrinkOptionString  = "largeDrinkOption"
+
 let appLanguages = ["en", "nb"]
 
 class StartVC: UIViewController, UNUserNotificationCenterDelegate {
@@ -214,40 +216,40 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     @objc func tap(_ sender: UIGestureRecognizer){
         let drink = Drink.init()
         switch sender.view {
-        case smallOption:
-            print("small short-press")
-            drink.amountOfDrink = drinkOptions[0].amountOfDrink
-            updateConsumtion(drink)
-        case mediumOption:
-            print("medium short-press")
-            drink.amountOfDrink = drinkOptions[1].amountOfDrink
-            updateConsumtion(drink)
-        case largeOption:
-            print("large short-press")
-            drink.amountOfDrink = drinkOptions[2].amountOfDrink
-            updateConsumtion(drink)
-        case settingsButton:
-            let aboutScreen = SettingsVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromLeft
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            aboutScreen.modalPresentationStyle = .fullScreen
-            present(aboutScreen, animated: false, completion: nil)
-        case calendarButton:
-            let calendarScreen  = CalendarVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromRight
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            calendarScreen.modalPresentationStyle     = .fullScreen
-            self.present(calendarScreen, animated: false, completion: nil)
-        default:
-            break
+            case smallOption:
+                print("small short-press")
+                drink.amountOfDrink = drinkOptions[0].amountOfDrink
+                updateConsumtion(drink)
+            case mediumOption:
+                print("medium short-press")
+                drink.amountOfDrink = drinkOptions[1].amountOfDrink
+                updateConsumtion(drink)
+            case largeOption:
+                print("large short-press")
+                drink.amountOfDrink = drinkOptions[2].amountOfDrink
+                updateConsumtion(drink)
+            case settingsButton:
+                let aboutScreen = SettingsVC()
+                let transition      = CATransition()
+                transition.duration = 0.4
+                transition.type     = .push
+                transition.subtype  = .fromLeft
+                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                view.window!.layer.add(transition, forKey: kCATransition)
+                aboutScreen.modalPresentationStyle = .fullScreen
+                present(aboutScreen, animated: false, completion: nil)
+            case calendarButton:
+                let calendarScreen  = CalendarVC()
+                let transition      = CATransition()
+                transition.duration = 0.4
+                transition.type     = .push
+                transition.subtype  = .fromRight
+                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                view.window!.layer.add(transition, forKey: kCATransition)
+                calendarScreen.modalPresentationStyle     = .fullScreen
+                self.present(calendarScreen, animated: false, completion: nil)
+            default:
+                break
         }
     }
     
@@ -260,19 +262,19 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      1. case 1, 2, 3 and will ask the usr if the user wants to change or remove a drink from the consumed amount.
      */
     @objc func long(_ sender: UIGestureRecognizer){
-        if sender.state 	== .began {
+        if sender.state     == .began {
             switch sender.view {
-            case smallOption:
-                print("small long-press")
-                popUpOptions(sender, drinkOptions[0], smallLabel)
-            case mediumOption:
-                print("medium long-press")
-                popUpOptions(sender, drinkOptions[1], mediumLabel)
-            case largeOption:
-                print("large long-press")
-                popUpOptions(sender, drinkOptions[2], largeLabel)
-            default:
-                break
+                case smallOption:
+                    print("small long-press")
+                    popUpOptions(sender, drinkOptions[0], smallLabel)
+                case mediumOption:
+                    print("medium long-press")
+                    popUpOptions(sender, drinkOptions[1], mediumLabel)
+                case largeOption:
+                    print("large long-press")
+                    popUpOptions(sender, drinkOptions[2], largeLabel)
+                default:
+                    break
             }
         }
     }
@@ -285,19 +287,19 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      # Example #
      ```
      override func viewDidLoad() {
-     	NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+     NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
      }
      ```
      */
     @objc func didMoveToForeground(){
         currentDay.text         = formatter.string(from: Date.init()).localizedCapitalized
-        days                    = Day.loadDay()
+        days                    = Day.loadDays()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
             today                 = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
         } else {
             today                 = Day.init()
             if !days.isEmpty {
-                today.goalAmount     = days.last!.goalAmount
+                today.goal     = days.last!.goal
             }
             insertDay(today)
         }
@@ -359,7 +361,14 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             })
         }
         setUpHealth()
-        days = Day.loadDay()
+        days = Day.loadDays()
+        
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+        
         updateUI()
     }
     
@@ -368,11 +377,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         darkMode             = defaults.bool(forKey: darkModeString)
         metricUnits          = defaults.bool(forKey: metricUnitsString)
         currentDay.text      = formatter.string(from: Date.init()).localizedCapitalized
-        days                 = Day.loadDay()
+        days                 = Day.loadDays()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
             today            = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
         } else if !days.isEmpty {
-            today.goalAmount = days.last!.goalAmount
+            today.goal = days.last!.goal
         } else {
             today            = Day.init()
             insertDay(today)
@@ -381,10 +390,21 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         setUpUI()
         changeAppearance()
         updateUI()
+        if WCSession.isSupported(){
+            let message = ["phoneDate": formatter.string(from: today.date),
+                           "phoneGoal": String(today.goal.amountOfDrink),
+                           "phoneConsumed": String(today.consumed.amountOfDrink)]
+            if WCSession.default.isReachable{
+                WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                    print(error.localizedDescription)
+                }
+            } else {
+                WCSession.default.transferUserInfo(message)
+            }
+        }
     }
     
     //MARK: - Set up of UI
-    
     /**
      Will set up the UI and must be called when the view will appear.
      
@@ -421,8 +441,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      # Example #
      ```
      override func viewDidLoad() {
-         super.viewDidLoad()
-         createDrinkStack()
+     super.viewDidLoad()
+     createDrinkStack()
      }
      ```
      */
@@ -468,7 +488,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - SetUp UIButton
-    
     /**
      Setting upp the listeners and aperients of the buttons.
      
@@ -509,15 +528,14 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - SetUp UIViewStack
-    
     /**
      Will crate a stack for all the summary lables.
      
      # Example #
      ```
      func setUPUI(){
-         createSummaryStack()
-         self.view.addSubView(summaryStack)
+     createSummaryStack()
+     self.view.addSubView(summaryStack)
      }
      ```
      */
@@ -534,71 +552,70 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      # Example #
      ```
      func setUPUI(){
-         crateDrinkStack()
-         self.view.addSubView(drinkStack)
+     crateDrinkStack()
+     self.view.addSubView(drinkStack)
      }
      ```
      */
     func createDrinkStack(){
-    let smallStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .vertical
-        stack.alignment = .center
-        return stack
-    }()
-    let smallLableStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .horizontal
-        stack.alignment = .bottom
-        stack.distribution = .fillProportionally
-        return stack
-    }()
-    smallLableStack.addArrangedSubview(smallLabel)
-    smallLableStack.addArrangedSubview(smallPrefix)
-    smallStack.addArrangedSubview(smallOption)
-    smallStack.addArrangedSubview(smallLableStack)
-    let mediumStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .vertical
-        stack.alignment = .center
-        return stack
-    }()
-    let mediumLableStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .horizontal
-        stack.alignment = .center
-        stack.distribution = .fillProportionally
-        return stack
-    }()
-    mediumLableStack.addArrangedSubview(mediumLabel)
-    mediumLableStack.addArrangedSubview(mediumPrefix)
-    mediumStack.addArrangedSubview(mediumOption)
-    mediumStack.addArrangedSubview(mediumLableStack)
-    let largeStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .vertical
-        stack.alignment = .center
-        stack.distribution = .equalCentering
-        return stack
-    }()
-    let largeLableStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .horizontal
-        stack.alignment = .bottom
-        stack.distribution = .fillProportionally
-        return stack
-    }()
-    largeLableStack.addArrangedSubview(largeLabel)
-    largeLableStack.addArrangedSubview(largePrefix)
-    largeStack.addArrangedSubview(largeOption)
-    largeStack.addArrangedSubview(largeLableStack)
-    drinkStack.addArrangedSubview(smallStack)
-    drinkStack.addArrangedSubview(mediumStack)
-    drinkStack.addArrangedSubview(largeStack)
-}
+        let smallStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .vertical
+            stack.alignment = .center
+            return stack
+        }()
+        let smallLableStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .horizontal
+            stack.alignment = .bottom
+            stack.distribution = .fillProportionally
+            return stack
+        }()
+        smallLableStack.addArrangedSubview(smallLabel)
+        smallLableStack.addArrangedSubview(smallPrefix)
+        smallStack.addArrangedSubview(smallOption)
+        smallStack.addArrangedSubview(smallLableStack)
+        let mediumStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .vertical
+            stack.alignment = .center
+            return stack
+        }()
+        let mediumLableStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .horizontal
+            stack.alignment = .center
+            stack.distribution = .fillProportionally
+            return stack
+        }()
+        mediumLableStack.addArrangedSubview(mediumLabel)
+        mediumLableStack.addArrangedSubview(mediumPrefix)
+        mediumStack.addArrangedSubview(mediumOption)
+        mediumStack.addArrangedSubview(mediumLableStack)
+        let largeStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .vertical
+            stack.alignment = .center
+            stack.distribution = .equalCentering
+            return stack
+        }()
+        let largeLableStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .horizontal
+            stack.alignment = .bottom
+            stack.distribution = .fillProportionally
+            return stack
+        }()
+        largeLableStack.addArrangedSubview(largeLabel)
+        largeLableStack.addArrangedSubview(largePrefix)
+        largeStack.addArrangedSubview(largeOption)
+        largeStack.addArrangedSubview(largeLableStack)
+        drinkStack.addArrangedSubview(smallStack)
+        drinkStack.addArrangedSubview(mediumStack)
+        drinkStack.addArrangedSubview(largeStack)
+    }
     
     //MARK: - HealthKit
-    
     /**
      Will ask for premitions to use the health data for water consumtion. it will only write not read.
      
@@ -654,7 +671,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - Change appearance
-    
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
      
@@ -703,7 +719,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - Update consmed
-    
     /**
      Updates the amount consumed in the Day
      
@@ -721,14 +736,29 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let drinkAmount  = Measurement(value: Double(drinkConsumed.amountOfDrink), unit: UnitVolume.milliliters)
         let drink        = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
         exportDrinkToHealth(Double(drink.amountOfDrink), Date.init())
-        today.consumedAmount.amountOfDrink     += drink.amountOfDrink
-        if today.consumedAmount.amountOfDrink  <= 0.0{
-            today.consumedAmount.amountOfDrink  = 0
+        today.consumed.amountOfDrink     += drink.amountOfDrink
+        let rounded = Float(roundf(today.consumed.amountOfDrink * 100)/100)
+        today.consumed.amountOfDrink = rounded
+        if today.consumed.amountOfDrink  <= 0.0{
+            today.consumed.amountOfDrink  = 0
         } else {
             
         }
         insertDay(today)
         updateUI()
+        
+        if WCSession.isSupported(){
+            let message = ["phoneDate": formatter.string(from: today.date),
+                           "phoneGoal": String(today.goal.amountOfDrink),
+                           "phoneConsumed": String(today.consumed.amountOfDrink)]
+            if WCSession.default.isReachable {
+                WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                    print(error.localizedDescription)
+                }
+            } else {
+                WCSession.default.transferUserInfo(message)
+            }
+        }
     }
     
     /**
@@ -759,7 +789,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - Update View
-    
     /**
      Updates the  in the UI
      
@@ -771,53 +800,53 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      updateUI()
      ```
      */
-    func updateUI(){
-        Day.saveDay(days)
+    @objc func updateUI(){
+        Day.saveDays(days)
         let day = Day()
-        let goalAmount     = Measurement(value: Double(today.goalAmount.amountOfDrink), unit: UnitVolume.liters)
-        let consumedAmount = Measurement(value: Double(today.consumedAmount.amountOfDrink), unit: UnitVolume.liters)
-        let smallDrink 	   = Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
+        let goalAmount     = Measurement(value: Double(today.goal.amountOfDrink), unit: UnitVolume.liters)
+        let consumedAmount = Measurement(value: Double(today.consumed.amountOfDrink), unit: UnitVolume.liters)
+        let smallDrink     = Measurement(value: Double(drinkOptions[0].amountOfDrink), unit: UnitVolume.milliliters)
         let mediumDrink    = Measurement(value: Double(drinkOptions[1].amountOfDrink), unit: UnitVolume.milliliters)
-        let largeDrink 	   = Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
+        let largeDrink     = Measurement(value: Double(drinkOptions[2].amountOfDrink), unit: UnitVolume.milliliters)
         if metricUnits {
-            day.goalAmount.amountOfDrink     = Float(goalAmount.converted(to: .liters).value)
-            day.consumedAmount.amountOfDrink = Float(consumedAmount.converted(to: .liters).value)
-            let roundedSmallDrink            = smallDrink.converted(to: .milliliters).value.rounded()
-            let roundedMediumDrink           = mediumDrink.converted(to: .milliliters).value.rounded()
-            let roundedLargeDrink            = largeDrink.converted(to: .milliliters).value.rounded()
+            day.goal.amountOfDrink     = Float(goalAmount.converted(to: .liters).value)
+            day.consumed.amountOfDrink = Float(consumedAmount.converted(to: .liters).value)
+            let roundedSmallDrink      = smallDrink.converted(to: .milliliters).value.rounded()
+            let roundedMediumDrink     = mediumDrink.converted(to: .milliliters).value.rounded()
+            let roundedLargeDrink      = largeDrink.converted(to: .milliliters).value.rounded()
             smallLabel.text            = String(format: "%.0f", roundedSmallDrink)
             mediumLabel.text           = String(format: "%.0f", roundedMediumDrink)
             largeLabel.text            = String(format: "%.0f", roundedLargeDrink)
         } else {
-            day.goalAmount.amountOfDrink     = Float(goalAmount.converted(to: .imperialPints).value)
-            day.consumedAmount.amountOfDrink = Float(consumedAmount.converted(to: .imperialPints).value)
-            let small                        = smallDrink.converted(to: .imperialFluidOunces).value
-            let medium                       = mediumDrink.converted(to: .imperialFluidOunces).value
-            let large                        = largeDrink.converted(to: .imperialFluidOunces).value
+            day.goal.amountOfDrink     = Float(goalAmount.converted(to: .imperialPints).value)
+            day.consumed.amountOfDrink = Float(consumedAmount.converted(to: .imperialPints).value)
+            let small                  = smallDrink.converted(to: .imperialFluidOunces).value
+            let medium                 = mediumDrink.converted(to: .imperialFluidOunces).value
+            let large                  = largeDrink.converted(to: .imperialFluidOunces).value
             smallLabel.text            = String(format: "%.2f", small)
             mediumLabel.text           = String(format: "%.2f", medium)
             largeLabel.text            = String(format: "%.2f", large)
         }
         
-        if (today.goalAmount.amountOfDrink.rounded(.up) == day.goalAmount.amountOfDrink.rounded(.down)){
-            self.goalAmount.text  = String(format: "%.0f", day.goalAmount.amountOfDrink)
+        if (today.goal.amountOfDrink.rounded(.up) == day.goal.amountOfDrink.rounded(.down)){
+            self.goalAmount.text  = String(format: "%.0f", day.goal.amountOfDrink)
         } else {
-            let stringFormatGoal  = getStringFormat(day.goalAmount.amountOfDrink)
-            self.goalAmount.text  = String(format: stringFormatGoal, day.goalAmount.amountOfDrink)
+            let stringFormatGoal  = getStringFormat(day.goal.amountOfDrink)
+            self.goalAmount.text  = String(format: stringFormatGoal, day.goal.amountOfDrink)
         }
         
-        let stringFormatConsumed  = getStringFormat(today.consumedAmount.amountOfDrink)
-        self.consumedAmount.text  = String(format: stringFormatConsumed, day.consumedAmount.amountOfDrink)
+        let stringFormatConsumed  = getStringFormat(today.consumed.amountOfDrink)
+        self.consumedAmount.text  = String(format: stringFormatConsumed, day.consumed.amountOfDrink)
         if metricUnits {
             smallPrefix.text  = "\(UnitVolume.milliliters.symbol)"
             mediumPrefix.text = "\(UnitVolume.milliliters.symbol)"
             largePrefix.text  = "\(UnitVolume.milliliters.symbol)"
-            goalPrefix.text              = "\(UnitVolume.liters.symbol)"
+            goalPrefix.text   = "\(UnitVolume.liters.symbol)"
         } else {
             smallPrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
             mediumPrefix.text = "\(UnitVolume.imperialFluidOunces.symbol)"
             largePrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
-            goalPrefix.text              = "\(UnitVolume.imperialPints.symbol)"
+            goalPrefix.text   = "\(UnitVolume.imperialPints.symbol)"
         }
     }
     
@@ -838,18 +867,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      */
     func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
         let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink", comment:
-            "popup view option for editing the drink options."), style: .default) {_ in
-            let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"),
-                                                message: nil, preferredStyle: .alert)
-            editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
-                textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                textField.font          = UIFont(name: "American typewriter", size: 18)
-                textField.keyboardType  = .decimalPad
-                textField.textAlignment = .center
-            })
-                let done = UIAlertAction(title: NSLocalizedString("Done", comment: "The done option of a popup view"),
-                                         style: .default) {_ in
+        let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink",comment: "popup view option for editing the drink options."),
+                                            style: .default) {_ in
+                let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"),
+                                                    message: nil, preferredStyle: .alert)
+                editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
+                    textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                    textField.font          = UIFont(name: "American typewriter", size: 18)
+                    textField.keyboardType  = .decimalPad
+                    textField.textAlignment = .center
+                })
+                let done = UIAlertAction(title: NSLocalizedString("Done", comment: "The done option of a popup view"), style: .default) {_ in
                     let newValue = (editAlert.textFields?.first!.text!)! as String
                     if newValue != "" {
                         if self.metricUnits {
@@ -897,7 +925,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - Save and Load
-    
     /**
      Will save each drink option to UserDefaults
      
@@ -933,6 +960,15 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         drinkOptions[0].amountOfDrink = defaults.float(forKey: smallDrinkOptionString)
         drinkOptions[1].amountOfDrink = defaults.float(forKey: mediumDrinkOptionString)
         drinkOptions[2].amountOfDrink = defaults.float(forKey: largeDrinkOptionString)
+        
+        if  drinkOptions[0].amountOfDrink == 0 ||
+            drinkOptions[1].amountOfDrink == 0 ||
+            drinkOptions[2].amountOfDrink == 0 {
+            
+            drinkOptions[0].amountOfDrink = 300
+            drinkOptions[1].amountOfDrink = 500
+            drinkOptions[2].amountOfDrink = 750
+        }
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -957,7 +993,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     //MARK: - String formatting
-    
     /**
      Will return the number of digits in a float
      
@@ -976,7 +1011,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 let numberOfDigits = stringOfNumber.count - 1
                 if numberOfDigits  < 3 {
                     return numberOfDigits
-                    
                 } else {
                     return 2
                 }
@@ -1002,6 +1036,65 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
     deinit {
         NotificationCenter.default.removeObserver(UIApplication.willEnterForegroundNotification)
+    }
+}
+
+extension StartVC: WCSessionDelegate {
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if (activationState == .activated) {
+            print("Connected")
+        } else {
+            print(error!.localizedDescription)
+            
+        }
+    }
+    
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        print("disconnecting from watch")
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        print("watch not connected")
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        print("sent data with transferUserInfo")
+        print(String(describing: message["consumed"]))
+        print(String(describing: message["date"]))
+        if formatter.string(from: today.date) == message["date"] as! String {
+            let messageConsumed = message["consumed"]!
+            let numberFormatter = NumberFormatter()
+            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            let drinkAmountAdded = consumed - today.consumed.amountOfDrink
+            today.consumed.amountOfDrink = consumed
+            print("todays amount was updated")
+            DispatchQueue.main.async {
+                self.insertDay(self.today)
+                Day.saveDays(self.days)
+                self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                self.updateUI()
+            }
+        }
+    }
+    
+    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        print("sent data with transferUserInfo")
+        print(String(describing: userInfo["consumed"]))
+        print(String(describing: userInfo["date"]))
+        if formatter.string(from: today.date) == userInfo["date"] as! String {
+            let messageConsumed = userInfo["consumed"]!
+            let numberFormatter = NumberFormatter()
+            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            let drinkAmountAdded = consumed - today.consumed.amountOfDrink
+            today.consumed.amountOfDrink = consumed
+            print("todays amount was updated")
+            DispatchQueue.main.async {
+                self.insertDay(self.today)
+                Day.saveDays(self.days)
+                self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                self.updateUI()
+            }
+        }
     }
 }
 
@@ -1044,23 +1137,23 @@ func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
     
     let metricUnits = UserDefaults.standard.bool(forKey: metricUnitsString)
     var unit = String()
-    var smallDrink = String()
+    var smallDrink  = String()
     var mediumDrink = String()
-    var largeDrink = String()
+    var largeDrink  = String()
     if metricUnits {
-        smallDrink = String(format: "%.0f", Measurement(value: Double(small), unit: UnitVolume.milliliters).value)
+        smallDrink  = String(format: "%.0f", Measurement(value: Double(small), unit: UnitVolume.milliliters).value)
         mediumDrink = String(format: "%.0f", Measurement(value: Double(medium), unit: UnitVolume.milliliters).value)
-        largeDrink = String(format: "%.0f", Measurement(value: Double(large), unit: UnitVolume.milliliters).value)
+        largeDrink  = String(format: "%.0f", Measurement(value: Double(large), unit: UnitVolume.milliliters).value)
         unit = "ml"
     } else {
-        smallDrink = String(format: "%.2f", Measurement(value: Double(small), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        smallDrink  = String(format: "%.2f", Measurement(value: Double(small), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
         mediumDrink = String(format: "%.2f", Measurement(value: Double(medium), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
-        largeDrink = String(format: "%.2f", Measurement(value: Double(large), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        largeDrink  = String(format: "%.2f", Measurement(value: Double(large), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
         unit = "fl oz"
     }
     for i in 0...totalNotifications {
-        var date = DateComponents()
-        date.hour = startHour + (intervals * i) / 60
+        var date    = DateComponents()
+        date.hour   = startHour + (intervals * i) / 60
         date.minute = (intervals * i) % 60
         print("setting reminder for \(date.hour!):\(date.minute!)")
         let notification = getReminder()

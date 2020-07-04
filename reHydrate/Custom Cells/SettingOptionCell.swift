@@ -188,9 +188,9 @@ class SettingOptionCell: UITableViewCell {
                 }
             case NSLocalizedString("SetYourGoal", comment: "").lowercased():
                 imageForCell.isHidden = true
-                let days = Day.loadDay()
+                let days = Day.loadDays()
                 if !days.isEmpty{
-                    textField.text = String(describing: days.last!.goalAmount.amountOfDrink)
+                    textField.text = String(describing: days.last!.goal.amountOfDrink)
                 } else {
                     textField.text = "3"
                 }
@@ -526,12 +526,12 @@ class SettingOptionCell: UITableViewCell {
     }
     
     func updateGoal(){
-        let days = Day.loadDay()
+        let days = Day.loadDays()
         let newGoal = Float(textField.text!)!
         if newGoal != 0 {
-            days[days.count - 1].goalAmount.amountOfDrink = newGoal
-            print(days[days.count - 1].goalAmount.amountOfDrink)
-            Day.saveDay(days)
+            days[days.count - 1].goal.amountOfDrink = newGoal
+            print(days[days.count - 1].goal.amountOfDrink)
+            Day.saveDays(days)
         }
     }
 }

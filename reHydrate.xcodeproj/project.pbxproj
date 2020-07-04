@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3319AA32245334130049C676 /* SettingOptionCell.swift */; };
+		332B2D6324A1631800646D3E /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8428243A4A2600848B7C /* Day.swift */; };
+		332B2D6424A1631B00646D3E /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8426243A47A800848B7C /* Drink.swift */; };
 		333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BD5F8246424FF0041D90A /* TutorialVC.swift */; };
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
 		334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334281E224977ADB00A3CF12 /* AppIconVC.swift */; };
@@ -70,6 +72,14 @@
 		3389E0AB2448A61300DD7B58 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3389E0AA2448A61300DD7B58 /* SettingsVC.swift */; };
 		33C431912482769B00E8EECA /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C431902482769B00E8EECA /* Extenstions.swift */; };
 		33C4319324827F2700E8EECA /* BundleExtension.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C4319224827F2700E8EECA /* BundleExtension.swift .swift */; };
+		33D24C2224A0CC2000C7A23C /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33D24C2024A0CC2000C7A23C /* Interface.storyboard */; };
+		33D24C2424A0CC2200C7A23C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33D24C2324A0CC2200C7A23C /* Assets.xcassets */; };
+		33D24C2B24A0CC2200C7A23C /* reHydrate-watchOS Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 33D24C2A24A0CC2200C7A23C /* reHydrate-watchOS Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		33D24C3024A0CC2200C7A23C /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D24C2F24A0CC2200C7A23C /* InterfaceController.swift */; };
+		33D24C3224A0CC2200C7A23C /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D24C3124A0CC2200C7A23C /* ExtensionDelegate.swift */; };
+		33D24C3424A0CC2200C7A23C /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D24C3324A0CC2200C7A23C /* NotificationController.swift */; };
+		33D24C3624A0CC2400C7A23C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33D24C3524A0CC2400C7A23C /* Assets.xcassets */; };
+		33D24C3B24A0CC2400C7A23C /* reHydrate-watchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 33D24C1E24A0CC2000C7A23C /* reHydrate-watchOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC8427243A47A800848B7C /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8426243A47A800848B7C /* Drink.swift */; };
 		33FC8429243A4A2600848B7C /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8428243A4A2600848B7C /* Day.swift */; };
@@ -77,6 +87,48 @@
 		33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FE29D724506FF000BE7634 /* SettingsHeader.swift */; };
 		9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		33D24C2C24A0CC2200C7A23C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33D24C2924A0CC2200C7A23C;
+			remoteInfo = "reHydrate-watchOS Extension";
+		};
+		33D24C3924A0CC2400C7A23C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33D24C1D24A0CC2000C7A23C;
+			remoteInfo = "reHydrate-watchOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		33D24C3C24A0CC2400C7A23C /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				33D24C3B24A0CC2400C7A23C /* reHydrate-watchOS.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33D24C3F24A0CC2400C7A23C /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				33D24C2B24A0CC2200C7A23C /* reHydrate-watchOS Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3310709A244DBCD3008365A3 /* reHydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reHydrate.entitlements; sourceTree = "<group>"; };
@@ -144,6 +196,17 @@
 		33C431902482769B00E8EECA /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
 		33C4319224827F2700E8EECA /* BundleExtension.swift .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BundleExtension.swift .swift"; sourceTree = "<group>"; };
 		33CD6D58243BE53B00EF0335 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		33D24C1E24A0CC2000C7A23C /* reHydrate-watchOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "reHydrate-watchOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		33D24C2124A0CC2000C7A23C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		33D24C2324A0CC2200C7A23C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		33D24C2524A0CC2200C7A23C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33D24C2A24A0CC2200C7A23C /* reHydrate-watchOS Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "reHydrate-watchOS Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		33D24C2F24A0CC2200C7A23C /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		33D24C3124A0CC2200C7A23C /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		33D24C3324A0CC2200C7A23C /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		33D24C3524A0CC2400C7A23C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		33D24C3724A0CC2400C7A23C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33D24C3824A0CC2400C7A23C /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33EFF4002470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = nb; path = nb.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -165,6 +228,13 @@
 			files = (
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33D24C2724A0CC2200C7A23C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +312,8 @@
 			isa = PBXGroup;
 			children = (
 				3378767524378A9400F5A732 /* reHydrate */,
+				33D24C1F24A0CC2000C7A23C /* reHydrate-watchOS */,
+				33D24C2E24A0CC2200C7A23C /* reHydrate-watchOS Extension */,
 				3378767424378A9400F5A732 /* Products */,
 				DEE3AF47A916B38FCDFA6298 /* Pods */,
 				F887073E19DFDDCFF694E7E8 /* Frameworks */,
@@ -252,6 +324,8 @@
 			isa = PBXGroup;
 			children = (
 				3378767324378A9400F5A732 /* reHydrate.app */,
+				33D24C1E24A0CC2000C7A23C /* reHydrate-watchOS.app */,
+				33D24C2A24A0CC2200C7A23C /* reHydrate-watchOS Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -297,6 +371,29 @@
 			path = "Custom Class";
 			sourceTree = "<group>";
 		};
+		33D24C1F24A0CC2000C7A23C /* reHydrate-watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				33D24C2024A0CC2000C7A23C /* Interface.storyboard */,
+				33D24C2324A0CC2200C7A23C /* Assets.xcassets */,
+				33D24C2524A0CC2200C7A23C /* Info.plist */,
+			);
+			path = "reHydrate-watchOS";
+			sourceTree = "<group>";
+		};
+		33D24C2E24A0CC2200C7A23C /* reHydrate-watchOS Extension */ = {
+			isa = PBXGroup;
+			children = (
+				33D24C2F24A0CC2200C7A23C /* InterfaceController.swift */,
+				33D24C3124A0CC2200C7A23C /* ExtensionDelegate.swift */,
+				33D24C3324A0CC2200C7A23C /* NotificationController.swift */,
+				33D24C3524A0CC2400C7A23C /* Assets.xcassets */,
+				33D24C3724A0CC2400C7A23C /* Info.plist */,
+				33D24C3824A0CC2400C7A23C /* PushNotificationPayload.apns */,
+			);
+			path = "reHydrate-watchOS Extension";
+			sourceTree = "<group>";
+		};
 		DEE3AF47A916B38FCDFA6298 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,15 +425,51 @@
 				3378767024378A9400F5A732 /* Frameworks */,
 				3378767124378A9400F5A732 /* Resources */,
 				A423E6166413CEA25E5B2445 /* [CP] Embed Pods Frameworks */,
+				33D24C3C24A0CC2400C7A23C /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				33D24C3A24A0CC2400C7A23C /* PBXTargetDependency */,
 			);
 			name = reHydrate;
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
 			productType = "com.apple.product-type.application";
+		};
+		33D24C1D24A0CC2000C7A23C /* reHydrate-watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33D24C4324A0CC2400C7A23C /* Build configuration list for PBXNativeTarget "reHydrate-watchOS" */;
+			buildPhases = (
+				33D24C1C24A0CC2000C7A23C /* Resources */,
+				33D24C3F24A0CC2400C7A23C /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				33D24C2D24A0CC2200C7A23C /* PBXTargetDependency */,
+			);
+			name = "reHydrate-watchOS";
+			productName = "reHydrate-watchOS";
+			productReference = 33D24C1E24A0CC2000C7A23C /* reHydrate-watchOS.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		33D24C2924A0CC2200C7A23C /* reHydrate-watchOS Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33D24C4224A0CC2400C7A23C /* Build configuration list for PBXNativeTarget "reHydrate-watchOS Extension" */;
+			buildPhases = (
+				33D24C2624A0CC2200C7A23C /* Sources */,
+				33D24C2724A0CC2200C7A23C /* Frameworks */,
+				33D24C2824A0CC2200C7A23C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "reHydrate-watchOS Extension";
+			productName = "reHydrate-watchOS Extension";
+			productReference = 33D24C2A24A0CC2200C7A23C /* reHydrate-watchOS Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -344,12 +477,18 @@
 		3378766B24378A9300F5A732 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1140;
+				LastSwiftUpdateCheck = 1150;
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Petter vang Brakalsvålet";
 				TargetAttributes = {
 					3378767224378A9400F5A732 = {
 						CreatedOnToolsVersion = 11.4;
+					};
+					33D24C1D24A0CC2000C7A23C = {
+						CreatedOnToolsVersion = 11.5;
+					};
+					33D24C2924A0CC2200C7A23C = {
+						CreatedOnToolsVersion = 11.5;
 					};
 				};
 			};
@@ -368,6 +507,8 @@
 			projectRoot = "";
 			targets = (
 				3378767224378A9400F5A732 /* reHydrate */,
+				33D24C1D24A0CC2000C7A23C /* reHydrate-watchOS */,
+				33D24C2924A0CC2200C7A23C /* reHydrate-watchOS Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -428,6 +569,23 @@
 				334282602497AA0600A3CF12 /* YellowWhite@3x.png in Resources */,
 				334282272497A50F00A3CF12 /* OrangeBlack@1x.png in Resources */,
 				334282502497AA0600A3CF12 /* PinkWhite@1x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33D24C1C24A0CC2000C7A23C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33D24C2424A0CC2200C7A23C /* Assets.xcassets in Resources */,
+				33D24C2224A0CC2000C7A23C /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33D24C2824A0CC2200C7A23C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33D24C3624A0CC2400C7A23C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,7 +657,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		33D24C2624A0CC2200C7A23C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33D24C3424A0CC2200C7A23C /* NotificationController.swift in Sources */,
+				33D24C3224A0CC2200C7A23C /* ExtensionDelegate.swift in Sources */,
+				332B2D6324A1631800646D3E /* Day.swift in Sources */,
+				332B2D6424A1631B00646D3E /* Drink.swift in Sources */,
+				33D24C3024A0CC2200C7A23C /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		33D24C2D24A0CC2200C7A23C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33D24C2924A0CC2200C7A23C /* reHydrate-watchOS Extension */;
+			targetProxy = 33D24C2C24A0CC2200C7A23C /* PBXContainerItemProxy */;
+		};
+		33D24C3A24A0CC2400C7A23C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33D24C1D24A0CC2000C7A23C /* reHydrate-watchOS */;
+			targetProxy = 33D24C3924A0CC2400C7A23C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3378768124378A9800F5A732 /* LaunchScreen.storyboard */ = {
@@ -509,6 +692,14 @@
 				33C4318B247EDA6700E8EECA /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		33D24C2024A0CC2000C7A23C /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				33D24C2124A0CC2000C7A23C /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 		33EFF3FE2470449A00D0A003 /* Localizable.strings */ = {
@@ -653,7 +844,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.1; 
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -675,11 +866,99 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		33D24C3D24A0CC2400C7A23C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DCQ3V8BLU5;
+				IBSC_MODULE = reHydrate_watchOS_Extension;
+				INFOPLIST_FILE = "reHydrate-watchOS/Info.plist";
+				MARKETING_VERSION = 3.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Debug;
+		};
+		33D24C3E24A0CC2400C7A23C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DCQ3V8BLU5;
+				IBSC_MODULE = reHydrate_watchOS_Extension;
+				INFOPLIST_FILE = "reHydrate-watchOS/Info.plist";
+				MARKETING_VERSION = 3.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Release;
+		};
+		33D24C4024A0CC2400C7A23C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DCQ3V8BLU5;
+				INFOPLIST_FILE = "reHydrate-watchOS Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Debug;
+		};
+		33D24C4124A0CC2400C7A23C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DCQ3V8BLU5;
+				INFOPLIST_FILE = "reHydrate-watchOS Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
 			};
 			name = Release;
 		};
@@ -700,6 +979,24 @@
 			buildConfigurations = (
 				3378768824378A9800F5A732 /* Debug */,
 				3378768924378A9800F5A732 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		33D24C4224A0CC2400C7A23C /* Build configuration list for PBXNativeTarget "reHydrate-watchOS Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33D24C4024A0CC2400C7A23C /* Debug */,
+				33D24C4124A0CC2400C7A23C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		33D24C4324A0CC2400C7A23C /* Build configuration list for PBXNativeTarget "reHydrate-watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33D24C3D24A0CC2400C7A23C /* Debug */,
+				33D24C3E24A0CC2400C7A23C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
