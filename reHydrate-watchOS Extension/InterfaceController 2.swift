@@ -45,6 +45,17 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         // Configure interface objects here.
         days = Day.loadDays()
+        if WCSession.isSupported(){
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+    }
+    
+    override func willActivate() {
+        // This method is called when watch view controller is about to be visible to user
+        super.willActivate()
+        
         //ask the phone for the goal and the consumed amount.
         
         formatter.dateFormat = "EEEE - dd/MM/yy"
@@ -57,18 +68,6 @@ class InterfaceController: WKInterfaceController {
             insertDay(today)
         }
         updateSummary()
-        if WCSession.isSupported(){
-            let session = WCSession.default
-            session.delegate = self
-            session.activate()
-        }
-    }
-    
-    override func willActivate() {
-        // This method is called when watch view controller is about to be visible to user
-        super.willActivate()
-        
-        
     }
     
     override func didDeactivate() {
@@ -140,9 +139,9 @@ extension InterfaceController: WCSessionDelegate{
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         print("sent data with sendMessage")
-        print(String(describing: message["phoneDate"]!))
-        print(String(describing: message["phoneConsumed"]!))
-        print(String(describing: message["phoneConsumed"]!))
+        print(String(describing: message["phoneConsumed"]))
+        print(String(describing: message["phoneConsumed"]))
+        print(String(describing: message["phoneDate"]))
         if formatter.string(from: today.date) == message["phoneDate"] as! String {
             let messageConsumed = message["phoneConsumed"]!
             let numberFormatter = NumberFormatter()
@@ -151,10 +150,10 @@ extension InterfaceController: WCSessionDelegate{
             let messageGoal = message["phoneGoal"]!
             let goal = numberFormatter.number(from: messageGoal as! String)!.floatValue
             today.goal.amountOfDrink = goal
-            print("todays amount was updated by message")
+            print("todays amount was updated")
+            insertDay(today)
+            Day.saveDays(days)
             DispatchQueue.main.async {
-                self.insertDay(self.today)
-                Day.saveDays(self.days)
                 self.updateSummary()
             }
         }
@@ -162,9 +161,9 @@ extension InterfaceController: WCSessionDelegate{
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         print("sent data with transferUserInfo")
-        print(String(describing: userInfo["phoneDate"]!))
-        print(String(describing: userInfo["phoneConsumed"]!))
-        print(String(describing: userInfo["phoneConsumed"]!))
+        print(String(describing: userInfo["phoneConsumed"]))
+        print(String(describing: userInfo["phoneConsumed"]))
+        print(String(describing: userInfo["phoneDate"]))
         if formatter.string(from: today.date) == userInfo["phoneDate"] as! String {
             let messageConsumed = userInfo["phoneConsumed"]!
             let numberFormatter = NumberFormatter()
@@ -173,10 +172,10 @@ extension InterfaceController: WCSessionDelegate{
             let messageGoal = userInfo["phoneGoal"]!
             let goal = numberFormatter.number(from: messageGoal as! String)!.floatValue
             today.goal.amountOfDrink = goal
-            print("todays amount was updated with user info")
+            print("todays amount was updated")
+            insertDay(today)
+            Day.saveDays(days)
             DispatchQueue.main.async {
-                self.insertDay(self.today)
-                Day.saveDays(self.days)
                 self.updateSummary()
             }
         }
