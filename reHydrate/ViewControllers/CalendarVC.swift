@@ -76,7 +76,7 @@ class CalendarVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        days                 = Day.loadDay()
+        days                 = Day.loadDays()
         formatter.dateFormat = "EEE - dd/MM/yy"
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
@@ -215,8 +215,8 @@ class CalendarVC: UIViewController {
         titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
         if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
             let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
-            drinks.append(day.goalAmount)
-            drinks.append(day.consumedAmount)
+            drinks.append(day.goal)
+            drinks.append(day.consumed)
         } else {
             drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
             drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
@@ -236,7 +236,7 @@ class CalendarVC: UIViewController {
     func getAverageFor()-> Float {
         let average = Drink()
         for day in days {
-            average.amountOfDrink += day.consumedAmount.amountOfDrink
+            average.amountOfDrink += day.consumed.amountOfDrink
         }
         return average.amountOfDrink / Float(days.count)
     }
@@ -247,7 +247,7 @@ class CalendarVC: UIViewController {
         for day in calendar.selectedDates {
             if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
                 let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
-                average += selectedDay?.consumedAmount.amountOfDrink ?? 0
+                average += selectedDay?.consumed.amountOfDrink ?? 0
             }
             x += 1
         }

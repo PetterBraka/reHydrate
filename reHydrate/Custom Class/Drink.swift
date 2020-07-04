@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FSCalendar
 
 class Drink: NSObject, Codable {
     var typeOfDrink: 	String
@@ -62,6 +61,4 @@ class Drink: NSObject, Codable {
             return false
         }
     }
-    
-    
 }
