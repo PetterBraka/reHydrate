@@ -47,16 +47,8 @@ class InterfaceController: WKInterfaceController {
         days = Day.loadDays()
         //ask the phone for the goal and the consumed amount.
         
-        formatter.dateFormat = "EEEE - dd/MM/yy"
-        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
-            today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
-        } else if !days.isEmpty {
-            today.goal = days.last!.goal
-        } else {
-            today = Day.init()
-            insertDay(today)
-        }
-        updateSummary()
+        updateToday()
+        
         if WCSession.isSupported(){
             let session = WCSession.default
             session.delegate = self
@@ -68,12 +60,37 @@ class InterfaceController: WKInterfaceController {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
         
+        updateToday()
         
+        if WCSession.isSupported(){
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
     }
     
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
+    }
+    
+    /**
+     Will check if the correct day is loaded and is being changed, if not it will change to that day.
+     
+     # Example #
+     ```
+     isToday()
+     ```
+     */
+    func updateToday(){
+        formatter.dateFormat = "EEEE - dd/MM/yy"
+        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
+            today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
+        } else {
+            today = Day.init()
+            insertDay(today)
+        }
+        updateSummary()
     }
     
     /**
