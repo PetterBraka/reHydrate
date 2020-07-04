@@ -9,7 +9,7 @@
         <!--Interface Controller-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller fullBounds="YES" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="reHydrate_watchOS" customModuleProvider="target">
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="reHydrate_watchOS" customModuleProvider="target">
                     <items>
                         <label alignment="center" text="0/3L" textAlignment="center" id="LCV-Up-gsZ">
                             <fontDescription key="font" type="system" pointSize="36"/>

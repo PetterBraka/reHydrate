@@ -216,40 +216,40 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     @objc func tap(_ sender: UIGestureRecognizer){
         let drink = Drink.init()
         switch sender.view {
-        case smallOption:
-            print("small short-press")
-            drink.amountOfDrink = drinkOptions[0].amountOfDrink
-            updateConsumtion(drink)
-        case mediumOption:
-            print("medium short-press")
-            drink.amountOfDrink = drinkOptions[1].amountOfDrink
-            updateConsumtion(drink)
-        case largeOption:
-            print("large short-press")
-            drink.amountOfDrink = drinkOptions[2].amountOfDrink
-            updateConsumtion(drink)
-        case settingsButton:
-            let aboutScreen = SettingsVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromLeft
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            aboutScreen.modalPresentationStyle = .fullScreen
-            present(aboutScreen, animated: false, completion: nil)
-        case calendarButton:
-            let calendarScreen  = CalendarVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromRight
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            calendarScreen.modalPresentationStyle     = .fullScreen
-            self.present(calendarScreen, animated: false, completion: nil)
-        default:
-            break
+            case smallOption:
+                print("small short-press")
+                drink.amountOfDrink = drinkOptions[0].amountOfDrink
+                updateConsumtion(drink)
+            case mediumOption:
+                print("medium short-press")
+                drink.amountOfDrink = drinkOptions[1].amountOfDrink
+                updateConsumtion(drink)
+            case largeOption:
+                print("large short-press")
+                drink.amountOfDrink = drinkOptions[2].amountOfDrink
+                updateConsumtion(drink)
+            case settingsButton:
+                let aboutScreen = SettingsVC()
+                let transition      = CATransition()
+                transition.duration = 0.4
+                transition.type     = .push
+                transition.subtype  = .fromLeft
+                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                view.window!.layer.add(transition, forKey: kCATransition)
+                aboutScreen.modalPresentationStyle = .fullScreen
+                present(aboutScreen, animated: false, completion: nil)
+            case calendarButton:
+                let calendarScreen  = CalendarVC()
+                let transition      = CATransition()
+                transition.duration = 0.4
+                transition.type     = .push
+                transition.subtype  = .fromRight
+                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                view.window!.layer.add(transition, forKey: kCATransition)
+                calendarScreen.modalPresentationStyle     = .fullScreen
+                self.present(calendarScreen, animated: false, completion: nil)
+            default:
+                break
         }
     }
     
@@ -262,19 +262,19 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      1. case 1, 2, 3 and will ask the usr if the user wants to change or remove a drink from the consumed amount.
      */
     @objc func long(_ sender: UIGestureRecognizer){
-        if sender.state 	== .began {
+        if sender.state     == .began {
             switch sender.view {
-            case smallOption:
-                print("small long-press")
-                popUpOptions(sender, drinkOptions[0], smallLabel)
-            case mediumOption:
-                print("medium long-press")
-                popUpOptions(sender, drinkOptions[1], mediumLabel)
-            case largeOption:
-                print("large long-press")
-                popUpOptions(sender, drinkOptions[2], largeLabel)
-            default:
-                break
+                case smallOption:
+                    print("small long-press")
+                    popUpOptions(sender, drinkOptions[0], smallLabel)
+                case mediumOption:
+                    print("medium long-press")
+                    popUpOptions(sender, drinkOptions[1], mediumLabel)
+                case largeOption:
+                    print("large long-press")
+                    popUpOptions(sender, drinkOptions[2], largeLabel)
+                default:
+                    break
             }
         }
     }
@@ -287,7 +287,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      # Example #
      ```
      override func viewDidLoad() {
-     	NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+     NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
      }
      ```
      */
@@ -390,11 +390,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         setUpUI()
         changeAppearance()
         updateUI()
-        let responce = ["phoneDate": formatter.string(from: today.date),
-                        "phoneGoal": String(today.goal.amountOfDrink),
-                        "phoneConsumed": String(today.consumed.amountOfDrink)]
-        WCSession.default.sendMessage(responce, replyHandler: nil) { (error) in
-            print(error.localizedDescription)
+        if WCSession.isSupported(){
+            let message = ["phoneDate": formatter.string(from: today.date),
+                           "phoneGoal": String(today.goal.amountOfDrink),
+                           "phoneConsumed": String(today.consumed.amountOfDrink)]
+            if WCSession.default.isReachable{
+                WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                    print(error.localizedDescription)
+                }
+            } else {
+                WCSession.default.transferUserInfo(message)
+            }
         }
     }
     
@@ -435,8 +441,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      # Example #
      ```
      override func viewDidLoad() {
-         super.viewDidLoad()
-         createDrinkStack()
+     super.viewDidLoad()
+     createDrinkStack()
      }
      ```
      */
@@ -528,8 +534,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      # Example #
      ```
      func setUPUI(){
-         createSummaryStack()
-         self.view.addSubView(summaryStack)
+     createSummaryStack()
+     self.view.addSubView(summaryStack)
      }
      ```
      */
@@ -546,68 +552,68 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      # Example #
      ```
      func setUPUI(){
-         crateDrinkStack()
-         self.view.addSubView(drinkStack)
+     crateDrinkStack()
+     self.view.addSubView(drinkStack)
      }
      ```
      */
     func createDrinkStack(){
-    let smallStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .vertical
-        stack.alignment = .center
-        return stack
-    }()
-    let smallLableStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .horizontal
-        stack.alignment = .bottom
-        stack.distribution = .fillProportionally
-        return stack
-    }()
-    smallLableStack.addArrangedSubview(smallLabel)
-    smallLableStack.addArrangedSubview(smallPrefix)
-    smallStack.addArrangedSubview(smallOption)
-    smallStack.addArrangedSubview(smallLableStack)
-    let mediumStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .vertical
-        stack.alignment = .center
-        return stack
-    }()
-    let mediumLableStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .horizontal
-        stack.alignment = .center
-        stack.distribution = .fillProportionally
-        return stack
-    }()
-    mediumLableStack.addArrangedSubview(mediumLabel)
-    mediumLableStack.addArrangedSubview(mediumPrefix)
-    mediumStack.addArrangedSubview(mediumOption)
-    mediumStack.addArrangedSubview(mediumLableStack)
-    let largeStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .vertical
-        stack.alignment = .center
-        stack.distribution = .equalCentering
-        return stack
-    }()
-    let largeLableStack: UIStackView = {
-        let stack       = UIStackView()
-        stack.axis      = .horizontal
-        stack.alignment = .bottom
-        stack.distribution = .fillProportionally
-        return stack
-    }()
-    largeLableStack.addArrangedSubview(largeLabel)
-    largeLableStack.addArrangedSubview(largePrefix)
-    largeStack.addArrangedSubview(largeOption)
-    largeStack.addArrangedSubview(largeLableStack)
-    drinkStack.addArrangedSubview(smallStack)
-    drinkStack.addArrangedSubview(mediumStack)
-    drinkStack.addArrangedSubview(largeStack)
-}
+        let smallStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .vertical
+            stack.alignment = .center
+            return stack
+        }()
+        let smallLableStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .horizontal
+            stack.alignment = .bottom
+            stack.distribution = .fillProportionally
+            return stack
+        }()
+        smallLableStack.addArrangedSubview(smallLabel)
+        smallLableStack.addArrangedSubview(smallPrefix)
+        smallStack.addArrangedSubview(smallOption)
+        smallStack.addArrangedSubview(smallLableStack)
+        let mediumStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .vertical
+            stack.alignment = .center
+            return stack
+        }()
+        let mediumLableStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .horizontal
+            stack.alignment = .center
+            stack.distribution = .fillProportionally
+            return stack
+        }()
+        mediumLableStack.addArrangedSubview(mediumLabel)
+        mediumLableStack.addArrangedSubview(mediumPrefix)
+        mediumStack.addArrangedSubview(mediumOption)
+        mediumStack.addArrangedSubview(mediumLableStack)
+        let largeStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .vertical
+            stack.alignment = .center
+            stack.distribution = .equalCentering
+            return stack
+        }()
+        let largeLableStack: UIStackView = {
+            let stack       = UIStackView()
+            stack.axis      = .horizontal
+            stack.alignment = .bottom
+            stack.distribution = .fillProportionally
+            return stack
+        }()
+        largeLableStack.addArrangedSubview(largeLabel)
+        largeLableStack.addArrangedSubview(largePrefix)
+        largeStack.addArrangedSubview(largeOption)
+        largeStack.addArrangedSubview(largeLableStack)
+        drinkStack.addArrangedSubview(smallStack)
+        drinkStack.addArrangedSubview(mediumStack)
+        drinkStack.addArrangedSubview(largeStack)
+    }
     
     //MARK: - HealthKit
     /**
@@ -731,6 +737,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let drink        = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
         exportDrinkToHealth(Double(drink.amountOfDrink), Date.init())
         today.consumed.amountOfDrink     += drink.amountOfDrink
+        let rounded = Float(roundf(today.consumed.amountOfDrink * 100)/100)
+        today.consumed.amountOfDrink = rounded
         if today.consumed.amountOfDrink  <= 0.0{
             today.consumed.amountOfDrink  = 0
         } else {
@@ -738,6 +746,19 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
         insertDay(today)
         updateUI()
+        
+        if WCSession.isSupported(){
+            let message = ["phoneDate": formatter.string(from: today.date),
+                           "phoneGoal": String(today.goal.amountOfDrink),
+                           "phoneConsumed": String(today.consumed.amountOfDrink)]
+            if WCSession.default.isReachable {
+                WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                    print(error.localizedDescription)
+                }
+            } else {
+                WCSession.default.transferUserInfo(message)
+            }
+        }
     }
     
     /**
@@ -827,18 +848,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             largePrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
             goalPrefix.text   = "\(UnitVolume.imperialPints.symbol)"
         }
-        if WCSession.isSupported(){
-            let message = ["phoneDate": formatter.string(from: today.date),
-                          "phoneGoal": String(today.goal.amountOfDrink),
-                          "phoneConsumed": String(today.consumed.amountOfDrink)]
-            if WCSession.default.isReachable{
-                WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
-                    print(error.localizedDescription)
-                }
-            } else {
-                WCSession.default.transferUserInfo(message)
-            }
-        }
     }
     
     /**
@@ -858,18 +867,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      */
     func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
         let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink", comment:
-            "popup view option for editing the drink options."), style: .default) {_ in
-            let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"),
-                                                message: nil, preferredStyle: .alert)
-            editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
-                textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                textField.font          = UIFont(name: "American typewriter", size: 18)
-                textField.keyboardType  = .decimalPad
-                textField.textAlignment = .center
-            })
-                let done = UIAlertAction(title: NSLocalizedString("Done", comment: "The done option of a popup view"),
-                                         style: .default) {_ in
+        let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink",comment: "popup view option for editing the drink options."),
+                                            style: .default) {_ in
+                let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"),
+                                                    message: nil, preferredStyle: .alert)
+                editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
+                    textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                    textField.font          = UIFont(name: "American typewriter", size: 18)
+                    textField.keyboardType  = .decimalPad
+                    textField.textAlignment = .center
+                })
+                let done = UIAlertAction(title: NSLocalizedString("Done", comment: "The done option of a popup view"), style: .default) {_ in
                     let newValue = (editAlert.textFields?.first!.text!)! as String
                     if newValue != "" {
                         if self.metricUnits {
@@ -1057,16 +1065,14 @@ extension StartVC: WCSessionDelegate {
             let messageConsumed = message["consumed"]!
             let numberFormatter = NumberFormatter()
             let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            if today.consumed.amountOfDrink < consumed {
-                let drinkAmountAdded = consumed - today.consumed.amountOfDrink
-                today.consumed.amountOfDrink = consumed
-                print("todays amount was updated")
-                DispatchQueue.main.async {
-                    self.insertDay(self.today)
-                    Day.saveDays(self.days)
-                    self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
-                    self.updateUI()
-                }
+            let drinkAmountAdded = consumed - today.consumed.amountOfDrink
+            today.consumed.amountOfDrink = consumed
+            print("todays amount was updated")
+            DispatchQueue.main.async {
+                self.insertDay(self.today)
+                Day.saveDays(self.days)
+                self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                self.updateUI()
             }
         }
     }
@@ -1079,16 +1085,14 @@ extension StartVC: WCSessionDelegate {
             let messageConsumed = userInfo["consumed"]!
             let numberFormatter = NumberFormatter()
             let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            if today.consumed.amountOfDrink < consumed {
-                let drinkAmountAdded = consumed - today.consumed.amountOfDrink
-                today.consumed.amountOfDrink = consumed
-                print("todays amount was updated")
-                DispatchQueue.main.async {
-                    self.insertDay(self.today)
-                    Day.saveDays(self.days)
-                    self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
-                    self.updateUI()
-                }
+            let drinkAmountAdded = consumed - today.consumed.amountOfDrink
+            today.consumed.amountOfDrink = consumed
+            print("todays amount was updated")
+            DispatchQueue.main.async {
+                self.insertDay(self.today)
+                Day.saveDays(self.days)
+                self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                self.updateUI()
             }
         }
     }
