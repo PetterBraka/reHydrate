@@ -4,12 +4,17 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>reHydrate-watchOS (Notification).xcscheme_^#shared#^_</key>
+		<key>reHydrate-watch (Complication).xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>5</integer>
+			<integer>8</integer>
 		</dict>
-		<key>reHydrate-watchOS.xcscheme_^#shared#^_</key>
+		<key>reHydrate-watch (Notification).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
+		<key>reHydrate-watch.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>4</integer>
@@ -23,6 +28,16 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>3378767224378A9400F5A732</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>33D24C1D24A0CC2000C7A23C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>33DF9BD924B47D0900699B1A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
