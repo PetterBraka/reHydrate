@@ -661,11 +661,13 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let waterConsumed       = HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
         let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
                                                    start: date, end: date)
-        HKHealthStore().save(waterConsumedSample) { (success, error) in
-            if let error = error {
-                print("Error Saving water consumtion: \(error.localizedDescription)")
-            } else {
-                print("Successfully saved water consumtion")
+        if waterAmount != 0 {
+            HKHealthStore().save(waterConsumedSample) { (success, error) in
+                if let error = error {
+                    print("Error Saving water consumtion: \(error.localizedDescription)")
+                } else {
+                    print("Successfully saved water consumtion")
+                }
             }
         }
     }
