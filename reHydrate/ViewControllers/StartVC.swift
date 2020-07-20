@@ -366,7 +366,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         if WCSession.isSupported() {
             let session = WCSession.default
             session.delegate = self
-            session.activate()
+            if session.activationState != .activated {
+                session.activate()
+            }
         }
         
         updateUI()
