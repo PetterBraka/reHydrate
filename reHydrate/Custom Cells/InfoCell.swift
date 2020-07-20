@@ -87,7 +87,7 @@ class InfoCell: UITableViewCell {
     }
     
     func changeToImperial(_ drink: Drink){
-        let volume = Measurement(value: Double(drink.amountOfDrink), unit: UnitVolume.liters)
+        let volume = Measurement(value: Double(drink.amount), unit: UnitVolume.liters)
         let convertedValue = volume.converted(to: UnitVolume.imperialPints).value
         amountOfDrink.text = String(format: "%.2f", convertedValue)
         amountOfDrink.text?.append("pt")

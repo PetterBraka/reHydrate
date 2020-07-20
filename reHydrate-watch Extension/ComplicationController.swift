@@ -10,7 +10,7 @@ import ClockKit
 import WatchKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
-    
+    var today = Day()
     // MARK: - Timeline Configuration
     
     func getSupportedTimeTravelDirections(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimeTravelDirections) -> Void) {
@@ -34,20 +34,28 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
+        let fillFraction = today.consumed.amount / today.goal.amount
         switch complication.family {
             case .modularSmall:
                 let template = CLKComplicationTemplateModularSmallRingImage()
                 guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
                 template.ringStyle = .open
-                template.fillFraction = 1
+                template.fillFraction = fillFraction
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             case .modularLarge:
                 let template = CLKComplicationTemplateModularLargeStandardBody()
-                template.headerTextProvider = CLKSimpleTextProvider(text: "header")
-                template.body1TextProvider = CLKSimpleTextProvider(text: "body1")
-                template.body2TextProvider = CLKSimpleTextProvider(text: "body2")
+                template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.body1TextProvider = CLKSimpleTextProvider(text: "\(today.consumed.amount)/\(today.goal.amount)")
+                var body2 = String()
+                if today.consumed.amount < today.goal.amount {
+                    let toGo = today.goal.amount - today.consumed.amount
+                    body2 = "\(toGo) to go"
+                } else {
+                    body2 = "good job"
+                }
+                template.body2TextProvider = CLKSimpleTextProvider(text: body2)
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             case .utilitarianSmall:
@@ -55,20 +63,20 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
                 template.ringStyle = .open
-                template.fillFraction = 1
+                template.fillFraction = fillFraction
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             case .utilitarianSmallFlat:
                 let template = CLKComplicationTemplateUtilitarianSmallFlat()
                 guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
-                template.textProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.textProvider = CLKSimpleTextProvider(text:
+                    "\(today.consumed.amount)/\(today.goal.amount)")
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             case .utilitarianLarge:
                 let template = CLKComplicationTemplateUtilitarianLargeFlat()
-                guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
-                template.imageProvider = CLKImageProvider(onePieceImage: image)
+                template.imageProvider = nil
                 template.textProvider = CLKSimpleTextProvider(text: "reHydrate")
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
@@ -79,23 +87,32 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             case .graphicCorner:
-                let template = CLKComplicationTemplateGraphicCornerGaugeImage()
-                guard let image = UIImage(named: "AppIcon") else { handler(nil); return}
-                template.imageProvider = CLKFullColorImageProvider(fullColorImage: image)
-                template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: .blue, fillFraction: 0)
+                let template = CLKComplicationTemplateGraphicCornerGaugeText()
+                template.outerTextProvider = CLKSimpleTextProvider(text: "\(today.consumed.amount)")
+                template.leadingTextProvider = CLKSimpleTextProvider(text: "0")
+                template.trailingTextProvider = CLKSimpleTextProvider(text: "\(today.goal.amount)")
+                template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: .blue,
+                                                                fillFraction: fillFraction)
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             case .graphicCircular:
                 let template = CLKComplicationTemplateGraphicCircularImage()
-                guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
+                guard let image = UIImage(named: "AppIcon") else { handler(nil); return}
                 template.imageProvider = CLKFullColorImageProvider(fullColorImage: image)
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             case .graphicRectangular:
                 let template = CLKComplicationTemplateGraphicRectangularStandardBody()
-                template.headerTextProvider = CLKSimpleTextProvider(text: "header")
-                template.body1TextProvider = CLKSimpleTextProvider(text: "body1")
-                template.body2TextProvider = CLKSimpleTextProvider(text: "body2")
+                template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.body1TextProvider = CLKSimpleTextProvider(text: "\(today.consumed.amount)/\(today.goal.amount)")
+                var body2 = String()
+                if today.consumed.amount < today.goal.amount {
+                    let toGo = today.goal.amount - today.consumed.amount
+                    body2 = "\(toGo) to go"
+                } else {
+                    body2 = "good job"
+                }
+                template.body2TextProvider = CLKSimpleTextProvider(text: body2)
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             case .circularSmall:
@@ -103,6 +120,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
                 template.ringStyle = .open
+                template.fillFraction = fillFraction
                 let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                 handler(timelineEntry)
             default:
@@ -123,7 +141,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                     guard let image = UIImage(named: "Water-drop") else { break }
                     template.imageProvider = CLKImageProvider(onePieceImage: image)
                     template.ringStyle = .open
-                    template.fillFraction = 1
+                    template.fillFraction = 0.2
                     let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                     timelineEnteries.append(timelineEntry)
                     nextDate = nextDate.addingTimeInterval(60 * 60)
@@ -140,7 +158,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                     guard let image = UIImage(named: "Water-drop") else { break}
                     template.imageProvider = CLKImageProvider(onePieceImage: image)
                     template.ringStyle = .open
-                    template.fillFraction = 1
+                    template.fillFraction = 0.2
                     let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                     timelineEnteries.append(timelineEntry)
                     nextDate = nextDate.addingTimeInterval(60 * 60)
@@ -171,7 +189,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                     let template = CLKComplicationTemplateGraphicCornerGaugeImage()
                     guard let image = UIImage(named: "AppIcon") else { break }
                     template.imageProvider = CLKFullColorImageProvider(fullColorImage: image)
-                    template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: .blue, fillFraction: 0)
+                    template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: .blue, fillFraction: 0.2)
                     let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
                     timelineEnteries.append(timelineEntry)
                     nextDate = nextDate.addingTimeInterval(60 * 60)
@@ -226,63 +244,65 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // This method will be called once per supported complication, and the results will be cached
         switch complication.family {
             case .modularSmall:
-                let template = CLKComplicationTemplateModularSmallRingImage()
+                let template    = CLKComplicationTemplateModularSmallRingImage()
                 guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
-                template.ringStyle = .open
-                template.fillFraction = 2
+                template.fillFraction  = 0.2
+                template.ringStyle     = .open
                 handler(template)
             case .modularLarge:
                 let template = CLKComplicationTemplateModularLargeStandardBody()
-                template.headerTextProvider = CLKSimpleTextProvider(text: "header")
-                template.body1TextProvider = CLKSimpleTextProvider(text: "body1")
-                template.body2TextProvider = CLKSimpleTextProvider(text: "body2")
+                template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.body1TextProvider  = CLKSimpleTextProvider(text: "1/3L")
+                template.body2TextProvider  = CLKSimpleTextProvider(text: "go on")
                 handler(template)
             case .utilitarianSmall:
                 let template = CLKComplicationTemplateUtilitarianSmallRingImage()
                 guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
-                template.ringStyle = .open
-                template.fillFraction = 2
+                template.fillFraction  = 0.2
+                template.ringStyle     = .open
                 handler(template)
             case .utilitarianSmallFlat:
-                let template = CLKComplicationTemplateUtilitarianSmallFlat()
+                let template    = CLKComplicationTemplateUtilitarianSmallFlat()
                 guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
-                template.textProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.textProvider  = CLKSimpleTextProvider(text: "reHydrate")
                 handler(template)
             case .utilitarianLarge:
-                let template = CLKComplicationTemplateUtilitarianLargeFlat()
-                guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
+                let template    = CLKComplicationTemplateUtilitarianLargeFlat()
+                guard let image = UIImage(named: "AppIcon") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
-                template.textProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.textProvider  = CLKSimpleTextProvider(text: "reHydrate")
                 handler(template)
             case .graphicBezel:
                 let template = CLKComplicationTemplateGraphicBezelCircularText()
                 template.circularTemplate = CLKComplicationTemplateGraphicCircularStackImage()
-                template.textProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.textProvider     = CLKSimpleTextProvider(text: "reHydrate")
             case .graphicCorner:
-                let template = CLKComplicationTemplateGraphicCornerGaugeImage()
+                let template    = CLKComplicationTemplateGraphicCornerGaugeImage()
                 guard let image = UIImage(named: "AppIcon") else { handler(nil); return}
                 template.imageProvider = CLKFullColorImageProvider(fullColorImage: image)
-                template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: .blue, fillFraction: 0)
+                template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: .blue,
+                                                            fillFraction: 0.5)
                 handler(template)
             case .graphicCircular:
-                let template = CLKComplicationTemplateGraphicCircularImage()
-                guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
+                let template    = CLKComplicationTemplateGraphicCircularImage()
+                guard let image = UIImage(named: "AppIcon") else { handler(nil); return}
                 template.imageProvider = CLKFullColorImageProvider(fullColorImage: image)
                 handler(template)
             case .graphicRectangular:
                 let template = CLKComplicationTemplateGraphicRectangularStandardBody()
-                template.headerTextProvider = CLKSimpleTextProvider(text: "header")
-                template.body1TextProvider = CLKSimpleTextProvider(text: "body1")
-                template.body2TextProvider = CLKSimpleTextProvider(text: "body2")
+                template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.body1TextProvider  = CLKSimpleTextProvider(text: "1/3L")
+                template.body2TextProvider  = CLKSimpleTextProvider(text: "go on")
                 handler(template)
             case .circularSmall:
-                let template = CLKComplicationTemplateCircularSmallRingImage()
-                guard let image = UIImage(named: "Water-drop") else { handler(nil); return}
+                let template    = CLKComplicationTemplateCircularSmallRingImage()
+                guard let image = UIImage(named: "AppIcon") else { handler(nil); return}
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
-                template.ringStyle = .open
+                template.fillFraction  = 0.2
+                template.ringStyle     = .open
                 handler(template)
             default:
                 handler(nil)
