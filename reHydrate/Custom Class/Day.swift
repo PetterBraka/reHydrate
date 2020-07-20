@@ -72,11 +72,11 @@ public class Day: NSObject, Codable {
             formatter.dateFormat = "EEE - dd/MM/yy"
             print("|Date", formatter.string(from: day.date))
             print("|Goal:")
-            print("| - Drink type - ", day.goal.typeOfDrink)
-            print("| - Drink amount - ", day.goal.amountOfDrink)
+            print("| - Drink type - ", day.goal.type)
+            print("| - Drink amount - ", day.goal.amount)
             print("|Consumed Drink:")
-            print("| - Drink type - ", day.consumed.typeOfDrink)
-            print("| - Drink amount - ",String(format: "%.2f", day.consumed.amountOfDrink))
+            print("| - Drink type - ", day.consumed.type)
+            print("| - Drink amount - ",String(format: "%.2f", day.consumed.amount))
             print("---------------------------------------------")
         }
         
@@ -110,11 +110,11 @@ public class Day: NSObject, Codable {
                     formatter.dateFormat = "EEE - dd/MM/yy"
                     print("|Date", formatter.string(from: day.date))
                     print("|Goal:")
-                    print("| - Drink type - ", day.goal.typeOfDrink)
-                    print("| - Drink amount - ", day.goal.amountOfDrink)
+                    print("| - Drink type - ", day.goal.type)
+                    print("| - Drink amount - ", day.goal.amount)
                     print("|Consumed Drink:")
-                    print("| - Drink type - ", day.consumed.typeOfDrink)
-                    print("| - Drink amount - ",String(format: "%.2f", day.consumed.amountOfDrink))
+                    print("| - Drink type - ", day.consumed.type)
+                    print("| - Drink amount - ",String(format: "%.2f", day.consumed.amount))
                     print("---------------------------------------------")
                 }
                 return days

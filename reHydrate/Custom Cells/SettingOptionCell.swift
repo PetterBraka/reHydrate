@@ -190,7 +190,7 @@ class SettingOptionCell: UITableViewCell {
                 imageForCell.isHidden = true
                 let days = Day.loadDays()
                 if !days.isEmpty{
-                    textField.text = String(describing: days.last!.goal.amountOfDrink)
+                    textField.text = String(describing: days.last!.goal.amount)
                 } else {
                     textField.text = "3"
                 }
@@ -529,8 +529,8 @@ class SettingOptionCell: UITableViewCell {
         let days = Day.loadDays()
         let newGoal = Float(textField.text!)!
         if newGoal != 0 {
-            days[days.count - 1].goal.amountOfDrink = newGoal
-            print(days[days.count - 1].goal.amountOfDrink)
+            days[days.count - 1].goal.amount = newGoal
+            print(days[days.count - 1].goal.amount)
             Day.saveDays(days)
         }
     }

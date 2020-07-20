@@ -24,20 +24,20 @@ class InterfaceController: WKInterfaceController {
     @IBOutlet weak var summaryLable: WKInterfaceLabel!
     
     @IBAction func smallButton() {
-        let small = Measurement(value: Double(smallDrink.amountOfDrink), unit: UnitVolume.milliliters)
-        today.consumed.amountOfDrink += Float(small.converted(to: .liters).value)
+        let small = Measurement(value: Double(smallDrink.amount), unit: UnitVolume.milliliters)
+        today.consumed.amount += Float(small.converted(to: .liters).value)
         updateSummary()
     }
     
     @IBAction func mediumButton() {
-        let medium = Measurement(value: Double(mediumDrink.amountOfDrink), unit: UnitVolume.milliliters)
-        today.consumed.amountOfDrink += Float(medium.converted(to: .liters).value)
+        let medium = Measurement(value: Double(mediumDrink.amount), unit: UnitVolume.milliliters)
+        today.consumed.amount += Float(medium.converted(to: .liters).value)
         updateSummary()
     }
     
     @IBAction func largeButton() {
-        let large = Measurement(value: Double(largeDrink.amountOfDrink), unit: UnitVolume.milliliters)
-        today.consumed.amountOfDrink += Float(large.converted(to: .liters).value)
+        let large = Measurement(value: Double(largeDrink.amount), unit: UnitVolume.milliliters)
+        today.consumed.amount += Float(large.converted(to: .liters).value)
         updateSummary()
     }
     
@@ -121,15 +121,15 @@ class InterfaceController: WKInterfaceController {
     
     func updateSummary(){
         insertDay(today)
-        let consumedAmount = Measurement(value: Double(today.consumed.amountOfDrink), unit: UnitVolume.liters)
-        let goalAmount = Measurement(value: Double(today.goal.amountOfDrink), unit: UnitVolume.liters)
+        let consumedAmount = Measurement(value: Double(today.consumed.amount), unit: UnitVolume.liters)
+        let goalAmount = Measurement(value: Double(today.goal.amount), unit: UnitVolume.liters)
         if metric {
             summaryLable.setText("\(String(format: "%.1f", consumedAmount.converted(to: .liters).value))/\(String(format: "%.1f", goalAmount.converted(to: .liters).value))L")
         } else {
             summaryLable.setText("\(String(format: "%.1f", consumedAmount.converted(to: .imperialPints).value))/\(String(format: "%.1f", goalAmount.converted(to: .imperialPints).value))pt")
         }
         Day.saveDays(days)
-        let consumed = String(today.consumed.amountOfDrink)
+        let consumed = String(today.consumed.amount)
         let message = ["date": formatter.string(from: today.date),
                        "metric": String(metric),
                        "consumed": consumed] as [String : String]
@@ -143,7 +143,6 @@ class InterfaceController: WKInterfaceController {
             WCSession.default.transferUserInfo(message)
         }
     }
-    
 }
 
 extension InterfaceController: WCSessionDelegate{
@@ -164,10 +163,10 @@ extension InterfaceController: WCSessionDelegate{
             let messageConsumed = message["phoneConsumed"]!
             let numberFormatter = NumberFormatter()
             let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            today.consumed.amountOfDrink = consumed
+            today.consumed.amount = consumed
             let messageGoal = message["phoneGoal"]!
             let goal = numberFormatter.number(from: messageGoal as! String)!.floatValue
-            today.goal.amountOfDrink = goal
+            today.goal.amount = goal
             print("todays amount was updated by message")
             DispatchQueue.main.async {
                 self.insertDay(self.today)
@@ -186,10 +185,10 @@ extension InterfaceController: WCSessionDelegate{
             let messageConsumed = userInfo["phoneConsumed"]!
             let numberFormatter = NumberFormatter()
             let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            today.consumed.amountOfDrink = consumed
+            today.consumed.amount = consumed
             let messageGoal = userInfo["phoneGoal"]!
             let goal = numberFormatter.number(from: messageGoal as! String)!.floatValue
-            today.goal.amountOfDrink = goal
+            today.goal.amount = goal
             print("todays amount was updated with user info")
             DispatchQueue.main.async {
                 self.insertDay(self.today)
