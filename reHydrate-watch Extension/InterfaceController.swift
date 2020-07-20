@@ -52,7 +52,9 @@ class InterfaceController: WKInterfaceController {
         if WCSession.isSupported(){
             let session = WCSession.default
             session.delegate = self
-            session.activate()
+            if session.activationState != .activated {
+                session.activate()
+            }
         }
     }
     
@@ -65,13 +67,23 @@ class InterfaceController: WKInterfaceController {
         if WCSession.isSupported(){
             let session = WCSession.default
             session.delegate = self
-            session.activate()
+            if session.activationState != .activated {
+                session.activate()
+            }
         }
+        let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+        delegate.days = days
+        let server = CLKComplicationServer.sharedInstance()
+        server.activeComplications?.forEach({ (complication) in
+            server.reloadTimeline(for: complication)
+        })
     }
     
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
+        let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+        delegate.days = days
     }
     
     /**
@@ -172,6 +184,12 @@ extension InterfaceController: WCSessionDelegate{
                 self.insertDay(self.today)
                 Day.saveDays(self.days)
                 self.updateSummary()
+                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+                delegate.days = self.days
+                let server = CLKComplicationServer.sharedInstance()
+                server.activeComplications?.forEach({ (complication) in
+                    server.reloadTimeline(for: complication)
+                })
             }
         }
     }
@@ -194,6 +212,12 @@ extension InterfaceController: WCSessionDelegate{
                 self.insertDay(self.today)
                 Day.saveDays(self.days)
                 self.updateSummary()
+                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+                delegate.days = self.days
+                let server = CLKComplicationServer.sharedInstance()
+                server.activeComplications?.forEach({ (complication) in
+                    server.reloadTimeline(for: complication)
+                })
             }
         }
     }
