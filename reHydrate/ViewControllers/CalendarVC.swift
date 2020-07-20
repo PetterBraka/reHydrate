@@ -180,23 +180,27 @@ class CalendarVC: UIViewController {
         calendar.appearance.headerTitleFont = UIFont(name: "American typewriter", size: 20)
         calendar.appearance.borderRadius = 1
         if darkMode {
-            calendar.backgroundColor              = UIColor().hexStringToUIColor("#212121")
             self.view.backgroundColor             = UIColor().hexStringToUIColor("#212121")
+            calendar.backgroundColor              = UIColor().hexStringToUIColor("#212121")
             tableView.backgroundColor             = UIColor().hexStringToUIColor("#212121")
-            titleDate.textColor                   = .white
-            calendar.appearance.headerTitleColor  = .white
-            calendar.appearance.weekdayTextColor  = UIColor().hexStringToUIColor("#cfcfcf")
-            calendar.appearance.titleDefaultColor = .white
-            exitButton.tintColor                  = .lightGray
+            titleDate.textColor                     = .white
+            exitButton.tintColor                    = .white
+            calendar.appearance.headerTitleColor    = .white
+            calendar.appearance.weekdayTextColor    = .white
+            calendar.appearance.titleTodayColor     = .white
+            calendar.appearance.titleDefaultColor   = .white
+            calendar.appearance.titleSelectionColor = .white
         } else {
-            calendar.backgroundColor              = .white
-            calendar.appearance.headerTitleColor  = .black
-            calendar.appearance.weekdayTextColor  = .black
-            calendar.appearance.titleDefaultColor = .black
-            self.view.backgroundColor             = .white
-            tableView.backgroundColor             = .white
-            titleDate.textColor                   = .black
-            exitButton.tintColor                  = .black
+            self.view.backgroundColor               = .white
+            calendar.backgroundColor                = .white
+            tableView.backgroundColor               = .white
+            titleDate.textColor                     = .black
+            exitButton.tintColor                    = .black
+            calendar.appearance.headerTitleColor    = .black
+            calendar.appearance.weekdayTextColor    = .black
+            calendar.appearance.titleTodayColor     = .black
+            calendar.appearance.titleDefaultColor   = .black
+            calendar.appearance.titleSelectionColor = .black
         }
     }
     
@@ -326,6 +330,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
                 "\(String(format: "%.2f", average))")
         }
     }
+    
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.configureVisibleCells()
         print("deselected \(formatter.string(from: date))")
@@ -349,6 +354,12 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
                 "\(String(format: "%.2f", drinks[1].amount))/\(String(format: "%.2f",drinks[0].amount))")
+        } else if calendar.selectedDates.count == 0 {
+            titleDate.text = "\(formatter.string(from: Date()))"
+            self.getDrinks(Date())
+            let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
+            consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell"))",
+                "\(String(format: "%.2f", drinks[3].amount))/\(String(format: "%.2f",drinks[2].amount))")
         }
     }
     
