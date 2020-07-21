@@ -184,7 +184,7 @@ class CalendarVC: UIViewController {
             calendar.backgroundColor              = UIColor().hexStringToUIColor("#212121")
             tableView.backgroundColor             = UIColor().hexStringToUIColor("#212121")
             titleDate.textColor                     = .white
-            exitButton.tintColor                    = .white
+            exitButton.tintColor                    = .lightGray
             calendar.appearance.headerTitleColor    = .white
             calendar.appearance.weekdayTextColor    = .white
             calendar.appearance.titleTodayColor     = .white
@@ -195,7 +195,7 @@ class CalendarVC: UIViewController {
             calendar.backgroundColor                = .white
             tableView.backgroundColor               = .white
             titleDate.textColor                     = .black
-            exitButton.tintColor                    = .black
+            exitButton.tintColor                    = .gray
             calendar.appearance.headerTitleColor    = .black
             calendar.appearance.weekdayTextColor    = .black
             calendar.appearance.titleTodayColor     = .black

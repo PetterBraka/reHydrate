@@ -717,8 +717,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             mediumPrefix.textColor    = .black
             largeLabel.textColor      = .black
             largePrefix.textColor     = .black
-            calendarButton.tintColor  = .black
-            settingsButton.tintColor  = .black
+            calendarButton.tintColor  = .gray
+            settingsButton.tintColor  = .gray
         }
     }
     
