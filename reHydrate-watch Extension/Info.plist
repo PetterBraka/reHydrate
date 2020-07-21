@@ -25,6 +25,7 @@
 	<key>CLKComplicationSupportedFamilies</key>
 	<array>
 		<string>CLKComplicationFamilyCircularSmall</string>
+		<string>CLKComplicationFamilyExtraLarge</string>
 		<string>CLKComplicationFamilyGraphicCircular</string>
 		<string>CLKComplicationFamilyGraphicCorner</string>
 		<string>CLKComplicationFamilyGraphicRectangular</string>
