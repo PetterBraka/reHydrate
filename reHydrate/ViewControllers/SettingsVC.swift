@@ -177,7 +177,7 @@ class SettingsVC: UIViewController {
         if !darkMode {
             self.view.backgroundColor = .white
             tableView.backgroundColor = .white
-            exitButton.tintColor      = .black
+            exitButton.tintColor      = .gray
         } else{
             self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
             tableView.backgroundColor = UIColor().hexStringToUIColor("#212121")
