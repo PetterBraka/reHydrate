@@ -68,6 +68,8 @@
 		3378768024378A9800F5A732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3378767F24378A9800F5A732 /* Assets.xcassets */; };
 		3378768324378A9800F5A732 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378768124378A9800F5A732 /* LaunchScreen.storyboard */; };
 		3389E0AB2448A61300DD7B58 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3389E0AA2448A61300DD7B58 /* SettingsVC.swift */; };
+		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
+		3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33C431912482769B00E8EECA /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C431902482769B00E8EECA /* Extenstions.swift */; };
 		33C4319324827F2700E8EECA /* BundleExtension.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C4319224827F2700E8EECA /* BundleExtension.swift .swift */; };
 		33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BDC24B47D0900699B1A /* Interface.storyboard */; };
@@ -578,6 +580,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33DF9BE024B47D0A00699B1A /* Assets.xcassets in Resources */,
+				3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */,
 				33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -587,6 +590,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33DF9BF224B47D0A00699B1A /* Assets.xcassets in Resources */,
+				3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
