@@ -106,3 +106,7 @@
 "Purple" = "Lilla";
 "Red"    = "Rød";
 "Yellow" = "Gul";
+
+// Watch
+"toGo"    = "gjenstår";
+"goodJob" = "Bra jobba";
