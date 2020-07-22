@@ -404,12 +404,4 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // Call the handler with the timeline entries after to the given date
         handler(getListOfEnteries(complication))
     }
-    
-}
-
-extension Float {
-    var clean: String {
-        let temp = (self * 100).rounded() * 100
-        return temp.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(temp)
-    }
 }

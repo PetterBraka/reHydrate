@@ -272,10 +272,10 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath.row {
             case 0:
                 cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                               "\(String(format: "%.2f", drinks[1].amount))/\(String(format: "%.2f",drinks[0].amount))")
+                               "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
             case 1:
                 let average = Drink(typeOfDrink: "water", amountOfDrink: getAverageFor())
-                cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(format: "%.2f",average.amount))
+                cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), average.amount.clean)
             default:
                 break
         }
@@ -353,13 +353,13 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
-                "\(String(format: "%.2f", drinks[1].amount))/\(String(format: "%.2f",drinks[0].amount))")
+                "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
         } else if calendar.selectedDates.count == 0 {
             titleDate.text = "\(formatter.string(from: Date()))"
             self.getDrinks(Date())
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell"))",
-                "\(String(format: "%.2f", drinks[3].amount))/\(String(format: "%.2f",drinks[2].amount))")
+                "\(drinks[3].amount.clean)/\(drinks[2].amount.clean)")
         }
     }
     

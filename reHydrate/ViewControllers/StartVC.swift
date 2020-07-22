@@ -836,12 +836,10 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         if (today.goal.amount.rounded(.up) == day.goal.amount.rounded(.down)){
             self.goalAmount.text  = String(format: "%.0f", day.goal.amount)
         } else {
-            let stringFormatGoal  = getStringFormat(day.goal.amount)
-            self.goalAmount.text  = String(format: stringFormatGoal, day.goal.amount)
+            self.goalAmount.text  = day.goal.amount.clean
         }
         
-        let stringFormatConsumed  = getStringFormat(today.consumed.amount)
-        self.consumedAmount.text  = String(format: stringFormatConsumed, day.consumed.amount)
+        self.consumedAmount.text  = day.consumed.amount.clean
         if metricUnits {
             smallPrefix.text  = "\(UnitVolume.milliliters.symbol)"
             mediumPrefix.text = "\(UnitVolume.milliliters.symbol)"
@@ -995,48 +993,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             print("button was pressed")
         }
         
-    }
-    
-    //MARK: - String formatting
-    /**
-     Will return the number of digits in a float
-     
-     - parameter number: - A **Float** with unknown number of didgets.
-     - returns: An **Int** with the number of digits
-     
-     # Example #
-     ```
-     String(format: "%.\(String(getNumberOfDigits(numberOfDigits)))f", number)
-     ```
-     */
-    func getNumberOfDigits(_ number: Float)-> Int {
-        var stringOfNumber = number.description
-        if stringOfNumber.contains("."){
-            while stringOfNumber.removeFirst() != "." {
-                let numberOfDigits = stringOfNumber.count - 1
-                if numberOfDigits  < 3 {
-                    return numberOfDigits
-                } else {
-                    return 2
-                }
-            }
-        }
-        return 0
-    }
-    
-    /**
-     Will return a **String** format for displaying the number of digets in a number, but it will not allow more than two.
-     
-     - parameter number: - The **Float** you want to use
-     - returns: The **string** format
-     
-     # Example #
-     ```
-     let string = getStringFormat(3.14)
-     ```
-     */
-    func getStringFormat(_ number: Float)-> String{
-        return "%.\(String(getNumberOfDigits(number)))f"
     }
     
     deinit {
