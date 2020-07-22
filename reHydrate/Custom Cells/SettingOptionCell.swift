@@ -158,11 +158,11 @@ class SettingOptionCell: UITableViewCell {
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
             imageForCell.tintColor          = .darkGray
-            titleOption.textColor           = .black
-            subTitle.textColor              = .black
-            textField.textColor             = .black
+            titleOption.textColor           = .darkGray
+            subTitle.textColor              = .darkGray
+            textField.textColor             = .darkGray
             self.backgroundColor            = .white
-            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.darkGray])
+            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         }
         switch titleOption.text?.lowercased() {
             case NSLocalizedString("DarkMode", comment: "").lowercased():
@@ -223,10 +223,6 @@ class SettingOptionCell: UITableViewCell {
                     textField.text = NSLocalizedString(appLanguages[0], comment: "")
                     picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
                 }
-//            case NSLocalizedString("AppIcon", comment: "").lowercased():
-//                imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
-//            case NSLocalizedString("HowToUse", comment: "").lowercased():
-//                imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
             default:
                 imageForCell.isHidden = true
         }

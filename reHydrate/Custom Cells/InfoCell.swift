@@ -82,8 +82,9 @@ class InfoCell: UITableViewCell {
             titleOfCard.textColor      = .white
             amountOfDrink.textColor    = .white
         } else {
-            titleOfCard.textColor      = .black
-            amountOfDrink.textColor    = .black        }
+            titleOfCard.textColor      = .darkGray
+            amountOfDrink.textColor    = .darkGray
+        }
     }
     
     func changeToImperial(_ drink: Drink){
