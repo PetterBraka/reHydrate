@@ -9,8 +9,8 @@
 import UIKit
 
 class Drink: NSObject, Codable {
-    var typeOfDrink: 	String
-    var amountOfDrink: 	Float
+    var type:   String
+    var amount: Float
     
     /**
      Default initializer for **Drink**
@@ -21,15 +21,15 @@ class Drink: NSObject, Codable {
      ```
      */
     required override init() {
-        self.typeOfDrink 	= "water"
-        self.amountOfDrink 	= 0
+        self.type 	= "water"
+        self.amount 	= 0
     }
 
     /**
      Initializer for Drink
      
-     - parameter typeOfDrink: - The type of drink.
-     - parameter amountOfDrink: - The amount of drink.
+     - parameter type: - The type of drink.
+     - parameter amount: - The amount of drink.
     
      # Example #
      ```
@@ -37,8 +37,8 @@ class Drink: NSObject, Codable {
      ```
      */
     init(typeOfDrink: String, amountOfDrink: Float ) {
-        self.typeOfDrink 	= typeOfDrink
-        self.amountOfDrink 	= amountOfDrink
+        self.type 	= typeOfDrink
+        self.amount 	= amountOfDrink
     }
     
     /**
@@ -55,7 +55,7 @@ class Drink: NSObject, Codable {
      ```
      */
     func isTypeSame(_ compairTo: Drink) -> Bool {
-        if typeOfDrink.lowercased() == compairTo.typeOfDrink.lowercased(){
+        if type.lowercased() == compairTo.type.lowercased(){
             return true
         } else{
             return false

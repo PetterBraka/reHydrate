@@ -171,7 +171,7 @@ class TutorialVC: UIViewController {
                 if darkMode {
                     summaryLable.textColor = .white
                 } else {
-                    summaryLable.textColor = .black
+                    summaryLable.textColor = .darkGray
             }
             case 2:
                 let imageArray = [UIImage(named: "Cup"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
@@ -186,9 +186,9 @@ class TutorialVC: UIViewController {
                     mediumDrinkLable.textColor = .white
                     largeDrinkLable.textColor  = .white
                 } else {
-                    smallDrinkLable.textColor  = .black
-                    mediumDrinkLable.textColor = .black
-                    largeDrinkLable.textColor  = .black
+                    smallDrinkLable.textColor  = .darkGray
+                    mediumDrinkLable.textColor = .darkGray
+                    largeDrinkLable.textColor  = .darkGray
                 }
                 explanationLabel.text = explanationText[stage]
             case 3:
@@ -199,14 +199,14 @@ class TutorialVC: UIViewController {
                 if darkMode {
                     settingsButton.tintColor = .lightGray
                 } else {
-                    settingsButton.tintColor = .black
+                    settingsButton.tintColor = .darkGray
                 }
                 explanationLabel.text = explanationText[stage]
             case 4:
                 if darkMode {
                     calendarButton.tintColor = .lightGray
                 } else {
-                    calendarButton.tintColor = .black
+                    calendarButton.tintColor = .darkGray
                 }
                 explanationLabel.text = explanationText[stage]
                 nextButton.setTitle(NSLocalizedString("Done", comment: "Done button in toolbar"), for: .normal)
@@ -269,7 +269,7 @@ class TutorialVC: UIViewController {
         if darkMode {
             dayLable.textColor = .white
         } else {
-            dayLable.textColor = .black
+            dayLable.textColor = .darkGray
         }
         explanationLabel.text      = explanationText[stage]
     }
@@ -401,9 +401,9 @@ class TutorialVC: UIViewController {
             settingsButton.tintColor   = UIColor().hexStringToUIColor("#c9c9c9")
             calendarButton.tintColor   = UIColor().hexStringToUIColor("#c9c9c9")
             toolBar.backgroundColor    = UIColor().hexStringToUIColor("#d1d1d1")
-            nextButton.setTitleColor(.black, for: .normal)
-            skipButton.setTitleColor(.black, for: .normal)
-            explanationLabel.textColor = .black
+            nextButton.setTitleColor(.darkGray, for: .normal)
+            skipButton.setTitleColor(.darkGray, for: .normal)
+            explanationLabel.textColor = .darkGray
         }
     }
 }
