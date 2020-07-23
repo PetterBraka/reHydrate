@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 import HealthKit
 import FSCalendar
 import WatchConnectivity
@@ -301,7 +302,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             if !days.isEmpty {
                 today.goal     = days.last!.goal
             }
-            insertDay(today)
+            days.insertDay(today)
         }
         updateUI()
     }
@@ -380,14 +381,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         metricUnits          = defaults.bool(forKey: metricUnitsString)
         currentDay.text      = formatter.string(from: Date.init()).localizedCapitalized
         days                 = Day.loadDays()
-        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
-            today            = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
-        } else if !days.isEmpty {
-            today.goal = days.last!.goal
-        } else {
-            today            = Day.init()
-            insertDay(today)
-        }
+        today                = days.updateToday()
         loadDrinkOptions()
         setUpUI()
         changeAppearance()
@@ -748,7 +742,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         } else {
             
         }
-        insertDay(today)
+        days.insertDay(today)
         updateUI()
         
         if WCSession.isSupported(){
@@ -761,34 +755,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 }
             } else {
                 WCSession.default.transferUserInfo(message)
-            }
-            
-        }
-    }
-    
-    /**
-     Adds or updates the day in an array of days
-     
-     - parameter dayToInsert: -  An day to insert in an array.
-     
-     # Notes: #
-     1. Parameters must be of type Day
-     
-     # Example #
-     ```
-     insertDay(today)
-     ```
-     */
-    func insertDay(_ dayToInsert: Day){
-        formatter.dateFormat = "EEEE - dd/MM/yy"
-        if days.isEmpty {
-            days.append(dayToInsert)
-        } else {
-            if days.contains(where: {formatter.string(from: $0.date) ==
-                formatter.string(from: dayToInsert.date) }) {
-                days[days.firstIndex(of: dayToInsert) ?? days.count - 1] = dayToInsert
-            } else {
-                days.append(dayToInsert)
             }
         }
     }
@@ -833,13 +799,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             largeLabel.text            = String(format: "%.2f", large)
         }
         
-        if (today.goal.amount.rounded(.up) == day.goal.amount.rounded(.down)){
-            self.goalAmount.text  = String(format: "%.0f", day.goal.amount)
-        } else {
-            self.goalAmount.text  = day.goal.amount.clean
-        }
+        self.goalAmount.text     = day.goal.amount.clean
+        self.consumedAmount.text = day.consumed.amount.clean
         
-        self.consumedAmount.text  = day.consumed.amount.clean
         if metricUnits {
             smallPrefix.text  = "\(UnitVolume.milliliters.symbol)"
             mediumPrefix.text = "\(UnitVolume.milliliters.symbol)"
@@ -1031,7 +993,7 @@ extension StartVC: WCSessionDelegate {
             today.consumed.amount = consumed
             print("todays amount was updated")
             DispatchQueue.main.async {
-                self.insertDay(self.today)
+                self.days.insertDay(self.today)
                 Day.saveDays(self.days)
                 self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
                 self.updateUI()
@@ -1051,7 +1013,7 @@ extension StartVC: WCSessionDelegate {
             today.consumed.amount = consumed
             print("todays amount was updated")
             DispatchQueue.main.async {
-                self.insertDay(self.today)
+                self.days.insertDay(self.today)
                 Day.saveDays(self.days)
                 self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
                 self.updateUI()

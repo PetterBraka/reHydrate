@@ -11,7 +11,8 @@ import WatchKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
     var today = Day()
-    var days: [Day] = (WKExtension.shared().delegate as! ExtensionDelegate).days
+    let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+    var days: [Day] = []
     // MARK: - Timeline Configuration
     
     func getSupportedTimeTravelDirections(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimeTravelDirections) -> Void) {
@@ -35,9 +36,14 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
+        days = delegate.days
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd/MM/yy"
-        today = days.updateToday()
+        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
+            today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
+        } else {
+            today = Day.init()
+        }
         var fillFraction = Float()
         if today.consumed.amount / today.goal.amount < 1 {
             fillFraction = today.consumed.amount / today.goal.amount
@@ -158,6 +164,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     func getListOfEnteries(_ complication: CLKComplication) -> [CLKComplicationTimelineEntry] {
+        days = delegate.days
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd/MM/yy"
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
@@ -396,5 +403,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getTimelineEntries(for complication: CLKComplication, after date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
         // Call the handler with the timeline entries after to the given date
         handler(getListOfEnteries(complication))
+    }
+    
+}
+
+extension Float {
+    var clean: String {
+        let temp = (self * 100).rounded() * 100
+        return temp.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(temp)
     }
 }
