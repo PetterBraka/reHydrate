@@ -132,14 +132,14 @@ class AppIconVC: UIViewController{
      ```
      */
     func changeAppearance(){
-        if !darkMode {
-            self.view.backgroundColor = .white
-            tableView.backgroundColor = .white
-            exitButton.tintColor      = .black
-        } else{
+        if darkMode {
             self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
             tableView.backgroundColor = UIColor().hexStringToUIColor("#212121")
             exitButton.tintColor      = .lightGray
+        } else{
+            self.view.backgroundColor = .white
+            tableView.backgroundColor = .white
+            exitButton.tintColor      = .darkGray
         }
     }
 }

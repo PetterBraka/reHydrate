@@ -180,23 +180,27 @@ class CalendarVC: UIViewController {
         calendar.appearance.headerTitleFont = UIFont(name: "American typewriter", size: 20)
         calendar.appearance.borderRadius = 1
         if darkMode {
-            calendar.backgroundColor              = UIColor().hexStringToUIColor("#212121")
             self.view.backgroundColor             = UIColor().hexStringToUIColor("#212121")
+            calendar.backgroundColor              = UIColor().hexStringToUIColor("#212121")
             tableView.backgroundColor             = UIColor().hexStringToUIColor("#212121")
-            titleDate.textColor                   = .white
-            calendar.appearance.headerTitleColor  = .white
-            calendar.appearance.weekdayTextColor  = UIColor().hexStringToUIColor("#cfcfcf")
-            calendar.appearance.titleDefaultColor = .white
-            exitButton.tintColor                  = .lightGray
+            titleDate.textColor                     = .white
+            exitButton.tintColor                    = .lightGray
+            calendar.appearance.headerTitleColor    = .white
+            calendar.appearance.weekdayTextColor    = .white
+            calendar.appearance.titleTodayColor     = .white
+            calendar.appearance.titleDefaultColor   = .white
+            calendar.appearance.titleSelectionColor = .white
         } else {
-            calendar.backgroundColor              = .white
-            calendar.appearance.headerTitleColor  = .black
-            calendar.appearance.weekdayTextColor  = .black
-            calendar.appearance.titleDefaultColor = .black
-            self.view.backgroundColor             = .white
-            tableView.backgroundColor             = .white
-            titleDate.textColor                   = .black
-            exitButton.tintColor                  = .black
+            self.view.backgroundColor               = .white
+            calendar.backgroundColor                = .white
+            tableView.backgroundColor               = .white
+            titleDate.textColor                     = .darkGray
+            exitButton.tintColor                    = .darkGray
+            calendar.appearance.headerTitleColor    = .darkGray
+            calendar.appearance.weekdayTextColor    = .darkGray
+            calendar.appearance.titleTodayColor     = .darkGray
+            calendar.appearance.titleDefaultColor   = .darkGray
+            calendar.appearance.titleSelectionColor = .darkGray
         }
     }
     
@@ -236,9 +240,9 @@ class CalendarVC: UIViewController {
     func getAverageFor()-> Float {
         let average = Drink()
         for day in days {
-            average.amountOfDrink += day.consumed.amountOfDrink
+            average.amount += day.consumed.amount
         }
-        return average.amountOfDrink / Float(days.count)
+        return average.amount / Float(days.count)
     }
     
     func getAverageFor(_ startDate: Date,_ endDate: Date)-> Float {
@@ -247,7 +251,7 @@ class CalendarVC: UIViewController {
         for day in calendar.selectedDates {
             if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
                 let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
-                average += selectedDay?.consumed.amountOfDrink ?? 0
+                average += selectedDay?.consumed.amount ?? 0
             }
             x += 1
         }
@@ -268,10 +272,10 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath.row {
             case 0:
                 cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                               "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
+                               "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
             case 1:
                 let average = Drink(typeOfDrink: "water", amountOfDrink: getAverageFor())
-                cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(format: "%.2f",average.amountOfDrink))
+                cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), average.amount.clean)
             default:
                 break
         }
@@ -320,12 +324,13 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
-                           "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
+                           "\(String(format: "%.2f", drinks[1].amount))/\(String(format: "%.2f",drinks[0].amount))")
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
             averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
                 "\(String(format: "%.2f", average))")
         }
     }
+    
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.configureVisibleCells()
         print("deselected \(formatter.string(from: date))")
@@ -348,7 +353,13 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
-                "\(String(format: "%.2f", drinks[1].amountOfDrink))/\(String(format: "%.2f",drinks[0].amountOfDrink))")
+                "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
+        } else if calendar.selectedDates.count == 0 {
+            titleDate.text = "\(formatter.string(from: Date()))"
+            self.getDrinks(Date())
+            let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
+            consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell"))",
+                "\(drinks[3].amount.clean)/\(drinks[2].amount.clean)")
         }
     }
     
