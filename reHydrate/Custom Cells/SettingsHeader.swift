@@ -84,7 +84,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
             title.textColor = .white
             container.backgroundColor = UIColor().hexStringToUIColor("#404040")
         } else {
-            title.textColor = .black
+            title.textColor = .darkGray
             container.backgroundColor = UIColor().hexStringToUIColor("#d9d9d9")
         }
     }
