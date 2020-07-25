@@ -75,7 +75,7 @@ extension UIImage {
      */
     var grayed: UIImage {
         guard let ciImage = CIImage(image: self)
-            else { return self }
+        else { return self }
         let filterParameters = [ kCIInputColorKey: CIColor.white, kCIInputIntensityKey: 1.0 ] as [String: Any]
         let grayscale = ciImage.applyingFilter("CIColorMonochrome", parameters: filterParameters)
         return UIImage(ciImage: grayscale)

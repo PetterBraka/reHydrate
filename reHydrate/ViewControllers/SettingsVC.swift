@@ -67,18 +67,18 @@ class SettingsVC: UIViewController {
      */
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
-            case exitButton:
-                defaults.set(darkMode, forKey: darkModeString)
-                defaults.set(metricUnits, forKey: metricUnitsString)
-                let transition      = CATransition()
-                transition.duration = 0.4
-                transition.type     = .push
-                transition.subtype  = .fromRight
-                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                view.window!.layer.add(transition, forKey: kCATransition)
-                self.dismiss(animated: false, completion: nil)
-            default:
-                break
+        case exitButton:
+            defaults.set(darkMode, forKey: darkModeString)
+            defaults.set(metricUnits, forKey: metricUnitsString)
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromRight
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            self.dismiss(animated: false, completion: nil)
+        default:
+            break
         }
     }
     
@@ -248,74 +248,52 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         cell.setting         = settings[indexPath.section].options[indexPath.row]
         cell.selectionStyle  = .none
         cell.setCellAppairents(darkMode, metricUnits)
-        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-        let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-        let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-        var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
-        if intervals == 0 {
-            intervals = 30
-        }
         switch indexPath {
-            case IndexPath(row: 1, section: 0), IndexPath(row: 1, section: 4), IndexPath(row: 0, section: 5),
-                 IndexPath(row: 1, section: 5):
-                cell.imageForCell.isHidden = false
-                cell.imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
-                cell.subTitle.removeFromSuperview()
-                cell.textField.removeFromSuperview()
-                cell.setTitleConstraints()
-                cell.setButtonConstraints()
-            case IndexPath(row: 0, section: 1):
-                cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
-                cell.textField.removeFromSuperview()
-                let current = UNUserNotificationCenter.current()
-                current.getPendingNotificationRequests { (pendingNotifcations) in
-                    if !pendingNotifcations.isEmpty{
-                        current.removeAllDeliveredNotifications()
-                        current.removeAllPendingNotificationRequests()
-                        setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
-                    }
-                }
-            case IndexPath(row: 1, section: 1):
-                cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
-                cell.textField.removeFromSuperview()
-                let current = UNUserNotificationCenter.current()
-                current.getPendingNotificationRequests { (pendingNotifcations) in
-                    if !pendingNotifcations.isEmpty{
-                        current.removeAllDeliveredNotifications()
-                        current.removeAllPendingNotificationRequests()
-                        setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
-                    }
+        case IndexPath(row: 1, section: 0), IndexPath(row: 1, section: 4), IndexPath(row: 0, section: 5),
+             IndexPath(row: 1, section: 5):
+            cell.imageForCell.isHidden = false
+            cell.imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
+            cell.subTitle.removeFromSuperview()
+            cell.textField.removeFromSuperview()
+            cell.setTitleConstraints()
+            cell.setButtonConstraints()
+        case IndexPath(row: 0, section: 1):
+            cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
+            cell.textField.removeFromSuperview()
+        case IndexPath(row: 1, section: 1):
+            cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
+            cell.textField.removeFromSuperview()
+        case IndexPath(row: 0, section: 3):
+            if settings[3].isOpened {
+                cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
+            } else {
+                cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
             }
-            case IndexPath(row: 0, section: 3):
-                if settings[3].isOpened {
-                    cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
-                    cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
-                } else {
-                    cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
-                    cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
-                }
-                cell.textField.removeFromSuperview()
-            case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
-                 IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
-                 IndexPath(row: 0, section: 4):
-                cell.subTitle.removeFromSuperview()
-                break
-            case IndexPath(row: 2, section: 5):
-                cell.imageForCell.isHidden = false
-                cell.imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
-                cell.imageForCell.tintColor = .systemRed
-                cell.titleOption.textColor = .systemRed
-                cell.subTitle.removeFromSuperview()
-                cell.textField.removeFromSuperview()
-                cell.setTitleConstraints()
-                cell.setButtonConstraints()
-            default:
-                cell.textField.removeFromSuperview()
-                cell.subTitle.removeFromSuperview()
-                cell.setTitleConstraints()
-                cell.setButtonConstraints()
-                break
+            cell.textField.removeFromSuperview()
+            cell.subTitle.removeFromSuperview()
+            cell.setTitleConstraints()
+        case IndexPath(row: 2, section: 5):
+            cell.imageForCell.isHidden = false
+            cell.imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
+            cell.imageForCell.tintColor = .systemRed
+            cell.titleOption.textColor = .systemRed
+            cell.subTitle.removeFromSuperview()
+            cell.textField.removeFromSuperview()
+            cell.setTitleConstraints()
+            cell.setButtonConstraints()
+        case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
+             IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
+             IndexPath(row: 0, section: 4):
+            cell.subTitle.removeFromSuperview()
+            break
+        default:
+            cell.textField.removeFromSuperview()
+            cell.subTitle.removeFromSuperview()
+            cell.setTitleConstraints()
+            cell.setButtonConstraints()
+            break
         }
         
         return cell
@@ -347,96 +325,100 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
-            case IndexPath(row: 0, section: 0): // dark mode selected
-                darkMode = !darkMode
-                changeAppearance()
-                tableView.reloadData()
-            case IndexPath(row: 1, section: 0): // Change app icon
-                let appIconVC = AppIconVC()
-                appIconVC.modalPresentationStyle = .fullScreen
-                self.present(appIconVC, animated: true, completion: nil)
-                break
-            case IndexPath(row: 0, section: 1): // Metric is selected
-                metricUnits = true
-                tableView.reloadData()
-            case IndexPath(row: 1, section: 1): // imperial is selected
-                metricUnits = false
-                tableView.reloadData()
-            case IndexPath(row: 0, section: 3): // turn on/off notifications
-                let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
-                settings[3].isOpened = !settings[3].isOpened
-                if settings[3].isOpened {
-                    settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
-                    settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
-                    settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
-                    tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
-                    cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
-                    cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
-                    let startDate = defaults.object(forKey: startingTimeString) as! Date
-                    let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                    let endDate = defaults.object(forKey: endingTimeString) as! Date
-                    let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                    let intervals = defaults.integer(forKey: reminderIntervalString)
-                    setReminders(startTimer.hour!, endTimer.hour!, intervals)
-                    sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
-                } else {
-                    settings[3].options.removeLast(3)
-                    tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
-                    cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
-                    cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
-                    let center = UNUserNotificationCenter.current()
-                    center.removeAllPendingNotificationRequests()
-                    center.removeAllDeliveredNotifications()
-                    defaults.set(false, forKey: remindersString)
-                    sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
-                }
-            case IndexPath(row: 0, section: 4):
-                break
-            case IndexPath(row: 1, section: 4):
-                print("help pressed")
-                let tutorialVC = TutorialVC()
-                tutorialVC.modalPresentationStyle = .fullScreen
-                self.present(tutorialVC, animated: true, completion: nil)
-            case IndexPath(row: 0, section: 5):
-                if let url = URL(string:UIApplication.openSettingsURLString) {
-                    if UIApplication.shared.canOpenURL(url) {
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        case IndexPath(row: 0, section: 0): // dark mode selected
+            darkMode = !darkMode
+            changeAppearance()
+            tableView.reloadData()
+        case IndexPath(row: 1, section: 0): // Change app icon
+            let appIconVC = AppIconVC()
+            appIconVC.modalPresentationStyle = .fullScreen
+            self.present(appIconVC, animated: true, completion: nil)
+            break
+        case IndexPath(row: 0, section: 1): // Metric is selected
+            metricUnits = true
+            tableView.reloadData()
+        case IndexPath(row: 1, section: 1): // imperial is selected
+            metricUnits = false
+            tableView.reloadData()
+        case IndexPath(row: 0, section: 3): // turn on/off notifications
+            let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
+            let center = UNUserNotificationCenter.current()
+            settings[3].isOpened = !settings[3].isOpened
+            if settings[3].isOpened {
+                settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
+                settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
+                settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
+                tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
+                cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
+                let startDate = defaults.object(forKey: startingTimeString) as! Date
+                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+                let endDate = defaults.object(forKey: endingTimeString) as! Date
+                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+                let intervals = defaults.integer(forKey: reminderIntervalString)
+                center.getPendingNotificationRequests { (pendingNotifcations) in
+                    if pendingNotifcations.isEmpty{
+                        setReminders(startTimer.hour!, endTimer.hour!, intervals)
+                        DispatchQueue.main.async {
+                            self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
+                        }
                     }
+                }
+            } else {
+                settings[3].options.removeLast(3)
+                tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
+                cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
+                center.removeAllPendingNotificationRequests()
+                center.removeAllDeliveredNotifications()
+                defaults.set(false, forKey: remindersString)
+                sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
             }
-            case IndexPath(row: 1, section: 5):
-                UIApplication.shared.open(URL(string: "x-apple-health://")!)
-            case IndexPath(row: 2, section: 5):
-                let clearDataAlert = UIAlertController(title: NSLocalizedString("ClearingDataAlert",
-                                                                                comment: "Title for clearing data alert"),
-                                                       message: NSLocalizedString("ClearingDataBody",
-                                                                                  comment: "body for clearing data alert"),
-                                                       preferredStyle: .alert)
-                clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataKeepData",
-                                                                                comment: "Keep data option"),
-                                                       style: .cancel, handler: nil))
-                clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataRemoveData", comment: "Remove old data option"), style: .destructive, handler: {_ in
-                    let domain = Bundle.main.bundleIdentifier!
-                    self.defaults.removePersistentDomain(forName: domain)
-                    self.defaults.synchronize()
-                    let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
-                    let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
-                    let intervals = 30
-                    self.defaults.set(startDate, forKey: startingTimeString)
-                    self.defaults.set(endDate,   forKey: endingTimeString)
-                    self.defaults.set(intervals, forKey: reminderIntervalString)
-                    self.defaults.set(self.darkMode,  forKey: darkModeString)
-                    self.defaults.set(self.metricUnits, forKey: metricUnitsString)
-                    let transition      = CATransition()
-                    transition.duration = 0.4
-                    transition.type     = .push
-                    transition.subtype  = .fromRight
-                    transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                    self.view.window!.layer.add(transition, forKey: kCATransition)
-                    self.dismiss(animated: false, completion: nil)
-                }))
-                self.present(clearDataAlert, animated: true, completion: nil)
-            default:
-                break
+        case IndexPath(row: 1, section: 4):
+            print("help pressed")
+            let tutorialVC = TutorialVC()
+            tutorialVC.modalPresentationStyle = .fullScreen
+            self.present(tutorialVC, animated: true, completion: nil)
+        case IndexPath(row: 0, section: 5):
+            if let url = URL(string:UIApplication.openSettingsURLString) {
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            }
+        case IndexPath(row: 1, section: 5):
+            UIApplication.shared.open(URL(string: "x-apple-health://")!)
+        case IndexPath(row: 2, section: 5):
+            let clearDataAlert = UIAlertController(title: NSLocalizedString("ClearingDataAlert",
+                                                                            comment: "Title for clearing data alert"),
+                                                   message: NSLocalizedString("ClearingDataBody",
+                                                                              comment: "body for clearing data alert"),
+                                                   preferredStyle: .alert)
+            clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataKeepData",
+                                                                            comment: "Keep data option"),
+                                                   style: .cancel, handler: nil))
+            clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataRemoveData", comment: "Remove old data option"), style: .destructive, handler: {_ in
+                let domain = Bundle.main.bundleIdentifier!
+                self.defaults.removePersistentDomain(forName: domain)
+                self.defaults.synchronize()
+                let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
+                let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
+                let intervals = 30
+                self.defaults.set(startDate, forKey: startingTimeString)
+                self.defaults.set(endDate,   forKey: endingTimeString)
+                self.defaults.set(intervals, forKey: reminderIntervalString)
+                self.defaults.set(self.darkMode,  forKey: darkModeString)
+                self.defaults.set(self.metricUnits, forKey: metricUnitsString)
+                let transition      = CATransition()
+                transition.duration = 0.4
+                transition.type     = .push
+                transition.subtype  = .fromRight
+                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                self.view.window!.layer.add(transition, forKey: kCATransition)
+                self.dismiss(animated: false, completion: nil)
+            }))
+            self.present(clearDataAlert, animated: true, completion: nil)
+        default:
+            break
         }
     }
 }

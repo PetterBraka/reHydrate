@@ -166,55 +166,55 @@ class TutorialVC: UIViewController {
         print("Go to stage \(stage) in tutorial")
         changeAppearance()
         switch stage {
-            case 1:
-                explanationLabel.text = explanationText[stage]
-                if darkMode {
-                    summaryLable.textColor = .white
-                } else {
-                    summaryLable.textColor = .darkGray
+        case 1:
+            explanationLabel.text = explanationText[stage]
+            if darkMode {
+                summaryLable.textColor = .white
+            } else {
+                summaryLable.textColor = .darkGray
             }
-            case 2:
-                let imageArray = [UIImage(named: "Cup"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
-                var position = 0
-                while position < drinkOptionStack.subviews.count {
-                    let drink = drinkOptionStack.subviews[position] as! UIImageView
-                    drink.image = imageArray[position]
-                    position += 1
-                }
-                if darkMode {
-                    smallDrinkLable.textColor  = .white
-                    mediumDrinkLable.textColor = .white
-                    largeDrinkLable.textColor  = .white
-                } else {
-                    smallDrinkLable.textColor  = .darkGray
-                    mediumDrinkLable.textColor = .darkGray
-                    largeDrinkLable.textColor  = .darkGray
-                }
-                explanationLabel.text = explanationText[stage]
-            case 3:
-                for drink in drinkOptionStack.subviews {
-                    let drinkOption   = drink as! UIImageView
-                    drinkOption.image = drinkOption.image?.grayed
-                }
-                if darkMode {
-                    settingsButton.tintColor = .lightGray
-                } else {
-                    settingsButton.tintColor = .darkGray
-                }
-                explanationLabel.text = explanationText[stage]
-            case 4:
-                if darkMode {
-                    calendarButton.tintColor = .lightGray
-                } else {
-                    calendarButton.tintColor = .darkGray
-                }
-                explanationLabel.text = explanationText[stage]
-                nextButton.setTitle(NSLocalizedString("Done", comment: "Done button in toolbar"), for: .normal)
-            case 5:
-                stage = 0
-                self.dismiss(animated: true, completion: nil)
-            default:
-                break
+        case 2:
+            let imageArray = [UIImage(named: "Cup"), UIImage(named: "Bottle"), UIImage(named: "Flask")]
+            var position = 0
+            while position < drinkOptionStack.subviews.count {
+                let drink = drinkOptionStack.subviews[position] as! UIImageView
+                drink.image = imageArray[position]
+                position += 1
+            }
+            if darkMode {
+                smallDrinkLable.textColor  = .white
+                mediumDrinkLable.textColor = .white
+                largeDrinkLable.textColor  = .white
+            } else {
+                smallDrinkLable.textColor  = .darkGray
+                mediumDrinkLable.textColor = .darkGray
+                largeDrinkLable.textColor  = .darkGray
+            }
+            explanationLabel.text = explanationText[stage]
+        case 3:
+            for drink in drinkOptionStack.subviews {
+                let drinkOption   = drink as! UIImageView
+                drinkOption.image = drinkOption.image?.grayed
+            }
+            if darkMode {
+                settingsButton.tintColor = .lightGray
+            } else {
+                settingsButton.tintColor = .darkGray
+            }
+            explanationLabel.text = explanationText[stage]
+        case 4:
+            if darkMode {
+                calendarButton.tintColor = .lightGray
+            } else {
+                calendarButton.tintColor = .darkGray
+            }
+            explanationLabel.text = explanationText[stage]
+            nextButton.setTitle(NSLocalizedString("Done", comment: "Done button in toolbar"), for: .normal)
+        case 5:
+            stage = 0
+            self.dismiss(animated: true, completion: nil)
+        default:
+            break
         }
     }
     

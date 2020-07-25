@@ -24,13 +24,13 @@ class Drink: NSObject, Codable {
         self.type 	= "water"
         self.amount 	= 0
     }
-
+    
     /**
      Initializer for Drink
      
      - parameter type: - The type of drink.
      - parameter amount: - The amount of drink.
-    
+     
      # Example #
      ```
      var drink = Drink.inti("water", 1.2)
@@ -49,8 +49,8 @@ class Drink: NSObject, Codable {
      
      # Example #
      ```
-      if drinkOne.isTypeSame(drinkTwo){
-        // do something
+     if drinkOne.isTypeSame(drinkTwo){
+     // do something
      }
      ```
      */
