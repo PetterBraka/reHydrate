@@ -154,14 +154,15 @@ class SettingOptionCell: UITableViewCell {
             subTitle.textColor              = .white
             textField.textColor             = .white
             self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
-            
+            textField.layer.borderColor     = UIColor.lightGray.cgColor
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
-            imageForCell.tintColor          = .darkGray
-            titleOption.textColor           = .darkGray
-            subTitle.textColor              = .darkGray
-            textField.textColor             = .darkGray
+            imageForCell.tintColor          = .black
+            titleOption.textColor           = .black
+            subTitle.textColor              = .black
+            textField.textColor             = .black
             self.backgroundColor            = .white
+            textField.layer.borderColor     = UIColor.darkGray.cgColor
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         }
         switch titleOption.text?.lowercased() {
@@ -254,7 +255,7 @@ class SettingOptionCell: UITableViewCell {
         
         textField.inputAccessoryView = toolBar
         
-        picker.frame        = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 200)
+        picker.frame        = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
         picker.delegate     = self
         picker.dataSource   = self
         textField.inputView = picker

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3319AA32245334130049C676 /* SettingOptionCell.swift */; };
+		332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332E5A4524CCBF5000EF4D79 /* Extensions.swift */; };
 		333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BD5F8246424FF0041D90A /* TutorialVC.swift */; };
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
 		334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334281E224977ADB00A3CF12 /* AppIconVC.swift */; };
@@ -135,6 +136,7 @@
 /* Begin PBXFileReference section */
 		3310709A244DBCD3008365A3 /* reHydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reHydrate.entitlements; sourceTree = "<group>"; };
 		3319AA32245334130049C676 /* SettingOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOptionCell.swift; sourceTree = "<group>"; };
+		332E5A4524CCBF5000EF4D79 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		333BD5F8246424FF0041D90A /* TutorialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVC.swift; sourceTree = "<group>"; };
 		33410F0D247C0A9D00C381AC /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		334281E224977ADB00A3CF12 /* AppIconVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconVC.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 		33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */ = {
 			isa = PBXGroup;
 			children = (
+				332E5A4524CCBF5000EF4D79 /* Extensions.swift */,
 				33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */,
 				33DF9BED24B47D0A00699B1A /* ExtensionDelegate.swift */,
 				33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */,
@@ -667,6 +670,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33DF9BEE24B47D0A00699B1A /* ExtensionDelegate.swift in Sources */,
+				332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */,
 				33DF9BEC24B47D0A00699B1A /* InterfaceController.swift in Sources */,
 				33DF9BFE24B47D8100699B1A /* Drink.swift in Sources */,
 				33DF9BFF24B47D8400699B1A /* Day.swift in Sources */,
@@ -851,7 +855,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -873,7 +877,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -890,7 +894,7 @@
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				IBSC_MODULE = reHydrate_watch_Extension;
 				INFOPLIST_FILE = "reHydrate-watch/Info.plist";
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -910,7 +914,7 @@
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				IBSC_MODULE = reHydrate_watch_Extension;
 				INFOPLIST_FILE = "reHydrate-watch/Info.plist";
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -933,7 +937,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
@@ -956,7 +960,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;

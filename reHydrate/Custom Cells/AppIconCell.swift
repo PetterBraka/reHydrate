@@ -33,6 +33,24 @@ class AppIconCell: UITableViewCell {
         self.backgroundColor = .none
     }
     
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        self.selectionStyle = .default
+        let darkMode = UserDefaults.standard.bool(forKey: darkModeString)
+        if selected {
+            if darkMode {
+                let selectedView = UIView()
+                selectedView.backgroundColor = .darkGray
+                self.selectedBackgroundView =  selectedView
+            } else {
+                let selectedView = UIView()
+                selectedView.backgroundColor = UIColor().hexStringToUIColor("cccccc")
+                self.selectedBackgroundView =  selectedView
+            }
+        }
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
