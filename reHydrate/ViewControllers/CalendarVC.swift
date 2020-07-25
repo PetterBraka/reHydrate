@@ -61,16 +61,16 @@ class CalendarVC: UIViewController {
      */
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
-            case exitButton:
-                let transition      = CATransition()
-                transition.duration = 0.4
-                transition.type     = .push
-                transition.subtype  = .fromLeft
-                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                view.window!.layer.add(transition, forKey: kCATransition)
-                self.dismiss(animated: false, completion: nil)
-            default:
-                break
+        case exitButton:
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromLeft
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            self.dismiss(animated: false, completion: nil)
+        default:
+            break
         }
     }
     
@@ -270,14 +270,14 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
         switch indexPath.row {
-            case 0:
-                cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                               "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
-            case 1:
-                let average = Drink(typeOfDrink: "water", amountOfDrink: getAverageFor())
-                cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), average.amount.clean)
-            default:
-                break
+        case 0:
+            cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
+                           "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
+        case 1:
+            let average = Drink(typeOfDrink: "water", amountOfDrink: getAverageFor())
+            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), average.amount.clean)
+        default:
+            break
         }
         cell.metricUnits = true
         cell.selectionStyle = .none
@@ -324,10 +324,10 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
-                           "\(String(format: "%.2f", drinks[1].amount))/\(String(format: "%.2f",drinks[0].amount))")
+                                   "\(String(format: "%.2f", drinks[1].amount))/\(String(format: "%.2f",drinks[0].amount))")
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
             averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
-                "\(String(format: "%.2f", average))")
+                                  "\(String(format: "%.2f", average))")
         }
     }
     
@@ -353,13 +353,13 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
-                "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
+                                   "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
         } else if calendar.selectedDates.count == 0 {
             titleDate.text = "\(formatter.string(from: Date()))"
             self.getDrinks(Date())
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell"))",
-                "\(drinks[3].amount.clean)/\(drinks[2].amount.clean)")
+                                   "\(drinks[3].amount.clean)/\(drinks[2].amount.clean)")
         }
     }
     

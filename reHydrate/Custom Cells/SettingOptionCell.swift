@@ -44,7 +44,7 @@ class SettingOptionCell: UITableViewCell {
         lable.font  = UIFont(name: "AmericanTypewriter", size: 15)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
-        }()
+    }()
     let subTitle: UILabel = {
         let lable  = UILabel()
         lable.text = "subText"
@@ -165,66 +165,66 @@ class SettingOptionCell: UITableViewCell {
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         }
         switch titleOption.text?.lowercased() {
-            case NSLocalizedString("DarkMode", comment: "").lowercased():
-                imageForCell.isHidden = false
-                if dark{
-                    imageForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
-                } else {
-                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                }
-            case NSLocalizedString("MetricSystem", comment: "").lowercased():
-                imageForCell.isHidden = false
-                if metric{
-                    imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                } else {
-                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                }
-            case NSLocalizedString("ImperialSystem", comment: "").lowercased():
-                imageForCell.isHidden = false
-                if !metric{
-                    imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                } else {
-                    imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                }
-            case NSLocalizedString("SetYourGoal", comment: "").lowercased():
-                imageForCell.isHidden = true
-                let days = Day.loadDays()
-                if !days.isEmpty{
-                    textField.text = String(describing: days.last!.goal.amount)
-                } else {
-                    textField.text = "3"
-                }
-                pickerArray     = ["0", "1","2","3","4","5","6","7","8","9"]
-                componentString = ["","",",",""]
-                setUpPickerView()
-                break
-            case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
-                 NSLocalizedString("TurnOffReminders", comment: "").lowercased():
-                imageForCell.isHidden = false
-            case NSLocalizedString("StartingTime", comment: "").lowercased(),
-                 NSLocalizedString("EndingTime", comment: "").lowercased():
-            	setUpDatePicker()
-                imageForCell.isHidden = true
-            case NSLocalizedString("Frequency", comment: "").lowercased():
-                imageForCell.isHidden = true
-                setUpMinutePicker()
-            case NSLocalizedString("Language", comment: "").lowercased():
-                imageForCell.isHidden = true
-                pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
-                componentString = [""]
-                setUpPickerView()
-                textField.placeholder = "language"
-                let picker = textField.inputView as! UIPickerView
-                let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
-                if pickerArray.contains(NSLocalizedString(language[0], comment: "")){
-                    textField.text = NSLocalizedString(language.first!, comment: "")
-                    picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(language.first!, comment: "")) ?? 0, inComponent: 0, animated: true)
-                } else {
-                    textField.text = NSLocalizedString(appLanguages[0], comment: "")
-                    picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
-                }
-            default:
-                imageForCell.isHidden = true
+        case NSLocalizedString("DarkMode", comment: "").lowercased():
+            imageForCell.isHidden = false
+            if dark{
+                imageForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
+            } else {
+                imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            }
+        case NSLocalizedString("MetricSystem", comment: "").lowercased():
+            imageForCell.isHidden = false
+            if metric{
+                imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            } else {
+                imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            }
+        case NSLocalizedString("ImperialSystem", comment: "").lowercased():
+            imageForCell.isHidden = false
+            if !metric{
+                imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            } else {
+                imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            }
+        case NSLocalizedString("SetYourGoal", comment: "").lowercased():
+            imageForCell.isHidden = true
+            let days = Day.loadDays()
+            if !days.isEmpty{
+                textField.text = String(describing: days.last!.goal.amount)
+            } else {
+                textField.text = "3"
+            }
+            pickerArray     = ["0", "1","2","3","4","5","6","7","8","9"]
+            componentString = ["","",",",""]
+            setUpPickerView()
+            break
+        case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
+             NSLocalizedString("TurnOffReminders", comment: "").lowercased():
+            imageForCell.isHidden = false
+        case NSLocalizedString("StartingTime", comment: "").lowercased(),
+             NSLocalizedString("EndingTime", comment: "").lowercased():
+            setUpDatePicker()
+            imageForCell.isHidden = true
+        case NSLocalizedString("Frequency", comment: "").lowercased():
+            imageForCell.isHidden = true
+            setUpMinutePicker()
+        case NSLocalizedString("Language", comment: "").lowercased():
+            imageForCell.isHidden = true
+            pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
+            componentString = [""]
+            setUpPickerView()
+            textField.placeholder = "language"
+            let picker = textField.inputView as! UIPickerView
+            let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
+            if pickerArray.contains(NSLocalizedString(language[0], comment: "")){
+                textField.text = NSLocalizedString(language.first!, comment: "")
+                picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(language.first!, comment: "")) ?? 0, inComponent: 0, animated: true)
+            } else {
+                textField.text = NSLocalizedString(appLanguages[0], comment: "")
+                picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
+            }
+        default:
+            imageForCell.isHidden = true
         }
         UserDefaults.standard.set(dark, forKey: darkModeString)
         UserDefaults.standard.set(metric, forKey: metricUnitsString)
@@ -254,7 +254,7 @@ class SettingOptionCell: UITableViewCell {
         
         textField.inputAccessoryView = toolBar
         
-        picker.frame        = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
+        picker.frame        = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 200)
         picker.delegate     = self
         picker.dataSource   = self
         textField.inputView = picker
@@ -356,33 +356,33 @@ class SettingOptionCell: UITableViewCell {
         formatter.dateFormat = "HH:mm"
         formatter.locale = .current
         switch titleOption.text?.lowercased() {
-            case NSLocalizedString("StartingTime", comment: "").lowercased():
-                let startDate = sender.date
-                var endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-                if endDate <= startDate {
-                    endDate = endDate - 1 * 60
-                    sender.setDate(endDate, animated: true)
-                }
-                UserDefaults.standard.set(startDate, forKey: startingTimeString)
-                break
-            case NSLocalizedString("EndingTime", comment: "").lowercased():
-                let endDate = sender.date
-                var startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-                if endDate <= startDate {
-                    startDate = startDate + 1 * 60
-                    sender.setDate(startDate, animated: true)
-                }
-                UserDefaults.standard.set(endDate, forKey: endingTimeString)
-                break
-            case NSLocalizedString("Frequency", comment: "").lowercased():
-                if sender.countDownDuration > 2.5 * 60 * 60{
-                    var components = DateComponents()
-                    components.hour = 2
-                    components.minute = 50
-                    let date = Calendar.current.date(from: components)!
-                    sender.setDate(date, animated: true)
-                }
-            default:
+        case NSLocalizedString("StartingTime", comment: "").lowercased():
+            let startDate = sender.date
+            var endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+            if endDate <= startDate {
+                endDate = endDate - 1 * 60
+                sender.setDate(endDate, animated: true)
+            }
+            UserDefaults.standard.set(startDate, forKey: startingTimeString)
+            break
+        case NSLocalizedString("EndingTime", comment: "").lowercased():
+            let endDate = sender.date
+            var startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+            if endDate <= startDate {
+                startDate = startDate + 1 * 60
+                sender.setDate(startDate, animated: true)
+            }
+            UserDefaults.standard.set(endDate, forKey: endingTimeString)
+            break
+        case NSLocalizedString("Frequency", comment: "").lowercased():
+            if sender.countDownDuration > 2.5 * 60 * 60{
+                var components = DateComponents()
+                components.hour = 2
+                components.minute = 50
+                let date = Calendar.current.date(from: components)!
+                sender.setDate(date, animated: true)
+            }
+        default:
             break
         }
         textField.text = formatter.string(from: sender.date)
@@ -395,86 +395,86 @@ class SettingOptionCell: UITableViewCell {
     @objc func doneClicked(){
         textField.endEditing(true)
         switch titleOption.text?.lowercased() {
-            case NSLocalizedString("SetYourGoal", comment: "").lowercased():
-                var component = 0
-                while component < picker.numberOfComponents {
-                    let value = pickerArray[picker.selectedRow(inComponent: component)]
-                    switch component {
-                        case 0, 1, 3:
-                            updateTextField(String(value), component)
-                        case 2:
-                            updateTextField(".", component)
-                        default:
-                            break
-                    }
-                    component += 1
+        case NSLocalizedString("SetYourGoal", comment: "").lowercased():
+            var component = 0
+            while component < picker.numberOfComponents {
+                let value = pickerArray[picker.selectedRow(inComponent: component)]
+                switch component {
+                case 0, 1, 3:
+                    updateTextField(String(value), component)
+                case 2:
+                    updateTextField(".", component)
+                default:
+                    break
                 }
-                updateGoal()
-            case NSLocalizedString("StartingTime", comment: "").lowercased(),
-                 NSLocalizedString("EndingTime", comment: "").lowercased():
-                let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                let intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
-                setReminders(startTimer.hour!, endTimer.hour!, intervals)
-                sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
-            case NSLocalizedString("Frequency", comment: "").lowercased():
-                let picker = textField.inputView as! UIDatePicker
-                if picker.countDownDuration > 2.5 * 60 * 60{
-                    var components = DateComponents()
-                    components.hour = 2
-                    components.minute = 50
-                    let date = Calendar.current.date(from: components)!
-                    picker.setDate(date, animated: true)
-                }
-                textField.text = formatter.string(from: picker.date)
-                
-                let calendar = Calendar.current
-                
-                let currentDateComponent = calendar.dateComponents([.hour, .minute], from: picker.date)
-                let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
-                
-                print("numberOfMinutes : ", numberOfMinutes)
-                UserDefaults.standard.set(numberOfMinutes, forKey: reminderIntervalString)
-                let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                setReminders(startTimer.hour!, endTimer.hour!, numberOfMinutes)
-                sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
+                component += 1
+            }
+            updateGoal()
+        case NSLocalizedString("StartingTime", comment: "").lowercased(),
+             NSLocalizedString("EndingTime", comment: "").lowercased():
+            let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+            let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+            let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+            let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+            let intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
+            setReminders(startTimer.hour!, endTimer.hour!, intervals)
+            sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
+        case NSLocalizedString("Frequency", comment: "").lowercased():
+            let picker = textField.inputView as! UIDatePicker
+            if picker.countDownDuration > 2.5 * 60 * 60{
+                var components = DateComponents()
+                components.hour = 2
+                components.minute = 50
+                let date = Calendar.current.date(from: components)!
+                picker.setDate(date, animated: true)
+            }
+            textField.text = formatter.string(from: picker.date)
+            
+            let calendar = Calendar.current
+            
+            let currentDateComponent = calendar.dateComponents([.hour, .minute], from: picker.date)
+            let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
+            
+            print("numberOfMinutes : ", numberOfMinutes)
+            UserDefaults.standard.set(numberOfMinutes, forKey: reminderIntervalString)
+            let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+            let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+            let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+            let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+            setReminders(startTimer.hour!, endTimer.hour!, numberOfMinutes)
+            sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
+            break
+        case NSLocalizedString("Language", comment: "").lowercased():
+            let picker = textField.inputView as! UIPickerView
+            textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
+            switch textField.text?.lowercased() {
+            case NSLocalizedString("nb", comment: "").lowercased():
+                setAppLanguage("nb")
                 break
-            case NSLocalizedString("Language", comment: "").lowercased():
-                let picker = textField.inputView as! UIPickerView
-                textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
-                switch textField.text?.lowercased() {
-                    case NSLocalizedString("nb", comment: "").lowercased():
-                        setAppLanguage("nb")
-                        break
-                    case NSLocalizedString("en", comment: ""):
-                        setAppLanguage("en")
-                    default:
-                        setAppLanguage("en")
-                }
-                let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
-                if intervals == 0 {
-                    intervals = 60
-                }
-                let current = UNUserNotificationCenter.current()
-                current.getPendingNotificationRequests { (pendingNotifcations) in
-                    if !pendingNotifcations.isEmpty{
-                        current.removeAllDeliveredNotifications()
-                        current.removeAllPendingNotificationRequests()
-                        setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
-                    }
-                }
-                break
+            case NSLocalizedString("en", comment: ""):
+                setAppLanguage("en")
             default:
-                break
+                setAppLanguage("en")
+            }
+            let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+            let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+            let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+            let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+            var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
+            if intervals == 0 {
+                intervals = 60
+            }
+            let current = UNUserNotificationCenter.current()
+            current.getPendingNotificationRequests { (pendingNotifcations) in
+                if !pendingNotifcations.isEmpty{
+                    current.removeAllDeliveredNotifications()
+                    current.removeAllPendingNotificationRequests()
+                    setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
+                }
+            }
+            break
+        default:
+            break
         }
     }
     
@@ -549,12 +549,12 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
             return pickerArray.count
         } else {
             switch component {
-                case 0, 1, 3:
-                    return pickerArray.count
-                case 2:
-                    return 1
-                default:
-                    return 0
+            case 0, 1, 3:
+                return pickerArray.count
+            case 2:
+                return 1
+            default:
+                return 0
             }
         }
     }
@@ -564,12 +564,12 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
             return pickerArray[row]
         } else {
             switch component {
-                case 0, 1, 3:
-                    return pickerArray[row]
-                case 2:
-                    return "."
-                default:
-                    return ""
+            case 0, 1, 3:
+                return pickerArray[row]
+            case 2:
+                return "."
+            default:
+                return ""
             }
         }
     }
@@ -591,12 +591,12 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
             updateTextField(pickerArray[row], component)
         } else {
             switch component {
-                case 0, 1, 3:
-                    updateTextField(pickerArray[row], component)
-                case 2:
-                    updateTextField(".", component)
-                default:
-                    break
+            case 0, 1, 3:
+                updateTextField(pickerArray[row], component)
+            case 2:
+                updateTextField(".", component)
+            default:
+                break
             }
         }
     }
@@ -610,6 +610,6 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
         for number in componentString {
             textField.text = textField.text! + number
         }
-            
+        
     }
 }
