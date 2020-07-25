@@ -694,20 +694,20 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             calendarButton.tintColor  = .lightGray
         } else {
             self.view.backgroundColor = .white
-            appTitle.textColor        = .darkGray
-            currentDay.textColor      = .darkGray
-            consumedAmount.textColor  = .darkGray
-            summarySplitter.textColor = .darkGray
-            goalAmount.textColor      = .darkGray
-            goalPrefix.textColor      = .darkGray
-            smallLabel.textColor      = .darkGray
-            smallPrefix.textColor     = .darkGray
-            mediumLabel.textColor     = .darkGray
-            mediumPrefix.textColor    = .darkGray
-            largeLabel.textColor      = .darkGray
-            largePrefix.textColor     = .darkGray
-            calendarButton.tintColor  = .darkGray
-            settingsButton.tintColor  = .darkGray
+            appTitle.textColor        = .black
+            currentDay.textColor      = .black
+            consumedAmount.textColor  = .black
+            summarySplitter.textColor = .black
+            goalAmount.textColor      = .black
+            goalPrefix.textColor      = .black
+            smallLabel.textColor      = .black
+            smallPrefix.textColor     = .black
+            mediumLabel.textColor     = .black
+            mediumPrefix.textColor    = .black
+            largeLabel.textColor      = .black
+            largePrefix.textColor     = .black
+            calendarButton.tintColor  = .black
+            settingsButton.tintColor  = .black
         }
     }
     

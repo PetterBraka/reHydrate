@@ -82,8 +82,8 @@ class InfoCell: UITableViewCell {
             titleOfCard.textColor      = .white
             amountOfDrink.textColor    = .white
         } else {
-            titleOfCard.textColor      = .darkGray
-            amountOfDrink.textColor    = .darkGray
+            titleOfCard.textColor      = .black
+            amountOfDrink.textColor    = .black
         }
     }
     
