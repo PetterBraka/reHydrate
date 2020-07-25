@@ -9,7 +9,7 @@
 import UIKit
 
 class AppIconCell: UITableViewCell {
-
+    
     let title: UILabel     = {
         let lable   = UILabel()
         lable.text  = ""
