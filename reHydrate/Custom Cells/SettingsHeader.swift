@@ -24,7 +24,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
         return lable
     }()
     var container: UIView = {
-       let view              = UIView()
+        let view              = UIView()
         view.clipsToBounds   = true
         view.backgroundColor = .lightGray
         view.isUserInteractionEnabled = true
@@ -32,7 +32,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
         return view
     }()
     var darkMode = Bool()
-
+    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         self.isUserInteractionEnabled  = true

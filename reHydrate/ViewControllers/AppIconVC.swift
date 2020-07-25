@@ -56,7 +56,7 @@ class AppIconVC: UIViewController{
             self.dismiss(animated: true, completion: nil)
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
@@ -152,25 +152,25 @@ extension AppIconVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! AppIconCell
         switch indexPath.row {
-            case 0:
-                cell.title.text = iconNames[0]
-            case 1:
-                cell.title.text = iconNames[1]
-            case 2, 3:
-                cell.title.text = iconNames[2]
-            case 4, 5:
-                cell.title.text = iconNames[3]
-            case 6, 7:
-                cell.title.text = iconNames[4]
-            case 8, 9:
-                cell.title.text = iconNames[5]
-            case 10, 11:
-                cell.title.text = iconNames[6]
-            case 12, 13:
-                cell.title.text = iconNames[7]
-            case 14, 15:
-                cell.title.text = iconNames[8]
-            default:
+        case 0:
+            cell.title.text = iconNames[0]
+        case 1:
+            cell.title.text = iconNames[1]
+        case 2, 3:
+            cell.title.text = iconNames[2]
+        case 4, 5:
+            cell.title.text = iconNames[3]
+        case 6, 7:
+            cell.title.text = iconNames[4]
+        case 8, 9:
+            cell.title.text = iconNames[5]
+        case 10, 11:
+            cell.title.text = iconNames[6]
+        case 12, 13:
+            cell.title.text = iconNames[7]
+        case 14, 15:
+            cell.title.text = iconNames[8]
+        default:
             break
         }
         cell.imageForCell.setBackgroundImage(UIImage(named: icons[indexPath.row]), for: .normal)
