@@ -8,6 +8,7 @@
 
 import UIKit
 import WatchKit
+import ClockKit
 import Foundation
 import WatchConnectivity
 
@@ -61,10 +62,6 @@ class InterfaceController: WKInterfaceController {
                 session.activate()
             }
         }
-        let server = CLKComplicationServer.sharedInstance()
-        server.activeComplications?.forEach({ (complication) in
-            server.reloadTimeline(for: complication)
-        })
     }
     
     override func willActivate() {
@@ -82,6 +79,10 @@ class InterfaceController: WKInterfaceController {
         }
         let delegate  = WKExtension.shared().delegate as! ExtensionDelegate
         delegate.days = days
+        let server = CLKComplicationServer.sharedInstance()
+        server.activeComplications?.forEach({ (complication) in
+            server.reloadTimeline(for: complication)
+        })
         updateSummary()
     }
     
@@ -90,6 +91,10 @@ class InterfaceController: WKInterfaceController {
         super.didDeactivate()
         let delegate = WKExtension.shared().delegate as! ExtensionDelegate
         delegate.days = days
+        let server = CLKComplicationServer.sharedInstance()
+        server.activeComplications?.forEach({ (complication) in
+            server.reloadTimeline(for: complication)
+        })
     }
     
     func updateSummary(){
@@ -131,36 +136,6 @@ extension InterfaceController: WCSessionDelegate{
         }
     }
     
-    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        print("sent data with sendMessage")
-        print(String(describing: message["phoneDate"]!))
-        print(String(describing: message["phoneGoal"]!))
-        print(String(describing: message["phoneConsumed"]!))
-        formatter.dateFormat = "EEEE - dd/MM/yy"
-        today = days.updateToday()
-        if formatter.string(from: today.date) == message["phoneDate"] as! String {
-            let messageConsumed = message["phoneConsumed"]!
-            let numberFormatter = NumberFormatter()
-            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            today.consumed.amount = consumed
-            let messageGoal = message["phoneGoal"]!
-            let goal = numberFormatter.number(from: messageGoal as! String)!.floatValue
-            today.goal.amount = goal
-            let server = CLKComplicationServer.sharedInstance()
-            server.activeComplications?.forEach({ (complication) in
-                server.reloadTimeline(for: complication)
-            })
-            print("todays amount was updated by message")
-            DispatchQueue.main.async {
-                self.days.insertDay(self.today)
-                Day.saveDays(self.days)
-                self.updateSummary()
-                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-                delegate.days = self.days
-            }
-        }
-    }
-    
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         print("sent data with transferUserInfo")
         print(String(describing: userInfo["phoneDate"]!))
@@ -176,17 +151,20 @@ extension InterfaceController: WCSessionDelegate{
             let messageGoal = userInfo["phoneGoal"]!
             let goal = numberFormatter.number(from: messageGoal as! String)!.floatValue
             today.goal.amount = goal
+            
+            let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+            delegate.days = self.days
             let server = CLKComplicationServer.sharedInstance()
-            server.activeComplications?.forEach({ (complication) in
+            guard let activeComplications = server.activeComplications else { return }
+            for complication in activeComplications {
                 server.reloadTimeline(for: complication)
-            })
+            }
+            
             print("todays amount was updated with user info")
             DispatchQueue.main.async {
                 self.days.insertDay(self.today)
                 Day.saveDays(self.days)
                 self.updateSummary()
-                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-                delegate.days = self.days
             }
         }
     }

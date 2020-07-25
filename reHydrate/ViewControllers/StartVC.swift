@@ -12,7 +12,7 @@ import HealthKit
 import FSCalendar
 import WatchConnectivity
 
-let versionString = "version3.1"
+let versionString = "version3.4"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -217,40 +217,40 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     @objc func tap(_ sender: UIGestureRecognizer){
         let drink = Drink.init()
         switch sender.view {
-            case smallOption:
-                print("small short-press")
-                drink.amount = drinkOptions[0].amount
-                updateConsumtion(drink)
-            case mediumOption:
-                print("medium short-press")
-                drink.amount = drinkOptions[1].amount
-                updateConsumtion(drink)
-            case largeOption:
-                print("large short-press")
-                drink.amount = drinkOptions[2].amount
-                updateConsumtion(drink)
-            case settingsButton:
-                let aboutScreen = SettingsVC()
-                let transition      = CATransition()
-                transition.duration = 0.4
-                transition.type     = .push
-                transition.subtype  = .fromLeft
-                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                view.window!.layer.add(transition, forKey: kCATransition)
-                aboutScreen.modalPresentationStyle = .fullScreen
-                present(aboutScreen, animated: false, completion: nil)
-            case calendarButton:
-                let calendarScreen  = CalendarVC()
-                let transition      = CATransition()
-                transition.duration = 0.4
-                transition.type     = .push
-                transition.subtype  = .fromRight
-                transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                view.window!.layer.add(transition, forKey: kCATransition)
-                calendarScreen.modalPresentationStyle     = .fullScreen
-                self.present(calendarScreen, animated: false, completion: nil)
-            default:
-                break
+        case smallOption:
+            print("small short-press")
+            drink.amount = drinkOptions[0].amount
+            updateConsumtion(drink)
+        case mediumOption:
+            print("medium short-press")
+            drink.amount = drinkOptions[1].amount
+            updateConsumtion(drink)
+        case largeOption:
+            print("large short-press")
+            drink.amount = drinkOptions[2].amount
+            updateConsumtion(drink)
+        case settingsButton:
+            let aboutScreen = SettingsVC()
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromLeft
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            aboutScreen.modalPresentationStyle = .fullScreen
+            present(aboutScreen, animated: false, completion: nil)
+        case calendarButton:
+            let calendarScreen  = CalendarVC()
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromRight
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            calendarScreen.modalPresentationStyle     = .fullScreen
+            self.present(calendarScreen, animated: false, completion: nil)
+        default:
+            break
         }
     }
     
@@ -265,17 +265,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     @objc func long(_ sender: UIGestureRecognizer){
         if sender.state     == .began {
             switch sender.view {
-                case smallOption:
-                    print("small long-press")
-                    popUpOptions(sender, drinkOptions[0], smallLabel)
-                case mediumOption:
-                    print("medium long-press")
-                    popUpOptions(sender, drinkOptions[1], mediumLabel)
-                case largeOption:
-                    print("large long-press")
-                    popUpOptions(sender, drinkOptions[2], largeLabel)
-                default:
-                    break
+            case smallOption:
+                print("small long-press")
+                popUpOptions(sender, drinkOptions[0], smallLabel)
+            case mediumOption:
+                print("medium long-press")
+                popUpOptions(sender, drinkOptions[1], mediumLabel)
+            case largeOption:
+                print("large long-press")
+                popUpOptions(sender, drinkOptions[2], largeLabel)
+            default:
+                break
             }
         }
     }
@@ -333,30 +333,30 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             } else {
                 darkMode = false
             }
-            let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
-            let startTime = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-            let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
-            let endTime   = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-            let intervals = 30
-            defaults.set(startDate, forKey: startingTimeString)
-            defaults.set(endDate,   forKey: endingTimeString)
-            defaults.set(intervals, forKey: reminderIntervalString)
             defaults.set(darkMode,  forKey: darkModeString)
             saveDrinkOptions()
             let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
             if !appLanguages.contains(language[0]){
                 setAppLanguage(appLanguages[0])
             }
+            //sets default values for reminders
+            let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
+            let startTime = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+            let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
+            let endTime   = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+            let intervals = 30
             let current = UNUserNotificationCenter.current()
             current.getNotificationSettings(completionHandler: { (settings) in
                 if settings.authorizationStatus == .authorized {
+                    self.defaults.set(startDate, forKey: startingTimeString)
+                    self.defaults.set(endDate,   forKey: endingTimeString)
+                    self.defaults.set(intervals, forKey: reminderIntervalString)
                     current.getPendingNotificationRequests { (notificationRequests) in
                         if !notificationRequests.isEmpty {
                             current.removeAllPendingNotificationRequests()
                             current.removeAllDeliveredNotifications()
-                            setReminders(startTime.hour ?? 8, endTime.hour ?? 23, intervals)
-                            
                         }
+                        setReminders(startTime.hour ?? 8, endTime.hour ?? 23, intervals)
                     }
                 }
             })
@@ -386,17 +386,12 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         setUpUI()
         changeAppearance()
         updateUI()
+        
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal.amount),
                            "phoneConsumed": String(today.consumed.amount)]
-            if WCSession.default.isReachable{
-                WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
-                    print(error.localizedDescription)
-                }
-            } else {
-                WCSession.default.transferUserInfo(message)
-            }
+            WCSession.default.transferCurrentComplicationUserInfo(message)
         }
     }
     
@@ -749,13 +744,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal.amount),
                            "phoneConsumed": String(today.consumed.amount)]
-            if WCSession.default.isReachable {
-                WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
-                    print(error.localizedDescription)
-                }
-            } else {
-                WCSession.default.transferUserInfo(message)
-            }
+            WCSession.default.transferCurrentComplicationUserInfo(message)
         }
     }
     
@@ -834,58 +823,58 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink",comment: "popup view option for editing the drink options."),
                                             style: .default) {_ in
-                let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"),
-                                                    message: nil, preferredStyle: .alert)
-                editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
-                    textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                    textField.font          = UIFont(name: "American typewriter", size: 18)
-                    textField.keyboardType  = .decimalPad
-                    textField.textAlignment = .center
-                })
-                let done = UIAlertAction(title: NSLocalizedString("Done", comment: "The done option of a popup view"), style: .default) {_ in
-                    let newValue = (editAlert.textFields?.first!.text!)! as String
-                    if newValue != "" {
-                        if self.metricUnits {
-                            let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
-                            switch optionLabel {
-                                case self.smallLabel:
-                                    self.drinkOptions[0].amount = Float(drinkAmount.value)
-                                case self.mediumLabel:
-                                    self.drinkOptions[1].amount = Float(drinkAmount.value)
-                                case self.largeLabel:
-                                    self.drinkOptions[2].amount = Float(drinkAmount.value)
-                                default:
-                                    break
-                            }
-                        } else {
-                            let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.imperialFluidOunces)
-                                .converted(to: .milliliters)
-                            switch optionLabel {
-                                case self.smallLabel:
-                                    self.drinkOptions[0].amount = Float(drinkAmount.value)
-                                case self.mediumLabel:
-                                    self.drinkOptions[1].amount = Float(drinkAmount.value)
-                                case self.largeLabel:
-                                    self.drinkOptions[2].amount = Float(drinkAmount.value)
-                                default:
-                                    break
-                            }
+            let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"),
+                                                message: nil, preferredStyle: .alert)
+            editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
+                textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                textField.font          = UIFont(name: "American typewriter", size: 18)
+                textField.keyboardType  = .decimalPad
+                textField.textAlignment = .center
+            })
+            let done = UIAlertAction(title: NSLocalizedString("Done", comment: "The done option of a popup view"), style: .default) {_ in
+                let newValue = (editAlert.textFields?.first!.text!)! as String
+                if newValue != "" {
+                    if self.metricUnits {
+                        let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
+                        switch optionLabel {
+                        case self.smallLabel:
+                            self.drinkOptions[0].amount = Float(drinkAmount.value)
+                        case self.mediumLabel:
+                            self.drinkOptions[1].amount = Float(drinkAmount.value)
+                        case self.largeLabel:
+                            self.drinkOptions[2].amount = Float(drinkAmount.value)
+                        default:
+                            break
                         }
-                        self.saveDrinkOptions()
+                    } else {
+                        let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.imperialFluidOunces)
+                            .converted(to: .milliliters)
+                        switch optionLabel {
+                        case self.smallLabel:
+                            self.drinkOptions[0].amount = Float(drinkAmount.value)
+                        case self.mediumLabel:
+                            self.drinkOptions[1].amount = Float(drinkAmount.value)
+                        case self.largeLabel:
+                            self.drinkOptions[2].amount = Float(drinkAmount.value)
+                        default:
+                            break
+                        }
                     }
+                    self.saveDrinkOptions()
                 }
-                editAlert.addAction(done)
-                self.present(editAlert, animated: true, completion: nil)
+            }
+            editAlert.addAction(done)
+            self.present(editAlert, animated: true, completion: nil)
         }
         let removeAmount = UIAlertAction(title: NSLocalizedString("RemoveDrink", comment:
-            "popup view option for removeing the drink amount."), style: .default) {_ in
-                let removeDrink = Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amount)
-                self.updateConsumtion(removeDrink)
+                                                                    "popup view option for removeing the drink amount."), style: .default) {_ in
+            let removeDrink = Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amount)
+            self.updateConsumtion(removeDrink)
         }
         alerContorller.addAction(editOption)
         alerContorller.addAction(removeAmount)
         alerContorller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:
-            "popup view option for cancel."), style: .destructive, handler: nil))
+                                                                            "popup view option for cancel."), style: .destructive, handler: nil))
         self.present(alerContorller, animated: true, completion: nil)
     }
     
@@ -927,8 +916,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         drinkOptions[2].amount = defaults.float(forKey: largeDrinkOptionString)
         
         if  drinkOptions[0].amount == 0 ||
-            drinkOptions[1].amount == 0 ||
-            drinkOptions[2].amount == 0 {
+                drinkOptions[1].amount == 0 ||
+                drinkOptions[2].amount == 0 {
             
             drinkOptions[0].amount = 300
             drinkOptions[1].amount = 500
@@ -988,15 +977,29 @@ extension StartVC: WCSessionDelegate {
         if formatter.string(from: today.date) == message["date"] as! String {
             let messageConsumed = message["consumed"]!
             let numberFormatter = NumberFormatter()
-            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            let drinkAmountAdded = consumed - today.consumed.amount
-            today.consumed.amount = consumed
-            print("todays amount was updated")
-            DispatchQueue.main.async {
-                self.days.insertDay(self.today)
-                Day.saveDays(self.days)
-                self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
-                self.updateUI()
+            let watchConsumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            if today.consumed.amount <= watchConsumed {
+                let drinkAmountAdded = watchConsumed - today.consumed.amount
+                today.consumed.amount = watchConsumed
+                print("todays amount was updated")
+                DispatchQueue.main.async {
+                    self.days.insertDay(self.today)
+                    Day.saveDays(self.days)
+                    self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                    self.updateUI()
+                }
+            } else {
+                let message = ["phoneDate": formatter.string(from: today.date),
+                               "phoneGoal": String(today.goal.amount),
+                               "phoneConsumed": String(today.consumed.amount)]
+                if WCSession.default.isReachable {
+                    WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                        print(error.localizedDescription)
+                    }
+                    WCSession.default.transferCurrentComplicationUserInfo(message)
+                } else {
+                    WCSession.default.transferUserInfo(message)
+                }
             }
         }
     }
@@ -1008,15 +1011,29 @@ extension StartVC: WCSessionDelegate {
         if formatter.string(from: today.date) == userInfo["date"] as! String {
             let messageConsumed = userInfo["consumed"]!
             let numberFormatter = NumberFormatter()
-            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            let drinkAmountAdded = consumed - today.consumed.amount
-            today.consumed.amount = consumed
-            print("todays amount was updated")
-            DispatchQueue.main.async {
-                self.days.insertDay(self.today)
-                Day.saveDays(self.days)
-                self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
-                self.updateUI()
+            let watchConsumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            if today.consumed.amount <= watchConsumed {
+                let drinkAmountAdded = watchConsumed - today.consumed.amount
+                today.consumed.amount = watchConsumed
+                print("todays amount was updated")
+                DispatchQueue.main.async {
+                    self.days.insertDay(self.today)
+                    Day.saveDays(self.days)
+                    self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                    self.updateUI()
+                }
+            } else {
+                let message = ["phoneDate": formatter.string(from: today.date),
+                               "phoneGoal": String(today.goal.amount),
+                               "phoneConsumed": String(today.consumed.amount)]
+                if WCSession.default.isReachable {
+                    WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                        print(error.localizedDescription)
+                    }
+                    WCSession.default.transferCurrentComplicationUserInfo(message)
+                } else {
+                    WCSession.default.transferUserInfo(message)
+                }
             }
         }
     }
@@ -1082,11 +1099,11 @@ func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
         print("setting reminder for \(date.hour!):\(date.minute!)")
         let notification = getReminder()
         let smallDrinkAction = UNNotificationAction(identifier: "small", title: "\(NSLocalizedString("Add", comment: "")) \(smallDrink)\(unit)",
-            options: UNNotificationActionOptions(rawValue: 0))
+                                                    options: UNNotificationActionOptions(rawValue: 0))
         let mediumDrinkAction = UNNotificationAction(identifier: "medium", title: "\(NSLocalizedString("Add", comment: "")) \(mediumDrink)\(unit)",
-            options: UNNotificationActionOptions(rawValue: 0))
+                                                     options: UNNotificationActionOptions(rawValue: 0))
         let largeDrinkAction = UNNotificationAction(identifier: "large", title: "\(NSLocalizedString("Add", comment: "")) \(largeDrink)\(unit)",
-            options: UNNotificationActionOptions(rawValue: 0))
+                                                    options: UNNotificationActionOptions(rawValue: 0))
         let category = UNNotificationCategory(identifier: "reminders", actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction], intentIdentifiers: [], options: .customDismissAction)
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
         let uuidString = UUID().uuidString

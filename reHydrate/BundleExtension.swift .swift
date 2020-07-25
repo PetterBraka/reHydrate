@@ -18,9 +18,9 @@ class LanguageBundle: Bundle {
                                   table tableName: String?) -> String {
         
         guard let path = objc_getAssociatedObject(self, &bundleKey) as? String,
-            let bundle = Bundle(path: path) else {
-                
-                return super.localizedString(forKey: key, value: value, table: tableName)
+              let bundle = Bundle(path: path) else {
+            
+            return super.localizedString(forKey: key, value: value, table: tableName)
         }
         
         return bundle.localizedString(forKey: key, value: value, table: tableName)

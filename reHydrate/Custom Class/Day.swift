@@ -15,7 +15,7 @@ public class Day: NSObject, Codable {
     
     /**
      Default initializer for **Day**
-    
+     
      # Example #
      ```
      let day = Day.init()
@@ -153,7 +153,7 @@ extension Array where Element == Day {
             self.append(dayToInsert)
         } else {
             if self.contains(where: {dateFormatter.string(from: $0.date) ==
-                dateFormatter.string(from: dayToInsert.date) }) {
+                                dateFormatter.string(from: dayToInsert.date) }) {
                 self[self.firstIndex(of: dayToInsert) ?? self.count - 1] = dayToInsert
             } else {
                 self.append(dayToInsert)
