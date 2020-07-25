@@ -181,7 +181,7 @@ class SettingsVC: UIViewController {
         } else{
             self.view.backgroundColor = .white
             tableView.backgroundColor = .white
-            exitButton.tintColor      = .darkGray
+            exitButton.tintColor      = .black
         }
     }
     
