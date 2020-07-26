@@ -276,6 +276,10 @@ class SettingOptionCell: UITableViewCell {
         datePicker.datePickerMode = .time
         datePicker.locale = .current
         datePicker.minuteInterval = 10
+        if #available(iOS 14, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+            datePicker.sizeToFit()
+        }
         let calendar = NSCalendar.current
         var components = calendar.dateComponents([.hour, .minute], from: Date())
         let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
@@ -332,6 +336,10 @@ class SettingOptionCell: UITableViewCell {
         let date = Calendar.current.date(from: components)!
         minutePicker.setDate(date, animated: false)
         minutePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
+        if #available(iOS 14, *) {
+            minutePicker.preferredDatePickerStyle = .wheels
+            minutePicker.sizeToFit()
+        }
         
         self.addSubview(textField)
         setTextFieldConstraints()
