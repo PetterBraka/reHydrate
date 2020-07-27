@@ -269,8 +269,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
              IndexPath(row: 1, section: 5):
             cell.buttonForCell.isHidden = false
             if #available(iOS 13.0, *) {
-                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
-                cell.setButtonConstraints(20)
+                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
             } else {
                 if darkMode {
                     cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.gray), for: .normal)
@@ -318,7 +317,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         case IndexPath(row: 2, section: 5):
             cell.buttonForCell.isHidden = false
             if #available(iOS 13.0, *) {
-                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
+                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
                 cell.buttonForCell.tintColor = .systemRed
             } else {
                 cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.systemRed), for: .normal)
