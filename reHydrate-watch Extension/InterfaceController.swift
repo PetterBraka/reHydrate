@@ -30,20 +30,20 @@ class InterfaceController: WKInterfaceController {
     @IBOutlet weak var summaryLable: WKInterfaceLabel!
     
     @IBAction func smallButton() {
-        let small = Measurement(value: Double(smallDrink.amount), unit: UnitVolume.milliliters)
-        today.consumed.amount += Float(small.converted(to: .liters).value)
+        let small = Measurement(value: smallDrink.amount, unit: UnitVolume.milliliters)
+        today.consumed.amount += small.converted(to: .liters).value
         updateSummary()
     }
     
     @IBAction func mediumButton() {
-        let medium = Measurement(value: Double(mediumDrink.amount), unit: UnitVolume.milliliters)
-        today.consumed.amount += Float(medium.converted(to: .liters).value)
+        let medium = Measurement(value: mediumDrink.amount, unit: UnitVolume.milliliters)
+        today.consumed.amount += medium.converted(to: .liters).value
         updateSummary()
     }
     
     @IBAction func largeButton() {
-        let large = Measurement(value: Double(largeDrink.amount), unit: UnitVolume.milliliters)
-        today.consumed.amount += Float(large.converted(to: .liters).value)
+        let large = Measurement(value: largeDrink.amount, unit: UnitVolume.milliliters)
+        today.consumed.amount += large.converted(to: .liters).value
         updateSummary()
     }
     
@@ -78,7 +78,7 @@ class InterfaceController: WKInterfaceController {
             }
         }
         let delegate  = WKExtension.shared().delegate as! ExtensionDelegate
-        delegate.days = days
+        delegate.today = today
         let server = CLKComplicationServer.sharedInstance()
         server.activeComplications?.forEach({ (complication) in
             server.reloadTimeline(for: complication)
@@ -90,7 +90,7 @@ class InterfaceController: WKInterfaceController {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
         let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-        delegate.days = days
+        delegate.today = today
         let server = CLKComplicationServer.sharedInstance()
         server.activeComplications?.forEach({ (complication) in
             server.reloadTimeline(for: complication)
@@ -102,9 +102,9 @@ class InterfaceController: WKInterfaceController {
         let consumedAmount = Measurement(value: Double(today.consumed.amount), unit: UnitVolume.liters)
         let goalAmount = Measurement(value: Double(today.goal.amount), unit: UnitVolume.liters)
         if metric {
-            summaryLable.setText("\(Float(consumedAmount.converted(to: .liters).value).clean)/\(Float(goalAmount.converted(to: .liters).value).clean)L")
+            summaryLable.setText("\(consumedAmount.converted(to: .liters).value.clean)/\(goalAmount.converted(to: .liters).value.clean)L")
         } else {
-            summaryLable.setText("\(Float(consumedAmount.converted(to: .imperialPints).value).clean)/\(Float(goalAmount.converted(to: .imperialPints).value).clean)pt")
+            summaryLable.setText("\(consumedAmount.converted(to: .imperialPints).value.clean)/\(goalAmount.converted(to: .imperialPints).value.clean)pt")
         }
         let server = CLKComplicationServer.sharedInstance()
         server.activeComplications?.forEach({ (complication) in
@@ -144,27 +144,31 @@ extension InterfaceController: WCSessionDelegate{
         formatter.dateFormat = "EEEE - dd/MM/yy"
         today = days.updateToday()
         if formatter.string(from: today.date) == userInfo["phoneDate"] as! String {
-            let messageConsumed = userInfo["phoneConsumed"]!
-            let numberFormatter = NumberFormatter()
-            let consumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
-            today.consumed.amount = consumed
-            let messageGoal = userInfo["phoneGoal"]!
-            let goal = numberFormatter.number(from: messageGoal as! String)!.floatValue
-            today.goal.amount = goal
-            
-            let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-            delegate.days = self.days
-            let server = CLKComplicationServer.sharedInstance()
-            guard let activeComplications = server.activeComplications else { return }
-            for complication in activeComplications {
-                server.reloadTimeline(for: complication)
+            let messageConsumed = userInfo["phoneConsumed"]! as! String
+            guard let consumed = Double(messageConsumed) else {
+                print("error can't extract number from string")
+                return
             }
-            
+            today.consumed.amount = consumed
+            let messageGoal = userInfo["phoneGoal"]! as! String
+            guard let goal = Double(messageGoal) else {
+                print("error can't extract number from string")
+                return
+            }
+            today.goal.amount = goal
             print("todays amount was updated with user info")
             DispatchQueue.main.async {
                 self.days.insertDay(self.today)
                 Day.saveDays(self.days)
                 self.updateSummary()
+                
+                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+                delegate.today = self.today
+                let server = CLKComplicationServer.sharedInstance()
+                guard let activeComplications = server.activeComplications else { return }
+                for complication in activeComplications {
+                    server.reloadTimeline(for: complication)
+                }
             }
         }
     }

@@ -10,11 +10,10 @@ import WatchKit
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
-    var days: [Day] = [] 
+    var today = Day()
     
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
-        days = Day.loadDays()
     }
     
     func applicationDidBecomeActive() {
