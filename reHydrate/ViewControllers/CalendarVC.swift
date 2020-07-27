@@ -19,7 +19,11 @@ class CalendarVC: UIViewController {
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return darkMode ? .lightContent : .darkContent
+        if #available(iOS 13.0, *) {
+            return darkMode ? .lightContent : .darkContent
+        } else {
+            return .default
+        }
     }
     var metricUnits     = Bool()
     let formatter       = DateFormatter()
@@ -27,7 +31,11 @@ class CalendarVC: UIViewController {
     var exitButton: UIButton    = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        } else {
+            button.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.darkGray), for: .normal)
+        }
         button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -184,23 +192,31 @@ class CalendarVC: UIViewController {
             calendar.backgroundColor              = UIColor().hexStringToUIColor("#212121")
             tableView.backgroundColor             = UIColor().hexStringToUIColor("#212121")
             titleDate.textColor                     = .white
-            exitButton.tintColor                    = .lightGray
             calendar.appearance.headerTitleColor    = .white
             calendar.appearance.weekdayTextColor    = .white
             calendar.appearance.titleTodayColor     = .white
             calendar.appearance.titleDefaultColor   = .white
             calendar.appearance.titleSelectionColor = .white
+            if #available(iOS 13, *) {
+                exitButton.tintColor                = .lightGray
+            } else {
+                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.lightGray), for: .normal)
+            }
         } else {
             self.view.backgroundColor               = .white
             calendar.backgroundColor                = .white
             tableView.backgroundColor               = .white
             titleDate.textColor                     = .black
-            exitButton.tintColor                    = .black
             calendar.appearance.headerTitleColor    = .black
             calendar.appearance.weekdayTextColor    = .black
             calendar.appearance.titleTodayColor     = .black
             calendar.appearance.titleDefaultColor   = .black
             calendar.appearance.titleSelectionColor = .black
+            if #available(iOS 13, *) {
+                exitButton.tintColor                = .black
+            } else {
+                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.black), for: .normal)
+            }
         }
     }
     
@@ -228,26 +244,26 @@ class CalendarVC: UIViewController {
     }
     
     /**
-     Will take the averag of the last days upto 7 days and return a float.
+     Will take the averag of the last days upto 7 days and return a **Double**.
      
-     - returns: **Float** The average consumtion
+     - returns: a **Double** with the average consumtion
      
      # Example #
      ```
      let average = getAverageFor()
      ```
      */
-    func getAverageFor()-> Float {
+    func getAverageFor()-> Double {
         let average = Drink()
         for day in days {
             average.amount += day.consumed.amount
         }
-        return average.amount / Float(days.count)
+        return average.amount / Double(days.count)
     }
     
-    func getAverageFor(_ startDate: Date,_ endDate: Date)-> Float {
-        var average = Float()
-        var x = Float(0)
+    func getAverageFor(_ startDate: Date,_ endDate: Date)-> Double {
+        var average = Double()
+        var x = Int(0)
         for day in calendar.selectedDates {
             if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
                 let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
@@ -255,7 +271,7 @@ class CalendarVC: UIViewController {
             }
             x += 1
         }
-        return average / x
+        return average / Double(x)
     }
 }
 
@@ -272,10 +288,10 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath.row {
         case 0:
             cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                           "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
+                           "\(drinks[1].amount)/\(drinks[0].amount)")
         case 1:
             let average = Drink(typeOfDrink: "water", amountOfDrink: getAverageFor())
-            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), average.amount.clean)
+            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average.amount))
         default:
             break
         }
@@ -353,13 +369,13 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
-                                   "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
+                                   "\(drinks[1].amount)/\(drinks[0].amount)")
         } else if calendar.selectedDates.count == 0 {
             titleDate.text = "\(formatter.string(from: Date()))"
             self.getDrinks(Date())
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell"))",
-                                   "\(drinks[3].amount.clean)/\(drinks[2].amount.clean)")
+                                   "\(drinks[3].amount)/\(drinks[2].amount)")
         }
     }
     

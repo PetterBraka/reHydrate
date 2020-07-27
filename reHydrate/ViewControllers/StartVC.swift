@@ -12,7 +12,7 @@ import HealthKit
 import FSCalendar
 import WatchConnectivity
 
-let versionString = "version3.4"
+let versionString = "version3.5"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -169,18 +169,26 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }()
     var settingsButton: UIButton  = {
         var button = UIButton()
-        button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
+        } else {
+            button.setBackgroundImage(UIImage(named: "gear")?.colored(.gray), for: .normal)
+        }
         button.setTitle("", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentMode = .scaleAspectFit
+        button.contentMode = .center
         return button
     }()
     var calendarButton: UIButton  = {
         var button = UIButton()
-        button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
+        } else {
+            button.setBackgroundImage(UIImage(named: "calendar.circle")?.colored(.gray), for: .normal)
+        }
         button.setTitle("", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentMode = .scaleAspectFit
+        button.contentMode = .center
         return button
     }()
     
@@ -194,7 +202,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return darkMode ? .lightContent : .darkContent
+        if #available(iOS 13.0, *) {
+            return darkMode ? .lightContent : .darkContent
+        } else {
+            return .default
+        }
     }
     var metricUnits  = true
     var drinkOptions = [Drink(typeOfDrink: "water", amountOfDrink: 300),
@@ -690,8 +702,13 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             mediumPrefix.textColor    = .white
             largeLabel.textColor      = .white
             largePrefix.textColor     = .white
-            settingsButton.tintColor  = .lightGray
-            calendarButton.tintColor  = .lightGray
+            if #available(iOS 13, *) {
+                settingsButton.tintColor  = .lightGray
+                calendarButton.tintColor  = .lightGray
+            } else {
+                settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(.gray), for: .normal)
+                calendarButton.setBackgroundImage(UIImage(named: "calendar.circle")?.colored(.gray), for: .normal)
+            }
         } else {
             self.view.backgroundColor = .white
             appTitle.textColor        = .black
@@ -706,8 +723,13 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             mediumPrefix.textColor    = .black
             largeLabel.textColor      = .black
             largePrefix.textColor     = .black
-            calendarButton.tintColor  = .black
-            settingsButton.tintColor  = .black
+            if #available(iOS 13, *) {
+                settingsButton.tintColor  = .black
+                calendarButton.tintColor  = .black
+            } else {
+                settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(.black), for: .normal)
+                calendarButton.setBackgroundImage(UIImage(named: "calendar.circle")?.colored(.black), for: .normal)
+            }
         }
     }
     
@@ -727,10 +749,10 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      */
     func updateConsumtion(_ drinkConsumed: Drink) {
         let drinkAmount  = Measurement(value: Double(drinkConsumed.amount), unit: UnitVolume.milliliters)
-        let drink        = Drink(typeOfDrink: "water", amountOfDrink: Float(drinkAmount.converted(to: .liters).value))
+        let drink        = Drink(typeOfDrink: "water", amountOfDrink: drinkAmount.converted(to: .liters).value)
         exportDrinkToHealth(Double(drink.amount), Date.init())
         today.consumed.amount     += drink.amount
-        let rounded = Float(roundf(today.consumed.amount * 100)/100)
+        let rounded = round(today.consumed.amount * 100)/100
         today.consumed.amount = rounded
         if today.consumed.amount  <= 0.0{
             today.consumed.amount  = 0
@@ -769,27 +791,27 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let mediumDrink    = Measurement(value: Double(drinkOptions[1].amount), unit: UnitVolume.milliliters)
         let largeDrink     = Measurement(value: Double(drinkOptions[2].amount), unit: UnitVolume.milliliters)
         if metricUnits {
-            day.goal.amount     = Float(goalAmount.converted(to: .liters).value)
-            day.consumed.amount = Float(consumedAmount.converted(to: .liters).value)
-            let roundedSmallDrink      = smallDrink.converted(to: .milliliters).value.rounded()
-            let roundedMediumDrink     = mediumDrink.converted(to: .milliliters).value.rounded()
-            let roundedLargeDrink      = largeDrink.converted(to: .milliliters).value.rounded()
-            smallLabel.text            = String(format: "%.0f", roundedSmallDrink)
-            mediumLabel.text           = String(format: "%.0f", roundedMediumDrink)
-            largeLabel.text            = String(format: "%.0f", roundedLargeDrink)
+            day.goal.amount        = goalAmount.converted(to: .liters).value
+            day.consumed.amount    = consumedAmount.converted(to: .liters).value
+            let roundedSmallDrink  = smallDrink.converted(to: .milliliters).value.rounded()
+            let roundedMediumDrink = mediumDrink.converted(to: .milliliters).value.rounded()
+            let roundedLargeDrink  = largeDrink.converted(to: .milliliters).value.rounded()
+            smallLabel.text        = String(format: "%.0f", roundedSmallDrink)
+            mediumLabel.text       = String(format: "%.0f", roundedMediumDrink)
+            largeLabel.text        = String(format: "%.0f", roundedLargeDrink)
         } else {
-            day.goal.amount     = Float(goalAmount.converted(to: .imperialPints).value)
-            day.consumed.amount = Float(consumedAmount.converted(to: .imperialPints).value)
-            let small                  = smallDrink.converted(to: .imperialFluidOunces).value
-            let medium                 = mediumDrink.converted(to: .imperialFluidOunces).value
-            let large                  = largeDrink.converted(to: .imperialFluidOunces).value
-            smallLabel.text            = String(format: "%.2f", small)
-            mediumLabel.text           = String(format: "%.2f", medium)
-            largeLabel.text            = String(format: "%.2f", large)
+            day.goal.amount     = goalAmount.converted(to: .imperialPints).value
+            day.consumed.amount = consumedAmount.converted(to: .imperialPints).value
+            let small           = smallDrink.converted(to: .imperialFluidOunces).value
+            let medium          = mediumDrink.converted(to: .imperialFluidOunces).value
+            let large           = largeDrink.converted(to: .imperialFluidOunces).value
+            smallLabel.text     = String(format: "%.2f", small)
+            mediumLabel.text    = String(format: "%.2f", medium)
+            largeLabel.text     = String(format: "%.2f", large)
         }
         
-        self.goalAmount.text     = day.goal.amount.clean
-        self.consumedAmount.text = day.consumed.amount.clean
+        self.goalAmount.text     = String(day.goal.amount.clean)
+        self.consumedAmount.text = String(day.consumed.amount.clean)
         
         if metricUnits {
             smallPrefix.text  = "\(UnitVolume.milliliters.symbol)"
@@ -838,11 +860,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                         let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
                         switch optionLabel {
                         case self.smallLabel:
-                            self.drinkOptions[0].amount = Float(drinkAmount.value)
+                            self.drinkOptions[0].amount = drinkAmount.value
                         case self.mediumLabel:
-                            self.drinkOptions[1].amount = Float(drinkAmount.value)
+                            self.drinkOptions[1].amount = drinkAmount.value
                         case self.largeLabel:
-                            self.drinkOptions[2].amount = Float(drinkAmount.value)
+                            self.drinkOptions[2].amount = drinkAmount.value
                         default:
                             break
                         }
@@ -851,11 +873,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                             .converted(to: .milliliters)
                         switch optionLabel {
                         case self.smallLabel:
-                            self.drinkOptions[0].amount = Float(drinkAmount.value)
+                            self.drinkOptions[0].amount = drinkAmount.value
                         case self.mediumLabel:
-                            self.drinkOptions[1].amount = Float(drinkAmount.value)
+                            self.drinkOptions[1].amount = drinkAmount.value
                         case self.largeLabel:
-                            self.drinkOptions[2].amount = Float(drinkAmount.value)
+                            self.drinkOptions[2].amount = drinkAmount.value
                         default:
                             break
                         }
@@ -911,9 +933,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     func loadDrinkOptions(){
-        drinkOptions[0].amount = defaults.float(forKey: smallDrinkOptionString)
-        drinkOptions[1].amount = defaults.float(forKey: mediumDrinkOptionString)
-        drinkOptions[2].amount = defaults.float(forKey: largeDrinkOptionString)
+        drinkOptions[0].amount = defaults.double(forKey: smallDrinkOptionString)
+        drinkOptions[1].amount = defaults.double(forKey: mediumDrinkOptionString)
+        drinkOptions[2].amount = defaults.double(forKey: largeDrinkOptionString)
         
         if  drinkOptions[0].amount == 0 ||
                 drinkOptions[1].amount == 0 ||
@@ -975,9 +997,11 @@ extension StartVC: WCSessionDelegate {
         print(String(describing: message["consumed"]))
         print(String(describing: message["date"]))
         if formatter.string(from: today.date) == message["date"] as! String {
-            let messageConsumed = message["consumed"]!
-            let numberFormatter = NumberFormatter()
-            let watchConsumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            let messageConsumed = message["consumed"]! as! String
+            guard let watchConsumed = Double(messageConsumed) else {
+                print("error can't extract number from string")
+                return
+            }
             if today.consumed.amount <= watchConsumed {
                 let drinkAmountAdded = watchConsumed - today.consumed.amount
                 today.consumed.amount = watchConsumed
@@ -1009,9 +1033,11 @@ extension StartVC: WCSessionDelegate {
         print(String(describing: userInfo["consumed"]))
         print(String(describing: userInfo["date"]))
         if formatter.string(from: today.date) == userInfo["date"] as! String {
-            let messageConsumed = userInfo["consumed"]!
-            let numberFormatter = NumberFormatter()
-            let watchConsumed = numberFormatter.number(from: messageConsumed as! String)!.floatValue
+            let messageConsumed = userInfo["consumed"]! as! String
+            guard let watchConsumed = Double(messageConsumed) else {
+                print("error can't extract number from string")
+                return
+            }
             if today.consumed.amount <= watchConsumed {
                 let drinkAmountAdded = watchConsumed - today.consumed.amount
                 today.consumed.amount = watchConsumed
@@ -1072,9 +1098,9 @@ func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
     let totalHours = endHour - startHour
     let totalNotifications = totalHours * 60 / intervals
     
-    let small   = UserDefaults.standard.float(forKey: smallDrinkOptionString)
-    let medium  = UserDefaults.standard.float(forKey: mediumDrinkOptionString)
-    let large   = UserDefaults.standard.float(forKey: largeDrinkOptionString)
+    let small   = UserDefaults.standard.double(forKey: smallDrinkOptionString)
+    let medium  = UserDefaults.standard.double(forKey: mediumDrinkOptionString)
+    let large   = UserDefaults.standard.double(forKey: largeDrinkOptionString)
     
     let metricUnits = UserDefaults.standard.bool(forKey: metricUnitsString)
     var unit = String()
@@ -1082,14 +1108,14 @@ func setReminders(_ startHour: Int, _ endHour: Int, _ frequency: Int){
     var mediumDrink = String()
     var largeDrink  = String()
     if metricUnits {
-        smallDrink  = String(format: "%.0f", Measurement(value: Double(small), unit: UnitVolume.milliliters).value)
-        mediumDrink = String(format: "%.0f", Measurement(value: Double(medium), unit: UnitVolume.milliliters).value)
-        largeDrink  = String(format: "%.0f", Measurement(value: Double(large), unit: UnitVolume.milliliters).value)
+        smallDrink  = String(format: "%.0f", Measurement(value: small, unit: UnitVolume.milliliters).value)
+        mediumDrink = String(format: "%.0f", Measurement(value: medium, unit: UnitVolume.milliliters).value)
+        largeDrink  = String(format: "%.0f", Measurement(value: large, unit: UnitVolume.milliliters).value)
         unit = "ml"
     } else {
-        smallDrink  = String(format: "%.2f", Measurement(value: Double(small), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
-        mediumDrink = String(format: "%.2f", Measurement(value: Double(medium), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
-        largeDrink  = String(format: "%.2f", Measurement(value: Double(large), unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        smallDrink  = String(format: "%.2f", Measurement(value: small, unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        mediumDrink = String(format: "%.2f", Measurement(value: medium, unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
+        largeDrink  = String(format: "%.2f", Measurement(value: large, unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
         unit = "fl oz"
     }
     for i in 0...totalNotifications {

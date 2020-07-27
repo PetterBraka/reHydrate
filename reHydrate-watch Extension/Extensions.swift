@@ -57,10 +57,10 @@ extension UIImage {
     }
 }
 
-extension Float {
+extension Double {
     
     /**
-     Will clean up a **Float** so that it has a maximum of 1 desimal
+     Will clean up a **Double** so that it has a maximum of 1 desimal
      
      - returns: the number as a **String** but cleand up
      
