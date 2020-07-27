@@ -11,7 +11,11 @@ import UIKit
 class TutorialVC: UIViewController {
     let toolBar: UIView       = {
         let view             = UIView()
-        view.backgroundColor = .opaqueSeparator
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .opaqueSeparator
+        } else {
+            view.backgroundColor = .lightGray
+        }
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -106,7 +110,11 @@ class TutorialVC: UIViewController {
     }()
     let settingsButton: UIButton  = {
         let button = UIButton()
-        button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
+        } else {
+            button.setBackgroundImage(UIImage(named: "gear"), for: .normal)
+        }
         button.setTitle("", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints             = false
         button.widthAnchor.constraint(equalToConstant: 50).isActive  = true
@@ -115,7 +123,11 @@ class TutorialVC: UIViewController {
     }()
     let calendarButton: UIButton  = {
         let button = UIButton()
-        button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
+        } else {
+            button.setBackgroundImage(UIImage(named: "calendar.circle"), for: .normal)
+        }
         button.setTitle("", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints             = false
         button.widthAnchor.constraint(equalToConstant: 50).isActive  = true
@@ -145,7 +157,11 @@ class TutorialVC: UIViewController {
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return darkMode ? .lightContent : .darkContent
+        if #available(iOS 13.0, *) {
+            return darkMode ? .lightContent : .darkContent
+        } else {
+            return .default
+        }
     }
     var metricUnits               = true
     
@@ -196,17 +212,33 @@ class TutorialVC: UIViewController {
                 let drinkOption   = drink as! UIImageView
                 drinkOption.image = drinkOption.image?.grayed
             }
-            if darkMode {
-                settingsButton.tintColor = .lightGray
+            if #available(iOS 13, *) {
+                if darkMode {
+                    settingsButton.tintColor = .lightGray
+                } else {
+                    settingsButton.tintColor = .black
+                }
             } else {
-                settingsButton.tintColor = .black
+                if darkMode {
+                    settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(.gray), for: .normal)
+                } else {
+                    settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(.black), for: .normal)
+                }
             }
             explanationLabel.text = explanationText[stage]
         case 4:
-            if darkMode {
-                calendarButton.tintColor = .lightGray
+            if #available(iOS 13, *) {
+                if darkMode {
+                    calendarButton.tintColor = .lightGray
+                } else {
+                    calendarButton.tintColor = .black
+                }
             } else {
-                calendarButton.tintColor = .black
+                if darkMode {
+                    calendarButton.setBackgroundImage(UIImage(named: "gear")?.colored(.gray), for: .normal)
+                } else {
+                    calendarButton.setBackgroundImage(UIImage(named: "gear")?.colored(.black), for: .normal)
+                }
             }
             explanationLabel.text = explanationText[stage]
             nextButton.setTitle(NSLocalizedString("Done", comment: "Done button in toolbar"), for: .normal)
@@ -386,8 +418,13 @@ class TutorialVC: UIViewController {
             smallDrinkLable.textColor  = UIColor().hexStringToUIColor("#404040")
             mediumDrinkLable.textColor = UIColor().hexStringToUIColor("#404040")
             largeDrinkLable.textColor  = UIColor().hexStringToUIColor("#404040")
-            settingsButton.tintColor   = UIColor().hexStringToUIColor("#404040")
-            calendarButton.tintColor   = UIColor().hexStringToUIColor("#404040")
+            if #available(iOS 13, *) {
+                settingsButton.tintColor   = UIColor().hexStringToUIColor("#404040")
+                calendarButton.tintColor   = UIColor().hexStringToUIColor("#404040")
+            } else {
+                settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(UIColor().hexStringToUIColor("#404040")), for: .normal)
+                calendarButton.setBackgroundImage(UIImage(named: "gear")?.colored(UIColor().hexStringToUIColor("#404040")), for: .normal)
+            }
             nextButton.setTitleColor(.white, for: .normal)
             skipButton.setTitleColor(.white, for: .normal)
             explanationLabel.textColor = .white
@@ -398,8 +435,13 @@ class TutorialVC: UIViewController {
             smallDrinkLable.textColor  = UIColor().hexStringToUIColor("#c9c9c9")
             mediumDrinkLable.textColor = UIColor().hexStringToUIColor("#c9c9c9")
             largeDrinkLable.textColor  = UIColor().hexStringToUIColor("#c9c9c9")
-            settingsButton.tintColor   = UIColor().hexStringToUIColor("#c9c9c9")
-            calendarButton.tintColor   = UIColor().hexStringToUIColor("#c9c9c9")
+            if #available(iOS 13, *) {
+                settingsButton.tintColor   = UIColor().hexStringToUIColor("#c9c9c9")
+                calendarButton.tintColor   = UIColor().hexStringToUIColor("#c9c9c9")
+            } else {
+                settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(UIColor().hexStringToUIColor("#c9c9c9")), for: .normal)
+                calendarButton.setBackgroundImage(UIImage(named: "gear")?.colored(UIColor().hexStringToUIColor("#c9c9c9")), for: .normal)
+            }
             toolBar.backgroundColor    = UIColor().hexStringToUIColor("#d1d1d1")
             nextButton.setTitleColor(.black, for: .normal)
             skipButton.setTitleColor(.black, for: .normal)

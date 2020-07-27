@@ -52,10 +52,14 @@ class SettingOptionCell: UITableViewCell {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var imageForCell: UIButton = {
+    var buttonForCell: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        } else {
+            button.setBackgroundImage(UIImage(named: "checkmark.circle.fill"), for: .normal)
+        }
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -63,7 +67,7 @@ class SettingOptionCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.addSubview(titleOption)
-        self.addSubview(imageForCell)
+        self.addSubview(buttonForCell)
         setTitleConstraints()
         setButtonConstraints()
         self.backgroundColor = .none
@@ -118,17 +122,17 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        imageForCell.widthAnchor.constraint(equalToConstant: 25).isActive                                  = true
-        imageForCell.heightAnchor.constraint(equalToConstant: 25).isActive                                 = true
-        imageForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
-        imageForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
+        buttonForCell.widthAnchor.constraint(equalToConstant: 25).isActive                                  = true
+        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                                 = true
+        buttonForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
+        buttonForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
     }
     
-    func setButtonConstraints(_ size: CGFloat) {
-        imageForCell.widthAnchor.constraint(equalToConstant: size).isActive                                = true
-        imageForCell.heightAnchor.constraint(equalToConstant: size).isActive                               = true
-        imageForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
-        imageForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
+    func setButtonConstraints(_ width: CGFloat) {
+        buttonForCell.widthAnchor.constraint(equalToConstant: width).isActive                               = true
+        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                                 = true
+        buttonForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
+        buttonForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
     }
     
     fileprivate func setTextFieldConstraints() {
@@ -149,7 +153,7 @@ class SettingOptionCell: UITableViewCell {
      */
     func setCellAppairents(_ dark: Bool,_ metric: Bool){
         if dark{
-            imageForCell.tintColor          = .lightGray
+            buttonForCell.tintColor         = .lightGray
             titleOption.textColor           = .white
             subTitle.textColor              = .white
             textField.textColor             = .white
@@ -157,7 +161,7 @@ class SettingOptionCell: UITableViewCell {
             textField.layer.borderColor     = UIColor.lightGray.cgColor
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
-            imageForCell.tintColor          = .black
+            buttonForCell.tintColor         = .black
             titleOption.textColor           = .black
             subTitle.textColor              = .black
             textField.textColor             = .black
@@ -167,28 +171,68 @@ class SettingOptionCell: UITableViewCell {
         }
         switch titleOption.text?.lowercased() {
         case NSLocalizedString("DarkMode", comment: "").lowercased():
-            imageForCell.isHidden = false
+            buttonForCell.isHidden = false
             if dark{
-                imageForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    buttonForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "moon.circle.fill")?.colored(.gray), for: .normal)
+                }
             } else {
-                imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                }
             }
         case NSLocalizedString("MetricSystem", comment: "").lowercased():
-            imageForCell.isHidden = false
+            buttonForCell.isHidden = false
             if metric{
-                imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                } else {
+                    if dark {
+                        buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                    } else {
+                        buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                    }
+                }
             } else {
-                imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                } else {
+                    if dark {
+                        buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                    } else {
+                        buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                    }
+                }
             }
         case NSLocalizedString("ImperialSystem", comment: "").lowercased():
-            imageForCell.isHidden = false
+            buttonForCell.isHidden = false
             if !metric{
-                imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                } else {
+                    if dark {
+                        buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                    } else {
+                        buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                    }
+                }
             } else {
-                imageForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                } else {
+                    if dark {
+                        buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                    } else {
+                        buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                    }
+                }
             }
         case NSLocalizedString("SetYourGoal", comment: "").lowercased():
-            imageForCell.isHidden = true
+            buttonForCell.isHidden = true
             let days = Day.loadDays()
             if !days.isEmpty{
                 textField.text = String(describing: days.last!.goal.amount)
@@ -201,16 +245,16 @@ class SettingOptionCell: UITableViewCell {
             break
         case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
              NSLocalizedString("TurnOffReminders", comment: "").lowercased():
-            imageForCell.isHidden = false
+            buttonForCell.isHidden = false
         case NSLocalizedString("StartingTime", comment: "").lowercased(),
              NSLocalizedString("EndingTime", comment: "").lowercased():
             setUpDatePicker()
-            imageForCell.isHidden = true
+            buttonForCell.isHidden = true
         case NSLocalizedString("Frequency", comment: "").lowercased():
-            imageForCell.isHidden = true
+            buttonForCell.isHidden = true
             setUpMinutePicker()
         case NSLocalizedString("Language", comment: "").lowercased():
-            imageForCell.isHidden = true
+            buttonForCell.isHidden = true
             pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
             componentString = [""]
             setUpPickerView()
@@ -225,7 +269,7 @@ class SettingOptionCell: UITableViewCell {
                 picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
             }
         default:
-            imageForCell.isHidden = true
+            buttonForCell.isHidden = true
         }
         UserDefaults.standard.set(dark, forKey: darkModeString)
         UserDefaults.standard.set(metric, forKey: metricUnitsString)
@@ -532,7 +576,7 @@ class SettingOptionCell: UITableViewCell {
     
     func updateGoal(){
         let days = Day.loadDays()
-        let newGoal = Float(textField.text!)!
+        let newGoal = Double(textField.text!)!
         if newGoal != 0 {
             days[days.count - 1].goal.amount = newGoal
             print(days[days.count - 1].goal.amount)
