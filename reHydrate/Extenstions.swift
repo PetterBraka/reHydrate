@@ -49,6 +49,14 @@ extension UIApplication {
 }
 
 extension UIImage {
+    func colored(_ color: UIColor) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            color.setFill()
+            self.draw(at: .zero)
+            context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height), blendMode: .sourceAtop)
+        }
+    }
     
     func renderResizedImage (newWidth: CGFloat) -> UIImage {
         let scale = newWidth / self.size.width
@@ -120,10 +128,10 @@ extension UIColor {
     }
 }
 
-extension Float {
+extension Double {
     
     /**
-     Will clean up a **Float** so that it has a maximum of 2 desimal
+     Will clean up a **Double** so that it has a maximum of 2 desimal
      
      - returns: the number as a **String** cleand up
      

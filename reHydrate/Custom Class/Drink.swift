@@ -10,7 +10,7 @@ import UIKit
 
 class Drink: NSObject, Codable {
     var type:   String
-    var amount: Float
+    var amount: Double
     
     /**
      Default initializer for **Drink**
@@ -22,7 +22,7 @@ class Drink: NSObject, Codable {
      */
     required override init() {
         self.type 	= "water"
-        self.amount 	= 0
+        self.amount = 0
     }
     
     /**
@@ -36,7 +36,7 @@ class Drink: NSObject, Codable {
      var drink = Drink.inti("water", 1.2)
      ```
      */
-    init(typeOfDrink: String, amountOfDrink: Float ) {
+    init(typeOfDrink: String, amountOfDrink: Double ) {
         self.type 	= typeOfDrink
         self.amount 	= amountOfDrink
     }

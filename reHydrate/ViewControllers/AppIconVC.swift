@@ -28,20 +28,28 @@ class AppIconVC: UIViewController{
                      NSLocalizedString("Red", comment: ""),
                      NSLocalizedString("Yellow", comment: "")]
     var tableView: UITableView = UITableView()
+    var darkMode = true {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
     var exitButton: UIButton   = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        } else {
+            button.setBackgroundImage(UIImage(named: "xmark.circle"), for: .normal)
+        }
         button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return darkMode ? .lightContent : .darkContent
-    }
-    var darkMode = true {
-        didSet {
-            self.setNeedsStatusBarAppearanceUpdate()
+        if #available(iOS 13.0, *) {
+            return darkMode ? .lightContent : .darkContent
+        } else {
+            return .lightContent
         }
     }
     
@@ -135,11 +143,19 @@ class AppIconVC: UIViewController{
         if darkMode {
             self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
             tableView.backgroundColor = UIColor().hexStringToUIColor("#212121")
-            exitButton.tintColor      = .lightGray
+            if #available(iOS 13, *) {
+                exitButton.tintColor      = .lightGray
+            } else {
+                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.gray), for: .normal)
+            }
         } else{
             self.view.backgroundColor = .white
             tableView.backgroundColor = .white
-            exitButton.tintColor      = .black
+            if #available(iOS 13, *) {
+                exitButton.tintColor      = .black
+            } else {
+                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.black), for: .normal)
+            }
         }
     }
 }

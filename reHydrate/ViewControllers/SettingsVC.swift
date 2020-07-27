@@ -23,18 +23,26 @@ class SettingsVC: UIViewController {
     var exitButton: UIButton       = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        } else {
+            button.setBackgroundImage(UIImage(named: "xmark.circle"), for: .normal)
+        }
         button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    var darkMode                   = true {
+    var darkMode = true {
         didSet {
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return darkMode ? .lightContent : .darkContent
+        if #available(iOS 13.0, *) {
+            return darkMode ? .lightContent : .darkContent
+        } else {
+            return .default
+        }
     }
     var metricUnits                = true
     var selectedRow: IndexPath     = IndexPath()
@@ -177,11 +185,19 @@ class SettingsVC: UIViewController {
         if darkMode {
             self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
             tableView.backgroundColor = UIColor().hexStringToUIColor("#212121")
-            exitButton.tintColor      = .lightGray
+            if #available(iOS 13, *) {
+                exitButton.tintColor  = .lightGray
+            } else {
+                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.gray), for: .normal)
+            }
         } else{
             self.view.backgroundColor = .white
             tableView.backgroundColor = .white
-            exitButton.tintColor      = .black
+            if #available(iOS 13, *) {
+                exitButton.tintColor  = .black
+            } else {
+                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.black), for: .normal)
+            }
         }
     }
     
@@ -251,8 +267,17 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath {
         case IndexPath(row: 1, section: 0), IndexPath(row: 1, section: 4), IndexPath(row: 0, section: 5),
              IndexPath(row: 1, section: 5):
-            cell.imageForCell.isHidden = false
-            cell.imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
+            cell.buttonForCell.isHidden = false
+            if #available(iOS 13.0, *) {
+                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
+                cell.setButtonConstraints(20)
+            } else {
+                if darkMode {
+                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.gray), for: .normal)
+                } else {
+                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.black), for: .normal)
+                }
+            }
             cell.subTitle.removeFromSuperview()
             cell.textField.removeFromSuperview()
             cell.setTitleConstraints()
@@ -265,19 +290,39 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.textField.removeFromSuperview()
         case IndexPath(row: 0, section: 3):
             if settings[3].isOpened {
-                cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                } else {
+                    if darkMode {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                    } else {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                    }
+                }
                 cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
             } else {
-                cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                } else {
+                    if darkMode {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                    } else {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                    }
+                }
                 cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
             }
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
         case IndexPath(row: 2, section: 5):
-            cell.imageForCell.isHidden = false
-            cell.imageForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right"), for: .normal)
-            cell.imageForCell.tintColor = .systemRed
+            cell.buttonForCell.isHidden = false
+            if #available(iOS 13.0, *) {
+                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
+                cell.buttonForCell.tintColor = .systemRed
+            } else {
+                cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.systemRed), for: .normal)
+            }
             cell.titleOption.textColor = .systemRed
             cell.subTitle.removeFromSuperview()
             cell.textField.removeFromSuperview()
@@ -349,7 +394,15 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
                 settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
                 tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
-                cell.imageForCell.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                } else {
+                    if darkMode {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                    } else {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                    }
+                }
                 cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                 let startDate = defaults.object(forKey: startingTimeString) as! Date
                 let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
@@ -367,7 +420,15 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             } else {
                 settings[3].options.removeLast(3)
                 tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
-                cell.imageForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                if #available(iOS 13.0, *) {
+                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                } else {
+                    if darkMode {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                    } else {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                    }
+                }
                 cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                 center.removeAllPendingNotificationRequests()
                 center.removeAllDeliveredNotifications()
