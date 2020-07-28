@@ -161,6 +161,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd/MM/yy"
         today = delegate.today
+        today.date = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: today.date)!
+        
         var fillFraction = Float()
         if today.consumed.amount / today.goal.amount < 1 {
             fillFraction = Float(today.consumed.amount / today.goal.amount)
@@ -169,118 +171,127 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         }
         var timelineEnteries = [CLKComplicationTimelineEntry]()
         
-        switch complication.family {
-        case .circularSmall:
-            let template    = CLKComplicationTemplateCircularSmallRingImage()
-            guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
-            template.imageProvider = CLKImageProvider(onePieceImage: image)
-            template.fillFraction  = fillFraction
-            template.ringStyle     = .closed
-            let timelineEntry      = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .extraLarge:
-            let template    = CLKComplicationTemplateExtraLargeRingImage()
-            guard let image = UIImage(named: "waterDrop")?.withTintColor(.white).resized(toWidth: 45) else { break }
-            template.imageProvider = CLKImageProvider(onePieceImage: image)
-            template.fillFraction  = fillFraction
-            template.ringStyle     = .closed
-            let timelineEntry      = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .modularSmall:
-            let template    = CLKComplicationTemplateModularSmallRingImage()
-            guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
-            template.imageProvider = CLKImageProvider(onePieceImage: image)
-            template.fillFraction  = fillFraction
-            template.ringStyle     = .closed
-            let timelineEntry      = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .modularLarge:
-            let template = CLKComplicationTemplateModularLargeStandardBody()
-            template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
-            template.body1TextProvider = CLKSimpleTextProvider(text: "\(today.consumed.amount.clean)/\(today.goal.amount.clean)")
-            var body2 = String()
-            if today.consumed.amount < today.goal.amount {
-                let toGo = today.goal.amount - today.consumed.amount
-                body2 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
-            } else { body2 = "\(NSLocalizedString("goodJob", comment: ""))" }
-            template.body2TextProvider = CLKSimpleTextProvider(text: body2)
-            let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .utilitarianSmall:
-            let template    = CLKComplicationTemplateUtilitarianSmallRingImage()
-            guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break}
-            template.imageProvider = CLKImageProvider(onePieceImage: image)
-            template.fillFraction  = fillFraction
-            template.ringStyle     = .closed
-            let timelineEntry      = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .utilitarianSmallFlat:
-            let template    = CLKComplicationTemplateUtilitarianSmallFlat()
-            guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
-            template.imageProvider = CLKImageProvider(onePieceImage: image)
-            template.textProvider  = CLKSimpleTextProvider(text: "\(today.consumed.amount.clean)/\(today.goal.amount.clean)")
-            let timelineEntry      = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .utilitarianLarge:
-            let template = CLKComplicationTemplateUtilitarianLargeFlat()
-            guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
-            template.imageProvider = CLKImageProvider(onePieceImage: image)
-            var body = String()
-            if today.consumed.amount < today.goal.amount {
-                let toGo = today.goal.amount - today.consumed.amount
-                body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
-            } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
-            template.textProvider  = CLKSimpleTextProvider(text: body)
-            let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .graphicCorner:
-            let template = CLKComplicationTemplateGraphicCornerGaugeText()
-            template.outerTextProvider    = CLKSimpleTextProvider(text: "\(today.consumed.amount.clean)")
-            template.leadingTextProvider  = CLKSimpleTextProvider(text: "0")
-            template.trailingTextProvider = CLKSimpleTextProvider(text: "\(today.goal.amount.clean)")
-            template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
-            let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .graphicCircular:
-            let template    = CLKComplicationTemplateGraphicCircularOpenGaugeImage()
-            guard let image = UIImage(named: "waterDrop")?.withTintColor(.white).resized(toWidth: 9) else { break }
-            template.bottomImageProvider = CLKFullColorImageProvider(fullColorImage: image.withTintColor(.white))
-            template.centerTextProvider  = CLKSimpleTextProvider(text: "\(today.consumed.amount.clean)")
-            template.gaugeProvider       = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
-            let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .graphicBezel:
-            let circularTemplate = CLKComplicationTemplateGraphicCircularClosedGaugeImage()
-            guard let image      = UIImage(named: "waterDrop")?.withTintColor(.white).resized(toWidth: 22) else { break }
-            circularTemplate.imageProvider = CLKFullColorImageProvider(fullColorImage: image.withTintColor(.white))
-            circularTemplate.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
-            let template = CLKComplicationTemplateGraphicBezelCircularText()
-            var body = String()
-            if today.consumed.amount < today.goal.amount {
-                let toGo = today.goal.amount - today.consumed.amount
-                body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
-            } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
-            template.circularTemplate = circularTemplate
-            template.textProvider     = CLKSimpleTextProvider(text: body)
-            let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        case .graphicRectangular:
-            let template = CLKComplicationTemplateGraphicRectangularTextGauge()
-            template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
-            var body1 = String()
-            if today.consumed.amount <= today.goal.amount {
-                let toGo = today.goal.amount - today.consumed.amount
-                body1 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
-            } else {
-                body1 = "\(NSLocalizedString("goodJob", comment: ""))"
+        for _ in 0...1 {
+            switch complication.family {
+            case .circularSmall:
+                let template    = CLKComplicationTemplateCircularSmallRingImage()
+                guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
+                template.imageProvider = CLKImageProvider(onePieceImage: image)
+                template.fillFraction  = fillFraction
+                template.ringStyle     = .closed
+                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .extraLarge:
+                let template    = CLKComplicationTemplateExtraLargeRingImage()
+                guard let image = UIImage(named: "waterDrop")?.withTintColor(.white).resized(toWidth: 45) else { break }
+                template.imageProvider = CLKImageProvider(onePieceImage: image)
+                template.fillFraction  = fillFraction
+                template.ringStyle     = .closed
+                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .modularSmall:
+                let template    = CLKComplicationTemplateModularSmallRingImage()
+                guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
+                template.imageProvider = CLKImageProvider(onePieceImage: image)
+                template.fillFraction  = fillFraction
+                template.ringStyle     = .closed
+                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .modularLarge:
+                let template = CLKComplicationTemplateModularLargeStandardBody()
+                template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
+                template.body1TextProvider = CLKSimpleTextProvider(text: "\(today.consumed.amount.clean)/\(today.goal.amount.clean)")
+                var body2 = String()
+                if today.consumed.amount < today.goal.amount {
+                    let toGo = today.goal.amount - today.consumed.amount
+                    body2 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
+                } else { body2 = "\(NSLocalizedString("goodJob", comment: ""))" }
+                template.body2TextProvider = CLKSimpleTextProvider(text: body2)
+                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .utilitarianSmall:
+                let template    = CLKComplicationTemplateUtilitarianSmallRingImage()
+                guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break}
+                template.imageProvider = CLKImageProvider(onePieceImage: image)
+                template.fillFraction  = fillFraction
+                template.ringStyle     = .closed
+                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .utilitarianSmallFlat:
+                let template    = CLKComplicationTemplateUtilitarianSmallFlat()
+                guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
+                template.imageProvider = CLKImageProvider(onePieceImage: image)
+                template.textProvider  = CLKSimpleTextProvider(text: "\(today.consumed.amount.clean)/\(today.goal.amount.clean)")
+                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .utilitarianLarge:
+                let template = CLKComplicationTemplateUtilitarianLargeFlat()
+                guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
+                template.imageProvider = CLKImageProvider(onePieceImage: image)
+                var body = String()
+                if today.consumed.amount < today.goal.amount {
+                    let toGo = today.goal.amount - today.consumed.amount
+                    body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
+                } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
+                template.textProvider  = CLKSimpleTextProvider(text: body)
+                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .graphicCorner:
+                let template = CLKComplicationTemplateGraphicCornerGaugeText()
+                template.outerTextProvider    = CLKSimpleTextProvider(text: "\(today.consumed.amount.clean)")
+                template.leadingTextProvider  = CLKSimpleTextProvider(text: "0")
+                template.trailingTextProvider = CLKSimpleTextProvider(text: "\(today.goal.amount.clean)")
+                template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
+                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .graphicCircular:
+                let template    = CLKComplicationTemplateGraphicCircularOpenGaugeImage()
+                guard let image = UIImage(named: "waterDrop")?.withTintColor(.white).resized(toWidth: 9) else { break }
+                template.bottomImageProvider = CLKFullColorImageProvider(fullColorImage: image.withTintColor(.white))
+                template.centerTextProvider  = CLKSimpleTextProvider(text: "\(today.consumed.amount.clean)")
+                template.gaugeProvider       = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
+                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .graphicBezel:
+                let circularTemplate = CLKComplicationTemplateGraphicCircularClosedGaugeImage()
+                guard let image      = UIImage(named: "waterDrop")?.withTintColor(.white).resized(toWidth: 22) else { break }
+                circularTemplate.imageProvider = CLKFullColorImageProvider(fullColorImage: image.withTintColor(.white))
+                circularTemplate.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
+                let template = CLKComplicationTemplateGraphicBezelCircularText()
+                var body = String()
+                if today.consumed.amount < today.goal.amount {
+                    let toGo = today.goal.amount - today.consumed.amount
+                    body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
+                } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
+                template.circularTemplate = circularTemplate
+                template.textProvider     = CLKSimpleTextProvider(text: body)
+                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            case .graphicRectangular:
+                let template = CLKComplicationTemplateGraphicRectangularTextGauge()
+                template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
+                var body1 = String()
+                if today.consumed.amount <= today.goal.amount {
+                    let toGo = today.goal.amount - today.consumed.amount
+                    body1 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
+                } else {
+                    body1 = "\(NSLocalizedString("goodJob", comment: ""))"
+                }
+                template.body1TextProvider = CLKSimpleTextProvider(text: body1)
+                template.gaugeProvider     = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
+                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                timelineEnteries.append(timelineEntry)
+            default:
+                break
             }
-            template.body1TextProvider = CLKSimpleTextProvider(text: body1)
-            template.gaugeProvider     = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
-            let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
-            timelineEnteries.append(timelineEntry)
-        default:
-            break
+
+            let tomorrowsDate = Calendar.current.date(byAdding: .day, value: 1, to: today.date)!
+            let tomorrow = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: tomorrowsDate)!
+            let currentGoal = today.goal
+            self.today = Day(date: tomorrow, goalAmount: currentGoal, consumedAmount: Drink())
         }
+        
+        
         return timelineEnteries
     }
     // MARK: - Placeholder Templates
