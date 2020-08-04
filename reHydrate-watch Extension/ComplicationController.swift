@@ -287,8 +287,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 
             let tomorrowsDate = Calendar.current.date(byAdding: .day, value: 1, to: today.date)!
             let tomorrow = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: tomorrowsDate)!
-            let currentGoal = today.goal
-            self.today = Day(date: tomorrow, goalAmount: currentGoal, consumedAmount: Drink())
+            self.today = Day(date: tomorrow, goalAmount: today.goal, consumedAmount: Drink())
         }
         
         
