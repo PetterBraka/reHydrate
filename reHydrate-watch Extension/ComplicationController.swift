@@ -162,16 +162,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         formatter.dateFormat = "EEEE - dd/MM/yy"
         today = delegate.today
         today.date = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: today.date)!
-        
         var fillFraction = Float()
-        if today.consumed.amount / today.goal.amount < 1 {
-            fillFraction = Float(today.consumed.amount / today.goal.amount)
-        } else {
-            fillFraction = 1
-        }
         var timelineEnteries = [CLKComplicationTimelineEntry]()
         
         for _ in 0...1 {
+            if today.consumed.amount / today.goal.amount < 1 {
+                fillFraction = Float(today.consumed.amount / today.goal.amount)
+            } else {
+                fillFraction = 1
+            }
+            
             switch complication.family {
             case .circularSmall:
                 let template    = CLKComplicationTemplateCircularSmallRingImage()
@@ -287,8 +287,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 
             let tomorrowsDate = Calendar.current.date(byAdding: .day, value: 1, to: today.date)!
             let tomorrow = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: tomorrowsDate)!
-            let currentGoal = today.goal
-            self.today = Day(date: tomorrow, goalAmount: currentGoal, consumedAmount: Drink())
+            self.today = Day(date: tomorrow, goalAmount: today.goal, consumedAmount: Drink())
         }
         
         

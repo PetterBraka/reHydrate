@@ -292,7 +292,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - Screen Appear
+    //MARK: - View Loaded
     
     /**
      Will be called when the app enters the foreground. Then it will update the date for to saved data for this day or create a new instance of **Day**
@@ -387,6 +387,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         updateUI()
     }
     
+    //MARK: - View will
+    
     override func viewWillAppear(_ animated: Bool) {
         print("Main screen will appear")
         darkMode             = defaults.bool(forKey: darkModeString)
@@ -398,7 +400,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         setUpUI()
         changeAppearance()
         updateUI()
-        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal.amount),
