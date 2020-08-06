@@ -128,6 +128,8 @@ class CalendarVC: UIViewController {
         tableView.register(InfoCell.self, forCellReuseIdentifier: "customCell")
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
         calendar.allowsMultipleSelection = true
+        calendar.swipeToChooseGesture.isEnabled = true
+        calendar.swipeToChooseGesture.minimumPressDuration = 0.2
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
         
@@ -231,7 +233,7 @@ class CalendarVC: UIViewController {
      ```
      */
     func getDrinks(_ dateOfDay: Date){
-        print(formatter.string(from: dateOfDay))
+//        print(formatter.string(from: dateOfDay))
         titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
         if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
             let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
@@ -323,18 +325,37 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        
+        var tempSelectedDates = calendar.selectedDates
+        tempSelectedDates.sort(by: {$0 < $1})
+        print("----------------------------")
+        tempSelectedDates.forEach { (date) in
+            print("temp \(formatter.string(from: date))")
+        }
+        print("----------------------------")
+        var i = 0
+        while i < tempSelectedDates.count - 1 && tempSelectedDates.count > 1{
+            if Calendar.current.date(byAdding: .day, value: 1, to: tempSelectedDates[i])! != tempSelectedDates[i + 1] {
+                calendar.selectedDates.forEach { (selectedDate) in
+                    calendar.deselect(selectedDate)
+                    calendar.select(date)
+                }
+            }
+            i += 1
+        }
+        
         self.configureVisibleCells()
-        print("selected \(formatter.string(from: date))")
+//        print("selected \(formatter.string(from: date))")
         tableView.reloadData()
         self.drinks.removeAll()
         self.getDrinks(date)
-        calendar.selectedDates.forEach { (date) in
-            print(formatter.string(from: date))
-        }
+//        calendar.selectedDates.forEach { (date) in
+//            print(formatter.string(from: date))
+//        }
         if calendar.selectedDates.count > 1 {
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
-            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
+//            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "d/M"
@@ -348,7 +369,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.configureVisibleCells()
-        print("deselected \(formatter.string(from: date))")
+//        print("deselected \(formatter.string(from: date))")
         tableView.reloadData()
         self.drinks.removeAll()
         if calendar.selectedDates.count == 1 {
@@ -356,13 +377,13 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         } else {
             self.getDrinks(date)
         }
-        calendar.selectedDates.forEach { (date) in
-            print(formatter.string(from: date))
-        }
+//        calendar.selectedDates.forEach { (date) in
+//            print(formatter.string(from: date))
+//        }
         if calendar.selectedDates.count > 1 {
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
-            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
+//            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "d/M"
