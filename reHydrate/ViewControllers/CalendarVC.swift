@@ -335,8 +335,8 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         case .cancelled, .ended, .failed:
             print("Long Press ended")
         default:
-            print("Long pressed")
-            CheckSelections(calendar, date)
+            print("pressed")
+            checkSelections(calendar, date)
         }
         
         self.configureVisibleCells()
@@ -360,6 +360,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.configureVisibleCells()
         print("deselected \(formatter.string(from: date))")
+        checkSelections(calendar, date)
         tableView.reloadData()
         self.drinks.removeAll()
         if calendar.selectedDates.count == 1 {
@@ -449,21 +450,23 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         }
     }
     
-    func CheckSelections(_ calendar: FSCalendar, _ date: Date) {
-        var tempSelectedDates = calendar.selectedDates
-        tempSelectedDates.sort(by: {$0 < $1})
+    func checkSelections(_ calendar: FSCalendar, _ date: Date) {
+        var tempDates = calendar.selectedDates
+        tempDates.sort(by: {$0 < $1})
         print("----------------------------")
-        tempSelectedDates.forEach { (date) in
+        tempDates.forEach { (date) in
             print("temp \(formatter.string(from: date))")
         }
         print("----------------------------")
         var i = 0
-        while i < tempSelectedDates.count - 1 && tempSelectedDates.count > 1{
-            if Calendar.current.date(byAdding: .day, value: 1, to: tempSelectedDates[i])! != tempSelectedDates[i + 1] {
+        while i < tempDates.count - 1 && tempDates.count > 1{
+            if Calendar.current.date(byAdding: .day, value: 1, to: tempDates[i])! != tempDates[i + 1] {
                 calendar.selectedDates.forEach { (selectedDate) in
                     calendar.deselect(selectedDate)
-                    calendar.select(date)
                 }
+                calendar.select(date)
+                calendar.reloadData()
+                return
             }
             i += 1
         }
