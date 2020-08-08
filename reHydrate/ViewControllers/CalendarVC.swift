@@ -461,12 +461,28 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         var i = 0
         while i < tempDates.count - 1 && tempDates.count > 1{
             if Calendar.current.date(byAdding: .day, value: 1, to: tempDates[i])! != tempDates[i + 1] {
-                calendar.selectedDates.forEach { (selectedDate) in
-                    calendar.deselect(selectedDate)
+                switch calendar.swipeToChooseGesture.state {
+                case .changed:
+                    if #available(iOS 13.0, *) {
+                        let differece = tempDates[i].distance(to: tempDates[i + 1])
+                        let days = differece / 60 / 60 / 24
+                        print("\(differece) is \(days)")
+                        for x in 1...Int(days - 1){
+                            calendar.select(Calendar.current.date(byAdding: .day, value: x, to: tempDates[i]))
+                            print(formatter.string(from: Calendar.current.date(byAdding: .day, value: x, to: tempDates[i])!))
+                        }
+                        calendar.reloadData()
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                default:
+                    calendar.selectedDates.forEach { (selectedDate) in
+                        calendar.deselect(selectedDate)
+                    }
+                    calendar.select(date)
+                    calendar.reloadData()
+                    return
                 }
-                calendar.select(date)
-                calendar.reloadData()
-                return
             }
             i += 1
         }
