@@ -132,7 +132,12 @@ class CalendarVC: UIViewController {
         calendar.swipeToChooseGesture.minimumPressDuration = 0.2
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
-        
+        switch calendar.swipeToChooseGesture.state {
+        case .ended:
+            print("Long Press Ended")
+        default:
+            print("Long Press")
+        }
         setConstraints()
     }
     
@@ -325,37 +330,22 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        
-        var tempSelectedDates = calendar.selectedDates
-        tempSelectedDates.sort(by: {$0 < $1})
-        print("----------------------------")
-        tempSelectedDates.forEach { (date) in
-            print("temp \(formatter.string(from: date))")
-        }
-        print("----------------------------")
-        var i = 0
-        while i < tempSelectedDates.count - 1 && tempSelectedDates.count > 1{
-            if Calendar.current.date(byAdding: .day, value: 1, to: tempSelectedDates[i])! != tempSelectedDates[i + 1] {
-                calendar.selectedDates.forEach { (selectedDate) in
-                    calendar.deselect(selectedDate)
-                    calendar.select(date)
-                }
-            }
-            i += 1
+        print("Selected \(formatter.string(from: date))")
+        switch calendar.swipeToChooseGesture.state {
+        case .cancelled, .ended, .failed:
+            print("Long Press ended")
+        default:
+            print("Long pressed")
+            CheckSelections(calendar, date)
         }
         
         self.configureVisibleCells()
-//        print("selected \(formatter.string(from: date))")
         tableView.reloadData()
         self.drinks.removeAll()
         self.getDrinks(date)
-//        calendar.selectedDates.forEach { (date) in
-//            print(formatter.string(from: date))
-//        }
         if calendar.selectedDates.count > 1 {
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
-//            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "d/M"
@@ -369,7 +359,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.configureVisibleCells()
-//        print("deselected \(formatter.string(from: date))")
+        print("deselected \(formatter.string(from: date))")
         tableView.reloadData()
         self.drinks.removeAll()
         if calendar.selectedDates.count == 1 {
@@ -377,19 +367,18 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         } else {
             self.getDrinks(date)
         }
-//        calendar.selectedDates.forEach { (date) in
-//            print(formatter.string(from: date))
-//        }
         if calendar.selectedDates.count > 1 {
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
-//            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
                                    "\(drinks[1].amount)/\(drinks[0].amount)")
+            let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
+            averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
+                                  "\(average.clean)")
         } else if calendar.selectedDates.count == 0 {
             titleDate.text = "\(formatter.string(from: Date()))"
             self.getDrinks(Date())
@@ -409,18 +398,18 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
         
-        let customCell = (cell as! CalendarCell)
+        let calendarCell = (cell as! CalendarCell)
         // Custom today layer
-        customCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
+        calendarCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
         // Configure selection layer
         if calendar.selectedDates.isEmpty {
             if self.gregorian.isDateInToday(date) {
-                customCell.todayHighlighter.isHidden = true
-                customCell.selectionLayer.isHidden = false
-                customCell.selectionType = SelectionType.single
+                calendarCell.todayHighlighter.isHidden = true
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = SelectionType.single
             } else {
-                customCell.todayHighlighter.isHidden = true
-                customCell.selectionLayer.isHidden = true
+                calendarCell.todayHighlighter.isHidden = true
+                calendarCell.selectionLayer.isHidden = true
             }
         } else {
             var selectionType = SelectionType.none
@@ -446,17 +435,37 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
                 }
             }
             if selectionType == .none {
-                customCell.selectionLayer.isHidden = true
+                calendarCell.selectionLayer.isHidden = true
                 return
             }
             if formatter.string(from: Date()) == formatter.string(from: date){
-                customCell.todayHighlighter.isHidden = true
-                customCell.selectionLayer.isHidden = false
-                customCell.selectionType = selectionType
+                calendarCell.todayHighlighter.isHidden = true
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = selectionType
             } else {
-                customCell.selectionLayer.isHidden = false
-                customCell.selectionType = selectionType
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = selectionType
             }
+        }
+    }
+    
+    func CheckSelections(_ calendar: FSCalendar, _ date: Date) {
+        var tempSelectedDates = calendar.selectedDates
+        tempSelectedDates.sort(by: {$0 < $1})
+        print("----------------------------")
+        tempSelectedDates.forEach { (date) in
+            print("temp \(formatter.string(from: date))")
+        }
+        print("----------------------------")
+        var i = 0
+        while i < tempSelectedDates.count - 1 && tempSelectedDates.count > 1{
+            if Calendar.current.date(byAdding: .day, value: 1, to: tempSelectedDates[i])! != tempSelectedDates[i + 1] {
+                calendar.selectedDates.forEach { (selectedDate) in
+                    calendar.deselect(selectedDate)
+                    calendar.select(date)
+                }
+            }
+            i += 1
         }
     }
 }
