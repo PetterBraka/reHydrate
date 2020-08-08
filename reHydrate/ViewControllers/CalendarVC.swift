@@ -331,14 +331,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         print("Selected \(formatter.string(from: date))")
-        switch calendar.swipeToChooseGesture.state {
-        case .cancelled, .ended, .failed:
-            print("Long Press ended")
-        default:
-            print("pressed")
-            checkSelections(calendar, date)
-        }
-        
+        checkSelections(calendar, date)
         self.configureVisibleCells()
         tableView.reloadData()
         self.drinks.removeAll()
