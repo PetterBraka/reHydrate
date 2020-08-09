@@ -128,9 +128,16 @@ class CalendarVC: UIViewController {
         tableView.register(InfoCell.self, forCellReuseIdentifier: "customCell")
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
         calendar.allowsMultipleSelection = true
+        calendar.swipeToChooseGesture.isEnabled = true
+        calendar.swipeToChooseGesture.minimumPressDuration = 0.2
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
-        
+        switch calendar.swipeToChooseGesture.state {
+        case .ended:
+            print("Long Press Ended")
+        default:
+            print("Long Press")
+        }
         setConstraints()
     }
     
@@ -163,7 +170,7 @@ class CalendarVC: UIViewController {
         tableView.topAnchor.constraint(equalTo: titleDate.bottomAnchor,constant: 30).isActive = true
         tableView.bottomAnchor.constraint(equalTo: calendar.topAnchor, constant: -20).isActive = true
         
-        calendar.topAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 10).isActive = true
+        calendar.topAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -30).isActive = true
         calendar.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
         calendar.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
         calendar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
@@ -231,7 +238,7 @@ class CalendarVC: UIViewController {
      ```
      */
     func getDrinks(_ dateOfDay: Date){
-        print(formatter.string(from: dateOfDay))
+//        print(formatter.string(from: dateOfDay))
         titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
         if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
             let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
@@ -288,10 +295,10 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath.row {
         case 0:
             cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                           "\(drinks[1].amount)/\(drinks[0].amount)")
+                           "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
         case 1:
             let average = Drink(typeOfDrink: "water", amountOfDrink: getAverageFor())
-            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average.amount))
+            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average.amount.clean))
         default:
             break
         }
@@ -317,39 +324,79 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
         if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: date)}){
-            return UIImage(named: "Water-drop")?.renderResizedImage(newWidth: 19)
+            let day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: date)})
+            let percent = (day!.consumed.amount / day!.goal.amount) * 100
+            switch percent {
+            case 0...10:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.0.full.dark")?.renderResizedImage(newWidth: 30)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.0.full.light")?.renderResizedImage(newWidth: 30)
+                    return newImage
+                }
+            case 10...30:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.25.full.dark")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.25.full.light")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }
+            case 30...60:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.50.full.dark")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.50.full.light")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }
+            case 60...80:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.75.full.dark")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.75.full.light")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }
+            default:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.full.dark")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.full.light")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }
+            }
         }
         return nil
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        print("Selected \(formatter.string(from: date))")
+        checkSelections(calendar, date)
         self.configureVisibleCells()
-        print("selected \(formatter.string(from: date))")
         tableView.reloadData()
         self.drinks.removeAll()
         self.getDrinks(date)
-        calendar.selectedDates.forEach { (date) in
-            print(formatter.string(from: date))
-        }
         if calendar.selectedDates.count > 1 {
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
-            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
-            consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
-                                   "\(String(format: "%.2f", drinks[1].amount))/\(String(format: "%.2f",drinks[0].amount))")
+            consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))", "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
             averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
-                                  "\(String(format: "%.2f", average))")
+                                  "\(average.clean)")
         }
     }
     
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.configureVisibleCells()
         print("deselected \(formatter.string(from: date))")
+        checkSelections(calendar, date)
         tableView.reloadData()
         self.drinks.removeAll()
         if calendar.selectedDates.count == 1 {
@@ -357,19 +404,18 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         } else {
             self.getDrinks(date)
         }
-        calendar.selectedDates.forEach { (date) in
-            print(formatter.string(from: date))
-        }
         if calendar.selectedDates.count > 1 {
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
-            print("Average amount consumed was \(average) \nFrom \(formatter.string(from: dates.first!)) and \(formatter.string(from: dates.last!))")
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
                                    "\(drinks[1].amount)/\(drinks[0].amount)")
+            let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
+            averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
+                                  "\(average.clean)")
         } else if calendar.selectedDates.count == 0 {
             titleDate.text = "\(formatter.string(from: Date()))"
             self.getDrinks(Date())
@@ -389,18 +435,18 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
         
-        let customCell = (cell as! CalendarCell)
+        let calendarCell = (cell as! CalendarCell)
         // Custom today layer
-        customCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
+        calendarCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
         // Configure selection layer
         if calendar.selectedDates.isEmpty {
             if self.gregorian.isDateInToday(date) {
-                customCell.todayHighlighter.isHidden = true
-                customCell.selectionLayer.isHidden = false
-                customCell.selectionType = SelectionType.single
+                calendarCell.todayHighlighter.isHidden = true
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = SelectionType.single
             } else {
-                customCell.todayHighlighter.isHidden = true
-                customCell.selectionLayer.isHidden = true
+                calendarCell.todayHighlighter.isHidden = true
+                calendarCell.selectionLayer.isHidden = true
             }
         } else {
             var selectionType = SelectionType.none
@@ -426,17 +472,55 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
                 }
             }
             if selectionType == .none {
-                customCell.selectionLayer.isHidden = true
+                calendarCell.selectionLayer.isHidden = true
                 return
             }
             if formatter.string(from: Date()) == formatter.string(from: date){
-                customCell.todayHighlighter.isHidden = true
-                customCell.selectionLayer.isHidden = false
-                customCell.selectionType = selectionType
+                calendarCell.todayHighlighter.isHidden = true
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = selectionType
             } else {
-                customCell.selectionLayer.isHidden = false
-                customCell.selectionType = selectionType
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = selectionType
             }
+        }
+    }
+    
+    func checkSelections(_ calendar: FSCalendar, _ date: Date) {
+        var tempDates = calendar.selectedDates
+        tempDates.sort(by: {$0 < $1})
+        print("----------------------------")
+        tempDates.forEach { (date) in
+            print("temp \(formatter.string(from: date))")
+        }
+        print("----------------------------")
+        var i = 0
+        while i < tempDates.count - 1 && tempDates.count > 1{
+            if Calendar.current.date(byAdding: .day, value: 1, to: tempDates[i])! != tempDates[i + 1] {
+                switch calendar.swipeToChooseGesture.state {
+                case .changed:
+                    if #available(iOS 13.0, *) {
+                        let differece = tempDates[i].distance(to: tempDates[i + 1])
+                        let days = differece / 60 / 60 / 24
+                        print("\(differece) is \(days)")
+                        for x in 1...Int(days - 1){
+                            calendar.select(Calendar.current.date(byAdding: .day, value: x, to: tempDates[i]))
+                            print(formatter.string(from: Calendar.current.date(byAdding: .day, value: x, to: tempDates[i])!))
+                        }
+                        calendar.reloadData()
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                default:
+                    calendar.selectedDates.forEach { (selectedDate) in
+                        calendar.deselect(selectedDate)
+                    }
+                    calendar.select(date)
+                    calendar.reloadData()
+                    return
+                }
+            }
+            i += 1
         }
     }
 }

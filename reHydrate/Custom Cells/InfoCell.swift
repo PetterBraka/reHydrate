@@ -18,7 +18,7 @@ class InfoCell: UITableViewCell {
     }()
     var amountOfDrink: UILabel    = {
         let lable  = UILabel()
-        lable.text = "0.0L"
+        lable.text = "0.0 L"
         lable.font = UIFont(name: "AmericanTypewriter", size: 20)
         lable.textAlignment = .right
         lable.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +64,7 @@ class InfoCell: UITableViewCell {
     func setLabels(_ title: String, _ drink: String){
         titleOfCard.text    = title
         amountOfDrink.text  = drink
-        amountOfDrink.text?.append("L")
+        amountOfDrink.text?.append(" L")
     }
     
     /**
