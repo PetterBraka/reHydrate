@@ -170,7 +170,7 @@ class CalendarVC: UIViewController {
         tableView.topAnchor.constraint(equalTo: titleDate.bottomAnchor,constant: 30).isActive = true
         tableView.bottomAnchor.constraint(equalTo: calendar.topAnchor, constant: -20).isActive = true
         
-        calendar.topAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 10).isActive = true
+        calendar.topAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -30).isActive = true
         calendar.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
         calendar.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
         calendar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
@@ -324,7 +324,50 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
         if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: date)}){
-            return UIImage(named: "Water-drop")?.renderResizedImage(newWidth: 19)
+            let day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: date)})
+            let percent = (day!.consumed.amount / day!.goal.amount) * 100
+            switch percent {
+            case 0...10:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.0.full.dark")?.renderResizedImage(newWidth: 30)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.0.full.light")?.renderResizedImage(newWidth: 30)
+                    return newImage
+                }
+            case 10...30:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.25.full.dark")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.25.full.light")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }
+            case 30...60:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.50.full.dark")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.50.full.light")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }
+            case 60...80:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.75.full.dark")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.75.full.light")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }
+            default:
+                if darkMode {
+                    let newImage = UIImage(named: "Water.drop.full.dark")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }else {
+                    let newImage = UIImage(named: "Water.drop.full.light")?.renderResizedImage(newWidth: 20)
+                    return newImage
+                }
+            }
         }
         return nil
     }

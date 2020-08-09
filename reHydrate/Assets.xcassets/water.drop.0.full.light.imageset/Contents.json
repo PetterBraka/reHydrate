@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "water.drop.0.full.light.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icons8-water-96 3.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
