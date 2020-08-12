@@ -180,42 +180,150 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>Black</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>Black</string>
-				</array>
-				<key>Icon alredy includes gloss effects</key>
-				<false/>
-			</dict>
-			<key>BlueBlack</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>BlueBlack</string>
-				</array>
-				<key>Icon alredy includes gloss effects</key>
-				<false/>
-			</dict>
-			<key>BlueWhite</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>BlueWhite</string>
-				</array>
-				<key>Icon alredy includes gloss effects</key>
-				<false/>
-			</dict>
-			<key>White</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>White</string>
-				</array>
-				<key>Icon alredy includes gloss effects</key>
-				<false/>
-			</dict>
+            <key>Black</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>Black</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>BlueBlack</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>BlueBlack</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>BlueWhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>BlueWhite</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>GreenBlack</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>GreenBlack</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>GreenWhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>GreenWhite</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>OrangeBlack</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>OrangeBlack</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>OrangeWhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>OrangeWhite</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>PinkBlack</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>PinkBlack</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>PinkWhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>PinkWhite</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>PurpleBlack</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>PurpleBlack</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>PurpleWhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>PurpleWhite</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>RedBlack</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>RedBlack</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>RedWhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>RedWhite</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>White</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>White</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>YellowBlack</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>YellowBlack</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>YellowWhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>YellowWhite</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
 		</dict>
 		<key>UINewsstandIcon</key>
 		<dict>
