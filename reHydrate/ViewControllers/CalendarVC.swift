@@ -329,42 +329,42 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             switch percent {
             case 0...10:
                 if darkMode {
-                    let newImage = UIImage(named: "Water.drop.0.full.dark")?.renderResizedImage(newWidth: 30)
+                    let newImage = UIImage(named: "water.drop.0.full.dark")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }else {
-                    let newImage = UIImage(named: "Water.drop.0.full.light")?.renderResizedImage(newWidth: 30)
+                    let newImage = UIImage(named: "water.drop.0.full.light")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }
             case 10...30:
                 if darkMode {
-                    let newImage = UIImage(named: "Water.drop.25.full.dark")?.renderResizedImage(newWidth: 20)
+                    let newImage = UIImage(named: "water.drop.25.full.dark")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }else {
-                    let newImage = UIImage(named: "Water.drop.25.full.light")?.renderResizedImage(newWidth: 20)
+                    let newImage = UIImage(named: "water.drop.25.full.light")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }
             case 30...60:
                 if darkMode {
-                    let newImage = UIImage(named: "Water.drop.50.full.dark")?.renderResizedImage(newWidth: 20)
+                    let newImage = UIImage(named: "water.drop.50.full.dark")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }else {
-                    let newImage = UIImage(named: "Water.drop.50.full.light")?.renderResizedImage(newWidth: 20)
+                    let newImage = UIImage(named: "water.drop.50.full.light")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }
             case 60...80:
                 if darkMode {
-                    let newImage = UIImage(named: "Water.drop.75.full.dark")?.renderResizedImage(newWidth: 20)
+                    let newImage = UIImage(named: "water.drop.75.full.dark")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }else {
-                    let newImage = UIImage(named: "Water.drop.75.full.light")?.renderResizedImage(newWidth: 20)
+                    let newImage = UIImage(named: "water.drop.75.full.light")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }
             default:
                 if darkMode {
-                    let newImage = UIImage(named: "Water.drop.full.dark")?.renderResizedImage(newWidth: 20)
+                    let newImage = UIImage(named: "water.drop.full.dark")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }else {
-                    let newImage = UIImage(named: "Water.drop.full.light")?.renderResizedImage(newWidth: 20)
+                    let newImage = UIImage(named: "water.drop.full.light")?.renderResizedImage(newWidth: 20)
                     return newImage
                 }
             }
