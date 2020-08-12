@@ -44,6 +44,11 @@ class SettingsVC: UIViewController {
             return .default
         }
     }
+    var timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:MM"
+        return formatter
+    }()
     var metricUnits                = true
     var selectedRow: IndexPath     = IndexPath()
     var settings: [settingOptions] = [
@@ -404,15 +409,13 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 }
                 cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                 let startDate = defaults.object(forKey: startingTimeString) as! Date
-                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
                 let endDate = defaults.object(forKey: endingTimeString) as! Date
-                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
                 let intervals = defaults.integer(forKey: reminderIntervalString)
                 center.getPendingNotificationRequests { (pendingNotifcations) in
                     if pendingNotifcations.isEmpty{
-                        setReminders(startTimer.hour!, endTimer.hour!, intervals)
+                        setReminders(startDate, endDate, intervals)
                         DispatchQueue.main.async {
-                            self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
+                            self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(self.timeFormatter.string(from: startDate)) \(NSLocalizedString("To", comment: "splitter for toast")) \(self.timeFormatter.string(from: endDate))", 4)
                         }
                     }
                 }
