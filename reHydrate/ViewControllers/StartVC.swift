@@ -793,7 +793,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                                 let difference = Calendar.current.dateComponents([.hour, .minute], from: Date(), to: triggerDate)
                                 let differenceInMunutes = (difference.hour! * 60) + difference.minute!
                                 // Checks if the time to the next notification is within half of the interval time.
-                                if differenceInMunutes < Int(Double(intervals) * 0.5) {
+                                if differenceInMunutes < Int(Double(intervals) * 0.8) {
                                     current.removePendingNotificationRequests(withIdentifiers: [request.identifier])
                                 }
                             }
