@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 import CloudKit
 import HealthKit
 import FSCalendar
@@ -1234,3 +1235,24 @@ func getReminder()-> UNMutableNotificationContent{
     notification.sound  = .default
     return notification
 }
+
+#if DEBUG
+
+struct startVCRepresentable: UIViewControllerRepresentable {
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        // leave this empty
+    }
+    
+    @available(iOS 13.0.0, *)
+    func makeUIViewController(context: Context) -> UIViewController {
+        StartVC()
+    }
+}
+
+@available(iOS 13.0, *)
+struct startVCPreview: PreviewProvider {
+    static var previews: some View {
+       startVCRepresentable()
+    }
+}
+#endif
