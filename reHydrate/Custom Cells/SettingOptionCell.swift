@@ -470,7 +470,7 @@ class SettingOptionCell: UITableViewCell {
             let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
             let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
             let intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
-            setReminders(startTimer.hour!, endTimer.hour!, intervals)
+            setReminders(startDate, endDate, intervals)
             sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
         case NSLocalizedString("Frequency", comment: "").lowercased():
             let picker = textField.inputView as! UIDatePicker
@@ -491,10 +491,8 @@ class SettingOptionCell: UITableViewCell {
             print("numberOfMinutes : ", numberOfMinutes)
             UserDefaults.standard.set(numberOfMinutes, forKey: reminderIntervalString)
             let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-            let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
             let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-            let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-            setReminders(startTimer.hour!, endTimer.hour!, numberOfMinutes)
+            setReminders(startDate, endDate, numberOfMinutes)
             sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
             break
         case NSLocalizedString("Language", comment: "").lowercased():
@@ -522,7 +520,7 @@ class SettingOptionCell: UITableViewCell {
                 if !pendingNotifcations.isEmpty{
                     current.removeAllDeliveredNotifications()
                     current.removeAllPendingNotificationRequests()
-                    setReminders(startTimer.hour ?? 8, endTimer.hour ?? 23, intervals)
+                    setReminders(startTimer.date!, endTimer.date!, intervals)
                 }
             }
             break
