@@ -293,7 +293,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - View Loaded
+    //MARK: - ViewDid
     
     /**
      Will be called when the app enters the foreground. Then it will update the date for to saved data for this day or create a new instance of **Day**
@@ -386,7 +386,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         updateUI()
     }
     
-    //MARK: - View will
+    //MARK: - ViewWill
     
     override func viewWillAppear(_ animated: Bool) {
         print("Main screen will appear")
@@ -399,6 +399,46 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         setUpUI()
         changeAppearance()
         updateUI()
+        if WCSession.isSupported(){
+            if WCSession.default.activationState != .activated {
+                WCSession.default.activate()
+            }
+            let message = ["requsetData": true]
+            WCSession.default.sendMessage(message) { (reply) in
+                print(reply)
+                let messageConsumed = reply["consumed"]! as! String
+                guard let watchConsumed = Double(messageConsumed) else {
+                    print("error can't extract number from string")
+                    return
+                }
+                if self.today.consumed.amount <= watchConsumed {
+                    let drinkAmountAdded = watchConsumed - self.today.consumed.amount
+                    self.today.consumed.amount = watchConsumed
+                    print("todays amount was updated")
+                    DispatchQueue.main.async {
+                        self.days.insertDay(self.today)
+                        Day.saveDays(self.days)
+                        self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                        self.updateUI()
+                    }
+                } else {
+                    let message = ["phoneDate": self.formatter.string(from: self.today.date),
+                                   "phoneGoal": String(self.today.goal.amount),
+                                   "phoneConsumed": String(self.today.consumed.amount)]
+                    if WCSession.default.isReachable {
+                        WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                            print(error.localizedDescription)
+                        }
+                        WCSession.default.transferCurrentComplicationUserInfo(message)
+                    } else {
+                        WCSession.default.transferUserInfo(message)
+                    }
+                }
+            } errorHandler: { (error) in
+                print(error.localizedDescription)
+            }
+
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
