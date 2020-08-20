@@ -115,7 +115,7 @@ class InterfaceController: WKInterfaceController {
         let message = ["date": formatter.string(from: today.date),
                        "metric": String(metric),
                        "consumed": consumed] as [String : String]
-        if WCSession.default.activationState == .activated {
+        if WCSession.default.isReachable {
             //send the updated date to the phone instantly.
             WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { (error) in
                 print(error.localizedDescription)
@@ -136,22 +136,29 @@ extension InterfaceController: WCSessionDelegate{
         }
     }
     
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        print("resived message")
+        print(message)
+        let response = ["date": formatter.string(from: today.date),
+                            "metric": String(metric),
+                            "consumed": String(today.consumed.amount)] as [String : String]
+        replyHandler(response)
+    }
+    
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         print("sent data with transferUserInfo")
-        print(String(describing: userInfo["phoneDate"]!))
-        print(String(describing: userInfo["phoneGoal"]!))
-        print(String(describing: userInfo["phoneConsumed"]!))
+        let phoneDate = String(describing: userInfo["phoneDate"] ?? "")
+        let phoneGoal = String(describing: userInfo["phoneGoal"] ?? "")
+        let phoneConsumed = String(describing: userInfo["phoneConsumed"] ?? "")
         formatter.dateFormat = "EEEE - dd/MM/yy"
         today = days.updateToday()
-        if formatter.string(from: today.date) == userInfo["phoneDate"] as! String {
-            let messageConsumed = userInfo["phoneConsumed"]! as! String
-            guard let consumed = Double(messageConsumed) else {
+        if formatter.string(from: today.date) == phoneDate {
+            guard let consumed = Double(phoneConsumed) else {
                 print("error can't extract number from string")
                 return
             }
             today.consumed.amount = consumed
-            let messageGoal = userInfo["phoneGoal"]! as! String
-            guard let goal = Double(messageGoal) else {
+            guard let goal = Double(phoneGoal) else {
                 print("error can't extract number from string")
                 return
             }
