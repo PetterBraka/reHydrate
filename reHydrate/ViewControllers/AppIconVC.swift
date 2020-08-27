@@ -9,24 +9,16 @@
 import UIKit
 
 class AppIconVC: UIViewController{
-    let icons = ["Black",
-                 "White",
-                 "BlueBlack",   "BlueWhite",
-                 "GreenBlack",  "GreenWhite",
-                 "OrangeBlack", "OrangeWhite",
-                 "PinkBlack",   "PinkWhite",
-                 "PurpleBlack", "PurpleWhite",
-                 "RedBlack",    "RedWhite",
-                 "YellowBlack", "YellowWhite"]
-    let iconNames = [NSLocalizedString("Black", comment: ""),
-                     NSLocalizedString("White", comment: ""),
-                     NSLocalizedString("Blue", comment: ""),
-                     NSLocalizedString("Green", comment: ""),
-                     NSLocalizedString("Orange", comment: ""),
-                     NSLocalizedString("Pink", comment: ""),
-                     NSLocalizedString("Purple", comment: ""),
-                     NSLocalizedString("Red", comment: ""),
-                     NSLocalizedString("Yellow", comment: "")]
+    let primaryIcons = ["white-grey"   , "grey-white"   , "black-white"  ]
+    let blueIcons    = ["white-blue"   , "blue-white"   , "black-blue"   ]
+    let greenIcons   = ["white-green"  , "green-white"  , "black-green"  ]
+    let orangeIcons  = ["white-orange" , "orange-white" , "black-orange" ]
+    let pinkIcons    = ["white-pink"   , "pink-white"   , "black-pink"   ]
+    let purpleIcons  = ["white-purple" , "purple-white" , "black-purple" ]
+    let redIcons     = ["white-red"    , "red-white"    , "black-red"    ]
+    let yellowIcons  = ["white-yellow" , "yellow-white" , "black-yellow" ]
+    let rainbowIcons = ["white-rainbow", "rainbow-white", "black-rainbow"]
+    var icons: [[String]] = []
     var tableView: UITableView = UITableView()
     var darkMode = true {
         didSet {
@@ -67,6 +59,9 @@ class AppIconVC: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        icons = [primaryIcons, redIcons, orangeIcons,
+                 yellowIcons, greenIcons, blueIcons,
+                 purpleIcons, pinkIcons, rainbowIcons]
         setUpUI()
     }
     
@@ -94,9 +89,10 @@ class AppIconVC: UIViewController{
         tableView.register(AppIconCell.self, forCellReuseIdentifier: "cell")
         tableView.delegate   = self
         tableView.dataSource = self
+        tableView.allowsSelection = false
         
-        let selectedIcon = UIApplication.shared.alternateIconName ?? "Black"
-        tableView.selectRow(at: IndexPath(row: icons.firstIndex(of: selectedIcon) ?? 0, section: 0), animated: false, scrollPosition: .none)
+        _ = UIApplication.shared.alternateIconName ?? "black-white"
+        
     }
     
     /**
@@ -165,51 +161,24 @@ extension AppIconVC: UITableViewDelegate, UITableViewDataSource{
         return icons.count
     }
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! AppIconCell
-        switch indexPath.row {
-        case 0:
-            cell.title.text = iconNames[0]
-        case 1:
-            cell.title.text = iconNames[1]
-        case 2, 3:
-            cell.title.text = iconNames[2]
-        case 4, 5:
-            cell.title.text = iconNames[3]
-        case 6, 7:
-            cell.title.text = iconNames[4]
-        case 8, 9:
-            cell.title.text = iconNames[5]
-        case 10, 11:
-            cell.title.text = iconNames[6]
-        case 12, 13:
-            cell.title.text = iconNames[7]
-        case 14, 15:
-            cell.title.text = iconNames[8]
-        default:
-            break
-        }
-        cell.imageForCell.setBackgroundImage(UIImage(named: icons[indexPath.row]), for: .normal)
+        print("section:\(indexPath.section) - row:\(indexPath.row)")
+        cell.cellImage0.setImage(UIImage(named: icons[indexPath.row][0]), for: .normal)
+        cell.cellImage1.setImage(UIImage(named: icons[indexPath.row][1]), for: .normal)
+        cell.cellImage2.setImage(UIImage(named: icons[indexPath.row][2]), for: .normal)
+        cell.cellImage0.setTitle(icons[indexPath.row][0], for: .normal)
+        cell.cellImage1.setTitle(icons[indexPath.row][1], for: .normal)
+        cell.cellImage2.setTitle(icons[indexPath.row][2], for: .normal)
         cell.setCellAppairents(darkMode)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return 120
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if UIApplication.shared.supportsAlternateIcons {
-            UIApplication.shared.setAlternateIconName("\(icons[indexPath.row])") { (error) in
-                if let error = error {
-                    print(error.localizedDescription)
-                } else {
-                    print("selected icon is \(self.icons[indexPath.row])")
-                }
-            }
-        } else {
-            print("App does not support alternate icons")
-        }
-    }
-    
 }
