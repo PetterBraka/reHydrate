@@ -10,150 +10,267 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>Black</key>
+			<key>black-white</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>Black</string>
+					<string>black-white</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>BlueBlack</key>
+			<key>black-blue</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>BlueBlack</string>
+					<string>black-blue</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>BlueWhite</key>
+			<key>black-green</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>BlueWhite</string>
+					<string>black-green</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>GreenBlack</key>
+			<key>black-orange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>GreenBlack</string>
+					<string>black-orange</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>GreenWhite</key>
+			<key>black-pink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>GreenWhite</string>
+					<string>black-pink</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>OrangeBlack</key>
+			<key>black-purple</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>OrangeBlack</string>
+					<string>black-purple</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>OrangeWhite</key>
+			<key>black-red</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>OrangeWhite</string>
+					<string>black-red</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>PinkBlack</key>
+			<key>black-yellow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>PinkBlack</string>
+					<string>black-yellow</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>PinkWhite</key>
+			<key>blue-black</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>PinkWhite</string>
+					<string>blue-black</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>PurpleBlack</key>
+			<key>blue-white</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>PurpleBlack</string>
+					<string>blue-white</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>PurpleWhite</key>
+			<key>green-black</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>PurpleWhite</string>
+					<string>green-black</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>RedBlack</key>
+			<key>green-white</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>RedBlack</string>
+					<string>green-white</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>RedWhite</key>
+			<key>orange-black</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>RedWhite</string>
+					<string>orange-black</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>White</key>
+			<key>orange-white</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>White</string>
+					<string>orange-white</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>YellowBlack</key>
+			<key>pink-black</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>YellowBlack</string>
+					<string>pink-black</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>YellowWhite</key>
+			<key>pink-white</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>YellowWhite</string>
+					<string>pink-white</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
+            <key>purple-black</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>purple-black</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>red-black</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>red-black</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>red-white</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>red-white</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>white-black</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>white-black</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>white-blue</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>white-blue</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>white-green</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>white-green</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>white-orange</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>white-orange</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>white-pink</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>white-pink</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>white-purple</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>white-purple</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>white-red</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>white-red</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>white-yellow</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>white-yellow</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>yellow-black</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>yellow-black</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
+            <key>yellow-white</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>yellow-white</string>
+                </array>
+                <key>Icon alredy includes gloss effects</key>
+                <false/>
+            </dict>
 		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
