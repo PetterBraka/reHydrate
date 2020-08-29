@@ -37,33 +37,33 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-            <key>black-pink</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>black-pink</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
-            <key>black-purple</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>black-purple</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
-            <key>black-rainbow</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>black-rainbow</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
+			<key>black-pink</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>black-pink</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
+			<key>black-purple</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>black-purple</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
+			<key>black-rainbow</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>black-rainbow</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>black-red</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -73,15 +73,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-            <key>black-white</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>black-white</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
+			<key>black-white</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>black-white</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>black-yellow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -109,15 +109,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-            <key>grey-white</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>green-white</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
+			<key>grey-white</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>grey-white</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>orange-white</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -145,15 +145,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-            <key>rainbow-white</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>rainbow-white</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
+			<key>rainbow-white</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>rainbow-white</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>red-white</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -163,15 +163,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-            <key>yellow-white</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>yellow-white</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
+			<key>yellow-white</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>yellow-white</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>white-black</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -199,15 +199,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-            <key>white-grey</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>white-grey</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
+			<key>white-grey</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>white-grey</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>white-orange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -235,15 +235,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-            <key>white-rainbow</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>white-rainbow</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
+			<key>white-rainbow</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>white-rainbow</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>white-red</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -253,15 +253,15 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-            <key>white-white</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>white-white</string>
-                </array>
-                <key>Icon alredy includes gloss effects</key>
-                <false/>
-            </dict>
+			<key>white-white</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>white-white</string>
+				</array>
+				<key>Icon alredy includes gloss effects</key>
+				<false/>
+			</dict>
 			<key>white-yellow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
