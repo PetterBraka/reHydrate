@@ -424,7 +424,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 } else {
                     let message = ["phoneDate": self.formatter.string(from: self.today.date),
                                    "phoneGoal": String(self.today.goal.amount),
-                                   "phoneConsumed": String(self.today.consumed.amount)]
+                                   "phoneConsumed": String(self.today.consumed.amount),
+                                   "phoneDrinks": "\(self.drinkOptions[0].amount),\(self.drinkOptions[1].amount),\(self.drinkOptions[2].amount)"]
                     if WCSession.default.isReachable {
                         WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
                             print(error.localizedDescription)
@@ -445,7 +446,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal.amount),
-                           "phoneConsumed": String(today.consumed.amount)]
+                           "phoneConsumed": String(today.consumed.amount),
+                           "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
             WCSession.default.transferCurrentComplicationUserInfo(message)
         }
     }
@@ -846,7 +848,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal.amount),
-                           "phoneConsumed": String(today.consumed.amount)]
+                           "phoneConsumed": String(today.consumed.amount),
+                           "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
             WCSession.default.transferCurrentComplicationUserInfo(message)
         }
     }
@@ -999,6 +1002,18 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         defaults.set(drinkOptions[1].amount, forKey: mediumDrinkOptionString)
         defaults.set(drinkOptions[2].amount, forKey: largeDrinkOptionString)
         updateUI()
+        let message = ["phoneDate": formatter.string(from: today.date),
+                       "phoneGoal": String(today.goal.amount),
+                       "phoneConsumed": String(today.consumed.amount),
+                       "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
+        if WCSession.default.isReachable {
+            WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                print(error.localizedDescription)
+            }
+            WCSession.default.transferCurrentComplicationUserInfo(message)
+        } else {
+            WCSession.default.transferUserInfo(message)
+        }
     }
     
     /**
@@ -1096,7 +1111,8 @@ extension StartVC: WCSessionDelegate {
             } else {
                 let message = ["phoneDate": formatter.string(from: today.date),
                                "phoneGoal": String(today.goal.amount),
-                               "phoneConsumed": String(today.consumed.amount)]
+                               "phoneConsumed": String(today.consumed.amount),
+                               "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
                 if WCSession.default.isReachable {
                     WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
                         print(error.localizedDescription)
@@ -1132,7 +1148,8 @@ extension StartVC: WCSessionDelegate {
             } else {
                 let message = ["phoneDate": formatter.string(from: today.date),
                                "phoneGoal": String(today.goal.amount),
-                               "phoneConsumed": String(today.consumed.amount)]
+                               "phoneConsumed": String(today.consumed.amount),
+                               "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
                 if WCSession.default.isReachable {
                     WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
                         print(error.localizedDescription)
