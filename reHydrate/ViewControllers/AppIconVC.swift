@@ -91,8 +91,6 @@ class AppIconVC: UIViewController{
         tableView.dataSource = self
         tableView.allowsSelection = false
         
-        _ = UIApplication.shared.alternateIconName ?? "black-white"
-        
     }
     
     /**
@@ -174,6 +172,37 @@ extension AppIconVC: UITableViewDelegate, UITableViewDataSource{
         cell.cellImage0.setTitle(icons[indexPath.row][0], for: .normal)
         cell.cellImage1.setTitle(icons[indexPath.row][1], for: .normal)
         cell.cellImage2.setTitle(icons[indexPath.row][2], for: .normal)
+        let selectedIcon = UIApplication.shared.alternateIconName ?? "black-white"
+        switch selectedIcon {
+        case cell.cellImage0.titleLabel!.text:
+            cell.cellImage0.layer.borderWidth = 5
+            cell.cellImage0.layer.borderColor = UIColor.gray.withAlphaComponent(0.6).cgColor
+            cell.cellImage1.layer.borderWidth = 1
+            cell.cellImage1.layer.borderColor = UIColor.black.cgColor
+            cell.cellImage2.layer.borderWidth = 1
+            cell.cellImage2.layer.borderColor = UIColor.black.cgColor
+        case cell.cellImage1.titleLabel!.text:
+            cell.cellImage0.layer.borderWidth = 1
+            cell.cellImage0.layer.borderColor = UIColor.black.cgColor
+            cell.cellImage1.layer.borderWidth = 5
+            cell.cellImage1.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.6).cgColor
+            cell.cellImage2.layer.borderWidth = 1
+            cell.cellImage2.layer.borderColor = UIColor.black.cgColor
+        case cell.cellImage2.titleLabel!.text:
+            cell.cellImage0.layer.borderWidth = 1
+            cell.cellImage0.layer.borderColor = UIColor.black.cgColor
+            cell.cellImage1.layer.borderWidth = 1
+            cell.cellImage1.layer.borderColor = UIColor.black.cgColor
+            cell.cellImage2.layer.borderWidth = 5
+            cell.cellImage2.layer.borderColor = UIColor.white.withAlphaComponent(0.6).cgColor
+        default:
+            cell.cellImage0.layer.borderWidth = 1
+            cell.cellImage0.layer.borderColor = UIColor.black.cgColor
+            cell.cellImage1.layer.borderWidth = 1
+            cell.cellImage1.layer.borderColor = UIColor.black.cgColor
+            cell.cellImage2.layer.borderWidth = 1
+            cell.cellImage2.layer.borderColor = UIColor.black.cgColor
+        }
         cell.setCellAppairents(darkMode)
         return cell
     }
