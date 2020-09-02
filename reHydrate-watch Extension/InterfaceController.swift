@@ -119,6 +119,7 @@ class InterfaceController: WKInterfaceController {
             //send the updated date to the phone instantly.
             WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { (error) in
                 print(error.localizedDescription)
+                WCSession.default.transferUserInfo(message)
             })
         } else {
             // if the watch isn't connected this message will be sent with a long term time out.
