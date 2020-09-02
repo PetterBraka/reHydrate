@@ -120,6 +120,8 @@ class AppIconCell: UITableViewCell {
                     }
                 }
             }
+            let tableview = self.superview as! UITableView
+            tableview.reloadData()
         } else {
             print("App does not support alternate icons")
         }
