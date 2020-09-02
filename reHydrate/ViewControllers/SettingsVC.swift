@@ -53,8 +53,7 @@ class SettingsVC: UIViewController {
     var selectedRow: IndexPath     = IndexPath()
     var settings: [settingOptions] = [
         settingOptions(isOpened: false, setting: NSLocalizedString("Appearance", comment: "Header title"),
-                       options: [NSLocalizedString("DarkMode", comment: "settings option"),
-                                 NSLocalizedString("AppIcon", comment: "setting option")]),
+                       options: [NSLocalizedString("DarkMode", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("UnitSystem", comment: "Header title"),
                        options: [NSLocalizedString("MetricSystem", comment: "settings option"),
                                  NSLocalizedString("ImperialSystem", comment: "settings option")]),
@@ -138,6 +137,10 @@ class SettingsVC: UIViewController {
             settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
             settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
             settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
+        }
+        
+        if UIApplication.shared.supportsAlternateIcons {
+            settings[0].options.append(NSLocalizedString("AppIcon", comment: "setting option"))
         }
         
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
