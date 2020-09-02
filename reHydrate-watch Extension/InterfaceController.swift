@@ -141,16 +141,22 @@ extension InterfaceController: WCSessionDelegate{
         print("resived message")
         print(message)
         let response = ["date": formatter.string(from: today.date),
-                            "metric": String(metric),
-                            "consumed": String(today.consumed.amount)] as [String : String]
+                        "metric": String(metric),
+                        "consumed": String(today.consumed.amount)] as [String : String]
         replyHandler(response)
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         print("sent data with transferUserInfo")
-        let phoneDate = String(describing: userInfo["phoneDate"] ?? "")
-        let phoneGoal = String(describing: userInfo["phoneGoal"] ?? "")
+        let phoneDate     = String(describing: userInfo["phoneDate"] ?? "")
+        let phoneGoal     = String(describing: userInfo["phoneGoal"] ?? "")
         let phoneConsumed = String(describing: userInfo["phoneConsumed"] ?? "")
+        let phoneDrinks   = String(describing: userInfo["phoneDrinks"] ?? "")
+        
+        let drinkOptions = phoneDrinks.components(separatedBy: ",")
+        self.smallDrink  = Drink(typeOfDrink: "water", amountOfDrink: Double(drinkOptions[0]) ?? 300)
+        self.mediumDrink = Drink(typeOfDrink: "water", amountOfDrink: Double(drinkOptions[1]) ?? 500)
+        self.largeDrink  = Drink(typeOfDrink: "water", amountOfDrink: Double(drinkOptions[2]) ?? 750)
         formatter.dateFormat = "EEEE - dd/MM/yy"
         today = days.updateToday()
         if formatter.string(from: today.date) == phoneDate {
