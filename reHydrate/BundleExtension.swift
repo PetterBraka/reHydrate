@@ -1,5 +1,5 @@
 //
-//  BundleExtension.swift .swift
+//  BundleExtension.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 30/05/2020.
