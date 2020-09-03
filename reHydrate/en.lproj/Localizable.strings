@@ -49,9 +49,9 @@
 "congrats3Title"  = "Congrats";
 "congrats3Body"   = "Another one for the records books.";
 "congrats4Title"  = "Finally done";
-"congrats4Title"  = "You don't need to worry about it anymore.";
+"congrats4Body"  = "You don't need to worry about it anymore.";
 "congrats5Title"  = "Hey,";
-"congrats5Title"  = "Did you see what you did.";
+"congrats5Body"  = "Did you see what you did.";
 "congrats6Title"  = "Me again";
 "congrats6Body"   = "Congratulation you reach your goal.";
 "congrats7Title"  = "Belive it or not, you did it!";

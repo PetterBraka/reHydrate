@@ -49,9 +49,9 @@
 "congrats3Title"  = "Grattis";
 "congrats3Body"   = "En til for historiebøkene.";
 "congrats4Title"  = "Endelig ferdig";
-"congrats4Title"  = "Du trenger ikke tenke på dette mere.";
+"congrats4Body"  = "Du trenger ikke tenke på dette mere.";
 "congrats5Title"  = "Hei";
-"congrats5Title"  = "Ser du hva du har gjort. Du klarte det!";
+"congrats5Body"  = "Ser du hva du har gjort. Du klarte det!";
 "congrats6Title"  = "Hei meg igjen,";
 "congrats6Body"   = "Gratulere du klarte målet ditt";
 "congrats7Title"  = "Tro det eller ei, du klarte det!";
