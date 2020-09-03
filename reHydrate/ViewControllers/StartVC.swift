@@ -13,7 +13,7 @@ import HealthKit
 import FSCalendar
 import WatchConnectivity
 
-let versionString = "version3.7"
+let versionString = "version3.9"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
