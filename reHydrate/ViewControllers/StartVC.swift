@@ -814,19 +814,21 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
                 let intervals = self.defaults.integer(forKey: reminderIntervalString)
                 
-                var tempStart = Calendar.current.dateComponents([.day, .hour, .minute], from: startDate)
-                var tempEnd   = Calendar.current.dateComponents([.day, .hour, .minute], from: endDate)
-                let tempNow   = Calendar.current.dateComponents([.day, .hour, .minute], from: Date())
+                var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
+                var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
+                let tempNow   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
                 // checks if the goal has been reached
                 if self.today.goal.amount <= self.today.consumed.amount {
                     current.removeAllPendingNotificationRequests()
+                    //Setting reminders for tomorrow.
                     tempStart.day = tempNow.day! + 1
                     tempEnd.day   = tempNow.day! + 1
                     setReminders(Calendar.current.date(from: tempStart)!,
                                  Calendar.current.date(from: tempEnd)!,
                                  intervals)
+                    //Setting up a congratulation message.
                     let notificationCenter = UNUserNotificationCenter.current()
-                    let notificationDate = Calendar.current.date(byAdding: .minute, value: 2, to: Date())
+                    let notificationDate = Calendar.current.date(byAdding: .minute, value: 1, to: Date())
                     let notification = getCongratulationReminder()
                     let date = Calendar.current.dateComponents([.hour, .minute], from: notificationDate!)
                     let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
@@ -1216,9 +1218,8 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
     let differenceInMunutes = (difference.hour! * 60) + difference.minute!
     let totalNotifications = Double(differenceInMunutes / intervals).rounded(.down)
     
-    print(difference)
-    print(differenceInMunutes)
-    print(totalNotifications)
+    print("difference \(differenceInMunutes)")
+    print("total notifications \(totalNotifications)")
     
     let small   = UserDefaults.standard.double(forKey: smallDrinkOptionString)
     let medium  = UserDefaults.standard.double(forKey: mediumDrinkOptionString)
@@ -1240,6 +1241,9 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
         largeDrink  = String(format: "%.2f", Measurement(value: large, unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
         unit = "fl oz"
     }
+    let formatter = DateFormatter()
+    formatter.dateFormat = "dd/MM/YYYY"
+    print(formatter.string(from: startDate))
     for i in 0...Int(totalNotifications) {
         let notificationDate = Calendar.current.date(byAdding: .minute, value: intervals * i, to: startDate)
         let formatter = DateFormatter()
@@ -1253,7 +1257,7 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
         let largeDrinkAction = UNNotificationAction(identifier: "large", title: "\(NSLocalizedString("Add", comment: "")) \(largeDrink)\(unit)",
                                                     options: UNNotificationActionOptions(rawValue: 0))
         let category = UNNotificationCategory(identifier: "reminders", actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction], intentIdentifiers: [], options: .customDismissAction)
-        let date = Calendar.current.dateComponents([.hour, .minute], from: notificationDate!)
+        let date = Calendar.current.dateComponents([.day, .hour, .minute], from: notificationDate!)
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
