@@ -41,6 +41,27 @@
 "OpenAppSettings"  = "Open app settings";
 "OpenHealthApp"    = "Open the health app";
 "RemoveData"       = "Remove data";
+// Congratulations
+"congrats1Title"  = "Congratulation";
+"congrats1Body"   = "You made your goal.";
+"congrats2Title"  = "Finally,";
+"congrats2Body"   = "You did it.";
+"congrats3Title"  = "Congrats";
+"congrats3Body"   = "Another one for the records books.";
+"congrats4Title"  = "Finally done";
+"congrats4Title"  = "You don't need to worry about it anymore.";
+"congrats5Title"  = "Hey,";
+"congrats5Title"  = "Did you see what you did.";
+"congrats6Title"  = "Me again";
+"congrats6Body"   = "Congratulation you reach your goal.";
+"congrats7Title"  = "Belive it or not, you did it!";
+"congrats7Body"   = "It's realy good.";
+"congrats8Title"  = "You did it!";
+"congrats8Body"   = "I knew you would do it.";
+"congrats9Title"  = "Look at that,";
+"congrats9Body"   = "You did it.";
+"congrats10Title" = "Well have a look at that";
+"congrats10Body"  = "You reached your goal.";
 
 // Reminders
 "reminder1Title"  = "You should have some water.";

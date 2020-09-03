@@ -41,7 +41,27 @@
 "OpenAppSettings"  = "Åpne app innstillinger";
 "OpenHealthApp"    = "Åpne helse appen";
 "RemoveData"       = "Fjern data";
-
+// Congratulations
+"congrats1Title"  = "Gratulerer";
+"congrats1Body"   = "Du node målet.";
+"congrats2Title"  = "Endelig,";
+"congrats2Body"   = "Du klarte det.";
+"congrats3Title"  = "Grattis";
+"congrats3Body"   = "En til for historiebøkene.";
+"congrats4Title"  = "Endelig ferdig";
+"congrats4Title"  = "Du trenger ikke tenke på dette mere.";
+"congrats5Title"  = "Hei";
+"congrats5Title"  = "Ser du hva du har gjort. Du klarte det!";
+"congrats6Title"  = "Hei meg igjen,";
+"congrats6Body"   = "Gratulere du klarte målet ditt";
+"congrats7Title"  = "Tro det eller ei, du klarte det!";
+"congrats7Body"   = "Kjempe bra";
+"congrats8Title"  = "Du klarte det!";
+"congrats8Body"   = "Jeg visste at du kunne klare det.";
+"congrats9Title"  = "Ser man det,";
+"congrats9Body"   = "Du klarte det!";
+"congrats10Title" = "Nei men ser man det,";
+"congrats10Body"  = "Du node målet ditt";
 //reminders
 "reminder1Title"  = "Skulle ikke hatt litt vann?";
 "reminder1Body"   = "Det er en stund siden du har hatt vann.";
