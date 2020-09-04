@@ -38,5 +38,5 @@ https://github.com/PetterBraka/reHydrate/issues
 
 
 #### Version: 1.0
-Last updated 10th Sep 2020
+Last updated 4th Sep 2020
 
