@@ -13,7 +13,7 @@ import HealthKit
 import FSCalendar
 import WatchConnectivity
 
-let versionString = "version3.7"
+let versionString = "version3.9"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -438,7 +438,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             } errorHandler: { (error) in
                 print(error.localizedDescription)
             }
-
+            
         }
     }
     
@@ -814,29 +814,50 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
                 let intervals = self.defaults.integer(forKey: reminderIntervalString)
                 
-                let tempStart = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-                let tempEnd   = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-                let tempNow   = Calendar.current.dateComponents([.hour, .minute], from: Date())
-                
-                //checks if the current time is within the notifications time span.
-                if ((tempStart.hour! == tempNow.hour! && tempStart.minute! < tempNow.minute!) ||
-                    tempStart.hour! < tempNow.hour!) &&
-                    ((tempEnd.hour! == tempNow.hour! && tempEnd.minute! > tempNow.minute!) ||
-                        tempEnd.hour! > tempNow.hour!)
-                    {
-                    //sets new reminders for the notification range
+                var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
+                var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
+                let tempNow   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
+                // checks if the goal has been reached
+                if self.today.goal.amount <= self.today.consumed.amount {
+                    current.removeAllPendingNotificationRequests()
+                    //Setting reminders for tomorrow.
+                    tempStart.day = tempNow.day! + 1
+                    tempEnd.day   = tempNow.day! + 1
                     setReminders(Calendar.current.date(from: tempStart)!,
                                  Calendar.current.date(from: tempEnd)!,
                                  intervals)
-                    current.getPendingNotificationRequests {(requests) in
-                        for request in requests {
-                            if let trigger = request.trigger as? UNCalendarNotificationTrigger,
-                                let triggerDate = trigger.nextTriggerDate(){
-                                let difference = Calendar.current.dateComponents([.hour, .minute], from: Date(), to: triggerDate)
-                                let differenceInMunutes = (difference.hour! * 60) + difference.minute!
-                                // Checks if the time to the next notification is within half of the interval time.
-                                if differenceInMunutes < Int(Double(intervals) * 0.8) {
-                                    current.removePendingNotificationRequests(withIdentifiers: [request.identifier])
+                    //Setting up a congratulation message.
+                    let notificationCenter = UNUserNotificationCenter.current()
+                    let notificationDate = Calendar.current.date(byAdding: .minute, value: 1, to: Date())
+                    let notification = getCongratulationReminder()
+                    let date = Calendar.current.dateComponents([.hour, .minute], from: notificationDate!)
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
+                    let uuidString = UUID().uuidString
+                    let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+                    notificationCenter.add(request, withCompletionHandler: nil) 
+                } else {
+                    //checks if the current time is within the notifications time span.
+                    if ((tempStart.hour! == tempNow.hour! &&
+                            tempStart.minute! < tempNow.minute!) ||
+                            tempStart.hour! < tempNow.hour!) &&
+                        ((tempEnd.hour! == tempNow.hour! &&
+                            tempEnd.minute! > tempNow.minute!) ||
+                            tempEnd.hour! > tempNow.hour!)
+                    {
+                        //sets new reminders for the notification range
+                        setReminders(Calendar.current.date(from: tempStart)!,
+                                     Calendar.current.date(from: tempEnd)!,
+                                     intervals)
+                        current.getPendingNotificationRequests {(requests) in
+                            for request in requests {
+                                if let trigger = request.trigger as? UNCalendarNotificationTrigger,
+                                   let triggerDate = trigger.nextTriggerDate(){
+                                    let difference = Calendar.current.dateComponents([.hour, .minute], from: Date(), to: triggerDate)
+                                    let differenceInMunutes = (difference.hour! * 60) + difference.minute!
+                                    // Checks if the time to the next notification is within half of the interval time.
+                                    if differenceInMunutes < Int(Double(intervals) * 0.8) {
+                                        current.removePendingNotificationRequests(withIdentifiers: [request.identifier])
+                                    }
                                 }
                             }
                         }
@@ -1192,14 +1213,13 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
     UserDefaults.standard.set(true, forKey: remindersString)
     
     let intervals = frequency
-        
+    
     let difference = Calendar.current.dateComponents([.hour, .minute], from: startDate, to: endDate)
     let differenceInMunutes = (difference.hour! * 60) + difference.minute!
     let totalNotifications = Double(differenceInMunutes / intervals).rounded(.down)
-
-    print(difference)
-    print(differenceInMunutes)
-    print(totalNotifications)
+    
+    print("difference \(differenceInMunutes)")
+    print("total notifications \(totalNotifications)")
     
     let small   = UserDefaults.standard.double(forKey: smallDrinkOptionString)
     let medium  = UserDefaults.standard.double(forKey: mediumDrinkOptionString)
@@ -1221,6 +1241,9 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
         largeDrink  = String(format: "%.2f", Measurement(value: large, unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
         unit = "fl oz"
     }
+    let formatter = DateFormatter()
+    formatter.dateFormat = "dd/MM/YYYY"
+    print(formatter.string(from: startDate))
     for i in 0...Int(totalNotifications) {
         let notificationDate = Calendar.current.date(byAdding: .minute, value: intervals * i, to: startDate)
         let formatter = DateFormatter()
@@ -1234,7 +1257,7 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
         let largeDrinkAction = UNNotificationAction(identifier: "large", title: "\(NSLocalizedString("Add", comment: "")) \(largeDrink)\(unit)",
                                                     options: UNNotificationActionOptions(rawValue: 0))
         let category = UNNotificationCategory(identifier: "reminders", actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction], intentIdentifiers: [], options: .customDismissAction)
-        let date = Calendar.current.dateComponents([.hour, .minute], from: notificationDate!)
+        let date = Calendar.current.dateComponents([.day, .hour, .minute], from: notificationDate!)
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
@@ -1293,6 +1316,41 @@ func getReminder()-> UNMutableNotificationContent{
     return notification
 }
 
+func getCongratulationReminder()-> UNMutableNotificationContent{
+    struct reminder {
+        var title = String()
+        var body  = String()
+    }
+    let reminderMessages: [reminder] = [
+        reminder(title: NSLocalizedString("congrats1Title" , comment: "First reminder title"),
+                 body:  NSLocalizedString("congrats1Body"  , comment: "First reminder body")),
+        reminder(title: NSLocalizedString("congrats2Title" , comment: "Second reminder title"),
+                 body:  NSLocalizedString("congrats2Body"  , comment: "Second reminder body")),
+        reminder(title: NSLocalizedString("congrats3Title" , comment: "third reminder title"),
+                 body:  NSLocalizedString("congrats3Body"  , comment: "third reminder body")),
+        reminder(title: NSLocalizedString("congrats4Title" , comment: "forth reminder title"),
+                 body:  NSLocalizedString("congrats4Body"  , comment: "forth reminder body")),
+        reminder(title: NSLocalizedString("congrats5Title" , comment: "fifth reminder title"),
+                 body:  NSLocalizedString("congrats5Body"  , comment: "fifth reminder body")),
+        reminder(title: NSLocalizedString("congrats6Title" , comment: "sixth reminder title"),
+                 body:  NSLocalizedString("congrats6Body"  , comment: "sixth reminder body")),
+        reminder(title: NSLocalizedString("congrats7Title" , comment: "seventh reminder title"),
+                 body:  NSLocalizedString("congrats7Body"  , comment: "seventh reminder body")),
+        reminder(title: NSLocalizedString("congrats8Title" , comment: "eighth reminder title"),
+                 body:  NSLocalizedString("congrats8Body"  , comment: "eighth reimder body")),
+        reminder(title: NSLocalizedString("congrats9Title" , comment: "ninth reminder title"),
+                 body:  NSLocalizedString("congrats9Body"  , comment: "ninth reminder body")),
+        reminder(title: NSLocalizedString("congrats10Title", comment: "tenth reminder title"),
+                 body:  NSLocalizedString("congrats10Body" , comment: "tenth reminder body"))]
+    let randomInt = Int.random(in: 0...reminderMessages.count - 1)
+    let notification = UNMutableNotificationContent()
+    notification.title = reminderMessages[randomInt].title
+    notification.body  = reminderMessages[randomInt].body
+    notification.categoryIdentifier = "congratulations"
+    notification.sound  = .default
+    return notification
+}
+
 #if DEBUG
 
 struct startVCRepresentable: UIViewControllerRepresentable {
@@ -1309,9 +1367,9 @@ struct startVCRepresentable: UIViewControllerRepresentable {
 @available(iOS 13.0, *)
 struct startVCPreview: PreviewProvider {
     static var previews: some View {
-       startVCRepresentable()
-        .previewDevice(PreviewDevice(rawValue: "iPhone XS"))
-        .previewDisplayName("iPhone XS")
+        startVCRepresentable()
+            .previewDevice(PreviewDevice(rawValue: "iPhone XS"))
+            .previewDisplayName("iPhone XS")
     }
 }
 #endif
