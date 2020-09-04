@@ -20,6 +20,9 @@
 "LightMode"        = "Light mode";
 "DarkMode"         = "Dark Mode";
 "AppIcon"          = "Change app icon";
+"Language"         = "Language";
+"en"               = "English";
+"nb"               = "Norsk";
 "UnitSystem"       = "Unit system";
 "Units"            = "Units";
 "MetricSystem"     = "Metric system";
@@ -32,15 +35,20 @@
 "StartingTime"     = "Starting time";
 "EndingTime"       = "Ending time";
 "Frequency"        = "Frequency";
-"Introductions"    = "General";
-"Language"         = "Language";
-"en"               = "English";
-"nb"               = "Norsk";
 "HowToUse"         = "How to use";
 "DangerZone"       = "Danger zone";
 "OpenAppSettings"  = "Open app settings";
 "OpenHealthApp"    = "Open the health app";
 "RemoveData"       = "Remove data";
+"Introductions"    = "More";
+"DevInsta"         = "Developer Instagram";
+"FeatureRequest"   = "Request a feature";
+"ReportBug"        = "Report a bug";
+"ContactUs"        = "Contact us";
+"PrivacyPolicy"    = "Privacy policy";
+"VersionNumber"    = "Version:";
+
+
 // Congratulations
 "congrats1Title"  = "Congratulations";
 "congrats1Body"   = "You made your goal!";
@@ -115,17 +123,6 @@
 "Consumed"    = "Consumed";
 "DrinkType"   = "Drink type";
 "DrinkAmount" = "Drink amount";
-
-// AppIcon
-"Black"  = "Black";
-"White"  = "White";
-"Blue"   = "Blue";
-"Green"  = "Green";
-"Orange" = "Orange";
-"Pink"   = "Pink";
-"Purple" = "Purple";
-"Red"    = "Red";
-"Yellow" = "Yellow";
 
 // Watch
 "toGo"    = "to go";

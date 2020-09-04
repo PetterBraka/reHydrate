@@ -12,3 +12,5 @@ This is a project for creating an app that can track your water consumption thro
 <a href="url"><img src="/mockups/settings-screen-dark-mockup.png" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/main-screen-dark-mockup.png" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/calendar-screen-dark-mockup.png" align="center" height="450" width="220"></a> 
 
 <a href="url"><img src="/mockups/settings-screen-white-mockup.png" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/main-screen-white-mockup.png" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/calendar-screen-white-mockup.png" align="center" height="450" width="220"></a> 
+
+## Read our privacy Policy [here](/Privacy-Policy.md)
