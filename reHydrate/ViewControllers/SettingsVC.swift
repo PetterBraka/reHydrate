@@ -8,6 +8,7 @@
 
 import UIKit
 import HealthKit
+import MessageUI
 
 struct settingOptions {
     var isOpened: Bool
@@ -15,7 +16,7 @@ struct settingOptions {
     var options:  [String]
 }
 
-class SettingsVC: UIViewController {
+class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
     
     // MARK: - Variabels
     let defaults                   = UserDefaults.standard
@@ -53,7 +54,8 @@ class SettingsVC: UIViewController {
     var selectedRow: IndexPath     = IndexPath()
     var settings: [settingOptions] = [
         settingOptions(isOpened: false, setting: NSLocalizedString("Appearance", comment: "Header title"),
-                       options: [NSLocalizedString("DarkMode", comment: "settings option")]),
+                       options: [NSLocalizedString("DarkMode", comment: "settings option"),
+                                 NSLocalizedString("Language", comment: "setting option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("UnitSystem", comment: "Header title"),
                        options: [NSLocalizedString("MetricSystem", comment: "settings option"),
                                  NSLocalizedString("ImperialSystem", comment: "settings option")]),
@@ -61,13 +63,18 @@ class SettingsVC: UIViewController {
                        options: [NSLocalizedString("SetYourGoal", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("Reminders", comment: "Header title"),
                        options: [NSLocalizedString("TurnOnReminders", comment: "settings option")]),
-        settingOptions(isOpened: false, setting: NSLocalizedString("Introductions", comment: "Header title"),
-                       options: [NSLocalizedString("Language", comment: "setting option"),
-                                 NSLocalizedString("HowToUse", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("DangerZone", comment: "Header title"),
                        options: [NSLocalizedString("OpenAppSettings", comment: "settings option"),
                                  NSLocalizedString("OpenHealthApp", comment: "settings option"),
-                                 NSLocalizedString("RemoveData", comment: "settings option")])]
+                                 NSLocalizedString("RemoveData", comment: "settings option")]),
+        settingOptions(isOpened: false, setting: NSLocalizedString("Introductions", comment: "Header title"),
+                       options: [NSLocalizedString("HowToUse", comment: "How to use the app"),
+                                 NSLocalizedString("DevInsta", comment: "Developers instagram account"),
+                                 NSLocalizedString("FeatureRequest", comment: "Link to github and feature requests"),
+                                 NSLocalizedString("ReportBug", comment: "Link to github and bug reports"),
+                                 NSLocalizedString("ContactUs", comment: "Link to devs twitter"),
+                                 NSLocalizedString("PrivacyPolicy", comment: "Link to the apps privacy policy"),
+                                 NSLocalizedString("VersionNumber", comment: "Disply version of app")])]
     
     //MARK: - Tap controller
     
@@ -140,7 +147,7 @@ class SettingsVC: UIViewController {
         }
         
         if UIApplication.shared.supportsAlternateIcons {
-            settings[0].options.append(NSLocalizedString("AppIcon", comment: "setting option"))
+            settings[0].options.insert(NSLocalizedString("AppIcon", comment: "setting option"), at: 1)
         }
         
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
@@ -273,8 +280,9 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         cell.selectionStyle  = .none
         cell.setCellAppairents(darkMode, metricUnits)
         switch indexPath {
-        case IndexPath(row: 1, section: 0), IndexPath(row: 1, section: 4), IndexPath(row: 0, section: 5),
-             IndexPath(row: 1, section: 5):
+        case IndexPath(row: 1, section: 0), IndexPath(row: 0, section: 4), IndexPath(row: 1, section: 4),
+             IndexPath(row: 0, section: 5), IndexPath(row: 1, section: 5), IndexPath(row: 2, section: 5),
+             IndexPath(row: 3, section: 5), IndexPath(row: 4, section: 5), IndexPath(row: 5, section: 5):
             cell.buttonForCell.isHidden = false
             if #available(iOS 13.0, *) {
                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
@@ -309,7 +317,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
             } else {
                 if #available(iOS 13.0, *) {
-                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                 } else {
                     if darkMode {
                         cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
@@ -322,7 +330,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
-        case IndexPath(row: 2, section: 5):
+        case IndexPath(row: 2, section: 4):
             cell.buttonForCell.isHidden = false
             if #available(iOS 13.0, *) {
                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
@@ -337,9 +345,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.setButtonConstraints()
         case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
              IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
-             IndexPath(row: 0, section: 4):
+             IndexPath(row: 2, section: 0):
             cell.subTitle.removeFromSuperview()
-            break
+        case IndexPath(row: 6, section: 5):
+            cell.titleOption.text!.append(" \(String(describing: Bundle.main.infoDictionary!["CFBundleShortVersionString"]!))")
+            cell.textField.removeFromSuperview()
+            cell.subTitle.removeFromSuperview()
+            cell.setTitleConstraints()
+            cell.setButtonConstraints()
         default:
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
@@ -440,20 +453,15 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 defaults.set(false, forKey: remindersString)
                 sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
             }
-        case IndexPath(row: 1, section: 4):
-            print("help pressed")
-            let tutorialVC = TutorialVC()
-            tutorialVC.modalPresentationStyle = .fullScreen
-            self.present(tutorialVC, animated: true, completion: nil)
-        case IndexPath(row: 0, section: 5):
+        case IndexPath(row: 0, section: 4):
             if let url = URL(string:UIApplication.openSettingsURLString) {
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
-        case IndexPath(row: 1, section: 5):
+        case IndexPath(row: 1, section: 4):
             UIApplication.shared.open(URL(string: "x-apple-health://")!)
-        case IndexPath(row: 2, section: 5):
+        case IndexPath(row: 2, section: 4):
             let clearDataAlert = UIAlertController(title: NSLocalizedString("ClearingDataAlert",
                                                                             comment: "Title for clearing data alert"),
                                                    message: NSLocalizedString("ClearingDataBody",
@@ -483,6 +491,100 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 self.dismiss(animated: false, completion: nil)
             }))
             self.present(clearDataAlert, animated: true, completion: nil)
+        case IndexPath(row: 0, section: 5):
+            print("help pressed")
+            let tutorialVC = TutorialVC()
+            tutorialVC.modalPresentationStyle = .fullScreen
+            self.present(tutorialVC, animated: true, completion: nil)
+        case IndexPath(row: 1, section: 5):
+            if let url = URL(string: "https://www.instagram.com/braka.coding/"),
+               UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:])
+            }
+        case IndexPath(row: 2, section: 5):
+            if MFMailComposeViewController.canSendMail() {
+                let mail = MFMailComposeViewController()
+                mail.mailComposeDelegate = self
+                mail.setToRecipients(["PetterBraka@gmail.com"])
+                mail.setSubject("Feature Request -reHydrate")
+                mail.setMessageBody("""
+Hi,<br>
+**Is your feature request related to a problem?**<br>
+Please describe:
+<br>
+**Describe the solution you'd like**<br>
+Please describe your feature:
+<br>
+**Additional context**<br>
+"""
+                                    , isHTML: true)
+                present(mail, animated: true)
+            } else {
+                sendToastMessage("E-mail couldn't open /ndownload Mail for the app store", 5)
+                if let url = URL(string: "https://github.com/PetterBraka/reHydrate/issues"),
+                   UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:])
+                }
+            }
+        case IndexPath(row: 3, section: 5):
+            if MFMailComposeViewController.canSendMail() {
+                UIDevice.current.isBatteryMonitoringEnabled = true
+                let mail = MFMailComposeViewController()
+                mail.mailComposeDelegate = self
+                mail.setToRecipients(["PetterBraka@gmail.com"])
+                mail.setSubject("Bug Request -reHydrate")
+                mail.setMessageBody("""
+**Describe the bug**<br>
+Please describe the bug:<br>
+<br>
+**To Reproduce**<br>
+Steps to reproduce the behaviour:<br>
+1. Go to '...'<br>
+2. Click on '....'<br>
+3. Scroll down to '....'<br>
+4. See error<br>
+<br>
+Please add any screenshots you have of the porblem:<br>
+<br>
+**Device info (please check if the following information):**<br>
+ - Battery: \(UIDevice.current.batteryLevel * 100)%<br>
+ - OS: \(UIDevice.current.systemVersion.description)<br>
+ - App version: \(String(describing: Bundle.main.infoDictionary!["CFBundleShortVersionString"]!))<br>
+"""
+                                    , isHTML: true)
+                present(mail, animated: true)
+            } else {
+                sendToastMessage("E-mail couldn't open /ndownload Mail for the app store", 5)
+                if let url = URL(string: "https://github.com/PetterBraka/reHydrate/issues"),
+                   UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:])
+                }
+            }
+        case IndexPath(row: 4, section: 5):
+            if MFMailComposeViewController.canSendMail() {
+                UIDevice.current.isBatteryMonitoringEnabled = true
+                let mail = MFMailComposeViewController()
+                mail.mailComposeDelegate = self
+                mail.setToRecipients(["PetterBraka@gmail.com"])
+                mail.setSubject("-reHydrate")
+                mail.setMessageBody("""
+Hi,<br>
+Thank you for getting in contact with us<br>
+"""
+                                    , isHTML: true)
+                present(mail, animated: true)
+            } else {
+                sendToastMessage("E-mail couldn't open /ndownload Mail for the app store", 5)
+                if let url = URL(string: "https://twitter.com/PetterBraka"),
+                   UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:])
+                }
+            }
+        case IndexPath(row: 5, section: 5):
+            if let url = URL(string: "https://github.com/PetterBraka/reHydrate/wiki/Privacy-Policy"),
+               UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:])
+            }
         default:
             break
         }
