@@ -15,32 +15,43 @@
 "ChangeAmount"  = "Endre mengde drikke";
 "EnterNewValue" = "Angi ny verdi";
 
-// settingsVC
+// SettingsVC
+//Appearance
 "Appearance"       = "Utseende";
 "LightMode"        = "Lys modus";
 "DarkMode"         = "Mørk modus";
 "UnitSystem"       = "Enhets system";
 "AppIcon"          = "Endre app icon";
+"Language"         = "Språk";
+"en"               = "English";
+"nb"               = "Norsk";
+//Units
 "Units"            = "Enheter";
 "MetricSystem"     = "Metrisk system";
 "ImperialSystem"   = "Imperial system";
 "ChangeGoal"       = "Ender mål";
 "SetYourGoal"      = "Set ditt mål";
+//Reminders
 "Reminders"        = "Påminnelser";
 "TurnOnReminders"  = "Skru på påminnelser";
 "TurnOffReminders" = "Skru av påminnelser";
 "StartingTime"     = "Start tid";
 "EndingTime"       = "Slutt tid";
 "Frequency"        = "Frekvens";
-"Introductions"    = "Generelt";
-"Language"         = "Språk";
-"en"               = "English";
-"nb"               = "Norsk";
-"HowToUse"         = "Guide";
+//DagerZone
 "DangerZone"       = "Faresone";
 "OpenAppSettings"  = "Åpne app innstillinger";
 "OpenHealthApp"    = "Åpne helse appen";
 "RemoveData"       = "Fjern data";
+//More
+"Introductions"    = "Mer";
+"HowToUse"         = "Guide";
+"PrivacyPolicy"    = "Privacy policy";
+"ContactUs"        = "Kontakt oss";
+"ReportBug"        = "Raporter en feil";
+"FeatureRequest"   = "Spør om en oppdatering";
+"DevInsta"         = "Utviklers Instagram";
+"VersionNumber"    = "Versjon:";
 // Congratulations
 "congrats1Title"  = "Gratulerer";
 "congrats1Body"   = "Du node målet!";

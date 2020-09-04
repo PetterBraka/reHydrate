@@ -41,7 +41,7 @@ class SettingOptionCell: UITableViewCell {
     let titleOption: UILabel 	= {
         let lable   = UILabel()
         lable.text  = "test"
-        lable.font  = UIFont(name: "AmericanTypewriter", size: 15)
+        lable.font  = UIFont(name: "AmericanTypewriter", size: 16)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()

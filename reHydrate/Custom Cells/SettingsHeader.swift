@@ -12,7 +12,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
     var setting: settingOptions? {
         didSet {
             guard let setting = setting else {return}
-            self.title.text = setting.setting.uppercased()
+            self.title.text = setting.setting.capitalized
         }
     }
     var title: UILabel 	= {
