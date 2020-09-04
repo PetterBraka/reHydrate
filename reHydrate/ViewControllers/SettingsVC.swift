@@ -44,12 +44,16 @@ class SettingsVC: UIViewController {
             return .default
         }
     }
+    var timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:MM"
+        return formatter
+    }()
     var metricUnits                = true
     var selectedRow: IndexPath     = IndexPath()
     var settings: [settingOptions] = [
         settingOptions(isOpened: false, setting: NSLocalizedString("Appearance", comment: "Header title"),
-                       options: [NSLocalizedString("DarkMode", comment: "settings option"),
-                                 NSLocalizedString("AppIcon", comment: "setting option")]),
+                       options: [NSLocalizedString("DarkMode", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("UnitSystem", comment: "Header title"),
                        options: [NSLocalizedString("MetricSystem", comment: "settings option"),
                                  NSLocalizedString("ImperialSystem", comment: "settings option")]),
@@ -133,6 +137,10 @@ class SettingsVC: UIViewController {
             settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
             settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
             settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
+        }
+        
+        if UIApplication.shared.supportsAlternateIcons {
+            settings[0].options.append(NSLocalizedString("AppIcon", comment: "setting option"))
         }
         
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
@@ -404,15 +412,13 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 }
                 cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                 let startDate = defaults.object(forKey: startingTimeString) as! Date
-                let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
                 let endDate = defaults.object(forKey: endingTimeString) as! Date
-                let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
                 let intervals = defaults.integer(forKey: reminderIntervalString)
                 center.getPendingNotificationRequests { (pendingNotifcations) in
                     if pendingNotifcations.isEmpty{
-                        setReminders(startTimer.hour!, endTimer.hour!, intervals)
+                        setReminders(startDate, endDate, intervals)
                         DispatchQueue.main.async {
-                            self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
+                            self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(self.timeFormatter.string(from: startDate)) \(NSLocalizedString("To", comment: "splitter for toast")) \(self.timeFormatter.string(from: endDate))", 4)
                         }
                     }
                 }
