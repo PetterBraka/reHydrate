@@ -376,14 +376,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell     = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
-        cell.setting = settings[section]
+        cell.setting = nil //settings[section]
         cell.tag = section
         cell.setHeaderAppairents(darkMode)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        return 20
     }
     
     //MARK: - Cell controlls of TableView
