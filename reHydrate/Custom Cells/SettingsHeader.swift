@@ -82,10 +82,10 @@ class SettingsHeader: UITableViewHeaderFooterView {
     func setHeaderAppairents(_ darkMode: Bool){
         if darkMode {
             title.textColor = .white
-            container.backgroundColor = UIColor.lightGray.withAlphaComponent(0.1)
+            container.backgroundColor = UIColor().hexStringToUIColor("333333")
         } else {
             title.textColor = .black
-            container.backgroundColor = UIColor.darkGray.withAlphaComponent(0.1)
+            container.backgroundColor = UIColor().hexStringToUIColor("ededed")
         }
     }
 }
