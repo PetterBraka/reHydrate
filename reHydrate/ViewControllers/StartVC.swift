@@ -450,6 +450,36 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                            "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
             WCSession.default.transferCurrentComplicationUserInfo(message)
         }
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings(completionHandler: { (settings) in
+            if settings.authorizationStatus == .authorized {
+                // checks if the goal has been reached
+                if self.today.goal.amount <= self.today.consumed.amount {
+                    let startDate = self.defaults.object(forKey: startingTimeString) as! Date
+                    let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
+                    let intervals = self.defaults.integer(forKey: reminderIntervalString)
+                    
+                    var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
+                    var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
+                    let now   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
+                    
+                    current.removeAllPendingNotificationRequests()
+                    //Setting reminders for tomorrow.
+                    tempStart.day = now.day! + 1
+                    tempEnd.day   = now.day! + 1
+                    setReminders(Calendar.current.date(from: tempStart)!,
+                                 Calendar.current.date(from: tempEnd)!,
+                                 intervals)
+                    //Setting up a congratulation message.
+                    let notificationCenter = UNUserNotificationCenter.current()
+                    let notification = getCongratulationReminder()
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 30, repeats: false)
+                    let uuidString = UUID().uuidString
+                    let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+                    notificationCenter.add(request, withCompletionHandler: nil)
+                }
+            }
+        })
     }
     
     //MARK: - Set up of UI
@@ -826,15 +856,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                     setReminders(Calendar.current.date(from: tempStart)!,
                                  Calendar.current.date(from: tempEnd)!,
                                  intervals)
-                    //Setting up a congratulation message.
-                    let notificationCenter = UNUserNotificationCenter.current()
-                    let notificationDate = Calendar.current.date(byAdding: .minute, value: 1, to: Date())
-                    let notification = getCongratulationReminder()
-                    let date = Calendar.current.dateComponents([.hour, .minute], from: notificationDate!)
-                    let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
-                    let uuidString = UUID().uuidString
-                    let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
-                    notificationCenter.add(request, withCompletionHandler: nil) 
                 } else {
                     //checks if the current time is within the notifications time span.
                     if ((tempStart.hour! == tempNow.hour! &&
