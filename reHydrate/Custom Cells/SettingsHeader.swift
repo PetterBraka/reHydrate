@@ -17,7 +17,7 @@ class SettingsHeader: UITableViewHeaderFooterView {
     }
     var title: UILabel 	= {
         let lable       = UILabel()
-        lable.text      = "Test"
+        lable.text      = ""
         lable.font      = UIFont(name: "AmericanTypewriter", size: 18)
         lable.textColor = .white
         lable.translatesAutoresizingMaskIntoConstraints	= false
@@ -82,10 +82,10 @@ class SettingsHeader: UITableViewHeaderFooterView {
     func setHeaderAppairents(_ darkMode: Bool){
         if darkMode {
             title.textColor = .white
-            container.backgroundColor = UIColor().hexStringToUIColor("#404040")
+            container.backgroundColor = UIColor().hexStringToUIColor("333333")
         } else {
             title.textColor = .black
-            container.backgroundColor = UIColor().hexStringToUIColor("#d9d9d9")
+            container.backgroundColor = UIColor().hexStringToUIColor("ededed")
         }
     }
 }
