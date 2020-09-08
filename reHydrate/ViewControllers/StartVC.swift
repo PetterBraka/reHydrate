@@ -213,6 +213,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var drinkOptions = [Drink(typeOfDrink: "water", amountOfDrink: 300),
                         Drink(typeOfDrink: "water", amountOfDrink: 500),
                         Drink(typeOfDrink: "water", amountOfDrink: 750)]
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     //MARK: - Touch controlls
     
@@ -322,20 +323,21 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         createDrinkStack()
         createSummaryStack()
+        
         formatter.dateFormat = "EEEE - dd/MM/yy"
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
+        
         UNUserNotificationCenter.current().getNotificationSettings { (notificationSetting) in
             if notificationSetting.authorizationStatus == .authorized {
                 UNUserNotificationCenter.current().delegate = self
             }
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),
-                                               name: UIApplication.willEnterForegroundNotification,
-                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),name: UIApplication.willEnterForegroundNotification, object: nil)
         
         if UIApplication.isFirstLaunch() {
             print("first time to launch this version of the app")
