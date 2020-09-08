@@ -14,8 +14,8 @@ import WatchConnectivity
 
 
 class InterfaceController: WKInterfaceController {
-    
-    var today = Day(date: Date(), goalAmount: Drink(typeOfDrink: "water", amountOfDrink: 3), consumedAmount: Drink())
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var today = Day(context: self.context)
     var days: [Day] = []
     var smallDrink  = Drink(typeOfDrink: "water", amountOfDrink: 300)
     var mediumDrink = Drink(typeOfDrink: "water", amountOfDrink: 500)

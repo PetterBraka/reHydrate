@@ -7,6 +7,7 @@
 //
 
 import WatchKit
+import CoreData
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
