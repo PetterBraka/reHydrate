@@ -11,10 +11,13 @@ import FSCalendar
 
 class CalendarVC: UIViewController {
     
-    var drinks: [Double] = []
-    var days: [Day]     = []
-    var cellHeight     = CGFloat()
-    var darkMode        = true {
+    let context     = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var metricUnits = Bool()
+    let formatter   = DateFormatter()
+    let defaults    = UserDefaults.standard
+    var drinks      = [Double()]
+    var cellHeight  = CGFloat()
+    var darkMode    = true {
         didSet {
             self.setNeedsStatusBarAppearanceUpdate()
         }
@@ -26,9 +29,6 @@ class CalendarVC: UIViewController {
             return .default
         }
     }
-    var metricUnits     = Bool()
-    let formatter       = DateFormatter()
-    let defaults        = UserDefaults.standard
     var exitButton: UIButton    = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -61,6 +61,7 @@ class CalendarVC: UIViewController {
         return calendar
     }()
     fileprivate let gregorian = Calendar(identifier: .gregorian)
+    var days: [Day]?
     
     /**
      Will dismiss the page and go back to the main page.
@@ -226,6 +227,26 @@ class CalendarVC: UIViewController {
             }
         }
     }
+    //MARK: - Load day(s)
+    
+    func fetchDays() {
+        do {
+            self.days = try self.context.fetch(Day.fetchRequest())
+        } catch {
+            print("can't featch days")
+        }
+    }
+    
+    func fetchDay(_ date: Date) -> Day {
+        fetchDays()
+        // Findes day saved equal to today days,
+        // if it can't find it it will created a new day.
+        let today = self.days?.first(where: {formatter.string(from: $0.date) == formatter.string(from: date)}) ?? Day(context: context)
+        today.date = Date()
+        // sets goal equal to previos day, if no previos day sets it to 3
+        today.goal = days?.last?.goal ?? 3
+        return today
+    }
     
     /**
      Will find the drinks, depending on the date past in and update UI
@@ -238,16 +259,12 @@ class CalendarVC: UIViewController {
      ```
      */
     func getDrinks(_ dateOfDay: Date){
-//        print(formatter.string(from: dateOfDay))
+        //print(formatter.string(from: dateOfDay))
         titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
-        if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: dateOfDay) }){
-            let day: Day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: dateOfDay)})!
-            drinks.append(day.goal)
-            drinks.append(day.consumed)
-        } else {
-            drinks.append(0)
-            drinks.append(0)
-        }
+        
+        let day = fetchDay(dateOfDay)
+        drinks.append(day.goal)
+        drinks.append(day.consumed)
     }
     
     /**
@@ -262,23 +279,30 @@ class CalendarVC: UIViewController {
      */
     func getAverageFor()-> Double {
         var average = Double()
-        for day in days {
-            average  += day.consumed
+        if ((days?.isEmpty) != nil) {
+            for day in days! {
+                average  += day.consumed
+            }
+            return average  / Double(days?.count ?? 0)
         }
-        return average  / Double(days.count)
+        return 0
     }
     
     func getAverageFor(_ startDate: Date,_ endDate: Date)-> Double {
         var average = Double()
         var x = Int(0)
-        for day in calendar.selectedDates {
-            if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
-                let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
-                average += selectedDay?.consumed  ?? 0
+        if ((days?.isEmpty) != nil) {
+            for day in calendar.selectedDates {
+                if days!.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
+                    let selectedDay = days!.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
+                    average += selectedDay?.consumed  ?? 0
+                }
+                x += 1
             }
-            x += 1
+            return average / Double(x)
+        } else {
+            return 0
         }
-        return average / Double(x)
     }
 }
 
@@ -324,9 +348,9 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-        if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: date)}){
-            let day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: date)})
-            let percent = (day!.consumed  / day!.goal ) * 100
+        if days?.contains(where: {formatter.string(from: $0.date) == formatter.string(from: date)}) ?? false{
+            let day = fetchDay(date)
+            let percent = (day.consumed / day.goal ) * 100
             print(cellHeight)
             switch percent {
             case 0...10:
