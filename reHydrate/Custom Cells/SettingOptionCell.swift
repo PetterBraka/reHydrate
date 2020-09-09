@@ -14,6 +14,7 @@ class SettingOptionCell: UITableViewCell {
     let picker            = UIPickerView()
     var notificationStart = Int()
     var notificationEnd   = Int()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
@@ -233,9 +234,14 @@ class SettingOptionCell: UITableViewCell {
             }
         case NSLocalizedString("SetYourGoal", comment: "").lowercased():
             buttonForCell.isHidden = true
-            let days = Day.loadDays()
+            var days = [Day(context: context)]
+            do {
+                days = try self.context.fetch(Day.fetchRequest())
+            } catch {
+                print("can't featch data")
+            }
             if !days.isEmpty{
-                textField.text = String(describing: days.last!.goal.amount)
+                textField.text = String(describing: days.last!.goal)
             } else {
                 textField.text = "3"
             }
@@ -573,12 +579,21 @@ class SettingOptionCell: UITableViewCell {
     }
     
     func updateGoal(){
-        let days = Day.loadDays()
+        var days: [Day] = []
+        do {
+            days = try self.context.fetch(Day.fetchRequest())
+        } catch {
+            print("can't fetch data")
+        }
         let newGoal = Double(textField.text!)!
         if newGoal != 0 {
-            days[days.count - 1].goal.amount = newGoal
-            print(days[days.count - 1].goal.amount)
-            Day.saveDays(days)
+            days[days.count - 1].goal = newGoal
+            print(days[days.count - 1].goal)
+            do {
+                try self.context.save()
+            } catch {
+                print("can't save data")
+            }
         }
     }
 }
