@@ -519,7 +519,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         currentDay.topAnchor.constraint(equalTo: appTitle.bottomAnchor, constant: 20).isActive = true
         
         // Constraints for the summery lables(Where the user can see the consumed amount and the goal)
-        summaryStack.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor).isActive = true
+        summaryStack.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor).isActive         = true
         summaryStack.topAnchor.constraint(equalTo: currentDay.bottomAnchor, constant: 5).isActive = true
         
         // Constraints for the drink options and the lables.

@@ -139,13 +139,13 @@ class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
         exitButton.addGestureRecognizer(exitTapRecognizer)
         
         setConstraints()
-        
+        // checking if the reminders are turn on or off
         if settings[3].isOpened {
             settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
             settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
             settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
         }
-        
+        // checks if the phone supports alternative icons
         if UIApplication.shared.supportsAlternateIcons {
             settings[0].options.insert(NSLocalizedString("AppIcon", comment: "setting option"), at: 1)
         }
@@ -383,7 +383,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        if section == 0 {
+            return 0
+        } else {
+            return 20
+        }
     }
     
     //MARK: - Cell controlls of TableView

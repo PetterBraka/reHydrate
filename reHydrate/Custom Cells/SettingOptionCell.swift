@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SettingOptionCell: UITableViewCell {
     var pickerArray       = ["0", "1","2","3","4","5","6","7","8","9"]
@@ -21,13 +22,7 @@ class SettingOptionCell: UITableViewCell {
         formatter.locale = .current
         return formatter
     }()
-    var setting: String? {
-        didSet {
-            guard let string 	= setting else {return}
-            titleOption.text 	= string
-        }
-    }
-    var textField: UITextField       = {
+    var textField: UITextField   = {
         let textField                = UITextField()
         textField.placeholder        = "value"
         textField.layer.borderWidth  = 2
@@ -39,17 +34,10 @@ class SettingOptionCell: UITableViewCell {
         textField.setRightPadding(10)
         return textField
     }()
-    let titleOption: UILabel 	= {
+    let titleOption: UILabel     = {
         let lable   = UILabel()
         lable.text  = "test"
         lable.font  = UIFont(name: "AmericanTypewriter", size: 16)
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        return lable
-    }()
-    let subTitle: UILabel = {
-        let lable  = UILabel()
-        lable.text = "subText"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 13)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -64,6 +52,20 @@ class SettingOptionCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    let subTitle: UILabel = {
+        let lable  = UILabel()
+        lable.text = "subText"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 13)
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var setting: String? {
+        didSet {
+            guard let string 	= setting else {return}
+            titleOption.text 	= string
+        }
+    }
+    var days: [Day]?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -76,6 +78,36 @@ class SettingOptionCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - Load and Save day(s)
+    
+    func fetchDays() {
+        do {
+            self.days = try self.context.fetch(Day.fetchRequest())
+        } catch {
+            print("can't featch days")
+        }
+    }
+    
+    func saveDays() {
+        do {
+            try self.context.save()
+        } catch {
+            print("can't save days")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func fetchToday() -> Day {
+        fetchDays()
+        // Findes day saved equal to today days,
+        // if it can't find it it will created a new day.
+        let today = self.days?.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
+        today.date = Date()
+        // sets goal equal to previos day, if no previos day sets it to 3
+        today.goal = days?.last?.goal ?? 3
+        return today
     }
     
     /**
@@ -234,17 +266,9 @@ class SettingOptionCell: UITableViewCell {
             }
         case NSLocalizedString("SetYourGoal", comment: "").lowercased():
             buttonForCell.isHidden = true
-            var days = [Day(context: context)]
-            do {
-                days = try self.context.fetch(Day.fetchRequest())
-            } catch {
-                print("can't featch data")
-            }
-            if !days.isEmpty{
-                textField.text = String(describing: days.last!.goal)
-            } else {
-                textField.text = "3"
-            }
+            fetchDays()
+            let day = fetchToday()
+            textField.text = String(describing: day.goal)
             pickerArray     = ["0", "1","2","3","4","5","6","7","8","9"]
             componentString = ["","",",",""]
             setUpPickerView()
@@ -579,21 +603,12 @@ class SettingOptionCell: UITableViewCell {
     }
     
     func updateGoal(){
-        var days: [Day] = []
-        do {
-            days = try self.context.fetch(Day.fetchRequest())
-        } catch {
-            print("can't fetch data")
-        }
+        fetchDays()
         let newGoal = Double(textField.text!)!
-        if newGoal != 0 {
-            days[days.count - 1].goal = newGoal
-            print(days[days.count - 1].goal)
-            do {
-                try self.context.save()
-            } catch {
-                print("can't save data")
-            }
+        let day = fetchToday()
+        if newGoal > 0 {
+            day.goal = newGoal
+            saveDays()
         }
     }
 }
