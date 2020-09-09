@@ -21,7 +21,7 @@
 		336DCC1A250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */; };
 		336DCC1B250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */; };
 		336DCC1C250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */; };
-		336DCC1D2507856400CF15F0 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */; };
+		336DCC1F250787DF00CF15F0 /* aDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC1E250787DF00CF15F0 /* aDay.swift */; };
 		3378767724378A9400F5A732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767624378A9400F5A732 /* AppDelegate.swift */; };
 		3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767824378A9400F5A732 /* SceneDelegate.swift */; };
 		3378767B24378A9400F5A732 /* StartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767A24378A9400F5A732 /* StartVC.swift */; };
@@ -181,6 +181,7 @@
 		336DCBFC250682C500CF15F0 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
 		336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties copy.swift"; sourceTree = "<group>"; };
 		336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass copy.swift"; sourceTree = "<group>"; };
+		336DCC1E250787DF00CF15F0 /* aDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aDay.swift; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767624378A9400F5A732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3378767824378A9400F5A732 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -401,6 +402,7 @@
 				33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */,
 				33DF9BF124B47D0A00699B1A /* Assets.xcassets */,
 				33DF9BF324B47D0A00699B1A /* Info.plist */,
+				336DCC1E250787DF00CF15F0 /* aDay.swift */,
 			);
 			path = "reHydrate-watch Extension";
 			sourceTree = "<group>";
@@ -775,7 +777,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				336DCC1D2507856400CF15F0 /* InterfaceController.swift in Sources */,
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
 				3378767724378A9400F5A732 /* AppDelegate.swift in Sources */,
 				336DCC1B250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */,
@@ -802,6 +803,7 @@
 			files = (
 				336DCC1A250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */,
 				33DF9BEE24B47D0A00699B1A /* ExtensionDelegate.swift in Sources */,
+				336DCC1F250787DF00CF15F0 /* aDay.swift in Sources */,
 				332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */,
 				336DCBFE250682C500CF15F0 /* reHydrate.xcdatamodeld in Sources */,
 				33DF9BEC24B47D0A00699B1A /* InterfaceController.swift in Sources */,

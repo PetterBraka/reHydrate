@@ -11,7 +11,7 @@ import FSCalendar
 
 class CalendarVC: UIViewController {
     
-    var drinks: [Drink] = []
+    var drinks: [Double] = []
     var days: [Day]     = []
     var cellHeight     = CGFloat()
     var darkMode        = true {
@@ -85,7 +85,6 @@ class CalendarVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        days                 = Day.loadDays()
         formatter.dateFormat = "EEE - dd/MM/yy"
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
@@ -246,8 +245,8 @@ class CalendarVC: UIViewController {
             drinks.append(day.goal)
             drinks.append(day.consumed)
         } else {
-            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
-            drinks.append(Drink.init(typeOfDrink: "", amountOfDrink: 0))
+            drinks.append(0)
+            drinks.append(0)
         }
     }
     
@@ -262,11 +261,11 @@ class CalendarVC: UIViewController {
      ```
      */
     func getAverageFor()-> Double {
-        let average = Drink()
+        var average = Double()
         for day in days {
-            average.amount += day.consumed.amount
+            average  += day.consumed
         }
-        return average.amount / Double(days.count)
+        return average  / Double(days.count)
     }
     
     func getAverageFor(_ startDate: Date,_ endDate: Date)-> Double {
@@ -275,7 +274,7 @@ class CalendarVC: UIViewController {
         for day in calendar.selectedDates {
             if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
                 let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
-                average += selectedDay?.consumed.amount ?? 0
+                average += selectedDay?.consumed  ?? 0
             }
             x += 1
         }
@@ -296,10 +295,10 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath.row {
         case 0:
             cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                           "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
+                           "\(drinks[1] .clean)/\(drinks[0] .clean)")
         case 1:
-            let average = Drink(typeOfDrink: "water", amountOfDrink: getAverageFor())
-            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average.amount.clean))
+            let average = getAverageFor()
+            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average .clean))
         default:
             break
         }
@@ -327,7 +326,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
         if days.contains(where: { formatter.string(from: $0.date) == formatter.string(from: date)}){
             let day = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: date)})
-            let percent = (day!.consumed.amount / day!.goal.amount) * 100
+            let percent = (day!.consumed  / day!.goal ) * 100
             print(cellHeight)
             switch percent {
             case 0...10:
@@ -389,7 +388,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
-            consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))", "\(drinks[1].amount.clean)/\(drinks[0].amount.clean)")
+            consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))", "\(drinks[1] .clean)/\(drinks[0] .clean)")
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
             averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
                                   "\(average.clean)")
@@ -415,7 +414,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             dateFormatter.dateFormat = "d/M"
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))",
-                                   "\(drinks[1].amount)/\(drinks[0].amount)")
+                                   "\(drinks[1] )/\(drinks[0] )")
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
             averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
                                   "\(average.clean)")
@@ -424,7 +423,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             self.getDrinks(Date())
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell"))",
-                                   "\(drinks[3].amount)/\(drinks[2].amount)")
+                                   "\(drinks[3] )/\(drinks[2] )")
         }
     }
     
