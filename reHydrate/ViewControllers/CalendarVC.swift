@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 import FSCalendar
 
 class CalendarVC: UIViewController {
@@ -238,14 +239,39 @@ class CalendarVC: UIViewController {
     }
     
     func fetchDay(_ date: Date) -> Day {
-        fetchDays()
-        // Findes day saved equal to today days,
-        // if it can't find it it will created a new day.
-        let today = self.days?.first(where: {formatter.string(from: $0.date) == formatter.string(from: date)}) ?? Day(context: context)
-        today.date = Date()
-        // sets goal equal to previos day, if no previos day sets it to 3
-        today.goal = days?.last?.goal ?? 3
-        return today
+        do {
+            let request = Day.fetchRequest() as NSFetchRequest
+            
+            // Get the current calendar with local time zone
+            var calendar = Calendar.current
+            calendar.timeZone = NSTimeZone.local
+
+            // Get today's beginning & end
+            let dateFrom = calendar.startOfDay(for: date)
+            let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom)
+
+            // Set predicate as date being today's date
+            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
+            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
+            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+            request.predicate = datePredicate
+            
+            let loadedDays = try self.context.fetch(Day.fetchRequest()) as! [Day]
+            
+            guard let day = loadedDays.first else {
+                let day = Day(context: self.context)
+                day.date = Date()
+                day.goal = 3
+                return day }
+            return day
+        } catch {
+            print("can't featch day")
+            print(error.localizedDescription)
+            let today = Day(context: self.context)
+            today.date = Date()
+            today.goal = 3
+            return today
+        }
     }
     
     /**
