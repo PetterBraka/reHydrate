@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 import CloudKit
+import CoreData
 import HealthKit
 import FSCalendar
 import WatchConnectivity
@@ -445,6 +446,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             self.days = try self.context.fetch(Day.fetchRequest())
         } catch {
             print("can't featch days")
+            print(error.localizedDescription)
         }
     }
     
@@ -458,14 +460,39 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     func fetchToday() -> Day {
-        fetchDays()
-        // Findes day saved equal to today days,
-        // if it can't find it it will created a new day.
-        let today = self.days?.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
-        today.date = Date()
-        // sets goal equal to previos day, if no previos day sets it to 3
-        today.goal = days?.last?.goal ?? 3
-        return today
+        do {
+            let request = Day.fetchRequest() as NSFetchRequest
+            
+            // Get the current calendar with local time zone
+            var calendar = Calendar.current
+            calendar.timeZone = NSTimeZone.local
+
+            // Get today's beginning & end
+            let dateFrom = calendar.startOfDay(for: Date())
+            let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom)
+
+            // Set predicate as date being today's date
+            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
+            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
+            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+            request.predicate = datePredicate
+            
+            let loadedDays = try self.context.fetch(Day.fetchRequest()) as! [Day]
+            
+            guard let today = loadedDays.first else {
+                let today = Day(context: self.context)
+                today.date = Date()
+                today.goal = 3
+                return today }
+            return today
+        } catch {
+            print("can't featch day")
+            print(error.localizedDescription)
+            let today = Day(context: self.context)
+            today.date = Date()
+            today.goal = 3
+            return today
+        }
     }
     
     //MARK: - Set up of UI
