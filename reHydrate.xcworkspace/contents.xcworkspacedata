@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reHydrate/reHydrate-watch Extension/Day+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reHydrate/reHydrate-watch Extension/Day+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:reHydrate.xcodeproj">
    </FileRef>
    <FileRef

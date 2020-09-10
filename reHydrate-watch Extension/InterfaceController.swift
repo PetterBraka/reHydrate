@@ -9,6 +9,7 @@
 import UIKit
 import WatchKit
 import ClockKit
+import CoreData
 import Foundation
 import WatchConnectivity
 
@@ -25,6 +26,7 @@ class InterfaceController: WKInterfaceController {
         dateFormatter.dateFormat = "EEEE - dd/MM/yy"
         return dateFormatter
     }()
+    let context = (WKExtension.shared().delegate as! ExtensionDelegate).persistentContainer.viewContext
     
     @IBOutlet weak var summaryLable: WKInterfaceLabel!
     

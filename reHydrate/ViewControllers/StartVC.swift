@@ -11,7 +11,6 @@ import SwiftUI
 import CloudKit
 import CoreData
 import HealthKit
-import FSCalendar
 import WatchConnectivity
 
 let versionString = "version3.9.2"
