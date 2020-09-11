@@ -134,12 +134,6 @@ class CalendarVC: UIViewController {
         calendar.swipeToChooseGesture.minimumPressDuration = 0.2
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)
-        switch calendar.swipeToChooseGesture.state {
-        case .ended:
-            print("Long Press Ended")
-        default:
-            print("Long Press")
-        }
         setConstraints()
     }
     
@@ -280,7 +274,6 @@ class CalendarVC: UIViewController {
      ```
      */
     func getDrinks(_ dateOfDay: Date){
-        //print(formatter.string(from: dateOfDay))
         titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
         
         let day = fetchDay(dateOfDay)
@@ -373,7 +366,6 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: date)}){
             let day = fetchDay(date)
             let percent = (day.consumed / day.goal ) * 100
-            print(cellHeight)
             switch percent {
             case 0...10:
                 if darkMode {
@@ -537,11 +529,6 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     func checkSelections(_ calendar: FSCalendar, _ date: Date) {
         var tempDates = calendar.selectedDates
         tempDates.sort(by: {$0 < $1})
-        print("----------------------------")
-        tempDates.forEach { (date) in
-            print("temp \(formatter.string(from: date))")
-        }
-        print("----------------------------")
         var i = 0
         while i < tempDates.count - 1 && tempDates.count > 1{
             if Calendar.current.date(byAdding: .day, value: 1, to: tempDates[i])! != tempDates[i + 1] {
@@ -550,10 +537,8 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
                     if #available(iOS 13.0, *) {
                         let differece = tempDates[i].distance(to: tempDates[i + 1])
                         let days = differece / 60 / 60 / 24
-                        print("\(differece) is \(days)")
                         for x in 1...Int(days - 1){
                             calendar.select(Calendar.current.date(byAdding: .day, value: x, to: tempDates[i]))
-                            print(formatter.string(from: Calendar.current.date(byAdding: .day, value: x, to: tempDates[i])!))
                         }
                         calendar.reloadData()
                     } else {
