@@ -404,12 +404,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return 0
+            return 2
         } else {
-            return 20
+            return 8
         }
     }
-    
     //MARK: - Cell controlls of TableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
