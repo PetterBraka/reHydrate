@@ -65,7 +65,7 @@ class SettingOptionCell: UITableViewCell {
             titleOption.text 	= string
         }
     }
-    var days: [Day]?
+    var days: [Day] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -102,23 +102,17 @@ class SettingOptionCell: UITableViewCell {
     func fetchToday() -> Day {
         do {
             let request = Day.fetchRequest() as NSFetchRequest
-            
-            // Get the current calendar with local time zone
-            var calendar = Calendar.current
-            calendar.timeZone = NSTimeZone.local
-
-            // Get today's beginning & end
-            let dateFrom = calendar.startOfDay(for: Date())
-            let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom)
-
-            // Set predicate as date being today's date
+            // Get today's beginning & tomorrows beginning time
+            let dateFrom = Calendar.current.startOfDay(for: Date())
+            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
+            // Sets conditions for date to be within today
             let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
             let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
             let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
             request.predicate = datePredicate
-            
-            let loadedDays = try self.context.fetch(Day.fetchRequest()) as! [Day]
-            
+            // tries to get the day out of the array.
+            let loadedDays = try self.context.fetch(request)
+            // If today wasn't found it will create a new day.
             guard let today = loadedDays.first else {
                 let today = Day(context: self.context)
                 today.date = Date()
@@ -128,6 +122,7 @@ class SettingOptionCell: UITableViewCell {
         } catch {
             print("can't featch day")
             print(error.localizedDescription)
+            // If the loading of data fails, we create a new day
             let today = Day(context: self.context)
             today.date = Date()
             today.goal = 3
@@ -631,10 +626,11 @@ class SettingOptionCell: UITableViewCell {
         fetchDays()
         let newGoal = Double(textField.text!)!
         let day = fetchToday()
+        
         if newGoal > 0 {
-            day.goal = newGoal
-            saveDays()
+            day.goal = Double(newGoal)
         }
+        saveDays()
     }
 }
 

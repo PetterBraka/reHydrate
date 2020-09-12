@@ -210,7 +210,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     var metricUnits  = true
     var drinkOptions = [Double(300), Double(500), Double(750)]
-    var days: [Day]?
+    var days: [Day] = []
     //MARK: - Touch controlls
     
     /**
@@ -461,23 +461,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     func fetchToday() -> Day {
         do {
             let request = Day.fetchRequest() as NSFetchRequest
-            
-            // Get the current calendar with local time zone
-            var calendar = Calendar.current
-            calendar.timeZone = NSTimeZone.local
-            
-            // Get today's beginning & end
-            let dateFrom = calendar.startOfDay(for: Date())
-            let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom)
-            
-            // Set predicate as date being today's date
+            // Get today's beginning & tomorrows beginning time
+            let dateFrom = Calendar.current.startOfDay(for: Date())
+            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
+            // Sets conditions for date to be within today
             let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
             let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
             let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
             request.predicate = datePredicate
-            
-            let loadedDays = try self.context.fetch(Day.fetchRequest()) as! [Day]
-            
+            // tries to get the day out of the array.
+            let loadedDays = try self.context.fetch(request)
+            // If today wasn't found it will create a new day.
             guard let today = loadedDays.first else {
                 let today = Day(context: self.context)
                 today.date = Date()
@@ -487,6 +481,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         } catch {
             print("can't featch day")
             print(error.localizedDescription)
+            // If the loading of data fails, we create a new day
             let today = Day(context: self.context)
             today.date = Date()
             today.goal = 3
@@ -1088,11 +1083,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         updateUI()
         self.fetchDays()
         var today: Day?
-        if days?.isEmpty ?? true {
-            today = days?.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
+        if days.isEmpty {
+            today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
         }
-        if !(days?.isEmpty ?? true) {
-            today?.goal = days?.last?.goal ?? 3
+        if !days.isEmpty {
+            today?.goal = days.last?.goal ?? 3
         }
         let message = ["phoneDate": formatter.string(from: today?.date ?? Date()),
                        "phoneGoal": String(today?.goal ?? 3),
@@ -1179,9 +1174,9 @@ extension StartVC: WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         fetchDays()
-        let today = days?.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
-        if !(days?.isEmpty ?? true) {
-            today.goal = days?.last?.goal ?? 3
+        let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
+        if !days.isEmpty {
+            today.goal = days.last?.goal ?? 3
         }
         print("sent data with transferUserInfo")
         print(String(describing: message["consumed"]))
@@ -1220,9 +1215,9 @@ extension StartVC: WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         fetchDays()
-        let today = days?.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
-        if !(days?.isEmpty ?? true) {
-            today.goal = days?.last?.goal ?? 3
+        let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
+        if !days.isEmpty {
+            today.goal = days.last?.goal ?? 3
         }
         print("sent data with transferUserInfo")
         print(String(describing: userInfo["consumed"]))
