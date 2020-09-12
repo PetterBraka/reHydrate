@@ -75,7 +75,9 @@ class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
                                  NSLocalizedString("ContactUs", comment: "Link to devs twitter"),
                                  NSLocalizedString("PrivacyPolicy", comment: "Link to the apps privacy policy"),
                                  NSLocalizedString("VersionNumber", comment: "Disply version of app")])]
-    
+    var days: [Day] = []
+    let context     = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+ 
     //MARK: - Tap controller
     
     /**
@@ -261,7 +263,25 @@ class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
         })
     }
     
-    //MARK: - Section controll of tableView
+    //MARK: - Load and Save days
+    
+    func fetchDays() {
+        do {
+            self.days = try self.context.fetch(Day.fetchRequest())
+        } catch {
+            print("can't featch days")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func saveDays() {
+        do {
+            try self.context.save()
+        } catch {
+            print("can't save days")
+            print(error.localizedDescription)
+        }
+    }
     
 }
 
@@ -491,6 +511,9 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 transition.type     = .push
                 transition.subtype  = .fromRight
                 transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                self.fetchDays()
+                self.days.forEach({self.context.delete($0)})
+                self.saveDays()
                 self.view.window!.layer.add(transition, forKey: kCATransition)
                 self.dismiss(animated: false, completion: nil)
             }))

@@ -16,9 +16,9 @@ class CalendarVC: UIViewController {
     var metricUnits = Bool()
     let formatter   = DateFormatter()
     let defaults    = UserDefaults.standard
-    var drinks      = [Double()]
     var cellHeight  = CGFloat()
-    var darkMode    = true {
+    var drinks: [Double] = []
+    var darkMode = true {
         didSet {
             self.setNeedsStatusBarAppearanceUpdate()
         }
@@ -62,7 +62,7 @@ class CalendarVC: UIViewController {
         return calendar
     }()
     fileprivate let gregorian = Calendar(identifier: .gregorian)
-    var days: [Day]?
+    var days: [Day] = []
     
     /**
      Will dismiss the page and go back to the main page.
@@ -241,32 +241,27 @@ class CalendarVC: UIViewController {
     func fetchDay(_ date: Date) -> Day {
         do {
             let request = Day.fetchRequest() as NSFetchRequest
-            
-            // Get the current calendar with local time zone
-            var calendar = Calendar.current
-            calendar.timeZone = NSTimeZone.local
-
-            // Get today's beginning & end
-            let dateFrom = calendar.startOfDay(for: date)
-            let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom)
-
-            // Set predicate as date being today's date
+            // Get day's beginning & tomorrows beginning time
+            let dateFrom = Calendar.current.startOfDay(for: date)
+            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
+            // Sets conditions for date to be within day
             let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
             let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
             let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
             request.predicate = datePredicate
-            
-            let loadedDays = try self.context.fetch(Day.fetchRequest()) as! [Day]
-            
-            guard let day = loadedDays.first else {
-                let day = Day(context: self.context)
-                day.date = Date()
-                day.goal = 3
-                return day }
-            return day
+            // tries to get the day out of the array.
+            let loadedDays = try self.context.fetch(request)
+            // If the day wasn't found it will create a new day.
+            guard let today = loadedDays.first else {
+                let today = Day(context: self.context)
+                today.date = Date()
+                today.goal = 3
+                return today }
+            return today
         } catch {
             print("can't featch day")
             print(error.localizedDescription)
+            // If the loading of data fails, we create a new day
             let today = Day(context: self.context)
             today.date = Date()
             today.goal = 3
@@ -305,11 +300,11 @@ class CalendarVC: UIViewController {
      */
     func getAverageFor()-> Double {
         var average = Double()
-        if ((days?.isEmpty) != nil) {
-            for day in days! {
+        if days.isEmpty {
+            for day in days {
                 average  += day.consumed
             }
-            return average  / Double(days?.count ?? 0)
+            return average  / Double(days.count)
         }
         return 0
     }
@@ -317,10 +312,10 @@ class CalendarVC: UIViewController {
     func getAverageFor(_ startDate: Date,_ endDate: Date)-> Double {
         var average = Double()
         var x = Int(0)
-        if ((days?.isEmpty) != nil) {
+        if days.isEmpty {
             for day in calendar.selectedDates {
-                if days!.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
-                    let selectedDay = days!.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
+                if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
+                    let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
                     average += selectedDay?.consumed  ?? 0
                 }
                 x += 1
@@ -345,10 +340,10 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath.row {
         case 0:
             cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                           "\(drinks[1] .clean)/\(drinks[0] .clean)")
+                           "\(drinks[1].clean)/\(drinks[0].clean)")
         case 1:
             let average = getAverageFor()
-            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average .clean))
+            cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average.clean))
         default:
             break
         }
@@ -374,7 +369,8 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-        if days?.contains(where: {formatter.string(from: $0.date) == formatter.string(from: date)}) ?? false{
+        fetchDays()
+        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: date)}){
             let day = fetchDay(date)
             let percent = (day.consumed / day.goal ) * 100
             print(cellHeight)
