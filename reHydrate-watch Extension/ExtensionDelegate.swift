@@ -11,7 +11,9 @@ import CoreData
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
-    var today = aDay()
+    var todayConsumed = Double()
+    var todayGoal = Double()
+    var todayDate = Date()
     
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.

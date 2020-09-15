@@ -16,7 +16,7 @@ extension Day {
         return NSFetchRequest<Day>(entityName: "Day")
     }
 
-    @NSManaged public var date: Date?
+    @NSManaged public var date: Date
     @NSManaged public var goal: Double
     @NSManaged public var consumed: Double
 

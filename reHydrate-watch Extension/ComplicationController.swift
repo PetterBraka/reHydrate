@@ -10,7 +10,9 @@ import ClockKit
 import WatchKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
-    var today = aDay()
+    var todayConsumed = Double()
+    var todayGoal = Double()
+    var todayDate = Date()
     let delegate = WKExtension.shared().delegate as! ExtensionDelegate
     // MARK: - Timeline Configuration
     
@@ -37,10 +39,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // Call the handler with the current timeline entry
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd/MM/yy"
-        today = delegate.today
+        todayConsumed = delegate.todayConsumed
+        todayGoal = delegate.todayGoal
+        todayDate = delegate.todayDate
         var fillFraction = Float()
-        if today.consumed / today.goal < 1 {
-            fillFraction = Float(today.consumed / today.goal)
+        if todayConsumed / todayGoal < 1 {
+            fillFraction = Float(todayConsumed / todayGoal)
         } else {
             fillFraction = 1
         }
@@ -72,10 +76,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         case .modularLarge:
             let template = CLKComplicationTemplateModularLargeStandardBody()
             template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
-            template.body1TextProvider  = CLKSimpleTextProvider(text: "\(today.consumed .clean)/\(today.goal .clean)")
+            template.body1TextProvider  = CLKSimpleTextProvider(text: "\(todayConsumed .clean)/\(todayGoal .clean)")
             var body2 = String()
-            if today.consumed  < today.goal  {
-                let toGo = today.goal  - today.consumed
+            if todayConsumed  < todayGoal  {
+                let toGo = todayGoal  - todayConsumed
                 body2 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body2 = "\(NSLocalizedString("goodJob", comment: ""))" }
             template.body2TextProvider = CLKSimpleTextProvider(text: body2)
@@ -93,7 +97,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             let template    = CLKComplicationTemplateUtilitarianSmallFlat()
             guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { handler(nil); return}
             template.imageProvider = CLKImageProvider(onePieceImage: image)
-            template.textProvider  = CLKSimpleTextProvider(text: "\(today.consumed .clean)/\(today.goal .clean)")
+            template.textProvider  = CLKSimpleTextProvider(text: "\(todayConsumed .clean)/\(todayGoal .clean)")
             let timelineEntry      = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
             handler(timelineEntry)
         case .utilitarianLarge:
@@ -101,8 +105,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { handler(nil); return}
             template.imageProvider = CLKImageProvider(onePieceImage: image)
             var body = String()
-            if today.consumed  < today.goal  {
-                let toGo = today.goal  - today.consumed
+            if todayConsumed  < todayGoal  {
+                let toGo = todayGoal  - todayConsumed
                 body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
             template.textProvider  = CLKSimpleTextProvider(text: body)
@@ -110,9 +114,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             handler(timelineEntry)
         case .graphicCorner:
             let template = CLKComplicationTemplateGraphicCornerGaugeText()
-            template.outerTextProvider    = CLKSimpleTextProvider(text: "\(today.consumed .clean)")
+            template.outerTextProvider    = CLKSimpleTextProvider(text: "\(todayConsumed .clean)")
             template.leadingTextProvider  = CLKSimpleTextProvider(text: "0")
-            template.trailingTextProvider = CLKSimpleTextProvider(text: "\(today.goal .clean)")
+            template.trailingTextProvider = CLKSimpleTextProvider(text: "\(todayGoal .clean)")
             template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
             let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
             handler(timelineEntry)
@@ -120,7 +124,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             let template    = CLKComplicationTemplateGraphicCircularOpenGaugeImage()
             guard let image = UIImage(named: "waterDrop")?.withTintColor(.white).resized(toWidth: 9) else { break }
             template.bottomImageProvider = CLKFullColorImageProvider(fullColorImage: image)
-            template.centerTextProvider  = CLKSimpleTextProvider(text: "\(today.consumed .clean)")
+            template.centerTextProvider  = CLKSimpleTextProvider(text: "\(todayConsumed .clean)")
             template.gaugeProvider       = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
             let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
             handler(timelineEntry)
@@ -131,8 +135,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             circularTemplate.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
             let template = CLKComplicationTemplateGraphicBezelCircularText()
             var body = String()
-            if today.consumed  < today.goal  {
-                let toGo = today.goal  - today.consumed
+            if todayConsumed  < todayGoal  {
+                let toGo = todayGoal  - todayConsumed
                 body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
             template.circularTemplate = circularTemplate
@@ -143,8 +147,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             let template = CLKComplicationTemplateGraphicRectangularTextGauge()
             template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
             var body1 = String()
-            if today.consumed  < today.goal  {
-                let toGo = today.goal  - today.consumed
+            if todayConsumed  < todayGoal  {
+                let toGo = todayGoal  - todayConsumed
                 body1 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body1 = "\(NSLocalizedString("goodJob", comment: ""))" }
             template.body1TextProvider = CLKSimpleTextProvider(text: body1)
@@ -160,14 +164,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getListOfEnteries(_ complication: CLKComplication) -> [CLKComplicationTimelineEntry] {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd/MM/yy"
-        today = delegate.today
-        today.date = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: today.date)!
+        todayConsumed = delegate.todayConsumed
+        todayGoal = delegate.todayGoal
+        todayDate = delegate.todayDate
+        todayDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: todayDate)!
         var fillFraction = Float()
         var timelineEnteries = [CLKComplicationTimelineEntry]()
         
         for _ in 0...1 {
-            if today.consumed  / today.goal  < 1 {
-                fillFraction = Float(today.consumed  / today.goal )
+            if todayConsumed  / todayGoal  < 1 {
+                fillFraction = Float(todayConsumed  / todayGoal )
             } else {
                 fillFraction = 1
             }
@@ -179,7 +185,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
                 template.fillFraction  = fillFraction
                 template.ringStyle     = .closed
-                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry      = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .extraLarge:
                 let template    = CLKComplicationTemplateExtraLargeRingImage()
@@ -187,7 +193,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
                 template.fillFraction  = fillFraction
                 template.ringStyle     = .closed
-                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry      = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .modularSmall:
                 let template    = CLKComplicationTemplateModularSmallRingImage()
@@ -195,19 +201,19 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
                 template.fillFraction  = fillFraction
                 template.ringStyle     = .closed
-                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry      = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .modularLarge:
                 let template = CLKComplicationTemplateModularLargeStandardBody()
                 template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
-                template.body1TextProvider = CLKSimpleTextProvider(text: "\(today.consumed .clean)/\(today.goal .clean)")
+                template.body1TextProvider = CLKSimpleTextProvider(text: "\(todayConsumed .clean)/\(todayGoal .clean)")
                 var body2 = String()
-                if today.consumed  < today.goal  {
-                    let toGo = today.goal  - today.consumed
+                if todayConsumed  < todayGoal  {
+                    let toGo = todayGoal  - todayConsumed
                     body2 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
                 } else { body2 = "\(NSLocalizedString("goodJob", comment: ""))" }
                 template.body2TextProvider = CLKSimpleTextProvider(text: body2)
-                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .utilitarianSmall:
                 let template    = CLKComplicationTemplateUtilitarianSmallRingImage()
@@ -215,42 +221,42 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
                 template.fillFraction  = fillFraction
                 template.ringStyle     = .closed
-                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry      = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .utilitarianSmallFlat:
                 let template    = CLKComplicationTemplateUtilitarianSmallFlat()
                 guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
-                template.textProvider  = CLKSimpleTextProvider(text: "\(today.consumed .clean)/\(today.goal .clean)")
-                let timelineEntry      = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                template.textProvider  = CLKSimpleTextProvider(text: "\(todayConsumed .clean)/\(todayGoal .clean)")
+                let timelineEntry      = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .utilitarianLarge:
                 let template = CLKComplicationTemplateUtilitarianLargeFlat()
                 guard let image = UIImage(named: "waterDrop")?.withTintColor(.white) else { break }
                 template.imageProvider = CLKImageProvider(onePieceImage: image)
                 var body = String()
-                if today.consumed  < today.goal  {
-                    let toGo = today.goal  - today.consumed
+                if todayConsumed  < todayGoal  {
+                    let toGo = todayGoal  - todayConsumed
                     body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
                 } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
                 template.textProvider  = CLKSimpleTextProvider(text: body)
-                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .graphicCorner:
                 let template = CLKComplicationTemplateGraphicCornerGaugeText()
-                template.outerTextProvider    = CLKSimpleTextProvider(text: "\(today.consumed .clean)")
+                template.outerTextProvider    = CLKSimpleTextProvider(text: "\(todayConsumed .clean)")
                 template.leadingTextProvider  = CLKSimpleTextProvider(text: "0")
-                template.trailingTextProvider = CLKSimpleTextProvider(text: "\(today.goal .clean)")
+                template.trailingTextProvider = CLKSimpleTextProvider(text: "\(todayGoal .clean)")
                 template.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
-                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .graphicCircular:
                 let template    = CLKComplicationTemplateGraphicCircularOpenGaugeImage()
                 guard let image = UIImage(named: "waterDrop")?.withTintColor(.white).resized(toWidth: 9) else { break }
                 template.bottomImageProvider = CLKFullColorImageProvider(fullColorImage: image.withTintColor(.white))
-                template.centerTextProvider  = CLKSimpleTextProvider(text: "\(today.consumed .clean)")
+                template.centerTextProvider  = CLKSimpleTextProvider(text: "\(todayConsumed .clean)")
                 template.gaugeProvider       = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
-                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .graphicBezel:
                 let circularTemplate = CLKComplicationTemplateGraphicCircularClosedGaugeImage()
@@ -259,35 +265,35 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 circularTemplate.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
                 let template = CLKComplicationTemplateGraphicBezelCircularText()
                 var body = String()
-                if today.consumed  < today.goal  {
-                    let toGo = today.goal  - today.consumed
+                if todayConsumed  < todayGoal  {
+                    let toGo = todayGoal  - todayConsumed
                     body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
                 } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
                 template.circularTemplate = circularTemplate
                 template.textProvider     = CLKSimpleTextProvider(text: body)
-                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             case .graphicRectangular:
                 let template = CLKComplicationTemplateGraphicRectangularTextGauge()
                 template.headerTextProvider = CLKSimpleTextProvider(text: "reHydrate")
                 var body1 = String()
-                if today.consumed  <= today.goal  {
-                    let toGo = today.goal  - today.consumed
+                if todayConsumed  <= todayGoal  {
+                    let toGo = todayGoal  - todayConsumed
                     body1 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
                 } else {
                     body1 = "\(NSLocalizedString("goodJob", comment: ""))"
                 }
                 template.body1TextProvider = CLKSimpleTextProvider(text: body1)
                 template.gaugeProvider     = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
-                let timelineEntry = CLKComplicationTimelineEntry(date: today.date, complicationTemplate: template)
+                let timelineEntry = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
                 timelineEnteries.append(timelineEntry)
             default:
                 break
             }
 
-            let tomorrowsDate = Calendar.current.date(byAdding: .day, value: 1, to: today.date)!
+            let tomorrowsDate = Calendar.current.date(byAdding: .day, value: 1, to: todayDate)!
             let tomorrow = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: tomorrowsDate)!
-            self.today = aDay(date: tomorrow, goalAmount: today.goal, consumedAmount: 0)
+            self.todayDate = tomorrow
         }
         
         
