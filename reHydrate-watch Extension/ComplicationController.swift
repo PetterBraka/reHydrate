@@ -290,7 +290,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             default:
                 break
             }
-
+            self.todayConsumed = 0
             let tomorrowsDate = Calendar.current.date(byAdding: .day, value: 1, to: todayDate)!
             let tomorrow = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: tomorrowsDate)!
             self.todayDate = tomorrow
