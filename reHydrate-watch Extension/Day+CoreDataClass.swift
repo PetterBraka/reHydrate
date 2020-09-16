@@ -1,6 +1,6 @@
 //
 //  Day+CoreDataClass.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 10/09/2020.
 //
