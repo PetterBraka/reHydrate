@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 import UIKit
 
 extension UITextField {
@@ -131,14 +132,14 @@ extension UIColor {
 extension Double {
     
     /**
-     Will clean up a **Double** so that it has a maximum of 2 desimal
+     Will clean up a **Double** so that it has a maximum of 1 desimal
      
      - returns: the number as a **String** cleand up
      
      # Example #
      ```
      let number1 = 3.122
-     number1.clean // returns 3.12
+     number1.clean // returns 3.1
      
      let number2 = 3.001
      number2.clean // returns 3

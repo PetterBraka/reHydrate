@@ -15,6 +15,9 @@
 		334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334281E224977ADB00A3CF12 /* AppIconVC.swift */; };
 		334282652497AE7600A3CF12 /* AppIconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334282642497AE7600A3CF12 /* AppIconCell.swift */; };
 		3359BB7024461D620008EF6A /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3359BB6F24461D620008EF6A /* InfoCell.swift */; };
+		336DCBFD250682C500CF15F0 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */; };
+		336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */; };
+		336DCC1B250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */; };
 		3378767724378A9400F5A732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767624378A9400F5A732 /* AppDelegate.swift */; };
 		3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767824378A9400F5A732 /* SceneDelegate.swift */; };
 		3378767B24378A9400F5A732 /* StartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767A24378A9400F5A732 /* StartVC.swift */; };
@@ -23,6 +26,9 @@
 		3389E0AB2448A61300DD7B58 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3389E0AA2448A61300DD7B58 /* SettingsVC.swift */; };
 		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
+		339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */; };
+		33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58825123A1900658867 /* Day+CoreDataClass.swift */; };
+		33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */; };
 		33C431912482769B00E8EECA /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C431902482769B00E8EECA /* Extenstions.swift */; };
 		33C4319324827F2700E8EECA /* BundleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C4319224827F2700E8EECA /* BundleExtension.swift */; };
 		33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BDC24B47D0900699B1A /* Interface.storyboard */; };
@@ -33,8 +39,6 @@
 		33DF9BF024B47D0A00699B1A /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */; };
 		33DF9BF224B47D0A00699B1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BF124B47D0A00699B1A /* Assets.xcassets */; };
 		33DF9BF624B47D0A00699B1A /* reHydrate-watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		33DF9BFE24B47D8100699B1A /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8426243A47A800848B7C /* Drink.swift */; };
-		33DF9BFF24B47D8400699B1A /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8428243A4A2600848B7C /* Day.swift */; };
 		33E2B86F24FAC8D70050B8A1 /* black-rainbow@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B86C24FAC8D70050B8A1 /* black-rainbow@1x.png */; };
 		33E2B87024FAC8D70050B8A1 /* black-rainbow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B86D24FAC8D70050B8A1 /* black-rainbow@3x.png */; };
 		33E2B87124FAC8D70050B8A1 /* black-rainbow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B86E24FAC8D70050B8A1 /* black-rainbow@2x.png */; };
@@ -117,8 +121,6 @@
 		33E2B91224FADB2C0050B8A1 /* black-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B90F24FADB2C0050B8A1 /* black-white@2x.png */; };
 		33E2B91324FADB2C0050B8A1 /* black-white@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B91024FADB2C0050B8A1 /* black-white@1x.png */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
-		33FC8427243A47A800848B7C /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8426243A47A800848B7C /* Drink.swift */; };
-		33FC8429243A4A2600848B7C /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC8428243A4A2600848B7C /* Day.swift */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
 		33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FE29D724506FF000BE7634 /* SettingsHeader.swift */; };
 		9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */; };
@@ -175,12 +177,18 @@
 		334281E224977ADB00A3CF12 /* AppIconVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconVC.swift; sourceTree = "<group>"; };
 		334282642497AE7600A3CF12 /* AppIconCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconCell.swift; sourceTree = "<group>"; };
 		3359BB6F24461D620008EF6A /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
+		336DCBFC250682C500CF15F0 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
+		336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties copy.swift"; sourceTree = "<group>"; };
+		336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass copy.swift"; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767624378A9400F5A732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3378767824378A9400F5A732 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3378767A24378A9400F5A732 /* StartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVC.swift; sourceTree = "<group>"; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3389E0AA2448A61300DD7B58 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
+		33BEA58825123A1900658867 /* Day+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass.swift"; sourceTree = "<group>"; };
+		33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33C4318B247EDA6700E8EECA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33C431902482769B00E8EECA /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
 		33C4319224827F2700E8EECA /* BundleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtension.swift; sourceTree = "<group>"; };
@@ -281,8 +289,6 @@
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		33FC8426243A47A800848B7C /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
-		33FC8428243A4A2600848B7C /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		33FC842E243B992600848B7C /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		33FE29D724506FF000BE7634 /* SettingsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHeader.swift; sourceTree = "<group>"; };
 		57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_reHydrate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -325,6 +331,9 @@
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
+				336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */,
+				336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */,
+				336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				33DF9BDB24B47D0900699B1A /* reHydrate-watch */,
 				33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */,
@@ -350,7 +359,6 @@
 				33F8CBEA24F568DC000143EC /* AppIcons */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				331EA7C324583B7C002D752E /* Custom Cells */,
-				33902D3E244744C4004BE39C /* Custom Class */,
 				33902D3D2447449F004BE39C /* ViewControllers */,
 				3378767624378A9400F5A732 /* AppDelegate.swift */,
 				3378767824378A9400F5A732 /* SceneDelegate.swift */,
@@ -376,15 +384,6 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		33902D3E244744C4004BE39C /* Custom Class */ = {
-			isa = PBXGroup;
-			children = (
-				33FC8428243A4A2600848B7C /* Day.swift */,
-				33FC8426243A47A800848B7C /* Drink.swift */,
-			);
-			path = "Custom Class";
-			sourceTree = "<group>";
-		};
 		33DF9BDB24B47D0900699B1A /* reHydrate-watch */ = {
 			isa = PBXGroup;
 			children = (
@@ -404,6 +403,9 @@
 				33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */,
 				33DF9BF124B47D0A00699B1A /* Assets.xcassets */,
 				33DF9BF324B47D0A00699B1A /* Info.plist */,
+				339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */,
+				33BEA58825123A1900658867 /* Day+CoreDataClass.swift */,
+				33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */,
 			);
 			path = "reHydrate-watch Extension";
 			sourceTree = "<group>";
@@ -780,7 +782,7 @@
 			files = (
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
 				3378767724378A9400F5A732 /* AppDelegate.swift in Sources */,
-				33FC8427243A47A800848B7C /* Drink.swift in Sources */,
+				336DCC1B250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */,
 				33FC842F243B992600848B7C /* CalendarVC.swift in Sources */,
 				3389E0AB2448A61300DD7B58 /* SettingsVC.swift in Sources */,
 				333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */,
@@ -788,11 +790,12 @@
 				3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */,
 				33C4319324827F2700E8EECA /* BundleExtension.swift in Sources */,
 				33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */,
+				336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */,
 				334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */,
 				33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */,
-				33FC8429243A4A2600848B7C /* Day.swift in Sources */,
 				3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */,
 				3359BB7024461D620008EF6A /* InfoCell.swift in Sources */,
+				336DCBFD250682C500CF15F0 /* reHydrate.xcdatamodeld in Sources */,
 				33C431912482769B00E8EECA /* Extenstions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -801,12 +804,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */,
 				33DF9BEE24B47D0A00699B1A /* ExtensionDelegate.swift in Sources */,
 				332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */,
+				33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */,
 				33DF9BEC24B47D0A00699B1A /* InterfaceController.swift in Sources */,
-				33DF9BFE24B47D8100699B1A /* Drink.swift in Sources */,
-				33DF9BFF24B47D8400699B1A /* Day.swift in Sources */,
 				33DF9BF024B47D0A00699B1A /* ComplicationController.swift in Sources */,
+				33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1143,6 +1147,29 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				336DCBFC250682C500CF15F0 /* reHydrate.xcdatamodel */,
+			);
+			currentVersion = 336DCBFC250682C500CF15F0 /* reHydrate.xcdatamodel */;
+			path = reHydrate.xcdatamodeld;
+			sourceTree = SOURCE_ROOT;
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */,
+			);
+			currentVersion = 339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */;
+			path = "watchOS-CoreData.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3378766B24378A9300F5A732 /* Project object */;
 }

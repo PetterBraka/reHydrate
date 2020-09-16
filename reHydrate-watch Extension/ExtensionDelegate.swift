@@ -7,10 +7,13 @@
 //
 
 import WatchKit
+import CoreData
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
-    var today = Day()
+    var todayConsumed = Double()
+    var todayGoal = Double()
+    var todayDate = Date()
     
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
@@ -51,6 +54,28 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             default:
                 // make sure to complete unhandled task types
                 task.setTaskCompletedWithSnapshot(false)
+            }
+        }
+    }
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "watchOS-CoreData")
+        container.loadPersistentStores { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved Error \(error.localizedDescription), \(error.userInfo)")
+            }
+        }
+        return container
+    }()
+    
+    func saveContext() {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError.localizedDescription), \(nsError.userInfo)")
             }
         }
     }
