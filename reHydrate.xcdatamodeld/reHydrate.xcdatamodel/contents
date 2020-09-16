@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17189" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Day" representedClassName="Day" syncable="YES">
+        <attribute name="consumed" attributeType="Double" valueTransformerName="consumed" defaultValueString="0.0" usesScalarValueType="YES" customClassName="Drink"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="goal" attributeType="Double" valueTransformerName="goal" defaultValueString="0" usesScalarValueType="YES" customClassName="Drink"/>
+    </entity>
+    <elements>
+        <element name="Day" positionX="-63" positionY="-18" width="128" height="88"/>
+    </elements>
+</model>

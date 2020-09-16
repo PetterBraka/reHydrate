@@ -9,11 +9,11 @@
 import UIKit
 import SwiftUI
 import CloudKit
+import CoreData
 import HealthKit
-import FSCalendar
 import WatchConnectivity
 
-let versionString = "version3.9"
+let versionString = "version3.9.2"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -194,8 +194,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }()
     
     let defaults     = UserDefaults.standard
-    var days: [Day]  = []
-    var today        = Day.init()
+    let context      = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let formatter    = DateFormatter()
     var darkMode     = true {
         didSet {
@@ -210,10 +209,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     var metricUnits  = true
-    var drinkOptions = [Drink(typeOfDrink: "water", amountOfDrink: 300),
-                        Drink(typeOfDrink: "water", amountOfDrink: 500),
-                        Drink(typeOfDrink: "water", amountOfDrink: 750)]
-    
+    var drinkOptions = [Double(300), Double(500), Double(750)]
+    var days: [Day] = []
     //MARK: - Touch controlls
     
     /**
@@ -228,19 +225,19 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      
      */
     @objc func tap(_ sender: UIGestureRecognizer){
-        let drink = Drink.init()
+        var drink = Double()
         switch sender.view {
         case smallOption:
             print("small short-press")
-            drink.amount = drinkOptions[0].amount
+            drink = drinkOptions[0]
             updateConsumtion(drink)
         case mediumOption:
             print("medium short-press")
-            drink.amount = drinkOptions[1].amount
+            drink = drinkOptions[1]
             updateConsumtion(drink)
         case largeOption:
             print("large short-press")
-            drink.amount = drinkOptions[2].amount
+            drink = drinkOptions[2]
             updateConsumtion(drink)
         case settingsButton:
             let aboutScreen = SettingsVC()
@@ -306,17 +303,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     @objc func didMoveToForeground(){
-        currentDay.text         = formatter.string(from: Date.init()).localizedCapitalized
-        days                    = Day.loadDays()
-        if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())}){
-            today                 = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date.init())})!
-        } else {
-            today                 = Day.init()
-            if !days.isEmpty {
-                today.goal     = days.last!.goal
-            }
-            days.insertDay(today)
-        }
+        currentDay.text = formatter.string(from: Date.init()).localizedCapitalized
         updateUI()
     }
     
@@ -324,18 +311,18 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         super.viewDidLoad()
         createDrinkStack()
         createSummaryStack()
+        
         formatter.dateFormat = "EEEE - dd/MM/yy"
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
+        
         UNUserNotificationCenter.current().getNotificationSettings { (notificationSetting) in
             if notificationSetting.authorizationStatus == .authorized {
                 UNUserNotificationCenter.current().delegate = self
             }
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),
-                                               name: UIApplication.willEnterForegroundNotification,
-                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),name: UIApplication.willEnterForegroundNotification, object: nil)
         
         if UIApplication.isFirstLaunch() {
             print("first time to launch this version of the app")
@@ -373,7 +360,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             })
         }
         setUpHealth()
-        days = Day.loadDays()
         
         if WCSession.isSupported() {
             let session = WCSession.default
@@ -390,96 +376,81 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         print("Main screen will appear")
-        darkMode             = defaults.bool(forKey: darkModeString)
-        metricUnits          = defaults.bool(forKey: metricUnitsString)
-        currentDay.text      = formatter.string(from: Date.init()).localizedCapitalized
-        days                 = Day.loadDays()
-        today                = days.updateToday()
+        darkMode        = defaults.bool(forKey: darkModeString)
+        metricUnits     = defaults.bool(forKey: metricUnitsString)
+        currentDay.text = formatter.string(from: Date.init()).localizedCapitalized
         loadDrinkOptions()
         setUpUI()
         changeAppearance()
         updateUI()
+        // Checks if Watch comunications is supported.
         if WCSession.isSupported(){
             if WCSession.default.activationState != .activated {
                 WCSession.default.activate()
             }
-            let message = ["requsetData": true]
-            WCSession.default.sendMessage(message) { (reply) in
-                print(reply)
-                let messageConsumed = reply["consumed"]! as! String
-                guard let watchConsumed = Double(messageConsumed) else {
-                    print("error can't extract number from string")
-                    return
-                }
-                if self.today.consumed.amount <= watchConsumed {
-                    let drinkAmountAdded = watchConsumed - self.today.consumed.amount
-                    self.today.consumed.amount = watchConsumed
-                    print("todays amount was updated")
-                    DispatchQueue.main.async {
-                        self.days.insertDay(self.today)
-                        Day.saveDays(self.days)
-                        self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
-                        self.updateUI()
-                    }
-                } else {
-                    let message = ["phoneDate": self.formatter.string(from: self.today.date),
-                                   "phoneGoal": String(self.today.goal.amount),
-                                   "phoneConsumed": String(self.today.consumed.amount),
-                                   "phoneDrinks": "\(self.drinkOptions[0].amount),\(self.drinkOptions[1].amount),\(self.drinkOptions[2].amount)"]
-                    if WCSession.default.isReachable {
-                        WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
-                            print(error.localizedDescription)
-                        }
-                        WCSession.default.transferCurrentComplicationUserInfo(message)
-                    } else {
-                        WCSession.default.transferUserInfo(message)
-                    }
-                }
-            } errorHandler: { (error) in
-                print(error.localizedDescription)
-            }
-            
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        let today = fetchToday()
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
-                           "phoneGoal": String(today.goal.amount),
-                           "phoneConsumed": String(today.consumed.amount),
-                           "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
+                           "phoneGoal": String(today.goal),
+                           "phoneConsumed": String(today.consumed),
+                           "phoneDrinks": "\(drinkOptions[0]),\(drinkOptions[1]),\(drinkOptions[2])"]
             WCSession.default.transferCurrentComplicationUserInfo(message)
         }
-        let current = UNUserNotificationCenter.current()
-        current.getNotificationSettings(completionHandler: { (settings) in
-            if settings.authorizationStatus == .authorized {
-                // checks if the goal has been reached
-                if self.today.goal.amount <= self.today.consumed.amount {
-                    let startDate = self.defaults.object(forKey: startingTimeString) as! Date
-                    let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
-                    let intervals = self.defaults.integer(forKey: reminderIntervalString)
-                    
-                    var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
-                    var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
-                    let now   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
-                    
-                    current.removeAllPendingNotificationRequests()
-                    //Setting reminders for tomorrow.
-                    tempStart.day = now.day! + 1
-                    tempEnd.day   = now.day! + 1
-                    setReminders(Calendar.current.date(from: tempStart)!,
-                                 Calendar.current.date(from: tempEnd)!,
-                                 intervals)
-                    //Setting up a congratulation message.
-                    let notificationCenter = UNUserNotificationCenter.current()
-                    let notification = getCongratulationReminder()
-                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 30, repeats: false)
-                    let uuidString = UUID().uuidString
-                    let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
-                    notificationCenter.add(request, withCompletionHandler: nil)
-                }
-            }
-        })
+    }
+    
+    //MARK: - Load and Save days
+    
+    func fetchDays() {
+        do {
+            self.days = try self.context.fetch(Day.fetchRequest())
+        } catch {
+            print("can't featch days")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func saveDays() {
+        do {
+            try self.context.save()
+        } catch {
+            print("can't save days")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func fetchToday() -> Day {
+        do {
+            let request = Day.fetchRequest() as NSFetchRequest
+            // Get today's beginning & tomorrows beginning time
+            let dateFrom = Calendar.current.startOfDay(for: Date())
+            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
+            // Sets conditions for date to be within today
+            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
+            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
+            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+            request.predicate = datePredicate
+            // tries to get the day out of the array.
+            let loadedDays = try self.context.fetch(request)
+            // If today wasn't found it will create a new day.
+            guard let today = loadedDays.first else {
+                let today = Day(context: self.context)
+                today.date = Date()
+                today.goal = 3
+                return today }
+            return today
+        } catch {
+            print("can't featch day")
+            print(error.localizedDescription)
+            // If the loading of data fails, we create a new day
+            let today = Day(context: self.context)
+            today.date = Date()
+            today.goal = 3
+            return today
+        }
     }
     
     //MARK: - Set up of UI
@@ -505,9 +476,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         setConstraints()
         setUpButtons()
         currentDay.text  = formatter.string(from: Date.init()).localizedCapitalized
-        smallLabel.text  = String(drinkOptions[0].amount)
-        mediumLabel.text = String(drinkOptions[1].amount)
-        largeLabel.text  = String(drinkOptions[2].amount)
+        smallLabel.text  = String(drinkOptions[0])
+        mediumLabel.text = String(drinkOptions[1])
+        largeLabel.text  = String(drinkOptions[2])
     }
     
     /**
@@ -533,7 +504,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         currentDay.topAnchor.constraint(equalTo: appTitle.bottomAnchor, constant: 20).isActive = true
         
         // Constraints for the summery lables(Where the user can see the consumed amount and the goal)
-        summaryStack.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor).isActive = true
+        summaryStack.centerXAnchor.constraint(equalTo: currentDay.centerXAnchor).isActive         = true
         summaryStack.topAnchor.constraint(equalTo: currentDay.bottomAnchor, constant: 5).isActive = true
         
         // Constraints for the drink options and the lables.
@@ -822,62 +793,91 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      updateConsumtion(drink)
      ```
      */
-    func updateConsumtion(_ drinkConsumed: Drink) {
-        let drinkAmount  = Measurement(value: Double(drinkConsumed.amount), unit: UnitVolume.milliliters)
-        let drink        = Drink(typeOfDrink: "water", amountOfDrink: drinkAmount.converted(to: .liters).value)
-        exportDrinkToHealth(Double(drink.amount), Date.init())
-        today.consumed.amount     += drink.amount
-        let rounded = round(today.consumed.amount * 100)/100
-        today.consumed.amount = rounded
-        if today.consumed.amount  <= 0.0{
-            today.consumed.amount  = 0
-        } else {
-            
+    func updateConsumtion(_ drinkConsumed: Double) {
+        let drinkAmount  = Measurement(value: Double(drinkConsumed), unit: UnitVolume.milliliters)
+        let drink        = drinkAmount.converted(to: .liters).value
+        exportDrinkToHealth(Double(drink), Date.init())
+        fetchDays()
+        let today = fetchToday()
+        today.consumed += drink
+        let rounded = round(today.consumed * 100)/100
+        today.consumed = rounded
+        if today.consumed <= 0.0{
+            today.consumed  = 0
         }
-        days.insertDay(today)
+        saveDays()
         updateUI()
         
         let current = UNUserNotificationCenter.current()
         current.getNotificationSettings(completionHandler: { (settings) in
             if settings.authorizationStatus == .authorized {
-                let startDate = self.defaults.object(forKey: startingTimeString) as! Date
-                let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
-                let intervals = self.defaults.integer(forKey: reminderIntervalString)
-                
-                var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
-                var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
-                let tempNow   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
-                // checks if the goal has been reached
-                if self.today.goal.amount <= self.today.consumed.amount {
-                    current.removeAllPendingNotificationRequests()
-                    //Setting reminders for tomorrow.
-                    tempStart.day = tempNow.day! + 1
-                    tempEnd.day   = tempNow.day! + 1
-                    setReminders(Calendar.current.date(from: tempStart)!,
-                                 Calendar.current.date(from: tempEnd)!,
-                                 intervals)
-                } else {
-                    //checks if the current time is within the notifications time span.
-                    if ((tempStart.hour! == tempNow.hour! &&
-                            tempStart.minute! < tempNow.minute!) ||
-                            tempStart.hour! < tempNow.hour!) &&
-                        ((tempEnd.hour! == tempNow.hour! &&
-                            tempEnd.minute! > tempNow.minute!) ||
-                            tempEnd.hour! > tempNow.hour!)
-                    {
-                        //sets new reminders for the notification range
-                        setReminders(Calendar.current.date(from: tempStart)!,
-                                     Calendar.current.date(from: tempEnd)!,
-                                     intervals)
-                        current.getPendingNotificationRequests {(requests) in
-                            for request in requests {
-                                if let trigger = request.trigger as? UNCalendarNotificationTrigger,
-                                   let triggerDate = trigger.nextTriggerDate(){
-                                    let difference = Calendar.current.dateComponents([.hour, .minute], from: Date(), to: triggerDate)
-                                    let differenceInMunutes = (difference.hour! * 60) + difference.minute!
-                                    // Checks if the time to the next notification is within half of the interval time.
-                                    if differenceInMunutes < Int(Double(intervals) * 0.8) {
-                                        current.removePendingNotificationRequests(withIdentifiers: [request.identifier])
+                current.getPendingNotificationRequests { (notifications) in
+                    if !notifications.isEmpty{
+                        let startDate = self.defaults.object(forKey: startingTimeString) as! Date
+                        let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
+                        let intervals = self.defaults.integer(forKey: reminderIntervalString)
+                        
+                        var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
+                        var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
+                        let tempNow   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
+                        // checks if the goal has been reached
+                        if today.goal <= today.consumed{
+                            current.removeAllPendingNotificationRequests()
+                            //Setting reminders for tomorrow.
+                            tempStart.day = tempNow.day! + 1
+                            tempEnd.day   = tempNow.day! + 1
+                            setReminders(Calendar.current.date(from: tempStart)!,
+                                         Calendar.current.date(from: tempEnd)!,
+                                         intervals)
+                            // checks if the goal has been reached
+                            if today.goal <= today.consumed {
+                                let startDate = self.defaults.object(forKey: startingTimeString) as! Date
+                                let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
+                                let intervals = self.defaults.integer(forKey: reminderIntervalString)
+                                
+                                var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
+                                var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
+                                let now   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
+                                
+                                current.removeAllPendingNotificationRequests()
+                                //Setting reminders for tomorrow.
+                                tempStart.day = now.day! + 1
+                                tempEnd.day   = now.day! + 1
+                                setReminders(Calendar.current.date(from: tempStart)!,
+                                             Calendar.current.date(from: tempEnd)!,
+                                             intervals)
+                                //Setting up a congratulation message.
+                                let notificationCenter = UNUserNotificationCenter.current()
+                                let notification = getCongratulationReminder()
+                                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60*1, repeats: false)
+                                let uuidString = UUID().uuidString
+                                let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+                                notificationCenter.add(request, withCompletionHandler: nil)
+                            }
+                        } else {
+                            //checks if the current time is within the notifications time span.
+                            if ((tempStart.hour! == tempNow.hour! &&
+                                    tempStart.minute! < tempNow.minute!) ||
+                                    tempStart.hour! < tempNow.hour!) &&
+                                ((tempEnd.hour! == tempNow.hour! &&
+                                    tempEnd.minute! > tempNow.minute!) ||
+                                    tempEnd.hour! > tempNow.hour!)
+                            {
+                                //sets new reminders for the notification range
+                                setReminders(Calendar.current.date(from: tempStart)!,
+                                             Calendar.current.date(from: tempEnd)!,
+                                             intervals)
+                                current.getPendingNotificationRequests {(requests) in
+                                    for request in requests {
+                                        if let trigger = request.trigger as? UNCalendarNotificationTrigger,
+                                           let triggerDate = trigger.nextTriggerDate(){
+                                            let difference = Calendar.current.dateComponents([.hour, .minute], from: Date(), to: triggerDate)
+                                            let differenceInMunutes = (difference.hour! * 60) + difference.minute!
+                                            // Checks if the time to the next notification is within half of the interval time.
+                                            if differenceInMunutes < Int(Double(intervals) * 0.8) {
+                                                current.removePendingNotificationRequests(withIdentifiers: [request.identifier])
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -889,9 +889,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
-                           "phoneGoal": String(today.goal.amount),
-                           "phoneConsumed": String(today.consumed.amount),
-                           "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
+                           "phoneGoal": String(today.goal),
+                           "phoneConsumed": String(today.consumed),
+                           "phoneDrinks": "\(drinkOptions[0]),\(drinkOptions[1]),\(drinkOptions[2])"]
             WCSession.default.transferCurrentComplicationUserInfo(message)
         }
     }
@@ -909,16 +909,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     @objc func updateUI(){
-        Day.saveDays(days)
-        let day = Day()
-        let goalAmount     = Measurement(value: Double(today.goal.amount), unit: UnitVolume.liters)
-        let consumedAmount = Measurement(value: Double(today.consumed.amount), unit: UnitVolume.liters)
-        let smallDrink     = Measurement(value: Double(drinkOptions[0].amount), unit: UnitVolume.milliliters)
-        let mediumDrink    = Measurement(value: Double(drinkOptions[1].amount), unit: UnitVolume.milliliters)
-        let largeDrink     = Measurement(value: Double(drinkOptions[2].amount), unit: UnitVolume.milliliters)
+        let today = fetchToday()
+        let goalAmount     = Measurement(value: Double(today.goal), unit: UnitVolume.liters)
+        let consumedAmount = Measurement(value: Double(today.consumed), unit: UnitVolume.liters)
+        let smallDrink     = Measurement(value: Double(drinkOptions[0]), unit: UnitVolume.milliliters)
+        let mediumDrink    = Measurement(value: Double(drinkOptions[1]), unit: UnitVolume.milliliters)
+        let largeDrink     = Measurement(value: Double(drinkOptions[2]), unit: UnitVolume.milliliters)
+        var goal = Double()
+        var consumed = Double()
         if metricUnits {
-            day.goal.amount        = goalAmount.converted(to: .liters).value
-            day.consumed.amount    = consumedAmount.converted(to: .liters).value
+            goal       = goalAmount.converted(to: .liters).value
+            consumed   = consumedAmount.converted(to: .liters).value
             let roundedSmallDrink  = smallDrink.converted(to: .milliliters).value.rounded()
             let roundedMediumDrink = mediumDrink.converted(to: .milliliters).value.rounded()
             let roundedLargeDrink  = largeDrink.converted(to: .milliliters).value.rounded()
@@ -926,8 +927,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             mediumLabel.text       = String(format: "%.0f", roundedMediumDrink)
             largeLabel.text        = String(format: "%.0f", roundedLargeDrink)
         } else {
-            day.goal.amount     = goalAmount.converted(to: .imperialPints).value
-            day.consumed.amount = consumedAmount.converted(to: .imperialPints).value
+            goal     = goalAmount.converted(to: .imperialPints).value
+            consumed = consumedAmount.converted(to: .imperialPints).value
             let small           = smallDrink.converted(to: .imperialFluidOunces).value
             let medium          = mediumDrink.converted(to: .imperialFluidOunces).value
             let large           = largeDrink.converted(to: .imperialFluidOunces).value
@@ -936,8 +937,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             largeLabel.text     = String(format: "%.2f", large)
         }
         
-        self.goalAmount.text     = String(day.goal.amount.clean)
-        self.consumedAmount.text = String(day.consumed.amount.clean)
+        self.goalAmount.text     = String(goal.clean)
+        self.consumedAmount.text = String(consumed.clean)
         
         if metricUnits {
             smallPrefix.text  = "\(UnitVolume.milliliters.symbol)"
@@ -967,7 +968,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      popUpOptions(sender, drink, mediumOptionLabel)
      ```
      */
-    func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Drink, _ optionLabel: UILabel) {
+    func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Double, _ optionLabel: UILabel) {
         let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink",comment: "popup view option for editing the drink options."),
                                             style: .default) {_ in
@@ -986,11 +987,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                         let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
                         switch optionLabel {
                         case self.smallLabel:
-                            self.drinkOptions[0].amount = drinkAmount.value
+                            self.drinkOptions[0] = drinkAmount.value
                         case self.mediumLabel:
-                            self.drinkOptions[1].amount = drinkAmount.value
+                            self.drinkOptions[1] = drinkAmount.value
                         case self.largeLabel:
-                            self.drinkOptions[2].amount = drinkAmount.value
+                            self.drinkOptions[2] = drinkAmount.value
                         default:
                             break
                         }
@@ -999,11 +1000,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                             .converted(to: .milliliters)
                         switch optionLabel {
                         case self.smallLabel:
-                            self.drinkOptions[0].amount = drinkAmount.value
+                            self.drinkOptions[0] = drinkAmount.value
                         case self.mediumLabel:
-                            self.drinkOptions[1].amount = drinkAmount.value
+                            self.drinkOptions[1] = drinkAmount.value
                         case self.largeLabel:
-                            self.drinkOptions[2].amount = drinkAmount.value
+                            self.drinkOptions[2] = drinkAmount.value
                         default:
                             break
                         }
@@ -1016,7 +1017,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
         let removeAmount = UIAlertAction(title: NSLocalizedString("RemoveDrink", comment:
                                                                     "popup view option for removeing the drink amount."), style: .default) {_ in
-            let removeDrink = Drink.init(typeOfDrink: "water", amountOfDrink: -drink.amount)
+            let removeDrink = -drink
             self.updateConsumtion(removeDrink)
         }
         alerContorller.addAction(editOption)
@@ -1040,14 +1041,22 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     func saveDrinkOptions(){
-        defaults.set(drinkOptions[0].amount, forKey: smallDrinkOptionString)
-        defaults.set(drinkOptions[1].amount, forKey: mediumDrinkOptionString)
-        defaults.set(drinkOptions[2].amount, forKey: largeDrinkOptionString)
+        defaults.set(drinkOptions[0], forKey: smallDrinkOptionString)
+        defaults.set(drinkOptions[1], forKey: mediumDrinkOptionString)
+        defaults.set(drinkOptions[2], forKey: largeDrinkOptionString)
         updateUI()
-        let message = ["phoneDate": formatter.string(from: today.date),
-                       "phoneGoal": String(today.goal.amount),
-                       "phoneConsumed": String(today.consumed.amount),
-                       "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
+        self.fetchDays()
+        var today: Day?
+        if days.isEmpty {
+            today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
+        }
+        if !days.isEmpty {
+            today?.goal = days.last?.goal ?? 3
+        }
+        let message = ["phoneDate": formatter.string(from: today?.date ?? Date()),
+                       "phoneGoal": String(today?.goal ?? 3),
+                       "phoneConsumed": String(today?.consumed ?? 0),
+                       "phoneDrinks": "\(drinkOptions[0] ),\(drinkOptions[1] ),\(drinkOptions[2] )"]
         if WCSession.default.isReachable {
             WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
                 print(error.localizedDescription)
@@ -1071,17 +1080,14 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     func loadDrinkOptions(){
-        drinkOptions[0].amount = defaults.double(forKey: smallDrinkOptionString)
-        drinkOptions[1].amount = defaults.double(forKey: mediumDrinkOptionString)
-        drinkOptions[2].amount = defaults.double(forKey: largeDrinkOptionString)
+        drinkOptions[0]  = defaults.double(forKey: smallDrinkOptionString)
+        drinkOptions[1]  = defaults.double(forKey: mediumDrinkOptionString)
+        drinkOptions[2]  = defaults.double(forKey: largeDrinkOptionString)
         
-        if  drinkOptions[0].amount == 0 ||
-                drinkOptions[1].amount == 0 ||
-                drinkOptions[2].amount == 0 {
-            
-            drinkOptions[0].amount = 300
-            drinkOptions[1].amount = 500
-            drinkOptions[2].amount = 750
+        if  drinkOptions[0]  == 0 || drinkOptions[1]  == 0 || drinkOptions[2]  == 0 {
+            drinkOptions[0]  = 300
+            drinkOptions[1]  = 500
+            drinkOptions[2]  = 750
         }
     }
     
@@ -1131,6 +1137,11 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        fetchDays()
+        let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
+        if !days.isEmpty {
+            today.goal = days.last?.goal ?? 3
+        }
         print("sent data with transferUserInfo")
         print(String(describing: message["consumed"]))
         print(String(describing: message["date"]))
@@ -1140,21 +1151,20 @@ extension StartVC: WCSessionDelegate {
                 print("error can't extract number from string")
                 return
             }
-            if today.consumed.amount <= watchConsumed {
-                let drinkAmountAdded = watchConsumed - today.consumed.amount
-                today.consumed.amount = watchConsumed
+            if today.consumed  <= watchConsumed {
+                let drinkAmountAdded = watchConsumed - today.consumed
+                today.consumed = watchConsumed
+                self.saveDays()
                 print("todays amount was updated")
                 DispatchQueue.main.async {
-                    self.days.insertDay(self.today)
-                    Day.saveDays(self.days)
-                    self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                    self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
                     self.updateUI()
                 }
             } else {
                 let message = ["phoneDate": formatter.string(from: today.date),
-                               "phoneGoal": String(today.goal.amount),
-                               "phoneConsumed": String(today.consumed.amount),
-                               "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
+                               "phoneGoal": String(today.goal),
+                               "phoneConsumed": String(today.consumed),
+                               "phoneDrinks": "\(drinkOptions[0]),\(drinkOptions[1]),\(drinkOptions[2])"]
                 if WCSession.default.isReachable {
                     WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
                         print(error.localizedDescription)
@@ -1168,6 +1178,11 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        fetchDays()
+        let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
+        if !days.isEmpty {
+            today.goal = days.last?.goal ?? 3
+        }
         print("sent data with transferUserInfo")
         print(String(describing: userInfo["consumed"]))
         print(String(describing: userInfo["date"]))
@@ -1177,21 +1192,20 @@ extension StartVC: WCSessionDelegate {
                 print("error can't extract number from string")
                 return
             }
-            if today.consumed.amount <= watchConsumed {
-                let drinkAmountAdded = watchConsumed - today.consumed.amount
-                today.consumed.amount = watchConsumed
+            if today.consumed <= watchConsumed {
+                let drinkAmountAdded = watchConsumed - today.consumed
+                today.consumed = watchConsumed
                 print("todays amount was updated")
                 DispatchQueue.main.async {
-                    self.days.insertDay(self.today)
-                    Day.saveDays(self.days)
-                    self.exportDrinkToHealth(Double(drinkAmountAdded), self.today.date)
+                    self.saveDays()
+                    self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
                     self.updateUI()
                 }
             } else {
                 let message = ["phoneDate": formatter.string(from: today.date),
-                               "phoneGoal": String(today.goal.amount),
-                               "phoneConsumed": String(today.consumed.amount),
-                               "phoneDrinks": "\(drinkOptions[0].amount),\(drinkOptions[1].amount),\(drinkOptions[2].amount)"]
+                               "phoneGoal": String(today.goal),
+                               "phoneConsumed": String(today.consumed),
+                               "phoneDrinks": "\(drinkOptions[0]),\(drinkOptions[1]),\(drinkOptions[2])"]
                 if WCSession.default.isReachable {
                     WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
                         print(error.localizedDescription)

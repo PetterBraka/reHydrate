@@ -9,18 +9,18 @@
 import UIKit
 import WatchKit
 import ClockKit
+import CoreData
 import Foundation
 import WatchConnectivity
 
 
 class InterfaceController: WKInterfaceController {
-    
-    var today = Day(date: Date(), goalAmount: Drink(typeOfDrink: "water", amountOfDrink: 3), consumedAmount: Drink())
+    var metric  = true
+    let context = (WKExtension.shared().delegate as! ExtensionDelegate).persistentContainer.viewContext
     var days: [Day] = []
-    var smallDrink  = Drink(typeOfDrink: "water", amountOfDrink: 300)
-    var mediumDrink = Drink(typeOfDrink: "water", amountOfDrink: 500)
-    var largeDrink  = Drink(typeOfDrink: "water", amountOfDrink: 750)
-    var metric = true
+    var smallDrink  = Double(300)
+    var mediumDrink = Double(500)
+    var largeDrink  = Double(750)
     let formatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE - dd/MM/yy"
@@ -30,30 +30,31 @@ class InterfaceController: WKInterfaceController {
     @IBOutlet weak var summaryLable: WKInterfaceLabel!
     
     @IBAction func smallButton() {
-        let small = Measurement(value: smallDrink.amount, unit: UnitVolume.milliliters)
-        today.consumed.amount += small.converted(to: .liters).value
+        let small = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
+        let today = fetchToday()
+        today.consumed += small.converted(to: .liters).value
         updateSummary()
     }
     
     @IBAction func mediumButton() {
-        let medium = Measurement(value: mediumDrink.amount, unit: UnitVolume.milliliters)
-        today.consumed.amount += medium.converted(to: .liters).value
+        let medium = Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
+        let today = fetchToday()
+        today.consumed += medium.converted(to: .liters).value
         updateSummary()
     }
     
     @IBAction func largeButton() {
-        let large = Measurement(value: largeDrink.amount, unit: UnitVolume.milliliters)
-        today.consumed.amount += large.converted(to: .liters).value
+        let large = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
+        let today = fetchToday()
+        today.consumed += large.converted(to: .liters).value
         updateSummary()
     }
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         // Configure interface objects here.
-        days = Day.loadDays()
+        fetchDays()
         //ask the phone for the goal and the consumed amount.
-        
-        today = days.updateToday()
         
         if WCSession.isSupported(){
             let session = WCSession.default
@@ -67,9 +68,7 @@ class InterfaceController: WKInterfaceController {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        
-        today = days.updateToday()
-        
+        let today = fetchToday()
         if WCSession.isSupported(){
             let session = WCSession.default
             session.delegate = self
@@ -78,7 +77,9 @@ class InterfaceController: WKInterfaceController {
             }
         }
         let delegate  = WKExtension.shared().delegate as! ExtensionDelegate
-        delegate.today = today
+        delegate.todayConsumed = today.consumed
+        delegate.todayGoal = today.goal
+        delegate.todayDate = today.date
         let server = CLKComplicationServer.sharedInstance()
         server.activeComplications?.forEach({ (complication) in
             server.reloadTimeline(for: complication)
@@ -89,18 +90,72 @@ class InterfaceController: WKInterfaceController {
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
+        let today = fetchToday()
         let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-        delegate.today = today
+        delegate.todayConsumed = today.consumed
+        delegate.todayGoal = today.goal
+        delegate.todayDate = today.date
         let server = CLKComplicationServer.sharedInstance()
         server.activeComplications?.forEach({ (complication) in
             server.reloadTimeline(for: complication)
         })
     }
     
+    //MARK: - Load and Save days
+    
+    func fetchDays() {
+        do {
+            self.days = try self.context.fetch(Day.fetchRequest())
+        } catch {
+            print("can't featch days")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func saveDays() {
+        do {
+            try self.context.save()
+        } catch {
+            print("can't save days")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func fetchToday() -> Day {
+        do {
+            let request = Day.fetchRequest() as NSFetchRequest
+            // Get today's beginning & tomorrows beginning time
+            let dateFrom = Calendar.current.startOfDay(for: Date())
+            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
+            // Sets conditions for date to be within today
+            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
+            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
+            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+            request.predicate = datePredicate
+            // tries to get the day out of the array.
+            let loadedDays = try self.context.fetch(request)
+            // If today wasn't found it will create a new day.
+            guard let today = loadedDays.first else {
+                let today = Day(context: self.context)
+                today.date = Date()
+                today.goal = 3
+                return today }
+            return today
+        } catch {
+            print("can't featch day")
+            print(error.localizedDescription)
+            // If the loading of data fails, we create a new day
+            let today = Day(context: self.context)
+            today.date = Date()
+            today.goal = 3
+            return today
+        }
+    }
+    
     func updateSummary(){
-        days.insertDay(today)
-        let consumedAmount = Measurement(value: Double(today.consumed.amount), unit: UnitVolume.liters)
-        let goalAmount = Measurement(value: Double(today.goal.amount), unit: UnitVolume.liters)
+        let today = fetchToday()
+        let consumedAmount = Measurement(value: Double(today.consumed), unit: UnitVolume.liters)
+        let goalAmount = Measurement(value: Double(today.goal), unit: UnitVolume.liters)
         if metric {
             summaryLable.setText("\(consumedAmount.converted(to: .liters).value.clean)/\(goalAmount.converted(to: .liters).value.clean)L")
         } else {
@@ -110,8 +165,8 @@ class InterfaceController: WKInterfaceController {
         server.activeComplications?.forEach({ (complication) in
             server.reloadTimeline(for: complication)
         })
-        Day.saveDays(days)
-        let consumed = String(today.consumed.amount)
+        saveDays()
+        let consumed = String(today.consumed)
         let message = ["date": formatter.string(from: today.date),
                        "metric": String(metric),
                        "consumed": consumed] as [String : String]
@@ -138,15 +193,17 @@ extension InterfaceController: WCSessionDelegate{
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        let today = fetchToday()
         print("resived message")
         print(message)
         let response = ["date": formatter.string(from: today.date),
                         "metric": String(metric),
-                        "consumed": String(today.consumed.amount)] as [String : String]
+                        "consumed": String(today.consumed)] as [String : String]
         replyHandler(response)
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        let today = fetchToday()
         print("sent data with transferUserInfo")
         let phoneDate     = String(describing: userInfo["phoneDate"] ?? "")
         let phoneGoal     = String(describing: userInfo["phoneGoal"] ?? "")
@@ -154,30 +211,30 @@ extension InterfaceController: WCSessionDelegate{
         let phoneDrinks   = String(describing: userInfo["phoneDrinks"] ?? "")
         
         let drinkOptions = phoneDrinks.components(separatedBy: ",")
-        self.smallDrink  = Drink(typeOfDrink: "water", amountOfDrink: Double(drinkOptions[0]) ?? 300)
-        self.mediumDrink = Drink(typeOfDrink: "water", amountOfDrink: Double(drinkOptions[1]) ?? 500)
-        self.largeDrink  = Drink(typeOfDrink: "water", amountOfDrink: Double(drinkOptions[2]) ?? 750)
+        self.smallDrink  = Double(drinkOptions[0]) ?? Double(300)
+        self.mediumDrink = Double(drinkOptions[1]) ?? Double(500)
+        self.largeDrink  = Double(drinkOptions[2]) ?? Double(750)
         formatter.dateFormat = "EEEE - dd/MM/yy"
-        today = days.updateToday()
         if formatter.string(from: today.date) == phoneDate {
             guard let consumed = Double(phoneConsumed) else {
                 print("error can't extract number from string")
                 return
             }
-            today.consumed.amount = consumed
+            today.consumed = consumed
             guard let goal = Double(phoneGoal) else {
                 print("error can't extract number from string")
                 return
             }
-            today.goal.amount = goal
+            today.goal = goal
             print("todays amount was updated with user info")
             DispatchQueue.main.async {
-                self.days.insertDay(self.today)
-                Day.saveDays(self.days)
+                self.saveDays()
                 self.updateSummary()
                 
                 let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-                delegate.today = self.today
+                delegate.todayConsumed = today.consumed
+                delegate.todayGoal = today.goal
+                delegate.todayDate = today.date
                 let server = CLKComplicationServer.sharedInstance()
                 guard let activeComplications = server.activeComplications else { return }
                 for complication in activeComplications {

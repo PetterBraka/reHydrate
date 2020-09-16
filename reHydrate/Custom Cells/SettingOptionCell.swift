@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SettingOptionCell: UITableViewCell {
     var pickerArray       = ["0", "1","2","3","4","5","6","7","8","9"]
@@ -14,19 +15,14 @@ class SettingOptionCell: UITableViewCell {
     let picker            = UIPickerView()
     var notificationStart = Int()
     var notificationEnd   = Int()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         formatter.locale = .current
         return formatter
     }()
-    var setting: String? {
-        didSet {
-            guard let string 	= setting else {return}
-            titleOption.text 	= string
-        }
-    }
-    var textField: UITextField       = {
+    var textField: UITextField   = {
         let textField                = UITextField()
         textField.placeholder        = "value"
         textField.layer.borderWidth  = 2
@@ -38,17 +34,10 @@ class SettingOptionCell: UITableViewCell {
         textField.setRightPadding(10)
         return textField
     }()
-    let titleOption: UILabel 	= {
+    let titleOption: UILabel     = {
         let lable   = UILabel()
         lable.text  = "test"
         lable.font  = UIFont(name: "AmericanTypewriter", size: 16)
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        return lable
-    }()
-    let subTitle: UILabel = {
-        let lable  = UILabel()
-        lable.text = "subText"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 13)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -63,6 +52,20 @@ class SettingOptionCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    let subTitle: UILabel = {
+        let lable  = UILabel()
+        lable.text = "subText"
+        lable.font = UIFont(name: "AmericanTypewriter", size: 13)
+        lable.translatesAutoresizingMaskIntoConstraints = false
+        return lable
+    }()
+    var setting: String? {
+        didSet {
+            guard let string 	= setting else {return}
+            titleOption.text 	= string
+        }
+    }
+    var days: [Day] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -75,6 +78,56 @@ class SettingOptionCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - Load and Save day(s)
+    
+    func fetchDays() {
+        do {
+            self.days = try self.context.fetch(Day.fetchRequest())
+        } catch {
+            print("can't featch days")
+        }
+    }
+    
+    func saveDays() {
+        do {
+            try self.context.save()
+        } catch {
+            print("can't save days")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func fetchToday() -> Day {
+        do {
+            let request = Day.fetchRequest() as NSFetchRequest
+            // Get today's beginning & tomorrows beginning time
+            let dateFrom = Calendar.current.startOfDay(for: Date())
+            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
+            // Sets conditions for date to be within today
+            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
+            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
+            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+            request.predicate = datePredicate
+            // tries to get the day out of the array.
+            let loadedDays = try self.context.fetch(request)
+            // If today wasn't found it will create a new day.
+            guard let today = loadedDays.first else {
+                let today = Day(context: self.context)
+                today.date = Date()
+                today.goal = 3
+                return today }
+            return today
+        } catch {
+            print("can't featch day")
+            print(error.localizedDescription)
+            // If the loading of data fails, we create a new day
+            let today = Day(context: self.context)
+            today.date = Date()
+            today.goal = 3
+            return today
+        }
     }
     
     /**
@@ -233,12 +286,9 @@ class SettingOptionCell: UITableViewCell {
             }
         case NSLocalizedString("SetYourGoal", comment: "").lowercased():
             buttonForCell.isHidden = true
-            let days = Day.loadDays()
-            if !days.isEmpty{
-                textField.text = String(describing: days.last!.goal.amount)
-            } else {
-                textField.text = "3"
-            }
+            fetchDays()
+            let day = fetchToday()
+            textField.text = String(describing: day.goal)
             pickerArray     = ["0", "1","2","3","4","5","6","7","8","9"]
             componentString = ["","",",",""]
             setUpPickerView()
@@ -573,13 +623,14 @@ class SettingOptionCell: UITableViewCell {
     }
     
     func updateGoal(){
-        let days = Day.loadDays()
+        fetchDays()
         let newGoal = Double(textField.text!)!
-        if newGoal != 0 {
-            days[days.count - 1].goal.amount = newGoal
-            print(days[days.count - 1].goal.amount)
-            Day.saveDays(days)
+        let day = fetchToday()
+        
+        if newGoal > 0 {
+            day.goal = Double(newGoal)
         }
+        saveDays()
     }
 }
 
