@@ -379,7 +379,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         darkMode        = defaults.bool(forKey: darkModeString)
         metricUnits     = defaults.bool(forKey: metricUnitsString)
         currentDay.text = formatter.string(from: Date.init()).localizedCapitalized
-        let today = fetchToday()
         loadDrinkOptions()
         setUpUI()
         changeAppearance()
@@ -389,41 +388,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             if WCSession.default.activationState != .activated {
                 WCSession.default.activate()
             }
-            let message = ["requsetData": true]
-            WCSession.default.sendMessage(message) { (reply) in
-                print(reply)
-                let messageConsumed = reply["consumed"]! as! String
-                guard let watchConsumed = Double(messageConsumed) else {
-                    print("error can't extract number from string")
-                    return
-                }
-                if today.consumed <= watchConsumed {
-                    let drinkAmountAdded = watchConsumed - today.consumed
-                    today.consumed = watchConsumed
-                    print("todays amount was updated")
-                    DispatchQueue.main.async {
-                        self.saveDays()
-                        self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
-                        self.updateUI()
-                    }
-                } else {
-                    let message = ["phoneDate": self.formatter.string(from: today.date),
-                                   "phoneGoal": String(today.goal),
-                                   "phoneConsumed": String(today.consumed ),
-                                   "phoneDrinks": "\(self.drinkOptions[0]),\(self.drinkOptions[1]),\(self.drinkOptions[2])"]
-                    if WCSession.default.isReachable {
-                        WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
-                            print(error.localizedDescription)
-                        }
-                        WCSession.default.transferCurrentComplicationUserInfo(message)
-                    } else {
-                        WCSession.default.transferUserInfo(message)
-                    }
-                }
-            } errorHandler: { (error) in
-                print(error.localizedDescription)
-            }
-            
         }
     }
     

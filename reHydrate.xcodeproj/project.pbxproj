@@ -27,8 +27,8 @@
 		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */; };
-		339491F5250A39630069BACC /* Day+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339491F4250A39630069BACC /* Day+CoreDataProperties.swift */; };
-		339491F6250A39630069BACC /* Day+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339491F3250A39630069BACC /* Day+CoreDataClass.swift */; };
+		33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58825123A1900658867 /* Day+CoreDataClass.swift */; };
+		33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */; };
 		33C431912482769B00E8EECA /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C431902482769B00E8EECA /* Extenstions.swift */; };
 		33C4319324827F2700E8EECA /* BundleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C4319224827F2700E8EECA /* BundleExtension.swift */; };
 		33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BDC24B47D0900699B1A /* Interface.storyboard */; };
@@ -187,8 +187,8 @@
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3389E0AA2448A61300DD7B58 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
-		339491F3250A39630069BACC /* Day+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Day+CoreDataClass.swift"; path = "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reHydrate/reHydrate-watch Extension/Day+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		339491F4250A39630069BACC /* Day+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Day+CoreDataProperties.swift"; path = "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reHydrate/reHydrate-watch Extension/Day+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		33BEA58825123A1900658867 /* Day+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass.swift"; sourceTree = "<group>"; };
+		33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33C4318B247EDA6700E8EECA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33C431902482769B00E8EECA /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
 		33C4319224827F2700E8EECA /* BundleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtension.swift; sourceTree = "<group>"; };
@@ -404,8 +404,8 @@
 				33DF9BF124B47D0A00699B1A /* Assets.xcassets */,
 				33DF9BF324B47D0A00699B1A /* Info.plist */,
 				339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */,
-				339491F3250A39630069BACC /* Day+CoreDataClass.swift */,
-				339491F4250A39630069BACC /* Day+CoreDataProperties.swift */,
+				33BEA58825123A1900658867 /* Day+CoreDataClass.swift */,
+				33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */,
 			);
 			path = "reHydrate-watch Extension";
 			sourceTree = "<group>";
@@ -807,10 +807,10 @@
 				339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */,
 				33DF9BEE24B47D0A00699B1A /* ExtensionDelegate.swift in Sources */,
 				332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */,
-				339491F6250A39630069BACC /* Day+CoreDataClass.swift in Sources */,
+				33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */,
 				33DF9BEC24B47D0A00699B1A /* InterfaceController.swift in Sources */,
 				33DF9BF024B47D0A00699B1A /* ComplicationController.swift in Sources */,
-				339491F5250A39630069BACC /* Day+CoreDataProperties.swift in Sources */,
+				33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
