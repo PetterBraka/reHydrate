@@ -210,7 +210,7 @@ class SettingOptionCell: UITableViewCell {
             titleOption.textColor           = .white
             subTitle.textColor              = .white
             textField.textColor             = .white
-            self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
+            self.backgroundColor            = UIColor().hexStringToUIColor("#303030")
             textField.layer.borderColor     = UIColor.lightGray.cgColor
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
