@@ -20,7 +20,7 @@ class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
     
     // MARK: - Variabels
     let defaults                   = UserDefaults.standard
-    var tableView: UITableView     = UITableView()
+    var tableView: UITableView     = UITableView(frame: CGRect.zero, style: .plain)
     var exitButton: UIButton       = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -395,19 +395,13 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     //MARK: - Creates a section
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell     = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
-        cell.setting = nil //settings[section]
-        cell.tag = section
+        let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
         cell.setHeaderAppairents(darkMode)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 2
-        } else {
-            return 8
-        }
+        return 25
     }
     //MARK: - Cell controlls of TableView
     
