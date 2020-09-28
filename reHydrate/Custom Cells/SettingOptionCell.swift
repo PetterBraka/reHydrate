@@ -10,8 +10,8 @@ import UIKit
 import CoreData
 
 class SettingOptionCell: UITableViewCell {
-    var pickerArray       = ["0", "1","2","3","4","5","6","7","8","9"]
-    var componentString   = ["","",",",""]
+    var pickerArray       = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
+    var componentString   = [""]
     let picker            = UIPickerView()
     var notificationStart = Int()
     var notificationEnd   = Int()
@@ -130,6 +130,8 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     
+    //MARK: - Setup UI
+    
     /**
      Adds a subtitle under the title lable
      
@@ -210,7 +212,7 @@ class SettingOptionCell: UITableViewCell {
             titleOption.textColor           = .white
             subTitle.textColor              = .white
             textField.textColor             = .white
-            self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
+            self.backgroundColor            = UIColor().hexStringToUIColor("#303030")
             textField.layer.borderColor     = UIColor.lightGray.cgColor
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
@@ -288,9 +290,12 @@ class SettingOptionCell: UITableViewCell {
             buttonForCell.isHidden = true
             fetchDays()
             let day = fetchToday()
-            textField.text = String(describing: day.goal)
-            pickerArray     = ["0", "1","2","3","4","5","6","7","8","9"]
-            componentString = ["","",",",""]
+            if metric {
+                textField.text = day.goal.clean
+            } else {
+                let measurement = Measurement(value: day.goal, unit: UnitVolume.liters)
+                textField.text  = measurement.converted(to: .imperialFluidOunces).value.clean
+            }
             setUpPickerView()
             break
         case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
@@ -352,7 +357,11 @@ class SettingOptionCell: UITableViewCell {
         picker.frame        = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
         picker.delegate     = self
         picker.dataSource   = self
-        textField.inputView = picker
+        if titleOption.text?.lowercased() == NSLocalizedString("Language", comment: "").lowercased(){
+            textField.inputView = picker
+        } else if titleOption.text?.lowercased() == NSLocalizedString("SetYourGoal", comment: "").lowercased(){
+            textField.keyboardType = .decimalPad
+        }
     }
     
     // MARK: - SetUp DatePicker
@@ -499,19 +508,6 @@ class SettingOptionCell: UITableViewCell {
         textField.endEditing(true)
         switch titleOption.text?.lowercased() {
         case NSLocalizedString("SetYourGoal", comment: "").lowercased():
-            var component = 0
-            while component < picker.numberOfComponents {
-                let value = pickerArray[picker.selectedRow(inComponent: component)]
-                switch component {
-                case 0, 1, 3:
-                    updateTextField(String(value), component)
-                case 2:
-                    updateTextField(".", component)
-                default:
-                    break
-                }
-                component += 1
-            }
             updateGoal()
         case NSLocalizedString("StartingTime", comment: "").lowercased(),
              NSLocalizedString("EndingTime", comment: "").lowercased():
@@ -629,6 +625,8 @@ class SettingOptionCell: UITableViewCell {
         
         if newGoal > 0 {
             day.goal = Double(newGoal)
+        } else {
+            textField.text = day.goal.clean
         }
         saveDays()
     }

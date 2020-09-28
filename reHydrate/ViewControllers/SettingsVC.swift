@@ -16,11 +16,11 @@ struct settingOptions {
     var options:  [String]
 }
 
-class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
+class SettingsVC: UIViewController {
     
     // MARK: - Variabels
     let defaults                   = UserDefaults.standard
-    var tableView: UITableView     = UITableView()
+    var tableView: UITableView     = UITableView(frame: CGRect.zero, style: .plain)
     var exitButton: UIButton       = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -156,6 +156,9 @@ class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         tableView.delegate   = self
         tableView.dataSource = self
+        
+        let mail = MFMailComposeViewController()
+        mail.mailComposeDelegate = self
     }
     
     /**
@@ -395,19 +398,13 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     //MARK: - Creates a section
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell     = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
-        cell.setting = nil //settings[section]
-        cell.tag = section
+        let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
         cell.setHeaderAppairents(darkMode)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 2
-        } else {
-            return 8
-        }
+        return 25
     }
     //MARK: - Cell controlls of TableView
     
@@ -476,15 +473,15 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 defaults.set(false, forKey: remindersString)
                 sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
             }
-        case IndexPath(row: 0, section: 4):
+        case IndexPath(row: 0, section: 4): // Open settings
             if let url = URL(string:UIApplication.openSettingsURLString) {
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
-        case IndexPath(row: 1, section: 4):
+        case IndexPath(row: 1, section: 4): // Open health
             UIApplication.shared.open(URL(string: "x-apple-health://")!)
-        case IndexPath(row: 2, section: 4):
+        case IndexPath(row: 2, section: 4): // Remove data
             let clearDataAlert = UIAlertController(title: NSLocalizedString("ClearingDataAlert",
                                                                             comment: "Title for clearing data alert"),
                                                    message: NSLocalizedString("ClearingDataBody",
@@ -517,17 +514,16 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 self.dismiss(animated: false, completion: nil)
             }))
             self.present(clearDataAlert, animated: true, completion: nil)
-        case IndexPath(row: 0, section: 5):
-            print("help pressed")
+        case IndexPath(row: 0, section: 5): // How to use
             let tutorialVC = TutorialVC()
             tutorialVC.modalPresentationStyle = .fullScreen
             self.present(tutorialVC, animated: true, completion: nil)
-        case IndexPath(row: 1, section: 5):
+        case IndexPath(row: 1, section: 5): // Open Instagram
             if let url = URL(string: "https://www.instagram.com/braka.coding/"),
                UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:])
             }
-        case IndexPath(row: 2, section: 5):
+        case IndexPath(row: 2, section: 5): // Send mail about feature
             if MFMailComposeViewController.canSendMail() {
                 let mail = MFMailComposeViewController()
                 mail.mailComposeDelegate = self
@@ -552,7 +548,7 @@ Please describe your feature:
                     UIApplication.shared.open(url, options: [:])
                 }
             }
-        case IndexPath(row: 3, section: 5):
+        case IndexPath(row: 3, section: 5): // Send mail about bug
             if MFMailComposeViewController.canSendMail() {
                 UIDevice.current.isBatteryMonitoringEnabled = true
                 let mail = MFMailComposeViewController()
@@ -586,7 +582,7 @@ Please add any screenshots you have of the porblem:<br>
                     UIApplication.shared.open(url, options: [:])
                 }
             }
-        case IndexPath(row: 4, section: 5):
+        case IndexPath(row: 4, section: 5): // Send mail to contact dev
             if MFMailComposeViewController.canSendMail() {
                 UIDevice.current.isBatteryMonitoringEnabled = true
                 let mail = MFMailComposeViewController()
@@ -606,13 +602,23 @@ Thank you for getting in contact with us<br>
                     UIApplication.shared.open(url, options: [:])
                 }
             }
-        case IndexPath(row: 5, section: 5):
+        case IndexPath(row: 5, section: 5): // open privacy policy
             if let url = URL(string: "https://github.com/PetterBraka/reHydrate/wiki/Privacy-Policy"),
                UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:])
             }
         default:
             break
+        }
+    }
+}
+
+extension SettingsVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+
+        if result == .sent {
+            dismiss(animated: true)
         }
     }
 }
