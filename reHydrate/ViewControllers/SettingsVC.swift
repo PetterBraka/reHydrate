@@ -16,7 +16,7 @@ struct settingOptions {
     var options:  [String]
 }
 
-class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
+class SettingsVC: UIViewController {
     
     // MARK: - Variabels
     let defaults                   = UserDefaults.standard
@@ -156,6 +156,9 @@ class SettingsVC: UIViewController, MFMailComposeViewControllerDelegate {
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         tableView.delegate   = self
         tableView.dataSource = self
+        
+        let mail = MFMailComposeViewController()
+        mail.mailComposeDelegate = self
     }
     
     /**
@@ -607,6 +610,16 @@ Thank you for getting in contact with us<br>
             }
         default:
             break
+        }
+    }
+}
+
+extension SettingsVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+
+        if result == .sent {
+            dismiss(animated: true)
         }
     }
 }
