@@ -358,8 +358,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                     }
                 }
             })
+            setUpRequests()
         }
-        setUpHealth()
         
         if WCSession.isSupported() {
             let session = WCSession.default
@@ -664,16 +664,16 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         drinkStack.addArrangedSubview(largeStack)
     }
     
-    //MARK: - HealthKit
     /**
      Will ask for premitions to use the health data for water consumtion. it will only write not read.
+     Will ask for premition to send notifications after previous request.
      
      # Example #
      ```
      setUpHealth()
      ```
      */
-    fileprivate func setUpHealth() {
+    fileprivate func setUpRequests() {
         //  Request access to write dietaryWater data to HealthStore
         if HKHealthStore.isHealthDataAvailable(){
             let healthStore = HKHealthStore()
@@ -686,9 +686,21 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                     print("Was not authorization by the user")
                     return
                 }
+                let center = UNUserNotificationCenter.current()
+                center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+                    if success {
+                        print("we are allowed to send notifications.")
+                        self.defaults.set(true, forKey: remindersString)
+                    } else {
+                        print("we are not allowed to send notifications.")
+                        self.defaults.set(false, forKey: remindersString)
+                    }
+                }
             })
         }
     }
+    
+    //MARK: - HealthKit
     
     /**
      Will export a drink to the health app
