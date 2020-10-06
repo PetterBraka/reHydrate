@@ -13,7 +13,7 @@ import CoreData
 import HealthKit
 import WatchConnectivity
 
-let versionString = "version3.9.2"
+let versionString = "version4"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -316,14 +316,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
         
-        UNUserNotificationCenter.current().getNotificationSettings { (notificationSetting) in
-            if notificationSetting.authorizationStatus == .authorized {
-                UNUserNotificationCenter.current().delegate = self
-            }
-        }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),name: UIApplication.willEnterForegroundNotification, object: nil)
-        
         if UIApplication.isFirstLaunch() {
             print("first time to launch this version of the app")
             metricUnits  = true
@@ -339,6 +331,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             if !appLanguages.contains(language[0]){
                 setAppLanguage(appLanguages[0])
             }
+            setUpRequests()
             //sets default values for reminders
             let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
             let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
@@ -349,17 +342,21 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             let current = UNUserNotificationCenter.current()
             current.getNotificationSettings(completionHandler: { (settings) in
                 if settings.authorizationStatus == .authorized {
-                    current.getPendingNotificationRequests { (notificationRequests) in
-                        if !notificationRequests.isEmpty {
-                            current.removeAllPendingNotificationRequests()
-                            current.removeAllDeliveredNotifications()
-                        }
-                        setReminders(startDate, endDate, intervals)
-                    }
+                    current.removeAllPendingNotificationRequests()
+                    setReminders(startDate, endDate, intervals)
                 }
             })
-            setUpRequests()
         }
+        
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings { (notificationSetting) in
+            if notificationSetting.authorizationStatus == .authorized {
+                current.delegate = self
+            }
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),name: UIApplication.willEnterForegroundNotification, object: nil)
+        
         
         if WCSession.isSupported() {
             let session = WCSession.default
@@ -375,7 +372,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     //MARK: - ViewWill
     
     override func viewWillAppear(_ animated: Bool) {
-        print("Main screen will appear")
         darkMode        = defaults.bool(forKey: darkModeString)
         metricUnits     = defaults.bool(forKey: metricUnitsString)
         currentDay.text = formatter.string(from: Date.init()).localizedCapitalized
@@ -389,10 +385,24 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 WCSession.default.activate()
             }
         }
+        #if DEBUG
+        print("Main screen will appear")
+        let current = UNUserNotificationCenter.current()
+        current.getPendingNotificationRequests { (notificationRequest) in
+            print("pending notification: \(notificationRequest.count)")
+        }
+        #endif
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         let today = fetchToday()
+        #if DEBUG
+        print("View will disappear")
+        let current = UNUserNotificationCenter.current()
+        current.getPendingNotificationRequests { (notificationRequest) in
+            print("pending notification: \(notificationRequest.count)")
+        }
+        #endif
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal),
@@ -859,12 +869,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                                              Calendar.current.date(from: tempEnd)!,
                                              intervals)
                                 //Setting up a congratulation message.
-                                let notificationCenter = UNUserNotificationCenter.current()
                                 let notification = getCongratulationReminder()
                                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60*1, repeats: false)
                                 let uuidString = UUID().uuidString
                                 let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
-                                notificationCenter.add(request, withCompletionHandler: nil)
+                                current.add(request, withCompletionHandler: nil)
                             }
                         } else {
                             //checks if the current time is within the notifications time span.
@@ -1294,7 +1303,7 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
     for i in 0...Int(totalNotifications) {
         let notificationDate = Calendar.current.date(byAdding: .minute, value: intervals * i, to: startDate)
         let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm"
+        formatter.dateFormat = "HH:mm"
         print("setting reminder for \(formatter.string(from: notificationDate!))")
         let notification = getReminder()
         let smallDrinkAction = UNNotificationAction(identifier: "small", title: "\(NSLocalizedString("Add", comment: "")) \(smallDrink)\(unit)",
