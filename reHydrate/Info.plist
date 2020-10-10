@@ -163,15 +163,6 @@
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
 			</dict>
-			<key>white-black</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>white-black</string>
-				</array>
-				<key>Icon alredy includes gloss effects</key>
-				<false/>
-			</dict>
 			<key>white-blue</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -437,15 +428,6 @@
 				<key>CFBundleIconFiles</key>
 				<array>
 					<string>red-white</string>
-				</array>
-				<key>Icon alredy includes gloss effects</key>
-				<false/>
-			</dict>
-			<key>white-black</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>white-black</string>
 				</array>
 				<key>Icon alredy includes gloss effects</key>
 				<false/>
