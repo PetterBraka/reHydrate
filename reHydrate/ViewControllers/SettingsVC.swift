@@ -420,58 +420,50 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         case IndexPath(row: 0, section: 3): // turn on/off notifications
             let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
             let center = UNUserNotificationCenter.current()
-            center.getNotificationSettings { (notificationSetting) in
-                if notificationSetting.alertSetting == .enabled {                self.settings[3].isOpened = !self.settings[3].isOpened
-                    if self.settings[3].isOpened {
-                        self.settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
-                        self.settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
-                        self.settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
-                        DispatchQueue.main.async {
-                            tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
-                            if #available(iOS 13.0, *) {
-                                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                            } else {
-                                if self.darkMode {
-                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                                } else {
-                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                                }
-                            }
-                            cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
-                        }
-                        let startDate = self.defaults.object(forKey: startingTimeString) as! Date
-                        let endDate = self.defaults.object(forKey: endingTimeString) as! Date
-                        let intervals = self.defaults.integer(forKey: reminderIntervalString)
+            settings[3].isOpened = !settings[3].isOpened
+            if settings[3].isOpened {
+                settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
+                settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
+                settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
+                tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
+                if #available(iOS 13.0, *) {
+                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                } else {
+                    if darkMode {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                    } else {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                    }
+                }
+                cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
+                let startDate = defaults.object(forKey: startingTimeString) as! Date
+                let endDate = defaults.object(forKey: endingTimeString) as! Date
+                let intervals = defaults.integer(forKey: reminderIntervalString)
+                center.getPendingNotificationRequests { (pendingNotifcations) in
+                    if pendingNotifcations.isEmpty{
                         setReminders(startDate, endDate, intervals)
                         DispatchQueue.main.async {
                             self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(self.timeFormatter.string(from: startDate)) \(NSLocalizedString("To", comment: "splitter for toast")) \(self.timeFormatter.string(from: endDate))", 4)
                         }
-                    } else {
-                        self.settings[3].options.removeLast(3)
-                        DispatchQueue.main.async {
-                            tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
-                            if #available(iOS 13.0, *) {
-                                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                            } else {
-                                if self.darkMode {
-                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                                } else {
-                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                                }
-                            }
-                            cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
-                        }
-                        center.removeAllPendingNotificationRequests()
-                        center.removeAllDeliveredNotifications()
-                        DispatchQueue.main.async {
-                            self.sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
-                        }
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.sendToastMessage("Not allowed to send notifications", 3)
                     }
                 }
+            } else {
+                settings[3].options.removeLast(3)
+                tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
+                if #available(iOS 13.0, *) {
+                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                } else {
+                    if darkMode {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                    } else {
+                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                    }
+                }
+                cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
+                center.removeAllPendingNotificationRequests()
+                center.removeAllDeliveredNotifications()
+                defaults.set(false, forKey: remindersString)
+                sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
             }
         case IndexPath(row: 0, section: 4): // Open settings
             if let url = URL(string:UIApplication.openSettingsURLString) {
