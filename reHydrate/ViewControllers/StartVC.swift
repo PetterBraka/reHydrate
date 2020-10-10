@@ -13,7 +13,7 @@ import CoreData
 import HealthKit
 import WatchConnectivity
 
-let versionString = "version3.9.2"
+let versionString = "version4"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
@@ -316,14 +316,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
         
-        UNUserNotificationCenter.current().getNotificationSettings { (notificationSetting) in
-            if notificationSetting.authorizationStatus == .authorized {
-                UNUserNotificationCenter.current().delegate = self
-            }
-        }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),name: UIApplication.willEnterForegroundNotification, object: nil)
-        
         if UIApplication.isFirstLaunch() {
             print("first time to launch this version of the app")
             metricUnits  = true
@@ -339,6 +331,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             if !appLanguages.contains(language[0]){
                 setAppLanguage(appLanguages[0])
             }
+            setUpRequests()
             //sets default values for reminders
             let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
             let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
@@ -349,17 +342,21 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             let current = UNUserNotificationCenter.current()
             current.getNotificationSettings(completionHandler: { (settings) in
                 if settings.authorizationStatus == .authorized {
-                    current.getPendingNotificationRequests { (notificationRequests) in
-                        if !notificationRequests.isEmpty {
-                            current.removeAllPendingNotificationRequests()
-                            current.removeAllDeliveredNotifications()
-                        }
-                        setReminders(startDate, endDate, intervals)
-                    }
+                    current.removeAllPendingNotificationRequests()
+                    setReminders(startDate, endDate, intervals)
                 }
             })
         }
-        setUpHealth()
+        
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings { (notificationSetting) in
+            if notificationSetting.authorizationStatus == .authorized {
+                current.delegate = self
+            }
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didMoveToForeground),name: UIApplication.willEnterForegroundNotification, object: nil)
+        
         
         if WCSession.isSupported() {
             let session = WCSession.default
@@ -375,7 +372,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     //MARK: - ViewWill
     
     override func viewWillAppear(_ animated: Bool) {
-        print("Main screen will appear")
         darkMode        = defaults.bool(forKey: darkModeString)
         metricUnits     = defaults.bool(forKey: metricUnitsString)
         currentDay.text = formatter.string(from: Date.init()).localizedCapitalized
@@ -389,10 +385,24 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 WCSession.default.activate()
             }
         }
+        #if DEBUG
+        print("Main screen will appear")
+        let current = UNUserNotificationCenter.current()
+        current.getPendingNotificationRequests { (notificationRequest) in
+            print("pending notification: \(notificationRequest.count)")
+        }
+        #endif
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         let today = fetchToday()
+        #if DEBUG
+        print("View will disappear")
+        let current = UNUserNotificationCenter.current()
+        current.getPendingNotificationRequests { (notificationRequest) in
+            print("pending notification: \(notificationRequest.count)")
+        }
+        #endif
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal),
@@ -422,6 +432,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
+    /// Will get a day representing data for the current day. It will also set the goal to be the same as the goal from the previous day.
+    /// - Returns: The day found to be equal to todays date.
     func fetchToday() -> Day {
         do {
             let request = Day.fetchRequest() as NSFetchRequest
@@ -664,16 +676,16 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         drinkStack.addArrangedSubview(largeStack)
     }
     
-    //MARK: - HealthKit
     /**
      Will ask for premitions to use the health data for water consumtion. it will only write not read.
+     Will ask for premition to send notifications after previous request.
      
      # Example #
      ```
      setUpHealth()
      ```
      */
-    fileprivate func setUpHealth() {
+    fileprivate func setUpRequests() {
         //  Request access to write dietaryWater data to HealthStore
         if HKHealthStore.isHealthDataAvailable(){
             let healthStore = HKHealthStore()
@@ -686,9 +698,21 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                     print("Was not authorization by the user")
                     return
                 }
+                let center = UNUserNotificationCenter.current()
+                center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+                    if success {
+                        print("we are allowed to send notifications.")
+                        self.defaults.set(true, forKey: remindersString)
+                    } else {
+                        print("we are not allowed to send notifications.")
+                        self.defaults.set(false, forKey: remindersString)
+                    }
+                }
             })
         }
     }
+    
+    //MARK: - HealthKit
     
     /**
      Will export a drink to the health app
@@ -811,82 +835,84 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let current = UNUserNotificationCenter.current()
         current.getNotificationSettings(completionHandler: { (settings) in
             if settings.authorizationStatus == .authorized {
-                current.getPendingNotificationRequests { (notifications) in
-                    if !notifications.isEmpty{
-                        let startDate = self.defaults.object(forKey: startingTimeString) as! Date
-                        let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
-                        let intervals = self.defaults.integer(forKey: reminderIntervalString)
-                        
-                        var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
-                        var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
-                        let tempNow   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
-                        // checks if the goal has been reached
-                        if today.goal <= today.consumed{
-                            current.removeAllPendingNotificationRequests()
-                            //Setting reminders for tomorrow.
-                            tempStart.day = tempNow.day! + 1
-                            tempEnd.day   = tempNow.day! + 1
-                            setReminders(Calendar.current.date(from: tempStart)!,
-                                         Calendar.current.date(from: tempEnd)!,
-                                         intervals)
+                // check if the user have activated notifications or not.
+                
+                let wantReminders = self.defaults.bool(forKey: remindersString)
+                if wantReminders {
+                    //gets starrting times
+                    let startDate = self.defaults.object(forKey: startingTimeString) as! Date
+                    let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
+                    let intervals = self.defaults.integer(forKey: reminderIntervalString)
+                    current.getPendingNotificationRequests { (notifications) in
+                        if !notifications.isEmpty{
+                            //Sets starting time with datecomponents [month, day, hour, minute]
+                            var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
+                            var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
+                            let tempNow   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
                             // checks if the goal has been reached
-                            if today.goal <= today.consumed {
-                                let startDate = self.defaults.object(forKey: startingTimeString) as! Date
-                                let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
-                                let intervals = self.defaults.integer(forKey: reminderIntervalString)
-                                
-                                var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
-                                var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
-                                let now   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
-                                
+                            if today.goal <= today.consumed{
                                 current.removeAllPendingNotificationRequests()
                                 //Setting reminders for tomorrow.
-                                tempStart.day = now.day! + 1
-                                tempEnd.day   = now.day! + 1
+                                tempStart.day = tempNow.day! + 1
+                                tempEnd.day   = tempNow.day! + 1
                                 setReminders(Calendar.current.date(from: tempStart)!,
                                              Calendar.current.date(from: tempEnd)!,
                                              intervals)
-                                //Setting up a congratulation message.
-                                let notificationCenter = UNUserNotificationCenter.current()
-                                let notification = getCongratulationReminder()
-                                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60*1, repeats: false)
-                                let uuidString = UUID().uuidString
-                                let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
-                                notificationCenter.add(request, withCompletionHandler: nil)
-                            }
-                        } else {
-                            //checks if the current time is within the notifications time span.
-                            if ((tempStart.hour! == tempNow.hour! &&
-                                    tempStart.minute! < tempNow.minute!) ||
-                                    tempStart.hour! < tempNow.hour!) &&
-                                ((tempEnd.hour! == tempNow.hour! &&
-                                    tempEnd.minute! > tempNow.minute!) ||
-                                    tempEnd.hour! > tempNow.hour!)
-                            {
-                                //sets new reminders for the notification range
-                                setReminders(Calendar.current.date(from: tempStart)!,
-                                             Calendar.current.date(from: tempEnd)!,
-                                             intervals)
-                                current.getPendingNotificationRequests {(requests) in
-                                    for request in requests {
-                                        if let trigger = request.trigger as? UNCalendarNotificationTrigger,
-                                           let triggerDate = trigger.nextTriggerDate(){
-                                            let difference = Calendar.current.dateComponents([.hour, .minute], from: Date(), to: triggerDate)
-                                            let differenceInMunutes = (difference.hour! * 60) + difference.minute!
-                                            // Checks if the time to the next notification is within half of the interval time.
-                                            if differenceInMunutes < Int(Double(intervals) * 0.8) {
-                                                current.removePendingNotificationRequests(withIdentifiers: [request.identifier])
+                                // checks if the goal has been reached
+                                if today.goal <= today.consumed {
+                                    let startDate = self.defaults.object(forKey: startingTimeString) as! Date
+                                    let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
+                                    let intervals = self.defaults.integer(forKey: reminderIntervalString)
+                                    
+                                    var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
+                                    var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
+                                    let now   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: Date())
+                                    
+                                    current.removeAllPendingNotificationRequests()
+                                    //Setting reminders for tomorrow.
+                                    tempStart.day = now.day! + 1
+                                    tempEnd.day   = now.day! + 1
+                                    setReminders(Calendar.current.date(from: tempStart)!,
+                                                 Calendar.current.date(from: tempEnd)!,
+                                                 intervals)
+                                    //Setting up a congratulation message.
+                                    let notification = getCongratulationReminder()
+                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60*1, repeats: false)
+                                    let uuidString = UUID().uuidString
+                                    let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+                                    current.add(request, withCompletionHandler: nil)
+                                }
+                            } else {
+                                //checks if the current time is within the notifications time span.
+                                if ((tempStart.hour! == tempNow.hour! && tempStart.minute! < tempNow.minute!) ||
+                                        tempStart.hour! < tempNow.hour!) &&
+                                    ((tempEnd.hour! == tempNow.hour! && tempEnd.minute! > tempNow.minute!) ||
+                                        tempEnd.hour! > tempNow.hour!)
+                                {
+                                    //sets new reminders for the notification range
+                                    current.getPendingNotificationRequests {(requests) in
+                                        for request in requests {
+                                            if let trigger = request.trigger as? UNCalendarNotificationTrigger,
+                                               let triggerDate = trigger.nextTriggerDate(){
+                                                let difference = Calendar.current.dateComponents([.hour, .minute], from: Date(), to: triggerDate)
+                                                let differenceInMunutes = (difference.hour! * 60) + difference.minute!
+                                                // Checks if the time to the next notification is less than 80% of the interval time.
+                                                if differenceInMunutes < Int(Double(intervals) * 0.8) {
+                                                    current.removePendingNotificationRequests(withIdentifiers: [request.identifier])
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                        } else {
+                            setReminders(startDate, endDate, intervals)
                         }
                     }
                 }
             }
         })
-        
+         
         if WCSession.isSupported(){
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal),
@@ -1232,6 +1258,15 @@ func setAppLanguage(_ language: String) {
 
 // MARK: - Notifications
 
+func setReminders() {
+        // Gets times for reminders and sets reminders
+    let defaults = UserDefaults.standard
+    let startDate = defaults.object(forKey: startingTimeString) as! Date
+    let endDate = defaults.object(forKey: endingTimeString) as! Date
+    let intervals = defaults.integer(forKey: reminderIntervalString)
+    setReminders(startDate, endDate, intervals)
+}
+
 /**
  Will set a notification for every half hour between 7 am and 11pm.
  
@@ -1282,7 +1317,7 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
     for i in 0...Int(totalNotifications) {
         let notificationDate = Calendar.current.date(byAdding: .minute, value: intervals * i, to: startDate)
         let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm"
+        formatter.dateFormat = "HH:mm"
         print("setting reminder for \(formatter.string(from: notificationDate!))")
         let notification = getReminder()
         let smallDrinkAction = UNNotificationAction(identifier: "small", title: "\(NSLocalizedString("Add", comment: "")) \(smallDrink)\(unit)",
