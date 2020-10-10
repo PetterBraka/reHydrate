@@ -47,7 +47,7 @@ class SettingsVC: UIViewController {
     }
     var timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:MM"
+        formatter.dateFormat = "HH:mm"
         return formatter
     }()
     var metricUnits                = true
