@@ -597,9 +597,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
-	<string>To save your water consumtion</string>
+	<string>We want to save your water consumption (gathered by this app) to your health app.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>To load your water consumtion</string>
+	<string>We want to save your water consumption (gathered by this app) to your health app.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

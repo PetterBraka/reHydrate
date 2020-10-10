@@ -47,7 +47,7 @@ class SettingsVC: UIViewController {
     }
     var timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:MM"
+        formatter.dateFormat = "HH:mm"
         return formatter
     }()
     var metricUnits                = true
@@ -105,14 +105,6 @@ class SettingsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
-            if success {
-                print("we are allowed to send notifications.")
-            } else {
-                print("we are not allowed to send notifications.")
-            }
-        }
         self.modalPresentationStyle = .fullScreen
         
         settings[3].isOpened = defaults.bool(forKey: remindersString)
@@ -235,35 +227,37 @@ class SettingsVC: UIViewController {
      ```
      */
     func sendToastMessage(_ message: String, _ messageDelay: Double) {
-        let toastLabel = UIButton()
-        toastLabel.setTitle(message, for: .normal)
-        toastLabel.titleLabel?.font          = UIFont(name: "AmericanTypewriter", size: 18.0)
-        toastLabel.titleLabel?.textAlignment = .center
-        toastLabel.titleLabel?.numberOfLines = 0
-        toastLabel.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        if darkMode {
-            toastLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.9)
-            toastLabel.setTitleColor(UIColor.white, for: .normal)
-        } else {
-            toastLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.9)
-            toastLabel.setTitleColor(UIColor.black, for: .normal)
+        DispatchQueue.main.async {
+            let toastLabel = UIButton()
+            toastLabel.setTitle(message, for: .normal)
+            toastLabel.titleLabel?.font          = UIFont(name: "AmericanTypewriter", size: 18.0)
+            toastLabel.titleLabel?.textAlignment = .center
+            toastLabel.titleLabel?.numberOfLines = 0
+            toastLabel.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+            if self.darkMode {
+                toastLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.9)
+                toastLabel.setTitleColor(UIColor.white, for: .normal)
+            } else {
+                toastLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.9)
+                toastLabel.setTitleColor(UIColor.black, for: .normal)
+            }
+            toastLabel.isUserInteractionEnabled = false
+            toastLabel.layer.cornerRadius       = 10
+            toastLabel.clipsToBounds            = true
+            toastLabel.alpha                    = 1
+            self.view.addSubview(toastLabel)
+            toastLabel.translatesAutoresizingMaskIntoConstraints = false
+            toastLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                      = true
+            toastLabel.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive       = true
+            toastLabel.leftAnchor.constraint(greaterThanOrEqualTo: self.view.leftAnchor, constant: 50).isActive = true
+            toastLabel.rightAnchor.constraint(lessThanOrEqualTo: self.view.rightAnchor, constant: -50).isActive = true
+            toastLabel.sizeToFit()
+            UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
+                toastLabel.alpha = 0.0
+            }, completion: {(isCompleted) in
+                toastLabel.removeFromSuperview()
+            })
         }
-        toastLabel.isUserInteractionEnabled = false
-        toastLabel.layer.cornerRadius       = 10
-        toastLabel.clipsToBounds            = true
-        toastLabel.alpha                    = 1
-        self.view.addSubview(toastLabel)
-        toastLabel.translatesAutoresizingMaskIntoConstraints = false
-        toastLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                      = true
-        toastLabel.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive       = true
-        toastLabel.leftAnchor.constraint(greaterThanOrEqualTo: self.view.leftAnchor, constant: 50).isActive = true
-        toastLabel.rightAnchor.constraint(lessThanOrEqualTo: self.view.rightAnchor, constant: -50).isActive = true
-        toastLabel.sizeToFit()
-        UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
-            toastLabel.removeFromSuperview()
-        })
     }
     
     //MARK: - Load and Save days
@@ -428,51 +422,66 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         case IndexPath(row: 0, section: 3): // turn on/off notifications
             let cell = tableView.cellForRow(at: indexPath) as! SettingOptionCell
             let center = UNUserNotificationCenter.current()
-            settings[3].isOpened = !settings[3].isOpened
-            if settings[3].isOpened {
-                settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
-                settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
-                settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
-                tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
-                if #available(iOS 13.0, *) {
-                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                } else {
-                    if darkMode {
-                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                    } else {
-                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+            center.removeAllDeliveredNotifications()
+            center.removeAllPendingNotificationRequests()
+            center.getNotificationSettings { (notificationSetting) in
+                switch notificationSetting.authorizationStatus {
+                case .denied:
+                    self.sendToastMessage("not allowed to send notificaitons", 3)
+                case .notDetermined:
+                    center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+                        if success {
+                            print("we are allowed to send notifications.")
+                            self.defaults.set(true, forKey: remindersString)
+                        } else {
+                            print("we are not allowed to send notifications.")
+                            self.defaults.set(false, forKey: remindersString)
+                        }
                     }
-                }
-                cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
-                let startDate = defaults.object(forKey: startingTimeString) as! Date
-                let endDate = defaults.object(forKey: endingTimeString) as! Date
-                let intervals = defaults.integer(forKey: reminderIntervalString)
-                center.getPendingNotificationRequests { (pendingNotifcations) in
-                    if pendingNotifcations.isEmpty{
+                default:
+                    self.settings[3].isOpened = !self.settings[3].isOpened
+                    if self.settings[3].isOpened {
+                        let startDate = self.defaults.object(forKey: startingTimeString) as! Date
+                        let endDate = self.defaults.object(forKey: endingTimeString) as! Date
+                        let intervals = self.defaults.integer(forKey: reminderIntervalString)
                         setReminders(startDate, endDate, intervals)
+                        self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(self.timeFormatter.string(from: startDate)) \(NSLocalizedString("To", comment: "splitter for toast")) \(self.timeFormatter.string(from: endDate))", 4)
                         DispatchQueue.main.async {
-                            self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(self.timeFormatter.string(from: startDate)) \(NSLocalizedString("To", comment: "splitter for toast")) \(self.timeFormatter.string(from: endDate))", 4)
+                            self.settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
+                            self.settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
+                            self.settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
+                            tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
+                            if #available(iOS 13.0, *) {
+                                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                            } else {
+                                if self.darkMode {
+                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                                } else {
+                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                                }
+                            }
+                            cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
+                        }
+                    } else {
+                        self.sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
+                        DispatchQueue.main.async {
+                            self.settings[3].options.removeLast(3)
+                            tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
+                            if #available(iOS 13.0, *) {
+                                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+                            } else {
+                                if self.darkMode {
+                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                                } else {
+                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                                }
+                            }
+                            cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                         }
                     }
                 }
-            } else {
-                settings[3].options.removeLast(3)
-                tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
-                if #available(iOS 13.0, *) {
-                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                } else {
-                    if darkMode {
-                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                    } else {
-                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                    }
-                }
-                cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
-                center.removeAllPendingNotificationRequests()
-                center.removeAllDeliveredNotifications()
-                defaults.set(false, forKey: remindersString)
-                sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
             }
+            self.defaults.set(self.settings[3].isOpened, forKey: remindersString)
         case IndexPath(row: 0, section: 4): // Open settings
             if let url = URL(string:UIApplication.openSettingsURLString) {
                 if UIApplication.shared.canOpenURL(url) {
