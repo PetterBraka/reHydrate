@@ -99,7 +99,7 @@
 
 "To"                   = "to";
 "Minutes"              = "minutes";
-"RemindersSetFrom"     = "Reminders set from";
+"RemindersSetFrom"     = "Enabled reminders";
 "RemoveRemindersToast" = "All reminders are removed";
 "FrequencyReminder"    = "The frequency of reminders";
 

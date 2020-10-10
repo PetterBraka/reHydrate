@@ -101,7 +101,7 @@
 
 "To"                   = "til";
 "Minutes"              = "minutter";
-"RemindersSetFrom"     = "Påminnelser satt fra";
+"RemindersSetFrom"     = "Slått på påminnelser";
 "RemoveRemindersToast" = "Alle påminnelser er fjernet";
 "FrequencyReminder"    = "Mellomrom mellom påminnelser er";
 
