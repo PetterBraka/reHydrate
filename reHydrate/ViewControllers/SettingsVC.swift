@@ -427,7 +427,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             center.getNotificationSettings { (notificationSetting) in
                 switch notificationSetting.authorizationStatus {
                 case .denied:
-                    self.sendToastMessage("not allowed to send notificaitons", 3)
+                    self.sendToastMessage(NSLocalizedString("RemindersNotAllowed", comment: "Notificaionts not allowed"), 3)
                 case .notDetermined:
                     center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
                         if success {

@@ -99,6 +99,7 @@
 
 "To"                   = "to";
 "Minutes"              = "minutes";
+"RemindersNotAllowed"  = "Not allowed to send notificaitons";
 "RemindersSetFrom"     = "Reminders set from";
 "RemoveRemindersToast" = "All reminders are removed";
 "FrequencyReminder"    = "The frequency of reminders";
