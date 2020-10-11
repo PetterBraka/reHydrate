@@ -551,10 +551,12 @@ Please describe your feature:
                                     , isHTML: true)
                 present(mail, animated: true)
             } else {
-                sendToastMessage("E-mail couldn't open /ndownload Mail for the app store", 5)
-                if let url = URL(string: "https://github.com/PetterBraka/reHydrate/issues"),
-                   UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:])
+                sendToastMessage(NSLocalizedString("CouldtSendMail", comment: "could't send email"), 4)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    if let url = URL(string: "https://github.com/PetterBraka/reHydrate/issues"),
+                       UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:])
+                    }
                 }
             }
         case IndexPath(row: 3, section: 5): // Send mail about bug
@@ -585,10 +587,12 @@ Please add any screenshots you have of the porblem:<br>
                                     , isHTML: true)
                 present(mail, animated: true)
             } else {
-                sendToastMessage("E-mail couldn't open /ndownload Mail for the app store", 5)
-                if let url = URL(string: "https://github.com/PetterBraka/reHydrate/issues"),
-                   UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:])
+                sendToastMessage(NSLocalizedString("CouldtSendMail", comment: "could't send email"), 4)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    if let url = URL(string: "https://github.com/PetterBraka/reHydrate/issues"),
+                       UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:])
+                    }
                 }
             }
         case IndexPath(row: 4, section: 5): // Send mail to contact dev
@@ -605,10 +609,12 @@ Thank you for getting in contact with us<br>
                                     , isHTML: true)
                 present(mail, animated: true)
             } else {
-                sendToastMessage("E-mail couldn't open /ndownload Mail for the app store", 5)
-                if let url = URL(string: "https://twitter.com/PetterBraka"),
-                   UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:])
+                sendToastMessage(NSLocalizedString("CouldtSendMail", comment: "could't send email"), 4)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    if let url = URL(string: "https://twitter.com/PetterBraka"),
+                       UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:])
+                    }
                 }
             }
         case IndexPath(row: 5, section: 5): // open privacy policy

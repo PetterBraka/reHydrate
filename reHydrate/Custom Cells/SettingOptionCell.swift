@@ -361,6 +361,7 @@ class SettingOptionCell: UITableViewCell {
             textField.inputView = picker
         } else if titleOption.text?.lowercased() == NSLocalizedString("SetYourGoal", comment: "").lowercased(){
             textField.keyboardType = .decimalPad
+            textField.delegate = self
         }
     }
     
@@ -710,6 +711,12 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
         for number in componentString {
             textField.text = textField.text! + number
         }
-        
+    }
+}
+
+
+extension SettingOptionCell: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.selectAll(self)
     }
 }

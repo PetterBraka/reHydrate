@@ -47,6 +47,7 @@
 "ContactUs"        = "Contact us";
 "PrivacyPolicy"    = "Privacy policy";
 "VersionNumber"    = "Version:";
+"CouldtSendMail"   = "Couldn't open e-mail app";
 
 
 // Congratulations
