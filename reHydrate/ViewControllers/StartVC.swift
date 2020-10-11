@@ -13,7 +13,7 @@ import CoreData
 import HealthKit
 import WatchConnectivity
 
-let versionString = "version4"
+let versionString = "version4.1"
 let appleLanguagesString = "AppleLanguages"
 
 let darkModeString          = "darkMode"
