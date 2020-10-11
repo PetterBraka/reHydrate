@@ -52,6 +52,7 @@
 "FeatureRequest"   = "Spør om en oppdatering";
 "DevInsta"         = "Utviklers Instagram";
 "VersionNumber"    = "Versjon:";
+"CouldtSendMail"   = "Kan ikke åpne e-post app";
 // Congratulations
 "congrats1Title"  = "Gratulerer";
 "congrats1Body"   = "Du node målet!";
