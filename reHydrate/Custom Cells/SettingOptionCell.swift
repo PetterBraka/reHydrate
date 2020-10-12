@@ -11,6 +11,12 @@ import SwiftUI
 import CoreData
 
 class SettingOptionCell: UITableViewCell {
+    enum cellPosition {
+        case none
+        case top
+        case mid
+        case bot
+    }
     var pickerArray       = [NSLocalizedString(appLanguages[0], comment: ""),
                              NSLocalizedString(appLanguages[1], comment: "")]
     var componentString   = [""]
@@ -40,8 +46,6 @@ class SettingOptionCell: UITableViewCell {
     var roundedCell: UIView      = {
         let view = UIView()
         view.backgroundColor = .black
-        view.layer.cornerRadius  = 8
-        view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -77,13 +81,7 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     var days: [Day] = []
-    enum possison {
-        case none
-        case top
-        case mid
-        case bot
-    }
-    var cellPossision: possison = .none
+    var position: cellPosition = .none
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -153,10 +151,20 @@ class SettingOptionCell: UITableViewCell {
     
     func setBackgroundConstraints(){
         self.removeConstraints(self.constraints)
-        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
+        roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive       = true
+        roundedCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive    = true
         roundedCell.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
-        roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5).isActive = true
-        roundedCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -5).isActive = true
+        switch position {
+        case .top:
+            roundedCell.roundCorners(corners: [.topLeft, .topRight], amount: 10)
+        case .mid:
+            roundedCell.roundCorners(corners: [])
+        case .bot:
+            roundedCell.roundCorners(corners: [.bottomLeft, .bottomRight], amount: 10)
+        default:
+            roundedCell.roundCorners(corners: [.topLeft, .topRight, .bottomLeft, .bottomRight], amount: 10)
+        }
     }
     
     /**
@@ -171,9 +179,8 @@ class SettingOptionCell: UITableViewCell {
      */
     func addSubTitle(_ subtitle: String){
         subTitle.text = subtitle
-        setBackgroundConstraints()
         roundedCell.addSubview(subTitle)
-        self.removeConstraints(self.constraints)
+        setBackgroundConstraints()
         titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: -10).isActive = true
         titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive        = true
         subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive           = true
@@ -190,7 +197,6 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setTitleConstraints(){
-        self.removeConstraints(self.constraints)
         setBackgroundConstraints()
         titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive = true
         titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive         = true
@@ -206,7 +212,6 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        setBackgroundConstraints()
         buttonForCell.widthAnchor.constraint(equalToConstant: 25).isActive                             = true
         buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
         buttonForCell.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
@@ -221,7 +226,7 @@ class SettingOptionCell: UITableViewCell {
         buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
     }
     
-    fileprivate func setTextFieldConstraints() {
+    func setTextFieldConstraints() {
         setBackgroundConstraints()
         textField.translatesAutoresizingMaskIntoConstraints                                 = false
         textField.heightAnchor.constraint(equalToConstant: 25).isActive                     = true
@@ -752,5 +757,31 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
 extension SettingOptionCell: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.selectAll(self)
+    }
+}
+
+extension UIView {
+    enum Corner:Int {
+        case bottomRight = 0,
+        topRight,
+        bottomLeft,
+        topLeft
+    }
+    
+    private func parseCorner(corner: Corner) -> CACornerMask.Element {
+        let corners: [CACornerMask.Element] = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner]
+        return corners[corner.rawValue]
+    }
+    
+    private func createMask(corners: [Corner]) -> UInt {
+        return corners.reduce(0, { (a, b) -> UInt in
+            return a + parseCorner(corner: b).rawValue
+        })
+    }
+    
+    func roundCorners(corners: [Corner], amount: CGFloat = 5) {
+        layer.cornerRadius = amount
+        let maskedCorners: CACornerMask = CACornerMask(rawValue: createMask(corners: corners))
+        layer.maskedCorners = maskedCorners
     }
 }
