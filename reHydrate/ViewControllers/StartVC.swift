@@ -1438,8 +1438,8 @@ struct startVCRepresentable: UIViewControllerRepresentable {
 struct startVCPreview: PreviewProvider {
     static var previews: some View {
         startVCRepresentable()
-            .previewDevice(PreviewDevice(rawValue: "iPhone XS"))
-            .previewDisplayName("iPhone XS")
+            .previewDevice(PreviewDevice(rawValue: "iPhone 11 pro"))
+            .previewDisplayName("iPhone 11 pro")
     }
 }
 #endif

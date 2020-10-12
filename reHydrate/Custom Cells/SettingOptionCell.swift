@@ -7,15 +7,18 @@
 //
 
 import UIKit
+import SwiftUI
 import CoreData
 
 class SettingOptionCell: UITableViewCell {
-    var pickerArray       = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
+    var pickerArray       = [NSLocalizedString(appLanguages[0], comment: ""),
+                             NSLocalizedString(appLanguages[1], comment: "")]
     var componentString   = [""]
     let picker            = UIPickerView()
     var notificationStart = Int()
     var notificationEnd   = Int()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let context = (UIApplication.shared.delegate as!
+                    AppDelegate).persistentContainer.viewContext
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
@@ -33,6 +36,14 @@ class SettingOptionCell: UITableViewCell {
         textField.setLeftPadding(10)
         textField.setRightPadding(10)
         return textField
+    }()
+    var roundedCell: UIView      = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.layer.cornerRadius  = 8
+        view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     let titleOption: UILabel     = {
         let lable   = UILabel()
@@ -66,14 +77,22 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     var days: [Day] = []
+    enum possison {
+        case none
+        case top
+        case mid
+        case bot
+    }
+    var cellPossision: possison = .none
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.addSubview(titleOption)
-        self.addSubview(buttonForCell)
+        contentView.addSubview(roundedCell)
+        setBackgroundConstraints()
+        roundedCell.addSubview(titleOption)
+        roundedCell.addSubview(buttonForCell)
         setTitleConstraints()
         setButtonConstraints()
-        self.backgroundColor = .none
     }
     
     required init?(coder: NSCoder) {
@@ -132,6 +151,14 @@ class SettingOptionCell: UITableViewCell {
     
     //MARK: - Setup UI
     
+    func setBackgroundConstraints(){
+        self.removeConstraints(self.constraints)
+        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
+        roundedCell.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
+        roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5).isActive = true
+        roundedCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -5).isActive = true
+    }
+    
     /**
      Adds a subtitle under the title lable
      
@@ -144,12 +171,13 @@ class SettingOptionCell: UITableViewCell {
      */
     func addSubTitle(_ subtitle: String){
         subTitle.text = subtitle
-        self.addSubview(subTitle)
+        setBackgroundConstraints()
+        roundedCell.addSubview(subTitle)
         self.removeConstraints(self.constraints)
-        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -10).isActive = true
-        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive        = true
-        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive    = true
-        subTitle.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 10).isActive     = true
+        titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: -10).isActive = true
+        titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive        = true
+        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive           = true
+        subTitle.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: 10).isActive     = true
         setButtonConstraints()
     }
     
@@ -163,8 +191,9 @@ class SettingOptionCell: UITableViewCell {
      */
     func setTitleConstraints(){
         self.removeConstraints(self.constraints)
-        titleOption.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive = true
-        titleOption.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive         = true
+        setBackgroundConstraints()
+        titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive = true
+        titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive         = true
         setButtonConstraints()
     }
     
@@ -177,25 +206,28 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setButtonConstraints() {
-        buttonForCell.widthAnchor.constraint(equalToConstant: 25).isActive                                  = true
-        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                                 = true
-        buttonForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
-        buttonForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
+        setBackgroundConstraints()
+        buttonForCell.widthAnchor.constraint(equalToConstant: 25).isActive                             = true
+        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
+        buttonForCell.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
+        buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
     }
     
     func setButtonConstraints(_ width: CGFloat) {
-        buttonForCell.widthAnchor.constraint(equalToConstant: width).isActive                               = true
-        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                                 = true
-        buttonForCell.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
-        buttonForCell.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive            = true
+        setBackgroundConstraints()
+        buttonForCell.widthAnchor.constraint(equalToConstant: width).isActive                          = true
+        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
+        buttonForCell.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
+        buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
     }
     
     fileprivate func setTextFieldConstraints() {
+        setBackgroundConstraints()
         textField.translatesAutoresizingMaskIntoConstraints                                 = false
-        textField.heightAnchor.constraint(equalToConstant: 35).isActive                     = true
-        textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20).isActive = true
+        textField.heightAnchor.constraint(equalToConstant: 25).isActive                     = true
         textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive        = true
         textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
+        textField.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
     }
     
     /**
@@ -212,7 +244,8 @@ class SettingOptionCell: UITableViewCell {
             titleOption.textColor           = .white
             subTitle.textColor              = .white
             textField.textColor             = .white
-            self.backgroundColor            = UIColor().hexStringToUIColor("#303030")
+            self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
+            roundedCell.backgroundColor     = UIColor().hexStringToUIColor("#303030")
             textField.layer.borderColor     = UIColor.lightGray.cgColor
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         } else {
@@ -220,7 +253,8 @@ class SettingOptionCell: UITableViewCell {
             titleOption.textColor           = .black
             subTitle.textColor              = .black
             textField.textColor             = .black
-            self.backgroundColor            = .white
+            self.backgroundColor            = UIColor().hexStringToUIColor("ebebeb")
+            roundedCell.backgroundColor     = .white
             textField.layer.borderColor     = UIColor.darkGray.cgColor
             textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         }
