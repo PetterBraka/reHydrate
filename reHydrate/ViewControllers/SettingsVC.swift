@@ -398,7 +398,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 25
+        return 20
     }
     //MARK: - Cell controlls of TableView
     
