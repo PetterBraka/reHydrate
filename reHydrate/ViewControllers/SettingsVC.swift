@@ -181,7 +181,7 @@ class SettingsVC: UIViewController {
         tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: exitButton.bottomAnchor, constant: 10).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
     }
     
     // MARK: - Change appearance
@@ -207,8 +207,8 @@ class SettingsVC: UIViewController {
                 exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.gray), for: .normal)
             }
         } else{
-            self.view.backgroundColor = .white
-            tableView.backgroundColor = .white
+            self.view.backgroundColor = UIColor().hexStringToUIColor("ebebeb")
+            tableView.backgroundColor = UIColor().hexStringToUIColor("ebebeb")
             if #available(iOS 13, *) {
                 exitButton.tintColor  = .black
             } else {
@@ -292,7 +292,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     //MARK: - Creates a cell
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settings[section].options.count
+        if section == 6 {
+            return 0
+        } else {
+            return settings[section].options.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -388,7 +392,6 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.subTitle.removeFromSuperview()
             cell.textField.removeFromSuperview()
             cell.setTitleConstraints()
-            cell.setButtonConstraints()
         case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
              IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
              IndexPath(row: 2, section: 0):
@@ -399,12 +402,10 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
-            cell.setButtonConstraints()
         default:
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
-            cell.setButtonConstraints()
             break
         }
         
@@ -416,7 +417,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return settings.count
+        return settings.count + 1
     }
     
     //MARK: - Creates a section
@@ -492,7 +493,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             }
                             cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                             cell.position = .top
-                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
+                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .none)
                         }
                     } else {
                         self.sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
@@ -510,7 +511,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             }
                             cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                             cell.position = .none
-                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
+                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .none)
                         }
                     }
                 }
