@@ -86,11 +86,10 @@ class SettingOptionCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(roundedCell)
-        setBackgroundConstraints()
         roundedCell.addSubview(titleOption)
         roundedCell.addSubview(buttonForCell)
+        setBackgroundConstraints()
         setTitleConstraints()
-        setButtonConstraints()
     }
     
     required init?(coder: NSCoder) {
