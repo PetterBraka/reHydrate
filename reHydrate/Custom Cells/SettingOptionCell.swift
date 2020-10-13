@@ -89,6 +89,8 @@ class SettingOptionCell: UITableViewCell {
         roundedCell.addSubview(titleOption)
         roundedCell.addSubview(buttonForCell)
         setTitleConstraints()
+        separatorInset.right = 20
+        separatorInset.left  = 20
     }
     
     required init?(coder: NSCoder) {
