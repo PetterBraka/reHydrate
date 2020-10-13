@@ -217,20 +217,12 @@ class SettingOptionCell: UITableViewCell {
         buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
     }
     
-    func setButtonConstraints(_ width: CGFloat) {
-        setBackgroundConstraints()
-        buttonForCell.widthAnchor.constraint(equalToConstant: width).isActive                          = true
-        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
-        buttonForCell.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
-        buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
-    }
-    
     func setTextFieldConstraints() {
         setBackgroundConstraints()
-        textField.translatesAutoresizingMaskIntoConstraints                                 = false
-        textField.heightAnchor.constraint(equalToConstant: 25).isActive                     = true
-        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive        = true
-        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive     = true
+        textField.translatesAutoresizingMaskIntoConstraints                                        = false
+        textField.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
+        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive               = true
+        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive            = true
         textField.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
     }
     
@@ -668,6 +660,14 @@ class SettingOptionCell: UITableViewCell {
             textField.text = day.goal.clean
         }
         saveDays()
+    }
+    
+    override func prepareForReuse() {
+        self.subTitle.removeFromSuperview()
+        self.textField.removeFromSuperview()
+        titleOption.text = ""
+        subTitle.text = ""
+        self.removeConstraints(self.constraints)
     }
 }
 
