@@ -477,7 +477,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             self.settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
                             self.settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
                             self.settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
-                            tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .top)
+                            tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .middle)
                             if #available(iOS 13.0, *) {
                                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                             } else {
@@ -489,7 +489,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             }
                             cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                             cell.position = .top
-                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
+                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
                         }
                     } else {
                         self.sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
@@ -497,9 +497,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             self.settings[3].options.removeLast(3)
                             cell.position = .none
                             tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .bottom)
-                            let selectedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! SettingOptionCell
-                            selectedCell.position = .none
-                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
+                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
                             if #available(iOS 13.0, *) {
                                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                             } else {
