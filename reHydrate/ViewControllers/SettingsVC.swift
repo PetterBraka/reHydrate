@@ -331,11 +331,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
         case IndexPath(row: 0, section: 1): // Unit selection(Metric)
+            cell.textField.removeFromSuperview()
             cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
-            cell.textField.removeFromSuperview()
         case IndexPath(row: 1, section: 1): // Unit selection(Imperial)
-            cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
             cell.textField.removeFromSuperview()
+            cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
         case IndexPath(row: 0, section: 3): // Reminders cell
             if settings[3].isOpened {
                 if #available(iOS 13.0, *) {
@@ -370,7 +370,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
              IndexPath(row: 3, section: 3): // Cell with textField
             cell.subTitle.removeFromSuperview()
             cell.setTextFieldConstraints()
-        case IndexPath(row: 2, section: 4): // Dager cell
+        case IndexPath(row: 2, section: 4): // Danger cell
             cell.buttonForCell.isHidden = false
             if #available(iOS 13.0, *) {
                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)

@@ -70,7 +70,7 @@ class SettingOptionCell: UITableViewCell {
     let subTitle: UILabel = {
         let lable  = UILabel()
         lable.text = "subText"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 13)
+        lable.font = UIFont(name: "AmericanTypewriter", size: 11)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -88,7 +88,6 @@ class SettingOptionCell: UITableViewCell {
         contentView.addSubview(roundedCell)
         roundedCell.addSubview(titleOption)
         roundedCell.addSubview(buttonForCell)
-        setBackgroundConstraints()
         setTitleConstraints()
     }
     
@@ -148,8 +147,9 @@ class SettingOptionCell: UITableViewCell {
     
     //MARK: - Setup UI
     
+    /// Settes background constraints and rounds the corners depening on the position of the cell.
     func setBackgroundConstraints(){
-        self.removeConstraints(self.constraints)
+        self.subviews.forEach({$0.removeConstraints($0.constraints)})
         roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive       = true
         roundedCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
         roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive    = true
@@ -166,35 +166,19 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     
-    /**
-     Adds a subtitle under the title lable
-     
-     - parameter : subTitle - the **String** you wnat to display under the title.
-     
-     # Example #
-     ```
-     addSubTitle("subtitle")
-     ```
-     */
+    /// Adds a subtitle under the title lable
+    /// - Parameter subtitle: : subTitle - the **String** you wnat to display under the title.
     func addSubTitle(_ subtitle: String){
         subTitle.text = subtitle
-        roundedCell.addSubview(subTitle)
         setBackgroundConstraints()
-        titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: -10).isActive = true
+        roundedCell.addSubview(subTitle)
         titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive        = true
         subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive           = true
-        subTitle.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: 10).isActive     = true
+        subTitle.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: 15).isActive     = true
         setButtonConstraints()
     }
     
-    /**
-     Setting constraints for the tilte lable.
-     
-     # Example #
-     ```
-     setTitleConstraints()
-     ```
-     */
+    /// Setting constraints for the background, tilte *UILable* and the button.
     func setTitleConstraints(){
         setBackgroundConstraints()
         titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive = true
@@ -202,14 +186,7 @@ class SettingOptionCell: UITableViewCell {
         setButtonConstraints()
     }
     
-    /**
-     Setting the constraints for the activate button.
-     
-     # Example #
-     ```
-     setActivatedButtonConstraints()
-     ```
-     */
+    /// Setts the button constraints
     func setButtonConstraints() {
         buttonForCell.widthAnchor.constraint(equalToConstant: 25).isActive                             = true
         buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
@@ -217,12 +194,13 @@ class SettingOptionCell: UITableViewCell {
         buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
     }
     
+    /// Setts the background constrains and the constraints for the UITextField
     func setTextFieldConstraints() {
         setBackgroundConstraints()
         textField.translatesAutoresizingMaskIntoConstraints                                        = false
         textField.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
-        textField.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive               = true
-        textField.centerYAnchor.constraint(equalTo: titleOption.centerYAnchor).isActive            = true
+        textField.widthAnchor.constraint(equalToConstant: 100).isActive                            = true
+        textField.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
         textField.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
     }
     
