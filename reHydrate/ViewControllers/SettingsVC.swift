@@ -77,7 +77,7 @@ class SettingsVC: UIViewController {
                                  NSLocalizedString("VersionNumber", comment: "Disply version of app")])]
     var days: [Day] = []
     let context     = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
- 
+    
     //MARK: - Tap controller
     
     /**
@@ -106,13 +106,13 @@ class SettingsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.modalPresentationStyle = .fullScreen
-        
-        settings[3].isOpened = defaults.bool(forKey: remindersString)
-        metricUnits          = defaults.bool(forKey: metricUnitsString)
-        darkMode             = defaults.bool(forKey: darkModeString)
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        settings[3].isOpened = defaults.bool(forKey: remindersString)
+        metricUnits          = defaults.bool(forKey: metricUnitsString)
+        darkMode             = defaults.bool(forKey: darkModeString)
+        
         setUpUI()
         changeAppearance()
     }
@@ -307,53 +307,36 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         
         switch indexPath {
         case IndexPath(row: 0, section: 0), IndexPath(row: 0, section: 1),
-             IndexPath(row: 0, section: 3), IndexPath(row: 0, section: 4),
-             IndexPath(row: 0, section: 5):
+             IndexPath(row: 0, section: 4), IndexPath(row: 0, section: 5):
             cell.position = .top
         case IndexPath(row: settings[0].options.count - 1, section: 0),
-             IndexPath(row: settings[1].options.count - 1, section: 1),
-             IndexPath(row: settings[3].options.count - 1, section: 3),
-             IndexPath(row: settings[4].options.count - 1, section: 4),
-             IndexPath(row: settings[5].options.count - 1, section: 5):
+             IndexPath(row: 1, section: 1), IndexPath(row: 3, section: 3),
+             IndexPath(row: 2, section: 4), IndexPath(row: 6, section: 5):
             cell.position = .bot
         case IndexPath(row: 0, section: 2):
             cell.position = .none
+        case IndexPath(row: 0, section: 3):
+            if settings[3].isOpened{
+                cell.position = .top
+            } else {
+                cell.position = .none
+            }
         default:
             cell.position = .mid
         }
         
         switch indexPath {
-        case IndexPath(row: 1, section: 0),
-             IndexPath(row: 0, section: 4),
-             IndexPath(row: 1, section: 4),
-             IndexPath(row: 0, section: 5),
-             IndexPath(row: 1, section: 5),
-             IndexPath(row: 2, section: 5),
-             IndexPath(row: 3, section: 5),
-             IndexPath(row: 4, section: 5),
-             IndexPath(row: 5, section: 5):
-            cell.buttonForCell.isHidden = false
-            if #available(iOS 13.0, *) {
-                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
-            } else {
-                if darkMode {
-                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.gray),
-                                                          for: .normal)
-                } else {
-                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.black),
-                                                          for: .normal)
-                }
-            }
-            cell.subTitle.removeFromSuperview()
+        case IndexPath(row: 0, section: 0): // Dark Mode cell
             cell.textField.removeFromSuperview()
+            cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
-        case IndexPath(row: 0, section: 1):
+        case IndexPath(row: 0, section: 1): // Unit selection(Metric)
             cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
             cell.textField.removeFromSuperview()
-        case IndexPath(row: 1, section: 1):
+        case IndexPath(row: 1, section: 1): // Unit selection(Imperial)
             cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
             cell.textField.removeFromSuperview()
-        case IndexPath(row: 0, section: 3):
+        case IndexPath(row: 0, section: 3): // Reminders cell
             if settings[3].isOpened {
                 if #available(iOS 13.0, *) {
                     cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -380,7 +363,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
-        case IndexPath(row: 2, section: 4):
+        case IndexPath(row: 2, section: 0),
+             IndexPath(row: 0, section: 2),
+             IndexPath(row: 1, section: 3),
+             IndexPath(row: 2, section: 3),
+             IndexPath(row: 3, section: 3): // Cell with textField
+            cell.subTitle.removeFromSuperview()
+            cell.setTextFieldConstraints()
+        case IndexPath(row: 2, section: 4): // Dager cell
             cell.buttonForCell.isHidden = false
             if #available(iOS 13.0, *) {
                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
@@ -392,21 +382,27 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.subTitle.removeFromSuperview()
             cell.textField.removeFromSuperview()
             cell.setTitleConstraints()
-        case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
-             IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
-             IndexPath(row: 2, section: 0):
-            cell.subTitle.removeFromSuperview()
-            cell.setTextFieldConstraints()
-        case IndexPath(row: 6, section: 5):
+        case IndexPath(row: 6, section: 5): // Version cell
             cell.titleOption.text!.append(" \(String(describing: Bundle.main.infoDictionary!["CFBundleShortVersionString"]!))")
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
-        default:
-            cell.textField.removeFromSuperview()
+        default: // Cells with normal button
+            cell.buttonForCell.isHidden = false
+            if #available(iOS 13.0, *) {
+                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
+            } else {
+                if darkMode {
+                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.gray),
+                                                          for: .normal)
+                } else {
+                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.black),
+                                                          for: .normal)
+                }
+            }
             cell.subTitle.removeFromSuperview()
+            cell.textField.removeFromSuperview()
             cell.setTitleConstraints()
-            break
         }
         
         return cell
@@ -493,13 +489,17 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             }
                             cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                             cell.position = .top
-                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .none)
+                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
                         }
                     } else {
                         self.sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
                         DispatchQueue.main.async {
                             self.settings[3].options.removeLast(3)
+                            cell.position = .none
                             tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .bottom)
+                            let selectedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! SettingOptionCell
+                            selectedCell.position = .none
+                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .fade)
                             if #available(iOS 13.0, *) {
                                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                             } else {
@@ -509,14 +509,12 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                                     cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
                                 }
                             }
+                            self.defaults.set(false, forKey: remindersString)
                             cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
-                            cell.position = .none
-                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .none)
                         }
                     }
                 }
             }
-            self.defaults.set(self.settings[3].isOpened, forKey: remindersString)
         case IndexPath(row: 0, section: 4): // Open settings
             if let url = URL(string:UIApplication.openSettingsURLString) {
                 if UIApplication.shared.canOpenURL(url) {
@@ -666,7 +664,7 @@ Thank you for getting in contact with us<br>
 extension SettingsVC: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
-
+        
         if result == .sent {
             dismiss(animated: true)
         }
