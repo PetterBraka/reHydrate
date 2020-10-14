@@ -85,6 +85,20 @@ class CalendarVC: UIViewController {
         }
     }
     
+    @objc func handleSwipe(_ sender: UISwipeGestureRecognizer){
+        if sender.direction == .right {
+            defaults.set(darkMode, forKey: darkModeString)
+            defaults.set(metricUnits, forKey: metricUnitsString)
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromLeft
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            self.dismiss(animated: false, completion: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         formatter.dateFormat = "EEE - dd/MM/yy"
@@ -122,19 +136,31 @@ class CalendarVC: UIViewController {
         
         darkMode             = defaults.bool(forKey: darkModeString)
         metricUnits          = defaults.bool(forKey: metricUnitsString)
+        
         tableView.delegate   = self
         tableView.dataSource = self
+        tableView.register(InfoCell.self, forCellReuseIdentifier: "customCell")
+        
         calendar.delegate    = self
         calendar.dataSource  = self
         calendar.locale      = .current
-        tableView.register(InfoCell.self, forCellReuseIdentifier: "customCell")
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
         calendar.allowsMultipleSelection = true
         calendar.swipeToChooseGesture.isEnabled = true
-        calendar.swipeToChooseGesture.minimumPressDuration = 0.2
-        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
-        exitButton.addGestureRecognizer(exitTapRecognizer)
+        calendar.swipeToChooseGesture.minimumPressDuration = 0.1
+        
+        setUpGestrues()
         setConstraints()
+    }
+    
+    func setUpGestrues(){
+        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let rightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        
+        rightGesture.direction = .right
+        
+        exitButton.addGestureRecognizer(exitTapRecognizer)
+        self.view.addGestureRecognizer(rightGesture)
     }
     
     /**

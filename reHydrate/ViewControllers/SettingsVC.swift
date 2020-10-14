@@ -103,6 +103,20 @@ class SettingsVC: UIViewController {
         }
     }
     
+    @objc func handleSwipe(_ sender: UISwipeGestureRecognizer){
+        if sender.direction == .left {
+            defaults.set(darkMode, forKey: darkModeString)
+            defaults.set(metricUnits, forKey: metricUnitsString)
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromRight
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            self.dismiss(animated: false, completion: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.modalPresentationStyle = .fullScreen
@@ -131,9 +145,7 @@ class SettingsVC: UIViewController {
         self.view.addSubview(exitButton)
         self.view.addSubview(tableView)
         
-        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
-        exitButton.addGestureRecognizer(exitTapRecognizer)
-        
+        setUpGestrues()
         setConstraints()
         // checking if the reminders are turn on or off
         if settings[3].isOpened {
@@ -155,6 +167,16 @@ class SettingsVC: UIViewController {
         
         let mail = MFMailComposeViewController()
         mail.mailComposeDelegate = self
+    }
+    
+    func setUpGestrues(){
+        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        
+        leftGesture.direction = .left
+        
+        exitButton.addGestureRecognizer(exitTapRecognizer)
+        self.view.addGestureRecognizer(leftGesture)
     }
     
     /**
