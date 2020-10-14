@@ -257,7 +257,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             transition.subtype  = .fromRight
             transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             view.window!.layer.add(transition, forKey: kCATransition)
-            calendarScreen.modalPresentationStyle     = .fullScreen
+            calendarScreen.modalPresentationStyle = .fullScreen
             self.present(calendarScreen, animated: false, completion: nil)
         default:
             break
@@ -287,6 +287,34 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             default:
                 break
             }
+        }
+    }
+    
+    @objc func handleSwipe(_ sender: UISwipeGestureRecognizer){
+        switch sender.direction {
+        case .left:
+            let calendarScreen  = CalendarVC()
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromRight
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            calendarScreen.modalPresentationStyle = .fullScreen
+            self.present(calendarScreen, animated: false, completion: nil)
+        case .right:
+            let aboutScreen = SettingsVC()
+            let transition      = CATransition()
+            transition.duration = 0.4
+            transition.type     = .push
+            transition.subtype  = .fromLeft
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            aboutScreen.modalPresentationStyle = .fullScreen
+            present(aboutScreen, animated: false, completion: nil)
+        default:
+            print("Could't recognize swipe gesture")
+            break
         }
     }
     
@@ -487,6 +515,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         self.view.addSubview(calendarButton)
         setConstraints()
         setUpButtons()
+        setUpSwipeGestrues()
         currentDay.text  = formatter.string(from: Date.init()).localizedCapitalized
         smallLabel.text  = String(drinkOptions[0])
         mediumLabel.text = String(drinkOptions[1])
@@ -546,6 +575,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         calendarButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive   = true
         calendarButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
         
+    }
+    
+    func setUpSwipeGestrues(){
+        let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        let rightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        
+        leftGesture.direction = .left
+        rightGesture.direction = .right
+        
+        self.view.addGestureRecognizer(leftGesture)
+        self.view.addGestureRecognizer(rightGesture)
     }
     
     //MARK: - SetUp UIButton
