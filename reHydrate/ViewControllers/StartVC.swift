@@ -6,6 +6,7 @@
 //  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import Hero
 import UIKit
 import SwiftUI
 import CloudKit
@@ -211,6 +212,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var metricUnits  = true
     var drinkOptions = [Double(300), Double(500), Double(750)]
     var days: [Day] = []
+    
     //MARK: - Touch controlls
     
     /**
@@ -240,25 +242,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             drink = drinkOptions[2]
             updateConsumtion(drink)
         case settingsButton:
-            let aboutScreen = SettingsVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromLeft
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            aboutScreen.modalPresentationStyle = .fullScreen
-            present(aboutScreen, animated: false, completion: nil)
+            let settingScreen = SettingsVC()
+            settingScreen.modalPresentationStyle = .fullScreen
+            settingScreen.hero.isEnabled = true
+            settingScreen.hero.modalAnimationType = .selectBy(presenting: .cover(direction: .trailing), dismissing: .uncover(direction: .leading))
+            present(settingScreen, animated: true, completion: nil)
         case calendarButton:
             let calendarScreen  = CalendarVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromRight
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
             calendarScreen.modalPresentationStyle = .fullScreen
-            self.present(calendarScreen, animated: false, completion: nil)
+            calendarScreen.hero.isEnabled = true
+            calendarScreen.hero.modalAnimationType = .selectBy(presenting: .cover(direction: .leading), dismissing: .uncover(direction: .trailing))
+            present(calendarScreen, animated: true, completion: nil)
         default:
             break
         }
@@ -291,30 +285,18 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     @objc func handleSwipe(_ sender: UISwipeGestureRecognizer){
-        switch sender.direction {
-        case .left:
+        if sender.direction == .right {
+            let settingScreen = SettingsVC()
+            settingScreen.modalPresentationStyle = .fullScreen
+            settingScreen.hero.isEnabled = true
+            settingScreen.hero.modalAnimationType = .selectBy(presenting: .cover(direction: .right), dismissing: .push(direction: .left))
+            present(settingScreen, animated: true, completion: nil)
+        } else if sender.direction == .left {
             let calendarScreen  = CalendarVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromRight
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
             calendarScreen.modalPresentationStyle = .fullScreen
-            self.present(calendarScreen, animated: false, completion: nil)
-        case .right:
-            let aboutScreen = SettingsVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromLeft
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            aboutScreen.modalPresentationStyle = .fullScreen
-            present(aboutScreen, animated: false, completion: nil)
-        default:
-            print("Could't recognize swipe gesture")
-            break
+            calendarScreen.hero.isEnabled = true
+            calendarScreen.hero.modalAnimationType = .selectBy(presenting: .cover(direction: .left), dismissing: .push(direction: .right))
+            present(calendarScreen, animated: true, completion: nil)
         }
     }
     
@@ -337,6 +319,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.heroID = "main"
+        self.isHeroEnabled = true
         createDrinkStack()
         createSummaryStack()
         
@@ -395,6 +379,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
         
         updateUI()
+        
+        
     }
     
     //MARK: - ViewWill
@@ -502,7 +488,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      setUpUI()
      ```
      */
-    func setUpUI(){
+    fileprivate func setUpUI(){
         for view in self.view.subviews{
             view.removeFromSuperview()
         }
@@ -536,7 +522,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    func setConstraints(){
+    fileprivate func setConstraints(){
         
         appTitle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                           = true
         appTitle.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
@@ -577,7 +563,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         
     }
     
-    func setUpSwipeGestrues(){
+    fileprivate func setUpSwipeGestrues(){
         let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         let rightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         
@@ -600,7 +586,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    func setUpButtons(){
+    fileprivate func setUpButtons(){
         //setting up an gesture recognizer for each button.
         let settingsTapGesture       = UITapGestureRecognizer(target: self, action: #selector(tap))
         let calendarTapGesture       = UITapGestureRecognizer(target: self, action: #selector(tap))
@@ -640,7 +626,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    func createSummaryStack(){
+    fileprivate func createSummaryStack(){
         summaryStack.addArrangedSubview(consumedAmount)
         summaryStack.addArrangedSubview(summarySplitter)
         summaryStack.addArrangedSubview(goalAmount)
@@ -658,7 +644,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    func createDrinkStack(){
+    fileprivate func createDrinkStack(){
         let smallStack: UIStackView = {
             let stack       = UIStackView()
             stack.axis      = .vertical
@@ -797,7 +783,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      changeAppearance()
      ```
      */
-    func changeAppearance() {
+    fileprivate func changeAppearance() {
         if darkMode {
             self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
             appTitle.textColor        = .white
@@ -974,7 +960,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      updateUI()
      ```
      */
-    @objc func updateUI(){
+    @objc fileprivate func updateUI(){
         let today = fetchToday()
         let goalAmount     = Measurement(value: Double(today.goal), unit: UnitVolume.liters)
         let consumedAmount = Measurement(value: Double(today.consumed), unit: UnitVolume.liters)
@@ -1034,7 +1020,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      popUpOptions(sender, drink, mediumOptionLabel)
      ```
      */
-    func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Double, _ optionLabel: UILabel) {
+    fileprivate func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Double, _ optionLabel: UILabel) {
         let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink",comment: "popup view option for editing the drink options."),
                                             style: .default) {_ in
@@ -1157,8 +1143,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         if response.actionIdentifier == "small" {
             print("small button was pressed")

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import Hero
 import UIKit
 import HealthKit
 import MessageUI
@@ -20,7 +21,7 @@ class SettingsVC: UIViewController {
     
     // MARK: - Variabels
     let defaults                   = UserDefaults.standard
-    var tableView: UITableView     = UITableView(frame: CGRect.zero, style: .plain)
+    var tableView: UITableView     = UITableView()
     var exitButton: UIButton       = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -91,13 +92,7 @@ class SettingsVC: UIViewController {
         case exitButton:
             defaults.set(darkMode, forKey: darkModeString)
             defaults.set(metricUnits, forKey: metricUnitsString)
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromRight
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            self.dismiss(animated: false, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         default:
             break
         }
@@ -107,28 +102,24 @@ class SettingsVC: UIViewController {
         if sender.direction == .left {
             defaults.set(darkMode, forKey: darkModeString)
             defaults.set(metricUnits, forKey: metricUnitsString)
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromRight
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            self.dismiss(animated: false, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.modalPresentationStyle = .fullScreen
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         settings[3].isOpened = defaults.bool(forKey: remindersString)
         metricUnits          = defaults.bool(forKey: metricUnitsString)
         darkMode             = defaults.bool(forKey: darkModeString)
         
         setUpUI()
+        updateSettings()
         changeAppearance()
+        view.heroID = "settings"
     }
     
     //MARK: - Set up of UI
@@ -147,6 +138,18 @@ class SettingsVC: UIViewController {
         
         setUpGestrues()
         setConstraints()
+        
+        tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
+        
+        tableView.delegate   = self
+        tableView.dataSource = self
+        
+        let mail = MFMailComposeViewController()
+        mail.mailComposeDelegate = self
+    }
+    
+    fileprivate func updateSettings() {
         // checking if the reminders are turn on or off
         if settings[3].isOpened {
             settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
@@ -157,19 +160,9 @@ class SettingsVC: UIViewController {
         if UIApplication.shared.supportsAlternateIcons {
             settings[0].options.insert(NSLocalizedString("AppIcon", comment: "setting option"), at: 1)
         }
-        
-        tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
-        tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
-        
-        tableView.delegate   = self
-        tableView.dataSource = self
-        tableView.reloadData()
-        
-        let mail = MFMailComposeViewController()
-        mail.mailComposeDelegate = self
     }
     
-    func setUpGestrues(){
+    fileprivate func setUpGestrues(){
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         
@@ -578,7 +571,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             self.present(clearDataAlert, animated: true, completion: nil)
         case IndexPath(row: 0, section: 5): // How to use
             let tutorialVC = TutorialVC()
-            tutorialVC.modalPresentationStyle = .fullScreen
+//            tutorialVC.isHeroEnabled = false
+            tutorialVC.modalPresentationStyle = .popover
             self.present(tutorialVC, animated: true, completion: nil)
         case IndexPath(row: 1, section: 5): // Open Instagram
             if let url = URL(string: "https://www.instagram.com/braka.coding/"),
