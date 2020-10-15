@@ -172,9 +172,8 @@ class SettingOptionCell: UITableViewCell {
     /// - Parameter subtitle: : subTitle - the **String** you wnat to display under the title.
     func addSubTitle(_ subtitle: String){
         subTitle.text = subtitle
-        setBackgroundConstraints()
         roundedCell.addSubview(subTitle)
-        titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive        = true
+        setTitleConstraints()
         subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive           = true
         subTitle.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: 15).isActive     = true
         setButtonConstraints()
