@@ -6,6 +6,7 @@
 //  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import Hero
 import UIKit
 import HealthKit
 import MessageUI
@@ -20,7 +21,7 @@ class SettingsVC: UIViewController {
     
     // MARK: - Variabels
     let defaults                   = UserDefaults.standard
-    var tableView: UITableView     = UITableView(frame: CGRect.zero, style: .plain)
+    var tableView: UITableView     = UITableView()
     var exitButton: UIButton       = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -77,7 +78,7 @@ class SettingsVC: UIViewController {
                                  NSLocalizedString("VersionNumber", comment: "Disply version of app")])]
     var days: [Day] = []
     let context     = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
- 
+    
     //MARK: - Tap controller
     
     /**
@@ -91,28 +92,34 @@ class SettingsVC: UIViewController {
         case exitButton:
             defaults.set(darkMode, forKey: darkModeString)
             defaults.set(metricUnits, forKey: metricUnitsString)
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromRight
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            self.dismiss(animated: false, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         default:
             break
         }
     }
     
+    @objc func handleSwipe(_ sender: UISwipeGestureRecognizer){
+        if sender.direction == .left {
+            defaults.set(darkMode, forKey: darkModeString)
+            defaults.set(metricUnits, forKey: metricUnitsString)
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.modalPresentationStyle = .fullScreen
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         settings[3].isOpened = defaults.bool(forKey: remindersString)
         metricUnits          = defaults.bool(forKey: metricUnitsString)
         darkMode             = defaults.bool(forKey: darkModeString)
         
         setUpUI()
+        updateSettings()
         changeAppearance()
+        view.heroID = "settings"
     }
     
     //MARK: - Set up of UI
@@ -129,10 +136,20 @@ class SettingsVC: UIViewController {
         self.view.addSubview(exitButton)
         self.view.addSubview(tableView)
         
-        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
-        exitButton.addGestureRecognizer(exitTapRecognizer)
-        
+        setUpGestrues()
         setConstraints()
+        
+        tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
+        
+        tableView.delegate   = self
+        tableView.dataSource = self
+        
+        let mail = MFMailComposeViewController()
+        mail.mailComposeDelegate = self
+    }
+    
+    fileprivate func updateSettings() {
         // checking if the reminders are turn on or off
         if settings[3].isOpened {
             settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
@@ -143,14 +160,16 @@ class SettingsVC: UIViewController {
         if UIApplication.shared.supportsAlternateIcons {
             settings[0].options.insert(NSLocalizedString("AppIcon", comment: "setting option"), at: 1)
         }
+    }
+    
+    fileprivate func setUpGestrues(){
+        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         
-        tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
-        tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
-        tableView.delegate   = self
-        tableView.dataSource = self
+        leftGesture.direction = .left
         
-        let mail = MFMailComposeViewController()
-        mail.mailComposeDelegate = self
+        exitButton.addGestureRecognizer(exitTapRecognizer)
+        self.view.addGestureRecognizer(leftGesture)
     }
     
     /**
@@ -177,7 +196,7 @@ class SettingsVC: UIViewController {
         tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: exitButton.bottomAnchor, constant: 10).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
     }
     
     // MARK: - Change appearance
@@ -203,8 +222,8 @@ class SettingsVC: UIViewController {
                 exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.gray), for: .normal)
             }
         } else{
-            self.view.backgroundColor = .white
-            tableView.backgroundColor = .white
+            self.view.backgroundColor = UIColor().hexStringToUIColor("ebebeb")
+            tableView.backgroundColor = UIColor().hexStringToUIColor("ebebeb")
             if #available(iOS 13, *) {
                 exitButton.tintColor  = .black
             } else {
@@ -259,27 +278,6 @@ class SettingsVC: UIViewController {
             })
         }
     }
-    
-    //MARK: - Load and Save days
-    
-    func fetchDays() {
-        do {
-            self.days = try self.context.fetch(Day.fetchRequest())
-        } catch {
-            print("can't featch days")
-            print(error.localizedDescription)
-        }
-    }
-    
-    func saveDays() {
-        do {
-            try self.context.save()
-        } catch {
-            print("can't save days")
-            print(error.localizedDescription)
-        }
-    }
-    
 }
 
 extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
@@ -288,7 +286,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     //MARK: - Creates a cell
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settings[section].options.count
+        if section == 6 {
+            return 0
+        } else {
+            return settings[section].options.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -296,31 +298,39 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         cell.setting         = settings[indexPath.section].options[indexPath.row]
         cell.selectionStyle  = .none
         cell.setCellAppairents(darkMode, metricUnits)
+        
         switch indexPath {
-        case IndexPath(row: 1, section: 0), IndexPath(row: 0, section: 4), IndexPath(row: 1, section: 4),
-             IndexPath(row: 0, section: 5), IndexPath(row: 1, section: 5), IndexPath(row: 2, section: 5),
-             IndexPath(row: 3, section: 5), IndexPath(row: 4, section: 5), IndexPath(row: 5, section: 5):
-            cell.buttonForCell.isHidden = false
-            if #available(iOS 13.0, *) {
-                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
-            } else {
-                if darkMode {
-                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.gray), for: .normal)
-                } else {
-                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.black), for: .normal)
-                }
-            }
-            cell.subTitle.removeFromSuperview()
-            cell.textField.removeFromSuperview()
-            cell.setTitleConstraints()
-            cell.setButtonConstraints()
-        case IndexPath(row: 0, section: 1):
-            cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
-            cell.textField.removeFromSuperview()
-        case IndexPath(row: 1, section: 1):
-            cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
-            cell.textField.removeFromSuperview()
+        case IndexPath(row: 0, section: 0), IndexPath(row: 0, section: 1),
+             IndexPath(row: 0, section: 4), IndexPath(row: 0, section: 5):
+            cell.position = .top
+        case IndexPath(row: settings[0].options.count - 1, section: 0),
+             IndexPath(row: 1, section: 1), IndexPath(row: 3, section: 3),
+             IndexPath(row: 2, section: 4), IndexPath(row: 6, section: 5):
+            cell.position = .bot
+        case IndexPath(row: 0, section: 2):
+            cell.position = .none
         case IndexPath(row: 0, section: 3):
+            if settings[3].isOpened{
+                cell.position = .top
+            } else {
+                cell.position = .none
+            }
+        default:
+            cell.position = .mid
+        }
+        
+        switch indexPath {
+        case IndexPath(row: 0, section: 0): // Dark Mode cell
+            cell.textField.removeFromSuperview()
+            cell.subTitle.removeFromSuperview()
+            cell.setTitleConstraints()
+        case IndexPath(row: 0, section: 1): // Unit selection(Metric)
+            cell.textField.removeFromSuperview()
+            cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.liters.symbol), \(UnitVolume.milliliters.symbol)")
+        case IndexPath(row: 1, section: 1): // Unit selection(Imperial)
+            cell.textField.removeFromSuperview()
+            cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
+        case IndexPath(row: 0, section: 3): // Reminders cell
             if settings[3].isOpened {
                 if #available(iOS 13.0, *) {
                     cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
@@ -347,7 +357,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
-        case IndexPath(row: 2, section: 4):
+        case IndexPath(row: 2, section: 0),
+             IndexPath(row: 0, section: 2),
+             IndexPath(row: 1, section: 3),
+             IndexPath(row: 2, section: 3),
+             IndexPath(row: 3, section: 3): // Cell with textField
+            cell.subTitle.removeFromSuperview()
+            cell.setTextFieldConstraints()
+        case IndexPath(row: 2, section: 4): // Danger cell
             cell.buttonForCell.isHidden = false
             if #available(iOS 13.0, *) {
                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
@@ -359,23 +376,27 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.subTitle.removeFromSuperview()
             cell.textField.removeFromSuperview()
             cell.setTitleConstraints()
-            cell.setButtonConstraints()
-        case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
-             IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3),
-             IndexPath(row: 2, section: 0):
-            cell.subTitle.removeFromSuperview()
-        case IndexPath(row: 6, section: 5):
+        case IndexPath(row: 6, section: 5): // Version cell
             cell.titleOption.text!.append(" \(String(describing: Bundle.main.infoDictionary!["CFBundleShortVersionString"]!))")
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
             cell.setTitleConstraints()
-            cell.setButtonConstraints()
-        default:
-            cell.textField.removeFromSuperview()
+        default: // Cells with normal button
+            cell.buttonForCell.isHidden = false
+            if #available(iOS 13.0, *) {
+                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
+            } else {
+                if darkMode {
+                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.gray),
+                                                          for: .normal)
+                } else {
+                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.black),
+                                                          for: .normal)
+                }
+            }
             cell.subTitle.removeFromSuperview()
+            cell.textField.removeFromSuperview()
             cell.setTitleConstraints()
-            cell.setButtonConstraints()
-            break
         }
         
         return cell
@@ -386,7 +407,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return settings.count
+        return settings.count + 1
     }
     
     //MARK: - Creates a section
@@ -398,7 +419,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 25
+        return 20
     }
     //MARK: - Cell controlls of TableView
     
@@ -450,7 +471,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             self.settings[3].options.append(NSLocalizedString("StartingTime", comment: "settings option"))
                             self.settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
                             self.settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
-                            tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
+                            tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .middle)
                             if #available(iOS 13.0, *) {
                                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                             } else {
@@ -461,12 +482,16 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                                 }
                             }
                             cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
+                            cell.position = .top
+                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
                         }
                     } else {
                         self.sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
                         DispatchQueue.main.async {
                             self.settings[3].options.removeLast(3)
-                            tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .fade)
+                            cell.position = .none
+                            tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .bottom)
+                            tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
                             if #available(iOS 13.0, *) {
                                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                             } else {
@@ -476,12 +501,12 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                                     cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
                                 }
                             }
+                            self.defaults.set(false, forKey: remindersString)
                             cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                         }
                     }
                 }
             }
-            self.defaults.set(self.settings[3].isOpened, forKey: remindersString)
         case IndexPath(row: 0, section: 4): // Open settings
             if let url = URL(string:UIApplication.openSettingsURLString) {
                 if UIApplication.shared.canOpenURL(url) {
@@ -516,16 +541,17 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 transition.type     = .push
                 transition.subtype  = .fromRight
                 transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                self.fetchDays()
+                self.days = fetchDays()
                 self.days.forEach({self.context.delete($0)})
-                self.saveDays()
+                saveDays()
                 self.view.window!.layer.add(transition, forKey: kCATransition)
                 self.dismiss(animated: false, completion: nil)
             }))
             self.present(clearDataAlert, animated: true, completion: nil)
         case IndexPath(row: 0, section: 5): // How to use
             let tutorialVC = TutorialVC()
-            tutorialVC.modalPresentationStyle = .fullScreen
+//            tutorialVC.isHeroEnabled = false
+            tutorialVC.modalPresentationStyle = .popover
             self.present(tutorialVC, animated: true, completion: nil)
         case IndexPath(row: 1, section: 5): // Open Instagram
             if let url = URL(string: "https://www.instagram.com/braka.coding/"),
@@ -631,7 +657,7 @@ Thank you for getting in contact with us<br>
 extension SettingsVC: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
-
+        
         if result == .sent {
             dismiss(animated: true)
         }

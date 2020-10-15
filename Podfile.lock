@@ -1,16 +1,20 @@
 PODS:
   - FSCalendar (2.8.1)
+  - Hero (1.5.0)
 
 DEPENDENCIES:
   - FSCalendar
+  - Hero
 
 SPEC REPOS:
   trunk:
     - FSCalendar
+    - Hero
 
 SPEC CHECKSUMS:
   FSCalendar: 5245140456fcbcac5824c203b98bd8068bdfee1a
+  Hero: b7385b75e7259da62f4f85462f59a5082d66b058
 
-PODFILE CHECKSUM: e8ae24348ce8ee32e57d0bfbc23a2252519cd759
+PODFILE CHECKSUM: dfaf76a4690cabe2189247142a1e5765f77f06cf
 
 COCOAPODS: 1.9.1
