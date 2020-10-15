@@ -7,4 +7,5 @@ target 'reHydrate' do
 
   # Pods for reHydrate
   pod 'FSCalendar'
+  pod 'Hero'
 end

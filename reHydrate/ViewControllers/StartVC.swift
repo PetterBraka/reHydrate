@@ -6,6 +6,7 @@
 //  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import Hero
 import UIKit
 import SwiftUI
 import CloudKit
@@ -211,6 +212,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var metricUnits  = true
     var drinkOptions = [Double(300), Double(500), Double(750)]
     var days: [Day] = []
+    
     //MARK: - Touch controlls
     
     /**
@@ -240,25 +242,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             drink = drinkOptions[2]
             updateConsumtion(drink)
         case settingsButton:
-            let aboutScreen = SettingsVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromLeft
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            aboutScreen.modalPresentationStyle = .fullScreen
-            present(aboutScreen, animated: false, completion: nil)
+            let settingScreen = SettingsVC()
+            settingScreen.modalPresentationStyle = .fullScreen
+            settingScreen.hero.isEnabled = true
+            settingScreen.hero.modalAnimationType = .selectBy(presenting: .cover(direction: .trailing), dismissing: .uncover(direction: .leading))
+            present(settingScreen, animated: true, completion: nil)
         case calendarButton:
             let calendarScreen  = CalendarVC()
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromRight
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            calendarScreen.modalPresentationStyle     = .fullScreen
-            self.present(calendarScreen, animated: false, completion: nil)
+            calendarScreen.modalPresentationStyle = .fullScreen
+            calendarScreen.hero.isEnabled = true
+            calendarScreen.hero.modalAnimationType = .selectBy(presenting: .cover(direction: .leading), dismissing: .uncover(direction: .trailing))
+            present(calendarScreen, animated: true, completion: nil)
         default:
             break
         }
@@ -290,6 +284,22 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
+    @objc func handleSwipe(_ sender: UISwipeGestureRecognizer){
+        if sender.direction == .right {
+            let settingScreen = SettingsVC()
+            settingScreen.modalPresentationStyle = .fullScreen
+            settingScreen.hero.isEnabled = true
+            settingScreen.hero.modalAnimationType = .selectBy(presenting: .cover(direction: .right), dismissing: .push(direction: .left))
+            present(settingScreen, animated: true, completion: nil)
+        } else if sender.direction == .left {
+            let calendarScreen  = CalendarVC()
+            calendarScreen.modalPresentationStyle = .fullScreen
+            calendarScreen.hero.isEnabled = true
+            calendarScreen.hero.modalAnimationType = .selectBy(presenting: .cover(direction: .left), dismissing: .push(direction: .right))
+            present(calendarScreen, animated: true, completion: nil)
+        }
+    }
+    
     //MARK: - ViewDid
     
     /**
@@ -309,6 +319,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.heroID = "main"
+        self.isHeroEnabled = true
         createDrinkStack()
         createSummaryStack()
         
@@ -367,6 +379,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
         
         updateUI()
+        
+        
     }
     
     //MARK: - ViewWill
@@ -412,58 +426,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - Load and Save days
-    
-    func fetchDays() {
-        do {
-            self.days = try self.context.fetch(Day.fetchRequest())
-        } catch {
-            print("can't featch days")
-            print(error.localizedDescription)
-        }
-    }
-    
-    func saveDays() {
-        do {
-            try self.context.save()
-        } catch {
-            print("can't save days")
-            print(error.localizedDescription)
-        }
-    }
-    
-    /// Will get a day representing data for the current day. It will also set the goal to be the same as the goal from the previous day.
-    /// - Returns: The day found to be equal to todays date.
-    func fetchToday() -> Day {
-        do {
-            let request = Day.fetchRequest() as NSFetchRequest
-            // Get today's beginning & tomorrows beginning time
-            let dateFrom = Calendar.current.startOfDay(for: Date())
-            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
-            // Sets conditions for date to be within today
-            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
-            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
-            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
-            request.predicate = datePredicate
-            // tries to get the day out of the array.
-            let loadedDays = try self.context.fetch(request)
-            // If today wasn't found it will create a new day.
-            guard let today = loadedDays.first else {
-                let today = Day(context: self.context)
-                today.date = Date()
-                today.goal = 3
-                return today }
-            return today
-        } catch {
-            print("can't featch day")
-            print(error.localizedDescription)
-            // If the loading of data fails, we create a new day
-            let today = Day(context: self.context)
-            today.date = Date()
-            today.goal = 3
-            return today
-        }
-    }
     
     //MARK: - Set up of UI
     /**
@@ -474,7 +436,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      setUpUI()
      ```
      */
-    func setUpUI(){
+    fileprivate func setUpUI(){
         for view in self.view.subviews{
             view.removeFromSuperview()
         }
@@ -487,6 +449,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         self.view.addSubview(calendarButton)
         setConstraints()
         setUpButtons()
+        setUpSwipeGestrues()
         currentDay.text  = formatter.string(from: Date.init()).localizedCapitalized
         smallLabel.text  = String(drinkOptions[0])
         mediumLabel.text = String(drinkOptions[1])
@@ -507,7 +470,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    func setConstraints(){
+    fileprivate func setConstraints(){
         
         appTitle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                           = true
         appTitle.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
@@ -548,6 +511,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         
     }
     
+    fileprivate func setUpSwipeGestrues(){
+        let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        let rightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        
+        leftGesture.direction = .left
+        rightGesture.direction = .right
+        
+        self.view.addGestureRecognizer(leftGesture)
+        self.view.addGestureRecognizer(rightGesture)
+    }
+    
     //MARK: - SetUp UIButton
     /**
      Setting upp the listeners and aperients of the buttons.
@@ -560,7 +534,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    func setUpButtons(){
+    fileprivate func setUpButtons(){
         //setting up an gesture recognizer for each button.
         let settingsTapGesture       = UITapGestureRecognizer(target: self, action: #selector(tap))
         let calendarTapGesture       = UITapGestureRecognizer(target: self, action: #selector(tap))
@@ -600,7 +574,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    func createSummaryStack(){
+    fileprivate func createSummaryStack(){
         summaryStack.addArrangedSubview(consumedAmount)
         summaryStack.addArrangedSubview(summarySplitter)
         summaryStack.addArrangedSubview(goalAmount)
@@ -618,7 +592,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    func createDrinkStack(){
+    fileprivate func createDrinkStack(){
         let smallStack: UIStackView = {
             let stack       = UIStackView()
             stack.axis      = .vertical
@@ -757,7 +731,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      changeAppearance()
      ```
      */
-    func changeAppearance() {
+    fileprivate func changeAppearance() {
         if darkMode {
             self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
             appTitle.textColor        = .white
@@ -821,7 +795,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let drinkAmount  = Measurement(value: Double(drinkConsumed), unit: UnitVolume.milliliters)
         let drink        = drinkAmount.converted(to: .liters).value
         exportDrinkToHealth(Double(drink), Date.init())
-        fetchDays()
+        self.days = fetchDays()
         let today = fetchToday()
         today.consumed += drink
         let rounded = round(today.consumed * 100)/100
@@ -934,7 +908,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      updateUI()
      ```
      */
-    @objc func updateUI(){
+    @objc fileprivate func updateUI(){
         let today = fetchToday()
         let goalAmount     = Measurement(value: Double(today.goal), unit: UnitVolume.liters)
         let consumedAmount = Measurement(value: Double(today.consumed), unit: UnitVolume.liters)
@@ -994,7 +968,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      popUpOptions(sender, drink, mediumOptionLabel)
      ```
      */
-    func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Double, _ optionLabel: UILabel) {
+    fileprivate func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Double, _ optionLabel: UILabel) {
         let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink",comment: "popup view option for editing the drink options."),
                                             style: .default) {_ in
@@ -1071,7 +1045,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         defaults.set(drinkOptions[1], forKey: mediumDrinkOptionString)
         defaults.set(drinkOptions[2], forKey: largeDrinkOptionString)
         updateUI()
-        self.fetchDays()
+        self.days = fetchDays()
         var today: Day?
         if days.isEmpty {
             today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
@@ -1117,8 +1091,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         if response.actionIdentifier == "small" {
             print("small button was pressed")
@@ -1163,7 +1136,7 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        fetchDays()
+        self.days = fetchDays()
         let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
         if !days.isEmpty {
             today.goal = days.last?.goal ?? 3
@@ -1180,7 +1153,7 @@ extension StartVC: WCSessionDelegate {
             if today.consumed  <= watchConsumed {
                 let drinkAmountAdded = watchConsumed - today.consumed
                 today.consumed = watchConsumed
-                self.saveDays()
+                saveDays()
                 print("todays amount was updated")
                 DispatchQueue.main.async {
                     self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
@@ -1204,7 +1177,7 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        fetchDays()
+        self.days = fetchDays()
         let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
         if !days.isEmpty {
             today.goal = days.last?.goal ?? 3
@@ -1223,7 +1196,7 @@ extension StartVC: WCSessionDelegate {
                 today.consumed = watchConsumed
                 print("todays amount was updated")
                 DispatchQueue.main.async {
-                    self.saveDays()
+                    saveDays()
                     self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
                     self.updateUI()
                 }
@@ -1438,8 +1411,8 @@ struct startVCRepresentable: UIViewControllerRepresentable {
 struct startVCPreview: PreviewProvider {
     static var previews: some View {
         startVCRepresentable()
-            .previewDevice(PreviewDevice(rawValue: "iPhone XS"))
-            .previewDisplayName("iPhone XS")
+            .previewDevice(PreviewDevice(rawValue: "iPhone 11 pro"))
+            .previewDisplayName("iPhone 11 pro")
     }
 }
 #endif
