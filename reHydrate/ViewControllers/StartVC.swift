@@ -426,58 +426,6 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - Load and Save days
-    
-    func fetchDays() {
-        do {
-            self.days = try self.context.fetch(Day.fetchRequest())
-        } catch {
-            print("can't featch days")
-            print(error.localizedDescription)
-        }
-    }
-    
-    func saveDays() {
-        do {
-            try self.context.save()
-        } catch {
-            print("can't save days")
-            print(error.localizedDescription)
-        }
-    }
-    
-    /// Will get a day representing data for the current day. It will also set the goal to be the same as the goal from the previous day.
-    /// - Returns: The day found to be equal to todays date.
-    func fetchToday() -> Day {
-        do {
-            let request = Day.fetchRequest() as NSFetchRequest
-            // Get today's beginning & tomorrows beginning time
-            let dateFrom = Calendar.current.startOfDay(for: Date())
-            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
-            // Sets conditions for date to be within today
-            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
-            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
-            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
-            request.predicate = datePredicate
-            // tries to get the day out of the array.
-            let loadedDays = try self.context.fetch(request)
-            // If today wasn't found it will create a new day.
-            guard let today = loadedDays.first else {
-                let today = Day(context: self.context)
-                today.date = Date()
-                today.goal = 3
-                return today }
-            return today
-        } catch {
-            print("can't featch day")
-            print(error.localizedDescription)
-            // If the loading of data fails, we create a new day
-            let today = Day(context: self.context)
-            today.date = Date()
-            today.goal = 3
-            return today
-        }
-    }
     
     //MARK: - Set up of UI
     /**
@@ -847,7 +795,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let drinkAmount  = Measurement(value: Double(drinkConsumed), unit: UnitVolume.milliliters)
         let drink        = drinkAmount.converted(to: .liters).value
         exportDrinkToHealth(Double(drink), Date.init())
-        fetchDays()
+        self.days = fetchDays()
         let today = fetchToday()
         today.consumed += drink
         let rounded = round(today.consumed * 100)/100
@@ -1097,7 +1045,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         defaults.set(drinkOptions[1], forKey: mediumDrinkOptionString)
         defaults.set(drinkOptions[2], forKey: largeDrinkOptionString)
         updateUI()
-        self.fetchDays()
+        self.days = fetchDays()
         var today: Day?
         if days.isEmpty {
             today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
@@ -1188,7 +1136,7 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        fetchDays()
+        self.days = fetchDays()
         let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
         if !days.isEmpty {
             today.goal = days.last?.goal ?? 3
@@ -1205,7 +1153,7 @@ extension StartVC: WCSessionDelegate {
             if today.consumed  <= watchConsumed {
                 let drinkAmountAdded = watchConsumed - today.consumed
                 today.consumed = watchConsumed
-                self.saveDays()
+                saveDays()
                 print("todays amount was updated")
                 DispatchQueue.main.async {
                     self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
@@ -1229,7 +1177,7 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        fetchDays()
+        self.days = fetchDays()
         let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
         if !days.isEmpty {
             today.goal = days.last?.goal ?? 3
@@ -1248,7 +1196,7 @@ extension StartVC: WCSessionDelegate {
                 today.consumed = watchConsumed
                 print("todays amount was updated")
                 DispatchQueue.main.async {
-                    self.saveDays()
+                    saveDays()
                     self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
                     self.updateUI()
                 }

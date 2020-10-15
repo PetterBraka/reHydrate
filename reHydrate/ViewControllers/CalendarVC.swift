@@ -95,6 +95,8 @@ class CalendarVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.days = fetchDays()
         getDrinks(Date.init())
         setUpUI()
         changeAppearance()
@@ -230,46 +232,6 @@ class CalendarVC: UIViewController {
             }
         }
     }
-    //MARK: - Load day(s)
-    
-    func fetchDays() {
-        do {
-            self.days = try self.context.fetch(Day.fetchRequest())
-        } catch {
-            print("can't featch days")
-        }
-    }
-    
-    func fetchDay(_ date: Date) -> Day {
-        do {
-            let request = Day.fetchRequest() as NSFetchRequest
-            // Get day's beginning & tomorrows beginning time
-            let dateFrom = Calendar.current.startOfDay(for: date)
-            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
-            // Sets conditions for date to be within day
-            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
-            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
-            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
-            request.predicate = datePredicate
-            // tries to get the day out of the array.
-            let loadedDays = try self.context.fetch(request)
-            // If the day wasn't found it will create a new day.
-            guard let today = loadedDays.first else {
-                let today = Day(context: self.context)
-                today.date = Date()
-                today.goal = 3
-                return today }
-            return today
-        } catch {
-            print("can't featch day")
-            print(error.localizedDescription)
-            // If the loading of data fails, we create a new day
-            let today = Day(context: self.context)
-            today.date = Date()
-            today.goal = 3
-            return today
-        }
-    }
     
     /**
      Will find the drinks, depending on the date past in and update UI
@@ -283,10 +245,15 @@ class CalendarVC: UIViewController {
      */
     func getDrinks(_ dateOfDay: Date){
         titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
-        
+        drinks.removeAll()
         let day = fetchDay(dateOfDay)
-        drinks.append(day.goal)
-        drinks.append(day.consumed)
+        if day != nil {
+            drinks.append(day!.goal)
+            drinks.append(day!.consumed)
+        } else {
+            drinks.append(0)
+            drinks.append(0)
+        }
     }
     
     /**
@@ -301,19 +268,29 @@ class CalendarVC: UIViewController {
      */
     func getAverageFor()-> Double {
         var average = Double()
-        if days.isEmpty {
+        if !days.isEmpty {
+            var count = 0
+            average = days[0].consumed
             for day in days {
-                average  += day.consumed
+                if days.firstIndex(of: day)! > 0 {
+                    if formatter.string(from: day.date) != formatter.string(from: days[days.firstIndex(of: day)! - 1].date){
+                        count += 1
+                        average  += day.consumed
+                    }
+                } else {
+                    count += 1
+                }
             }
-            return average  / Double(days.count)
+            return average  / Double(count)
+        } else {
+            return 0
         }
-        return 0
     }
     
     func getAverageFor(_ startDate: Date,_ endDate: Date)-> Double {
         var average = Double()
         var x = Int(0)
-        if days.isEmpty {
+        if !days.isEmpty {
             for day in calendar.selectedDates {
                 if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
                     let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
@@ -340,8 +317,13 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
         switch indexPath.row {
         case 0:
-            cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                           "\(drinks[1].clean)/\(drinks[0].clean)")
+            if !drinks.isEmpty {
+                cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
+                               "\(drinks[1].clean)/\(drinks[0].clean)")
+            } else {
+                cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
+                               "\(0)/\(0)")
+            }
         case 1:
             let average = getAverageFor()
             cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average.clean))
@@ -370,10 +352,9 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-        fetchDays()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: date)}){
             let day = fetchDay(date)
-            let percent = (day.consumed / day.goal ) * 100
+            let percent = (day!.consumed / day!.goal ) * 100
             switch percent {
             case 0...10:
                 if darkMode {
@@ -436,8 +417,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))", "\(drinks[1] .clean)/\(drinks[0] .clean)")
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
-            averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
-                                  "\(average.clean)")
+            averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))", "\(average.clean)")
         }
     }
     
@@ -469,7 +449,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             self.getDrinks(Date())
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell"))",
-                                   "\(drinks[3] )/\(drinks[2] )")
+                                   "\(drinks[1] )/\(drinks[0] )")
         }
     }
     
