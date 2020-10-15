@@ -6,6 +6,7 @@
 //  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import Hero
 import UIKit
 import CoreData
 import FSCalendar
@@ -73,13 +74,7 @@ class CalendarVC: UIViewController {
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
         case exitButton:
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromLeft
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            self.dismiss(animated: false, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         default:
             break
         }
@@ -87,20 +82,13 @@ class CalendarVC: UIViewController {
     
     @objc func handleSwipe(_ sender: UISwipeGestureRecognizer){
         if sender.direction == .right {
-            defaults.set(darkMode, forKey: darkModeString)
-            defaults.set(metricUnits, forKey: metricUnitsString)
-            let transition      = CATransition()
-            transition.duration = 0.4
-            transition.type     = .push
-            transition.subtype  = .fromLeft
-            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            self.dismiss(animated: false, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.isHeroEnabled = true
         formatter.dateFormat = "EEE - dd/MM/yy"
         let local = defaults.array(forKey: appleLanguagesString)
         formatter.locale = Locale(identifier: local?.first as! String)
@@ -113,15 +101,8 @@ class CalendarVC: UIViewController {
     }
     //MARK: - Set up of UI
     
-    /**
-     Will set up the UI and must be called at the launche of the view.
-     
-     # Example #
-     ```
-     setUpUI()
-     ```
-     */
-    func setUpUI(){
+    ///Will set up the UI and must be called at the launche of the view.
+    fileprivate func setUpUI(){
         self.view.addSubview(exitButton)
         self.view.addSubview(titleDate)
         self.view.addSubview(tableView)
@@ -153,7 +134,8 @@ class CalendarVC: UIViewController {
         setConstraints()
     }
     
-    func setUpGestrues(){
+    /// Setting gesture recognizers for swiping and tapping.
+    fileprivate func setUpGestrues(){
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         let rightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         
