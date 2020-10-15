@@ -463,10 +463,17 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             let loadedDays = try self.context.fetch(request)
             // If today wasn't found it will create a new day.
             guard let today = loadedDays.first else {
+                // create new day
                 let today = Day(context: self.context)
                 today.date = Date()
-                today.goal = 3
-                return today }
+                
+                // tries to get yesterday data
+                let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: today.date)
+                let yesterday = fetchDay(yesterdayDate!)
+                today.goal = yesterday?.goal ?? 3
+                
+                return today
+            }
             return today
         } catch {
             print("can't featch day")
@@ -476,6 +483,29 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             today.date = Date()
             today.goal = 3
             return today
+        }
+    }
+    
+    func fetchDay(_ date: Date) -> Day? {
+        do {
+            let request = Day.fetchRequest() as NSFetchRequest
+            // Get day's beginning & tomorrows beginning time
+            let dateFrom = Calendar.current.startOfDay(for: date)
+            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
+            // Sets conditions for date to be within day
+            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
+            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
+            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+            request.predicate = datePredicate
+            // tries to get the day out of the array.
+            let loadedDays = try self.context.fetch(request)
+            // If the day wasn't found it will create a new day.
+            let day = loadedDays.first
+            return day
+        } catch {
+            print("can't featch day")
+            print(error.localizedDescription)
+            return nil
         }
     }
     
