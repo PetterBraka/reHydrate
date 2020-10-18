@@ -55,7 +55,6 @@ public func fetchToday() -> Day {
             // create new day
             let today = Day(context: context)
             today.date = Date()
-            
             // tries to get yesterday data
             let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: today.date)
             let yesterday = fetchDay(yesterdayDate!)
@@ -70,7 +69,10 @@ public func fetchToday() -> Day {
         // If the loading of data fails, we create a new day
         let today = Day(context: context)
         today.date = Date()
-        today.goal = 3
+        // tries to get yesterday data
+        let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: today.date)
+        let yesterday = fetchDay(yesterdayDate!)
+        today.goal = yesterday?.goal ?? 3
         return today
     }
 }
