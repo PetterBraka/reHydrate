@@ -278,27 +278,6 @@ class SettingsVC: UIViewController {
             })
         }
     }
-    
-    //MARK: - Load and Save days
-    
-    func fetchDays() {
-        do {
-            self.days = try self.context.fetch(Day.fetchRequest())
-        } catch {
-            print("can't featch days")
-            print(error.localizedDescription)
-        }
-    }
-    
-    func saveDays() {
-        do {
-            try self.context.save()
-        } catch {
-            print("can't save days")
-            print(error.localizedDescription)
-        }
-    }
-    
 }
 
 extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
@@ -562,9 +541,9 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 transition.type     = .push
                 transition.subtype  = .fromRight
                 transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                self.fetchDays()
+                self.days = fetchDays()
                 self.days.forEach({self.context.delete($0)})
-                self.saveDays()
+                saveDays()
                 self.view.window!.layer.add(transition, forKey: kCATransition)
                 self.dismiss(animated: false, completion: nil)
             }))

@@ -230,46 +230,6 @@ class CalendarVC: UIViewController {
             }
         }
     }
-    //MARK: - Load day(s)
-    
-    func fetchDays() {
-        do {
-            self.days = try self.context.fetch(Day.fetchRequest())
-        } catch {
-            print("can't featch days")
-        }
-    }
-    
-    func fetchDay(_ date: Date) -> Day {
-        do {
-            let request = Day.fetchRequest() as NSFetchRequest
-            // Get day's beginning & tomorrows beginning time
-            let dateFrom = Calendar.current.startOfDay(for: date)
-            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
-            // Sets conditions for date to be within day
-            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
-            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
-            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
-            request.predicate = datePredicate
-            // tries to get the day out of the array.
-            let loadedDays = try self.context.fetch(request)
-            // If the day wasn't found it will create a new day.
-            guard let today = loadedDays.first else {
-                let today = Day(context: self.context)
-                today.date = Date()
-                today.goal = 3
-                return today }
-            return today
-        } catch {
-            print("can't featch day")
-            print(error.localizedDescription)
-            // If the loading of data fails, we create a new day
-            let today = Day(context: self.context)
-            today.date = Date()
-            today.goal = 3
-            return today
-        }
-    }
     
     /**
      Will find the drinks, depending on the date past in and update UI
@@ -285,8 +245,10 @@ class CalendarVC: UIViewController {
         titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
         
         let day = fetchDay(dateOfDay)
-        drinks.append(day.goal)
-        drinks.append(day.consumed)
+        if day != nil {
+            drinks.append(day!.goal)
+            drinks.append(day!.consumed)
+        }
     }
     
     /**
@@ -370,10 +332,10 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-        fetchDays()
+        self.days = fetchDays()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: date)}){
             let day = fetchDay(date)
-            let percent = (day.consumed / day.goal ) * 100
+            let percent = (day!.consumed / day!.goal ) * 100
             switch percent {
             case 0...10:
                 if darkMode {
