@@ -302,8 +302,13 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! InfoCell
         switch indexPath.row {
         case 0:
-            cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
-                           "\(drinks[1].clean)/\(drinks[0].clean)")
+            if !drinks.isEmpty {
+                cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
+                               "\(drinks[1].clean)/\(drinks[0].clean)")
+            } else {
+                cell.setLabels(NSLocalizedString("Consumed", comment: "Title of cell"),
+                               "\(0)/\(0)")
+            }
         case 1:
             let average = getAverageFor()
             cell.setLabels(NSLocalizedString("Average", comment: "Title of cell"), String(average.clean))
@@ -431,7 +436,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             self.getDrinks(Date())
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell"))",
-                                   "\(drinks[3] )/\(drinks[2] )")
+                                   "\(drinks[1] )/\(drinks[0] )")
         }
     }
     
