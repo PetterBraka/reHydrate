@@ -124,15 +124,8 @@ class SettingsVC: UIViewController {
     
     //MARK: - Set up of UI
     
-    /**
-     Will set up the UI and must be called at the launche of the view.
-     
-     # Example #
-     ```
-     setUpUI()
-     ```
-     */
-    func setUpUI(){
+    ///Will set up the UI and must be called at the launche of the view.
+    fileprivate func setUpUI(){
         self.view.addSubview(exitButton)
         self.view.addSubview(tableView)
         
@@ -149,6 +142,43 @@ class SettingsVC: UIViewController {
         mail.mailComposeDelegate = self
     }
     
+    /// Sets up gesture recognizers.
+    fileprivate func setUpGestrues(){
+        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        
+        leftGesture.direction = .left
+        
+        exitButton.addGestureRecognizer(exitTapRecognizer)
+        self.view.addGestureRecognizer(leftGesture)
+    }
+    
+    /// Will sett the constraints for all the views in the view.
+    ///Will sett the constraints for all the views in the view.
+    
+    ///# Notes: #
+    ///1. The setUPUI must be called first and add all of the views.
+    
+    ///# Example #
+    ///```
+    ///func setUpUI(){
+    /////Add the views
+    ///setConstraints()
+    ///}
+    ///```
+    fileprivate func setConstraints(){
+        exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        exitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20).isActive = true
+        exitButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: exitButton.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+    }
+    
     fileprivate func updateSettings() {
         // checking if the reminders are turn on or off
         if settings[3].isOpened {
@@ -160,43 +190,6 @@ class SettingsVC: UIViewController {
         if UIApplication.shared.supportsAlternateIcons {
             settings[0].options.insert(NSLocalizedString("AppIcon", comment: "setting option"), at: 1)
         }
-    }
-    
-    fileprivate func setUpGestrues(){
-        let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
-        let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        
-        leftGesture.direction = .left
-        
-        exitButton.addGestureRecognizer(exitTapRecognizer)
-        self.view.addGestureRecognizer(leftGesture)
-    }
-    
-    /**
-     Will sett the constraints for all the views in the view.
-     
-     # Notes: #
-     1. The setUPUI must be called first and add all of the views.
-     
-     # Example #
-     ```
-     func setUpUI(){
-     //Add the views
-     setConstraints()
-     }
-     ```
-     */
-    func setConstraints(){
-        exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        exitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
-        exitButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: exitButton.bottomAnchor, constant: 10).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
     }
     
     // MARK: - Change appearance
@@ -245,7 +238,7 @@ class SettingsVC: UIViewController {
      sendToastMessage("Reminders set for every 30 minutes from 7 am to 11 pm", 3.5)
      ```
      */
-    func sendToastMessage(_ message: String, _ messageDelay: Double) {
+    fileprivate func sendToastMessage(_ message: String, _ messageDelay: Double) {
         DispatchQueue.main.async {
             let toastLabel = UIButton()
             toastLabel.setTitle(message, for: .normal)
