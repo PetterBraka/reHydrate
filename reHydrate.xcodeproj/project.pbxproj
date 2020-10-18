@@ -370,6 +370,7 @@
 				3378767624378A9400F5A732 /* AppDelegate.swift */,
 				3378767824378A9400F5A732 /* SceneDelegate.swift */,
 				33C431902482769B00E8EECA /* Extenstions.swift */,
+				33B50E4F2538D8C50024122D /* featchData.swift */,
 				33C4319224827F2700E8EECA /* BundleExtension.swift */,
 				33EFF3FE2470449A00D0A003 /* Localizable.strings */,
 				3378767F24378A9800F5A732 /* Assets.xcassets */,
@@ -377,7 +378,6 @@
 				33F320FD243CEB2100E61D27 /* Info.plist */,
 				336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */,
 				336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */,
-				33B50E4F2538D8C50024122D /* featchData.swift */,
 			);
 			path = reHydrate;
 			sourceTree = "<group>";
