@@ -148,24 +148,22 @@ class CalendarVC: UIViewController {
         self.view.addGestureRecognizer(rightGesture)
     }
     
-    /**
-     Will sett the constraints for all the views in the view.
-     
-     # Notes: #
-     1. The setUPUI must be called first and add all of the views.
-     
-     # Example #
-     ```
-     func setUpUI(){
-     //Add the views
-     setConstraints()
-     }
-     ```
-     */
-    func setConstraints(){
+    /// Will sett the constraints for all the views in the view.
+    
+    ///# Notes: #
+    ///1. The setUPUI must be called first and add all of the views.
+    
+    ///# Example #
+    ///```
+    ///func setUpUI(){
+    /////Add the views
+    ///setConstraints()
+    ///}
+    ///```
+    fileprivate func setConstraints(){
         exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         exitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20).isActive = true
         exitButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         
         titleDate.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
