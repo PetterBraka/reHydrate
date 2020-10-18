@@ -95,6 +95,8 @@ class CalendarVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.days = fetchDays()
         getDrinks(Date.init())
         setUpUI()
         changeAppearance()
@@ -243,11 +245,14 @@ class CalendarVC: UIViewController {
      */
     func getDrinks(_ dateOfDay: Date){
         titleDate.text = formatter.string(from: dateOfDay).localizedCapitalized
-        
+        drinks.removeAll()
         let day = fetchDay(dateOfDay)
         if day != nil {
             drinks.append(day!.goal)
             drinks.append(day!.consumed)
+        } else {
+            drinks.append(0)
+            drinks.append(0)
         }
     }
     
@@ -263,19 +268,29 @@ class CalendarVC: UIViewController {
      */
     func getAverageFor()-> Double {
         var average = Double()
-        if days.isEmpty {
+        if !days.isEmpty {
+            var count = 0
+            average = days[0].consumed
             for day in days {
-                average  += day.consumed
+                if days.firstIndex(of: day)! > 0 {
+                    if formatter.string(from: day.date) != formatter.string(from: days[days.firstIndex(of: day)! - 1].date){
+                        count += 1
+                        average  += day.consumed
+                    }
+                } else {
+                    count += 1
+                }
             }
-            return average  / Double(days.count)
+            return average  / Double(count)
+        } else {
+            return 0
         }
-        return 0
     }
     
     func getAverageFor(_ startDate: Date,_ endDate: Date)-> Double {
         var average = Double()
         var x = Int(0)
-        if days.isEmpty {
+        if !days.isEmpty {
             for day in calendar.selectedDates {
                 if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: day)}){
                     let selectedDay = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: day)})
@@ -337,7 +352,6 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-        self.days = fetchDays()
         if days.contains(where: {formatter.string(from: $0.date) == formatter.string(from: date)}){
             let day = fetchDay(date)
             let percent = (day!.consumed / day!.goal ) * 100
@@ -403,8 +417,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell
             consumedCell.setLabels("\(NSLocalizedString("Consumed", comment: "Title of cell")) - \(dateFormatter.string(from: date))", "\(drinks[1] .clean)/\(drinks[0] .clean)")
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
-            averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
-                                  "\(average.clean)")
+            averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))", "\(average.clean)")
         }
     }
     
