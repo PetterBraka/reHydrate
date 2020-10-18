@@ -12,13 +12,23 @@ import CoreData
 
 
 let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+let formatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "dd/MM/YYYY"
+    return formatter
+}()
 
 //MARK: - Load and Save days
 
+/// Loading all days saved to core data.
+/// - Returns: *[Day]* an array off days loaded
 public func fetchDays() -> [Day] {
     do {
-        let days = try context.fetch(Day.fetchRequest())
-        return days as! [Day]
+        let days = try context.fetch(Day.fetchRequest()) as! [Day]
+        #if DEBUG
+        days.forEach({$0.toPrint()})
+        #endif
+        return days
     } catch {
         print("can't featch days")
         print(error.localizedDescription)
@@ -26,6 +36,13 @@ public func fetchDays() -> [Day] {
     }
 }
 
+/// Remove a specific day
+/// - Parameter day: The day you want to remove
+public func removeDay(day : Day){
+    context.delete(day)
+}
+
+/// Tries to save all days created in context
 public func saveDays() {
     do {
         try context.save()
@@ -50,6 +67,9 @@ public func fetchToday() -> Day {
         request.predicate = datePredicate
         // tries to get the day out of the array.
         let loadedDays = try context.fetch(request)
+        #if DEBUG
+        loadedDays.forEach({$0.toPrint()})
+        #endif
         // If today wasn't found it will create a new day.
         guard let today = loadedDays.first else {
             // create new day
@@ -77,6 +97,9 @@ public func fetchToday() -> Day {
     }
 }
 
+/// Will featch and return a spesific day or reurn nill if day can't be found for the date.
+/// - Parameter date: The date for the spesific day you wan't
+/// - Returns: returns *Day* if found else nil
 public func fetchDay(_ date: Date) -> Day? {
     do {
         let request = Day.fetchRequest() as NSFetchRequest
@@ -90,6 +113,9 @@ public func fetchDay(_ date: Date) -> Day? {
         request.predicate = datePredicate
         // tries to get the day out of the array.
         let loadedDays = try context.fetch(request)
+        #if DEBUG
+        loadedDays.forEach({$0.toPrint()})
+        #endif
         // If the day wasn't found it will create a new day.
         let day = loadedDays.first
         return day
