@@ -130,7 +130,8 @@ class CalendarVC: UIViewController {
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
         calendar.allowsMultipleSelection = true
         calendar.swipeToChooseGesture.isEnabled = true
-        calendar.swipeToChooseGesture.minimumPressDuration = 0.1
+        calendar.swipeToChooseGesture.minimumPressDuration = 0
+        calendar.firstWeekday = 2
         
         setUpGestrues()
         setConstraints()
@@ -462,7 +463,6 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
-        
         let calendarCell = (cell as! CalendarCell)
         // Custom today layer
         calendarCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
@@ -482,6 +482,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             if calendar.selectedDates.contains(date) {
                 let previousDate = self.gregorian.date(byAdding: .day, value: -1, to: date)!
                 let nextDate = self.gregorian.date(byAdding: .day, value: 1, to: date)!
+                // check if starting and ending date is the same when swipe gesture is used
                 if calendar.selectedDates.contains(date) {
                     if calendar.selectedDates.contains(previousDate) && calendar.selectedDates.contains(nextDate) {
                         selectionType = .middle
