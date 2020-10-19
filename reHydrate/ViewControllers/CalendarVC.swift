@@ -407,9 +407,9 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         checkSelections(calendar, date)
         self.configureVisibleCells()
         tableView.reloadData()
-        self.drinks.removeAll()
         self.getDrinks(date)
         if calendar.selectedDates.count > 1 {
+            // check if starting and ending date is the same when swipe gesture is used
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
@@ -482,7 +482,6 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             if calendar.selectedDates.contains(date) {
                 let previousDate = self.gregorian.date(byAdding: .day, value: -1, to: date)!
                 let nextDate = self.gregorian.date(byAdding: .day, value: 1, to: date)!
-                // check if starting and ending date is the same when swipe gesture is used
                 if calendar.selectedDates.contains(date) {
                     if calendar.selectedDates.contains(previousDate) && calendar.selectedDates.contains(nextDate) {
                         selectionType = .middle
