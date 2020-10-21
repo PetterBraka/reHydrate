@@ -19,5 +19,17 @@ extension Day {
     @NSManaged public var date: Date
     @NSManaged public var goal: Double
     @NSManaged public var consumed: Double
-
+    
+    /// Will print all data form the day
+    public func toPrint() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/YY"
+        print("""
+            =========================
+            Date: \(formatter.string(from: self.date))
+            Consumed: \(self.consumed)
+            Goal: \(self.goal)
+            =========================
+            """)
+    }
 }

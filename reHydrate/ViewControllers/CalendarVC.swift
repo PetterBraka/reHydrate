@@ -130,7 +130,8 @@ class CalendarVC: UIViewController {
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
         calendar.allowsMultipleSelection = true
         calendar.swipeToChooseGesture.isEnabled = true
-        calendar.swipeToChooseGesture.minimumPressDuration = 0.1
+        calendar.swipeToChooseGesture.minimumPressDuration = 0
+        calendar.firstWeekday = 2
         
         setUpGestrues()
         setConstraints()
@@ -147,24 +148,22 @@ class CalendarVC: UIViewController {
         self.view.addGestureRecognizer(rightGesture)
     }
     
-    /**
-     Will sett the constraints for all the views in the view.
-     
-     # Notes: #
-     1. The setUPUI must be called first and add all of the views.
-     
-     # Example #
-     ```
-     func setUpUI(){
-     //Add the views
-     setConstraints()
-     }
-     ```
-     */
-    func setConstraints(){
+    /// Will sett the constraints for all the views in the view.
+    
+    ///# Notes: #
+    ///1. The setUPUI must be called first and add all of the views.
+    
+    ///# Example #
+    ///```
+    ///func setUpUI(){
+    /////Add the views
+    ///setConstraints()
+    ///}
+    ///```
+    fileprivate func setConstraints(){
         exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         exitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        exitButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20).isActive = true
         exitButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         
         titleDate.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -406,9 +405,9 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
         checkSelections(calendar, date)
         self.configureVisibleCells()
         tableView.reloadData()
-        self.drinks.removeAll()
         self.getDrinks(date)
         if calendar.selectedDates.count > 1 {
+            // check if starting and ending date is the same when swipe gesture is used
             let dates = calendar.selectedDates.sorted(by: {$0 < $1})
             let average = getAverageFor(dates.first!, dates.last!.addingTimeInterval(86400))
             titleDate.text = "\(formatter.string(from: dates.first!)) \n\(formatter.string(from: dates.last!))"
@@ -462,7 +461,6 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     }
     
     private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
-        
         let calendarCell = (cell as! CalendarCell)
         // Custom today layer
         calendarCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
