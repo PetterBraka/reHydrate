@@ -9,8 +9,8 @@ This is a project for creating an app that can track your water consumption thro
 - CAAnimation
 - Localization
 
-<a href="url"><img src="/mockups/settings-screen-dark-mockup.png" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/main-screen-dark-mockup.png" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/calendar-screen-dark-mockup.png" align="center" height="450" width="220"></a> 
+<a href="url"><img src="/mockups/20oct/Main-screenDark.jpeg" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/20oct/Main-ScreenDarkWhite.jpeg" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/20oct/AppIconsDark.jpeg" align="center" height="450" width="220"></a> 
 
-<a href="url"><img src="/mockups/settings-screen-white-mockup.png" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/main-screen-white-mockup.png" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/calendar-screen-white-mockup.png" align="center" height="450" width="220"></a> 
+<a href="url"><img src="/mockups/20oct/CalendarWhite.jpeg" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/20oct/CalendarDark.jpeg" align="center" height="450" width="220"></a> <a href="url"><img src="/mockups/20oct/SettingsWhite.jpeg" align="center" height="450" width="220"></a> 
 
 ## Read our Privacy Policy [here](/Privacy-Policy.md)
