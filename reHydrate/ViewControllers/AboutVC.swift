@@ -36,7 +36,7 @@ class AboutVC: UIViewController {
         settingOptions(isOpened: false, setting: "instructions", options: ["How to use"]),
         settingOptions(isOpened: false, setting: "danger zone", options: ["Remove date"])]
     
-    //MARK: - Tap controller
+    // MARK: - Tap controller
     
     /**
      Will check which **view** that called this function.
@@ -63,7 +63,7 @@ class AboutVC: UIViewController {
         let exitTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
         let helpTapRecognizer 	= UITapGestureRecognizer(target: self, action: #selector(tap))
         let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+        center.requestAuthorization(options: [.alert, .sound]) { (success, _) in
             if success {
                 print("we are allowed to send notifications.")
             } else {
@@ -272,19 +272,19 @@ class AboutVC: UIViewController {
         toastLabel.sizeToFit()
         UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
+        }, completion: {(_) in
             toastLabel.removeFromSuperview()
         })
     }
     
-    //MARK: - Section controll of tableView
+    // MARK: - Section controll of tableView
     
 }
 
 extension AboutVC: UITableViewDelegate, UITableViewDataSource{
     
     
-    //MARK: - Creates a cell
+    // MARK: - Creates a cell
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settings[section].options.count
@@ -331,7 +331,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         return settings.count
     }
     
-    //MARK: - Creates a section
+    // MARK: - Creates a section
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell     = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
@@ -345,7 +345,7 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
         return 40
     }
     
-    //MARK: - Cell controlls of TableView
+    // MARK: - Cell controlls of TableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
