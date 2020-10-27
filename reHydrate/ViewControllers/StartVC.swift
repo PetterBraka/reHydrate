@@ -667,7 +667,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 let waterType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
                 return [waterType]
             }
-            healthStore.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, error) in
+            healthStore.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, _) in
                 if (!success) {
                     print("Was not authorization by the user")
                     return
