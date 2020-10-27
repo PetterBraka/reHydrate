@@ -31,7 +31,7 @@ let appLanguages = ["en", "nb"]
 
 class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
-    //MARK: - Variables
+    // MARK: - Variables
     
     var appTitle: UILabel         = {
         let lable  = UILabel()
@@ -213,7 +213,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var drinkOptions = [Double(300), Double(500), Double(750)]
     var days: [Day] = []
     
-    //MARK: - Touch controlls
+    // MARK: - Touch controlls
     
     /**
      Will check which view that called this function
@@ -300,7 +300,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - ViewDid
+    // MARK: - ViewDid
     
     /**
      Will be called when the app enters the foreground. Then it will update the date for to saved data for this day or create a new instance of **Day**
@@ -383,7 +383,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         
     }
     
-    //MARK: - ViewWill
+    // MARK: - ViewWill
     
     override func viewWillAppear(_ animated: Bool) {
         darkMode        = defaults.bool(forKey: darkModeString)
@@ -427,7 +427,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
     
     
-    //MARK: - Set up of UI
+    // MARK: - Set up of UI
     /**
      Will set up the UI and must be called when the view will appear.
      
@@ -522,7 +522,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         self.view.addGestureRecognizer(rightGesture)
     }
     
-    //MARK: - SetUp UIButton
+    // MARK: - SetUp UIButton
     /**
      Setting upp the listeners and aperients of the buttons.
      
@@ -562,7 +562,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         largeOption.addGestureRecognizer(largeOptionLongGesture)
     }
     
-    //MARK: - SetUp UIViewStack
+    // MARK: - SetUp UIViewStack
     /**
      Will crate a stack for all the summary lables.
      
@@ -673,7 +673,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                     return
                 }
                 let center = UNUserNotificationCenter.current()
-                center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+                center.requestAuthorization(options: [.alert, .sound]) { (success, _) in
                     if success {
                         print("we are allowed to send notifications.")
                         self.defaults.set(true, forKey: remindersString)
@@ -686,7 +686,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - HealthKit
+    // MARK: - HealthKit
     
     /**
      Will export a drink to the health app
@@ -709,7 +709,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
                                                    start: date, end: date)
         if waterAmount != 0 {
-            HKHealthStore().save(waterConsumedSample) { (success, error) in
+            HKHealthStore().save(waterConsumedSample) { (_, error) in
                 if let error = error {
                     print("Error Saving water consumtion: \(error.localizedDescription)")
                 } else {
@@ -719,7 +719,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - Change appearance
+    // MARK: - Change appearance
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
      
@@ -777,7 +777,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - Update consmed
+    // MARK: - Update consmed
     /**
      Updates the amount consumed in the Day
      
@@ -896,7 +896,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    //MARK: - Update View
+    // MARK: - Update View
     /**
      Updates the  in the UI
      
@@ -1027,7 +1027,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         self.present(alerContorller, animated: true, completion: nil)
     }
     
-    //MARK: - Save and Load
+    // MARK: - Save and Load
     /**
      Will save each drink option to UserDefaults
      
@@ -1116,7 +1116,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }
 }
 
-//MARK: - Watch communications
+// MARK: - Watch communications
 extension StartVC: WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if (activationState == .activated) {
