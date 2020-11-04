@@ -44,7 +44,7 @@
 "OpenAppSettings"  = "Open app settings";
 "OpenHealthApp"    = "Open the health app";
 "RemoveData"       = "Remove data";
-
+// More
 "Introductions"    = "More";
 "DevInsta"         = "Developer Instagram";
 "FeatureRequest"   = "Request a feature";
@@ -53,8 +53,6 @@
 "PrivacyPolicy"    = "Privacy policy";
 "VersionNumber"    = "Version:";
 "CouldtSendMail"   = "Couldn't open email app";
-
-
 // Congratulations
 "congrats1Title"  = "Congratulations";
 "congrats1Body"   = "You made your goal!";
@@ -76,7 +74,6 @@
 "congrats9Body"   = "You did it!";
 "congrats10Title" = "Well look at that,";
 "congrats10Body"  = "You reached your goal!";
-
 // Reminders
 "reminder1Title"  = "You should have some water.";
 "reminder1Body"   = "It has been a long time since you had some water, why don't you have some.";
