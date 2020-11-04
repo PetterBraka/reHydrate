@@ -11,7 +11,7 @@ import CoreData
 import UIKit
 
 extension UITextField {
-    //MARK: TextField padding
+    // MARK: TextField padding
     func setLeftPadding(_ amount:CGFloat){
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
         self.leftView = paddingView
@@ -66,7 +66,7 @@ extension UIImage {
         
         let renderer = UIGraphicsImageRenderer(size: newSize)
         
-        let image = renderer.image { (context) in
+        let image = renderer.image { (_) in
             self.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: newSize))
         }
         return image

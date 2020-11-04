@@ -79,7 +79,7 @@ class SettingsVC: UIViewController {
     var days: [Day] = []
     let context     = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    //MARK: - Tap controller
+    // MARK: - Tap controller
     
     /**
      Will check which **view** that called this function.
@@ -122,7 +122,7 @@ class SettingsVC: UIViewController {
         view.heroID = "settings"
     }
     
-    //MARK: - Set up of UI
+    // MARK: - Set up of UI
     
     ///Will set up the UI and must be called at the launche of the view.
     fileprivate func setUpUI(){
@@ -266,7 +266,7 @@ class SettingsVC: UIViewController {
             toastLabel.sizeToFit()
             UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
                 toastLabel.alpha = 0.0
-            }, completion: {(isCompleted) in
+            }, completion: {(_) in
                 toastLabel.removeFromSuperview()
             })
         }
@@ -276,7 +276,7 @@ class SettingsVC: UIViewController {
 extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     
-    //MARK: - Creates a cell
+    // MARK: - Creates a cell
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 6 {
@@ -403,7 +403,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         return settings.count + 1
     }
     
-    //MARK: - Creates a section
+    // MARK: - Creates a section
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
@@ -414,7 +414,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 20
     }
-    //MARK: - Cell controlls of TableView
+    // MARK: - Cell controlls of TableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
@@ -443,7 +443,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 case .denied:
                     self.sendToastMessage(NSLocalizedString("RemindersNotAllowed", comment: "Notificaionts not allowed"), 3)
                 case .notDetermined:
-                    center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+                    center.requestAuthorization(options: [.alert, .sound]) { (success, _) in
                         if success {
                             print("we are allowed to send notifications.")
                             self.defaults.set(true, forKey: remindersString)
