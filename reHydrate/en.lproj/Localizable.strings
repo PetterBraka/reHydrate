@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   reHydrate
 
@@ -14,32 +14,37 @@
 "RemoveDrink"   = "Take away this drink";
 "ChangeAmount"  = "Change the amount";
 "EnterNewValue" = "Enter new value";
-
 // Settings
-"Appearance"       = "Apperance";
+// Appearance
+"Appearance"       = "Appearance";
 "LightMode"        = "Light mode";
-"DarkMode"         = "Dark Mode";
+"DarkMode"         = "Dark mode";
 "AppIcon"          = "Change app icon";
 "Language"         = "Language";
 "en"               = "English";
 "nb"               = "Norsk";
+// Units
 "UnitSystem"       = "Unit system";
 "Units"            = "Units";
 "MetricSystem"     = "Metric system";
 "ImperialSystem"   = "Imperial system";
+// Goal
 "ChangeGoal"       = "Change Goal";
 "SetYourGoal"      = "Set your goal";
+// Reminders
 "Reminders"        = "Reminders";
 "TurnOnReminders"  = "Turn on reminders";
 "TurnOffReminders" = "Turn off reminders";
 "StartingTime"     = "Starting time";
 "EndingTime"       = "Ending time";
 "Frequency"        = "Frequency";
+// DangerZone
 "HowToUse"         = "How to use";
 "DangerZone"       = "Danger zone";
 "OpenAppSettings"  = "Open app settings";
 "OpenHealthApp"    = "Open the health app";
 "RemoveData"       = "Remove data";
+// More
 "Introductions"    = "More";
 "DevInsta"         = "Developer Instagram";
 "FeatureRequest"   = "Request a feature";
@@ -47,9 +52,7 @@
 "ContactUs"        = "Contact us";
 "PrivacyPolicy"    = "Privacy policy";
 "VersionNumber"    = "Version:";
-"CouldtSendMail"   = "Couldn't open e-mail app";
-
-
+"CouldtSendMail"   = "Couldn't open email app";
 // Congratulations
 "congrats1Title"  = "Congratulations";
 "congrats1Body"   = "You made your goal!";
@@ -71,7 +74,6 @@
 "congrats9Body"   = "You did it!";
 "congrats10Title" = "Well look at that,";
 "congrats10Body"  = "You reached your goal!";
-
 // Reminders
 "reminder1Title"  = "You should have some water.";
 "reminder1Body"   = "It has been a long time since you had some water, why don't you have some.";
@@ -87,7 +89,7 @@
 "reminder6Body"   = "There is a thing called water; maybe you should have some.";
 "reminder7Title"  = "I know you don't like it.";
 "reminder7Body"   = "But have some water - it's not going to hurt you.";
-"reminder8Title"  = "What is blue and refreshing?.";
+"reminder8Title"  = "What is blue and refreshing?";
 "reminder8Body"   = "Water. It’s water. Drink some.";
 "reminder9Title"  = "Have some water.";
 "reminder9Body"   = "You need to hydrate. Have some water.";
@@ -97,19 +99,19 @@
 "reminder11Body"  = "General Kenobi, would you like some water?";
 "reminder12Title" = "Hey there, me again.";
 "reminder12Body"  = "I think you should have some water.";
-
+// Popups
 "To"                   = "to";
 "Minutes"              = "minutes";
-"RemindersNotAllowed"  = "Not allowed to send notificaitons";
+"RemindersNotAllowed"  = "Not allowed to send notifications";
 "RemindersSetFrom"     = "Reminders set from";
 "RemoveRemindersToast" = "All reminders are removed";
 "FrequencyReminder"    = "The frequency of reminders";
-
+// Danger alert
 "ClearingDataAlert"    = "Clearing data";
 "ClearingDataBody"     = "Are you sure you want to delete all save data?";
 "ClearDataKeepData"    = "Keep data";
 "ClearDataRemoveData"  = "REMOVE OLD DATA";
-
+// TutorialVC
 "ExplenationDay"       = "This is the current day.";
 "ExplenationSummary"   = "This is your consumed amount and your goal for the day.";
 "ExplenationDrinks"    = "This is the different drink options you can use. Tap on a drink to add it to your total amount.";
@@ -117,7 +119,6 @@
 "ExplenationCalendar"  = "Tap on this to see your history.";
 "Skip" = "Skip";
 "Next" = "Next";
-
 // Calendar
 "Goal"        = "Goal";
 "Water"       = "Water";
@@ -125,7 +126,6 @@
 "Consumed"    = "Consumed";
 "DrinkType"   = "Drink type";
 "DrinkAmount" = "Drink amount";
-
 // Watch
 "toGo"    = "to go";
 "goodJob" = "Good job";
