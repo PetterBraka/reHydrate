@@ -14,9 +14,8 @@
 "RemoveDrink"   = "Fjern denne drinken";
 "ChangeAmount"  = "Endre mengde drikke";
 "EnterNewValue" = "Angi ny verdi";
-
 // SettingsVC
-//Appearance
+// Appearance
 "Appearance"       = "Utseende";
 "LightMode"        = "Lys modus";
 "DarkMode"         = "Mørk modus";
@@ -25,32 +24,33 @@
 "Language"         = "Språk";
 "en"               = "English";
 "nb"               = "Norsk";
-//Units
+// Units
 "Units"            = "Enheter";
 "MetricSystem"     = "Metrisk system";
 "ImperialSystem"   = "Imperial system";
+// Goal
 "ChangeGoal"       = "Ender mål";
 "SetYourGoal"      = "Set ditt mål";
-//Reminders
+// Reminders
 "Reminders"        = "Påminnelser";
 "TurnOnReminders"  = "Skru på påminnelser";
 "TurnOffReminders" = "Skru av påminnelser";
 "StartingTime"     = "Start tid";
 "EndingTime"       = "Slutt tid";
 "Frequency"        = "Frekvens";
-//DagerZone
+// DangerZone
+"HowToUse"         = "Guide";
 "DangerZone"       = "Faresone";
 "OpenAppSettings"  = "Åpne app innstillinger";
 "OpenHealthApp"    = "Åpne helse appen";
 "RemoveData"       = "Fjern data";
-//More
+// More
 "Introductions"    = "Mer";
-"HowToUse"         = "Guide";
-"PrivacyPolicy"    = "Privacy policy";
-"ContactUs"        = "Kontakt oss";
-"ReportBug"        = "Raporter en feil";
-"FeatureRequest"   = "Spør om en oppdatering";
 "DevInsta"         = "Utviklers Instagram";
+"FeatureRequest"   = "Spør om en oppdatering";
+"ReportBug"        = "Raporter en feil";
+"ContactUs"        = "Kontakt oss";
+"PrivacyPolicy"    = "Personvernregler";
 "VersionNumber"    = "Versjon:";
 "CouldtSendMail"   = "Kan ikke åpne e-post app";
 // Congratulations
@@ -87,31 +87,30 @@
 "reminder5Body"   = "Hei, kanskje du skal gi hjernen din noe å gå på?";
 "reminder6Title"  = "En liten påminnelse.";
 "reminder6Body"   = "Det er noe som hetter vann. kanskje du burde drikke litt?";
-"reminder7Title"  = "Jeg vet du ikke liker det, men kanskje du skulle hatt litt vann.";
-"reminder7Body"   = "Det kan ikke skade.";
+"reminder7Title"  = "Jeg vet du ikke liker det.";
+"reminder7Body"   = "Men kanskje du skulle hatt litt vann. Det kan ikke skade.";
 "reminder8Title"  = "Hva er blått og forfriskende?";
 "reminder8Body"   = "Vann. det er vann. Kanskje du burde ha litt.";
 "reminder9Title"  = "Drikk litt vann.";
 "reminder9Body"   = "Du må hydrere deg. Drikk litt vann.";
 "reminder10Title" = "Er du ikke tørst enda?";
 "reminder10Body"  = "Du bør ha litt vann.";
-"reminder11Title" = "Hei du.";
-"reminder11Body"  = "Skulle ikke tatt deg litt vann da?";
+"reminder11Title" = "Hei der.";
+"reminder11Body"  = "General Kenoby, Skulle ikke tatt deg litt vann da?";
 "reminder12Title" = "Heisan meg igjen.";
 "reminder12Body"  = "Jeg tror du burde drikke litt vann.";
-
+// Popups
 "To"                   = "til";
 "Minutes"              = "minutter";
 "RemindersNotAllowed"  = "Påminnelser er ikke tillatt";
 "RemindersSetFrom"     = "Påminnelser satt fra";
 "RemoveRemindersToast" = "Alle påminnelser er fjernet";
 "FrequencyReminder"    = "Mellomrom mellom påminnelser er";
-
+// Danger alert
 "ClearingDataAlert"    = "Fjerner data";
 "ClearingDataBody"     = "Er du sikker på at du vill fjerne all data?";
 "ClearDataKeepData"    = "Behold data";
 "ClearDataRemoveData"  = "Fjern gammel data";
-
 // TutorialVC
 "ExplenationDay"       = "Dette er dagen i dag.";
 "ExplenationSummary"   = "Dette er hvor mye du har drikket og hva ditt mål er.";
@@ -120,26 +119,13 @@
 "ExplenationCalendar"  = "Trykk her for å gå til kalenderen";
 "Skip" = "Hopp over";
 "Next" = "Neste";
-
 // Calendar
 "Goal"               = "Mål";
-"Water"              = "vann";
+"Water"              = "Vann";
 "Average"            = "Gjennomsnitt";
 "Consumed"           = "Drukket";
 "DrinkType"          = "Drikke";
 "DrinkAmount"        = "Drukket mengde";
-
-// AppIcon
-"Black"  = "Svart";
-"White"  = "Hvit";
-"Blue"   = "Blå";
-"Green"  = "Grønn";
-"Orange" = "Oransje";
-"Pink"   = "Rosa";
-"Purple" = "Lilla";
-"Red"    = "Rød";
-"Yellow" = "Gul";
-
 // Watch
 "toGo"    = "gjenstår";
 "goodJob" = "Bra jobba";
