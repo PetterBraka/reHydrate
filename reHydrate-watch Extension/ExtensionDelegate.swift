@@ -60,7 +60,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "watchOS-CoreData")
-        container.loadPersistentStores { (storeDescription, error) in
+        container.loadPersistentStores { (_, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved Error \(error.localizedDescription), \(error.userInfo)")
             }

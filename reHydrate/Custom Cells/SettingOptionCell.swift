@@ -97,7 +97,7 @@ class SettingOptionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Load and Save day(s)
+    // MARK: - Load and Save day(s)
     
     func fetchDays() {
         do {
@@ -147,7 +147,7 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     
-    //MARK: - Setup UI
+    // MARK: - Setup UI
     
     /// Settes background constraints and rounds the corners depening on the position of the cell.
     func setBackgroundConstraints(){
@@ -339,7 +339,7 @@ class SettingOptionCell: UITableViewCell {
         UserDefaults.standard.set(metric, forKey: metricUnitsString)
     }
     
-    //MARK: - Set-up PickerView
+    // MARK: - Set-up PickerView
     
     /**
      Setting up a **UIPickerView** for a **UITextField**
@@ -430,7 +430,7 @@ class SettingOptionCell: UITableViewCell {
         textField.inputAccessoryView = toolBar
     }
     
-    //MARK: - SetUp MinutePicker
+    // MARK: - SetUp MinutePicker
     
     /**
      Setting up a **UIDatePicker** for a **UITextField**
@@ -623,7 +623,7 @@ class SettingOptionCell: UITableViewCell {
         toastLabel.sizeToFit()
         UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
+        }, completion: {(_) in
             toastLabel.removeFromSuperview()
         })
     }
@@ -652,7 +652,7 @@ class SettingOptionCell: UITableViewCell {
 
 extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
     
-    //MARK: - UIPickerVeiw
+    // MARK: - UIPickerVeiw
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if NSLocalizedString("Language", comment: "") == titleOption.text {
