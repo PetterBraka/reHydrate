@@ -130,7 +130,7 @@ class CalendarVC: UIViewController {
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
         calendar.allowsMultipleSelection = true
         calendar.swipeToChooseGesture.isEnabled = true
-        calendar.swipeToChooseGesture.minimumPressDuration = 0
+        calendar.swipeToChooseGesture.minimumPressDuration = 0.1
         calendar.firstWeekday = 2
         
         setUpGestrues()
