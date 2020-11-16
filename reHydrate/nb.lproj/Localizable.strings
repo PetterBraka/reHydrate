@@ -24,6 +24,7 @@
 "Language"         = "Språk";
 "en"               = "English";
 "nb"               = "Norsk";
+"gb"               = "Deutsch";
 // Units
 "Units"            = "Enheter";
 "MetricSystem"     = "Metrisk system";
