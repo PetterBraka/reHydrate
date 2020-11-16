@@ -18,7 +18,8 @@ class SettingOptionCell: UITableViewCell {
         case bot
     }
     var pickerArray       = [NSLocalizedString(appLanguages[0], comment: ""),
-                             NSLocalizedString(appLanguages[1], comment: "")]
+                             NSLocalizedString(appLanguages[1], comment: ""),
+                             NSLocalizedString(appLanguages[2], comment: "")]
     var componentString   = [""]
     let picker            = UIPickerView()
     var notificationStart = Int()
@@ -319,7 +320,9 @@ class SettingOptionCell: UITableViewCell {
             setUpMinutePicker()
         case NSLocalizedString("Language", comment: "").lowercased():
             buttonForCell.isHidden = true
-            pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
+            pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""),
+                               NSLocalizedString(appLanguages[1], comment: ""),
+                               NSLocalizedString(appLanguages[2], comment: "")]
             componentString = [""]
             setUpPickerView()
             textField.placeholder = "language"
@@ -558,8 +561,10 @@ class SettingOptionCell: UITableViewCell {
             case NSLocalizedString("nb", comment: "").lowercased():
                 setAppLanguage("nb")
                 break
-            case NSLocalizedString("en", comment: ""):
+            case NSLocalizedString("en", comment: "").lowercased():
                 setAppLanguage("en")
+            case NSLocalizedString("gb", comment: "").lowercased():
+                setAppLanguage("gb")
             default:
                 setAppLanguage("en")
             }
