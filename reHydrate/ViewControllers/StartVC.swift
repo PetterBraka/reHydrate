@@ -1394,25 +1394,26 @@ func getCongratulationReminder()-> UNMutableNotificationContent{
     return notification
 }
 
-#if DEBUG
-
-struct startVCRepresentable: UIViewControllerRepresentable {
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        // leave this empty
-    }
-    
-    @available(iOS 13.0.0, *)
-    func makeUIViewController(context: Context) -> UIViewController {
-        StartVC()
-    }
-}
-
-@available(iOS 13.0, *)
-struct startVCPreview: PreviewProvider {
-    static var previews: some View {
-        startVCRepresentable()
-            .previewDevice(PreviewDevice(rawValue: "iPhone 11 pro"))
-            .previewDisplayName("iPhone 11 pro")
-    }
-}
-#endif
+//Add if prewview is wanted.
+//#if DEBUG
+//
+//struct startVCRepresentable: UIViewControllerRepresentable {
+//    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+//        // leave this empty
+//    }
+//
+//    @available(iOS 13.0.0, *)
+//    func makeUIViewController(context: Context) -> UIViewController {
+//        StartVC()
+//    }
+//}
+//
+//@available(iOS 13.0, *)
+//struct startVCPreview: PreviewProvider {
+//    static var previews: some View {
+//        startVCRepresentable()
+//            .previewDevice(PreviewDevice(rawValue: "iPhone 11 pro"))
+//            .previewDisplayName("iPhone 11 pro")
+//    }
+//}
+//#endif
