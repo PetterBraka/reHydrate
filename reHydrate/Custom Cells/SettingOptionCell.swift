@@ -563,8 +563,8 @@ class SettingOptionCell: UITableViewCell {
                 break
             case NSLocalizedString("en", comment: "").lowercased():
                 setAppLanguage("en")
-            case NSLocalizedString("gb", comment: "").lowercased():
-                setAppLanguage("gb")
+            case NSLocalizedString("de", comment: "").lowercased():
+                setAppLanguage("de")
             default:
                 setAppLanguage("en")
             }

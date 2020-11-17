@@ -23,7 +23,7 @@
 "Language"         = "Language";
 "en"               = "English";
 "nb"               = "Norsk";
-"gb"               = "Deutsch";
+"de"               = "Deutsch";
 // Units
 "UnitSystem"       = "Unit system";
 "Units"            = "Units";
