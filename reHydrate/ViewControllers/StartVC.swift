@@ -27,7 +27,7 @@ let smallDrinkOptionString  = "smallDrinkOption"
 let mediumDrinkOptionString = "mediumDrinkOption"
 let largeDrinkOptionString  = "largeDrinkOption"
 
-let appLanguages = ["en", "nb", "gb"]
+let appLanguages = ["en", "nb", "de"]
 
 class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     
