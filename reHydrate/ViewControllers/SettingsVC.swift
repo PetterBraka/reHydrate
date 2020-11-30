@@ -426,7 +426,6 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             let appIconVC = AppIconVC()
             appIconVC.modalPresentationStyle = .fullScreen
             self.present(appIconVC, animated: true, completion: nil)
-            break
         case IndexPath(row: 0, section: 1): // Metric is selected
             metricUnits = true
             tableView.reloadData()

@@ -308,7 +308,6 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                     cell.activatedOption.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
                     cell.titleOption.text = "Turn on reminders"
                 }
-                break
             case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 3),
                  IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3):
                 break
@@ -317,7 +316,6 @@ extension AboutVC: UITableViewDelegate, UITableViewDataSource{
                 cell.subTitle.removeFromSuperview()
             default:
                 cell.textField.removeFromSuperview()
-                break
         }
         
         return cell
