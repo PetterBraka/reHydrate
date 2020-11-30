@@ -98,7 +98,7 @@ class SettingOptionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Load and Save day(s)
+    // MARK: - Load and Save day(s)
     
     func fetchDays() {
         do {
@@ -148,7 +148,7 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     
-    //MARK: - Setup UI
+    // MARK: - Setup UI
     
     /// Settes background constraints and rounds the corners depening on the position of the cell.
     func setBackgroundConstraints(){
@@ -307,7 +307,6 @@ class SettingOptionCell: UITableViewCell {
                 textField.text  = measurement.converted(to: .imperialFluidOunces).value.clean
             }
             setUpPickerView()
-            break
         case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
              NSLocalizedString("TurnOffReminders", comment: "").lowercased():
             buttonForCell.isHidden = false
@@ -342,7 +341,7 @@ class SettingOptionCell: UITableViewCell {
         UserDefaults.standard.set(metric, forKey: metricUnitsString)
     }
     
-    //MARK: - Set-up PickerView
+    // MARK: - Set-up PickerView
     
     /**
      Setting up a **UIPickerView** for a **UITextField**
@@ -433,7 +432,7 @@ class SettingOptionCell: UITableViewCell {
         textField.inputAccessoryView = toolBar
     }
     
-    //MARK: - SetUp MinutePicker
+    // MARK: - SetUp MinutePicker
     
     /**
      Setting up a **UIDatePicker** for a **UITextField**
@@ -489,7 +488,6 @@ class SettingOptionCell: UITableViewCell {
                 sender.setDate(endDate, animated: true)
             }
             UserDefaults.standard.set(startDate, forKey: startingTimeString)
-            break
         case NSLocalizedString("EndingTime", comment: "").lowercased():
             let endDate = sender.date
             var startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
@@ -498,7 +496,6 @@ class SettingOptionCell: UITableViewCell {
                 sender.setDate(startDate, animated: true)
             }
             UserDefaults.standard.set(endDate, forKey: endingTimeString)
-            break
         case NSLocalizedString("Frequency", comment: "").lowercased():
             if sender.countDownDuration > 2.5 * 60 * 60{
                 var components = DateComponents()
@@ -553,14 +550,12 @@ class SettingOptionCell: UITableViewCell {
             let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
             setReminders(startDate, endDate, numberOfMinutes)
             sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
-            break
         case NSLocalizedString("Language", comment: "").lowercased():
             let picker = textField.inputView as! UIPickerView
             textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
             switch textField.text?.lowercased() {
             case NSLocalizedString("nb", comment: "").lowercased():
                 setAppLanguage("nb")
-                break
             case NSLocalizedString("en", comment: "").lowercased():
                 setAppLanguage("en")
             case NSLocalizedString("de", comment: "").lowercased():
@@ -584,7 +579,6 @@ class SettingOptionCell: UITableViewCell {
                     setReminders(startTimer.date!, endTimer.date!, intervals)
                 }
             }
-            break
         default:
             break
         }
@@ -657,7 +651,7 @@ class SettingOptionCell: UITableViewCell {
 
 extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
     
-    //MARK: - UIPickerVeiw
+    // MARK: - UIPickerVeiw
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if NSLocalizedString("Language", comment: "") == titleOption.text {
