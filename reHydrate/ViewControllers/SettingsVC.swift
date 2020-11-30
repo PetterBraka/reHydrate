@@ -266,7 +266,7 @@ class SettingsVC: UIViewController {
             toastLabel.sizeToFit()
             UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
                 toastLabel.alpha = 0.0
-            }, completion: {(isCompleted) in
+            }, completion: {(_) in
                 toastLabel.removeFromSuperview()
             })
         }
@@ -443,7 +443,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 case .denied:
                     self.sendToastMessage(NSLocalizedString("RemindersNotAllowed", comment: "Notificaionts not allowed"), 3)
                 case .notDetermined:
-                    center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+                    center.requestAuthorization(options: [.alert, .sound]) { (success, _) in
                         if success {
                             print("we are allowed to send notifications.")
                             self.defaults.set(true, forKey: remindersString)
