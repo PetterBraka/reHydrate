@@ -171,11 +171,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         var fillFraction = Float()
         var timelineEnteries = [CLKComplicationTimelineEntry]()
         
-        for _ in 0...1 {
-            if todayConsumed  / todayGoal  < 1 {
-                fillFraction = Float(todayConsumed  / todayGoal )
+        for i in 0...1 {
+            if i == 0 {
+                if todayConsumed  / todayGoal  < 1 {
+                    fillFraction = Float(todayConsumed  / todayGoal )
+                } else {
+                    fillFraction = 1
+                }
             } else {
-                fillFraction = 1
+                fillFraction = 0
             }
             
             switch complication.family {
@@ -290,10 +294,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             default:
                 break
             }
-            self.todayConsumed = 0
-            let tomorrowsDate = Calendar.current.date(byAdding: .day, value: 1, to: todayDate)!
-            let tomorrow = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: tomorrowsDate)!
-            self.todayDate = tomorrow
         }
         
         

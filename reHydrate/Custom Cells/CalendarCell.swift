@@ -47,7 +47,7 @@ class CalendarCell: FSCalendarCell {
         self.shapeLayer.isHidden = true
         
         let view = UIView(frame: self.bounds)
-        self.backgroundView = view;
+        self.backgroundView = view
         
     }
     
