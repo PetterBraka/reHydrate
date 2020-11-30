@@ -1,5 +1,5 @@
 //
-//  AboutVC.swift
+//  Settings.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 16/04/2020.
