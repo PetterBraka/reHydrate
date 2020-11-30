@@ -622,7 +622,7 @@ class SettingOptionCell: UITableViewCell {
         toastLabel.sizeToFit()
         UIView.animate(withDuration: 0.5, delay: messageDelay, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
+        }, completion: {(_) in
             toastLabel.removeFromSuperview()
         })
     }

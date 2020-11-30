@@ -673,7 +673,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                     return
                 }
                 let center = UNUserNotificationCenter.current()
-                center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+                center.requestAuthorization(options: [.alert, .sound]) { (success, _) in
                     if success {
                         print("we are allowed to send notifications.")
                         self.defaults.set(true, forKey: remindersString)
@@ -709,7 +709,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
                                                    start: date, end: date)
         if waterAmount != 0 {
-            HKHealthStore().save(waterConsumedSample) { (success, error) in
+            HKHealthStore().save(waterConsumedSample) { (_, error) in
                 if let error = error {
                     print("Error Saving water consumtion: \(error.localizedDescription)")
                 } else {
