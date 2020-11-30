@@ -99,7 +99,7 @@ class InterfaceController: WKInterfaceController {
         })
     }
     
-    //MARK: - Load and Save days
+    // MARK: - Load and Save days
 
     /// Loading all days saved to core data.
     /// - Returns: *[Day]* an array off days loaded
