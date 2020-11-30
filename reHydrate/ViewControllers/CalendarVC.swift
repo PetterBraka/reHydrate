@@ -101,7 +101,7 @@ class CalendarVC: UIViewController {
         setUpUI()
         changeAppearance()
     }
-    //MARK: - Set up of UI
+    // MARK: - Set up of UI
     
     ///Will set up the UI and must be called at the launche of the view.
     fileprivate func setUpUI(){
@@ -130,7 +130,11 @@ class CalendarVC: UIViewController {
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
         calendar.allowsMultipleSelection = true
         calendar.swipeToChooseGesture.isEnabled = true
+<<<<<<< HEAD
+        calendar.swipeToChooseGesture.minimumPressDuration = 0.1
+=======
         calendar.swipeToChooseGesture.minimumPressDuration = 1
+>>>>>>> master
         calendar.firstWeekday = 2
         
         setUpGestrues()
@@ -181,7 +185,7 @@ class CalendarVC: UIViewController {
         calendar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
     }
     
-    //MARK: - Change appearence
+    // MARK: - Change appearence
     
     /**
      Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
@@ -306,7 +310,7 @@ class CalendarVC: UIViewController {
 
 extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
     
-    //MARK: - Set up tableVeiw
+    // MARK: - Set up tableVeiw
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
@@ -341,7 +345,7 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
 
 extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
     
-    //MARK: - Set up calander
+    // MARK: - Set up calander
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
         let cell = calendar.dequeueReusableCell(withIdentifier: "calendarCell", for: date, at: position) as! CalendarCell
@@ -443,7 +447,7 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             let averageCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! InfoCell
             averageCell.setLabels("\(NSLocalizedString("Average", comment: "Title of cell"))",
                                   "\(average.clean)")
-        } else if calendar.selectedDates.count == 0 {
+        } else if calendar.selectedDates.isEmpty {
             titleDate.text = "\(formatter.string(from: Date()))"
             self.getDrinks(Date())
             let consumedCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! InfoCell

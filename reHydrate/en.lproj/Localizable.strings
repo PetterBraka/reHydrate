@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   reHydrate
 
@@ -23,6 +23,10 @@
 "Language"         = "Language";
 "en"               = "English";
 "nb"               = "Norsk";
+<<<<<<< HEAD
+"de"               = "Deutsch";
+=======
+>>>>>>> master
 // Units
 "UnitSystem"       = "Unit system";
 "Units"            = "Units";

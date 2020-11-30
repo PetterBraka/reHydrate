@@ -65,7 +65,7 @@ class AppIconVC: UIViewController{
         setUpUI()
     }
     
-    //MARK: - Set up of UI
+    // MARK: - Set up of UI
     
     /**
      Will set up the UI and must be called at the launche of the view.
