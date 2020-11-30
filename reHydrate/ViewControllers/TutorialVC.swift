@@ -165,7 +165,7 @@ class TutorialVC: UIViewController {
     }
     var metricUnits               = true
     
-    //MARK: - Touch controll
+    // MARK: - Touch controll
     
     /**
      Will close the toturial view
@@ -256,7 +256,7 @@ class TutorialVC: UIViewController {
         setUpUI()
     }
     
-    //MARK: - Set up of UI
+    // MARK: - Set up of UI
     
     /**
      Will set up the UI and must be called at the launche of the view.
@@ -306,7 +306,7 @@ class TutorialVC: UIViewController {
         explanationLabel.text      = explanationText[stage]
     }
     
-    //MARK: - Set constraints
+    // MARK: - Set constraints
     
     /**
      sets all the constraints for the toolBar and all the buttons in it.
@@ -400,7 +400,7 @@ class TutorialVC: UIViewController {
         calendarButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
     }
     
-    //MARK: - Change appearance
+    // MARK: - Change appearance
     
     /**
      Will change the appearance of this **UIViewController**

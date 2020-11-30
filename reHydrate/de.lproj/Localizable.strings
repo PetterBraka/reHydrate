@@ -1,0 +1,132 @@
+/*
+  Localizable.strings
+  reHydrate
+
+  Created by Petter vang Brakalsvålet on 16/05/2020.
+  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
+*/
+
+// StartVC
+"Add"           = "Hinzufügen";
+"Done"          = "Fertig";
+"Cancel"        = "Abbrechen";
+"EditDrink"     = "Getränk bearbeiten";
+"RemoveDrink"   = "Dieses Getränk entfernen";
+"ChangeAmount"  = "Die Menge ändern";
+"EnterNewValue" = "Gib einen Wert ein";
+// Settings
+// Appearance
+"Appearance"       = "Aussehen";
+"LightMode"        = "Heller-Modus";
+"DarkMode"         = "Dunkler-Modus";
+"AppIcon"          = "App-Icon ändern";
+"Language"         = "Sprache";
+"en"               = "English";
+"nb"               = "Norsk";
+"de"               = "Deutsch";
+// Units
+"UnitSystem"       = "Einheitensystem";
+"Units"            = "Einheit";
+"MetricSystem"     = "Metrisches System";
+"ImperialSystem"   = "Imperiales System";
+// Goal
+"ChangeGoal"       = "Ziel ändern";
+"SetYourGoal"      = "Setze dein Ziel";
+// Reminders
+"Reminders"        = "Erinnerungen";
+"TurnOnReminders"  = "Erinnerungen einschalten";
+"TurnOffReminders" = "Erinnerungen abschalten";
+"StartingTime"     = "Start-Zeit";
+"EndingTime"       = "End-Zeit";
+"Frequency"        = "Frequenz";
+// DangerZone
+"HowToUse"         = "Verwendungsanleitung";
+"DangerZone"       = "Gefahrenzone";
+"OpenAppSettings"  = "App-Settings öffnen";
+"OpenHealthApp"    = "Health-App öffnen";
+"RemoveData"       = "Daten löschen";
+// More
+"Introductions"    = "Mehr";
+"DevInsta"         = "Entwickler Instagram";
+"FeatureRequest"   = "Ein Feature anfragen";
+"ReportBug"        = "Einen Fehler melden";
+"ContactUs"        = "Kontaktiere mich";
+"PrivacyPolicy"    = "Datenschutzerklärung";
+"VersionNumber"    = "Version:";
+"CouldtSendMail"   = "Konnte die Mail-App nicht öffnen";
+// Congratulations
+"congrats1Title"  = "Glückwunsch";
+"congrats1Body"   = "Du hast dein Ziel erreicht";
+"congrats2Title"  = "Endlich,";
+"congrats2Body"   = "du hast es geschafft!";
+"congrats3Title"  = "Glückwunsch";
+"congrats3Body"   = "nNoch ein Rekord!";
+"congrats4Title"  = "ndlich geschafft";
+"congrats4Body"   = "Du brauchst dir keine Sorgen mehr machen!";
+"congrats5Title"  = "Hey,";
+"congrats5Body"   = "Hast du gesehen, dass du gemacht hast?!";
+"congrats6Title"  = "Ich wieder";
+"congrats6Body"   = "Glückwunsch, du hast dein Ziel erreicht!";
+"congrats7Title"  = "Glaub es oder nicht, du hast es geschafft!";
+"congrats7Body"   = "Großartig!";
+"congrats8Title"  = "Du hast es geschafft!";
+"congrats8Body"   = "Ich wusste du würdest es schaffen!";
+"congrats9Title"  = "Na also,";
+"congrats9Body"   = "Du hast es geschafft!";
+"congrats10Title" = "Schau mal her,";
+"congrats10Body"  = "Du hast es geschafft!";
+// Reminders
+"reminder1Title"  = "Du sollte etwas Wasser trinken.";
+"reminder1Body"   = "Es ist lange her, dass du das letzte mal Wasser getrunken hast, warum trinkst du nicht wieder etwas?";
+"reminder2Title"  = "Hi, kennst du die Sahara?";
+"reminder2Body"   = "I empfehle diese nicht als Vorbild zu haben. Trink etwas Wasser.";
+"reminder3Title"  = "Wasser - was ist das?";
+"reminder3Body"   = "Hast du dran gedacht etwas zu trinken? Ich empfehle es dir.";
+"reminder4Title"  = "Hey, ist es ok wenn ich dir eine Frage stelle?";
+"reminder4Body"   = "Wäre es nicht super etwas Wasser zu trinken?";
+"reminder5Title"  = "Wie wäre es mit etwas Wasser?";
+"reminder5Body"   = "Vielleicht so solltest du deine Kopf etwas Treibstoff geben.";
+"reminder6Title"  = "Nur eine kleine Erinnerung.";
+"reminder6Body"   = "Es gibt dieses Wasser; vielleicht sollte du etwas davon trinken.";
+"reminder7Title"  = "Ich weis du magst es nicht,";
+"reminder7Body"   = "Aber trink etwas Wasser - es tut nicht weh.";
+"reminder8Title"  = "Was ist blau und erfrischend?";
+"reminder8Body"   = "Wasser! Es ist Wasser. Trinke etwas.";
+"reminder9Title"  = "Trink etwas Wasser.";
+"reminder9Body"   = "Du must hydrieren. Trink etwas Wasser.";
+"reminder10Title" = "Warum bist du nicht durstig?";
+"reminder10Body"  = "Du solltest etwas Wasser trinken.";
+"reminder11Title" = "Hallo.";
+"reminder11Body"  = "General Kenobi, willst du etwas Wasser trinken?";
+"reminder12Title" = "Hallo, ich bins wieder.";
+"reminder12Body"  = "Ich glaube du solltest etwas Wasser trinken.";
+// Popups
+"To"                   = "bis";
+"Minutes"              = "Minuten";
+"RemindersNotAllowed"  = "Nicht erlaubt Nachrichten zu senden";
+"RemindersSetFrom"     = "Erinnerungen gesetzt von";
+"RemoveRemindersToast" = "Alle Erinnerungen sind erlaubt";
+"FrequencyReminder"    = "Die Frequenz der Erinnerungen";
+// Danger alert
+"ClearingDataAlert"    = "Daten löschen";
+"ClearingDataBody"     = "Bist du dir sicher, dass du alle Daten löschen willst?";
+"ClearDataKeepData"    = "Daten behalten";
+"ClearDataRemoveData"  = "LÖSCHE ALTE DATEN";
+// TutorialVC
+"ExplenationDay"       = "Dies ist der aktuelle Tag.";
+"ExplenationSummary"   = "Dies ist deine getrunkene Menge und dein Ziel für den Tag.";
+"ExplenationDrinks"    = "Dies sind die anderen Getränk-Optionen, die du benutzen kannst. Tippe ein Getränk um die gesamte Menge hinzuzufügen.";
+"ExplenationSettings"  = "Tippe hier um zu den Einstellungen zu gelangen.";
+"ExplenationCalendar"  = "Tippe hier um die Historie zu sehen.";
+"Skip" = "Überspringen";
+"Next" = "Nächste";
+// Calendar
+"Goal"        = "Ziel";
+"Water"       = "Wasser";
+"Average"     = "Durchschnitt";
+"Consumed"    = "Getrunken";
+"DrinkType"   = "Getränk-Typ";
+"DrinkAmount" = "Getränk Menge";
+// Watch
+"toGo"    = "geh zu";
+"goodJob" = "Gut gemacht";

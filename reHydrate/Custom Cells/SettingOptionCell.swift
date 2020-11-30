@@ -18,7 +18,8 @@ class SettingOptionCell: UITableViewCell {
         case bot
     }
     var pickerArray       = [NSLocalizedString(appLanguages[0], comment: ""),
-                             NSLocalizedString(appLanguages[1], comment: "")]
+                             NSLocalizedString(appLanguages[1], comment: ""),
+                             NSLocalizedString(appLanguages[2], comment: "")]
     var componentString   = [""]
     let picker            = UIPickerView()
     var notificationStart = Int()
@@ -306,7 +307,6 @@ class SettingOptionCell: UITableViewCell {
                 textField.text  = measurement.converted(to: .imperialFluidOunces).value.clean
             }
             setUpPickerView()
-            break
         case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
              NSLocalizedString("TurnOffReminders", comment: "").lowercased():
             buttonForCell.isHidden = false
@@ -319,7 +319,9 @@ class SettingOptionCell: UITableViewCell {
             setUpMinutePicker()
         case NSLocalizedString("Language", comment: "").lowercased():
             buttonForCell.isHidden = true
-            pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""), NSLocalizedString(appLanguages[1], comment: "")]
+            pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""),
+                               NSLocalizedString(appLanguages[1], comment: ""),
+                               NSLocalizedString(appLanguages[2], comment: "")]
             componentString = [""]
             setUpPickerView()
             textField.placeholder = "language"
@@ -486,7 +488,6 @@ class SettingOptionCell: UITableViewCell {
                 sender.setDate(endDate, animated: true)
             }
             UserDefaults.standard.set(startDate, forKey: startingTimeString)
-            break
         case NSLocalizedString("EndingTime", comment: "").lowercased():
             let endDate = sender.date
             var startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
@@ -495,7 +496,6 @@ class SettingOptionCell: UITableViewCell {
                 sender.setDate(startDate, animated: true)
             }
             UserDefaults.standard.set(endDate, forKey: endingTimeString)
-            break
         case NSLocalizedString("Frequency", comment: "").lowercased():
             if sender.countDownDuration > 2.5 * 60 * 60{
                 var components = DateComponents()
@@ -550,16 +550,16 @@ class SettingOptionCell: UITableViewCell {
             let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
             setReminders(startDate, endDate, numberOfMinutes)
             sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
-            break
         case NSLocalizedString("Language", comment: "").lowercased():
             let picker = textField.inputView as! UIPickerView
             textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
             switch textField.text?.lowercased() {
             case NSLocalizedString("nb", comment: "").lowercased():
                 setAppLanguage("nb")
-                break
-            case NSLocalizedString("en", comment: ""):
+            case NSLocalizedString("en", comment: "").lowercased():
                 setAppLanguage("en")
+            case NSLocalizedString("de", comment: "").lowercased():
+                setAppLanguage("de")
             default:
                 setAppLanguage("en")
             }
@@ -579,7 +579,6 @@ class SettingOptionCell: UITableViewCell {
                     setReminders(startTimer.date!, endTimer.date!, intervals)
                 }
             }
-            break
         default:
             break
         }

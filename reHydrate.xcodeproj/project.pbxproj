@@ -191,6 +191,7 @@
 		33B50E4F2538D8C50024122D /* featchData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = featchData.swift; sourceTree = "<group>"; };
 		33BEA58825123A1900658867 /* Day+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		33C1288A256267D100C6FA8B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33C4318B247EDA6700E8EECA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33C431902482769B00E8EECA /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
 		33C4319224827F2700E8EECA /* BundleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtension.swift; sourceTree = "<group>"; };
@@ -618,6 +619,7 @@
 				en,
 				nb,
 				Base,
+				de,
 			);
 			mainGroup = 3378766A24378A9300F5A732;
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
@@ -864,6 +866,7 @@
 			children = (
 				33EFF3FD2470449A00D0A003 /* en */,
 				33EFF4012470451400D0A003 /* nb */,
+				33C1288A256267D100C6FA8B /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
