@@ -197,6 +197,11 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     let defaults     = UserDefaults.standard
     let context      = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let formatter    = DateFormatter()
+    let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        return formatter
+    }()
     var darkMode     = true {
         didSet {
             self.setNeedsStatusBarAppearanceUpdate()
@@ -705,6 +710,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         guard let dietaryWater     = HKQuantityType.quantityType(forIdentifier: .dietaryWater) else {
             fatalError("dietary water is no longer available in HealthKit")
         }
+        #if DEBUG
+        print(date)
+        #endif
         let waterConsumed       = HKQuantity(unit: HKUnit.liter(), doubleValue: waterAmount)
         let waterConsumedSample = HKQuantitySample(type: dietaryWater, quantity: waterConsumed,
                                                    start: date, end: date)
@@ -1144,15 +1152,21 @@ extension StartVC: WCSessionDelegate {
         print("sent data with transferUserInfo")
         print(String(describing: message["consumed"]))
         print(String(describing: message["date"]))
+        print(String(describing: message["time"]))
         if formatter.string(from: today.date) == message["date"] as! String {
             let messageConsumed = message["consumed"]! as! String
             guard let watchConsumed = Double(messageConsumed) else {
                 print("error can't extract number from string")
                 return
             }
-            if today.consumed  <= watchConsumed {
+            guard let watchTime = timeFormatter.date(from: message["time"] as! String) else {
+                print("error can't extract time from string")
+                return
+            }
+            if today.consumed <= watchConsumed {
                 let drinkAmountAdded = watchConsumed - today.consumed
                 today.consumed = watchConsumed
+                today.date = watchTime
                 saveDays()
                 print("todays amount was updated")
                 DispatchQueue.main.async {
@@ -1184,6 +1198,7 @@ extension StartVC: WCSessionDelegate {
         }
         print("sent data with transferUserInfo")
         print(String(describing: userInfo["consumed"]))
+        print(String(describing: userInfo["date"]))
         print(String(describing: userInfo["date"]))
         if formatter.string(from: today.date) == userInfo["date"] as! String {
             let messageConsumed = userInfo["consumed"]! as! String
