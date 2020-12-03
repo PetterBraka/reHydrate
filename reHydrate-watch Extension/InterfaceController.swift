@@ -26,23 +26,25 @@ class InterfaceController: WKInterfaceController {
         dateFormatter.dateFormat = "EEEE - dd/MM/yy"
         return dateFormatter
     }()
+    let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        return formatter
+    }()
     
     @IBOutlet weak var summaryLable: WKInterfaceLabel!
-    
     @IBAction func smallButton() {
         let small = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
         let today = fetchToday()
         today.consumed += small.converted(to: .liters).value
         updateSummary()
     }
-    
     @IBAction func mediumButton() {
         let medium = Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
         let today = fetchToday()
         today.consumed += medium.converted(to: .liters).value
         updateSummary()
     }
-    
     @IBAction func largeButton() {
         let large = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
         let today = fetchToday()
@@ -224,8 +226,10 @@ class InterfaceController: WKInterfaceController {
         saveDays()
         let consumed = String(today.consumed)
         let message = ["date": formatter.string(from: today.date),
+                       "time": timeFormatter.string(from: today.date),
                        "metric": String(metric),
                        "consumed": consumed] as [String : String]
+        print(message)
         if WCSession.default.isReachable {
             //send the updated date to the phone instantly.
             WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { (error) in
@@ -253,6 +257,7 @@ extension InterfaceController: WCSessionDelegate{
         print("resived message")
         print(message)
         let response = ["date": formatter.string(from: today.date),
+                        "time": timeFormatter.string(from: today.date),
                         "metric": String(metric),
                         "consumed": String(today.consumed)] as [String : String]
         replyHandler(response)
