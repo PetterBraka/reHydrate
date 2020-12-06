@@ -29,6 +29,11 @@
 "Units"            = "Enheter";
 "MetricSystem"     = "Metrisk system";
 "ImperialSystem"   = "Imperial system";
+//Credits
+"Credits"          = "Kreditter";
+"Translations"     = "Oversetting";
+"Open-source"      = "Open-source";
+"Dev&Design"       = "Utvikling & design";
 // Goal
 "ChangeGoal"       = "Ender mål";
 "SetYourGoal"      = "Set ditt mål";
