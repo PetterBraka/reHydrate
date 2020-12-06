@@ -29,6 +29,11 @@
 "Units"            = "Units";
 "MetricSystem"     = "Metric system";
 "ImperialSystem"   = "Imperial system";
+//Credits
+"Credits"          = "Credits";
+"Translations"     = "Translations";
+"Open-source"      = "Open-source";
+"Dev&Design"       = "Development & Design";
 // Goal
 "ChangeGoal"       = "Change Goal";
 "SetYourGoal"      = "Set your goal";
