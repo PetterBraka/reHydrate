@@ -425,6 +425,7 @@ class TutorialVC: UIViewController {
                 settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(UIColor().hexStringToUIColor("#404040")), for: .normal)
                 calendarButton.setBackgroundImage(UIImage(named: "gear")?.colored(UIColor().hexStringToUIColor("#404040")), for: .normal)
             }
+            toolBar.backgroundColor = UIColor().hexStringToUIColor("212121")
             nextButton.setTitleColor(.white, for: .normal)
             skipButton.setTitleColor(.white, for: .normal)
             explanationLabel.textColor = .white
@@ -442,7 +443,7 @@ class TutorialVC: UIViewController {
                 settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(UIColor().hexStringToUIColor("#c9c9c9")), for: .normal)
                 calendarButton.setBackgroundImage(UIImage(named: "gear")?.colored(UIColor().hexStringToUIColor("#c9c9c9")), for: .normal)
             }
-            toolBar.backgroundColor    = UIColor().hexStringToUIColor("#d1d1d1")
+            toolBar.backgroundColor = .white
             nextButton.setTitleColor(.black, for: .normal)
             skipButton.setTitleColor(.black, for: .normal)
             explanationLabel.textColor = .black

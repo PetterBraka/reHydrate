@@ -117,11 +117,11 @@ class CreditsVC: UIViewController {
         if darkMode {
             self.view.backgroundColor  = UIColor().hexStringToUIColor("#212121")
             exitButton.setTitleColor(.white, for: .normal)
-            toolBar.backgroundColor    = .darkGray
+            toolBar.backgroundColor    = UIColor().hexStringToUIColor("212121")
         } else {
             self.view.backgroundColor  = .white
             exitButton.setTitleColor(.black, for: .normal)
-            toolBar.backgroundColor    = UIColor().hexStringToUIColor("#d1d1d1")
+            toolBar.backgroundColor    = .white
         }
     }
 }
