@@ -14,6 +14,7 @@
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
 		334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334281E224977ADB00A3CF12 /* AppIconVC.swift */; };
 		334282652497AE7600A3CF12 /* AppIconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334282642497AE7600A3CF12 /* AppIconCell.swift */; };
+		33593576257D4D8200C5612E /* CreditsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33593575257D4D8200C5612E /* CreditsVC.swift */; };
 		3359BB7024461D620008EF6A /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3359BB6F24461D620008EF6A /* InfoCell.swift */; };
 		336DCBFD250682C500CF15F0 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */; };
 		336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */; };
@@ -177,6 +178,7 @@
 		33410F0D247C0A9D00C381AC /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		334281E224977ADB00A3CF12 /* AppIconVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconVC.swift; sourceTree = "<group>"; };
 		334282642497AE7600A3CF12 /* AppIconCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconCell.swift; sourceTree = "<group>"; };
+		33593575257D4D8200C5612E /* CreditsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsVC.swift; sourceTree = "<group>"; };
 		3359BB6F24461D620008EF6A /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		336DCBFC250682C500CF15F0 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
 		336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties copy.swift"; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				3389E0AA2448A61300DD7B58 /* SettingsVC.swift */,
 				333BD5F8246424FF0041D90A /* TutorialVC.swift */,
 				334281E224977ADB00A3CF12 /* AppIconVC.swift */,
+				33593575257D4D8200C5612E /* CreditsVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -806,6 +809,7 @@
 				33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */,
 				336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */,
 				334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */,
+				33593576257D4D8200C5612E /* CreditsVC.swift in Sources */,
 				33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */,
 				3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */,
 				3359BB7024461D620008EF6A /* InfoCell.swift in Sources */,
