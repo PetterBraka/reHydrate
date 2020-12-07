@@ -20,6 +20,7 @@
 "LightMode"        = "Heller-Modus";
 "DarkMode"         = "Dunkler-Modus";
 "AppIcon"          = "App-Icon ändern";
+"Back"             = "zurück";
 "Language"         = "Sprache";
 "en"               = "English";
 "nb"               = "Norsk";

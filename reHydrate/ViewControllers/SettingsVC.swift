@@ -64,6 +64,8 @@ class SettingsVC: UIViewController {
                        options: [NSLocalizedString("SetYourGoal", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("Reminders", comment: "Header title"),
                        options: [NSLocalizedString("TurnOnReminders", comment: "settings option")]),
+        settingOptions(isOpened: false, setting: NSLocalizedString("Credits", comment: "Header title"),
+                       options: [NSLocalizedString("Credits", comment: "settings option")]),
         settingOptions(isOpened: false, setting: NSLocalizedString("DangerZone", comment: "Header title"),
                        options: [NSLocalizedString("OpenAppSettings", comment: "settings option"),
                                  NSLocalizedString("OpenHealthApp", comment: "settings option"),
@@ -279,7 +281,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     // MARK: - Creates a cell
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 6 {
+        if section == 7 {
             return 0
         } else {
             return settings[section].options.count
@@ -294,21 +296,21 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         
         switch indexPath {
         case IndexPath(row: 0, section: 0), IndexPath(row: 0, section: 1),
-             IndexPath(row: 0, section: 4), IndexPath(row: 0, section: 5):
+             IndexPath(row: 0, section: 5), IndexPath(row: 0, section: 6): // first cell of section
             cell.position = .top
         case IndexPath(row: settings[0].options.count - 1, section: 0),
              IndexPath(row: 1, section: 1), IndexPath(row: 3, section: 3),
-             IndexPath(row: 2, section: 4), IndexPath(row: 6, section: 5):
+             IndexPath(row: 2, section: 5), IndexPath(row: 6, section: 6): // last cells of section
             cell.position = .bot
-        case IndexPath(row: 0, section: 2):
+        case IndexPath(row: 0, section: 2), IndexPath(row: 0, section: 4): // Section with one cell
             cell.position = .none
-        case IndexPath(row: 0, section: 3):
+        case IndexPath(row: 0, section: 3): // first cell of reminders
             if settings[3].isOpened{
                 cell.position = .top
             } else {
                 cell.position = .none
             }
-        default:
+        default: // cells in the middle of a section
             cell.position = .mid
         }
         
@@ -357,7 +359,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
              IndexPath(row: 3, section: 3): // Cell with textField
             cell.subTitle.removeFromSuperview()
             cell.setTextFieldConstraints()
-        case IndexPath(row: 2, section: 4): // Danger cell
+        case IndexPath(row: 2, section: 5): // Danger cell
             cell.buttonForCell.isHidden = false
             if #available(iOS 13.0, *) {
                 cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
@@ -369,7 +371,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.subTitle.removeFromSuperview()
             cell.textField.removeFromSuperview()
             cell.setTitleConstraints()
-        case IndexPath(row: 6, section: 5): // Version cell
+        case IndexPath(row: 6, section: 6): // Version cell
             cell.titleOption.text!.append(" \(String(describing: Bundle.main.infoDictionary!["CFBundleShortVersionString"]!))")
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
@@ -499,15 +501,19 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     }
                 }
             }
-        case IndexPath(row: 0, section: 4): // Open settings
+        case IndexPath(row: 0, section: 4): // Credits
+            let creditsVC = CreditsVC()
+            creditsVC.modalPresentationStyle = .popover
+            self.present(creditsVC, animated: true, completion: nil)
+        case IndexPath(row: 0, section: 5): // Open settings
             if let url = URL(string:UIApplication.openSettingsURLString) {
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
-        case IndexPath(row: 1, section: 4): // Open health
+        case IndexPath(row: 1, section: 5): // Open health
             UIApplication.shared.open(URL(string: "x-apple-health://")!)
-        case IndexPath(row: 2, section: 4): // Remove data
+        case IndexPath(row: 2, section: 5): // Remove data
             let clearDataAlert = UIAlertController(title: NSLocalizedString("ClearingDataAlert",
                                                                             comment: "Title for clearing data alert"),
                                                    message: NSLocalizedString("ClearingDataBody",
@@ -540,17 +546,16 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 self.dismiss(animated: false, completion: nil)
             }))
             self.present(clearDataAlert, animated: true, completion: nil)
-        case IndexPath(row: 0, section: 5): // How to use
+        case IndexPath(row: 0, section: 6): // Toturial
             let tutorialVC = TutorialVC()
-//            tutorialVC.isHeroEnabled = false
             tutorialVC.modalPresentationStyle = .popover
             self.present(tutorialVC, animated: true, completion: nil)
-        case IndexPath(row: 1, section: 5): // Open Instagram
+        case IndexPath(row: 1, section: 6): // Open Instagram
             if let url = URL(string: "https://www.instagram.com/braka.coding/"),
                UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:])
             }
-        case IndexPath(row: 2, section: 5): // Send mail about feature
+        case IndexPath(row: 2, section: 6): // Send mail about feature
             if MFMailComposeViewController.canSendMail() {
                 let mail = MFMailComposeViewController()
                 mail.mailComposeDelegate = self
@@ -577,7 +582,7 @@ Please describe your feature:
                     }
                 }
             }
-        case IndexPath(row: 3, section: 5): // Send mail about bug
+        case IndexPath(row: 3, section: 6): // Send mail about bug
             if MFMailComposeViewController.canSendMail() {
                 UIDevice.current.isBatteryMonitoringEnabled = true
                 let mail = MFMailComposeViewController()
@@ -613,7 +618,7 @@ Please add any screenshots you have of the porblem:<br>
                     }
                 }
             }
-        case IndexPath(row: 4, section: 5): // Send mail to contact dev
+        case IndexPath(row: 4, section: 6): // Send mail to contact dev
             if MFMailComposeViewController.canSendMail() {
                 UIDevice.current.isBatteryMonitoringEnabled = true
                 let mail = MFMailComposeViewController()
@@ -635,7 +640,7 @@ Thank you for getting in contact with us<br>
                     }
                 }
             }
-        case IndexPath(row: 5, section: 5): // open privacy policy
+        case IndexPath(row: 5, section: 6): // open privacy policy
             if let url = URL(string: "https://github.com/PetterBraka/reHydrate/wiki/Privacy-Policy"),
                UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:])

@@ -21,6 +21,7 @@
 "DarkMode"         = "Mørk modus";
 "UnitSystem"       = "Enhets system";
 "AppIcon"          = "Endre app icon";
+"Back"             = "Tilbake";
 "Language"         = "Språk";
 "en"               = "English";
 "nb"               = "Norsk";
