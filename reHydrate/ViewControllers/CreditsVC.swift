@@ -12,7 +12,6 @@ import UIKit
 struct credit {
     var name:  String
     var webpage: String
-    var category: Int
     var language: String
 }
 
@@ -50,17 +49,12 @@ class CreditsVC: UIViewController {
     }
     
     let credits: [credit] =
-        [credit(name: "Petter Vang Braklsvålet", webpage: "https://petterbraka.github.io/LinkTree/", category: 0, language: "🌐 🇳🇴"),
-         credit(name: "Leo Mehing", webpage: "https://petterbraka.github.io/LinkTree/",
-                category: 1, language: "🌐 🇩🇪"),
-         credit(name: "Preben Vangberg", webpage: "",
-                category: 1, language: "🏴󠁧󠁢󠁷󠁬󠁳󠁿"),
-         credit(name: "Sævar Ingi Siggason", webpage: "https://petterbraka.github.io/LinkTree/",
-                category: 1, language: "🇮🇸"),
-         credit(name: "WenchaoD/FSCalendar", webpage: "https://github.com/WenchaoD/FSCalendar",
-                category: 2, language: "🌐"),
-         credit(name: "HeroTransitions/Hero", webpage: "https://github.com/HeroTransitions/Hero",
-                category: 2, language: "🌐")]
+        [credit(name: "Petter Vang Braklsvålet", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇳🇴"),
+         credit(name: "Leo Mehing", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇩🇪"),
+         credit(name: "Preben Vangberg", webpage: "", language: "🏴󠁧󠁢󠁷󠁬󠁳󠁿"),
+         credit(name: "Sævar Ingi Siggason", webpage: "https://petterbraka.github.io/LinkTree/", language: "🇮🇸"),
+         credit(name: "WenchaoD/FSCalendar", webpage: "https://github.com/WenchaoD/FSCalendar", language: "🌐"),
+         credit(name: "HeroTransitions/Hero", webpage: "https://github.com/HeroTransitions/Hero", language: "🌐")]
     
     // MARK: - Touch controll
     
@@ -185,30 +179,14 @@ extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "creditsCell") as! CreditsCell
         cell.selectionStyle = .none
         cell.setCellAppairents(darkMode)
+        cell.titleOption.text = credits[indexPath.row + indexPath.section].name
+        cell.languageImage.setTitle(credits[indexPath.row + indexPath.section].language, for: .normal)
         switch indexPath {
-        case IndexPath(row: 0, section: 0):
-            cell.titleOption.text = credits[0].name
-            cell.languageImage.setTitle(credits[0].language, for: .normal)
-            cell.position = .none
-        case IndexPath(row: 0, section: 1):
-            cell.titleOption.text = credits[1].name
-            cell.languageImage.setTitle(credits[1].language, for: .normal)
+        case IndexPath(row: 0, section: 1), IndexPath(row: 0, section: 2):
             cell.position = .top
         case IndexPath(row: 1, section: 1):
-            cell.titleOption.text = credits[2].name
-            cell.languageImage.setTitle(credits[2].language, for: .normal)
             cell.position = .mid
-        case IndexPath(row: 2, section: 1):
-            cell.titleOption.text = credits[3].name
-            cell.languageImage.setTitle(credits[3].language, for: .normal)
-            cell.position = .bot
-        case IndexPath(row: 0, section: 2):
-            cell.titleOption.text = credits[4].name
-            cell.languageImage.setTitle(credits[4].language, for: .normal)
-            cell.position = .top
-        case IndexPath(row: 1, section: 2):
-            cell.titleOption.text = credits[5].name
-            cell.languageImage.setTitle(credits[5].language, for: .normal)
+        case IndexPath(row: 2, section: 1), IndexPath(row: 1, section: 2):
             cell.position = .bot
         default:
             cell.position = .none
