@@ -39,6 +39,7 @@ class CreditsCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var url: String = ""
     var position: cellPosition = .none
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -116,4 +117,5 @@ class CreditsCell: UITableViewCell {
             self.backgroundColor            = UIColor().hexStringToUIColor("ebebeb")
         }
     }
+    
 }
