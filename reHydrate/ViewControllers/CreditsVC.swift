@@ -181,6 +181,7 @@ extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
         cell.setCellAppairents(darkMode)
         cell.titleOption.text = credits[indexPath.row + indexPath.section].name
         cell.languageImage.setTitle(credits[indexPath.row + indexPath.section].language, for: .normal)
+        cell.url = credits[indexPath.row + indexPath.section].webpage
         switch indexPath {
         case IndexPath(row: 0, section: 1), IndexPath(row: 0, section: 2):
             cell.position = .top
@@ -210,5 +211,12 @@ extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 20
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! CreditsCell
+        if let url = URL(string: cell.url) {
+            UIApplication.shared.open(url)
+        }
     }
 }
