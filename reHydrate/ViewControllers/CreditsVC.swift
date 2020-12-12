@@ -8,6 +8,14 @@
 
 import UIKit
 
+
+struct credit {
+    var name:  String
+    var webpage: String
+    var category: Int
+    var language: String
+}
+
 class CreditsVC: UIViewController {
     let toolBar: UIView       = {
         let view             = UIView()
@@ -32,6 +40,7 @@ class CreditsVC: UIViewController {
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
+    var tableView: UITableView     = UITableView()
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) {
             return darkMode ? .lightContent : .darkContent
@@ -40,10 +49,23 @@ class CreditsVC: UIViewController {
         }
     }
     
+    let credits: [credit] =
+        [credit(name: "Petter Vang Braklsvålet", webpage: "https://petterbraka.github.io/LinkTree/", category: 0, language: "🌐 🇳🇴"),
+         credit(name: "Leo Mehing", webpage: "https://petterbraka.github.io/LinkTree/",
+                category: 1, language: "🌐 🇩🇪"),
+         credit(name: "Preben Vangberg", webpage: "",
+                category: 1, language: "🏴󠁧󠁢󠁷󠁬󠁳󠁿"),
+         credit(name: "Sævar Ingi Siggason", webpage: "https://petterbraka.github.io/LinkTree/",
+                category: 1, language: "🇮🇸"),
+         credit(name: "WenchaoD/FSCalendar", webpage: "https://github.com/WenchaoD/FSCalendar",
+                category: 2, language: "🌐"),
+         credit(name: "HeroTransitions/Hero", webpage: "https://github.com/HeroTransitions/Hero",
+                category: 2, language: "🌐")]
+    
     // MARK: - Touch controll
     
     /**
-     Will close the toturial view
+     Will close the  view
      */
     @objc func exit(_ sender: UIBarButtonItem){
         self.dismiss(animated: true, completion: nil)
@@ -69,10 +91,18 @@ class CreditsVC: UIViewController {
      */
     func setUpUI(){
         self.view.addSubview(toolBar)
+        self.view.addSubview(tableView)
         toolBar.addSubview(exitButton)
         
         setToolBarConstraints()
+        setConstraints()
         exitButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.exit(_:))))
+        
+        tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(CreditsCell.self, forCellReuseIdentifier: "creditsCell")
+        
+        tableView.dataSource = self
+        tableView.delegate   = self
         
         changeAppearance()
     }
@@ -103,6 +133,14 @@ class CreditsVC: UIViewController {
         exitButton.centerYAnchor.constraint(equalTo: toolBar.centerYAnchor).isActive            = true
     }
     
+    fileprivate func setConstraints(){
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: exitButton.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+    }
+    
     // MARK: - Change appearance
     
     /**
@@ -114,14 +152,85 @@ class CreditsVC: UIViewController {
      ```
      */
     func changeAppearance(){
+        tableView.separatorStyle = .none
         if darkMode {
             self.view.backgroundColor  = UIColor().hexStringToUIColor("#212121")
             exitButton.setTitleColor(.white, for: .normal)
             toolBar.backgroundColor    = UIColor().hexStringToUIColor("212121")
+            tableView.backgroundColor  = UIColor().hexStringToUIColor("#212121")
         } else {
             self.view.backgroundColor  = .white
             exitButton.setTitleColor(.black, for: .normal)
             toolBar.backgroundColor    = .white
+            tableView.backgroundColor  = UIColor().hexStringToUIColor("ebebeb")
         }
+    }
+}
+
+extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return 3
+        case 2:
+            return 2
+        default:
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "creditsCell") as! CreditsCell
+        cell.selectionStyle = .none
+        cell.setCellAppairents(darkMode)
+        switch indexPath {
+        case IndexPath(row: 0, section: 0):
+            cell.titleOption.text = credits[0].name
+            cell.languageImage.setTitle(credits[0].language, for: .normal)
+            cell.position = .none
+        case IndexPath(row: 0, section: 1):
+            cell.titleOption.text = credits[1].name
+            cell.languageImage.setTitle(credits[1].language, for: .normal)
+            cell.position = .top
+        case IndexPath(row: 1, section: 1):
+            cell.titleOption.text = credits[2].name
+            cell.languageImage.setTitle(credits[2].language, for: .normal)
+            cell.position = .mid
+        case IndexPath(row: 2, section: 1):
+            cell.titleOption.text = credits[3].name
+            cell.languageImage.setTitle(credits[3].language, for: .normal)
+            cell.position = .bot
+        case IndexPath(row: 0, section: 2):
+            cell.titleOption.text = credits[4].name
+            cell.languageImage.setTitle(credits[4].language, for: .normal)
+            cell.position = .top
+        case IndexPath(row: 1, section: 2):
+            cell.titleOption.text = credits[5].name
+            cell.languageImage.setTitle(credits[5].language, for: .normal)
+            cell.position = .bot
+        default:
+            cell.position = .none
+        }
+        cell.setConstraints()
+        return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        3
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
+        cell.setHeaderAppairents(darkMode)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 20
     }
 }
