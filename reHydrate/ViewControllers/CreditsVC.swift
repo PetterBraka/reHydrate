@@ -48,12 +48,14 @@ class CreditsVC: UIViewController {
         }
     }
     
-    let credits: [credit] =
-        [credit(name: "Petter Vang Braklsvålet", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇳🇴"),
-         credit(name: "Leo Mehing", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇩🇪"),
+    let creator =
+        [credit(name: "Petter Vang Braklsvålet", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇳🇴")]
+    let translators =
+        [credit(name: "Leo Mehing", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇩🇪"),
          credit(name: "Preben Vangberg", webpage: "", language: "🏴󠁧󠁢󠁷󠁬󠁳󠁿"),
-         credit(name: "Sævar Ingi Siggason", webpage: "https://petterbraka.github.io/LinkTree/", language: "🇮🇸"),
-         credit(name: "WenchaoD/FSCalendar", webpage: "https://github.com/WenchaoD/FSCalendar", language: "🌐"),
+         credit(name: "Sævar Ingi Siggason", webpage: "https://petterbraka.github.io/LinkTree/", language: "🇮🇸")]
+    let openSource =
+        [credit(name: "WenchaoD/FSCalendar", webpage: "https://github.com/WenchaoD/FSCalendar", language: "🌐"),
          credit(name: "HeroTransitions/Hero", webpage: "https://github.com/HeroTransitions/Hero", language: "🌐")]
     
     // MARK: - Touch controll
@@ -92,6 +94,7 @@ class CreditsVC: UIViewController {
         setConstraints()
         exitButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.exit(_:))))
         
+        tableView.register( , forCellReuseIdentifier: <#T##String#>)
         tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(CreditsCell.self, forCellReuseIdentifier: "creditsCell")
         
@@ -179,9 +182,25 @@ extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "creditsCell") as! CreditsCell
         cell.selectionStyle = .none
         cell.setCellAppairents(darkMode)
-        cell.titleOption.text = credits[indexPath.row + indexPath.section].name
-        cell.languageImage.setTitle(credits[indexPath.row + indexPath.section].language, for: .normal)
-        cell.url = credits[indexPath.row + indexPath.section].webpage
+        switch indexPath.section {
+        case 0:
+            cell.titleOption.text = creator[indexPath.row].name
+            cell.languageImage.setTitle(creator[indexPath.row].language, for: .normal)
+            cell.url = creator[indexPath.row].webpage
+        case 1:
+            cell.titleOption.text = translators[indexPath.row].name
+            cell.languageImage.setTitle(translators[indexPath.row].language, for: .normal)
+            cell.url = translators[indexPath.row].webpage
+        case 2:
+            cell.titleOption.text = openSource[indexPath.row].name
+            cell.languageImage.setTitle(openSource[indexPath.row].language, for: .normal)
+            cell.url = openSource[indexPath.row].webpage
+        default:
+            cell.titleOption.text = creator[indexPath.row].name
+            cell.languageImage.setTitle(creator[indexPath.row].language, for: .normal)
+            cell.url = creator[indexPath.row].webpage
+            cell.position = .none
+        }
         switch indexPath {
         case IndexPath(row: 0, section: 1), IndexPath(row: 0, section: 2):
             cell.position = .top
