@@ -20,6 +20,7 @@
 "LightMode"        = "Heller-Modus";
 "DarkMode"         = "Dunkler-Modus";
 "AppIcon"          = "App-Icon ändern";
+"Back"             = "zurück";
 "Language"         = "Sprache";
 "en"               = "English";
 "nb"               = "Norsk";
@@ -29,6 +30,11 @@
 "Units"            = "Einheit";
 "MetricSystem"     = "Metrisches System";
 "ImperialSystem"   = "Imperiales System";
+//Credits
+"Credits"          = "Danksagungen";
+"Translations"     = "Übersetzungen";
+"Open-source"      = "Open-source";
+"Dev&Design"       = "Entwicklung & Design";
 // Goal
 "ChangeGoal"       = "Ziel ändern";
 "SetYourGoal"      = "Setze dein Ziel";
