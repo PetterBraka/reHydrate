@@ -77,7 +77,7 @@ public func fetchToday() -> Day {
             today.date = Date()
             // tries to get yesterday data
             let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: today.date)
-            let yesterday = fetchDay(yesterdayDate!)
+            let yesterday = fetchPreviousDay()
             today.goal = yesterday?.goal ?? 3
             
             return today
@@ -123,5 +123,25 @@ public func fetchDay(_ date: Date) -> Day? {
         print("can't featch day")
         print(error.localizedDescription)
         return nil
+    }
+}
+
+/// Will featch the previous day saved.
+/// - Returns: returns *Day* if found else nil
+public func fetchPreviousDay() -> Day? {
+    do {
+        let days = try context.fetch(Day.fetchRequest()) as! [Day]
+        #if DEBUG
+        days.forEach({$0.toPrint()})
+        #endif
+        return days[days.count - 1]
+    } catch {
+        print("can't featch day creating new day")
+        print(error.localizedDescription)
+        let prevDay = Day(context: context)
+        prevDay.date = Date()
+        prevDay.goal = 3
+        prevDay.consumed = 0
+        return prevDay
     }
 }
