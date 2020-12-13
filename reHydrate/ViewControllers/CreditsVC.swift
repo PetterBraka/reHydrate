@@ -96,7 +96,7 @@ class CreditsVC: UIViewController {
         setConstraints()
         exitButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.exit(_:))))
         
-        tableView.register(creditsHeder.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(CreditsHeder.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(CreditsCell.self, forCellReuseIdentifier: "creditsCell")
         
         tableView.dataSource = self
@@ -224,7 +224,7 @@ extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! creditsHeder
+        let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! CreditsHeder
         switch section {
         case 0:
             cell.title.text = NSLocalizedString("Dev&Design", comment: "title for header")

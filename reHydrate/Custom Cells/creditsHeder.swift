@@ -8,7 +8,7 @@
 
 import UIKit
 
-class creditsHeder: UITableViewHeaderFooterView {
+class CreditsHeder: UITableViewHeaderFooterView {
     let title: UILabel = {
         let lable   = UILabel()
         lable.text  = "Title"
