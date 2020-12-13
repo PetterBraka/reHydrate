@@ -51,12 +51,14 @@ class CreditsVC: UIViewController {
     let creator =
         [credit(name: "Petter Vang Braklsvålet", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇳🇴")]
     let translators =
-        [credit(name: "Leo Mehing", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇩🇪"),
-         credit(name: "Preben Vangberg", webpage: "", language: "🏴󠁧󠁢󠁷󠁬󠁳󠁿"),
-         credit(name: "Sævar Ingi Siggason", webpage: "https://petterbraka.github.io/LinkTree/", language: "🇮🇸")]
+        [credit(name: "Leo Mehing", webpage: "https://structured.today", language: "🌐 🇩🇪"),
+//         credit(name: "Preben Vangberg", webpage: "", language: "🏴󠁧󠁢󠁷󠁬󠁳󠁿"),
+//         credit(name: "Sævar Ingi Siggason", webpage: "", language: "🇮🇸")
+        ]
     let openSource =
         [credit(name: "WenchaoD/FSCalendar", webpage: "https://github.com/WenchaoD/FSCalendar", language: "🌐"),
-         credit(name: "HeroTransitions/Hero", webpage: "https://github.com/HeroTransitions/Hero", language: "🌐")]
+         credit(name: "HeroTransitions/Hero", webpage: "https://github.com/HeroTransitions/Hero", language: "🌐")
+        ]
     
     // MARK: - Touch controll
     
@@ -94,8 +96,7 @@ class CreditsVC: UIViewController {
         setConstraints()
         exitButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.exit(_:))))
         
-        tableView.register( , forCellReuseIdentifier: <#T##String#>)
-        tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(creditsHeder.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(CreditsCell.self, forCellReuseIdentifier: "creditsCell")
         
         tableView.dataSource = self
@@ -168,11 +169,11 @@ extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 1
+            return creator.count
         case 1:
-            return 3
+            return translators.count
         case 2:
-            return 2
+            return openSource.count
         default:
             return 0
         }
@@ -223,13 +224,23 @@ extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
-        cell.setHeaderAppairents(darkMode)
+        let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! creditsHeder
+        switch section {
+        case 0:
+            cell.title.text = NSLocalizedString("Dev&Design", comment: "title for header")
+        case 1:
+            cell.title.text = NSLocalizedString("Translation", comment: "title for header")
+        case 2:
+            cell.title.text = NSLocalizedString("Open-source", comment: "title for header")
+        default:
+            cell.title.text = ""
+        }
+        cell.setAppairents(darkMode)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        return 50
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
