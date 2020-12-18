@@ -1,0 +1,139 @@
+/*
+  Localizable.strings
+  reHydrate
+
+  Created by Petter vang Brakalsvålet on 16/05/2020.
+  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
+*/
+
+// StartVC
+"Add"           = "Bæta";
+"Done"          = "Búið";
+"Cancel"        = "Hætta við";
+"EditDrink"     = "Breyta drikk";
+"RemoveDrink"   = "Taktu þennan drykk";
+"ChangeAmount"  = "Breyta magni";
+"EnterNewValue" = "Sláðu inn nýtt gildi";
+// Settings
+// Appearance
+"Appearance" = "Útlit";
+"LightMode"  = "Ljósstilling";
+"DarkMode"   = "Næturstilling";
+"AppIcon"    = "Breyta forritatákninu";
+"Back"       = "Back";
+"Language"   = "Tungumál";
+"en"         = "English";
+"nb"         = "Norsk";
+"de"         = "Deutsch";
+"is"         = "íslenskur";
+// Units
+"UnitSystem"       = "Einingakerfi";
+"Units"            = "Einingar";
+"MetricSystem"     = "Metrakerfi";
+"ImperialSystem"   = "Keisarakerfi";
+//Credits
+"Credits"          = "Inneign";
+"Translations"     = "Þýðingar";
+"Open-source"      = "Opinn uppspretta";
+"Dev&Design"       = "Þróun & hönnun";
+// Goal
+"ChangeGoal"       = "Breyta markmiði";
+"SetYourGoal"      = "Set your goal";
+// Reminders
+"Reminders"        = "Áminningar";
+"TurnOnReminders"  = "Kveikja á áminningum";
+"TurnOffReminders" = "Slökkva á áminningum";
+"StartingTime"     = "Upphafstími";
+"EndingTime"       = "Lokatími";
+"Frequency"        = "Tíðni";
+// DangerZone
+"HowToUse"         = "Hvernig skal nota";
+"DangerZone"       = "Hættusvæði";
+"OpenAppSettings"  = "Opnaðu forritastillingar";
+"OpenHealthApp"    = "Opnaðu heilsuforritið";
+"RemoveData"       = "fjarlægja gögn";
+// More
+"Introductions"    = "meira";
+"DevInsta"         = "Instagram hönnuðar";
+"FeatureRequest"   = "Óska eftir lögun";
+"ReportBug"        = "Tilkynntu villu";
+"ContactUs"        = "Hafðu samband við mig";
+"PrivacyPolicy"    = "Friðhelgisstefna";
+"VersionNumber"    = "Útgáfa:";
+"CouldtSendMail"   = "Gat ekki opnað tölvupóstforrit";
+// Congratulations
+"congrats1Title"  = "Til hamingju";
+"congrats1Body"   = "Þú náðir markmiði þínu!";
+"congrats2Title"  = "Loksins,";
+"congrats2Body"   = "Þú gerðir það!";
+"congrats3Title"  = "Til hamingju";
+"congrats3Body"   = "Önnur fyrir plötubækurnar!";
+"congrats4Title"  = "Loksins búið";
+"congrats4Body"   = "Þú þarft ekki að hafa áhyggjur af því lengur!";
+"congrats5Title"  = "Hæ,";
+"congrats5Body"   = "Sástu hvað þú gerðir?!";
+"congrats6Title"  = "Ég aftur,";
+"congrats6Body"   = "Til hamingju, þú náðir markmiði þínu!";
+"congrats7Title"  = "Trúðu því eða ekki, þú gerðir það!";
+"congrats7Body"   = "Það er ótrúlegt!";
+"congrats8Title"  = "Þú gerðir það!";
+"congrats8Body"   = "Ég vissi að þú myndir gera það!";
+"congrats9Title"  = "Sjáðu þetta,";
+"congrats9Body"   = "Þú gerðir það!";
+"congrats10Title" = "Sko, það";
+"congrats10Body"  = "Þú náðir markmiði þínu!";
+// Reminders
+"reminder1Title"  = "Þú ættir að hafa vatn.";
+"reminder1Body"   = "Það er langt síðan þú hafðir vatn, af hverju áttu það ekki.";
+"reminder2Title"  = "Hæ, hefur þú heyrt um Sahara?";
+"reminder2Body"   = "Ég legg til að hafa það ekki sem átrúnaðargoð. Hafðu smá vatn.";
+"reminder3Title"  = "Vatn - hvað er það?";
+"reminder3Body"   = "Hefurðu munað eftir að drekka vatn? Ég legg til að þú hafir einhverjar.";
+"reminder4Title"  = "Hey, væri þér sama ef ég spurði þig spurningar?";
+"reminder4Body"   = "Væri ekki frábært að fá sér vatn?";
+"reminder5Title"  = "Hvað með vatn?";
+"reminder5Body"   = "Hey, kannski ættirðu að gefa heilanum eitthvað til að hlaupa á?";
+"reminder6Title"  = "Bara smá áminning.";
+"reminder6Body"   = "Það er hlutur sem kallast vatn; þú ættir kannski að eiga nokkrar.";
+"reminder7Title"  = "Ég veit að þér líkar það ekki.";
+"reminder7Body"   = "En hafðu vatn - það mun ekki skaða þig.";
+"reminder8Title"  = "Hvað er blátt og hressandi?";
+"reminder8Body"   = "Vatn. Það er vatn. Drekkið smá.";
+"reminder9Title"  = "Hafðu smá vatn.";
+"reminder9Body"   = "Þú þarft að vökva. Hafðu smá vatn.";
+"reminder10Title" = "Af hverju ertu ekki þyrstur núna.";
+"reminder10Body"  = "Þú ættir að hafa vatn.";
+"reminder11Title" = "Halló þarna.";
+"reminder11Body"  = "Kenobi hershöfðingi, viltu fá vatn?";
+"reminder12Title" = "Hey þarna, ég aftur.";
+"reminder12Body"  = "Ég held að þú ættir að fá þér vatn.";
+// Popups
+"To"                   = "til";
+"Minutes"              = "mínútur";
+"RemindersNotAllowed"  = "Ekki heimilt að senda tilkynningar";
+"RemindersSetFrom"     = "Áminningar stilltar frá";
+"RemoveRemindersToast" = "Allar áminningar eru fjarlægðar";
+"FrequencyReminder"    = "Tíðni áminninga";
+// Danger alert
+"ClearingDataAlert"    = "Hreinsa gögn";
+"ClearingDataBody"     = "Ertu viss um að þú viljir eyða öllum vistuðum gögnum?";
+"ClearDataKeepData"    = "Haltu gögnum";
+"ClearDataRemoveData"  = "FJARLÆGÐU GÖMUL GÖGN";
+// TutorialVC
+"ExplenationDay"       = "Þetta er dagurinn í dag.";
+"ExplenationSummary"   = "Þetta er neytt magn og markmið þitt fyrir daginn.";
+"ExplenationDrinks"    = "Þetta eru mismunandi drykkjarvalkostir sem þú getur notað. Pikkaðu á drykk til að bæta honum við heildarupphæðina.";
+"ExplenationSettings"  = "Pikkaðu á þetta til að fara í stillingar.";
+"ExplenationCalendar"  = "Pikkaðu á þetta til að sjá sögu þína.";
+"Skip" = "Sleppa";
+"Next" = "Næst";
+// Calendar
+"Goal"        = "Markmið";
+"Water"       = "Vatn";
+"Average"     = "Meðaltal";
+"Consumed"    = "Neytt";
+"DrinkType"   = "Drykkjutegund";
+"DrinkAmount" = "Drykkjumagn";
+// Watch
+"toGo"    = "að fara";
+"goodJob" = "Vel gert";

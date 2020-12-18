@@ -16,15 +16,16 @@
 "EnterNewValue" = "Gib einen Wert ein";
 // Settings
 // Appearance
-"Appearance"       = "Aussehen";
-"LightMode"        = "Heller-Modus";
-"DarkMode"         = "Dunkler-Modus";
-"AppIcon"          = "App-Icon ändern";
-"Back"             = "zurück";
-"Language"         = "Sprache";
-"en"               = "English";
-"nb"               = "Norsk";
-"de"               = "Deutsch";
+"Appearance" = "Aussehen";
+"LightMode"  = "Heller-Modus";
+"DarkMode"   = "Dunkler-Modus";
+"AppIcon"    = "App-Icon ändern";
+"Back"       = "zurück";
+"Language"   = "Sprache";
+"en"         = "English";
+"nb"         = "Norsk";
+"de"         = "Deutsch";
+"is"         = "íslenskur";
 // Units
 "UnitSystem"       = "Einheitensystem";
 "Units"            = "Einheit";
