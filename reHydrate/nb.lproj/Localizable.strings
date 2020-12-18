@@ -16,16 +16,17 @@
 "EnterNewValue" = "Angi ny verdi";
 // SettingsVC
 // Appearance
-"Appearance"       = "Utseende";
-"LightMode"        = "Lys modus";
-"DarkMode"         = "Mørk modus";
-"UnitSystem"       = "Enhets system";
-"AppIcon"          = "Endre app icon";
-"Back"             = "Tilbake";
-"Language"         = "Språk";
-"en"               = "English";
-"nb"               = "Norsk";
-"de"               = "Deutsch";
+"Appearance" = "Utseende";
+"LightMode"  = "Lys modus";
+"DarkMode"   = "Mørk modus";
+"UnitSystem" = "Enhets system";
+"AppIcon"    = "Endre app icon";
+"Back"       = "Tilbake";
+"Language"   = "Språk";
+"en"         = "English";
+"nb"         = "Norsk";
+"de"         = "Deutsch";
+"is"         = "íslenskur";
 // Units
 "Units"            = "Enheter";
 "MetricSystem"     = "Metrisk system";
