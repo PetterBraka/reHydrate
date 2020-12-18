@@ -20,18 +20,21 @@
 "LightMode"        = "Light mode";
 "DarkMode"         = "Dark mode";
 "AppIcon"          = "Change app icon";
+"Back"             = "Back";
 "Language"         = "Language";
 "en"               = "English";
 "nb"               = "Norsk";
-<<<<<<< HEAD
 "de"               = "Deutsch";
-=======
->>>>>>> master
 // Units
 "UnitSystem"       = "Unit system";
 "Units"            = "Units";
 "MetricSystem"     = "Metric system";
 "ImperialSystem"   = "Imperial system";
+//Credits
+"Credits"          = "Credits";
+"Translations"     = "Translations";
+"Open-source"      = "Open-source";
+"Dev&Design"       = "Development & Design";
 // Goal
 "ChangeGoal"       = "Change Goal";
 "SetYourGoal"      = "Set your goal";
