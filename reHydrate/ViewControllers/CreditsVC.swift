@@ -52,8 +52,8 @@ class CreditsVC: UIViewController {
         [credit(name: "Petter Vang Braklsvålet", webpage: "https://petterbraka.github.io/LinkTree/", language: "🌐 🇳🇴")]
     let translators =
         [credit(name: "Leo Mehing", webpage: "https://structured.today", language: "🌐 🇩🇪"),
-//         credit(name: "Preben Vangberg", webpage: "", language: "🏴󠁧󠁢󠁷󠁬󠁳󠁿"),
-//         credit(name: "Sævar Ingi Siggason", webpage: "", language: "🇮🇸")
+         credit(name: "Sævar Ingi Siggason", webpage: "", language: "🇮🇸"),
+//         credit(name: "Preben Vangberg", webpage: "", language: "🏴󠁧󠁢󠁷󠁬󠁳󠁿")
         ]
     let openSource =
         [credit(name: "WenchaoD/FSCalendar", webpage: "https://github.com/WenchaoD/FSCalendar", language: "🌐"),
