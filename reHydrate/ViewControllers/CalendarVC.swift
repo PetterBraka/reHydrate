@@ -96,7 +96,7 @@ class CalendarVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.days = fetchDays()
+        self.days = fetchAllDays()
         getDrinks(Date.init())
         setUpUI()
         changeAppearance()
