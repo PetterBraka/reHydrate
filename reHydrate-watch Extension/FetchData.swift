@@ -1,17 +1,17 @@
 //
-//  featchData.swift
-//  reHydrate
+//  FetchData.swift
+//  reHydrate-watch Extension
 //
-//  Created by Petter vang Brakalsvålet on 15/10/2020.
-//  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
+//  Created by Petter vang Brakalsvålet on 16/01/2021.
+//  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
-
-import Foundation
 import UIKit
+import WatchKit
 import CoreData
+import Foundation
 
 
-let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+let context = (WKExtension.shared().delegate as! ExtensionDelegate).persistentContainer.viewContext
 let formatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "dd/MM/YYYY"

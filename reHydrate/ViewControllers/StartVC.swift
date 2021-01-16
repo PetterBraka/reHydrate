@@ -235,15 +235,21 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         var drink = Double()
         switch sender.view {
         case smallOption:
+            #if DEBUG
             print("small short-press")
+            #endif
             drink = drinkOptions[0]
             updateConsumtion(drink)
         case mediumOption:
+            #if DEBUG
             print("medium short-press")
+            #endif
             drink = drinkOptions[1]
             updateConsumtion(drink)
         case largeOption:
+            #if DEBUG
             print("large short-press")
+            #endif
             drink = drinkOptions[2]
             updateConsumtion(drink)
         case settingsButton:
@@ -275,13 +281,19 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         if sender.state     == .began {
             switch sender.view {
             case smallOption:
+                #if DEBUG
                 print("small long-press")
+                #endif
                 popUpOptions(sender, drinkOptions[0], smallLabel)
             case mediumOption:
+                #if DEBUG
                 print("medium long-press")
+                #endif
                 popUpOptions(sender, drinkOptions[1], mediumLabel)
             case largeOption:
+                #if DEBUG
                 print("large long-press")
+                #endif
                 popUpOptions(sender, drinkOptions[2], largeLabel)
             default:
                 break
@@ -334,7 +346,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         formatter.locale = Locale(identifier: local?.first as! String)
         
         if UIApplication.isFirstLaunch() {
+            #if DEBUG
             print("first time to launch this version of the app")
+            #endif
             metricUnits  = true
             defaults.set(metricUnits, forKey: metricUnitsString)
             if self.traitCollection.userInterfaceStyle == .dark {
@@ -674,16 +688,22 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             }
             healthStore.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, _) in
                 if (!success) {
-                    print("Was not authorization by the user")
+                    #if DEBUG
+                    print("Was not authorization by the user to use health")
+                    #endif
                     return
                 }
                 let center = UNUserNotificationCenter.current()
                 center.requestAuthorization(options: [.alert, .sound]) { (success, _) in
                     if success {
-                        print("we are allowed to send notifications.")
+                        #if DEBUG
+                        print("Was not authorization by the user to use send notifications.")
+                        #endif
                         self.defaults.set(true, forKey: remindersString)
                     } else {
-                        print("we are not allowed to send notifications.")
+                        #if DEBUG
+                        print("Was not authorization by the user to use send notifications.")
+                        #endif
                         self.defaults.set(false, forKey: remindersString)
                     }
                 }
@@ -718,11 +738,13 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                                                    start: date, end: date)
         if waterAmount != 0 {
             HKHealthStore().save(waterConsumedSample) { (_, error) in
+                #if DEBUG
                 if let error = error {
                     print("Error Saving water consumtion: \(error.localizedDescription)")
                 } else {
                     print("Successfully saved water consumtion")
                 }
+                #endif
             }
         }
     }
@@ -803,7 +825,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let drinkAmount  = Measurement(value: Double(drinkConsumed), unit: UnitVolume.milliliters)
         let drink        = drinkAmount.converted(to: .liters).value
         exportDrinkToHealth(Double(drink), Date.init())
-        self.days = fetchDays()
+        self.days = fetchAllDays()
         let today = fetchToday()
         today.consumed += drink
         let rounded = round(today.consumed * 100)/100
@@ -1053,7 +1075,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         defaults.set(drinkOptions[1], forKey: mediumDrinkOptionString)
         defaults.set(drinkOptions[2], forKey: largeDrinkOptionString)
         updateUI()
-        self.days = fetchDays()
+        self.days = fetchAllDays()
         var today: Day?
         if days.isEmpty {
             today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
@@ -1067,7 +1089,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                        "phoneDrinks": "\(drinkOptions[0] ),\(drinkOptions[1] ),\(drinkOptions[2] )"]
         if WCSession.default.isReachable {
             WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                #if DEBUG
                 print(error.localizedDescription)
+                #endif
             }
             WCSession.default.transferCurrentComplicationUserInfo(message)
         } else {
@@ -1102,19 +1126,27 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         if response.actionIdentifier == "small" {
+            #if DEBUG
             print("small button was pressed")
+            #endif
             updateConsumtion(drinkOptions[0])
             completionHandler()
         } else if response.actionIdentifier == "medium"{
+            #if DEBUG
             print("medium button was pressed")
+            #endif
             updateConsumtion(drinkOptions[1])
             completionHandler()
         } else if response.actionIdentifier == "large"{
+            #if DEBUG
             print("large button was pressed")
+            #endif
             updateConsumtion(drinkOptions[2])
             completionHandler()
         } else {
-            print("button was pressed")
+            #if DEBUG
+            print("unrecogniced button was pressed")
+            #endif
         }
         
     }
@@ -1127,40 +1159,51 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
 // MARK: - Watch communications
 extension StartVC: WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        #if DEBUG
         if (activationState == .activated) {
             print("Connected")
         } else {
             print(error!.localizedDescription)
-            
         }
+        #endif
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) {
+        #if DEBUG
         print("disconnecting from watch")
+        #endif
     }
     
     func sessionDidDeactivate(_ session: WCSession) {
+        #if DEBUG
         print("watch not connected")
+        #endif
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        self.days = fetchDays()
+        self.days = fetchAllDays()
         let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
         if !days.isEmpty {
             today.goal = days.last?.goal ?? 3
         }
+        #if DEBUG
         print("sent data with transferUserInfo")
         print(String(describing: message["consumed"]))
         print(String(describing: message["date"]))
         print(String(describing: message["time"]))
+        #endif
         if formatter.string(from: today.date) == message["date"] as! String {
             let messageConsumed = message["consumed"]! as! String
             guard let watchConsumed = Double(messageConsumed) else {
+                #if DEBUG
                 print("error can't extract number from string")
+                #endif
                 return
             }
             guard let watchTime = timeFormatter.date(from: message["time"] as! String) else {
+                #if DEBUG
                 print("error can't extract time from string")
+                #endif
                 return
             }
             if today.consumed <= watchConsumed {
@@ -1168,7 +1211,9 @@ extension StartVC: WCSessionDelegate {
                 today.consumed = watchConsumed
                 today.date = watchTime
                 saveDays()
+                #if DEBUG
                 print("todays amount was updated")
+                #endif
                 DispatchQueue.main.async {
                     self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
                     self.updateUI()
@@ -1180,7 +1225,9 @@ extension StartVC: WCSessionDelegate {
                                "phoneDrinks": "\(drinkOptions[0]),\(drinkOptions[1]),\(drinkOptions[2])"]
                 if WCSession.default.isReachable {
                     WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                        #if DEBUG
                         print(error.localizedDescription)
+                        #endif
                     }
                     WCSession.default.transferCurrentComplicationUserInfo(message)
                 } else {
@@ -1191,25 +1238,31 @@ extension StartVC: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        self.days = fetchDays()
+        self.days = fetchAllDays()
         let today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
         if !days.isEmpty {
             today.goal = days.last?.goal ?? 3
         }
+        #if DEBUG
         print("sent data with transferUserInfo")
         print(String(describing: userInfo["consumed"]))
         print(String(describing: userInfo["date"]))
         print(String(describing: userInfo["date"]))
+        #endif
         if formatter.string(from: today.date) == userInfo["date"] as! String {
             let messageConsumed = userInfo["consumed"]! as! String
             guard let watchConsumed = Double(messageConsumed) else {
+                #if DEBUG
                 print("error can't extract number from string")
+                #endif
                 return
             }
             if today.consumed <= watchConsumed {
                 let drinkAmountAdded = watchConsumed - today.consumed
                 today.consumed = watchConsumed
+                #if DEBUG
                 print("todays amount was updated")
+                #endif
                 DispatchQueue.main.async {
                     saveDays()
                     self.exportDrinkToHealth(Double(drinkAmountAdded), today.date)
@@ -1222,7 +1275,9 @@ extension StartVC: WCSessionDelegate {
                                "phoneDrinks": "\(drinkOptions[0]),\(drinkOptions[1]),\(drinkOptions[2])"]
                 if WCSession.default.isReachable {
                     WCSession.default.sendMessage(message, replyHandler: nil) { (error) in
+                        #if DEBUG
                         print(error.localizedDescription)
+                        #endif
                     }
                     WCSession.default.transferCurrentComplicationUserInfo(message)
                 } else {
@@ -1236,10 +1291,8 @@ extension StartVC: WCSessionDelegate {
 func setAppLanguage(_ language: String) {
     UserDefaults.standard.set([language], forKey: appleLanguagesString)
     UserDefaults.standard.synchronize()
-    
     // Update the language by swaping bundle
     Bundle.setLanguage(language)
-    
     // Done to reintantiate the storyboards instantly
     UIApplication.shared.windows.first(where: {$0.isKeyWindow})?.rootViewController = StartVC()
 }
@@ -1275,10 +1328,10 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
     let difference = Calendar.current.dateComponents([.hour, .minute], from: startDate, to: endDate)
     let differenceInMunutes = (difference.hour! * 60) + difference.minute!
     let totalNotifications = Double(differenceInMunutes / intervals).rounded(.down)
-    
+    #if DEBUG
     print("difference \(differenceInMunutes)")
     print("total notifications \(totalNotifications)")
-    
+    #endif
     let small   = UserDefaults.standard.double(forKey: smallDrinkOptionString)
     let medium  = UserDefaults.standard.double(forKey: mediumDrinkOptionString)
     let large   = UserDefaults.standard.double(forKey: largeDrinkOptionString)
@@ -1301,12 +1354,16 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
     }
     let formatter = DateFormatter()
     formatter.dateFormat = "dd/MM/YYYY"
+    #if DEBUG
     print(formatter.string(from: startDate))
+    #endif
     for i in 0...Int(totalNotifications) {
         let notificationDate = Calendar.current.date(byAdding: .minute, value: intervals * i, to: startDate)
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
+        #if DEBUG
         print("setting reminder for \(formatter.string(from: notificationDate!))")
+        #endif
         let notification = getReminder()
         let smallDrinkAction = UNNotificationAction(identifier: "small", title: "\(NSLocalizedString("Add", comment: "")) \(smallDrink)\(unit)",
                                                     options: UNNotificationActionOptions(rawValue: 0))
