@@ -34,7 +34,7 @@ public func fetchAllDays() -> [Day] {
         print("can't featch days")
         print(error.localizedDescription)
         #endif
-        return nil
+        return [Day(context: context)]
     }
 }
 
