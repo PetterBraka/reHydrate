@@ -689,7 +689,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             healthStore.requestAuthorization(toShare: typesToShare, read: nil, completion: { (success, _) in
                 if (!success) {
                     #if DEBUG
-                    print("Was not authorization by the user")
+                    print("Was not authorization by the user to use health")
                     #endif
                     return
                 }
@@ -697,12 +697,12 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                 center.requestAuthorization(options: [.alert, .sound]) { (success, _) in
                     if success {
                         #if DEBUG
-                        print("we are allowed to send notifications.")
+                        print("Was not authorization by the user to use send notifications.")
                         #endif
                         self.defaults.set(true, forKey: remindersString)
                     } else {
                         #if DEBUG
-                        print("we are not allowed to send notifications.")
+                        print("Was not authorization by the user to use send notifications.")
                         #endif
                         self.defaults.set(false, forKey: remindersString)
                     }
