@@ -24,14 +24,15 @@ let formatter: DateFormatter = {
 /// - Returns: *[Day]* an array off days loaded
 public func fetchAllDays() -> [Day] {
     do {
-        let days = try context.fetch(Day.fetchRequest()) as! [Day]
+        var days = try context.fetch(Day.fetchRequest()) as! [Day]
+        days.sort {$0.date < $1.date}
         #if DEBUG
         days.forEach({$0.toPrint()})
         #endif
         return days
     } catch {
         #if DEBUG
-        print("can't featch days")
+        print("can't fetch days")
         print(error.localizedDescription)
         #endif
         return [Day(context: context)]
@@ -118,7 +119,7 @@ public func fetchDay(_ date: Date) -> Day? {
         let day = loadedDays.first
         return day
     } catch {
-        print("can't featch day")
+        print("can't fetch day")
         print(error.localizedDescription)
         return nil
     }
