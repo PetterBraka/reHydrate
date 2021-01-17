@@ -68,19 +68,11 @@ public func fetchToday() -> Day {
             #if DEBUG
             print("can't today")
             #endif
-            // If the loading of data fails, we create a new day
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd/MM/YYYY"
+            let allDays = fetchAllDays()
+            let previousDay = allDays.last
             let today = Day(context: context)
             today.date = Date()
-            // tries to get yesterday data
-            let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: todaysStart)!
-            let allDays = fetchAllDays()
-            let yesterday = allDays.first(
-                where: {
-                    dateFormatter.string(from: $0.date) ==
-                        dateFormatter.string(from: yesterdayDate)})
-            today.goal = yesterday?.goal ?? 3
+            today.goal = previousDay?.goal ?? 3
             return today
         }
         return today
