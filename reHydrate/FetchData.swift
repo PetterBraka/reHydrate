@@ -1,14 +1,14 @@
 //
-//  featchData.swift
+//  FetchData.swift
 //  reHydrate
 //
-//  Created by Petter vang Brakalsvålet on 15/10/2020.
-//  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
+//  Created by Petter vang Brakalsvålet on 17/01/2021.
+//  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import CoreData
+import Foundation
 
 
 let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -34,7 +34,7 @@ public func fetchAllDays() -> [Day] {
         print("can't featch days")
         print(error.localizedDescription)
         #endif
-        return nil
+        return [Day(context: context)]
     }
 }
 
@@ -64,7 +64,23 @@ public func fetchToday() -> Day {
         loadedDays.forEach({$0.toPrint()})
         #endif
         // If today wasn't found it will create a new day.
-        let today = loadedDays.first!
+        guard let today = loadedDays.first else {
+            #if DEBUG
+            print("can't today")
+            #endif
+            // If the loading of data fails, we create a new day
+            let today = Day(context: context)
+            today.date = Date()
+            // tries to get yesterday data
+            let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: todaysStart)!
+            let allDays = fetchAllDays()
+            let yesterday = allDays.first(
+                where: {
+                    formatter.string(from: $0.date) ==
+                        formatter.string(from: yesterdayDate)})
+            today.goal = yesterday?.goal ?? 3
+            return today
+        }
         return today
     } catch {
         #if DEBUG
@@ -73,13 +89,8 @@ public func fetchToday() -> Day {
         #endif
         // If the loading of data fails, we create a new day
         let today = Day(context: context)
-        let todaysStart = Calendar.current.startOfDay(for: Date())
         today.date = Date()
-        // tries to get yesterday data
-        let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: todaysStart)
-        let allDays = fetchAllDays()
-        let yesterday = allDays.first(where: {$0.date <= yesterdayDate! && $0.date > todaysStart})
-        today.goal = yesterday?.goal ?? 3
+        today.goal = 3
         return today
     }
 }
