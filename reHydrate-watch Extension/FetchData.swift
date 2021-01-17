@@ -64,7 +64,25 @@ public func fetchToday() -> Day {
         loadedDays.forEach({$0.toPrint()})
         #endif
         // If today wasn't found it will create a new day.
-        let today = loadedDays.first!
+        guard let today = loadedDays.first else {
+            #if DEBUG
+            print("can't today")
+            #endif
+            // If the loading of data fails, we create a new day
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/YYYY"
+            let today = Day(context: context)
+            today.date = Date()
+            // tries to get yesterday data
+            let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: todaysStart)!
+            let allDays = fetchAllDays()
+            let yesterday = allDays.first(
+                where: {
+                    dateFormatter.string(from: $0.date) ==
+                        dateFormatter.string(from: yesterdayDate)})
+            today.goal = yesterday?.goal ?? 3
+            return today
+        }
         return today
     } catch {
         #if DEBUG
@@ -73,13 +91,8 @@ public func fetchToday() -> Day {
         #endif
         // If the loading of data fails, we create a new day
         let today = Day(context: context)
-        let todaysStart = Calendar.current.startOfDay(for: Date())
         today.date = Date()
-        // tries to get yesterday data
-        let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: todaysStart)
-        let allDays = fetchAllDays()
-        let yesterday = allDays.first(where: {$0.date <= yesterdayDate! && $0.date > todaysStart})
-        today.goal = yesterday?.goal ?? 3
+        today.goal = 3
         return today
     }
 }
