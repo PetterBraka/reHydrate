@@ -101,7 +101,41 @@ class InterfaceController: WKInterfaceController {
         })
     }
     
-    // MARK: - Load and Save days
+    func updateSummary(){
+        let today = fetchToday()
+        let consumedAmount = Measurement(value: Double(today.consumed), unit: UnitVolume.liters)
+        let goalAmount = Measurement(value: Double(today.goal), unit: UnitVolume.liters)
+        if metric {
+            summaryLable.setText("\(consumedAmount.converted(to: .liters).value.clean)/\(goalAmount.converted(to: .liters).value.clean)L")
+        } else {
+            summaryLable.setText("\(consumedAmount.converted(to: .imperialPints).value.clean)/\(goalAmount.converted(to: .imperialPints).value.clean)pt")
+        }
+        let server = CLKComplicationServer.sharedInstance()
+        server.activeComplications?.forEach({ (complication) in
+            server.reloadTimeline(for: complication)
+        })
+        saveDays()
+        let consumed = String(today.consumed)
+        let message = ["date": formatter.string(from: today.date),
+                       "time": timeFormatter.string(from: today.date),
+                       "metric": String(metric),
+                       "consumed": consumed] as [String : String]
+        print(message)
+        if WCSession.default.isReachable {
+            //send the updated date to the phone instantly.
+            WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { (error) in
+                print(error.localizedDescription)
+                WCSession.default.transferUserInfo(message)
+            })
+        } else {
+            // if the watch isn't connected this message will be sent with a long term time out.
+            WCSession.default.transferUserInfo(message)
+        }
+    }
+}
+
+// MARK: - Load and Save days
+extension InterfaceController {
     /// Loading all days saved to core data.
     /// - Returns: *[Day]* an array off days loaded
     public func fetchAllDays() -> [Day] {
@@ -213,39 +247,6 @@ class InterfaceController: WKInterfaceController {
         }
     }
 
-
-    
-    func updateSummary(){
-        let today = fetchToday()
-        let consumedAmount = Measurement(value: Double(today.consumed), unit: UnitVolume.liters)
-        let goalAmount = Measurement(value: Double(today.goal), unit: UnitVolume.liters)
-        if metric {
-            summaryLable.setText("\(consumedAmount.converted(to: .liters).value.clean)/\(goalAmount.converted(to: .liters).value.clean)L")
-        } else {
-            summaryLable.setText("\(consumedAmount.converted(to: .imperialPints).value.clean)/\(goalAmount.converted(to: .imperialPints).value.clean)pt")
-        }
-        let server = CLKComplicationServer.sharedInstance()
-        server.activeComplications?.forEach({ (complication) in
-            server.reloadTimeline(for: complication)
-        })
-        saveDays()
-        let consumed = String(today.consumed)
-        let message = ["date": formatter.string(from: today.date),
-                       "time": timeFormatter.string(from: today.date),
-                       "metric": String(metric),
-                       "consumed": consumed] as [String : String]
-        print(message)
-        if WCSession.default.isReachable {
-            //send the updated date to the phone instantly.
-            WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { (error) in
-                print(error.localizedDescription)
-                WCSession.default.transferUserInfo(message)
-            })
-        } else {
-            // if the watch isn't connected this message will be sent with a long term time out.
-            WCSession.default.transferUserInfo(message)
-        }
-    }
 }
 
 extension InterfaceController: WCSessionDelegate{
