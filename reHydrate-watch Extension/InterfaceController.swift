@@ -55,7 +55,7 @@ class InterfaceController: WKInterfaceController {
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         // Configure interface objects here.
-        days = fetchDays()
+        days = fetchAllDays()
         if WCSession.isSupported(){
             let session = WCSession.default
             session.delegate = self
@@ -104,7 +104,7 @@ class InterfaceController: WKInterfaceController {
     // MARK: - Load and Save days
     /// Loading all days saved to core data.
     /// - Returns: *[Day]* an array off days loaded
-    public func fetchDays() -> [Day] {
+    public func fetchAllDays() -> [Day] {
         do {
             var days = try context.fetch(Day.fetchRequest()) as! [Day]
             days.sort {$0.date < $1.date}
