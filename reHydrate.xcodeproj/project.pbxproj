@@ -30,7 +30,6 @@
 		3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */; };
 		33B4C6FC257E92DB00EEE4AA /* CreditsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B4C6FB257E92DB00EEE4AA /* CreditsCell.swift */; };
-		33B63B9525B389860035E29B /* FetchData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B63B9425B389860035E29B /* FetchData.swift */; };
 		33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58825123A1900658867 /* Day+CoreDataClass.swift */; };
 		33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */; };
 		33C431912482769B00E8EECA /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C431902482769B00E8EECA /* Extenstions.swift */; };
@@ -196,7 +195,6 @@
 		3389E0AA2448A61300DD7B58 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
 		33B4C6FB257E92DB00EEE4AA /* CreditsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsCell.swift; sourceTree = "<group>"; };
-		33B63B9425B389860035E29B /* FetchData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchData.swift; sourceTree = "<group>"; };
 		33BEA58825123A1900658867 /* Day+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33C1288A256267D100C6FA8B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -420,16 +418,15 @@
 		33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */ = {
 			isa = PBXGroup;
 			children = (
-				332E5A4524CCBF5000EF4D79 /* Extensions.swift */,
 				33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */,
 				33DF9BED24B47D0A00699B1A /* ExtensionDelegate.swift */,
+				332E5A4524CCBF5000EF4D79 /* Extensions.swift */,
 				33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */,
 				33DF9BF124B47D0A00699B1A /* Assets.xcassets */,
 				33DF9BF324B47D0A00699B1A /* Info.plist */,
 				339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */,
 				33BEA58825123A1900658867 /* Day+CoreDataClass.swift */,
 				33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */,
-				33B63B9425B389860035E29B /* FetchData.swift */,
 			);
 			path = "reHydrate-watch Extension";
 			sourceTree = "<group>";
@@ -841,7 +838,6 @@
 				33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */,
 				33DF9BEC24B47D0A00699B1A /* InterfaceController.swift in Sources */,
 				33DF9BF024B47D0A00699B1A /* ComplicationController.swift in Sources */,
-				33B63B9525B389860035E29B /* FetchData.swift in Sources */,
 				33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1018,7 +1014,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = reHydrate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1040,7 +1036,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = reHydrate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1061,7 +1057,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				IBSC_MODULE = reHydrate_watch_Extension;
 				INFOPLIST_FILE = "reHydrate-watch/Info.plist";
@@ -1082,7 +1078,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				IBSC_MODULE = reHydrate_watch_Extension;
 				INFOPLIST_FILE = "reHydrate-watch/Info.plist";
@@ -1102,7 +1098,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = "reHydrate-watch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1126,7 +1122,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = "reHydrate-watch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
