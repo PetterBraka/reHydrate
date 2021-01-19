@@ -539,7 +539,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                 transition.type     = .push
                 transition.subtype  = .fromRight
                 transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                self.days = fetchDays()
+                self.days = fetchAllDays()
                 self.days.forEach({self.context.delete($0)})
                 saveDays()
                 self.view.window!.layer.add(transition, forKey: kCATransition)
