@@ -81,6 +81,10 @@ class SettingOptionCell: UITableViewCell {
     }
     var days: [Day] = []
     var position: cellPosition = .none
+    let languageArray = [NSLocalizedString(appLanguages[0], comment: ""),
+                       NSLocalizedString(appLanguages[1], comment: ""),
+                       NSLocalizedString(appLanguages[2], comment: ""),
+                       NSLocalizedString(appLanguages[3], comment: "")]
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -144,7 +148,7 @@ class SettingOptionCell: UITableViewCell {
         buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
     }
     
-    /// Setts the background constrains and the constraints for the UITextField
+    /// Setts the background constrains and the constraints for the *UITextField*
     func setTextFieldConstraints() {
         setBackgroundConstraints()
         textField.translatesAutoresizingMaskIntoConstraints                                        = false
@@ -155,27 +159,24 @@ class SettingOptionCell: UITableViewCell {
     }
     
     /**
-     Changes the apparentce of a **SettingOptionCell** deppending on the users preferents.
+     Calles a method to change the apparance of each cell
      
      # Example #
      ```
-     settCellAppairents(darkMode)
+     setCellApparance(darkMode)
      ```
      */
-    func setCellAppairents(_ dark: Bool,_ metric: Bool){
+    func setCellApparance(_ dark: Bool,_ metric: Bool){
         changeTheme(dark)
         switch titleOption.text?.lowercased() {
+        case NSLocalizedString("DarkMode", comment: "").lowercased():
+            buttonApparanceDarkMode(dark)
+        case NSLocalizedString("MetricSystem", comment: "").lowercased():
+            buttonApparanceMetrics(metric, dark)
+        case NSLocalizedString("ImperialSystem", comment: "").lowercased():
+            buttonApparanceImperial(metric, dark)
         case NSLocalizedString("SetYourGoal", comment: "").lowercased():
-            buttonForCell.isHidden = true
-            days = fetchAllDays()
-            let day = fetchToday()
-            if metric {
-                textField.text = day.goal.clean
-            } else {
-                let measurement = Measurement(value: day.goal, unit: UnitVolume.liters)
-                textField.text  = measurement.converted(to: .imperialFluidOunces).value.clean
-            }
-            setUpPickerView()
+            textfieldApparanceGoal(metric)
         case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
              NSLocalizedString("TurnOffReminders", comment: "").lowercased():
             buttonForCell.isHidden = false
@@ -187,7 +188,7 @@ class SettingOptionCell: UITableViewCell {
             buttonForCell.isHidden = true
             setUpMinutePicker()
         case NSLocalizedString("Language", comment: "").lowercased():
-            setLanguageAppairents()
+            setLanguageApparance()
         default:
             buttonForCell.isHidden = true
         }
@@ -195,6 +196,17 @@ class SettingOptionCell: UITableViewCell {
         UserDefaults.standard.set(metric, forKey: metricUnitsString)
     }
     
+    
+    /**
+     This method will change the theme of the app.
+     
+     - parameter dark: -  Indecating if the theme is light or dark mode.
+     
+     # Example #
+     ```
+        changeTheme(dark)
+     ```
+     */
     fileprivate func changeTheme(_ dark: Bool) {
         if dark{
             buttonForCell.tintColor         = .lightGray
@@ -217,104 +229,157 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     
-    fileprivate func setButtonApperance(_ dark: Bool,_ metric: Bool){
-        if #available(iOS 13.0, *){
-            setButtonIcons(dark, metric)
-        } else {
-            setButtonIconsOld(dark, metric)
-        }
-    }
-    
-    @available(iOS 13.0, *)
-    fileprivate func setButtonIcons(_ dark: Bool, _ metric: Bool) {
-        switch titleOption.text?.lowercased() {
-        case NSLocalizedString("DarkMode", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if dark{
+    /**
+     Will change the button apparance for dark mode cell
+     
+     - parameter dark: - Indecating if the theme is light or dark mode.
+     
+     # Example #
+     ```
+     case NSLocalizedString("DarkMode", comment: "").lowercased():
+         buttonApparanceDarkMode(dark)
+     ```
+     */
+    fileprivate func buttonApparanceDarkMode(_ dark: Bool) {
+        buttonForCell.isHidden = false
+        if dark{
+            if #available(iOS 13.0, *) {
                 buttonForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
             } else {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-            }
-        case NSLocalizedString("MetricSystem", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if metric{
-                buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-            } else {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-            }
-        case NSLocalizedString("ImperialSystem", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if !metric{
-                buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-            } else {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-            }
-        default:
-            buttonForCell.isHidden = true
-        }
-    }
-    
-    fileprivate func setButtonIconsOld(_ dark: Bool, _ metric: Bool) {
-        switch titleOption.text?.lowercased() {
-        case NSLocalizedString("DarkMode", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if dark{
                 buttonForCell.setBackgroundImage(UIImage(named: "moon.circle.fill")?.colored(.gray), for: .normal)
+            }
+        } else {
+            if #available(iOS 13.0, *) {
+                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
             } else {
                 buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
             }
-        case NSLocalizedString("MetricSystem", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if metric{
-                if dark {
-                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                }
-            } else {
-                if dark {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                }
-            }
-        case NSLocalizedString("ImperialSystem", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if !metric{
-                if dark {
-                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                }
-            } else {
-                if dark {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                }
-            }
-        default:
-            buttonForCell.isHidden = true
         }
     }
     
-    fileprivate func setLanguageAppairents() {
+    /**
+     Will change the button apparance for the metrics cell
+     
+     - parameter metric: - Indicates if the user are using metric units or not..
+     - parameter dark: -  Indecating if the theme is light or dark mode.
+    
+     # Example #
+     ```
+     case NSLocalizedString("MetricSystem", comment: "").lowercased():
+        buttonApparanceMetrics(metric, dark)
+     ```
+     */
+    fileprivate func buttonApparanceMetrics(_ metric: Bool, _ dark: Bool) {
+        buttonForCell.isHidden = false
+        if metric{
+            if #available(iOS 13.0, *) {
+                buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            } else {
+                if dark {
+                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                }
+            }
+        } else {
+            if #available(iOS 13.0, *) {
+                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            } else {
+                if dark {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                }
+            }
+        }
+    }
+    
+    /**
+     Will change the button apparance for the imperial cell
+     
+     - parameter metric: - Indicates if the user are using metric units or not..
+     - parameter dark: -  Indecating if the theme is light or dark mode.
+    
+     # Example #
+     ```
+     case NSLocalizedString("MetricSystem", comment: "").lowercased():
+        buttonApparanceMetrics(metric, dark)
+     ```
+     */
+    fileprivate func buttonApparanceImperial(_ metric: Bool, _ dark: Bool) {
+        buttonForCell.isHidden = false
+        if !metric{
+            if #available(iOS 13.0, *) {
+                buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            } else {
+                if dark {
+                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                }
+            }
+        } else {
+            if #available(iOS 13.0, *) {
+                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            } else {
+                if dark {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                }
+            }
+        }
+    }
+    
+    /**
+     Will change the apparance of the textfield with the goal to the metrics specified.
+     
+     - parameter metric: - Indicates if the user are using metric units or not..
+     
+     # Example #
+     ```
+     case NSLocalizedString("SetYourGoal", comment: "").lowercased():
+        textfieldApparanceGoal(metric)
+     ```
+     */
+    fileprivate func textfieldApparanceGoal(_ metric: Bool) {
         buttonForCell.isHidden = true
-        pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""),
-                           NSLocalizedString(appLanguages[1], comment: ""),
-                           NSLocalizedString(appLanguages[2], comment: ""),
-                           NSLocalizedString(appLanguages[3], comment: "")]
+        days = fetchAllDays()
+        let day = fetchToday()
+        if metric {
+            textField.text = day.goal.clean
+        } else {
+            let measurement = Measurement(value: day.goal, unit: UnitVolume.liters)
+            textField.text  = measurement.converted(to: .imperialFluidOunces).value.clean
+        }
+        setUpPickerView()
+    }
+    
+    /**
+     Will change the apparance of the picker and its options.
+     
+     - parameter metric: - Indicates if the user are using metric units or not..
+     
+     # Example #
+     ```
+     case NSLocalizedString("SetYourGoal", comment: "").lowercased():
+        textfieldApparanceGoal(metric)
+     ```
+     */
+    fileprivate func setLanguageApparance() {
+        buttonForCell.isHidden = true
+        pickerArray     = languageArray
         componentString = [""]
         setUpPickerView()
         textField.placeholder = "language"
         let picker = textField.inputView as! UIPickerView
         let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
-        if pickerArray.contains(NSLocalizedString(language[0], comment: "")){
+        if pickerArray.contains(NSLocalizedString(language.first!, comment: "")){
             textField.text = NSLocalizedString(language.first!, comment: "")
             picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(language.first!, comment: "")) ?? 0, inComponent: 0, animated: true)
         } else {
-            textField.text = NSLocalizedString(appLanguages[0], comment: "")
-            picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
+            textField.text = NSLocalizedString("en", comment: "")
+            picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString("en", comment: "")) ?? 0, inComponent: 0, animated: true)
         }
     }
     
@@ -445,6 +510,16 @@ class SettingOptionCell: UITableViewCell {
         textField.inputAccessoryView = toolBar
     }
     
+    /**
+     handles the imput for the UIDatePicker
+     
+     - parameter sender: - The UIDatePicker that called the function.
+     
+     # Example #
+     ```
+     minutePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
+     ```
+     */
     @objc func handleInput(_ sender: UIDatePicker ){
         switch titleOption.text?.lowercased() {
         case NSLocalizedString("StartingTime", comment: "").lowercased():
@@ -477,6 +552,14 @@ class SettingOptionCell: UITableViewCell {
         textField.text = formatter.string(from: sender.date)
     }
     
+    /**
+     will cancle the edits and close the keyboard
+     
+     # Example #
+     ```
+     let cancelButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelClicked))
+     ```
+     */
     @objc func cancelClicked(){
         textField.endEditing(true)
     }
@@ -498,6 +581,16 @@ class SettingOptionCell: UITableViewCell {
         }
     }
     
+    /**
+     will set reminders and notify the user that reminders has been set between the times specified by the user.
+     
+     # Example #
+     ```
+     case NSLocalizedString("StartingTime", comment: "").lowercased(),
+        NSLocalizedString("EndingTime", comment: "").lowercased():
+        handleRemindersOptions()
+     ```
+     */
     fileprivate func handleRemindersOptions() {
         let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
         let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
@@ -508,6 +601,15 @@ class SettingOptionCell: UITableViewCell {
         sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
     }
     
+    /**
+     will set the frequensy of the reminders and notify the user that reminders has been in the frequency specified by the user.
+     
+     # Example #
+     ```
+     case NSLocalizedString("Frequency", comment: "").lowercased():
+         handleFrequencyOptions()
+     ```
+     */
     fileprivate func handleFrequencyOptions() {
         let picker = textField.inputView as! UIDatePicker
         if picker.countDownDuration > 2.5 * 60 * 60{
@@ -532,6 +634,15 @@ class SettingOptionCell: UITableViewCell {
         sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
     }
     
+    /**
+     will change the app language to the language specified by the user.
+     
+     # Example #
+     ```
+     case NSLocalizedString("Language", comment: "").lowercased():
+        handleLanguageOptions()
+     ```
+     */
     fileprivate func handleLanguageOptions() {
         let picker = textField.inputView as! UIPickerView
         textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
@@ -608,6 +719,15 @@ class SettingOptionCell: UITableViewCell {
         })
     }
     
+    /**
+     will get all the days and change the goal for today and save the changes.
+     
+     # Example #
+     ```
+     case NSLocalizedString("SetYourGoal", comment: "").lowercased():
+         updateGoal()
+     ```
+     */
     func updateGoal(){
         days = fetchAllDays()
         let newGoal = Double(textField.text!)!
@@ -721,9 +841,9 @@ extension SettingOptionCell: UITextFieldDelegate {
 extension UIView {
     enum Corner:Int {
         case bottomRight = 0,
-        topRight,
-        bottomLeft,
-        topLeft
+             topRight,
+             bottomLeft,
+             topLeft
     }
     
     private func parseCorner(corner: Corner) -> CACornerMask.Element {
