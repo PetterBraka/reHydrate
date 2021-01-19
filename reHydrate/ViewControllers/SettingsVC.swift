@@ -292,7 +292,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         let cell             = tableView.dequeueReusableCell(withIdentifier: "settingCell") as! SettingOptionCell
         cell.setting         = settings[indexPath.section].options[indexPath.row]
         cell.selectionStyle  = .none
-        cell.setCellAppairents(darkMode, metricUnits)
+        cell.setCellApparance(darkMode, metricUnits)
         
         switch indexPath {
         case IndexPath(row: 0, section: 0), IndexPath(row: 0, section: 1),
