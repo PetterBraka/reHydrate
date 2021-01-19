@@ -17,9 +17,7 @@ class SettingOptionCell: UITableViewCell {
         case mid
         case bot
     }
-    var pickerArray       = [NSLocalizedString(appLanguages[0], comment: ""),
-                             NSLocalizedString(appLanguages[1], comment: ""),
-                             NSLocalizedString(appLanguages[2], comment: "")]
+    var pickerArray       = [""]
     var componentString   = [""]
     let picker            = UIPickerView()
     var notificationStart = Int()
@@ -98,56 +96,6 @@ class SettingOptionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Load and Save day(s)
-    
-    func fetchDays() {
-        do {
-            self.days = try self.context.fetch(Day.fetchRequest())
-        } catch {
-            print("can't featch days")
-        }
-    }
-    
-    func saveDays() {
-        do {
-            try self.context.save()
-        } catch {
-            print("can't save days")
-            print(error.localizedDescription)
-        }
-    }
-    
-    func fetchToday() -> Day {
-        do {
-            let request = Day.fetchRequest() as NSFetchRequest
-            // Get today's beginning & tomorrows beginning time
-            let dateFrom = Calendar.current.startOfDay(for: Date())
-            let dateTo = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)
-            // Sets conditions for date to be within today
-            let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
-            let toPredicate = NSPredicate(format: "date < %@", dateTo! as NSDate)
-            let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
-            request.predicate = datePredicate
-            // tries to get the day out of the array.
-            let loadedDays = try self.context.fetch(request)
-            // If today wasn't found it will create a new day.
-            guard let today = loadedDays.first else {
-                let today = Day(context: self.context)
-                today.date = Date()
-                today.goal = 3
-                return today }
-            return today
-        } catch {
-            print("can't featch day")
-            print(error.localizedDescription)
-            // If the loading of data fails, we create a new day
-            let today = Day(context: self.context)
-            today.date = Date()
-            today.goal = 3
-            return today
-        }
-    }
-    
     // MARK: - Setup UI
     
     /// Settes background constraints and rounds the corners depening on the position of the cell.
@@ -215,90 +163,11 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     func setCellAppairents(_ dark: Bool,_ metric: Bool){
-        if dark{
-            buttonForCell.tintColor         = .lightGray
-            titleOption.textColor           = .white
-            subTitle.textColor              = .white
-            textField.textColor             = .white
-            self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
-            roundedCell.backgroundColor     = UIColor().hexStringToUIColor("#303030")
-            textField.layer.borderColor     = UIColor.lightGray.cgColor
-            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-        } else {
-            buttonForCell.tintColor         = .black
-            titleOption.textColor           = .black
-            subTitle.textColor              = .black
-            textField.textColor             = .black
-            self.backgroundColor            = UIColor().hexStringToUIColor("ebebeb")
-            roundedCell.backgroundColor     = .white
-            textField.layer.borderColor     = UIColor.darkGray.cgColor
-            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-        }
+        changeTheme(dark)
         switch titleOption.text?.lowercased() {
-        case NSLocalizedString("DarkMode", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if dark{
-                if #available(iOS 13.0, *) {
-                    buttonForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "moon.circle.fill")?.colored(.gray), for: .normal)
-                }
-            } else {
-                if #available(iOS 13.0, *) {
-                    buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                }
-            }
-        case NSLocalizedString("MetricSystem", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if metric{
-                if #available(iOS 13.0, *) {
-                    buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                } else {
-                    if dark {
-                        buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                    } else {
-                        buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                    }
-                }
-            } else {
-                if #available(iOS 13.0, *) {
-                    buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                } else {
-                    if dark {
-                        buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                    } else {
-                        buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                    }
-                }
-            }
-        case NSLocalizedString("ImperialSystem", comment: "").lowercased():
-            buttonForCell.isHidden = false
-            if !metric{
-                if #available(iOS 13.0, *) {
-                    buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                } else {
-                    if dark {
-                        buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                    } else {
-                        buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                    }
-                }
-            } else {
-                if #available(iOS 13.0, *) {
-                    buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                } else {
-                    if dark {
-                        buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                    } else {
-                        buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                    }
-                }
-            }
         case NSLocalizedString("SetYourGoal", comment: "").lowercased():
             buttonForCell.isHidden = true
-            fetchDays()
+            days = fetchAllDays()
             let day = fetchToday()
             if metric {
                 textField.text = day.goal.clean
@@ -318,27 +187,135 @@ class SettingOptionCell: UITableViewCell {
             buttonForCell.isHidden = true
             setUpMinutePicker()
         case NSLocalizedString("Language", comment: "").lowercased():
-            buttonForCell.isHidden = true
-            pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""),
-                               NSLocalizedString(appLanguages[1], comment: ""),
-                               NSLocalizedString(appLanguages[2], comment: "")]
-            componentString = [""]
-            setUpPickerView()
-            textField.placeholder = "language"
-            let picker = textField.inputView as! UIPickerView
-            let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
-            if pickerArray.contains(NSLocalizedString(language[0], comment: "")){
-                textField.text = NSLocalizedString(language.first!, comment: "")
-                picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(language.first!, comment: "")) ?? 0, inComponent: 0, animated: true)
-            } else {
-                textField.text = NSLocalizedString(appLanguages[0], comment: "")
-                picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
-            }
+            setLanguageAppairents()
         default:
             buttonForCell.isHidden = true
         }
         UserDefaults.standard.set(dark, forKey: darkModeString)
         UserDefaults.standard.set(metric, forKey: metricUnitsString)
+    }
+    
+    fileprivate func changeTheme(_ dark: Bool) {
+        if dark{
+            buttonForCell.tintColor         = .lightGray
+            titleOption.textColor           = .white
+            subTitle.textColor              = .white
+            textField.textColor             = .white
+            self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
+            roundedCell.backgroundColor     = UIColor().hexStringToUIColor("#303030")
+            textField.layer.borderColor     = UIColor.lightGray.cgColor
+            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        } else {
+            buttonForCell.tintColor         = .black
+            titleOption.textColor           = .black
+            subTitle.textColor              = .black
+            textField.textColor             = .black
+            self.backgroundColor            = UIColor().hexStringToUIColor("ebebeb")
+            roundedCell.backgroundColor     = .white
+            textField.layer.borderColor     = UIColor.darkGray.cgColor
+            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        }
+    }
+    
+    fileprivate func setButtonApperance(_ dark: Bool,_ metric: Bool){
+        if #available(iOS 13.0, *){
+            setButtonIcons(dark, metric)
+        } else {
+            setButtonIconsOld(dark, metric)
+        }
+    }
+    
+    @available(iOS 13.0, *)
+    fileprivate func setButtonIcons(_ dark: Bool, _ metric: Bool) {
+        switch titleOption.text?.lowercased() {
+        case NSLocalizedString("DarkMode", comment: "").lowercased():
+            buttonForCell.isHidden = false
+            if dark{
+                buttonForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
+            } else {
+                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            }
+        case NSLocalizedString("MetricSystem", comment: "").lowercased():
+            buttonForCell.isHidden = false
+            if metric{
+                buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            } else {
+                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            }
+        case NSLocalizedString("ImperialSystem", comment: "").lowercased():
+            buttonForCell.isHidden = false
+            if !metric{
+                buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            } else {
+                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            }
+        default:
+            buttonForCell.isHidden = true
+        }
+    }
+    
+    fileprivate func setButtonIconsOld(_ dark: Bool, _ metric: Bool) {
+        switch titleOption.text?.lowercased() {
+        case NSLocalizedString("DarkMode", comment: "").lowercased():
+            buttonForCell.isHidden = false
+            if dark{
+                buttonForCell.setBackgroundImage(UIImage(named: "moon.circle.fill")?.colored(.gray), for: .normal)
+            } else {
+                buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+            }
+        case NSLocalizedString("MetricSystem", comment: "").lowercased():
+            buttonForCell.isHidden = false
+            if metric{
+                if dark {
+                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                }
+            } else {
+                if dark {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                }
+            }
+        case NSLocalizedString("ImperialSystem", comment: "").lowercased():
+            buttonForCell.isHidden = false
+            if !metric{
+                if dark {
+                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
+                }
+            } else {
+                if dark {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
+                } else {
+                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
+                }
+            }
+        default:
+            buttonForCell.isHidden = true
+        }
+    }
+    
+    fileprivate func setLanguageAppairents() {
+        buttonForCell.isHidden = true
+        pickerArray     = [NSLocalizedString(appLanguages[0], comment: ""),
+                           NSLocalizedString(appLanguages[1], comment: ""),
+                           NSLocalizedString(appLanguages[2], comment: ""),
+                           NSLocalizedString(appLanguages[3], comment: "")]
+        componentString = [""]
+        setUpPickerView()
+        textField.placeholder = "language"
+        let picker = textField.inputView as! UIPickerView
+        let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
+        if pickerArray.contains(NSLocalizedString(language[0], comment: "")){
+            textField.text = NSLocalizedString(language.first!, comment: "")
+            picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(language.first!, comment: "")) ?? 0, inComponent: 0, animated: true)
+        } else {
+            textField.text = NSLocalizedString(appLanguages[0], comment: "")
+            picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(appLanguages[0], comment: "")) ?? 0, inComponent: 0, animated: true)
+        }
     }
     
     // MARK: - Set-up PickerView
@@ -387,10 +364,13 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     fileprivate func setUpDatePicker() {
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .time
-        datePicker.locale = .current
-        datePicker.minuteInterval = 10
+        let datePicker : UIDatePicker = {
+            let picker = UIDatePicker()
+            picker.locale = .current
+            picker.minuteInterval = 10
+            picker.datePickerMode = .time
+            return picker
+        }()
         if #available(iOS 14, *) {
             datePicker.preferredDatePickerStyle = .wheels
             datePicker.sizeToFit()
@@ -413,15 +393,9 @@ class SettingOptionCell: UITableViewCell {
             textField.text = formatter.string(from: endDate)
         }
         datePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
-        
         self.addSubview(textField)
         setTextFieldConstraints()
         textField.inputView = datePicker
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.locale = .current
-        
         let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
@@ -459,10 +433,6 @@ class SettingOptionCell: UITableViewCell {
         self.addSubview(textField)
         setTextFieldConstraints()
         textField.inputView = minutePicker
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.locale = .current
         textField.text = formatter.string(from: minutePicker.date)
         
         let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
@@ -476,9 +446,6 @@ class SettingOptionCell: UITableViewCell {
     }
     
     @objc func handleInput(_ sender: UIDatePicker ){
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.locale = .current
         switch titleOption.text?.lowercased() {
         case NSLocalizedString("StartingTime", comment: "").lowercased():
             let startDate = sender.date
@@ -521,66 +488,80 @@ class SettingOptionCell: UITableViewCell {
             updateGoal()
         case NSLocalizedString("StartingTime", comment: "").lowercased(),
              NSLocalizedString("EndingTime", comment: "").lowercased():
-            let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-            let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-            let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-            let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-            let intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
-            setReminders(startDate, endDate, intervals)
-            sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
+            handleRemindersOptions()
         case NSLocalizedString("Frequency", comment: "").lowercased():
-            let picker = textField.inputView as! UIDatePicker
-            if picker.countDownDuration > 2.5 * 60 * 60{
-                var components = DateComponents()
-                components.hour = 2
-                components.minute = 50
-                let date = Calendar.current.date(from: components)!
-                picker.setDate(date, animated: true)
-            }
-            textField.text = formatter.string(from: picker.date)
-            
-            let calendar = Calendar.current
-            
-            let currentDateComponent = calendar.dateComponents([.hour, .minute], from: picker.date)
-            let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
-            
-            print("numberOfMinutes : ", numberOfMinutes)
-            UserDefaults.standard.set(numberOfMinutes, forKey: reminderIntervalString)
-            let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-            let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-            setReminders(startDate, endDate, numberOfMinutes)
-            sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
+            handleFrequencyOptions()
         case NSLocalizedString("Language", comment: "").lowercased():
-            let picker = textField.inputView as! UIPickerView
-            textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
-            switch textField.text?.lowercased() {
-            case NSLocalizedString("nb", comment: "").lowercased():
-                setAppLanguage("nb")
-            case NSLocalizedString("en", comment: "").lowercased():
-                setAppLanguage("en")
-            case NSLocalizedString("de", comment: "").lowercased():
-                setAppLanguage("de")
-            default:
-                setAppLanguage("en")
-            }
-            let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-            let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-            let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
-            let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-            var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
-            if intervals == 0 {
-                intervals = 60
-            }
-            let current = UNUserNotificationCenter.current()
-            current.getPendingNotificationRequests { (pendingNotifcations) in
-                if !pendingNotifcations.isEmpty{
-                    current.removeAllDeliveredNotifications()
-                    current.removeAllPendingNotificationRequests()
-                    setReminders(startTimer.date!, endTimer.date!, intervals)
-                }
-            }
+            handleLanguageOptions()
         default:
             break
+        }
+    }
+    
+    fileprivate func handleRemindersOptions() {
+        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+        let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+        let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+        let intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
+        setReminders(startDate, endDate, intervals)
+        sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
+    }
+    
+    fileprivate func handleFrequencyOptions() {
+        let picker = textField.inputView as! UIDatePicker
+        if picker.countDownDuration > 2.5 * 60 * 60{
+            var components = DateComponents()
+            components.hour = 2
+            components.minute = 50
+            let date = Calendar.current.date(from: components)!
+            picker.setDate(date, animated: true)
+        }
+        textField.text = formatter.string(from: picker.date)
+        
+        let calendar = Calendar.current
+        
+        let currentDateComponent = calendar.dateComponents([.hour, .minute], from: picker.date)
+        let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
+        
+        print("numberOfMinutes : ", numberOfMinutes)
+        UserDefaults.standard.set(numberOfMinutes, forKey: reminderIntervalString)
+        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+        setReminders(startDate, endDate, numberOfMinutes)
+        sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
+    }
+    
+    fileprivate func handleLanguageOptions() {
+        let picker = textField.inputView as! UIPickerView
+        textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
+        switch textField.text?.lowercased() {
+        case NSLocalizedString("nb", comment: "").lowercased():
+            setAppLanguage("nb")
+        case NSLocalizedString("en", comment: "").lowercased():
+            setAppLanguage("en")
+        case NSLocalizedString("de", comment: "").lowercased():
+            setAppLanguage("de")
+        case NSLocalizedString("is", comment: "").lowercased():
+            setAppLanguage("is")
+        default:
+            setAppLanguage("en")
+        }
+        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+        let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+        let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
+        var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
+        if intervals == 0 {
+            intervals = 60
+        }
+        let current = UNUserNotificationCenter.current()
+        current.getPendingNotificationRequests { (pendingNotifcations) in
+            if !pendingNotifcations.isEmpty{
+                current.removeAllDeliveredNotifications()
+                current.removeAllPendingNotificationRequests()
+                setReminders(startTimer.date!, endTimer.date!, intervals)
+            }
         }
     }
     
@@ -628,7 +609,7 @@ class SettingOptionCell: UITableViewCell {
     }
     
     func updateGoal(){
-        fetchDays()
+        days = fetchAllDays()
         let newGoal = Double(textField.text!)!
         let day = fetchToday()
         
