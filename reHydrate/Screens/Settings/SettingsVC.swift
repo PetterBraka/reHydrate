@@ -21,7 +21,7 @@ class SettingsVC: UIViewController {
     
     // MARK: - Variabels
     let defaults                   = UserDefaults.standard
-    var tableView: UITableView     = UITableView()
+    var tableView: UITableView     = UITableView(frame: .infinite, style: .insetGrouped)
     var exitButton: UIButton       = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -127,11 +127,11 @@ class SettingsVC: UIViewController {
         setUpGestrues()
         setConstraints()
         
-        tableView.register(SettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.register(SettingOptionCell.self, forCellReuseIdentifier: "settingCell")
         
-        tableView.delegate   = self
+        tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableView.automaticDimension
         
         let mail = MFMailComposeViewController()
         mail.mailComposeDelegate = self
@@ -273,26 +273,6 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         cell.setCellApparance(darkMode, metricUnits)
         
         switch indexPath {
-        case IndexPath(row: 0, section: 0), IndexPath(row: 0, section: 1),
-             IndexPath(row: 0, section: 5), IndexPath(row: 0, section: 6): // first cell of section
-            cell.position = .top
-        case IndexPath(row: settings[0].options.count - 1, section: 0),
-             IndexPath(row: 1, section: 1), IndexPath(row: 3, section: 3),
-             IndexPath(row: 2, section: 5), IndexPath(row: 6, section: 6): // last cells of section
-            cell.position = .bot
-        case IndexPath(row: 0, section: 2), IndexPath(row: 0, section: 4): // Section with one cell
-            cell.position = .none
-        case IndexPath(row: 0, section: 3): // first cell of reminders
-            if settings[3].isOpened{
-                cell.position = .top
-            } else {
-                cell.position = .none
-            }
-        default: // cells in the middle of a section
-            cell.position = .mid
-        }
-        
-        switch indexPath {
         case IndexPath(row: 0, section: 0): // Dark Mode cell
             cell.textField.removeFromSuperview()
             cell.subTitle.removeFromSuperview()
@@ -375,24 +355,10 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return settings.count + 1
     }
     
-    // MARK: - Creates a section
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
-    }
     // MARK: - Cell controlls of TableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -453,14 +419,12 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                                 }
                             }
                             cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
-                            cell.position = .top
                             tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
                         }
                     } else {
                         self.sendToastMessage(NSLocalizedString("RemoveRemindersToast", comment: "Toast message for removing reminders"), 1)
                         DispatchQueue.main.async {
                             self.settings[3].options.removeLast(3)
-                            cell.position = .none
                             tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .bottom)
                             tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
                             if #available(iOS 13.0, *) {
