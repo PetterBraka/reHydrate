@@ -130,7 +130,6 @@
 		33E2B90D24FADAE60050B8A1 /* white-grey@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B90A24FADAE60050B8A1 /* white-grey@1x.png */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
-		33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FE29D724506FF000BE7634 /* SettingsHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,7 +314,6 @@
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		33FC842E243B992600848B7C /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
-		33FE29D724506FF000BE7634 /* SettingsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -352,8 +350,6 @@
 				3359BB6F24461D620008EF6A /* InfoCell.swift */,
 				33410F0D247C0A9D00C381AC /* CalendarCell.swift */,
 				334282642497AE7600A3CF12 /* AppIconCell.swift */,
-				33B4C6FB257E92DB00EEE4AA /* CreditsCell.swift */,
-				33D1639525865C5A0049B88E /* CreditsHeder.swift */,
 			);
 			path = "Custom Cells";
 			sourceTree = "<group>";
@@ -411,7 +407,6 @@
 				33FC842E243B992600848B7C /* CalendarVC.swift */,
 				333BD5F8246424FF0041D90A /* TutorialVC.swift */,
 				334281E224977ADB00A3CF12 /* AppIconVC.swift */,
-				33593575257D4D8200C5612E /* CreditsVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -427,19 +422,21 @@
 		33B28F5B26B719F600DECA9F /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				33B28F5C26B71A1E00DECA9F /* Cells */,
+				33B28F5D26B734A100DECA9F /* Credits */,
 				3389E0AA2448A61300DD7B58 /* SettingsVC.swift */,
+				3319AA32245334130049C676 /* SettingOptionCell.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		33B28F5C26B71A1E00DECA9F /* Cells */ = {
+		33B28F5D26B734A100DECA9F /* Credits */ = {
 			isa = PBXGroup;
 			children = (
-				33FE29D724506FF000BE7634 /* SettingsHeader.swift */,
-				3319AA32245334130049C676 /* SettingOptionCell.swift */,
+				33593575257D4D8200C5612E /* CreditsVC.swift */,
+				33B4C6FB257E92DB00EEE4AA /* CreditsCell.swift */,
+				33D1639525865C5A0049B88E /* CreditsHeder.swift */,
 			);
-			path = Cells;
+			path = Credits;
 			sourceTree = "<group>";
 		};
 		33DF9BDB24B47D0900699B1A /* reHydrate-watch */ = {
@@ -812,7 +809,6 @@
 				336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */,
 				334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */,
 				33593576257D4D8200C5612E /* CreditsVC.swift in Sources */,
-				33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */,
 				3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */,
 				3359BB7024461D620008EF6A /* InfoCell.swift in Sources */,
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
