@@ -105,9 +105,9 @@ class SettingOptionCell: UITableViewCell {
     /// Settes background constraints and rounds the corners depening on the position of the cell.
     func setBackgroundConstraints(){
         self.subviews.forEach({$0.removeConstraints($0.constraints)})
-        roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive       = true
+        roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         roundedCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive    = true
+        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
         roundedCell.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
         switch position {
         case .top:
@@ -127,8 +127,8 @@ class SettingOptionCell: UITableViewCell {
         subTitle.text = subtitle
         roundedCell.addSubview(subTitle)
         setTitleConstraints()
-        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive           = true
-        subTitle.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: 15).isActive     = true
+        subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive = true
+        subTitle.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: 15).isActive = true
         setButtonConstraints()
     }
     
@@ -136,45 +136,72 @@ class SettingOptionCell: UITableViewCell {
     func setTitleConstraints(){
         setBackgroundConstraints()
         titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive = true
-        titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive         = true
+        titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive = true
         setButtonConstraints()
     }
     
     /// Setts the button constraints
     func setButtonConstraints() {
-        buttonForCell.widthAnchor.constraint(equalToConstant: 25).isActive                             = true
-        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
+        buttonForCell.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        buttonForCell.heightAnchor.constraint(equalToConstant: 25).isActive = true
         buttonForCell.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
-        buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
+        buttonForCell.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive = true
     }
     
     /// Setts the background constrains and the constraints for the *UITextField*
     func setTextFieldConstraints() {
         setBackgroundConstraints()
-        textField.translatesAutoresizingMaskIntoConstraints                                        = false
-        textField.heightAnchor.constraint(equalToConstant: 25).isActive                            = true
-        textField.widthAnchor.constraint(equalToConstant: 100).isActive                            = true
-        textField.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive            = true
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        textField.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        textField.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive = true
         textField.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
     }
     
     /**
-     Calles a method to change the apparance of each cell
+     Sets the apparance of each cell
      
      # Example #
      ```
-     setCellApparance(darkMode)
+     cell.setCellApparance(dark, metric)
      ```
      */
     func setCellApparance(_ dark: Bool,_ metric: Bool){
-        changeTheme(dark)
+        buttonForCell.tintColor         = dark ? .lightGray : .black
+        titleOption.textColor           = dark ? .white : .black
+        subTitle.textColor              = dark ? .white : .black
+        textField.textColor             = dark ? .white : .black
+        self.backgroundColor            = UIColor.reHydrateBackground
+        roundedCell.backgroundColor     = UIColor.reHydrateCellBackground
+        textField.layer.borderColor     = dark ? UIColor.lightGray.cgColor : UIColor.black.cgColor
+        textField.attributedPlaceholder = NSAttributedString(string: "value",
+                                                             attributes: [NSAttributedString.Key.foregroundColor :
+                                                                            dark ? UIColor.lightGray : UIColor.darkGray])
+        setSubviewApparance(dark, metric)
+        UserDefaults.standard.set(dark, forKey: darkModeString)
+        UserDefaults.standard.set(metric, forKey: metricUnitsString)
+    }
+    
+    /**
+     Setts the apparances of the button
+     
+     # Example #
+     ```
+     setButtonApparance(dark, metric)
+     ```
+     */
+    private func setSubviewApparance(_ dark: Bool, _ metric: Bool) {
+        buttonForCell.isHidden = false
         switch titleOption.text?.lowercased() {
         case NSLocalizedString("DarkMode", comment: "").lowercased():
-            buttonApparanceDarkMode(dark)
+            buttonForCell.setBackgroundImage(dark ? UIImage(systemName: "moon.circle.fill") :
+                                                UIImage(systemName: "circle"), for: .normal)
         case NSLocalizedString("MetricSystem", comment: "").lowercased():
-            buttonApparanceMetrics(metric, dark)
+            buttonForCell.setBackgroundImage(metric ? UIImage(systemName: "checkmark.circle.fill") :
+                                                UIImage(systemName: "circle"), for: .normal)
         case NSLocalizedString("ImperialSystem", comment: "").lowercased():
-            buttonApparanceImperial(metric, dark)
+            buttonForCell.setBackgroundImage(!metric ? UIImage(systemName: "checkmark.circle.fill") :
+                                                UIImage(systemName: "circle"), for: .normal)
         case NSLocalizedString("SetYourGoal", comment: "").lowercased():
             textfieldApparanceGoal(metric)
         case NSLocalizedString("TurnOnReminders", comment: "").lowercased(),
@@ -192,143 +219,6 @@ class SettingOptionCell: UITableViewCell {
         default:
             buttonForCell.isHidden = true
         }
-        UserDefaults.standard.set(dark, forKey: darkModeString)
-        UserDefaults.standard.set(metric, forKey: metricUnitsString)
-    }
-    
-    
-    /**
-     This method will change the theme of the app.
-     
-     - parameter dark: -  Indecating if the theme is light or dark mode.
-     
-     # Example #
-     ```
-        changeTheme(dark)
-     ```
-     */
-    fileprivate func changeTheme(_ dark: Bool) {
-        if dark{
-            buttonForCell.tintColor         = .lightGray
-            titleOption.textColor           = .white
-            subTitle.textColor              = .white
-            textField.textColor             = .white
-            self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
-            roundedCell.backgroundColor     = UIColor().hexStringToUIColor("#303030")
-            textField.layer.borderColor     = UIColor.lightGray.cgColor
-            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-        } else {
-            buttonForCell.tintColor         = .black
-            titleOption.textColor           = .black
-            subTitle.textColor              = .black
-            textField.textColor             = .black
-            self.backgroundColor            = UIColor().hexStringToUIColor("ebebeb")
-            roundedCell.backgroundColor     = .white
-            textField.layer.borderColor     = UIColor.darkGray.cgColor
-            textField.attributedPlaceholder = NSAttributedString(string: "value", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-        }
-    }
-    
-    /**
-     Will change the button apparance for dark mode cell
-     
-     - parameter dark: - Indecating if the theme is light or dark mode.
-     
-     # Example #
-     ```
-     case NSLocalizedString("DarkMode", comment: "").lowercased():
-         buttonApparanceDarkMode(dark)
-     ```
-     */
-    fileprivate func buttonApparanceDarkMode(_ dark: Bool) {
-        buttonForCell.isHidden = false
-        if dark{
-            if #available(iOS 13.0, *) {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
-            } else {
-                buttonForCell.setBackgroundImage(UIImage(named: "moon.circle.fill")?.colored(.gray), for: .normal)
-            }
-        } else {
-            if #available(iOS 13.0, *) {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-            } else {
-                buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-            }
-        }
-    }
-    
-    /**
-     Will change the button apparance for the metrics cell
-     
-     - parameter metric: - Indicates if the user are using metric units or not..
-     - parameter dark: -  Indecating if the theme is light or dark mode.
-    
-     # Example #
-     ```
-     case NSLocalizedString("MetricSystem", comment: "").lowercased():
-        buttonApparanceMetrics(metric, dark)
-     ```
-     */
-    fileprivate func buttonApparanceMetrics(_ metric: Bool, _ dark: Bool) {
-        buttonForCell.isHidden = false
-        if metric{
-            if #available(iOS 13.0, *) {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-            } else {
-                if dark {
-                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                }
-            }
-        } else {
-            if #available(iOS 13.0, *) {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-            } else {
-                if dark {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                }
-            }
-        }
-    }
-    
-    /**
-     Will change the button apparance for the imperial cell
-     
-     - parameter metric: - Indicates if the user are using metric units or not..
-     - parameter dark: -  Indecating if the theme is light or dark mode.
-    
-     # Example #
-     ```
-     case NSLocalizedString("MetricSystem", comment: "").lowercased():
-        buttonApparanceMetrics(metric, dark)
-     ```
-     */
-    fileprivate func buttonApparanceImperial(_ metric: Bool, _ dark: Bool) {
-        buttonForCell.isHidden = false
-        if !metric{
-            if #available(iOS 13.0, *) {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-            } else {
-                if dark {
-                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                }
-            }
-        } else {
-            if #available(iOS 13.0, *) {
-                buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-            } else {
-                if dark {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                } else {
-                    buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                }
-            }
-        }
     }
     
     /**
@@ -342,7 +232,7 @@ class SettingOptionCell: UITableViewCell {
         textfieldApparanceGoal(metric)
      ```
      */
-    fileprivate func textfieldApparanceGoal(_ metric: Bool) {
+    private func textfieldApparanceGoal(_ metric: Bool) {
         buttonForCell.isHidden = true
         days = fetchAllDays()
         let day = fetchToday()
@@ -366,7 +256,7 @@ class SettingOptionCell: UITableViewCell {
         textfieldApparanceGoal(metric)
      ```
      */
-    fileprivate func setLanguageApparance() {
+    private func setLanguageApparance() {
         buttonForCell.isHidden = true
         pickerArray     = languageArray
         componentString = [""]
@@ -393,23 +283,17 @@ class SettingOptionCell: UITableViewCell {
      setUpPickerView()
      ```
      */
-    fileprivate func setUpPickerView() {
+    private func setUpPickerView() {
         self.addSubview(textField)
         setTextFieldConstraints()
-        
-        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton    = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(doneClicked))
-        let cancelButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelClicked))
-        cancelButton.tintColor = .red
-        toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
-        toolBar.sizeToFit()
-        
+        let toolBar = getToolbar()
         textField.inputAccessoryView = toolBar
-        
-        picker.frame        = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 280)
-        picker.delegate     = self
-        picker.dataSource   = self
+        picker.frame = CGRect(x: 0,
+                              y: 0,
+                              width: contentView.bounds.width,
+                              height: 280)
+        picker.delegate = self
+        picker.dataSource = self
         if titleOption.text?.lowercased() == NSLocalizedString("Language", comment: "").lowercased(){
             textField.inputView = picker
         } else if titleOption.text?.lowercased() == NSLocalizedString("SetYourGoal", comment: "").lowercased(){
@@ -428,18 +312,16 @@ class SettingOptionCell: UITableViewCell {
      setUpPickerView()
      ```
      */
-    fileprivate func setUpDatePicker() {
-        let datePicker : UIDatePicker = {
+    private func setUpDatePicker() {
+        let datePicker: UIDatePicker = {
             let picker = UIDatePicker()
             picker.locale = .current
             picker.minuteInterval = 10
             picker.datePickerMode = .time
+            picker.preferredDatePickerStyle = .wheels
+            picker.sizeToFit()
             return picker
         }()
-        if #available(iOS 14, *) {
-            datePicker.preferredDatePickerStyle = .wheels
-            datePicker.sizeToFit()
-        }
         let calendar = NSCalendar.current
         var components = calendar.dateComponents([.hour, .minute], from: Date())
         let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
@@ -461,14 +343,36 @@ class SettingOptionCell: UITableViewCell {
         self.addSubview(textField)
         setTextFieldConstraints()
         textField.inputView = datePicker
-        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton    = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
-        let cancelButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelClicked))
+        let toolbar = getToolbar()
+        textField.inputAccessoryView = toolbar
+    }
+    
+    /**
+     Creates an toolbar with a done and cancle button.
+     
+     # Example #
+     ```
+     let toolbar = getToolbar
+     ```
+     */
+    private func getToolbar() -> UIToolbar{
+        let toolbar = UIToolbar(frame: CGRect(origin: CGPoint.zero,
+                                              size: CGSize(width: contentView.frame.width,
+                                                           height: 40)))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
+                                            target: nil,
+                                            action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done,
+                                         target: self,
+                                         action: #selector(doneClicked))
+        let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
+                                           style: .plain,
+                                           target: self,
+                                           action: #selector(cancelClicked))
         cancelButton.tintColor = .red
-        toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
-        toolBar.sizeToFit()
-        textField.inputAccessoryView = toolBar
+        toolbar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
+        toolbar.sizeToFit()
+        return toolbar
     }
     
     // MARK: - SetUp MinutePicker
@@ -481,7 +385,7 @@ class SettingOptionCell: UITableViewCell {
      setUpPickerView()
      ```
      */
-    fileprivate func setUpMinutePicker() {
+    private func setUpMinutePicker() {
         let minutePicker = UIDatePicker()
         minutePicker.datePickerMode = .countDownTimer
         minutePicker.minuteInterval = 10
@@ -500,13 +404,7 @@ class SettingOptionCell: UITableViewCell {
         textField.inputView = minutePicker
         textField.text = formatter.string(from: minutePicker.date)
         
-        let toolBar       = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: self.contentView.frame.width, height: 40)))
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(doneClicked))
-        let cancelButton  = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelClicked))
-        cancelButton.tintColor = .red
-        toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
-        toolBar.sizeToFit()
+        let toolBar = getToolbar()
         textField.inputAccessoryView = toolBar
     }
     
@@ -591,7 +489,7 @@ class SettingOptionCell: UITableViewCell {
         handleRemindersOptions()
      ```
      */
-    fileprivate func handleRemindersOptions() {
+    private func handleRemindersOptions() {
         let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
         let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
         let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
@@ -610,7 +508,7 @@ class SettingOptionCell: UITableViewCell {
          handleFrequencyOptions()
      ```
      */
-    fileprivate func handleFrequencyOptions() {
+    private func handleFrequencyOptions() {
         let picker = textField.inputView as! UIDatePicker
         if picker.countDownDuration > 2.5 * 60 * 60{
             var components = DateComponents()
@@ -643,7 +541,7 @@ class SettingOptionCell: UITableViewCell {
         handleLanguageOptions()
      ```
      */
-    fileprivate func handleLanguageOptions() {
+    private func handleLanguageOptions() {
         let picker = textField.inputView as! UIPickerView
         textField.text = pickerArray[picker.selectedRow(inComponent: 0)]
         switch textField.text?.lowercased() {

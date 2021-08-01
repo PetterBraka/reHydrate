@@ -32,6 +32,7 @@ class SettingsVC: UIViewController {
     }()
     var darkMode = true {
         didSet {
+            self.overrideUserInterfaceStyle = darkMode ? .dark : .light
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
@@ -201,7 +202,7 @@ class SettingsVC: UIViewController {
     func setAppearance(){
         self.view.backgroundColor = UIColor.reHydrateBackground
         tableView.backgroundColor = UIColor.reHydrateBackground
-        exitButton.tintColor  = .lightGray
+        exitButton.tintColor  = darkMode ? .lightGray : .black
     }
     
     // MARK: - Temp message
@@ -386,7 +387,6 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! SettingsHeader
-        cell.setHeaderAppairents(darkMode)
         return cell
     }
     

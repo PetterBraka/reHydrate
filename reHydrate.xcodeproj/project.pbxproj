@@ -350,8 +350,6 @@
 			isa = PBXGroup;
 			children = (
 				3359BB6F24461D620008EF6A /* InfoCell.swift */,
-				33FE29D724506FF000BE7634 /* SettingsHeader.swift */,
-				3319AA32245334130049C676 /* SettingOptionCell.swift */,
 				33410F0D247C0A9D00C381AC /* CalendarCell.swift */,
 				334282642497AE7600A3CF12 /* AppIconCell.swift */,
 				33B4C6FB257E92DB00EEE4AA /* CreditsCell.swift */,
@@ -421,9 +419,27 @@
 		33B28F5826B6EB2C00DECA9F /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				3389E0AA2448A61300DD7B58 /* SettingsVC.swift */,
+				33B28F5B26B719F600DECA9F /* Settings */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		33B28F5B26B719F600DECA9F /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				33B28F5C26B71A1E00DECA9F /* Cells */,
+				3389E0AA2448A61300DD7B58 /* SettingsVC.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		33B28F5C26B71A1E00DECA9F /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				33FE29D724506FF000BE7634 /* SettingsHeader.swift */,
+				3319AA32245334130049C676 /* SettingOptionCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		33DF9BDB24B47D0900699B1A /* reHydrate-watch */ = {
