@@ -153,8 +153,8 @@ class SettingOptionCell: UITableViewCell {
         titleOption.textColor           = dark ? .white : .black
         subTitle.textColor              = dark ? .white : .black
         textField.textColor             = dark ? .white : .black
-        self.backgroundColor            = UIColor.reHydrateBackground
-        roundedCell.backgroundColor     = UIColor.reHydrateCellBackground
+        self.backgroundColor            = UIColor.reHydrateTableViewBackground
+        roundedCell.backgroundColor     = UIColor.reHydrateBackground
         textField.layer.borderColor     = dark ? UIColor.lightGray.cgColor : UIColor.black.cgColor
         textField.attributedPlaceholder = NSAttributedString(string: "value",
                                                              attributes: [NSAttributedString.Key.foregroundColor :

@@ -108,8 +108,8 @@ class SettingsVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         settings[3].isOpened = defaults.bool(forKey: remindersString)
-        metricUnits          = defaults.bool(forKey: metricUnitsString)
-        darkMode             = defaults.bool(forKey: darkModeString)
+        metricUnits = defaults.bool(forKey: metricUnitsString)
+        darkMode = defaults.bool(forKey: darkModeString)
         
         setUpUI()
         updateSettings()
@@ -132,7 +132,7 @@ class SettingsVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.sectionHeaderHeight = .zero
+        tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 16
         
         let mail = MFMailComposeViewController()
@@ -202,8 +202,8 @@ class SettingsVC: UIViewController {
      ```
      */
     func setAppearance(){
-        self.view.backgroundColor = UIColor.reHydrateBackground
-        tableView.backgroundColor = UIColor.reHydrateBackground
+        self.view.backgroundColor = UIColor.reHydrateTableViewBackground
+        tableView.backgroundColor = UIColor.reHydrateTableViewBackground
         exitButton.tintColor  = darkMode ? .lightGray : .black
     }
     
