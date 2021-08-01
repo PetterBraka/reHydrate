@@ -349,7 +349,6 @@
 			children = (
 				3359BB6F24461D620008EF6A /* InfoCell.swift */,
 				33410F0D247C0A9D00C381AC /* CalendarCell.swift */,
-				334282642497AE7600A3CF12 /* AppIconCell.swift */,
 			);
 			path = "Custom Cells";
 			sourceTree = "<group>";
@@ -403,10 +402,7 @@
 		33902D3D2447449F004BE39C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				3378767A24378A9400F5A732 /* StartVC.swift */,
 				33FC842E243B992600848B7C /* CalendarVC.swift */,
-				333BD5F8246424FF0041D90A /* TutorialVC.swift */,
-				334281E224977ADB00A3CF12 /* AppIconVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -414,6 +410,7 @@
 		33B28F5826B6EB2C00DECA9F /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				33B28F5E26B7385D00DECA9F /* Home */,
 				33B28F5B26B719F600DECA9F /* Settings */,
 			);
 			path = Screens;
@@ -422,9 +419,11 @@
 		33B28F5B26B719F600DECA9F /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				33B28F5F26B738D000DECA9F /* AppIcon */,
 				33B28F5D26B734A100DECA9F /* Credits */,
 				3389E0AA2448A61300DD7B58 /* SettingsVC.swift */,
 				3319AA32245334130049C676 /* SettingOptionCell.swift */,
+				333BD5F8246424FF0041D90A /* TutorialVC.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -437,6 +436,23 @@
 				33D1639525865C5A0049B88E /* CreditsHeder.swift */,
 			);
 			path = Credits;
+			sourceTree = "<group>";
+		};
+		33B28F5E26B7385D00DECA9F /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				3378767A24378A9400F5A732 /* StartVC.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		33B28F5F26B738D000DECA9F /* AppIcon */ = {
+			isa = PBXGroup;
+			children = (
+				334281E224977ADB00A3CF12 /* AppIconVC.swift */,
+				334282642497AE7600A3CF12 /* AppIconCell.swift */,
+			);
+			path = AppIcon;
 			sourceTree = "<group>";
 		};
 		33DF9BDB24B47D0900699B1A /* reHydrate-watch */ = {
