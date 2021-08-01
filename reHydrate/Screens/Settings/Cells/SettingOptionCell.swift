@@ -11,12 +11,6 @@ import SwiftUI
 import CoreData
 
 class SettingOptionCell: UITableViewCell {
-    enum cellPosition {
-        case none
-        case top
-        case mid
-        case bot
-    }
     var pickerArray       = [""]
     var componentString   = [""]
     let picker            = UIPickerView()
@@ -58,11 +52,7 @@ class SettingOptionCell: UITableViewCell {
     var buttonForCell: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        if #available(iOS 13.0, *) {
-            button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-        } else {
-            button.setBackgroundImage(UIImage(named: "checkmark.circle.fill"), for: .normal)
-        }
+        button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -75,12 +65,11 @@ class SettingOptionCell: UITableViewCell {
     }()
     var setting: String? {
         didSet {
-            guard let string 	= setting else {return}
-            titleOption.text 	= string
+            guard let string = setting else {return}
+            titleOption.text = string
         }
     }
     var days: [Day] = []
-    var position: cellPosition = .none
     let languageArray = [NSLocalizedString(appLanguages[0], comment: ""),
                        NSLocalizedString(appLanguages[1], comment: ""),
                        NSLocalizedString(appLanguages[2], comment: ""),
@@ -92,8 +81,6 @@ class SettingOptionCell: UITableViewCell {
         roundedCell.addSubview(titleOption)
         roundedCell.addSubview(buttonForCell)
         setTitleConstraints()
-        separatorInset.right = 20
-        separatorInset.left  = 20
     }
     
     required init?(coder: NSCoder) {
@@ -107,18 +94,20 @@ class SettingOptionCell: UITableViewCell {
         self.subviews.forEach({$0.removeConstraints($0.constraints)})
         roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         roundedCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
-        roundedCell.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
-        switch position {
-        case .top:
-            roundedCell.roundCorners(corners: [.topLeft, .topRight], amount: 10)
-        case .mid:
-            roundedCell.roundCorners(corners: [])
-        case .bot:
-            roundedCell.roundCorners(corners: [.bottomLeft, .bottomRight], amount: 10)
-        default:
-            roundedCell.roundCorners(corners: [.topLeft, .topRight, .bottomLeft, .bottomRight], amount: 10)
+        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
+        roundedCell.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
+    }
+    
+    /// Setting constraints for the background, tilte *UILable* and the button.
+    func setTitleConstraints(){
+        setBackgroundConstraints()
+        titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive = true
+        if self.contains(subTitle){
+            titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: -4).isActive = true
+        } else {
+            titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive = true
         }
+        setButtonConstraints()
     }
     
     /// Adds a subtitle under the title lable
@@ -128,15 +117,8 @@ class SettingOptionCell: UITableViewCell {
         roundedCell.addSubview(subTitle)
         setTitleConstraints()
         subTitle.leftAnchor.constraint(equalTo: titleOption.leftAnchor, constant: 10).isActive = true
-        subTitle.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor, constant: 15).isActive = true
-        setButtonConstraints()
-    }
-    
-    /// Setting constraints for the background, tilte *UILable* and the button.
-    func setTitleConstraints(){
-        setBackgroundConstraints()
-        titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive = true
-        titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive = true
+        subTitle.topAnchor.constraint(equalTo: titleOption.bottomAnchor, constant: 2).isActive = true
+        subTitle.bottomAnchor.constraint(equalTo: roundedCell.bottomAnchor, constant: -4).isActive = true
         setButtonConstraints()
     }
     
@@ -258,7 +240,7 @@ class SettingOptionCell: UITableViewCell {
      */
     private func setLanguageApparance() {
         buttonForCell.isHidden = true
-        pickerArray     = languageArray
+        pickerArray = languageArray
         componentString = [""]
         setUpPickerView()
         textField.placeholder = "language"
@@ -271,6 +253,34 @@ class SettingOptionCell: UITableViewCell {
             textField.text = NSLocalizedString("en", comment: "")
             picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString("en", comment: "")) ?? 0, inComponent: 0, animated: true)
         }
+    }
+    
+    /**
+     Creates an toolbar with a done and cancle button.
+     
+     # Example #
+     ```
+     let toolbar = getToolbar
+     ```
+     */
+    private func getToolbar() -> UIToolbar{
+        let toolbar = UIToolbar(frame: CGRect(origin: CGPoint.zero,
+                                              size: CGSize(width: contentView.frame.width,
+                                                           height: 40)))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
+                                            target: nil,
+                                            action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done,
+                                         target: self,
+                                         action: #selector(doneClicked))
+        let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
+                                           style: .plain,
+                                           target: self,
+                                           action: #selector(cancelClicked))
+        cancelButton.tintColor = .red
+        toolbar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
+        toolbar.sizeToFit()
+        return toolbar
     }
     
     // MARK: - Set-up PickerView
@@ -345,34 +355,6 @@ class SettingOptionCell: UITableViewCell {
         textField.inputView = datePicker
         let toolbar = getToolbar()
         textField.inputAccessoryView = toolbar
-    }
-    
-    /**
-     Creates an toolbar with a done and cancle button.
-     
-     # Example #
-     ```
-     let toolbar = getToolbar
-     ```
-     */
-    private func getToolbar() -> UIToolbar{
-        let toolbar = UIToolbar(frame: CGRect(origin: CGPoint.zero,
-                                              size: CGSize(width: contentView.frame.width,
-                                                           height: 40)))
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
-                                            target: nil,
-                                            action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done,
-                                         target: self,
-                                         action: #selector(doneClicked))
-        let cancelButton = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""),
-                                           style: .plain,
-                                           target: self,
-                                           action: #selector(cancelClicked))
-        cancelButton.tintColor = .red
-        toolbar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
-        toolbar.sizeToFit()
-        return toolbar
     }
     
     // MARK: - SetUp MinutePicker
@@ -733,31 +715,5 @@ extension SettingOptionCell: UIPickerViewDelegate, UIPickerViewDataSource{
 extension SettingOptionCell: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.selectAll(self)
-    }
-}
-
-extension UIView {
-    enum Corner:Int {
-        case bottomRight = 0,
-             topRight,
-             bottomLeft,
-             topLeft
-    }
-    
-    private func parseCorner(corner: Corner) -> CACornerMask.Element {
-        let corners: [CACornerMask.Element] = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner]
-        return corners[corner.rawValue]
-    }
-    
-    private func createMask(corners: [Corner]) -> UInt {
-        return corners.reduce(0, { (a, b) -> UInt in
-            return a + parseCorner(corner: b).rawValue
-        })
-    }
-    
-    func roundCorners(corners: [Corner], amount: CGFloat = 5) {
-        layer.cornerRadius = amount
-        let maskedCorners: CACornerMask = CACornerMask(rawValue: createMask(corners: corners))
-        layer.maskedCorners = maskedCorners
     }
 }

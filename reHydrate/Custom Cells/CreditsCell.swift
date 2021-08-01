@@ -74,18 +74,8 @@ class CreditsCell: UITableViewCell {
         self.subviews.forEach({$0.removeConstraints($0.constraints)})
         roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive       = true
         roundedCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive    = true
-        roundedCell.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
-        switch position {
-        case .top:
-            roundedCell.roundCorners(corners: [.topLeft, .topRight], amount: 10)
-        case .mid:
-            roundedCell.roundCorners(corners: [])
-        case .bot:
-            roundedCell.roundCorners(corners: [.bottomLeft, .bottomRight], amount: 10)
-        default:
-            roundedCell.roundCorners(corners: [.topLeft, .topRight, .bottomLeft, .bottomRight], amount: 10)
-        }
+        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive    = true
+        roundedCell.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
     }
     
     /// Setting constraints for the background, tilte *UILable* and the button.
