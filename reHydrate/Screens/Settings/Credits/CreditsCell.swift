@@ -9,12 +9,6 @@
 import UIKit
 
 class CreditsCell: UITableViewCell {
-    enum cellPosition {
-        case none
-        case top
-        case mid
-        case bot
-    }
     var roundedCell: UIView      = {
         let view = UIView()
         view.backgroundColor = .black
@@ -40,7 +34,6 @@ class CreditsCell: UITableViewCell {
         return button
     }()
     var url: String = ""
-    var position: cellPosition = .none
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -70,22 +63,22 @@ class CreditsCell: UITableViewCell {
     // MARK: - Setup UI
     
     /// Settes background constraints and rounds the corners depening on the position of the cell.
-    func setBackgroundConstraints(){
+    private func setBackgroundConstraints(){
         self.subviews.forEach({$0.removeConstraints($0.constraints)})
-        roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive       = true
+        roundedCell.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         roundedCell.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive    = true
+        roundedCell.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
         roundedCell.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
     }
     
     /// Setting constraints for the background, tilte *UILable* and the button.
-    func setConstraints(){
+    private func setConstraints(){
         setBackgroundConstraints()
-        titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive        = true
-        titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive                = true
-        languageImage.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive   = true
-        languageImage.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive              = true
-        languageImage.heightAnchor.constraint(equalToConstant: 25).isActive                              = true
+        titleOption.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive = true
+        titleOption.leftAnchor.constraint(equalTo: roundedCell.leftAnchor, constant: 20).isActive = true
+        languageImage.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        languageImage.centerYAnchor.constraint(equalTo: roundedCell.centerYAnchor).isActive = true
+        languageImage.rightAnchor.constraint(equalTo: roundedCell.rightAnchor, constant: -20).isActive = true
     }
     
     /**
@@ -93,19 +86,13 @@ class CreditsCell: UITableViewCell {
      
      # Example #
      ```
-     settCellAppairents(darkMode)
+     setCellAppairents(darkMode)
      ```
      */
     func setCellAppairents(_ dark: Bool){
-        if dark{
-            titleOption.textColor           = .white
-            roundedCell.backgroundColor     = UIColor().hexStringToUIColor("#303030")
-            self.backgroundColor            = UIColor().hexStringToUIColor("#212121")
-        } else {
-            titleOption.textColor           = .black
-            roundedCell.backgroundColor     = .white
-            self.backgroundColor            = UIColor().hexStringToUIColor("ebebeb")
-        }
+        titleOption.textColor = dark ? .white : .black
+        roundedCell.backgroundColor = UIColor.reHydrateBackground
+        self.backgroundColor = UIColor.reHydrateTableViewBackground
     }
     
 }

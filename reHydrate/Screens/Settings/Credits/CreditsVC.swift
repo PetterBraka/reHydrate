@@ -16,36 +16,29 @@ struct credit {
 }
 
 class CreditsVC: UIViewController {
-    let toolBar: UIView       = {
-        let view             = UIView()
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .opaqueSeparator
-        } else {
-            view.backgroundColor = .lightGray
-        }
+    let toolBar: UIView = {
+        let view = UIView()
+        view.backgroundColor = .opaqueSeparator
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     let exitButton: UIButton  = {
-        let button              = UIButton()
-        button.titleLabel?.font = UIFont(name: "AmericanTypewriter", size: 20)
-        button.setTitle(NSLocalizedString("Back", comment: "Back button in toolbar"), for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        let button = UIButton()
+        button.setTitle("", for: .normal)
+        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     var darkMode = true {
         didSet {
+            self.overrideUserInterfaceStyle = darkMode ? .dark : .light
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
-    var tableView: UITableView     = UITableView()
+    var tableView: UITableView = UITableView(frame: .zero, style: .insetGrouped)
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #available(iOS 13.0, *) {
-            return darkMode ? .lightContent : .darkContent
-        } else {
-            return .default
-        }
+        return darkMode ? .lightContent : .darkContent
     }
     
     let creator =
@@ -100,9 +93,9 @@ class CreditsVC: UIViewController {
         tableView.register(CreditsCell.self, forCellReuseIdentifier: "creditsCell")
         
         tableView.dataSource = self
-        tableView.delegate   = self
+        tableView.delegate = self
         
-        changeAppearance()
+        setAppearance()
     }
     
     // MARK: - Set constraints
@@ -123,20 +116,22 @@ class CreditsVC: UIViewController {
      ```
      */
     fileprivate func setToolBarConstraints() {
-        toolBar.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive      = true
-        toolBar.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive    = true
+        toolBar.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
+        toolBar.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
         toolBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        toolBar.heightAnchor.constraint(equalToConstant: 50).isActive                           = true
-        exitButton.leftAnchor.constraint(equalTo: toolBar.leftAnchor, constant: 20).isActive    = true
-        exitButton.centerYAnchor.constraint(equalTo: toolBar.centerYAnchor).isActive            = true
+        toolBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        exitButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        exitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        exitButton.centerYAnchor.constraint(equalTo: toolBar.centerYAnchor).isActive = true
+        exitButton.leftAnchor.constraint(equalTo: toolBar.leftAnchor, constant: 20).isActive = true
     }
     
     fileprivate func setConstraints(){
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: exitButton.bottomAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: exitButton.bottomAnchor,constant: 8).isActive = true
     }
     
     // MARK: - Change appearance
@@ -149,19 +144,12 @@ class CreditsVC: UIViewController {
      changeAppearance()
      ```
      */
-    func changeAppearance(){
+    func setAppearance(){
         tableView.separatorStyle = .none
-        if darkMode {
-            self.view.backgroundColor  = UIColor().hexStringToUIColor("#212121")
-            exitButton.setTitleColor(.white, for: .normal)
-            toolBar.backgroundColor    = UIColor().hexStringToUIColor("212121")
-            tableView.backgroundColor  = UIColor().hexStringToUIColor("#212121")
-        } else {
-            self.view.backgroundColor  = .white
-            exitButton.setTitleColor(.black, for: .normal)
-            toolBar.backgroundColor    = .white
-            tableView.backgroundColor  = UIColor().hexStringToUIColor("ebebeb")
-        }
+        self.view.backgroundColor  = UIColor.reHydrateTableViewBackground
+        exitButton.tintColor = darkMode ? .lightGray : .black
+        toolBar.backgroundColor = UIColor.reHydrateTableViewBackground
+        tableView.backgroundColor = UIColor.reHydrateTableViewBackground
     }
 }
 
@@ -200,19 +188,7 @@ extension CreditsVC: UITableViewDelegate, UITableViewDataSource{
             cell.titleOption.text = creator[indexPath.row].name
             cell.languageImage.setTitle(creator[indexPath.row].language, for: .normal)
             cell.url = creator[indexPath.row].webpage
-            cell.position = .none
         }
-        switch indexPath {
-        case IndexPath(row: 0, section: 1), IndexPath(row: 0, section: 2):
-            cell.position = .top
-        case IndexPath(row: 1, section: 1):
-            cell.position = .mid
-        case IndexPath(row: 2, section: 1), IndexPath(row: 1, section: 2):
-            cell.position = .bot
-        default:
-            cell.position = .none
-        }
-        cell.setConstraints()
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

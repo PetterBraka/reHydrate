@@ -20,9 +20,9 @@ struct settingOptions {
 class SettingsVC: UIViewController {
     
     // MARK: - Variabels
-    let defaults                   = UserDefaults.standard
-    var tableView: UITableView     = UITableView(frame: .null, style: .insetGrouped)
-    var exitButton: UIButton       = {
+    let defaults = UserDefaults.standard
+    var tableView: UITableView = UITableView(frame: .null, style: .insetGrouped)
+    var exitButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
