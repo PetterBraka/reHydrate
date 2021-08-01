@@ -11,6 +11,7 @@ import UIKit
 
 extension UIColor {
     static let reHydrateBackground = UIColor(named: "reHydrate.Background")
+    static let reHydrateCellBackground = UIColor(named: "reHydrate.Cell.Background")
     
     /**
      Will convert an string of a hex color code to **UIColor**
