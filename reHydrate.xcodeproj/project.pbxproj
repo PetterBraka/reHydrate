@@ -32,6 +32,7 @@
 		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */; };
+		33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */; };
 		33B4C6FC257E92DB00EEE4AA /* CreditsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B4C6FB257E92DB00EEE4AA /* CreditsCell.swift */; };
 		33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58825123A1900658867 /* Day+CoreDataClass.swift */; };
 		33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */; };
@@ -207,6 +208,7 @@
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3389E0AA2448A61300DD7B58 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
+		33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		33B4C6FB257E92DB00EEE4AA /* CreditsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsCell.swift; sourceTree = "<group>"; };
 		33BEA58825123A1900658867 /* Day+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				33B28F5826B6EB2C00DECA9F /* Screens */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */,
 				336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */,
@@ -398,6 +401,7 @@
 				3378767F24378A9800F5A732 /* Assets.xcassets */,
 				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
+				33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */,
 			);
 			path = reHydrate;
 			sourceTree = "<group>";
@@ -407,12 +411,19 @@
 			children = (
 				3378767A24378A9400F5A732 /* StartVC.swift */,
 				33FC842E243B992600848B7C /* CalendarVC.swift */,
-				3389E0AA2448A61300DD7B58 /* SettingsVC.swift */,
 				333BD5F8246424FF0041D90A /* TutorialVC.swift */,
 				334281E224977ADB00A3CF12 /* AppIconVC.swift */,
 				33593575257D4D8200C5612E /* CreditsVC.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		33B28F5826B6EB2C00DECA9F /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				3389E0AA2448A61300DD7B58 /* SettingsVC.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		33DF9BDB24B47D0900699B1A /* reHydrate-watch */ = {
@@ -788,6 +799,7 @@
 				33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */,
 				3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */,
 				3359BB7024461D620008EF6A /* InfoCell.swift in Sources */,
+				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
 				336DCBFD250682C500CF15F0 /* reHydrate.xcdatamodeld in Sources */,
 				33C431912482769B00E8EECA /* Extenstions.swift in Sources */,
 			);

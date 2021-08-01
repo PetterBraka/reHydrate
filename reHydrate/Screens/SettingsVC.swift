@@ -25,11 +25,7 @@ class SettingsVC: UIViewController {
     var exitButton: UIButton       = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        if #available(iOS 13.0, *) {
-            button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        } else {
-            button.setBackgroundImage(UIImage(named: "xmark.circle"), for: .normal)
-        }
+        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -40,11 +36,7 @@ class SettingsVC: UIViewController {
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #available(iOS 13.0, *) {
-            return darkMode ? .lightContent : .darkContent
-        } else {
-            return .default
-        }
+        return darkMode ? .lightContent : .darkContent
     }
     var timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -120,7 +112,7 @@ class SettingsVC: UIViewController {
         
         setUpUI()
         updateSettings()
-        changeAppearance()
+        setAppearance()
         view.heroID = "settings"
     }
     
@@ -155,7 +147,6 @@ class SettingsVC: UIViewController {
         self.view.addGestureRecognizer(leftGesture)
     }
     
-    /// Will sett the constraints for all the views in the view.
     ///Will sett the constraints for all the views in the view.
     
     ///# Notes: #
@@ -194,37 +185,23 @@ class SettingsVC: UIViewController {
         }
     }
     
-    // MARK: - Change appearance
+    // MARK: - Set appearance
     
     /**
-     Changing the appearance of the app deppending on if the users prefrence for dark mode or light mode.
+     Set the appearance of the app deppending on if the users prefrence for dark mode or light mode.
      
      # Notes: #
      1. This will change all the colors off this screen.
      
      # Example #
      ```
-     changeAppearance()
+     setAppearance()
      ```
      */
-    func changeAppearance(){
-        if darkMode {
-            self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
-            tableView.backgroundColor = UIColor().hexStringToUIColor("#212121")
-            if #available(iOS 13, *) {
-                exitButton.tintColor  = .lightGray
-            } else {
-                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.gray), for: .normal)
-            }
-        } else{
-            self.view.backgroundColor = UIColor().hexStringToUIColor("ebebeb")
-            tableView.backgroundColor = UIColor().hexStringToUIColor("ebebeb")
-            if #available(iOS 13, *) {
-                exitButton.tintColor  = .black
-            } else {
-                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.black), for: .normal)
-            }
-        }
+    func setAppearance(){
+        self.view.backgroundColor = UIColor.reHydrateBackground
+        tableView.backgroundColor = UIColor.reHydrateBackground
+        exitButton.tintColor  = .lightGray
     }
     
     // MARK: - Temp message
@@ -422,7 +399,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
         switch indexPath {
         case IndexPath(row: 0, section: 0): // dark mode selected
             darkMode = !darkMode
-            changeAppearance()
+            setAppearance()
             tableView.reloadData()
         case IndexPath(row: 1, section: 0): // Change app icon
             let appIconVC = AppIconVC()
