@@ -21,7 +21,7 @@ class SettingsVC: UIViewController {
     
     // MARK: - Variabels
     let defaults                   = UserDefaults.standard
-    var tableView: UITableView     = UITableView(frame: .infinite, style: .insetGrouped)
+    var tableView: UITableView     = UITableView(frame: .null, style: .insetGrouped)
     var exitButton: UIButton       = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -132,6 +132,8 @@ class SettingsVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.sectionHeaderHeight = .zero
+        tableView.sectionFooterHeight = 16
         
         let mail = MFMailComposeViewController()
         mail.mailComposeDelegate = self
