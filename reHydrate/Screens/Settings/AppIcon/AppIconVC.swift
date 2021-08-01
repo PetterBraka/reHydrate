@@ -22,35 +22,28 @@ class AppIconVC: UIViewController{
     var tableView: UITableView = UITableView()
     var darkMode = true {
         didSet {
+            self.overrideUserInterfaceStyle = darkMode ? .dark : .light
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
     var exitButton: UIButton   = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        if #available(iOS 13.0, *) {
-            button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        } else {
-            button.setBackgroundImage(UIImage(named: "xmark.circle"), for: .normal)
-        }
+        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #available(iOS 13.0, *) {
-            return darkMode ? .lightContent : .darkContent
-        } else {
-            return .lightContent
-        }
+        return darkMode ? .lightContent : .darkContent
     }
     
     @objc func tap(sender: UIGestureRecognizer){
         if sender.view == exitButton{
-            let transition      = CATransition()
+            let transition = CATransition()
             transition.duration = 0.6
-            transition.type     = .push
-            transition.subtype  = .fromBottom
+            transition.type = .push
+            transition.subtype = .fromBottom
             transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             view.window!.layer.add(transition, forKey: kCATransition)
             self.dismiss(animated: true, completion: nil)
@@ -85,12 +78,11 @@ class AppIconVC: UIViewController{
         exitButton.addGestureRecognizer(exitTapRecognizer)
         
         setConstraints()
-        changeAppearance()
+        setAppearance()
         tableView.register(AppIconCell.self, forCellReuseIdentifier: "cell")
-        tableView.delegate   = self
+        tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
-        
     }
     
     /**
@@ -130,27 +122,13 @@ class AppIconVC: UIViewController{
      
      # Example #
      ```
-     changeAppearance()
+     setAppearance()
      ```
      */
-    func changeAppearance(){
-        if darkMode {
-            self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
-            tableView.backgroundColor = UIColor().hexStringToUIColor("#212121")
-            if #available(iOS 13, *) {
-                exitButton.tintColor      = .lightGray
-            } else {
-                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.gray), for: .normal)
-            }
-        } else{
-            self.view.backgroundColor = .white
-            tableView.backgroundColor = .white
-            if #available(iOS 13, *) {
-                exitButton.tintColor      = .black
-            } else {
-                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.black), for: .normal)
-            }
-        }
+    func setAppearance(){
+        self.view.backgroundColor = UIColor.reHydrateTableViewBackground
+        tableView.backgroundColor = UIColor.reHydrateTableViewBackground
+        exitButton.tintColor = darkMode ? .lightGray : .black
     }
 }
 

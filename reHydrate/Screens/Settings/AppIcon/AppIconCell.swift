@@ -12,10 +12,10 @@ import UIKit
 class AppIconCell: UITableViewCell {
     let imageStack: UIStackView = {
         let stack = UIStackView()
-        stack.axis         = .horizontal
-        stack.spacing      = 40
-        stack.alignment    = .center
-        stack.contentMode  = .center
+        stack.axis = .horizontal
+        stack.spacing = 40
+        stack.alignment = .center
+        stack.contentMode = .center
         stack.distribution = .equalSpacing
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -128,17 +128,10 @@ class AppIconCell: UITableViewCell {
     }
     
     func setCellAppairents(_ dark: Bool){
-        if dark{
-            cellImage0.tintColor = .lightGray
-            cellImage1.tintColor = .lightGray
-            cellImage2.tintColor = .lightGray
-            self.backgroundColor   = UIColor().hexStringToUIColor("#212121")
-        } else {
-            cellImage0.tintColor = .black
-            cellImage1.tintColor = .black
-            cellImage2.tintColor = .black
-            self.backgroundColor = .white
-        }
+        cellImage0.tintColor = dark ? .lightGray : .black
+        cellImage1.tintColor = dark ? .lightGray : .black
+        cellImage2.tintColor = dark ? .lightGray : .black
+        self.backgroundColor = UIColor.reHydrateTableViewBackground
     }
     
     /**
@@ -150,9 +143,9 @@ class AppIconCell: UITableViewCell {
      ```
      */
     func setImageStackConstraints(){
-        imageStack.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive        = true
-        imageStack.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10).isActive = true
         imageStack.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+        imageStack.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive = true
+        imageStack.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10).isActive = true
     }
     
     /**
