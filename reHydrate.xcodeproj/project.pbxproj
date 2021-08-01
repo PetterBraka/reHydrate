@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,9 @@
 		334282652497AE7600A3CF12 /* AppIconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334282642497AE7600A3CF12 /* AppIconCell.swift */; };
 		33593576257D4D8200C5612E /* CreditsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33593575257D4D8200C5612E /* CreditsVC.swift */; };
 		3359BB7024461D620008EF6A /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3359BB6F24461D620008EF6A /* InfoCell.swift */; };
+		336136A126B6E79F00C87FB5 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* SwiftPackageProductDependency */; };
+		336136A226B6E79F00C87FB5 /* BuildFile in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* SwiftPackageProductDependency */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		336136A626B6E7D500C87FB5 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A526B6E7D500C87FB5 /* SwiftPackageProductDependency */; };
 		336DCBFD250682C500CF15F0 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */; };
 		336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */; };
 		336DCC1B250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */; };
@@ -127,7 +130,6 @@
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
 		33FE29D824506FF000BE7634 /* SettingsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FE29D724506FF000BE7634 /* SettingsHeader.swift */; };
-		9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +150,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		336136A326B6E7A000C87FB5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				336136A226B6E79F00C87FB5 /* BuildFile in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		33D24C3C24A0CC2400C7A23C /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,9 +314,6 @@
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		33FC842E243B992600848B7C /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		33FE29D724506FF000BE7634 /* SettingsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHeader.swift; sourceTree = "<group>"; };
-		57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_reHydrate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A4C495ADD1C849E22BAE45E /* Pods-reHydrate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reHydrate.release.xcconfig"; path = "Target Support Files/Pods-reHydrate/Pods-reHydrate.release.xcconfig"; sourceTree = "<group>"; };
-		B204E91E4654643981AEA857 /* Pods-reHydrate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reHydrate.debug.xcconfig"; path = "Target Support Files/Pods-reHydrate/Pods-reHydrate.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,7 +322,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
-				9B74C1044DBD4B2BBAAEAC29 /* Pods_reHydrate.framework in Frameworks */,
+				336136A626B6E7D500C87FB5 /* BuildFile in Frameworks */,
+				336136A126B6E79F00C87FB5 /* BuildFile in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,8 +533,6 @@
 		DEE3AF47A916B38FCDFA6298 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B204E91E4654643981AEA857 /* Pods-reHydrate.debug.xcconfig */,
-				5A4C495ADD1C849E22BAE45E /* Pods-reHydrate.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -533,7 +542,6 @@
 			children = (
 				33F32133243D115600E61D27 /* CoreData.framework */,
 				33CD6D58243BE53B00EF0335 /* HealthKit.framework */,
-				57C41B23B9255A1F131F482D /* Pods_reHydrate.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -545,12 +553,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3378768724378A9800F5A732 /* Build configuration list for PBXNativeTarget "reHydrate" */;
 			buildPhases = (
-				88097486E497473D37F0076C /* [CP] Check Pods Manifest.lock */,
 				3378766F24378A9400F5A732 /* Sources */,
 				3378767024378A9400F5A732 /* Frameworks */,
 				3378767124378A9400F5A732 /* Resources */,
-				A423E6166413CEA25E5B2445 /* [CP] Embed Pods Frameworks */,
 				33D24C3C24A0CC2400C7A23C /* Embed Watch Content */,
+				336136A326B6E7A000C87FB5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -558,6 +565,10 @@
 				33DF9BF524B47D0A00699B1A /* PBXTargetDependency */,
 			);
 			name = reHydrate;
+			packageProductDependencies = (
+				336136A026B6E79F00C87FB5 /* SwiftPackageProductDependency */,
+				336136A526B6E7D500C87FB5 /* SwiftPackageProductDependency */,
+			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
 			productType = "com.apple.product-type.application";
@@ -633,6 +644,10 @@
 				is,
 			);
 			mainGroup = 3378766A24378A9300F5A732;
+			packageReferences = (
+				3361369F26B6E79F00C87FB5 /* RemoteSwiftPackageReference */,
+				336136A426B6E7D500C87FB5 /* RemoteSwiftPackageReference */,
+			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -756,48 +771,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		88097486E497473D37F0076C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-reHydrate-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A423E6166413CEA25E5B2445 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-reHydrate/Pods-reHydrate-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-reHydrate/Pods-reHydrate-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-reHydrate/Pods-reHydrate-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3378766F24378A9400F5A732 /* Sources */ = {
@@ -1009,7 +982,6 @@
 		};
 		3378768824378A9800F5A732 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B204E91E4654643981AEA857 /* Pods-reHydrate.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
@@ -1031,7 +1003,6 @@
 		};
 		3378768924378A9800F5A732 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5A4C495ADD1C849E22BAE45E /* Pods-reHydrate.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
@@ -1181,6 +1152,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3361369F26B6E79F00C87FB5 /* RemoteSwiftPackageReference */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/HeroTransitions/Hero";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.1;
+			};
+		};
+		336136A426B6E7D500C87FB5 /* RemoteSwiftPackageReference */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		336136A026B6E79F00C87FB5 /* SwiftPackageProductDependency */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3361369F26B6E79F00C87FB5 /* RemoteSwiftPackageReference */;
+			productName = Hero;
+		};
+		336136A526B6E7D500C87FB5 /* SwiftPackageProductDependency */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 336136A426B6E7D500C87FB5 /* RemoteSwiftPackageReference */;
+			productName = FSCalendar;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */ = {
