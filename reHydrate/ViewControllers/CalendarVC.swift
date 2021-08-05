@@ -25,20 +25,12 @@ class CalendarVC: UIViewController {
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #available(iOS 13.0, *) {
-            return darkMode ? .lightContent : .darkContent
-        } else {
-            return .default
-        }
+        return darkMode ? .lightContent : .darkContent
     }
     var exitButton: UIButton    = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        if #available(iOS 13.0, *) {
-            button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
-        } else {
-            button.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.darkGray), for: .normal)
-        }
+        button.setBackgroundImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -209,11 +201,7 @@ class CalendarVC: UIViewController {
             calendar.appearance.titleTodayColor     = .white
             calendar.appearance.titleDefaultColor   = .white
             calendar.appearance.titleSelectionColor = .white
-            if #available(iOS 13, *) {
-                exitButton.tintColor                = .lightGray
-            } else {
-                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.lightGray), for: .normal)
-            }
+            exitButton.tintColor                = .lightGray
         } else {
             self.view.backgroundColor               = .white
             calendar.backgroundColor                = .white
@@ -224,11 +212,7 @@ class CalendarVC: UIViewController {
             calendar.appearance.titleTodayColor     = .black
             calendar.appearance.titleDefaultColor   = .black
             calendar.appearance.titleSelectionColor = .black
-            if #available(iOS 13, *) {
-                exitButton.tintColor                = .black
-            } else {
-                exitButton.setBackgroundImage(UIImage(named: "xmark.circle")?.colored(.black), for: .normal)
-            }
+            exitButton.tintColor                = .black
         }
     }
     
@@ -520,16 +504,12 @@ extension CalendarVC: FSCalendarDelegate, FSCalendarDataSource{
             if Calendar.current.date(byAdding: .day, value: 1, to: tempDates[i])! != tempDates[i + 1] {
                 switch calendar.swipeToChooseGesture.state {
                 case .changed:
-                    if #available(iOS 13.0, *) {
-                        let differece = tempDates[i].distance(to: tempDates[i + 1])
-                        let days = differece / 60 / 60 / 24
-                        for x in 1...Int(days - 1){
-                            calendar.select(Calendar.current.date(byAdding: .day, value: x, to: tempDates[i]))
-                        }
-                        calendar.reloadData()
-                    } else {
-                        // Fallback on earlier versions
+                    let differece = tempDates[i].distance(to: tempDates[i + 1])
+                    let days = differece / 60 / 60 / 24
+                    for x in 1...Int(days - 1){
+                        calendar.select(Calendar.current.date(byAdding: .day, value: x, to: tempDates[i]))
                     }
+                    calendar.reloadData()
                 default:
                     calendar.selectedDates.forEach { (selectedDate) in
                         calendar.deselect(selectedDate)

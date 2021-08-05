@@ -154,11 +154,7 @@ class TutorialVC: UIViewController {
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #available(iOS 13.0, *) {
-            return darkMode ? .lightContent : .darkContent
-        } else {
-            return .default
-        }
+        return darkMode ? .lightContent : .darkContent
     }
     var metricUnits               = true
     
@@ -209,34 +205,10 @@ class TutorialVC: UIViewController {
                 let drinkOption   = drink as! UIImageView
                 drinkOption.image = drinkOption.image?.grayed
             }
-            if #available(iOS 13, *) {
-                if darkMode {
-                    settingsButton.tintColor = .lightGray
-                } else {
-                    settingsButton.tintColor = .black
-                }
-            } else {
-                if darkMode {
-                    settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(.gray), for: .normal)
-                } else {
-                    settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(.black), for: .normal)
-                }
-            }
+            settingsButton.tintColor = darkMode ? .lightGray : .black
             explanationLabel.text = explanationText[stage]
         case 4:
-            if #available(iOS 13, *) {
-                if darkMode {
-                    calendarButton.tintColor = .lightGray
-                } else {
-                    calendarButton.tintColor = .black
-                }
-            } else {
-                if darkMode {
-                    calendarButton.setBackgroundImage(UIImage(named: "gear")?.colored(.gray), for: .normal)
-                } else {
-                    calendarButton.setBackgroundImage(UIImage(named: "gear")?.colored(.black), for: .normal)
-                }
-            }
+            calendarButton.tintColor = darkMode ? .lightGray : .black
             explanationLabel.text = explanationText[stage]
             nextButton.setTitle(NSLocalizedString("Done", comment: "Done button in toolbar"), for: .normal)
         case 5:

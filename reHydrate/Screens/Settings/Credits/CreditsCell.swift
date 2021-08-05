@@ -25,11 +25,7 @@ class CreditsCell: UITableViewCell {
     var languageImage: UIButton = {
         let button = UIButton()
         button.setTitle("🇬🇧", for: .normal)
-        if #available(iOS 13.0, *) {
-            button.setBackgroundImage(UIImage(systemName: ""), for: .normal)
-        } else {
-            button.setBackgroundImage(UIImage(named: ""), for: .normal)
-        }
+        button.setBackgroundImage(UIImage(systemName: ""), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
