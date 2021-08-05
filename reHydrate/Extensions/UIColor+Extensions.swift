@@ -6,7 +6,6 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 extension UIColor {

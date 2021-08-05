@@ -13,19 +13,8 @@ import CloudKit
 import CoreData
 import HealthKit
 import WatchConnectivity
+import SwiftyUserDefaults
 
-let versionString = "version4.5.2"
-let appleLanguagesString = "AppleLanguages"
-
-let darkModeString          = "darkMode"
-let metricUnitsString       = "metricUnits"
-let startingTimeString      = "startignTime"
-let endingTimeString        = "endingTime"
-let remindersString         = "reminders"
-let reminderIntervalString  = "reminderInterval"
-let smallDrinkOptionString  = "smallDrinkOption"
-let mediumDrinkOptionString = "mediumDrinkOption"
-let largeDrinkOptionString  = "largeDrinkOption"
 
 let appLanguages = ["en", "nb", "de", "is"].sorted()
 
@@ -186,9 +175,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         return button
     }()
     
-    let defaults     = UserDefaults.standard
-    let context      = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    let formatter    = DateFormatter()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let formatter = DateFormatter()
     let timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
@@ -331,23 +319,23 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         createSummaryStack()
         
         formatter.dateFormat = "EEEE - dd/MM/yy"
-        let local = defaults.array(forKey: appleLanguagesString)
-        formatter.locale = Locale(identifier: local?.first as! String)
+        let local = Defaults[\.appleLanguages]
+        formatter.locale = Locale(identifier: local.first ?? "")
         
         if UIApplication.isFirstLaunch() {
             #if DEBUG
             print("first time to launch this version of the app")
             #endif
             metricUnits  = true
-            defaults.set(metricUnits, forKey: metricUnitsString)
+            Defaults[\.metricUnits] = metricUnits
             if self.traitCollection.userInterfaceStyle == .dark {
                 darkMode = true
             } else {
                 darkMode = false
             }
-            defaults.set(darkMode,  forKey: darkModeString)
+            Defaults[\.darkMode] = darkMode
             saveDrinkOptions()
-            let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
+            let language = Defaults[\.appleLanguages]
             if !appLanguages.contains(language[0]){
                 setAppLanguage(appLanguages[0])
             }
@@ -356,9 +344,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
             let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
             let intervals = 30
-            self.defaults.set(startDate, forKey: startingTimeString)
-            self.defaults.set(endDate,   forKey: endingTimeString)
-            self.defaults.set(intervals, forKey: reminderIntervalString)
+            Defaults[\.startingTime] = startDate
+            Defaults[\.endingTime] = endDate
+            Defaults[\.reminderInterval] = intervals
             let current = UNUserNotificationCenter.current()
             current.getNotificationSettings(completionHandler: { (settings) in
                 if settings.authorizationStatus == .authorized {
@@ -394,8 +382,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     // MARK: - ViewWill
     
     override func viewWillAppear(_ animated: Bool) {
-        darkMode        = defaults.bool(forKey: darkModeString)
-        metricUnits     = defaults.bool(forKey: metricUnitsString)
+        darkMode = Defaults[\.darkMode]
+        metricUnits = Defaults[\.metricUnits]
         currentDay.text = formatter.string(from: Date.init()).localizedCapitalized
         loadDrinkOptions()
         setUpUI()
@@ -688,12 +676,12 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                         #if DEBUG
                         print("Was not authorization by the user to use send notifications.")
                         #endif
-                        self.defaults.set(true, forKey: remindersString)
+                        Defaults[\.reminders] = true
                     } else {
                         #if DEBUG
                         print("Was not authorization by the user to use send notifications.")
                         #endif
-                        self.defaults.set(false, forKey: remindersString)
+                        Defaults[\.reminders] = false
                     }
                 }
             })
@@ -802,12 +790,12 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             if settings.authorizationStatus == .authorized {
                 // check if the user have activated notifications or not.
                 
-                let wantReminders = self.defaults.bool(forKey: remindersString)
+                let wantReminders = Defaults[\.reminders]
                 if wantReminders {
                     //gets starrting times
-                    let startDate = self.defaults.object(forKey: startingTimeString) as! Date
-                    let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
-                    let intervals = self.defaults.integer(forKey: reminderIntervalString)
+                    let startDate = Defaults[\.startingTime]
+                    let endDate = Defaults[\.endingTime]
+                    let intervals = Defaults[\.reminderInterval]
                     current.getPendingNotificationRequests { (notifications) in
                         if !notifications.isEmpty{
                             //Sets starting time with datecomponents [month, day, hour, minute]
@@ -825,9 +813,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
                                              intervals)
                                 // checks if the goal has been reached
                                 if today.goal <= today.consumed {
-                                    let startDate = self.defaults.object(forKey: startingTimeString) as! Date
-                                    let endDate   = self.defaults.object(forKey: endingTimeString) as! Date
-                                    let intervals = self.defaults.integer(forKey: reminderIntervalString)
+                                    let startDate = Defaults[\.startingTime]
+                                    let endDate = Defaults[\.endingTime]
+                                    let intervals = Defaults[\.reminderInterval]
                                     
                                     var tempStart = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: startDate)
                                     var tempEnd   = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: endDate)
@@ -1004,9 +992,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     func saveDrinkOptions(){
-        defaults.set(drinkOptions[0], forKey: smallDrinkOptionString)
-        defaults.set(drinkOptions[1], forKey: mediumDrinkOptionString)
-        defaults.set(drinkOptions[2], forKey: largeDrinkOptionString)
+        Defaults[\.smallDrinkOption] = drinkOptions[0]
+        Defaults[\.mediumDrinkOption] = drinkOptions[1]
+        Defaults[\.largeDrinkOption] = drinkOptions[2]
         updateUI()
         self.days = fetchAllDays()
         var today: Day?
@@ -1046,9 +1034,9 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     func loadDrinkOptions(){
-        drinkOptions[0] = defaults.double(forKey: smallDrinkOptionString)
-        drinkOptions[1] = defaults.double(forKey: mediumDrinkOptionString)
-        drinkOptions[2] = defaults.double(forKey: largeDrinkOptionString)
+        drinkOptions[0] = Defaults[\.smallDrinkOption]
+        drinkOptions[1] = Defaults[\.mediumDrinkOption]
+        drinkOptions[2] = Defaults[\.largeDrinkOption]
         
         if drinkOptions[0] == 0 || drinkOptions[1] == 0 || drinkOptions[2] == 0 {
             drinkOptions[0] = 300
@@ -1222,7 +1210,7 @@ extension StartVC: WCSessionDelegate {
 }
 
 func setAppLanguage(_ language: String) {
-    UserDefaults.standard.set([language], forKey: appleLanguagesString)
+    Defaults[\.appleLanguages] = [language]
     UserDefaults.standard.synchronize()
     // Update the language by swaping bundle
     Bundle.setLanguage(language)
@@ -1234,10 +1222,9 @@ func setAppLanguage(_ language: String) {
 
 func setReminders() {
     // Gets times for reminders and sets reminders
-    let defaults = UserDefaults.standard
-    let startDate = defaults.object(forKey: startingTimeString) as! Date
-    let endDate = defaults.object(forKey: endingTimeString) as! Date
-    let intervals = defaults.integer(forKey: reminderIntervalString)
+    let startDate = Defaults[\.startingTime]
+    let endDate = Defaults[\.endingTime]
+    let intervals = Defaults[\.reminderInterval]
     setReminders(startDate, endDate, intervals)
 }
 
@@ -1254,7 +1241,7 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
     notificationCenter.removeAllDeliveredNotifications()
     notificationCenter.removeAllPendingNotificationRequests()
     
-    UserDefaults.standard.set(true, forKey: remindersString)
+    Defaults[\.reminders] = true
     
     let intervals = frequency
     
@@ -1265,11 +1252,11 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
     print("difference \(differenceInMunutes)")
     print("total notifications \(totalNotifications)")
     #endif
-    let small   = UserDefaults.standard.double(forKey: smallDrinkOptionString)
-    let medium  = UserDefaults.standard.double(forKey: mediumDrinkOptionString)
-    let large   = UserDefaults.standard.double(forKey: largeDrinkOptionString)
+    let small = Defaults[\.smallDrinkOption]
+    let medium = Defaults[\.mediumDrinkOption]
+    let large = Defaults[\.largeDrinkOption]
     
-    let metricUnits = UserDefaults.standard.bool(forKey: metricUnitsString)
+    let metricUnits = Defaults[\.metricUnits]
     var unit = String()
     var smallDrink  = String()
     var mediumDrink = String()

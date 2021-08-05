@@ -10,14 +10,14 @@ import Hero
 import UIKit
 import CoreData
 import FSCalendar
+import SwiftyUserDefaults
 
 class CalendarVC: UIViewController {
     
-    let context     = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var metricUnits = Bool()
-    let formatter   = DateFormatter()
-    let defaults    = UserDefaults.standard
-    var cellHeight  = CGFloat()
+    let formatter = DateFormatter()
+    var cellHeight = CGFloat()
     var drinks: [Double] = []
     var darkMode = true {
         didSet {
@@ -83,8 +83,8 @@ class CalendarVC: UIViewController {
         super.viewDidLoad()
         self.isHeroEnabled = true
         formatter.dateFormat = "EEE - dd/MM/yy"
-        let local = defaults.array(forKey: appleLanguagesString)
-        formatter.locale = Locale(identifier: local?.first as! String)
+        let local = Defaults[\.appleLanguages]
+        formatter.locale = Locale(identifier: local.first ?? "")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,8 +110,8 @@ class CalendarVC: UIViewController {
             tableView.isScrollEnabled = false
         }
         
-        darkMode             = defaults.bool(forKey: darkModeString)
-        metricUnits          = defaults.bool(forKey: metricUnitsString)
+        darkMode = Defaults[\.darkMode]
+        metricUnits = Defaults[\.metricUnits]
         
         tableView.delegate   = self
         tableView.dataSource = self

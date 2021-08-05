@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyUserDefaults
 
 class TutorialVC: UIViewController {
     let toolBar: UIView = {
@@ -221,7 +222,7 @@ class TutorialVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        darkMode = UserDefaults.standard.bool(forKey: darkModeString)
+        darkMode = Defaults[\.darkMode]
         setUpUI()
     }
     

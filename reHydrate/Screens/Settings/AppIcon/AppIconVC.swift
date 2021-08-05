@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyUserDefaults
 
 class AppIconVC: UIViewController{
     let primaryIcons = ["white-grey"   , "grey-white"   , "black-white"  ]
@@ -72,7 +73,7 @@ class AppIconVC: UIViewController{
         self.view.addSubview(exitButton)
         self.view.addSubview(tableView)
         
-        darkMode = UserDefaults.standard.bool(forKey: darkModeString)
+        darkMode = Defaults[\.darkMode]
         
         let exitTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
         exitButton.addGestureRecognizer(exitTapRecognizer)

@@ -10,6 +10,7 @@ import Hero
 import UIKit
 import HealthKit
 import MessageUI
+import SwiftyUserDefaults
 
 struct settingOptions {
     var isOpened: Bool
@@ -20,7 +21,6 @@ struct settingOptions {
 class SettingsVC: UIViewController {
     
     // MARK: - Variabels
-    let defaults = UserDefaults.standard
     var tableView: UITableView = UITableView(frame: .null, style: .insetGrouped)
     var exitButton: UIButton = {
         let button = UIButton()
@@ -44,8 +44,8 @@ class SettingsVC: UIViewController {
         formatter.dateFormat = "HH:mm"
         return formatter
     }()
-    var metricUnits                = true
-    var selectedRow: IndexPath     = IndexPath()
+    var metricUnits = true
+    var selectedRow: IndexPath = IndexPath()
     var settings: [settingOptions] = [
         settingOptions(isOpened: false, setting: NSLocalizedString("Appearance", comment: "Header title"),
                        options: [NSLocalizedString("DarkMode", comment: "settings option"),
@@ -85,8 +85,8 @@ class SettingsVC: UIViewController {
     @objc func tap(_ sender: UIGestureRecognizer){
         switch sender.view {
         case exitButton:
-            defaults.set(darkMode, forKey: darkModeString)
-            defaults.set(metricUnits, forKey: metricUnitsString)
+            Defaults[\.darkMode] = darkMode
+            Defaults[\.metricUnits] = metricUnits
             self.dismiss(animated: true, completion: nil)
         default:
             break
@@ -95,8 +95,8 @@ class SettingsVC: UIViewController {
     
     @objc func handleSwipe(_ sender: UISwipeGestureRecognizer){
         if sender.direction == .left {
-            defaults.set(darkMode, forKey: darkModeString)
-            defaults.set(metricUnits, forKey: metricUnitsString)
+            Defaults[\.darkMode] = darkMode
+            Defaults[\.metricUnits] = metricUnits
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -107,9 +107,9 @@ class SettingsVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        settings[3].isOpened = defaults.bool(forKey: remindersString)
-        metricUnits = defaults.bool(forKey: metricUnitsString)
-        darkMode = defaults.bool(forKey: darkModeString)
+        settings[3].isOpened = Defaults[\.reminders]
+        metricUnits = Defaults[\.metricUnits]
+        darkMode = Defaults[\.darkMode]
         
         setUpUI()
         updateSettings()
@@ -362,18 +362,18 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                     center.requestAuthorization(options: [.alert, .sound]) { (success, _) in
                         if success {
                             print("we are allowed to send notifications.")
-                            self.defaults.set(true, forKey: remindersString)
+                            Defaults[\.reminders] = true
                         } else {
                             print("we are not allowed to send notifications.")
-                            self.defaults.set(false, forKey: remindersString)
+                            Defaults[\.reminders] = false
                         }
                     }
                 default:
                     self.settings[3].isOpened = !self.settings[3].isOpened
                     if self.settings[3].isOpened {
-                        let startDate = self.defaults.object(forKey: startingTimeString) as! Date
-                        let endDate = self.defaults.object(forKey: endingTimeString) as! Date
-                        let intervals = self.defaults.integer(forKey: reminderIntervalString)
+                        let startDate = Defaults[\.startingTime]
+                        let endDate = Defaults[\.endingTime]
+                        let intervals = Defaults[\.reminderInterval]
                         setReminders(startDate, endDate, intervals)
                         self.sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(self.timeFormatter.string(from: startDate)) \(NSLocalizedString("To", comment: "splitter for toast")) \(self.timeFormatter.string(from: endDate))", 4)
                         DispatchQueue.main.async {
@@ -392,7 +392,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .bottom)
                             tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
                             cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                            self.defaults.set(false, forKey: remindersString)
+                            Defaults[\.reminders] = false
                             cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                         }
                     }
@@ -421,16 +421,13 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                                                    style: .cancel, handler: nil))
             clearDataAlert.addAction(UIAlertAction(title: NSLocalizedString("ClearDataRemoveData", comment: "Remove old data option"), style: .destructive, handler: {_ in
                 let domain = Bundle.main.bundleIdentifier!
-                self.defaults.removePersistentDomain(forName: domain)
-                self.defaults.synchronize()
                 let startDate = Calendar.current.date(bySettingHour: 8, minute: 00, second: 0, of: Date())!
                 let endDate   = Calendar.current.date(bySettingHour: 23, minute: 00, second: 0, of: Date())!
-                let intervals = 30
-                self.defaults.set(startDate, forKey: startingTimeString)
-                self.defaults.set(endDate,   forKey: endingTimeString)
-                self.defaults.set(intervals, forKey: reminderIntervalString)
-                self.defaults.set(self.darkMode,  forKey: darkModeString)
-                self.defaults.set(self.metricUnits, forKey: metricUnitsString)
+                Defaults[\.startingTime] = startDate
+                Defaults[\.endingTime] = endDate
+                Defaults[\.reminderInterval] = 30
+                Defaults[\.darkMode] = false
+                Defaults[\.metricUnits] = false
                 let transition      = CATransition()
                 transition.duration = 0.4
                 transition.type     = .push

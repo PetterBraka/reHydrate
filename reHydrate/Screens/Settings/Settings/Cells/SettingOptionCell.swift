@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 import CoreData
+import SwiftyUserDefaults
 
 class SettingOptionCell: UITableViewCell {
     var pickerArray       = [""]
@@ -160,8 +161,8 @@ class SettingOptionCell: UITableViewCell {
                                                              attributes: [NSAttributedString.Key.foregroundColor :
                                                                             dark ? UIColor.lightGray : UIColor.darkGray])
         setSubviewApparance(dark, metric)
-        UserDefaults.standard.set(dark, forKey: darkModeString)
-        UserDefaults.standard.set(metric, forKey: metricUnitsString)
+        Defaults[\.darkMode] = dark
+        Defaults[\.metricUnits] = metric
     }
     
     /**
@@ -245,7 +246,7 @@ class SettingOptionCell: UITableViewCell {
         setUpPickerView()
         textField.placeholder = "language"
         let picker = textField.inputView as! UIPickerView
-        let language = UserDefaults.standard.array(forKey: appleLanguagesString) as! [String]
+        let language = Defaults[\.appleLanguages]
         if pickerArray.contains(NSLocalizedString(language.first!, comment: "")){
             textField.text = NSLocalizedString(language.first!, comment: "")
             picker.selectRow(pickerArray.firstIndex(of: NSLocalizedString(language.first!, comment: "")) ?? 0, inComponent: 0, animated: true)
@@ -334,9 +335,9 @@ class SettingOptionCell: UITableViewCell {
         }()
         let calendar = NSCalendar.current
         var components = calendar.dateComponents([.hour, .minute], from: Date())
-        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+        let startDate = Defaults[\.startingTime]
         let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+        let endDate = Defaults[\.endingTime]
         let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
         if titleOption.text?.lowercased() == NSLocalizedString("StartingTime", comment: "").lowercased(){
             components.hour = startTimer.hour
@@ -372,7 +373,7 @@ class SettingOptionCell: UITableViewCell {
         minutePicker.datePickerMode = .countDownTimer
         minutePicker.minuteInterval = 10
         var components = DateComponents()
-        components.minute = UserDefaults.standard.integer(forKey: reminderIntervalString)
+        components.minute = Defaults[\.reminderInterval]
         let date = Calendar.current.date(from: components)!
         minutePicker.setDate(date, animated: false)
         minutePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
@@ -402,20 +403,20 @@ class SettingOptionCell: UITableViewCell {
         switch titleOption.text?.lowercased() {
         case NSLocalizedString("StartingTime", comment: "").lowercased():
             let startDate = sender.date
-            var endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+            var endDate = Defaults[\.endingTime]
             if endDate <= startDate {
                 endDate = endDate - 1 * 60
                 sender.setDate(endDate, animated: true)
             }
-            UserDefaults.standard.set(startDate, forKey: startingTimeString)
+            Defaults[\.startingTime] = startDate
         case NSLocalizedString("EndingTime", comment: "").lowercased():
             let endDate = sender.date
-            var startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+            var startDate = Defaults[\.startingTime]
             if endDate <= startDate {
                 startDate = startDate + 1 * 60
                 sender.setDate(startDate, animated: true)
             }
-            UserDefaults.standard.set(endDate, forKey: endingTimeString)
+            Defaults[\.endingTime] = endDate
         case NSLocalizedString("Frequency", comment: "").lowercased():
             if sender.countDownDuration > 2.5 * 60 * 60{
                 var components = DateComponents()
@@ -470,11 +471,11 @@ class SettingOptionCell: UITableViewCell {
      ```
      */
     private func handleRemindersOptions() {
-        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+        let startDate = Defaults[\.startingTime]
         let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+        let endDate = Defaults[\.endingTime]
         let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-        let intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
+        let intervals = Defaults[\.reminderInterval]
         setReminders(startDate, endDate, intervals)
         sendToastMessage("\(NSLocalizedString("RemindersSetFrom", comment: "starting of toas message")) \(startTimer.hour!) \(NSLocalizedString("To", comment: "splitter for toast")) \(endTimer.hour!)", 4)
     }
@@ -505,9 +506,9 @@ class SettingOptionCell: UITableViewCell {
         let numberOfMinutes = (currentDateComponent.hour! * 60) + currentDateComponent.minute!
         
         print("numberOfMinutes : ", numberOfMinutes)
-        UserDefaults.standard.set(numberOfMinutes, forKey: reminderIntervalString)
-        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
-        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+        Defaults[\.reminderInterval] = numberOfMinutes
+        let startDate = Defaults[\.startingTime]
+        let endDate = Defaults[\.endingTime]
         setReminders(startDate, endDate, numberOfMinutes)
         sendToastMessage("\(NSLocalizedString("FrequencyReminder", comment: "start of frequency toast")) \(numberOfMinutes) \(NSLocalizedString("Minutes", comment: "end of frquency toast"))", 4)
     }
@@ -536,11 +537,11 @@ class SettingOptionCell: UITableViewCell {
         default:
             setAppLanguage("en")
         }
-        let startDate = UserDefaults.standard.object(forKey: startingTimeString) as! Date
+        let startDate = Defaults[\.startingTime]
         let startTimer = Calendar.current.dateComponents([.hour, .minute], from: startDate)
-        let endDate = UserDefaults.standard.object(forKey: endingTimeString) as! Date
+        let endDate = Defaults[\.endingTime]
         let endTimer = Calendar.current.dateComponents([.hour, .minute], from: endDate)
-        var intervals = UserDefaults.standard.integer(forKey: reminderIntervalString)
+        var intervals = Defaults[\.reminderInterval]
         if intervals == 0 {
             intervals = 60
         }
