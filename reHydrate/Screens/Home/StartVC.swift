@@ -171,11 +171,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }()
     var settingsButton: UIButton  = {
         var button = UIButton()
-        if #available(iOS 13.0, *) {
-            button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
-        } else {
-            button.setBackgroundImage(UIImage(named: "gear")?.colored(.gray), for: .normal)
-        }
+        button.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
         button.setTitle("", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.contentMode = .center
@@ -183,11 +179,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     }()
     var calendarButton: UIButton  = {
         var button = UIButton()
-        if #available(iOS 13.0, *) {
             button.setBackgroundImage(UIImage(systemName: "calendar.circle"), for: .normal)
-        } else {
-            button.setBackgroundImage(UIImage(named: "calendar.circle")?.colored(.gray), for: .normal)
-        }
         button.setTitle("", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.contentMode = .center
@@ -202,17 +194,14 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
         return formatter
     }()
-    var darkMode     = true {
+    var darkMode = true {
         didSet {
+            self.overrideUserInterfaceStyle = darkMode ? .dark : .light
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #available(iOS 13.0, *) {
-            return darkMode ? .lightContent : .darkContent
-        } else {
-            return .default
-        }
+        return darkMode ? .lightContent : .darkContent
     }
     var metricUnits  = true
     var drinkOptions = [Double(300), Double(500), Double(750)]
@@ -455,7 +444,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      setUpUI()
      ```
      */
-    fileprivate func setUpUI(){
+    private func setUpUI(){
         for view in self.view.subviews{
             view.removeFromSuperview()
         }
@@ -489,7 +478,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    fileprivate func setConstraints(){
+    private func setConstraints(){
         
         appTitle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive                           = true
         appTitle.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
@@ -530,7 +519,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         
     }
     
-    fileprivate func setUpSwipeGestrues(){
+    private func setUpSwipeGestrues(){
         let leftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         let rightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         
@@ -553,7 +542,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    fileprivate func setUpButtons(){
+    private func setUpButtons(){
         //setting up an gesture recognizer for each button.
         let settingsTapGesture       = UITapGestureRecognizer(target: self, action: #selector(tap))
         let calendarTapGesture       = UITapGestureRecognizer(target: self, action: #selector(tap))
@@ -593,7 +582,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    fileprivate func createSummaryStack(){
+    private func createSummaryStack(){
         summaryStack.addArrangedSubview(consumedAmount)
         summaryStack.addArrangedSubview(summarySplitter)
         summaryStack.addArrangedSubview(goalAmount)
@@ -611,7 +600,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      }
      ```
      */
-    fileprivate func createDrinkStack(){
+    private func createDrinkStack(){
         let smallStack: UIStackView = {
             let stack       = UIStackView()
             stack.axis      = .vertical
@@ -678,7 +667,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      setUpHealth()
      ```
      */
-    fileprivate func setUpRequests() {
+    private func setUpRequests() {
         //  Request access to write dietaryWater data to HealthStore
         if HKHealthStore.isHealthDataAvailable(){
             let healthStore = HKHealthStore()
@@ -761,50 +750,22 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      changeAppearance()
      ```
      */
-    fileprivate func changeAppearance() {
-        if darkMode {
-            self.view.backgroundColor = UIColor().hexStringToUIColor("#212121")
-            appTitle.textColor        = .white
-            currentDay.textColor      = .white
-            consumedAmount.textColor  = .white
-            summarySplitter.textColor = .white
-            goalAmount.textColor      = .white
-            goalPrefix.textColor      = .white
-            smallLabel.textColor      = .white
-            smallPrefix.textColor     = .white
-            mediumLabel.textColor     = .white
-            mediumPrefix.textColor    = .white
-            largeLabel.textColor      = .white
-            largePrefix.textColor     = .white
-            if #available(iOS 13, *) {
-                settingsButton.tintColor  = .lightGray
-                calendarButton.tintColor  = .lightGray
-            } else {
-                settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(.gray), for: .normal)
-                calendarButton.setBackgroundImage(UIImage(named: "calendar.circle")?.colored(.gray), for: .normal)
-            }
-        } else {
-            self.view.backgroundColor = .white
-            appTitle.textColor        = .black
-            currentDay.textColor      = .black
-            consumedAmount.textColor  = .black
-            summarySplitter.textColor = .black
-            goalAmount.textColor      = .black
-            goalPrefix.textColor      = .black
-            smallLabel.textColor      = .black
-            smallPrefix.textColor     = .black
-            mediumLabel.textColor     = .black
-            mediumPrefix.textColor    = .black
-            largeLabel.textColor      = .black
-            largePrefix.textColor     = .black
-            if #available(iOS 13, *) {
-                settingsButton.tintColor  = .black
-                calendarButton.tintColor  = .black
-            } else {
-                settingsButton.setBackgroundImage(UIImage(named: "gear")?.colored(.black), for: .normal)
-                calendarButton.setBackgroundImage(UIImage(named: "calendar.circle")?.colored(.black), for: .normal)
-            }
-        }
+    private func changeAppearance() {
+        self.view.backgroundColor = UIColor.reHydrateBackground
+        appTitle.textColor = darkMode ? .white : .black
+        currentDay.textColor = darkMode ? .white : .black
+        consumedAmount.textColor = darkMode ? .white : .black
+        summarySplitter.textColor = darkMode ? .white : .black
+        goalAmount.textColor = darkMode ? .white : .black
+        goalPrefix.textColor = darkMode ? .white : .black
+        smallLabel.textColor = darkMode ? .white : .black
+        smallPrefix.textColor = darkMode ? .white : .black
+        mediumLabel.textColor = darkMode ? .white : .black
+        largeLabel.textColor = darkMode ? .white : .black
+        largePrefix.textColor = darkMode ? .white : .black
+        mediumPrefix.textColor = darkMode ? .white : .black
+        settingsButton.tintColor = darkMode ? .lightGray : .black
+        calendarButton.tintColor = darkMode ? .lightGray : .black
     }
     
     // MARK: - Update consmed
@@ -938,7 +899,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      updateUI()
      ```
      */
-    @objc fileprivate func updateUI(){
+    @objc private func updateUI(){
         let today = fetchToday()
         let goalAmount     = Measurement(value: Double(today.goal), unit: UnitVolume.liters)
         let consumedAmount = Measurement(value: Double(today.consumed), unit: UnitVolume.liters)
@@ -947,40 +908,31 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         let largeDrink     = Measurement(value: Double(drinkOptions[2]), unit: UnitVolume.milliliters)
         var goal = Double()
         var consumed = Double()
-        if metricUnits {
-            goal       = goalAmount.converted(to: .liters).value
-            consumed   = consumedAmount.converted(to: .liters).value
-            let roundedSmallDrink  = smallDrink.converted(to: .milliliters).value.rounded()
-            let roundedMediumDrink = mediumDrink.converted(to: .milliliters).value.rounded()
-            let roundedLargeDrink  = largeDrink.converted(to: .milliliters).value.rounded()
-            smallLabel.text        = String(format: "%.0f", roundedSmallDrink)
-            mediumLabel.text       = String(format: "%.0f", roundedMediumDrink)
-            largeLabel.text        = String(format: "%.0f", roundedLargeDrink)
-        } else {
-            goal     = goalAmount.converted(to: .imperialPints).value
-            consumed = consumedAmount.converted(to: .imperialPints).value
-            let small           = smallDrink.converted(to: .imperialFluidOunces).value
-            let medium          = mediumDrink.converted(to: .imperialFluidOunces).value
-            let large           = largeDrink.converted(to: .imperialFluidOunces).value
-            smallLabel.text     = String(format: "%.2f", small)
-            mediumLabel.text    = String(format: "%.2f", medium)
-            largeLabel.text     = String(format: "%.2f", large)
-        }
+        goal = metricUnits ? goalAmount.converted(to: .liters).value :
+            goalAmount.converted(to: .imperialPints).value
+        consumed = metricUnits ? consumedAmount.converted(to: .liters).value :
+            consumedAmount.converted(to: .imperialPints).value
+        let small = metricUnits ? smallDrink.converted(to: .milliliters).value.rounded() :
+            smallDrink.converted(to: .imperialFluidOunces).value
+        let medium = metricUnits ? mediumDrink.converted(to: .milliliters).value.rounded() :
+            mediumDrink.converted(to: .imperialFluidOunces).value
+        let large = metricUnits ? largeDrink.converted(to: .milliliters).value.rounded() :
+            largeDrink.converted(to: .imperialFluidOunces).value
+        smallLabel.text = metricUnits ? String(format: "%.0f", small) : String(format: "%.2f", small)
+        mediumLabel.text = metricUnits ? String(format: "%.0f", medium) : String(format: "%.2f", medium)
+        largeLabel.text = metricUnits ? String(format: "%.0f", large) : String(format: "%.2f", large)
         
-        self.goalAmount.text     = String(goal.clean)
+        self.goalAmount.text = String(goal.clean)
         self.consumedAmount.text = String(consumed.clean)
         
-        if metricUnits {
-            smallPrefix.text  = "\(UnitVolume.milliliters.symbol)"
-            mediumPrefix.text = "\(UnitVolume.milliliters.symbol)"
-            largePrefix.text  = "\(UnitVolume.milliliters.symbol)"
-            goalPrefix.text   = "\(UnitVolume.liters.symbol)"
-        } else {
-            smallPrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
-            mediumPrefix.text = "\(UnitVolume.imperialFluidOunces.symbol)"
-            largePrefix.text  = "\(UnitVolume.imperialFluidOunces.symbol)"
-            goalPrefix.text   = "\(UnitVolume.imperialPints.symbol)"
-        }
+        smallPrefix.text = metricUnits ? "\(UnitVolume.milliliters.symbol)" :
+            "\(UnitVolume.imperialFluidOunces.symbol)"
+        mediumPrefix.text = metricUnits ? "\(UnitVolume.milliliters.symbol)" :
+            "\(UnitVolume.imperialFluidOunces.symbol)"
+        largePrefix.text = metricUnits ? "\(UnitVolume.milliliters.symbol)" :
+            "\(UnitVolume.imperialFluidOunces.symbol)"
+        goalPrefix.text = metricUnits ? "\(UnitVolume.liters.symbol)" :
+            "\(UnitVolume.imperialPints.symbol)"
     }
     
     /**
@@ -998,46 +950,28 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      popUpOptions(sender, drink, mediumOptionLabel)
      ```
      */
-    fileprivate func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Double, _ optionLabel: UILabel) {
-        let alerContorller  = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        let editOption      = UIAlertAction(title: NSLocalizedString("EditDrink",comment: "popup view option for editing the drink options."),
-                                            style: .default) {_ in
-            let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"),
-                                                message: nil, preferredStyle: .alert)
+    private func popUpOptions(_ sender: UIGestureRecognizer, _ drink: Double, _ optionLabel: UILabel) {
+        let editOption = UIAlertAction(title: NSLocalizedString("EditDrink", comment: "popup view option for editing the drink options."), style: .default) {_ in
+            let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"), message: nil, preferredStyle: .alert)
             editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
                 textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                textField.font          = UIFont(name: "American typewriter", size: 18)
-                textField.keyboardType  = .decimalPad
+                textField.font = UIFont(name: "American typewriter", size: 18)
+                textField.keyboardType = .decimalPad
                 textField.textAlignment = .center
             })
             let done = UIAlertAction(title: NSLocalizedString("Done", comment: "The done option of a popup view"), style: .default) {_ in
                 let newValue = (editAlert.textFields?.first!.text!)! as String
                 if newValue != "" {
-                    if self.metricUnits {
-                        let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.milliliters).converted(to: .milliliters)
-                        switch optionLabel {
-                        case self.smallLabel:
-                            self.drinkOptions[0] = drinkAmount.value
-                        case self.mediumLabel:
-                            self.drinkOptions[1] = drinkAmount.value
-                        case self.largeLabel:
-                            self.drinkOptions[2] = drinkAmount.value
-                        default:
-                            break
-                        }
-                    } else {
-                        let drinkAmount = Measurement(value: Double(newValue)!, unit: UnitVolume.imperialFluidOunces)
-                            .converted(to: .milliliters)
-                        switch optionLabel {
-                        case self.smallLabel:
-                            self.drinkOptions[0] = drinkAmount.value
-                        case self.mediumLabel:
-                            self.drinkOptions[1] = drinkAmount.value
-                        case self.largeLabel:
-                            self.drinkOptions[2] = drinkAmount.value
-                        default:
-                            break
-                        }
+                    let drinkAmount = Measurement(value: Double(newValue)!, unit: self.metricUnits ? UnitVolume.milliliters : .imperialFluidOunces).converted(to: self.metricUnits ? UnitVolume.milliliters : .milliliters)
+                    switch optionLabel {
+                    case self.smallLabel:
+                        self.drinkOptions[0] = drinkAmount.value
+                    case self.mediumLabel:
+                        self.drinkOptions[1] = drinkAmount.value
+                    case self.largeLabel:
+                        self.drinkOptions[2] = drinkAmount.value
+                    default:
+                        break
                     }
                     self.saveDrinkOptions()
                 }
@@ -1045,15 +979,14 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             editAlert.addAction(done)
             self.present(editAlert, animated: true, completion: nil)
         }
-        let removeAmount = UIAlertAction(title: NSLocalizedString("RemoveDrink", comment:
-                                                                    "popup view option for removeing the drink amount."), style: .default) {_ in
+        let removeAmount = UIAlertAction(title: NSLocalizedString("RemoveDrink", comment: "popup view option for removeing the drink amount."), style: .default) {_ in
             let removeDrink = -drink
             self.updateConsumtion(removeDrink)
         }
+        let alerContorller = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alerContorller.addAction(editOption)
         alerContorller.addAction(removeAmount)
-        alerContorller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:
-                                                                            "popup view option for cancel."), style: .destructive, handler: nil))
+        alerContorller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "popup view option for cancel."), style: .destructive, handler: nil))
         self.present(alerContorller, animated: true, completion: nil)
     }
     
@@ -1078,7 +1011,8 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         self.days = fetchAllDays()
         var today: Day?
         if days.isEmpty {
-            today = days.first(where: {formatter.string(from: $0.date) == formatter.string(from: Date())}) ?? Day(context: context)
+            today = days.first(where: {formatter.string(from: $0.date) ==
+                                formatter.string(from: Date())}) ?? Day(context: context)
         }
         if !days.isEmpty {
             today?.goal = days.last?.goal ?? 3
@@ -1112,19 +1046,18 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     func loadDrinkOptions(){
-        drinkOptions[0]  = defaults.double(forKey: smallDrinkOptionString)
-        drinkOptions[1]  = defaults.double(forKey: mediumDrinkOptionString)
-        drinkOptions[2]  = defaults.double(forKey: largeDrinkOptionString)
+        drinkOptions[0] = defaults.double(forKey: smallDrinkOptionString)
+        drinkOptions[1] = defaults.double(forKey: mediumDrinkOptionString)
+        drinkOptions[2] = defaults.double(forKey: largeDrinkOptionString)
         
-        if  drinkOptions[0]  == 0 || drinkOptions[1]  == 0 || drinkOptions[2]  == 0 {
-            drinkOptions[0]  = 300
-            drinkOptions[1]  = 500
-            drinkOptions[2]  = 750
+        if drinkOptions[0] == 0 || drinkOptions[1] == 0 || drinkOptions[2] == 0 {
+            drinkOptions[0] = 300
+            drinkOptions[1] = 500
+            drinkOptions[2] = 750
         }
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         if response.actionIdentifier == "small" {
             #if DEBUG
             print("small button was pressed")
@@ -1300,7 +1233,7 @@ func setAppLanguage(_ language: String) {
 // MARK: - Notifications
 
 func setReminders() {
-        // Gets times for reminders and sets reminders
+    // Gets times for reminders and sets reminders
     let defaults = UserDefaults.standard
     let startDate = defaults.object(forKey: startingTimeString) as! Date
     let endDate = defaults.object(forKey: endingTimeString) as! Date
@@ -1365,17 +1298,25 @@ func setReminders(_ startDate: Date, _ endDate: Date, _ frequency: Int){
         print("setting reminder for \(formatter.string(from: notificationDate!))")
         #endif
         let notification = getReminder()
-        let smallDrinkAction = UNNotificationAction(identifier: "small", title: "\(NSLocalizedString("Add", comment: "")) \(smallDrink)\(unit)",
+        let smallDrinkAction = UNNotificationAction(identifier: "small",
+                                                    title: "\(NSLocalizedString("Add", comment: "")) \(smallDrink)\(unit)",
                                                     options: UNNotificationActionOptions(rawValue: 0))
-        let mediumDrinkAction = UNNotificationAction(identifier: "medium", title: "\(NSLocalizedString("Add", comment: "")) \(mediumDrink)\(unit)",
+        let mediumDrinkAction = UNNotificationAction(identifier: "medium",
+                                                     title: "\(NSLocalizedString("Add", comment: "")) \(mediumDrink)\(unit)",
                                                      options: UNNotificationActionOptions(rawValue: 0))
-        let largeDrinkAction = UNNotificationAction(identifier: "large", title: "\(NSLocalizedString("Add", comment: "")) \(largeDrink)\(unit)",
+        let largeDrinkAction = UNNotificationAction(identifier: "large",
+                                                    title: "\(NSLocalizedString("Add", comment: "")) \(largeDrink)\(unit)",
                                                     options: UNNotificationActionOptions(rawValue: 0))
-        let category = UNNotificationCategory(identifier: "reminders", actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction], intentIdentifiers: [], options: .customDismissAction)
+        let category = UNNotificationCategory(identifier: "reminders",
+                                              actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction],
+                                              intentIdentifiers: [],
+                                              options: .customDismissAction)
         let date = Calendar.current.dateComponents([.day, .hour, .minute], from: notificationDate!)
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
         let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(identifier: uuidString, content: notification, trigger: trigger)
+        let request = UNNotificationRequest(identifier: uuidString,
+                                            content: notification,
+                                            trigger: trigger)
         notificationCenter.add(request, withCompletionHandler: nil)
         notificationCenter.setNotificationCategories([category])
     }
@@ -1466,26 +1407,21 @@ func getCongratulationReminder()-> UNMutableNotificationContent{
     return notification
 }
 
-//Add if prewview is wanted.
-//#if DEBUG
-//
-//struct startVCRepresentable: UIViewControllerRepresentable {
-//    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-//        // leave this empty
-//    }
-//
-//    @available(iOS 13.0.0, *)
-//    func makeUIViewController(context: Context) -> UIViewController {
-//        StartVC()
-//    }
-//}
-//
-//@available(iOS 13.0, *)
-//struct startVCPreview: PreviewProvider {
-//    static var previews: some View {
-//        startVCRepresentable()
-//            .previewDevice(PreviewDevice(rawValue: "iPhone 11 pro"))
-//            .previewDisplayName("iPhone 11 pro")
-//    }
-//}
-//#endif
+//Add if prewview is wanted
+#if DEBUG
+struct startVCRepresentable: UIViewControllerRepresentable {
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        StartVC()
+    }
+}
+
+struct startVCPreview: PreviewProvider {
+    static var previews: some View {
+        startVCRepresentable()
+            .previewDevice(PreviewDevice(rawValue: "iPhone 11 pro"))
+            .previewDisplayName("iPhone 11 pro")
+    }
+}
+#endif

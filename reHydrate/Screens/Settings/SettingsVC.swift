@@ -287,26 +287,10 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.addSubTitle( "\(NSLocalizedString("Units", comment: "")): \(UnitVolume.imperialPints.symbol), \(UnitVolume.imperialFluidOunces.symbol)")
         case IndexPath(row: 0, section: 3): // Reminders cell
             if settings[3].isOpened {
-                if #available(iOS 13.0, *) {
-                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                } else {
-                    if darkMode {
-                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                    } else {
-                        cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                    }
-                }
+                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                 cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
             } else {
-                if #available(iOS 13.0, *) {
-                    cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                } else {
-                    if darkMode {
-                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                    } else {
-                        cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                    }
-                }
+                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                 cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
             }
             cell.textField.removeFromSuperview()
@@ -321,12 +305,8 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.setTextFieldConstraints()
         case IndexPath(row: 2, section: 5): // Danger cell
             cell.buttonForCell.isHidden = false
-            if #available(iOS 13.0, *) {
-                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
-                cell.buttonForCell.tintColor = .systemRed
-            } else {
-                cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.systemRed), for: .normal)
-            }
+            cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
+            cell.buttonForCell.tintColor = .systemRed
             cell.titleOption.textColor = .systemRed
             cell.subTitle.removeFromSuperview()
             cell.textField.removeFromSuperview()
@@ -338,17 +318,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
             cell.setTitleConstraints()
         default: // Cells with normal button
             cell.buttonForCell.isHidden = false
-            if #available(iOS 13.0, *) {
-                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
-            } else {
-                if darkMode {
-                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.gray),
-                                                          for: .normal)
-                } else {
-                    cell.buttonForCell.setBackgroundImage(UIImage(named: "chevron.compact.right")?.colored(.black),
-                                                          for: .normal)
-                }
-            }
+            cell.buttonForCell.setBackgroundImage(UIImage(systemName: "chevron.compact.right")!.applyingSymbolConfiguration(.init(weight: .light)), for: .normal)
             cell.subTitle.removeFromSuperview()
             cell.textField.removeFromSuperview()
             cell.setTitleConstraints()
@@ -411,15 +381,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             self.settings[3].options.append(NSLocalizedString("EndingTime", comment: "settings option"))
                             self.settings[3].options.append(NSLocalizedString("Frequency", comment: "settings option"))
                             tableView.insertRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .middle)
-                            if #available(iOS 13.0, *) {
-                                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                            } else {
-                                if self.darkMode {
-                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.gray), for: .normal)
-                                } else {
-                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "checkmark.circle.fill")?.colored(.black), for: .normal)
-                                }
-                            }
+                            cell.buttonForCell.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                             cell.titleOption.text = NSLocalizedString("TurnOffReminders", comment: "Toggle Reminders")
                             tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
                         }
@@ -429,15 +391,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource{
                             self.settings[3].options.removeLast(3)
                             tableView.deleteRows(at: [IndexPath(row: 1, section: 3), IndexPath(row: 2, section: 3), IndexPath(row: 3, section: 3)], with: .bottom)
                             tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .automatic)
-                            if #available(iOS 13.0, *) {
-                                cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-                            } else {
-                                if self.darkMode {
-                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.gray), for: .normal)
-                                } else {
-                                    cell.buttonForCell.setBackgroundImage(UIImage(named: "selection.circle")?.colored(.black), for: .normal)
-                                }
-                            }
+                            cell.buttonForCell.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
                             self.defaults.set(false, forKey: remindersString)
                             cell.titleOption.text = NSLocalizedString("TurnOnReminders", comment: "Toggle Reminders")
                         }

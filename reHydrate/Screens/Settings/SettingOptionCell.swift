@@ -376,10 +376,8 @@ class SettingOptionCell: UITableViewCell {
         let date = Calendar.current.date(from: components)!
         minutePicker.setDate(date, animated: false)
         minutePicker.addTarget(self, action: #selector(handleInput), for: .allEvents)
-        if #available(iOS 14, *) {
-            minutePicker.preferredDatePickerStyle = .wheels
-            minutePicker.sizeToFit()
-        }
+        minutePicker.preferredDatePickerStyle = .wheels
+        minutePicker.sizeToFit()
         
         self.addSubview(textField)
         setTextFieldConstraints()
