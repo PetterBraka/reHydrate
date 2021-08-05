@@ -399,7 +399,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
         currentDay.text = formatter.string(from: Date.init()).localizedCapitalized
         loadDrinkOptions()
         setUpUI()
-        changeAppearance()
+        setAppearance()
         updateUI()
         // Checks if Watch comunications is supported.
         if WCSession.isSupported(){
@@ -747,10 +747,10 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      
      # Example #
      ```
-     changeAppearance()
+     setAppearance()
      ```
      */
-    private func changeAppearance() {
+    private func setAppearance() {
         self.view.backgroundColor = UIColor.reHydrateBackground
         appTitle.textColor = darkMode ? .white : .black
         currentDay.textColor = darkMode ? .white : .black

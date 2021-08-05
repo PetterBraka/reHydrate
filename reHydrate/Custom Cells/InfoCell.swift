@@ -9,14 +9,14 @@
 import UIKit
 
 class InfoCell: UITableViewCell {
-    var titleOfCard: UILabel      = {
+    var titleOfCard: UILabel = {
         let lable  = UILabel()
         lable.text = "Title"
         lable.font = UIFont(name: "AmericanTypewriter", size: 23)
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var amountOfDrink: UILabel    = {
+    var amountOfDrink: UILabel = {
         let lable  = UILabel()
         lable.text = "0.0 L"
         lable.font = UIFont(name: "AmericanTypewriter", size: 20)
@@ -24,7 +24,7 @@ class InfoCell: UITableViewCell {
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
-    var darkMode    = Bool()
+    var darkMode = Bool()
     var metricUnits = Bool()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -33,7 +33,7 @@ class InfoCell: UITableViewCell {
         self.contentView.addSubview(titleOfCard)
         self.contentView.addSubview(amountOfDrink)
         setConstraints()
-        changeAppearance(darkMode)
+        setAppearance(darkMode)
     }
     
     required init?(coder: NSCoder) {
@@ -41,12 +41,12 @@ class InfoCell: UITableViewCell {
     }
     
     func setConstraints(){
-        titleOfCard.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive                = true
-        titleOfCard.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 5).isActive               = true
+        titleOfCard.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive = true
+        titleOfCard.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 5).isActive = true
         titleOfCard.rightAnchor.constraint(lessThanOrEqualTo: self.contentView.rightAnchor, constant: 300).isActive = true
         
-        amountOfDrink.centerYAnchor.constraint(equalTo: titleOfCard.centerYAnchor).isActive                   = true
-        amountOfDrink.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive   = true
+        amountOfDrink.centerYAnchor.constraint(equalTo: titleOfCard.centerYAnchor).isActive = true
+        amountOfDrink.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20).isActive = true
         amountOfDrink.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10).isActive = true
     }
     
@@ -62,8 +62,8 @@ class InfoCell: UITableViewCell {
      ```
      */
     func setLabels(_ title: String, _ drink: String){
-        titleOfCard.text    = title
-        amountOfDrink.text  = drink
+        titleOfCard.text = title
+        amountOfDrink.text = drink
         amountOfDrink.text?.append(" L")
     }
     
@@ -72,19 +72,14 @@ class InfoCell: UITableViewCell {
      
      # Example #
      ```
-     changeAppearance()
+     setAppearance()
      ```
      */
-    func changeAppearance(_ darkMode: Bool){
+    func setAppearance(_ darkMode: Bool){
         self.darkMode = darkMode
         self.backgroundColor = .clear
-        if darkMode {
-            titleOfCard.textColor      = .white
-            amountOfDrink.textColor    = .white
-        } else {
-            titleOfCard.textColor      = .black
-            amountOfDrink.textColor    = .black
-        }
+        titleOfCard.textColor = darkMode ? .white : .black
+        amountOfDrink.textColor = darkMode ? .white : .black
     }
     
     func changeToImperial(_ drink: Double){
