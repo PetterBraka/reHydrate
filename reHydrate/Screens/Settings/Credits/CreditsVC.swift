@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyUserDefaults
 
 
 struct credit {
@@ -64,7 +65,7 @@ class CreditsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        darkMode = UserDefaults.standard.bool(forKey: darkModeString)
+        darkMode = Defaults[\.darkMode]
         setUpUI()
 
         // Do any additional setup after loading the view.
