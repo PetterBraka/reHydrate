@@ -141,7 +141,7 @@ class CreditsVC: UIViewController {
      
      # Example #
      ```
-     changeAppearance()
+     setAppearance()
      ```
      */
     func setAppearance(){

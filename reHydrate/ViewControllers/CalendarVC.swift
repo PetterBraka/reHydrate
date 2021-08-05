@@ -21,6 +21,7 @@ class CalendarVC: UIViewController {
     var drinks: [Double] = []
     var darkMode = true {
         didSet {
+            self.overrideUserInterfaceStyle = darkMode ? .dark : .light
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
@@ -91,7 +92,7 @@ class CalendarVC: UIViewController {
         self.days = fetchAllDays()
         getDrinks(Date.init())
         setUpUI()
-        changeAppearance()
+        setAppearance()
     }
     // MARK: - Set up of UI
     
@@ -183,37 +184,24 @@ class CalendarVC: UIViewController {
      
      # Example #
      ```
-     changeAppearance()
+     setAppearance()
      ```
      */
-    func changeAppearance(){
+    func setAppearance(){
         calendar.appearance.titleFont = UIFont(name: "American typewriter", size: 15)
         calendar.appearance.weekdayFont = UIFont(name: "American typewriter", size: 18)
         calendar.appearance.headerTitleFont = UIFont(name: "American typewriter", size: 20)
         calendar.appearance.borderRadius = 1
-        if darkMode {
-            self.view.backgroundColor             = UIColor().hexStringToUIColor("#212121")
-            calendar.backgroundColor              = UIColor().hexStringToUIColor("#212121")
-            tableView.backgroundColor             = UIColor().hexStringToUIColor("#212121")
-            titleDate.textColor                     = .white
-            calendar.appearance.headerTitleColor    = .white
-            calendar.appearance.weekdayTextColor    = .white
-            calendar.appearance.titleTodayColor     = .white
-            calendar.appearance.titleDefaultColor   = .white
-            calendar.appearance.titleSelectionColor = .white
-            exitButton.tintColor                = .lightGray
-        } else {
-            self.view.backgroundColor               = .white
-            calendar.backgroundColor                = .white
-            tableView.backgroundColor               = .white
-            titleDate.textColor                     = .black
-            calendar.appearance.headerTitleColor    = .black
-            calendar.appearance.weekdayTextColor    = .black
-            calendar.appearance.titleTodayColor     = .black
-            calendar.appearance.titleDefaultColor   = .black
-            calendar.appearance.titleSelectionColor = .black
-            exitButton.tintColor                = .black
-        }
+        self.view.backgroundColor = UIColor.reHydrateBackground
+        calendar.backgroundColor = UIColor.reHydrateBackground
+        tableView.backgroundColor = UIColor.reHydrateBackground
+        titleDate.textColor = darkMode ? .white : .black
+        calendar.appearance.headerTitleColor = darkMode ? .white : .black
+        calendar.appearance.weekdayTextColor = darkMode ? .white : .black
+        calendar.appearance.titleTodayColor = darkMode ? .white : .black
+        calendar.appearance.titleDefaultColor = darkMode ? .white : .black
+        calendar.appearance.titleSelectionColor = darkMode ? .white : .black
+        exitButton.tintColor = darkMode ? .lightGray : .black
     }
     
     /**
@@ -315,7 +303,7 @@ extension CalendarVC: UITableViewDelegate, UITableViewDataSource{
         }
         cell.metricUnits = true
         cell.selectionStyle = .none
-        cell.changeAppearance(darkMode)
+        cell.setAppearance(darkMode)
         if !metricUnits {
             cell.changeToImperial(drinks[indexPath.row])
         }
