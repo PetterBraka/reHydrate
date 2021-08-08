@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		330929DB25B5DA5700DAE6C0 /* FetchData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330929DA25B5DA5700DAE6C0 /* FetchData.swift */; };
+		330929DB25B5DA5700DAE6C0 /* SaveAndLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330929DA25B5DA5700DAE6C0 /* SaveAndLoad.swift */; };
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3319AA32245334130049C676 /* SettingOptionCell.swift */; };
 		332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332E5A4524CCBF5000EF4D79 /* Extensions.swift */; };
@@ -191,7 +191,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		330929DA25B5DA5700DAE6C0 /* FetchData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchData.swift; sourceTree = "<group>"; };
+		330929DA25B5DA5700DAE6C0 /* SaveAndLoad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveAndLoad.swift; sourceTree = "<group>"; };
 		3310709A244DBCD3008365A3 /* reHydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reHydrate.entitlements; sourceTree = "<group>"; };
 		3319AA32245334130049C676 /* SettingOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOptionCell.swift; sourceTree = "<group>"; };
 		332E5A4524CCBF5000EF4D79 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -379,12 +379,11 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				33C022AF26C0540000C36244 /* Models */,
 				33B28F6926BC7F6800DECA9F /* Extensions */,
 				33B28F5826B6EB2C00DECA9F /* Screens */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
-				336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */,
-				336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */,
-				330929DA25B5DA5700DAE6C0 /* FetchData.swift */,
+				330929DA25B5DA5700DAE6C0 /* SaveAndLoad.swift */,
 				3378767624378A9400F5A732 /* AppDelegate.swift */,
 				3378767824378A9400F5A732 /* SceneDelegate.swift */,
 				33EFF3FE2470449A00D0A003 /* Localizable.strings */,
@@ -507,6 +506,15 @@
 				33B28F7126BC807C00DECA9F /* UserDefault+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		33C022AF26C0540000C36244 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */,
+				336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		33DF9BDB24B47D0900699B1A /* reHydrate-watch */ = {
@@ -866,7 +874,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
-				330929DB25B5DA5700DAE6C0 /* FetchData.swift in Sources */,
+				330929DB25B5DA5700DAE6C0 /* SaveAndLoad.swift in Sources */,
 				3378767724378A9400F5A732 /* AppDelegate.swift in Sources */,
 				33B28F7226BC807C00DECA9F /* UserDefault+Extensions.swift in Sources */,
 				33D1639625865C5A0049B88E /* CreditsHeder.swift in Sources */,
