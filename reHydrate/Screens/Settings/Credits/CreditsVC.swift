@@ -147,10 +147,10 @@ class CreditsVC: UIViewController {
      */
     func setAppearance(){
         tableView.separatorStyle = .none
-        self.view.backgroundColor  = UIColor.reHydrateTableViewBackground
+        self.view.backgroundColor  = UIColor.tableViewBackground
         exitButton.tintColor = darkMode ? .lightGray : .black
-        toolBar.backgroundColor = UIColor.reHydrateTableViewBackground
-        tableView.backgroundColor = UIColor.reHydrateTableViewBackground
+        toolBar.backgroundColor = UIColor.tableViewBackground
+        tableView.backgroundColor = UIColor.tableViewBackground
     }
 }
 

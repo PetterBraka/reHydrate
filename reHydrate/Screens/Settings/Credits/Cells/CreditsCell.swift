@@ -87,8 +87,8 @@ class CreditsCell: UITableViewCell {
      */
     func setCellAppairents(_ dark: Bool){
         titleOption.textColor = dark ? .white : .black
-        roundedCell.backgroundColor = UIColor.reHydrateBackground
-        self.backgroundColor = UIColor.reHydrateTableViewBackground
+        roundedCell.backgroundColor = UIColor.background
+        self.backgroundColor = UIColor.tableViewBackground
     }
     
 }

@@ -377,8 +377,8 @@ class TutorialVC: UIViewController {
      ```
      */
     func setAppearance(){
-        toolBar.backgroundColor = UIColor.reHydrateBackground
-        self.view.backgroundColor = UIColor.reHydrateBackground
+        toolBar.backgroundColor = UIColor.background
+        self.view.backgroundColor = UIColor.background
         dayLable.textColor = darkMode ? .darkGray : .lightGray
         summaryLable.textColor = darkMode ? .darkGray : .lightGray
         settingsButton.tintColor = darkMode ? .darkGray : .lightGray

@@ -192,9 +192,9 @@ class CalendarVC: UIViewController {
         calendar.appearance.weekdayFont = .body
         calendar.appearance.headerTitleFont = .title
         calendar.appearance.borderRadius = 1
-        self.view.backgroundColor = UIColor.reHydrateBackground
-        calendar.backgroundColor = UIColor.reHydrateBackground
-        tableView.backgroundColor = UIColor.reHydrateBackground
+        self.view.backgroundColor = UIColor.background
+        calendar.backgroundColor = UIColor.background
+        tableView.backgroundColor = UIColor.background
         titleDate.textColor = darkMode ? .white : .black
         calendar.appearance.headerTitleColor = darkMode ? .white : .black
         calendar.appearance.weekdayTextColor = darkMode ? .white : .black
