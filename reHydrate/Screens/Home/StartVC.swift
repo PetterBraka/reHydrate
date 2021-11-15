@@ -25,7 +25,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var appTitle: UILabel         = {
         let lable  = UILabel()
         lable.text = "reHydrate"
-        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 50)
+        lable.font = .largeHeader
         lable.textAlignment = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -33,7 +33,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var currentDay: UILabel       = {
         let lable  = UILabel()
         lable.text = "Day - dd/MM/yy"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 20)
+        lable.font = .title
         lable.textAlignment = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -41,7 +41,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var consumedAmount: UILabel   = {
         let lable  = UILabel()
         lable.text = "0"
-        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
+        lable.font = .largeTitle
         lable.textAlignment = .right
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -49,7 +49,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var summarySplitter: UILabel  = {
         let lable  = UILabel()
         lable.text = "/"
-        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
+        lable.font = .largeTitle
         lable.textAlignment = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -57,7 +57,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var goalAmount: UILabel       = {
         let lable  = UILabel()
         lable.text = "3"
-        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
+        lable.font = .largeTitle
         lable.textAlignment = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -65,7 +65,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var goalPrefix: UILabel       = {
         let lable  = UILabel()
         lable.text = ""
-        lable.font = UIFont(name: "AmericanTypewriter-Bold", size: 35)
+        lable.font = .largeTitle
         lable.textAlignment = .left
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -89,7 +89,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var smallLabel: UILabel       = {
         let lable  = UILabel()
         lable.text = "300"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 17)
+        lable.font = .body
         lable.textAlignment = .right
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -97,7 +97,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var smallPrefix: UILabel      = {
         let lable  = UILabel()
         lable.text = "ml"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.font = .body
         lable.textAlignment = .left
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -113,7 +113,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var mediumLabel: UILabel      = {
         let lable  = UILabel()
         lable.text = "500"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.font = .body
         lable.textAlignment = .right
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -121,7 +121,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var mediumPrefix: UILabel     = {
         let lable  = UILabel()
         lable.text = "ml"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.font = .body
         lable.textAlignment = .left
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -137,7 +137,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var largeLabel: UILabel       = {
         let lable  = UILabel()
         lable.text = "750"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.font = .subTitle
         lable.textAlignment = .right
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -145,7 +145,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
     var largePrefix: UILabel      = {
         let lable  = UILabel()
         lable.text = "ml"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.font = .subTitle
         lable.textAlignment = .left
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -943,7 +943,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
             let editAlert   = UIAlertController(title: NSLocalizedString("ChangeAmount", comment: "popup view title"), message: nil, preferredStyle: .alert)
             editAlert.addTextField(configurationHandler: {(_ textField: UITextField) in
                 textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("EnterNewValue", comment: "PlaceHolder text for textfield"), attributes:[ NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-                textField.font = UIFont(name: "American typewriter", size: 18)
+                textField.font = .body
                 textField.keyboardType = .decimalPad
                 textField.textAlignment = .center
             })

@@ -12,7 +12,7 @@ class CreditsHeder: UITableViewHeaderFooterView {
     let title: UILabel = {
         let lable   = UILabel()
         lable.text  = "Title"
-        lable.font  = UIFont(name: "AmericanTypewriter", size: 20)
+        lable.font  = .title
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()

@@ -12,14 +12,14 @@ class InfoCell: UITableViewCell {
     var titleOfCard: UILabel = {
         let lable  = UILabel()
         lable.text = "Title"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 23)
+        lable.font = .largeTitle
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
     var amountOfDrink: UILabel = {
         let lable  = UILabel()
         lable.text = "0.0 L"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 20)
+        lable.font = .title
         lable.textAlignment = .right
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable

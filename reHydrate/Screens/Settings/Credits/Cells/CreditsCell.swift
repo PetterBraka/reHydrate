@@ -18,7 +18,7 @@ class CreditsCell: UITableViewCell {
     let titleOption: UILabel     = {
         let lable   = UILabel()
         lable.text  = "test"
-        lable.font  = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.font  = .body
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()

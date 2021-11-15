@@ -31,7 +31,7 @@ class SettingOptionCell: UITableViewCell {
         textField.layer.borderWidth  = 2
         textField.layer.cornerRadius = 5
         textField.layer.borderColor  = UIColor.lightGray.cgColor
-        textField.font               = UIFont(name: "AmericanTypewriter", size: 17)
+        textField.font               = .body
         textField.textAlignment      = .center
         textField.setLeftPadding(10)
         textField.setRightPadding(10)
@@ -46,7 +46,7 @@ class SettingOptionCell: UITableViewCell {
     let titleOption: UILabel     = {
         let lable   = UILabel()
         lable.text  = "test"
-        lable.font  = UIFont(name: "AmericanTypewriter", size: 16)
+        lable.font  = .body
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -60,7 +60,7 @@ class SettingOptionCell: UITableViewCell {
     let subTitle: UILabel = {
         let lable  = UILabel()
         lable.text = "subText"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 11)
+        lable.font = .subTitle
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -569,7 +569,7 @@ class SettingOptionCell: UITableViewCell {
     func sendToastMessage(_ message: String, _ messageDelay: Double) {
         let toastLabel = UIButton()
         toastLabel.setTitle(message, for: .normal)
-        toastLabel.titleLabel?.font          = UIFont(name: "AmericanTypewriter", size: 18.0)
+        toastLabel.titleLabel?.font          = .body
         toastLabel.titleLabel?.textAlignment = .center
         toastLabel.titleLabel?.numberOfLines = 0
         toastLabel.contentEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
