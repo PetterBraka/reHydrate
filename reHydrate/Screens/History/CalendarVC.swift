@@ -39,7 +39,7 @@ class CalendarVC: UIViewController {
     var titleDate:  UILabel     = {
         var lable  = UILabel()
         lable.text = "Mon - 11/05/20"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 25)
+        lable.font = .largeTitle
         lable.numberOfLines = 0
         lable.textAlignment = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
@@ -188,9 +188,9 @@ class CalendarVC: UIViewController {
      ```
      */
     func setAppearance(){
-        calendar.appearance.titleFont = UIFont(name: "American typewriter", size: 15)
-        calendar.appearance.weekdayFont = UIFont(name: "American typewriter", size: 18)
-        calendar.appearance.headerTitleFont = UIFont(name: "American typewriter", size: 20)
+        calendar.appearance.titleFont = .body
+        calendar.appearance.weekdayFont = .body
+        calendar.appearance.headerTitleFont = .title
         calendar.appearance.borderRadius = 1
         self.view.backgroundColor = UIColor.reHydrateBackground
         calendar.backgroundColor = UIColor.reHydrateBackground

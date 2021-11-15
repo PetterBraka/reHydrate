@@ -224,7 +224,7 @@ class SettingsVC: UIViewController {
         DispatchQueue.main.async {
             let toastLabel = UIButton()
             toastLabel.setTitle(message, for: .normal)
-            toastLabel.titleLabel?.font          = UIFont(name: "AmericanTypewriter", size: 18.0)
+            toastLabel.titleLabel?.font          = .body
             toastLabel.titleLabel?.textAlignment = .center
             toastLabel.titleLabel?.numberOfLines = 0
             toastLabel.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)

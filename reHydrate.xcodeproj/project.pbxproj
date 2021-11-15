@@ -14,6 +14,7 @@
 		332315E72742724D0039EE23 /* Drinkview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E62742724D0039EE23 /* Drinkview.swift */; };
 		332315EA274274090039EE23 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E9274274090039EE23 /* Images.swift */; };
 		332315EC274276290039EE23 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315EB274276290039EE23 /* Color.swift */; };
+		332315EE274278340039EE23 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315ED274278340039EE23 /* Font.swift */; };
 		332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332E5A4524CCBF5000EF4D79 /* Extensions.swift */; };
 		333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BD5F8246424FF0041D90A /* TutorialVC.swift */; };
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
@@ -202,6 +203,7 @@
 		332315E62742724D0039EE23 /* Drinkview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drinkview.swift; sourceTree = "<group>"; };
 		332315E9274274090039EE23 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		332315EB274276290039EE23 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		332315ED274278340039EE23 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		332E5A4524CCBF5000EF4D79 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		333B1326258D00F100340FB2 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		333BD5F8246424FF0041D90A /* TutorialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVC.swift; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			children = (
 				332315E9274274090039EE23 /* Images.swift */,
 				332315EB274276290039EE23 /* Color.swift */,
+				332315ED274278340039EE23 /* Font.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -903,6 +906,7 @@
 			files = (
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
 				330929DB25B5DA5700DAE6C0 /* SaveAndLoad.swift in Sources */,
+				332315EE274278340039EE23 /* Font.swift in Sources */,
 				3378767724378A9400F5A732 /* AppDelegate.swift in Sources */,
 				33B28F7226BC807C00DECA9F /* UserDefault+Extensions.swift in Sources */,
 				33D1639625865C5A0049B88E /* CreditsHeder.swift in Sources */,

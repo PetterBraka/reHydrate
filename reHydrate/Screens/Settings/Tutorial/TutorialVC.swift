@@ -19,7 +19,7 @@ class TutorialVC: UIViewController {
     
     let skipButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = UIFont(name: "AmericanTypewriter", size: 20)
+        button.titleLabel?.font = .title
         button.setTitle(NSLocalizedString("Skip", comment: "Skip button in toolbar"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +28,7 @@ class TutorialVC: UIViewController {
     
     let nextButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = UIFont(name: "AmericanTypewriter", size: 20)
+        button.titleLabel?.font = .title
         button.setTitle(NSLocalizedString("Next", comment: "Next button in toolbar"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,7 @@ class TutorialVC: UIViewController {
         formatter.dateFormat = "EEEE - dd/MM/yy"
         lable.textAlignment = .center
         lable.text = formatter.string(from: Date()).capitalized
-        lable.font = UIFont(name: "AmericanTypeWriter-Bold", size: 20)
+        lable.font = .title
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -49,7 +49,7 @@ class TutorialVC: UIViewController {
     let summaryLable: UILabel = {
         let lable = UILabel()
         lable.text = "1.25 / 3L"
-        lable.font = UIFont(name: "AmericanTypeWriter-Bold", size: 40)
+        lable.font = .largeHeader
         lable.textAlignment = .center
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
@@ -93,7 +93,7 @@ class TutorialVC: UIViewController {
         let lable           = UILabel()
         lable.textAlignment = .center
         lable.text          = "300ml"
-        lable.font          = UIFont(name: "AmericanTypeWriter", size: 17)
+        lable.font          = .body
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -101,7 +101,7 @@ class TutorialVC: UIViewController {
         let lable           = UILabel()
         lable.textAlignment = .center
         lable.text          = "500ml"
-        lable.font          = UIFont(name: "AmericanTypeWriter", size: 17)
+        lable.font          = .body
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -109,7 +109,7 @@ class TutorialVC: UIViewController {
         let lable           = UILabel()
         lable.textAlignment = .center
         lable.text          = "750ml"
-        lable.font          = UIFont(name: "AmericanTypeWriter", size: 17)
+        lable.font          = .body
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -134,7 +134,7 @@ class TutorialVC: UIViewController {
     let explanationLabel: UILabel = {
         let lable = UILabel()
         lable.text = "Explain whats showed"
-        lable.font = UIFont(name: "AmericanTypewriter", size: 22)
+        lable.font = .title
         lable.textAlignment = .center
         lable.baselineAdjustment  = .alignCenters
         lable.numberOfLines = 0
