@@ -739,7 +739,7 @@ class StartVC: UIViewController, UNUserNotificationCenterDelegate {
      ```
      */
     private func setAppearance() {
-        self.view.backgroundColor = UIColor.reHydrateBackground
+        self.view.backgroundColor = UIColor.background
         appTitle.textColor = darkMode ? .white : .black
         currentDay.textColor = darkMode ? .white : .black
         consumedAmount.textColor = darkMode ? .white : .black

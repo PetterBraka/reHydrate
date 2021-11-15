@@ -127,8 +127,8 @@ class AppIconVC: UIViewController{
      ```
      */
     func setAppearance(){
-        self.view.backgroundColor = UIColor.reHydrateTableViewBackground
-        tableView.backgroundColor = UIColor.reHydrateTableViewBackground
+        self.view.backgroundColor = UIColor.tableViewBackground
+        tableView.backgroundColor = UIColor.tableViewBackground
         exitButton.tintColor = darkMode ? .lightGray : .black
     }
 }

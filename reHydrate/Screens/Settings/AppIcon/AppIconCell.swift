@@ -131,7 +131,7 @@ class AppIconCell: UITableViewCell {
         cellImage0.tintColor = dark ? .lightGray : .black
         cellImage1.tintColor = dark ? .lightGray : .black
         cellImage2.tintColor = dark ? .lightGray : .black
-        self.backgroundColor = UIColor.reHydrateTableViewBackground
+        self.backgroundColor = UIColor.tableViewBackground
     }
     
     /**
