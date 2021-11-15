@@ -15,6 +15,11 @@
 		332315EA274274090039EE23 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E9274274090039EE23 /* Images.swift */; };
 		332315EC274276290039EE23 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315EB274276290039EE23 /* Color.swift */; };
 		332315EE274278340039EE23 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315ED274278340039EE23 /* Font.swift */; };
+		332315F42742B3430039EE23 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315F32742B3430039EE23 /* AppView.swift */; };
+		332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315F62742B4F10039EE23 /* AppViewModel.swift */; };
+		332315FA2742B6020039EE23 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 332315F92742B6020039EE23 /* Swinject */; };
+		332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315FC2742B61D0039EE23 /* MainAssembler.swift */; };
+		332315FF2742B6920039EE23 /* ViewModelAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315FE2742B6920039EE23 /* ViewModelAssembler.swift */; };
 		332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332E5A4524CCBF5000EF4D79 /* Extensions.swift */; };
 		333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BD5F8246424FF0041D90A /* TutorialVC.swift */; };
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
@@ -204,6 +209,10 @@
 		332315E9274274090039EE23 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		332315EB274276290039EE23 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		332315ED274278340039EE23 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		332315F32742B3430039EE23 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		332315F62742B4F10039EE23 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		332315FC2742B61D0039EE23 /* MainAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembler.swift; sourceTree = "<group>"; };
+		332315FE2742B6920039EE23 /* ViewModelAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelAssembler.swift; sourceTree = "<group>"; };
 		332E5A4524CCBF5000EF4D79 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		333B1326258D00F100340FB2 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		333BD5F8246424FF0041D90A /* TutorialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVC.swift; sourceTree = "<group>"; };
@@ -341,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
+				332315FA2742B6020039EE23 /* Swinject in Frameworks */,
 				336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */,
 				336136A126B6E79F00C87FB5 /* Hero in Frameworks */,
 				33B28F6226BC7EB100DECA9F /* SwiftyUserDefaults in Frameworks */,
@@ -369,6 +379,7 @@
 			children = (
 				332315E4274271E20039EE23 /* HomeView.swift */,
 				332315E62742724D0039EE23 /* Drinkview.swift */,
+				332315F32742B3430039EE23 /* AppView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -381,6 +392,23 @@
 				332315ED274278340039EE23 /* Font.swift */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		332315F52742B4E00039EE23 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				332315F62742B4F10039EE23 /* AppViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		332315FB2742B60A0039EE23 /* DI */ = {
+			isa = PBXGroup;
+			children = (
+				332315FC2742B61D0039EE23 /* MainAssembler.swift */,
+				332315FE2742B6920039EE23 /* ViewModelAssembler.swift */,
+			);
+			path = DI;
 			sourceTree = "<group>";
 		};
 		3378766A24378A9300F5A732 = {
@@ -409,6 +437,8 @@
 			isa = PBXGroup;
 			children = (
 				332315E8274273F20039EE23 /* Resources */,
+				332315FB2742B60A0039EE23 /* DI */,
+				332315F52742B4E00039EE23 /* ViewModel */,
 				332315E32742719F0039EE23 /* UI */,
 				33C022AF26C0540000C36244 /* Models */,
 				33B28F6926BC7F6800DECA9F /* Extensions */,
@@ -694,6 +724,7 @@
 				336136A026B6E79F00C87FB5 /* Hero */,
 				336136A526B6E7D500C87FB5 /* FSCalendar */,
 				33B28F6126BC7EB100DECA9F /* SwiftyUserDefaults */,
+				332315F92742B6020039EE23 /* Swinject */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -774,6 +805,7 @@
 				3361369F26B6E79F00C87FB5 /* XCRemoteSwiftPackageReference "Hero" */,
 				336136A426B6E7D500C87FB5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 				33B28F6026BC7EB100DECA9F /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */,
+				332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */,
 			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
@@ -906,8 +938,10 @@
 			files = (
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
 				330929DB25B5DA5700DAE6C0 /* SaveAndLoad.swift in Sources */,
+				332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */,
 				332315EE274278340039EE23 /* Font.swift in Sources */,
 				3378767724378A9400F5A732 /* AppDelegate.swift in Sources */,
+				332315FF2742B6920039EE23 /* ViewModelAssembler.swift in Sources */,
 				33B28F7226BC807C00DECA9F /* UserDefault+Extensions.swift in Sources */,
 				33D1639625865C5A0049B88E /* CreditsHeder.swift in Sources */,
 				336DCC1B250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */,
@@ -920,6 +954,7 @@
 				33C4319324827F2700E8EECA /* Bundle+Extensions.swift in Sources */,
 				33B4C6FC257E92DB00EEE4AA /* CreditsCell.swift in Sources */,
 				33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */,
+				332315F42742B3430039EE23 /* AppView.swift in Sources */,
 				332315E5274271E20039EE23 /* HomeView.swift in Sources */,
 				336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */,
 				332315EC274276290039EE23 /* Color.swift in Sources */,
@@ -929,6 +964,7 @@
 				33593576257D4D8200C5612E /* CreditsVC.swift in Sources */,
 				332315EA274274090039EE23 /* Images.swift in Sources */,
 				3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */,
+				332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */,
 				3359BB7024461D620008EF6A /* InfoCell.swift in Sources */,
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
 				33B28F6D26BC7FCD00DECA9F /* Double+Extensions.swift in Sources */,
@@ -1290,6 +1326,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swinject/swinject";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 2.8.0;
+			};
+		};
 		3361369F26B6E79F00C87FB5 /* XCRemoteSwiftPackageReference "Hero" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/HeroTransitions/Hero";
@@ -1317,6 +1361,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		332315F92742B6020039EE23 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */;
+			productName = Swinject;
+		};
 		336136A026B6E79F00C87FB5 /* Hero */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3361369F26B6E79F00C87FB5 /* XCRemoteSwiftPackageReference "Hero" */;

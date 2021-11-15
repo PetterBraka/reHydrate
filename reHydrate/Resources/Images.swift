@@ -28,6 +28,9 @@ extension Image {
     static let waterDrop100 = Image("water.drop.100")
     
     static let waterDrop = Image("waterDrop")
+    
+    static let settings = Image(systemName: "gear.circle")
+    static let calender = Image(systemName: "calendar.circle")
 }
 
 extension UIImage {
@@ -49,4 +52,7 @@ extension UIImage {
     static let waterDrop100 = UIImage(named: "water.drop.100")
     
     static let waterDrop = UIImage(named: "waterDrop")
+    
+    static let settings = UIImage(systemName: "gear.circle")
+    static let calender = UIImage(systemName: "calendar.circle")
 }
