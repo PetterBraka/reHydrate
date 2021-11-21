@@ -21,7 +21,7 @@ struct DrinkView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .contrast(disable ? 0.1 : 1)
-                Text("\(drink.size)mL")
+                Text("\(drink.size.clean)mL")
                     .font(.body)
                     .foregroundColor(.label)
             }

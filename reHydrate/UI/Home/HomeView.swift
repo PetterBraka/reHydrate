@@ -95,7 +95,7 @@ struct HomeView: View {
         }
         .confirmationDialog("Drink options",
                             isPresented: $viewModel.showAlert) {
-            Button("Remove \(viewModel.getCurrentDrink())mL",
+            Button("Remove \(viewModel.getValue(for: viewModel.interactedDrink))mL",
                    role: .destructive) {
                 if let drink = viewModel.interactedDrink {
                     viewModel.removeDrink(drink)

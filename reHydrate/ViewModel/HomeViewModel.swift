@@ -41,9 +41,9 @@ final class HomeViewModel: ObservableObject {
         self.fetchToday()
     }
     
-    func getCurrentDrink() -> String {
-        if let drink = interactedDrink {
-            return "\(drink.size)"
+    func getValue(for drink: Drink?) -> String {
+        if let drink = drink {
+            return "\(drink.size.clean)"
         } else {
             return ""
         }
