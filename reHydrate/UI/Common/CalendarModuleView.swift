@@ -137,19 +137,44 @@ struct CalendarModuleView: UIViewRepresentable {
             // Custom today layer
             calendarCell.todayHighlighter.isHidden = !parent.gregorian.isDateInToday(date)
             // Configure selection layer
+            
             if parent.selectedDates.isEmpty {
-                if parent.gregorian.isDateInToday(date) {
-                    calendarCell.todayHighlighter.isHidden = true
-                    calendarCell.selectionLayer.isHidden = false
-                    calendarCell.selectionType = SelectionType.single
-                } else {
-                    calendarCell.todayHighlighter.isHidden = true
-                    calendarCell.selectionLayer.isHidden = true
-                }
+                highlightToday(with: date, for: calendarCell)
                 return
             }
-            var selectionType = SelectionType.none
             
+            let selectionType = getSelection(with: date)
+            
+            if selectionType == .none {
+                calendarCell.selectionLayer.isHidden = true
+                return
+            }
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd/MM/yy"
+            if formatter.string(from: Date()) == formatter.string(from: date){
+                calendarCell.todayHighlighter.isHidden = true
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = selectionType
+            } else {
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = selectionType
+            }
+        }
+        
+        func highlightToday(with date: Date, for cell: CalendarCell) {
+            if parent.gregorian.isDateInToday(date) {
+                cell.todayHighlighter.isHidden = true
+                cell.selectionLayer.isHidden = false
+                cell.selectionType = SelectionType.single
+            } else {
+                cell.todayHighlighter.isHidden = true
+                cell.selectionLayer.isHidden = true
+            }
+        }
+        
+        func getSelection(with date: Date) -> SelectionType {
+            var selectionType = SelectionType.none
             if parent.selectedDates.contains(where: { $0.date == date }) {
                 let previousDate = parent.gregorian.date(byAdding: .day, value: -1, to: date)!
                 let nextDate = parent.gregorian.date(byAdding: .day, value: 1, to: date)!
@@ -171,20 +196,7 @@ struct CalendarModuleView: UIViewRepresentable {
                     selectionType = .none
                 }
             }
-            if selectionType == .none {
-                calendarCell.selectionLayer.isHidden = true
-                return
-            }
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd/MM/yy"
-            if formatter.string(from: Date()) == formatter.string(from: date){
-                calendarCell.todayHighlighter.isHidden = true
-                calendarCell.selectionLayer.isHidden = false
-                calendarCell.selectionType = selectionType
-            } else {
-                calendarCell.selectionLayer.isHidden = false
-                calendarCell.selectionType = selectionType
-            }
+            return selectionType
         }
     }
 }
