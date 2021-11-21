@@ -58,16 +58,16 @@ class CalendarCell: FSCalendarCell {
         self.todayHighlighter.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: self.contentView.bounds.height + 5)
         self.selectionLayer.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: self.contentView.bounds.height + 5)
         if selectionType == .middle {
-            self.selectionLayer.image = UIImage(named: "MidSelected")
+            self.selectionLayer.image = UIImage.midSelected
         }
         else if selectionType == .leftBorder {
-            self.selectionLayer.image = UIImage(named: "LeftSelected")
+            self.selectionLayer.image = UIImage.leftSelected
         }
         else if selectionType == .rightBorder {
-            self.selectionLayer.image = UIImage(named: "RightSelected")
+            self.selectionLayer.image = UIImage.rightSelected
         }
         else if selectionType == .single {
-            self.selectionLayer.image = UIImage(named: "circle")
+            self.selectionLayer.image = UIImage.circle
         }
     }
     

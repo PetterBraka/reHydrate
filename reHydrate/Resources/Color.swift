@@ -10,9 +10,9 @@ import UIKit
 import SwiftUI
 
 extension UIColor {
-    static let label = UIColor(named: "reHydrate.label")
-    static let background = UIColor(named: "reHydrate.Background")
-    static let tableViewBackground = UIColor(named: "reHydrate.tablview.Background")
+    static let label = UIColor(named: "reHydrate.label")!
+    static let background = UIColor(named: "reHydrate.Background")!
+    static let tableViewBackground = UIColor(named: "reHydrate.tablview.Background")!
 }
 
 extension Color {

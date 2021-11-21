@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17189" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Day" representedClassName="Day" syncable="YES">
-        <attribute name="consumed" attributeType="Double" valueTransformerName="consumed" defaultValueString="0.0" usesScalarValueType="YES" customClassName="Drink"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DayModel" representedClassName="DayModel" syncable="YES" codeGenerationType="class">
+        <attribute name="consumtion" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="goal" attributeType="Double" valueTransformerName="goal" defaultValueString="0" usesScalarValueType="YES" customClassName="Drink"/>
+        <attribute name="goal" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="Day" positionX="-63" positionY="-18" width="128" height="88"/>
+        <element name="DayModel" positionX="-63" positionY="9" width="128" height="89"/>
     </elements>
 </model>

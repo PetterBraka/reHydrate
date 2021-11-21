@@ -23,9 +23,6 @@ final class AppViewModel: ObservableObject {
     @Published var drinks = [Drink(type: .small, size: 250),
                              Drink(type: .medium, size: 500),
                              Drink(type: .large, size: 750)]
-    @Published var today = DayRecord(date: Date(),
-                                     consumed: 0,
-                                     goal: 3)
     
     private func navigate(to state: AppState) {
         withAnimation {

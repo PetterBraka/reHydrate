@@ -29,26 +29,25 @@ struct Drink: Identifiable, Hashable {
     var size: Int
 }
 
-struct DayRecord {
-    var date: Date
-    var consumed: Double
-    var goal: Double
-}
-
 struct HomeView: View {
+    @StateObject var viewModel: HomeViewModel
     @Binding var drinks: [Drink]
-    @Binding var today: DayRecord
     
-    var navigateTo: (AppState) -> Void
+    init(drinks: Binding<[Drink]>, navigateTo: @escaping ((AppState) -> Void)) {
+        _drinks = drinks
+        let viewModel = MainAssembler.shared.container.resolve(HomeViewModel.self,
+                                                               argument: navigateTo)!
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         VStack(spacing: 16) {
             Text("reHydrate")
                 .font(.largeHeader)
                 .bold()
-            Text("Monday - 15/11/21")
+            Text(viewModel.getDate())
                 .font(.title)
-            Text("0/2L")
+            Text("\(viewModel.today.consumption)/\(viewModel.today.goal)")
                 .font(.largeTitle)
                 .bold()
             
@@ -57,17 +56,21 @@ struct HomeView: View {
             GeometryReader { geo in
                 HStack(alignment: .bottom) {
                     DrinkView(drink: $drinks[0],
-                              disable: false) {}
+                              disable: false) {
+                        viewModel.addDrink(of: drinks[0])
+                    }
                               .frame(width: geo.size.width / 3,
                                      height: 100,
                                      alignment: .bottom)
                     DrinkView(drink: $drinks[1],
-                              disable: false) {}
+                              disable: false) {
+                        viewModel.addDrink(of: drinks[1])}
                               .frame(width: geo.size.width / 3,
                                      height: 180,
                                      alignment: .bottom)
                     DrinkView(drink: $drinks[2],
-                              disable: false) {}
+                              disable: false) {
+                        viewModel.addDrink(of: drinks[2])}
                               .frame(width: geo.size.width / 3,
                                      height: 250,
                                      alignment: .bottom)
@@ -80,7 +83,7 @@ struct HomeView: View {
             
             HStack {
                 Button {
-                    navigateTo(.settings)
+                    viewModel.navigateTo(.settings)
                 } label: {
                     Image.settings
                         .resizable()
@@ -91,7 +94,7 @@ struct HomeView: View {
                 Spacer()
                 
                 Button {
-                    navigateTo(.calender)
+                    viewModel.navigateTo(.calender)
                 } label: {
                     Image.calender
                         .resizable()
@@ -110,9 +113,6 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(drinks: .constant([Drink(type: .small, size: 250),
                                     Drink(type: .medium, size: 500),
-                                    Drink(type: .large, size: 750)]),
-                 today: .constant(DayRecord(date: Date(),
-                                            consumed: 0.4,
-                                            goal: 3))) {_ in }
+                                    Drink(type: .large, size: 750)])) {_ in }
     }
 }

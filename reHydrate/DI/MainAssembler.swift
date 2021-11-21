@@ -17,7 +17,7 @@ final class MainAssembler {
     
     private init() {
         container = Container()
-        assembler = Assembler([ViewModelAssembler()],
+        assembler = Assembler([ViewModelAssembler(), ManagerAssembly()],
                               container: container)
     }
 }
