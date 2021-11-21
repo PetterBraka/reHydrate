@@ -47,7 +47,7 @@ struct HomeView: View {
                 .bold()
             Text(viewModel.getDate())
                 .font(.title)
-            Text("\(viewModel.today.consumption)/\(viewModel.today.goal)")
+            Text("\(viewModel.getConsumed())/\(viewModel.getGoal())")
                 .font(.largeTitle)
                 .bold()
             
@@ -58,19 +58,30 @@ struct HomeView: View {
                     DrinkView(drink: $drinks[0],
                               disable: false) {
                         viewModel.addDrink(of: drinks[0])
+                    } longPress: {
+                        viewModel.interactedDrink = drinks[0]
+                        viewModel.showAlert.toggle()
                     }
-                              .frame(width: geo.size.width / 3,
-                                     height: 100,
-                                     alignment: .bottom)
+                    .frame(width: geo.size.width / 3,
+                           height: 100,
+                           alignment: .bottom)
                     DrinkView(drink: $drinks[1],
                               disable: false) {
-                        viewModel.addDrink(of: drinks[1])}
+                        viewModel.addDrink(of: drinks[1])
+                    } longPress: {
+                        viewModel.interactedDrink = drinks[1]
+                        viewModel.showAlert.toggle()
+                    }
                               .frame(width: geo.size.width / 3,
                                      height: 180,
                                      alignment: .bottom)
                     DrinkView(drink: $drinks[2],
                               disable: false) {
-                        viewModel.addDrink(of: drinks[2])}
+                        viewModel.addDrink(of: drinks[2])
+                    } longPress: {
+                        viewModel.interactedDrink = drinks[2]
+                        viewModel.showAlert.toggle()
+                    }
                               .frame(width: geo.size.width / 3,
                                      height: 250,
                                      alignment: .bottom)
@@ -104,6 +115,15 @@ struct HomeView: View {
             }
             .frame(height: 50)
             .padding(.horizontal, 24)
+        }
+        .confirmationDialog(Text("Do you want to remove \(viewModel.getCurrentDrink())"),
+                            isPresented: $viewModel.showAlert,
+                            titleVisibility: .visible) {
+            Button("Remove", role: .destructive) {
+                if let drink = viewModel.interactedDrink {
+                    viewModel.removeDrink(of: drink)
+                }
+            }
         }
         .background(Color.background.ignoresSafeArea())
     }

@@ -11,12 +11,11 @@ import SwiftUI
 struct DrinkView: View {
     @Binding var drink: Drink
     var disable: Bool
-    var action: () -> Void
+    var tapAction: () -> Void
+    var longPress: () -> Void
     
     var body: some View {
-        Button {
-            action()
-        } label: {
+        Button {} label: {
             VStack {
                 drink.type.getImage()
                     .resizable()
@@ -27,12 +26,26 @@ struct DrinkView: View {
                     .foregroundColor(.label)
             }
         }
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.2)
+                .onEnded({ success in
+                    if success {
+                        longPress()
+                    }
+                })
+        )
+        .highPriorityGesture(
+            TapGesture()
+                .onEnded({ _ in
+                    tapAction()
+                })
+        )
     }
 }
 
 struct DrinkView_Previews: PreviewProvider {
     static var previews: some View {
         DrinkView(drink: .constant(Drink(type: .medium, size: 500)),
-                  disable: true) {}
+                  disable: true) {} longPress: {}
     }
 }
