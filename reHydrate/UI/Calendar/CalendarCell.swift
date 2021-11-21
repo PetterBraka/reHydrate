@@ -23,9 +23,7 @@ class CalendarCell: FSCalendarCell {
     weak var selectionLayer: UIImageView!
     
     var selectionType: SelectionType = .none {
-        didSet {
-            setNeedsLayout()
-        }
+        didSet { setNeedsLayout() }
     }
     
     required init!(coder aDecoder: NSCoder!) {
@@ -35,11 +33,11 @@ class CalendarCell: FSCalendarCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let selectionLayer = UIImageView(image: UIImage(named: "circle"))
+        let selectionLayer = UIImageView(image: UIImage.circle)
         self.contentView.insertSubview(selectionLayer, at: 1)
         self.selectionLayer = selectionLayer
         
-        let circleImageView = UIImageView(image: UIImage(named: "circle")?.withRenderingMode(.alwaysTemplate))
+        let circleImageView = UIImageView(image: UIImage.circle.withRenderingMode(.alwaysTemplate))
         circleImageView.tintColor = .systemBlue
         self.contentView.insertSubview(circleImageView, at: 0)
         todayHighlighter = circleImageView
@@ -55,8 +53,10 @@ class CalendarCell: FSCalendarCell {
         super.layoutSubviews()
         
         self.backgroundView?.frame = self.bounds.insetBy(dx: 1, dy: 1)
-        self.todayHighlighter.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: self.contentView.bounds.height + 5)
-        self.selectionLayer.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: self.contentView.bounds.height + 5)
+        self.todayHighlighter.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width,
+                                             height: self.contentView.bounds.height + 5)
+        self.selectionLayer.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width,
+                                           height: self.contentView.bounds.height + 5)
         if selectionType == .middle {
             self.selectionLayer.image = UIImage.midSelected
         }

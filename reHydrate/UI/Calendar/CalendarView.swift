@@ -42,7 +42,8 @@ struct CalendarView: View {
             }
             Spacer()
             
-            CalendarModuleView(selectedDates: $selectedDate, firsWeekday: .monday)
+            CalendarModuleView(selectedDates: $selectedDate,
+                               firsWeekday: .monday)
         }
         .padding(.horizontal, 24)
         .background(Color.background.ignoresSafeArea())

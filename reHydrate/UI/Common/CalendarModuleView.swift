@@ -36,78 +36,32 @@ struct CalendarModuleView: UIViewRepresentable {
         calendar.delegate = context.coordinator
         calendar.dataSource = context.coordinator
         calendar.locale = .current
-        calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell") 
-        calendar.appearance.todayColor = UIColor.systemGreen
-        calendar.appearance.selectionColor = UIColor.systemBlue
+        calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell")
         
         calendar.allowsMultipleSelection = true
         calendar.swipeToChooseGesture.isEnabled = true
         calendar.swipeToChooseGesture.minimumPressDuration = 0.1
         calendar.firstWeekday = firsWeekday.rawValue
+        
+        calendar.appearance.titleFont = .body
+        calendar.appearance.weekdayFont = .body
+        calendar.appearance.headerTitleFont = .title
+        calendar.appearance.borderRadius = 1
+        
+        calendar.appearance.headerTitleColor = .label
+        calendar.appearance.weekdayTextColor = .label
+        calendar.appearance.titleTodayColor = .label
+        calendar.appearance.titleDefaultColor = .label
+        calendar.appearance.titleSelectionColor = .label
         return calendar
     }
     
     func updateUIView(_ uiView: FSCalendar, context: Context) {
-        uiView.visibleCells().forEach { (cell) in
-            let date = uiView.date(for: cell)
-            let position = uiView.monthPosition(for: cell)
-            self.configure(cell: cell, for: date!, at: position)
-        }
-    }
-    
-    private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
-        let calendarCell = (cell as! CalendarCell)
-        // Custom today layer
-        calendarCell.todayHighlighter.isHidden = !self.gregorian.isDateInToday(date)
-        // Configure selection layer
-        if self.selectedDates.isEmpty {
-            if self.gregorian.isDateInToday(date) {
-                calendarCell.todayHighlighter.isHidden = true
-                calendarCell.selectionLayer.isHidden = false
-                calendarCell.selectionType = SelectionType.single
-            } else {
-                calendarCell.todayHighlighter.isHidden = true
-                calendarCell.selectionLayer.isHidden = true
-            }
-        } else {
-            var selectionType = SelectionType.none
-            
-            if self.selectedDates.contains(where: { $0.date == date }) {
-                let previousDate = self.gregorian.date(byAdding: .day, value: -1, to: date)!
-                let nextDate = self.gregorian.date(byAdding: .day, value: 1, to: date)!
-                if self.selectedDates.contains(where: { $0.date == date }) {
-                    if self.selectedDates.contains(where: { $0.date == previousDate }) && self.selectedDates.contains(where: { $0.date == nextDate }) {
-                        selectionType = .middle
-                    }
-                    else if self.selectedDates.contains(where: { $0.date == previousDate }) &&
-                                self.selectedDates.contains(where: { $0.date == date}) {
-                        selectionType = .rightBorder
-                    }
-                    else if self.selectedDates.contains(where: { $0.date == nextDate }) {
-                        selectionType = .leftBorder
-                    }
-                    else {
-                        selectionType = .single
-                    }
-                } else {
-                    selectionType = .none
-                }
-            }
-            if selectionType == .none {
-                calendarCell.selectionLayer.isHidden = true
-                return
-            }
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd/MM/yy"
-            if formatter.string(from: Date()) == formatter.string(from: date){
-                calendarCell.todayHighlighter.isHidden = true
-                calendarCell.selectionLayer.isHidden = false
-                calendarCell.selectionType = selectionType
-            } else {
-                calendarCell.selectionLayer.isHidden = false
-                calendarCell.selectionType = selectionType
-            }
-        }
+//        uiView.visibleCells().forEach { (cell) in
+//            let date = uiView.date(for: cell)
+//            let position = uiView.monthPosition(for: cell)
+//            self.configure(cell: cell, for: date!, at: position)
+//        }
     }
     
     class Coordinator: NSObject, FSCalendarDelegate, FSCalendarDataSource {
@@ -125,7 +79,7 @@ struct CalendarModuleView: UIViewRepresentable {
         
         func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
             let cell = calendar.dequeueReusableCell(withIdentifier: "calendarCell", for: date, at: position) as! CalendarCell
-            parent.configure(cell: cell, for: date, at: position)
+            configure(cell: cell, for: date, at: position)
             return cell
         }
         
@@ -152,19 +106,84 @@ struct CalendarModuleView: UIViewRepresentable {
         
         func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
             print("Selected \(formatter.string(from: date))")
-            //                self.configureVisibleCells()
+            parent.selectedDates.append(Day(id: UUID(), consumption: 0, goal: 0, date: date))
+            self.configureVisibleCells(for: calendar)
             if calendar.selectedDates.count > 1 {
                 // check if starting and ending date is the same when swipe gesture is used
             }
         }
         
         func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
-            //                self.configureVisibleCells()
             print("deselected \(formatter.string(from: date))")
+            parent.selectedDates.removeAll(where: { $0.date == date })
+            self.configureVisibleCells(for: calendar)
             if parent.selectedDates.count == 1 {
                 //                self.getDrinks(calendar.selectedDates[0])
             } else {
                 //                self.getDrinks(date)
+            }
+        }
+        
+        private func configureVisibleCells(for calendar: FSCalendar) {
+            calendar.visibleCells().forEach { (cell) in
+                let date = calendar.date(for: cell)
+                let position = calendar.monthPosition(for: cell)
+                self.configure(cell: cell, for: date!, at: position)
+            }
+        }
+        
+        private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
+            let calendarCell = (cell as! CalendarCell)
+            // Custom today layer
+            calendarCell.todayHighlighter.isHidden = !parent.gregorian.isDateInToday(date)
+            // Configure selection layer
+            if parent.selectedDates.isEmpty {
+                if parent.gregorian.isDateInToday(date) {
+                    calendarCell.todayHighlighter.isHidden = true
+                    calendarCell.selectionLayer.isHidden = false
+                    calendarCell.selectionType = SelectionType.single
+                } else {
+                    calendarCell.todayHighlighter.isHidden = true
+                    calendarCell.selectionLayer.isHidden = true
+                }
+                return
+            }
+            var selectionType = SelectionType.none
+            
+            if parent.selectedDates.contains(where: { $0.date == date }) {
+                let previousDate = parent.gregorian.date(byAdding: .day, value: -1, to: date)!
+                let nextDate = parent.gregorian.date(byAdding: .day, value: 1, to: date)!
+                if parent.selectedDates.contains(where: { $0.date == date }) {
+                    if parent.selectedDates.contains(where: { $0.date == previousDate }) && parent.selectedDates.contains(where: { $0.date == nextDate }) {
+                        selectionType = .middle
+                    }
+                    else if parent.selectedDates.contains(where: { $0.date == previousDate }) &&
+                                parent.selectedDates.contains(where: { $0.date == date}) {
+                        selectionType = .rightBorder
+                    }
+                    else if parent.selectedDates.contains(where: { $0.date == nextDate }) {
+                        selectionType = .leftBorder
+                    }
+                    else {
+                        selectionType = .single
+                    }
+                } else {
+                    selectionType = .none
+                }
+            }
+            if selectionType == .none {
+                calendarCell.selectionLayer.isHidden = true
+                return
+            }
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd/MM/yy"
+            if formatter.string(from: Date()) == formatter.string(from: date){
+                calendarCell.todayHighlighter.isHidden = true
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = selectionType
+            } else {
+                calendarCell.selectionLayer.isHidden = false
+                calendarCell.selectionType = selectionType
             }
         }
     }
