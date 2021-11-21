@@ -22,7 +22,7 @@ struct AppView: View {
                 .transition( .asymmetric(insertion: .move(edge: .leading),
                                          removal: .move(edge: .trailing)))
         case .calender:
-            CalenderView(navigateTo: viewModel.navigateTo)
+            CalendarView(navigateTo: viewModel.navigateTo)
                 .transition( .asymmetric(insertion: .move(edge: .trailing),
                                          removal: .move(edge: .leading)))
         }

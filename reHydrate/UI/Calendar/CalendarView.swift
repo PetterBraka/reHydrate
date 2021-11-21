@@ -1,5 +1,5 @@
 //
-//  CalenderView.swift
+//  CalendarView.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 15/11/2021.
@@ -9,7 +9,7 @@
 import SwiftUI
 import FSCalendar
 
-struct CalenderView: View {
+struct CalendarView: View {
     @State var selectedDate: [Day] = []
     var navigateTo: (AppState) -> Void
     
@@ -49,8 +49,8 @@ struct CalenderView: View {
     }
 }
 
-struct CalenderView_Previews: PreviewProvider {
+struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalenderView() {_ in }
+        CalendarView() {_ in }
     }
 }

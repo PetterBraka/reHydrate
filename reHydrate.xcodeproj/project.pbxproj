@@ -21,7 +21,7 @@
 		332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315FC2742B61D0039EE23 /* MainAssembler.swift */; };
 		332315FF2742B6920039EE23 /* ViewModelAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315FE2742B6920039EE23 /* ViewModelAssembler.swift */; };
 		332316042742BD6C0039EE23 /* CoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332316032742BD6C0039EE23 /* CoreDataRepository.swift */; };
-		33231608274306BA0039EE23 /* CalenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231607274306BA0039EE23 /* CalenderView.swift */; };
+		33231608274306BA0039EE23 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231607274306BA0039EE23 /* CalendarView.swift */; };
 		3323160B27430A1B0039EE23 /* CalendarModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323160A27430A1B0039EE23 /* CalendarModuleView.swift */; };
 		3323160D27441B030039EE23 /* DayRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323160C27441B020039EE23 /* DayRepository.swift */; };
 		3323161127441E030039EE23 /* DayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161027441E030039EE23 /* DayModel.swift */; };
@@ -46,6 +46,7 @@
 		3378767B24378A9400F5A732 /* StartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767A24378A9400F5A732 /* StartVC.swift */; };
 		3378768024378A9800F5A732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3378767F24378A9800F5A732 /* Assets.xcassets */; };
 		3378768324378A9800F5A732 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378768124378A9800F5A732 /* LaunchScreen.storyboard */; };
+		3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387ED68274AD9C40083D2C1 /* Drink.swift */; };
 		3389E0AB2448A61300DD7B58 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3389E0AA2448A61300DD7B58 /* SettingsVC.swift */; };
 		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
@@ -222,7 +223,7 @@
 		332315FC2742B61D0039EE23 /* MainAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembler.swift; sourceTree = "<group>"; };
 		332315FE2742B6920039EE23 /* ViewModelAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelAssembler.swift; sourceTree = "<group>"; };
 		332316032742BD6C0039EE23 /* CoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataRepository.swift; sourceTree = "<group>"; };
-		33231607274306BA0039EE23 /* CalenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalenderView.swift; sourceTree = "<group>"; };
+		33231607274306BA0039EE23 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		3323160A27430A1B0039EE23 /* CalendarModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModuleView.swift; sourceTree = "<group>"; };
 		3323160C27441B020039EE23 /* DayRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRepository.swift; sourceTree = "<group>"; };
 		3323161027441E030039EE23 /* DayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayModel.swift; sourceTree = "<group>"; };
@@ -245,6 +246,7 @@
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767A24378A9400F5A732 /* StartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVC.swift; sourceTree = "<group>"; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3387ED68274AD9C40083D2C1 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
 		3389E0AA2448A61300DD7B58 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
 		33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
@@ -393,10 +395,9 @@
 		332315E32742719F0039EE23 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				3387ED6B274AD9F40083D2C1 /* Calendar */,
+				3387ED6A274AD9E50083D2C1 /* Home */,
 				3323160927430A060039EE23 /* Common */,
-				332315E4274271E20039EE23 /* HomeView.swift */,
-				33231607274306BA0039EE23 /* CalenderView.swift */,
-				332315E62742724D0039EE23 /* Drinkview.swift */,
 				332315F32742B3430039EE23 /* AppView.swift */,
 			);
 			path = UI;
@@ -463,6 +464,7 @@
 			children = (
 				3323161027441E030039EE23 /* DayModel.swift */,
 				3323161227441E140039EE23 /* Day.swift */,
+				3387ED68274AD9C40083D2C1 /* Drink.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -518,6 +520,23 @@
 				33231623274A75530039EE23 /* reHydrateApp.swift */,
 			);
 			path = reHydrate;
+			sourceTree = "<group>";
+		};
+		3387ED6A274AD9E50083D2C1 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				332315E62742724D0039EE23 /* Drinkview.swift */,
+				332315E4274271E20039EE23 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		3387ED6B274AD9F40083D2C1 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				33231607274306BA0039EE23 /* CalendarView.swift */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 		33B28F5826B6EB2C00DECA9F /* Screens */ = {
@@ -1002,7 +1021,7 @@
 			files = (
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
 				330929DB25B5DA5700DAE6C0 /* SaveAndLoad.swift in Sources */,
-				33231608274306BA0039EE23 /* CalenderView.swift in Sources */,
+				33231608274306BA0039EE23 /* CalendarView.swift in Sources */,
 				332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */,
 				332315EE274278340039EE23 /* Font.swift in Sources */,
 				33231619274420E60039EE23 /* reHydrate.xcdatamodeld in Sources */,
@@ -1030,6 +1049,7 @@
 				3323160D27441B030039EE23 /* DayRepository.swift in Sources */,
 				334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
+				3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				33593576257D4D8200C5612E /* CreditsVC.swift in Sources */,
 				3323161B274A61F30039EE23 /* PresistenceController.swift in Sources */,
