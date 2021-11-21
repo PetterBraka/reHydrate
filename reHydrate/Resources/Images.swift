@@ -29,30 +29,32 @@ extension Image {
     
     static let waterDrop = Image("waterDrop")
     
+    static let exit = Image(systemName: "x.circle")
     static let settings = Image(systemName: "gear.circle")
     static let calender = Image(systemName: "calendar.circle")
 }
 
 extension UIImage {
-    static let cup = UIImage(named: "Cup")
-    static let bottle = UIImage(named: "Bottle")
-    static let largeBottle = UIImage(named: "Flask")
+    static let cup = UIImage(named: "Cup")!
+    static let bottle = UIImage(named: "Bottle")!
+    static let largeBottle = UIImage(named: "Flask")!
     
-    static let logo = UIImage(named: "reHydrateLogo")
+    static let logo = UIImage(named: "reHydrateLogo")!
     
-    static let circle = UIImage(named: "circle")
-    static let leftSelected = UIImage(named: "LeftSelected")
-    static let midSelected = UIImage(named: "MidSelected")
-    static let rightSelected = UIImage(named: "RightSelected")
+    static let circle = UIImage(named: "circle")!
+    static let leftSelected = UIImage(named: "LeftSelected")!
+    static let midSelected = UIImage(named: "MidSelected")!
+    static let rightSelected = UIImage(named: "RightSelected")!
     
-    static let waterDrop0 = UIImage(named: "water.drop.0")
-    static let waterDrop25 = UIImage(named: "water.drop.25")
-    static let waterDrop50 = UIImage(named: "water.drop.50")
-    static let waterDrop75 = UIImage(named: "water.drop.75")
-    static let waterDrop100 = UIImage(named: "water.drop.100")
+    static let waterDrop0 = UIImage(named: "water.drop.0")!
+    static let waterDrop25 = UIImage(named: "water.drop.25")!
+    static let waterDrop50 = UIImage(named: "water.drop.50")!
+    static let waterDrop75 = UIImage(named: "water.drop.75")!
+    static let waterDrop100 = UIImage(named: "water.drop.100")!
     
-    static let waterDrop = UIImage(named: "waterDrop")
+    static let waterDrop = UIImage(named: "waterDrop")!
     
-    static let settings = UIImage(systemName: "gear.circle")
-    static let calender = UIImage(systemName: "calendar.circle")
+    static let exit = UIImage(systemName: "x.circle")!
+    static let settings = UIImage(systemName: "gear.circle")!
+    static let calender = UIImage(systemName: "calendar.circle")!
 }

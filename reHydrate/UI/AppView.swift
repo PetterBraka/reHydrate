@@ -15,7 +15,6 @@ struct AppView: View {
         switch viewModel.currenState {
         case .home:
             HomeView(drinks: $viewModel.drinks,
-                     today: $viewModel.today,
                      navigateTo: viewModel.navigateTo)
                 .transition(.slide)
         case .settings:

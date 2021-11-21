@@ -20,6 +20,18 @@
 		332315FA2742B6020039EE23 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 332315F92742B6020039EE23 /* Swinject */; };
 		332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315FC2742B61D0039EE23 /* MainAssembler.swift */; };
 		332315FF2742B6920039EE23 /* ViewModelAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315FE2742B6920039EE23 /* ViewModelAssembler.swift */; };
+		332316042742BD6C0039EE23 /* CoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332316032742BD6C0039EE23 /* CoreDataRepository.swift */; };
+		33231608274306BA0039EE23 /* CalenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231607274306BA0039EE23 /* CalenderView.swift */; };
+		3323160B27430A1B0039EE23 /* CalendarModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323160A27430A1B0039EE23 /* CalendarModuleView.swift */; };
+		3323160D27441B030039EE23 /* DayRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323160C27441B020039EE23 /* DayRepository.swift */; };
+		3323161127441E030039EE23 /* DayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161027441E030039EE23 /* DayModel.swift */; };
+		3323161327441E140039EE23 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161227441E140039EE23 /* Day.swift */; };
+		33231619274420E60039EE23 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 33231617274420E60039EE23 /* reHydrate.xcdatamodeld */; };
+		3323161B274A61F30039EE23 /* PresistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161A274A61F30039EE23 /* PresistenceController.swift */; };
+		3323161E274A63420039EE23 /* DayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161D274A63420039EE23 /* DayManager.swift */; };
+		33231620274A64210039EE23 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161F274A64210039EE23 /* HomeViewModel.swift */; };
+		33231622274A6FC70039EE23 /* ManagerAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231621274A6FC70039EE23 /* ManagerAssembly.swift */; };
+		33231624274A75530039EE23 /* reHydrateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231623274A75530039EE23 /* reHydrateApp.swift */; };
 		332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332E5A4524CCBF5000EF4D79 /* Extensions.swift */; };
 		333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BD5F8246424FF0041D90A /* TutorialVC.swift */; };
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
@@ -30,11 +42,7 @@
 		336136A126B6E79F00C87FB5 /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* Hero */; };
 		336136A226B6E79F00C87FB5 /* Hero in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* Hero */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A526B6E7D500C87FB5 /* FSCalendar */; };
-		336DCBFD250682C500CF15F0 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */; };
 		336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */; };
-		336DCC1B250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */; };
-		3378767724378A9400F5A732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767624378A9400F5A732 /* AppDelegate.swift */; };
-		3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767824378A9400F5A732 /* SceneDelegate.swift */; };
 		3378767B24378A9400F5A732 /* StartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378767A24378A9400F5A732 /* StartVC.swift */; };
 		3378768024378A9800F5A732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3378767F24378A9800F5A732 /* Assets.xcassets */; };
 		3378768324378A9800F5A732 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378768124378A9800F5A732 /* LaunchScreen.storyboard */; };
@@ -213,6 +221,18 @@
 		332315F62742B4F10039EE23 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		332315FC2742B61D0039EE23 /* MainAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembler.swift; sourceTree = "<group>"; };
 		332315FE2742B6920039EE23 /* ViewModelAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelAssembler.swift; sourceTree = "<group>"; };
+		332316032742BD6C0039EE23 /* CoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataRepository.swift; sourceTree = "<group>"; };
+		33231607274306BA0039EE23 /* CalenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalenderView.swift; sourceTree = "<group>"; };
+		3323160A27430A1B0039EE23 /* CalendarModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModuleView.swift; sourceTree = "<group>"; };
+		3323160C27441B020039EE23 /* DayRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRepository.swift; sourceTree = "<group>"; };
+		3323161027441E030039EE23 /* DayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayModel.swift; sourceTree = "<group>"; };
+		3323161227441E140039EE23 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
+		33231618274420E60039EE23 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
+		3323161A274A61F30039EE23 /* PresistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresistenceController.swift; sourceTree = "<group>"; };
+		3323161D274A63420039EE23 /* DayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayManager.swift; sourceTree = "<group>"; };
+		3323161F274A64210039EE23 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		33231621274A6FC70039EE23 /* ManagerAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerAssembly.swift; sourceTree = "<group>"; };
+		33231623274A75530039EE23 /* reHydrateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reHydrateApp.swift; sourceTree = "<group>"; };
 		332E5A4524CCBF5000EF4D79 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		333B1326258D00F100340FB2 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		333BD5F8246424FF0041D90A /* TutorialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVC.swift; sourceTree = "<group>"; };
@@ -221,12 +241,8 @@
 		334282642497AE7600A3CF12 /* AppIconCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconCell.swift; sourceTree = "<group>"; };
 		33593575257D4D8200C5612E /* CreditsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsVC.swift; sourceTree = "<group>"; };
 		3359BB6F24461D620008EF6A /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
-		336DCBFC250682C500CF15F0 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
 		336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties copy.swift"; sourceTree = "<group>"; };
-		336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass copy.swift"; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3378767624378A9400F5A732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3378767824378A9400F5A732 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3378767A24378A9400F5A732 /* StartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVC.swift; sourceTree = "<group>"; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3389E0AA2448A61300DD7B58 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -377,7 +393,9 @@
 		332315E32742719F0039EE23 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				3323160927430A060039EE23 /* Common */,
 				332315E4274271E20039EE23 /* HomeView.swift */,
+				33231607274306BA0039EE23 /* CalenderView.swift */,
 				332315E62742724D0039EE23 /* Drinkview.swift */,
 				332315F32742B3430039EE23 /* AppView.swift */,
 			);
@@ -398,6 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				332315F62742B4F10039EE23 /* AppViewModel.swift */,
+				3323161F274A64210039EE23 /* HomeViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -407,14 +426,58 @@
 			children = (
 				332315FC2742B61D0039EE23 /* MainAssembler.swift */,
 				332315FE2742B6920039EE23 /* ViewModelAssembler.swift */,
+				33231621274A6FC70039EE23 /* ManagerAssembly.swift */,
 			);
 			path = DI;
+			sourceTree = "<group>";
+		};
+		332316022742BD5E0039EE23 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				332316032742BD6C0039EE23 /* CoreDataRepository.swift */,
+				3323160C27441B020039EE23 /* DayRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		3323160927430A060039EE23 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				3323160A27430A1B0039EE23 /* CalendarModuleView.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		3323160E27441DB20039EE23 /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				33C022AF26C0540000C36244 /* Models */,
+				33B28F5826B6EB2C00DECA9F /* Screens */,
+				330929DA25B5DA5700DAE6C0 /* SaveAndLoad.swift */,
+			);
+			path = Old;
+			sourceTree = "<group>";
+		};
+		3323160F27441DF60039EE23 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3323161027441E030039EE23 /* DayModel.swift */,
+				3323161227441E140039EE23 /* Day.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3323161C274A63360039EE23 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				3323161D274A63420039EE23 /* DayManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
-				336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				33DF9BDB24B47D0900699B1A /* reHydrate-watch */,
 				33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */,
@@ -436,21 +499,23 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				3323161C274A63360039EE23 /* Managers */,
+				3323160E27441DB20039EE23 /* Old */,
+				33231617274420E60039EE23 /* reHydrate.xcdatamodeld */,
+				3323160F27441DF60039EE23 /* Model */,
+				332316022742BD5E0039EE23 /* Repository */,
 				332315E8274273F20039EE23 /* Resources */,
 				332315FB2742B60A0039EE23 /* DI */,
 				332315F52742B4E00039EE23 /* ViewModel */,
 				332315E32742719F0039EE23 /* UI */,
-				33C022AF26C0540000C36244 /* Models */,
 				33B28F6926BC7F6800DECA9F /* Extensions */,
-				33B28F5826B6EB2C00DECA9F /* Screens */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
-				330929DA25B5DA5700DAE6C0 /* SaveAndLoad.swift */,
-				3378767624378A9400F5A732 /* AppDelegate.swift */,
-				3378767824378A9400F5A732 /* SceneDelegate.swift */,
 				33EFF3FE2470449A00D0A003 /* Localizable.strings */,
 				3378767F24378A9800F5A732 /* Assets.xcassets */,
 				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
+				3323161A274A61F30039EE23 /* PresistenceController.swift */,
+				33231623274A75530039EE23 /* reHydrateApp.swift */,
 			);
 			path = reHydrate;
 			sourceTree = "<group>";
@@ -573,7 +638,6 @@
 			isa = PBXGroup;
 			children = (
 				336DCC17250782EE00CF15F0 /* Day+CoreDataProperties copy.swift */,
-				336DCC18250782EE00CF15F0 /* Day+CoreDataClass copy.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -938,19 +1002,24 @@
 			files = (
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
 				330929DB25B5DA5700DAE6C0 /* SaveAndLoad.swift in Sources */,
+				33231608274306BA0039EE23 /* CalenderView.swift in Sources */,
 				332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */,
 				332315EE274278340039EE23 /* Font.swift in Sources */,
-				3378767724378A9400F5A732 /* AppDelegate.swift in Sources */,
+				33231619274420E60039EE23 /* reHydrate.xcdatamodeld in Sources */,
 				332315FF2742B6920039EE23 /* ViewModelAssembler.swift in Sources */,
 				33B28F7226BC807C00DECA9F /* UserDefault+Extensions.swift in Sources */,
+				332316042742BD6C0039EE23 /* CoreDataRepository.swift in Sources */,
+				3323161127441E030039EE23 /* DayModel.swift in Sources */,
 				33D1639625865C5A0049B88E /* CreditsHeder.swift in Sources */,
-				336DCC1B250782EE00CF15F0 /* Day+CoreDataClass copy.swift in Sources */,
 				33FC842F243B992600848B7C /* CalendarVC.swift in Sources */,
 				3389E0AB2448A61300DD7B58 /* SettingsVC.swift in Sources */,
 				333BD5F9246424FF0041D90A /* TutorialVC.swift in Sources */,
 				334282652497AE7600A3CF12 /* AppIconCell.swift in Sources */,
 				33B28F6F26BC802800DECA9F /* UITextField+Extensions.swift in Sources */,
 				3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */,
+				3323161327441E140039EE23 /* Day.swift in Sources */,
+				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
+				3323161E274A63420039EE23 /* DayManager.swift in Sources */,
 				33C4319324827F2700E8EECA /* Bundle+Extensions.swift in Sources */,
 				33B4C6FC257E92DB00EEE4AA /* CreditsCell.swift in Sources */,
 				33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */,
@@ -958,17 +1027,20 @@
 				332315E5274271E20039EE23 /* HomeView.swift in Sources */,
 				336DCC19250782EE00CF15F0 /* Day+CoreDataProperties copy.swift in Sources */,
 				332315EC274276290039EE23 /* Color.swift in Sources */,
+				3323160D27441B030039EE23 /* DayRepository.swift in Sources */,
 				334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				33593576257D4D8200C5612E /* CreditsVC.swift in Sources */,
+				3323161B274A61F30039EE23 /* PresistenceController.swift in Sources */,
 				332315EA274274090039EE23 /* Images.swift in Sources */,
-				3378767924378A9400F5A732 /* SceneDelegate.swift in Sources */,
 				332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */,
 				3359BB7024461D620008EF6A /* InfoCell.swift in Sources */,
+				33231620274A64210039EE23 /* HomeViewModel.swift in Sources */,
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
+				3323160B27430A1B0039EE23 /* CalendarModuleView.swift in Sources */,
 				33B28F6D26BC7FCD00DECA9F /* Double+Extensions.swift in Sources */,
-				336DCBFD250682C500CF15F0 /* reHydrate.xcdatamodeld in Sources */,
+				33231622274A6FC70039EE23 /* ManagerAssembly.swift in Sources */,
 				33C431912482769B00E8EECA /* UIApplication+Extenstions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1384,12 +1456,12 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		336DCBFB250682C500CF15F0 /* reHydrate.xcdatamodeld */ = {
+		33231617274420E60039EE23 /* reHydrate.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				336DCBFC250682C500CF15F0 /* reHydrate.xcdatamodel */,
+				33231618274420E60039EE23 /* reHydrate.xcdatamodel */,
 			);
-			currentVersion = 336DCBFC250682C500CF15F0 /* reHydrate.xcdatamodel */;
+			currentVersion = 33231618274420E60039EE23 /* reHydrate.xcdatamodel */;
 			path = reHydrate.xcdatamodeld;
 			sourceTree = SOURCE_ROOT;
 			versionGroupType = wrapper.xcdatamodel;
