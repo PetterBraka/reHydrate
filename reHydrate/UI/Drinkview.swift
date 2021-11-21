@@ -27,7 +27,7 @@ struct DrinkView: View {
             }
         }
         .simultaneousGesture(
-            LongPressGesture(minimumDuration: 0.2)
+            LongPressGesture()
                 .onEnded({ success in
                     if success {
                         longPress()

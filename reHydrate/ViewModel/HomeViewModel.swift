@@ -18,7 +18,7 @@ final class HomeViewModel: ObservableObject {
     
     var formatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE - dd/MM"
+        formatter.dateFormat = "EEEE - dd MMM"
         return formatter
     }()
     var navigateTo: (AppState) -> Void
