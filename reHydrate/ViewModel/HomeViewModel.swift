@@ -13,21 +13,24 @@ import Swinject
 
 final class HomeViewModel: ObservableObject {
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
+    @Published var drinks = [Drink(type: .small, size: 250),
+                             Drink(type: .medium, size: 500),
+                             Drink(type: .large, size: 750)]
     @Published var showAlert: Bool = false
     @Published var interactedDrink: Drink?
-    
-    var formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE - dd MMM"
-        return formatter
-    }()
-    var navigateTo: (AppState) -> Void
     
     private var presistenceController: PresistenceControllerProtocol
     private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
     
-    var dayManager: DayManager
+    private var navigateTo: (AppState) -> Void
+    private var dayManager: DayManager
+    
+    private var formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE - dd MMM"
+        return formatter
+    }()
     
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
@@ -62,6 +65,14 @@ final class HomeViewModel: ObservableObject {
         } else {
             return ""
         }
+    }
+    
+    func navigateToSettings() {
+        navigateTo(.settings)
+    }
+    
+    func navigateToCalendar() {
+        navigateTo(.calendar)
     }
 }
 
@@ -98,6 +109,8 @@ extension HomeViewModel {
             } receiveValue: { [weak self] day in
                 if let day = day {
                     self?.today = day
+                } else {
+                    self?.createNewDay()
                 }
             }.store(in: &tasks)
     }
@@ -111,44 +124,44 @@ extension HomeViewModel {
                 default:
                     break
                 }
-            } receiveValue: { [weak self] success in
-                print("Success saving: \(success)")
+            } receiveValue: { [weak self] _ in
                 self?.fetchToday()
             }.store(in: &tasks)
 
     }
     
-    func addDrink(of type: Drink) {
-        let consumed = today.consumption + Double(type.size)
-        dayManager.dayRepository.update(consumption: consumed, for: today)
+    func addDrink(_ drink: Drink) {
+        let consumed = Measurement(value: drink.size, unit: UnitVolume.milliliters)
+        let consumedTotal = consumed.converted(to: .liters).value + today.consumption
+        dayManager.dayRepository.update(consumption: consumedTotal, for: today)
             .sink { completion in
                 switch completion {
                 case let .failure(error):
-                    print("Error adding drink of type: \(type), Error: \(error)")
+                    print("Error adding drink of type: \(drink), Error: \(error)")
                 default:
                     break
                 }
-            } receiveValue: { [weak self] success in
-                print("Added drink: \(success)")
+            } receiveValue: { [weak self] _ in
                 self?.saveAndFetch()
             }.store(in: &tasks)
     }
     
-    func removeDrink(of type: Drink) {
-        var consumed = today.consumption - Double(type.size)
-        if consumed < 0 {
-            consumed = 0
+    func removeDrink(_ drink: Drink) {
+        let consumed = Measurement(value: drink.size, unit: UnitVolume.milliliters)
+        var consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
+        
+        if consumedTotal < 0 {
+            consumedTotal = 0
         }
-        dayManager.dayRepository.update(consumption: consumed, for: today)
+        dayManager.dayRepository.update(consumption: consumedTotal, for: today)
             .sink { completion in
                 switch completion {
                 case let .failure(error):
-                    print("Error adding drink of type: \(type), Error: \(error)")
+                    print("Error adding drink of type: \(drink), Error: \(error)")
                 default:
                     break
                 }
-            } receiveValue: { [weak self] success in
-                print("Added drink: \(success)")
+            } receiveValue: { [weak self] _ in
                 self?.saveAndFetch()
             }.store(in: &tasks)
     }

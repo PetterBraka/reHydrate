@@ -14,14 +14,13 @@ struct AppView: View {
     var body: some View {
         switch viewModel.currenState {
         case .home:
-            HomeView(drinks: $viewModel.drinks,
-                     navigateTo: viewModel.navigateTo)
+            HomeView(navigateTo: viewModel.navigateTo)
                 .transition(.slide)
         case .settings:
             Text("Settings")
                 .transition( .asymmetric(insertion: .move(edge: .leading),
                                          removal: .move(edge: .trailing)))
-        case .calender:
+        case .calendar:
             CalendarView(navigateTo: viewModel.navigateTo)
                 .transition( .asymmetric(insertion: .move(edge: .trailing),
                                          removal: .move(edge: .leading)))
