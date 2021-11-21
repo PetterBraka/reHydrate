@@ -47,7 +47,7 @@ struct HomeView: View {
                 .bold()
             Text(viewModel.getDate())
                 .font(.title)
-            Text("\(viewModel.getConsumed())/\(viewModel.getGoal())")
+            Text("\(viewModel.getConsumed())/\(viewModel.getGoal())L")
                 .font(.largeTitle)
                 .bold()
             
@@ -116,10 +116,10 @@ struct HomeView: View {
             .frame(height: 50)
             .padding(.horizontal, 24)
         }
-        .confirmationDialog(Text("Do you want to remove \(viewModel.getCurrentDrink())"),
-                            isPresented: $viewModel.showAlert,
-                            titleVisibility: .visible) {
-            Button("Remove", role: .destructive) {
+        .confirmationDialog("Drink options",
+                            isPresented: $viewModel.showAlert) {
+            Button("Remove \(viewModel.getCurrentDrink())mL",
+                   role: .destructive) {
                 if let drink = viewModel.interactedDrink {
                     viewModel.removeDrink(of: drink)
                 }
