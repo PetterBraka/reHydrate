@@ -534,6 +534,7 @@
 		3387ED6B274AD9F40083D2C1 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				33410F0D247C0A9D00C381AC /* CalendarCell.swift */,
 				33231607274306BA0039EE23 /* CalendarView.swift */,
 			);
 			path = Calendar;
@@ -600,7 +601,6 @@
 			isa = PBXGroup;
 			children = (
 				3359BB6F24461D620008EF6A /* InfoCell.swift */,
-				33410F0D247C0A9D00C381AC /* CalendarCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
