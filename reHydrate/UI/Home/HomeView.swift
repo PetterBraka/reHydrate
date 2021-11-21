@@ -10,10 +10,8 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
-    @Binding var drinks: [Drink]
     
-    init(drinks: Binding<[Drink]>, navigateTo: @escaping ((AppState) -> Void)) {
-        _drinks = drinks
+    init(navigateTo: @escaping ((AppState) -> Void)) {
         let viewModel = MainAssembler.shared.container.resolve(HomeViewModel.self,
                                                                argument: navigateTo)!
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -34,31 +32,31 @@ struct HomeView: View {
             
             GeometryReader { geo in
                 HStack(alignment: .bottom) {
-                    DrinkView(drink: $drinks[0],
+                    DrinkView(drink: $viewModel.drinks[0],
                               disable: false) {
-                        viewModel.addDrink(of: drinks[0])
+                        viewModel.addDrink(viewModel.drinks[0])
                     } longPress: {
-                        viewModel.interactedDrink = drinks[0]
+                        viewModel.interactedDrink = viewModel.drinks[0]
                         viewModel.showAlert.toggle()
                     }
                     .frame(width: geo.size.width / 3,
                            height: 100,
                            alignment: .bottom)
-                    DrinkView(drink: $drinks[1],
+                    DrinkView(drink: $viewModel.drinks[1],
                               disable: false) {
-                        viewModel.addDrink(of: drinks[1])
+                        viewModel.addDrink(viewModel.drinks[1])
                     } longPress: {
-                        viewModel.interactedDrink = drinks[1]
+                        viewModel.interactedDrink = viewModel.drinks[1]
                         viewModel.showAlert.toggle()
                     }
                               .frame(width: geo.size.width / 3,
                                      height: 180,
                                      alignment: .bottom)
-                    DrinkView(drink: $drinks[2],
+                    DrinkView(drink: $viewModel.drinks[2],
                               disable: false) {
-                        viewModel.addDrink(of: drinks[2])
+                        viewModel.addDrink(viewModel.drinks[2])
                     } longPress: {
-                        viewModel.interactedDrink = drinks[2]
+                        viewModel.interactedDrink = viewModel.drinks[2]
                         viewModel.showAlert.toggle()
                     }
                               .frame(width: geo.size.width / 3,
@@ -73,7 +71,7 @@ struct HomeView: View {
             
             HStack {
                 Button {
-                    viewModel.navigateTo(.settings)
+                    viewModel.navigateToSettings()
                 } label: {
                     Image.settings
                         .resizable()
@@ -84,7 +82,7 @@ struct HomeView: View {
                 Spacer()
                 
                 Button {
-                    viewModel.navigateTo(.calender)
+                    viewModel.navigateToCalendar()
                 } label: {
                     Image.calender
                         .resizable()
@@ -100,7 +98,7 @@ struct HomeView: View {
             Button("Remove \(viewModel.getCurrentDrink())mL",
                    role: .destructive) {
                 if let drink = viewModel.interactedDrink {
-                    viewModel.removeDrink(of: drink)
+                    viewModel.removeDrink(drink)
                 }
             }
         }
@@ -110,8 +108,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(drinks: .constant([Drink(type: .small, size: 250),
-                                    Drink(type: .medium, size: 500),
-                                    Drink(type: .large, size: 750)])) {_ in }
+        HomeView() {_ in }
     }
 }

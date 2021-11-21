@@ -13,16 +13,13 @@ import SwiftUI
 enum AppState {
     case home
     case settings
-    case calender
+    case calendar
 }
 
 final class AppViewModel: ObservableObject {
     private var subscriptions = Set<AnyCancellable>()
     
     @Published var currenState: AppState = .home
-    @Published var drinks = [Drink(type: .small, size: 250),
-                             Drink(type: .medium, size: 500),
-                             Drink(type: .large, size: 750)]
     
     private func navigate(to state: AppState) {
         withAnimation {

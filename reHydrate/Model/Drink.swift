@@ -26,5 +26,5 @@ struct Drink: Identifiable, Hashable {
     }
     
     var type: type
-    var size: Int
+    var size: Double
 }
