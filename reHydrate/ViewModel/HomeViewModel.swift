@@ -13,6 +13,8 @@ import Swinject
 
 final class HomeViewModel: ObservableObject {
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
+    @Published var showAlert: Bool = false
+    @Published var interactedDrink: Drink?
     
     var formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -34,6 +36,24 @@ final class HomeViewModel: ObservableObject {
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         self.fetchToday()
+    }
+    
+    func getCurrentDrink() -> String {
+        if let drink = interactedDrink {
+            return "\(drink.size)"
+        } else {
+            return ""
+        }
+    }
+    
+    func getConsumed() -> String {
+        let consumed = today.consumption
+        return consumed.clean
+    }
+    
+    func getGoal() -> String {
+        let goal = today.goal
+        return goal.clean
     }
     
     func getDate() -> String {
@@ -112,6 +132,24 @@ extension HomeViewModel {
                 print("Added drink: \(success)")
                 self?.saveAndFetch()
             }.store(in: &tasks)
-
+    }
+    
+    func removeDrink(of type: Drink) {
+        var consumed = today.consumption - Double(type.size)
+        if consumed < 0 {
+            consumed = 0
+        }
+        dayManager.dayRepository.update(consumption: consumed, for: today)
+            .sink { completion in
+                switch completion {
+                case let .failure(error):
+                    print("Error adding drink of type: \(type), Error: \(error)")
+                default:
+                    break
+                }
+            } receiveValue: { [weak self] success in
+                print("Added drink: \(success)")
+                self?.saveAndFetch()
+            }.store(in: &tasks)
     }
 }
