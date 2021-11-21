@@ -56,13 +56,7 @@ struct CalendarModuleView: UIViewRepresentable {
         return calendar
     }
     
-    func updateUIView(_ uiView: FSCalendar, context: Context) {
-//        uiView.visibleCells().forEach { (cell) in
-//            let date = uiView.date(for: cell)
-//            let position = uiView.monthPosition(for: cell)
-//            self.configure(cell: cell, for: date!, at: position)
-//        }
-    }
+    func updateUIView(_ uiView: FSCalendar, context: Context) {}
     
     class Coordinator: NSObject, FSCalendarDelegate, FSCalendarDataSource {
         
