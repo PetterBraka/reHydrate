@@ -21,7 +21,7 @@ struct CalendarModuleView: UIViewRepresentable {
         case sunday = 1
     }
     
-    @Binding var selectedDates: [Day]
+    @Binding var selectedDays: [Day]
     @Binding var storedDays: [Day]
     var firsWeekday: DayOfTheWeek
     
@@ -41,7 +41,7 @@ struct CalendarModuleView: UIViewRepresentable {
         
         calendar.allowsMultipleSelection = true
         calendar.swipeToChooseGesture.isEnabled = true
-        calendar.swipeToChooseGesture.minimumPressDuration = 0.2
+        calendar.swipeToChooseGesture.minimumPressDuration = 0.3
         calendar.firstWeekday = firsWeekday.rawValue
         
         calendar.appearance.titleFont = .body
@@ -62,6 +62,11 @@ struct CalendarModuleView: UIViewRepresentable {
     class Coordinator: NSObject, FSCalendarDelegate, FSCalendarDataSource {
         
         var parent: CalendarModuleView
+        @Binding var selectedDays: [Day]
+        @Binding var storedDays: [Day]
+        
+        let gregorian = Calendar(identifier: .gregorian)
+        
         let formatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "dd/MM/yy"
@@ -70,6 +75,8 @@ struct CalendarModuleView: UIViewRepresentable {
         
         init(_ calender: CalendarModuleView) {
             self.parent = calender
+            _selectedDays = calender.$selectedDays
+            _storedDays = calender.$storedDays
         }
         
         func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
@@ -80,32 +87,32 @@ struct CalendarModuleView: UIViewRepresentable {
         }
         
         func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-                if let day = parent.storedDays.first(where: { formatter.string(from: $0.date) == formatter.string(from: date) }) {
-                    let percent = (day.consumption / day.goal ) * 100
-                    switch percent {
-                    case 0...10:
-                        return UIImage.waterDrop0
-                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                    case 10...30:
-                        return UIImage.waterDrop25
-                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                    case 30...60:
-                        return UIImage.waterDrop50
-                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                    case 60...80:
-                        return UIImage.waterDrop75
-                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                    default:
-                        return UIImage.waterDrop100
-                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                    }
+            if let day = storedDays.first(where: { $0.isSameDay(as: date) }) {
+                let percent = (day.consumption / day.goal ) * 100
+                switch percent {
+                case 0...10:
+                    return UIImage.waterDrop0
+                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                case 10...30:
+                    return UIImage.waterDrop25
+                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                case 30...60:
+                    return UIImage.waterDrop50
+                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                case 60...80:
+                    return UIImage.waterDrop75
+                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                default:
+                    return UIImage.waterDrop100
+                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
                 }
+            }
             return nil
         }
         
         func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
             print("Selected \(formatter.string(from: date))")
-            parent.selectedDates.append(Day(id: UUID(), consumption: 0, goal: 0, date: date))
+            selectedDays.append(Day(id: UUID(), consumption: 0, goal: 0, date: date))
             self.updateVisibleCells(in: calendar)
             if calendar.selectedDates.count > 1 {
                 // check if starting and ending date is the same when swipe gesture is used
@@ -114,7 +121,7 @@ struct CalendarModuleView: UIViewRepresentable {
         
         func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
             print("deselected \(formatter.string(from: date))")
-            parent.selectedDates.removeAll(where: { $0.date == date })
+            selectedDays.removeAll(where: { $0.isSameDay(as: date) })
             self.updateVisibleCells(in: calendar)
         }
         
@@ -125,79 +132,72 @@ struct CalendarModuleView: UIViewRepresentable {
             }
         }
         
-        private func configure(cell: FSCalendarCell,
-                               for date: Date) {
-            let calendarCell = (cell as! CalendarCell)
+        private func configure(cell: FSCalendarCell, for date: Date) {
+            guard let cell = cell as? CalendarCell else { return }
             // Custom today layer
-            calendarCell.todayHighlighter.isHidden = !parent.gregorian.isDateInToday(date)
+            cell.todayHighlighter.isHidden = !gregorian.isDateInToday(date)
             // Configure selection layer
             
-            if parent.selectedDates.isEmpty {
-                highlightToday(with: date, for: calendarCell)
+            if parent.selectedDays.isEmpty {
+                highlightToday(with: date, for: cell)
                 return
             }
             
-            let selectionType = getSelection(with: date)
-            
+            let selectionType = getSelection(for: date)
             if selectionType == .none {
-                calendarCell.selectionLayer.isHidden = true
+                cell.selectionLayer.isHidden = true
                 return
-            }
-            
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd/MM/yy"
-            if formatter.string(from: Date()) == formatter.string(from: date){
-                calendarCell.todayHighlighter.isHidden = true
-                calendarCell.selectionLayer.isHidden = false
-                calendarCell.selectionType = selectionType
             } else {
-                calendarCell.selectionLayer.isHidden = false
-                calendarCell.selectionType = selectionType
+                if gregorian.isDateInToday(date) {
+                    cell.todayHighlighter.isHidden = true
+                    cell.selectionLayer.isHidden = false
+                    cell.selectionType = selectionType
+                } else {
+                    cell.selectionLayer.isHidden = false
+                    cell.selectionType = selectionType
+                }
             }
         }
         
-        func highlightToday(with date: Date, for cell: CalendarCell) {
-            if parent.gregorian.isDateInToday(date) {
+        private func highlightToday(with date: Date, for cell: CalendarCell) {
+            if gregorian.isDateInToday(date) {
                 cell.todayHighlighter.isHidden = true
                 cell.selectionLayer.isHidden = false
-                cell.selectionType = SelectionType.single
+                cell.selectionType = .single
             } else {
                 cell.todayHighlighter.isHidden = true
                 cell.selectionLayer.isHidden = true
             }
         }
         
-        func getSelection(with date: Date) -> SelectionType {
-            var selectionType = SelectionType.none
-            if parent.selectedDates.contains(where: { $0.date == date }) {
-                let previousDate = parent.gregorian.date(byAdding: .day, value: -1, to: date)!
-                let nextDate = parent.gregorian.date(byAdding: .day, value: 1, to: date)!
-                if parent.selectedDates.contains(where: { $0.date == date }) {
-                    if parent.selectedDates.contains(where: { $0.date == previousDate }) && parent.selectedDates.contains(where: { $0.date == nextDate }) {
-                        selectionType = .middle
-                    }
-                    else if parent.selectedDates.contains(where: { $0.date == previousDate }) &&
-                                parent.selectedDates.contains(where: { $0.date == date}) {
-                        selectionType = .rightBorder
-                    }
-                    else if parent.selectedDates.contains(where: { $0.date == nextDate }) {
-                        selectionType = .leftBorder
-                    }
-                    else {
-                        selectionType = .single
-                    }
-                } else {
-                    selectionType = .none
+        private func getSelection(for date: Date) -> SelectionType {
+            if selectedDays.contains(where: { $0.isSameDay(as: date) }) {
+                let yesterday = gregorian.date(byAdding: .day, value: -1, to: date)!
+                let tomorrow = gregorian.date(byAdding: .day, value: 1, to: date)!
+                
+                let includesYesterday = selectedDays.contains(where: { $0.isSameDay(as: yesterday) })
+                let includesTomorrow = selectedDays.contains(where: { $0.isSameDay(as: tomorrow) })
+                let includesDate = selectedDays.contains(where: { $0.isSameDay(as: date) })
+                
+                if includesYesterday && includesTomorrow {
+                    return .middle
                 }
+                if includesYesterday && includesDate {
+                    return .rightBorder
+                }
+                if includesTomorrow {
+                    return .leftBorder
+                }
+                return .single
             }
-            return selectionType
+            return .none
         }
     }
 }
 
 struct CalendarModuleView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarModuleView(selectedDates: .constant([]),
+        CalendarModuleView(selectedDays: .constant([]),
                            storedDays: .constant([]),
                            firsWeekday: .monday)
     }
