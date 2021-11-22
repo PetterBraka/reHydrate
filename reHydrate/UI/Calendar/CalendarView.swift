@@ -20,43 +20,62 @@ struct CalendarView: View {
     
     var body: some View {
         GeometryReader { geo in
-            VStack(spacing: 16) {
-                HStack {
-                    Button {
-                        viewModel.navigateToHome()
-                    } label: {
-                        Image.exit
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
+            VStack {
+                VStack(spacing: 16) {
+                    HStack {
+                        Button {
+                            viewModel.navigateToHome()
+                        } label: {
+                            Image.exit
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.label)
+                        }
+                        .frame(width: 32)
+                        
+                        Spacer()
+                        Text("Monday 15/11/21")
+                            .font(.title)
+                            .foregroundColor(.label)
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text("Consumed:")
+                            .font(.body)
+                            .foregroundColor(.label)
+                        Spacer()
+                        Text("1/3L")
+                            .font(.body)
                             .foregroundColor(.label)
                     }
-                    .frame(width: 44)
-                    Spacer()
-                    Text("Monday 15/11/21")
-                        .foregroundColor(.label)
-                    Spacer()
-                }
-                HStack {
-                    Text("Consumed:")
-                    Spacer()
-                    Text("1/3L")
-                }
-                HStack {
-                    Text("Average:")
-                    Spacer()
-                    Text("1.5L")
+                    
+                    Divider()
+                    
+                    HStack {
+                        Text("Average:")
+                            .font(.body)
+                            .foregroundColor(.label)
+                        Spacer()
+                        Text("1.5L")
+                            .font(.body)
+                            .foregroundColor(.label)
+                    }
+                    
+                    Divider()
                 }
                 
                 Spacer()
                 
+                
                 CalendarModuleView(selectedDates: $viewModel.selectedDays,
                                    storedDays: $viewModel.days,
                                    firsWeekday: .monday)
-                    .frame(height: geo.size.height / 2)
+                    .frame(height: geo.size.height * 0.6)
             }
-            .padding(.horizontal, 24)
-            .background(Color.background.ignoresSafeArea())
         }
+        .padding(.horizontal, 24)
+        .background(Color.background.ignoresSafeArea())
     }
 }
 

@@ -41,7 +41,7 @@ struct CalendarModuleView: UIViewRepresentable {
         
         calendar.allowsMultipleSelection = true
         calendar.swipeToChooseGesture.isEnabled = true
-        calendar.swipeToChooseGesture.minimumPressDuration = 0.1
+        calendar.swipeToChooseGesture.minimumPressDuration = 0.2
         calendar.firstWeekday = firsWeekday.rawValue
         
         calendar.appearance.titleFont = .body
@@ -106,7 +106,7 @@ struct CalendarModuleView: UIViewRepresentable {
         func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
             print("Selected \(formatter.string(from: date))")
             parent.selectedDates.append(Day(id: UUID(), consumption: 0, goal: 0, date: date))
-            self.updateVisibleCells(in: calendar, for: date)
+            self.updateVisibleCells(in: calendar)
             if calendar.selectedDates.count > 1 {
                 // check if starting and ending date is the same when swipe gesture is used
             }
@@ -115,16 +115,18 @@ struct CalendarModuleView: UIViewRepresentable {
         func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
             print("deselected \(formatter.string(from: date))")
             parent.selectedDates.removeAll(where: { $0.date == date })
-            self.updateVisibleCells(in: calendar, for: date)
+            self.updateVisibleCells(in: calendar)
         }
         
-        private func updateVisibleCells(in calendar: FSCalendar, for date: Date) {
+        private func updateVisibleCells(in calendar: FSCalendar) {
             calendar.visibleCells().forEach { (cell) in
+                guard let date = calendar.date(for: cell) else { return }
                 self.configure(cell: cell, for: date)
             }
         }
         
-        private func configure(cell: FSCalendarCell, for date: Date) {
+        private func configure(cell: FSCalendarCell,
+                               for date: Date) {
             let calendarCell = (cell as! CalendarCell)
             // Custom today layer
             calendarCell.todayHighlighter.isHidden = !parent.gregorian.isDateInToday(date)
