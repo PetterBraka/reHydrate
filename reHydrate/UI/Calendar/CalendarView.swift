@@ -71,7 +71,7 @@ struct CalendarView: View {
                 CalendarModuleView(selectedDays: $viewModel.selectedDays,
                                    storedDays: $viewModel.days,
                                    firsWeekday: .monday)
-                    .frame(height: geo.size.height * 0.6)
+                    .frame(height: geo.size.height * 0.5)
             }
         }
         .padding(.horizontal, 24)
