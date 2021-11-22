@@ -22,6 +22,7 @@ struct CalendarModuleView: UIViewRepresentable {
     }
     
     @Binding var selectedDates: [Day]
+    @Binding var storedDays: [Day]
     var firsWeekday: DayOfTheWeek
     
     let gregorian = Calendar(identifier: .gregorian)
@@ -73,35 +74,39 @@ struct CalendarModuleView: UIViewRepresentable {
         
         func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
             let cell = calendar.dequeueReusableCell(withIdentifier: "calendarCell", for: date, at: position) as! CalendarCell
-            configure(cell: cell, for: date, at: position)
+            parent.cellHeight = cell.frame.height
+            configure(cell: cell, for: date)
             return cell
         }
         
         func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-//            if parent.selectedDates.contains(where:
-//                                                    { formatter.string(from: $0.date) == formatter.string(from: date) }) {
-//                let day = fetchDay(date)
-//                let percent = (day!.consumed / day!.goal ) * 100
-//                switch percent {
-//                case 0...10:
-//                    return UIImage.waterDrop0.renderResizedImage(newWidth: parent.cellHeight * 0.4)
-//                case 10...30:
-//                    return UIImage.waterDrop25.renderResizedImage(newWidth: parent.cellHeight * 0.4)
-//                case 30...60:
-//                    return UIImage.waterDrop50.renderResizedImage(newWidth: parent.cellHeight * 0.4)
-//                case 60...80:
-//                    return UIImage.waterDrop75.renderResizedImage(newWidth: parent.cellHeight * 0.4)
-//                default:
-//                    return UIImage.waterDrop100.renderResizedImage(newWidth: parent.cellHeight * 0.4)
-//                }
-//            }
+                if let day = parent.storedDays.first(where: { formatter.string(from: $0.date) == formatter.string(from: date) }) {
+                    let percent = (day.consumption / day.goal ) * 100
+                    switch percent {
+                    case 0...10:
+                        return UIImage.waterDrop0
+                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                    case 10...30:
+                        return UIImage.waterDrop25
+                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                    case 30...60:
+                        return UIImage.waterDrop50
+                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                    case 60...80:
+                        return UIImage.waterDrop75
+                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                    default:
+                        return UIImage.waterDrop100
+                            .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+                    }
+                }
             return nil
         }
         
         func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
             print("Selected \(formatter.string(from: date))")
             parent.selectedDates.append(Day(id: UUID(), consumption: 0, goal: 0, date: date))
-            self.configureVisibleCells(for: calendar)
+            self.updateVisibleCells(in: calendar, for: date)
             if calendar.selectedDates.count > 1 {
                 // check if starting and ending date is the same when swipe gesture is used
             }
@@ -110,23 +115,16 @@ struct CalendarModuleView: UIViewRepresentable {
         func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
             print("deselected \(formatter.string(from: date))")
             parent.selectedDates.removeAll(where: { $0.date == date })
-            self.configureVisibleCells(for: calendar)
-            if parent.selectedDates.count == 1 {
-                //                self.getDrinks(calendar.selectedDates[0])
-            } else {
-                //                self.getDrinks(date)
-            }
+            self.updateVisibleCells(in: calendar, for: date)
         }
         
-        private func configureVisibleCells(for calendar: FSCalendar) {
+        private func updateVisibleCells(in calendar: FSCalendar, for date: Date) {
             calendar.visibleCells().forEach { (cell) in
-                let date = calendar.date(for: cell)
-                let position = calendar.monthPosition(for: cell)
-                self.configure(cell: cell, for: date!, at: position)
+                self.configure(cell: cell, for: date)
             }
         }
         
-        private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
+        private func configure(cell: FSCalendarCell, for date: Date) {
             let calendarCell = (cell as! CalendarCell)
             // Custom today layer
             calendarCell.todayHighlighter.isHidden = !parent.gregorian.isDateInToday(date)
@@ -198,6 +196,7 @@ struct CalendarModuleView: UIViewRepresentable {
 struct CalendarModuleView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarModuleView(selectedDates: .constant([]),
+                           storedDays: .constant([]),
                            firsWeekday: .monday)
     }
 }

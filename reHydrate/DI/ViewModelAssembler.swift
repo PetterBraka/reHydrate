@@ -22,5 +22,11 @@ final class ViewModelAssembler: Assembly {
             HomeViewModel(presistenceController: resolver.resolve(PresistenceControllerProtocol.self)!,
                           navigateTo: state)
         }
+        
+        // Calendar - ViewModel
+        container.register(CalendarViewModel.self) { resolver, state in
+            CalendarViewModel(presistenceController: resolver.resolve(PresistenceControllerProtocol.self)!,
+                              navigateTo: state)
+        }
     }
 }

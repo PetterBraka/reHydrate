@@ -12,7 +12,7 @@ struct Day {
     let id: UUID
     var consumption: Double
     var goal: Double
-    let date: Date?
+    let date: Date!
 }
 
 protocol DomainMappable {
