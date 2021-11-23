@@ -20,9 +20,11 @@ final class AppViewModel: ObservableObject {
     private var subscriptions = Set<AnyCancellable>()
     
     @Published var currenState: AppState = .home
+    @Published var previousState: AppState = .home
     
     private func navigate(to state: AppState) {
         withAnimation {
+            previousState = currenState
             currenState = state
         }
     }
