@@ -79,7 +79,8 @@ final class HomeViewModel: ObservableObject {
 //MARK: Save & Load
 extension HomeViewModel {
     private func createNewDay() {
-        let newDay = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
+        let latestGoal = fetchLastGoal()
+        let newDay = Day(id: UUID(), consumption: 0, goal: latestGoal, date: Date())
         dayManager.dayRepository.create(day: newDay)
             .sink { completion in
                 switch completion {
@@ -92,6 +93,23 @@ extension HomeViewModel {
                 self?.saveAndFetch()
             }.store(in: &tasks)
 
+    }
+    
+    private func fetchLastGoal() -> Double {
+        var goal = 0.0
+        dayManager.dayRepository.getLatestGoal()
+            .sink { completion in
+                switch completion {
+                case let .failure(error):
+                    print("Failed creating new day: \(error)")
+                default:
+                    break
+                }
+            } receiveValue: { result in
+                goal = result
+            }
+            .store(in: &tasks)
+        return goal
     }
     
     private func fetchToday() {
