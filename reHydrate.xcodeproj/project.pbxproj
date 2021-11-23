@@ -153,6 +153,8 @@
 		33E2B90B24FADAE60050B8A1 /* white-grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B90824FADAE50050B8A1 /* white-grey@2x.png */; };
 		33E2B90C24FADAE60050B8A1 /* white-grey@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B90924FADAE50050B8A1 /* white-grey@3x.png */; };
 		33E2B90D24FADAE60050B8A1 /* white-grey@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B90A24FADAE60050B8A1 /* white-grey@1x.png */; };
+		33EC3A7B274D06070049E414 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7A274D06070049E414 /* SettingsView.swift */; };
+		33EC3A7D274D06680049E414 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7C274D06680049E414 /* SettingsViewModel.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
 /* End PBXBuildFile section */
@@ -356,6 +358,8 @@
 		33E2B90824FADAE50050B8A1 /* white-grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-grey@2x.png"; sourceTree = "<group>"; };
 		33E2B90924FADAE50050B8A1 /* white-grey@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-grey@3x.png"; sourceTree = "<group>"; };
 		33E2B90A24FADAE60050B8A1 /* white-grey@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-grey@1x.png"; sourceTree = "<group>"; };
+		33EC3A7A274D06070049E414 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		33EC3A7C274D06680049E414 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33EFF4002470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = nb; path = nb.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -397,6 +401,7 @@
 		332315E32742719F0039EE23 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				33EC3A77274D05E90049E414 /* Settings */,
 				3387ED6B274AD9F40083D2C1 /* Calendar */,
 				3387ED6A274AD9E50083D2C1 /* Home */,
 				3323160927430A060039EE23 /* Common */,
@@ -421,6 +426,7 @@
 				332315F62742B4F10039EE23 /* AppViewModel.swift */,
 				3323161F274A64210039EE23 /* HomeViewModel.swift */,
 				3387ED6C274C03A70083D2C1 /* CalendarViewModel.swift */,
+				33EC3A7C274D06680049E414 /* SettingsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -688,6 +694,14 @@
 				33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */,
 			);
 			path = "reHydrate-watch Extension";
+			sourceTree = "<group>";
+		};
+		33EC3A77274D05E90049E414 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				33EC3A7A274D06070049E414 /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		33F8CBEA24F568DC000143EC /* AppIcons */ = {
@@ -1023,6 +1037,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
+				33EC3A7D274D06680049E414 /* SettingsViewModel.swift in Sources */,
 				330929DB25B5DA5700DAE6C0 /* SaveAndLoad.swift in Sources */,
 				33231608274306BA0039EE23 /* CalendarView.swift in Sources */,
 				332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */,
@@ -1052,6 +1067,7 @@
 				332315EC274276290039EE23 /* Color.swift in Sources */,
 				3323160D27441B030039EE23 /* DayRepository.swift in Sources */,
 				334281E324977ADB00A3CF12 /* AppIconVC.swift in Sources */,
+				33EC3A7B274D06070049E414 /* SettingsView.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
 				3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
