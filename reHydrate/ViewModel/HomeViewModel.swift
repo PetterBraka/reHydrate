@@ -112,7 +112,7 @@ extension HomeViewModel {
         return goal
     }
     
-    private func fetchToday() {
+    func fetchToday() {
         dayManager.dayRepository.getDay(for: Date())
             .sink { [weak self] completion in
                 switch completion {
