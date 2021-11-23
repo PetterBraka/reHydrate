@@ -10,20 +10,27 @@ import SwiftUI
 
 struct AppView: View {
     @StateObject var viewModel = MainAssembler.shared.container.resolve(AppViewModel.self)!
+    @State var homeTransition: AnyTransition = .slide
     
     var body: some View {
         switch viewModel.currenState {
         case .home:
             HomeView(navigateTo: viewModel.navigateTo)
-                .transition(.slide)
+                .transition(homeTransition)
         case .settings:
-            Text("Settings")
-                .transition( .asymmetric(insertion: .move(edge: .leading),
-                                         removal: .move(edge: .trailing)))
+            SettingsView(navigateTo: viewModel.navigateTo)
+                .transition( .slide)
+                .onAppear {
+                    homeTransition = .asymmetric(insertion: .move(edge: .trailing),
+                                                 removal: .move(edge: .leading))
+                }
         case .calendar:
             CalendarView(navigateTo: viewModel.navigateTo)
                 .transition( .asymmetric(insertion: .move(edge: .trailing),
                                          removal: .move(edge: .leading)))
+                .onAppear {
+                    homeTransition = .slide
+                }
         }
     }
 }
