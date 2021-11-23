@@ -25,7 +25,7 @@ struct HomeView: View {
             Text(viewModel.getDate())
                 .font(.title)
             Text("\(viewModel.getConsumed())/\(viewModel.getGoal())L")
-                .font(.largeTitle)
+                .font(.extraLargeTitle)
                 .bold()
             
             Spacer()

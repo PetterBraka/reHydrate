@@ -35,18 +35,19 @@ struct CalendarView: View {
                         
                         Spacer()
                         Text("Monday 15/11/21")
-                            .font(.title)
+                            .font(.largeTitle)
                             .foregroundColor(.label)
                         Spacer()
                     }
+                    .padding(.vertical, 16)
                     
                     HStack {
                         Text("Consumed:")
-                            .font(.body)
+                            .font(.title)
                             .foregroundColor(.label)
                         Spacer()
                         Text("1/3L")
-                            .font(.body)
+                            .font(.title)
                             .foregroundColor(.label)
                     }
                     
@@ -54,11 +55,11 @@ struct CalendarView: View {
                     
                     HStack {
                         Text("Average:")
-                            .font(.body)
+                            .font(.title)
                             .foregroundColor(.label)
                         Spacer()
                         Text("1.5L")
-                            .font(.body)
+                            .font(.title)
                             .foregroundColor(.label)
                     }
                     
