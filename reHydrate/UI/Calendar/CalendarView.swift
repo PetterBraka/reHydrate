@@ -46,7 +46,7 @@ struct CalendarView: View {
                             .font(.title)
                             .foregroundColor(.label)
                         Spacer()
-                        Text("1/3L")
+                        Text(viewModel.consumtion)
                             .font(.title)
                             .foregroundColor(.label)
                     }
@@ -58,7 +58,7 @@ struct CalendarView: View {
                             .font(.title)
                             .foregroundColor(.label)
                         Spacer()
-                        Text("1.5L")
+                        Text(viewModel.average)
                             .font(.title)
                             .foregroundColor(.label)
                     }
@@ -70,9 +70,12 @@ struct CalendarView: View {
                 
                 
                 CalendarModuleView(selectedDays: $viewModel.selectedDays,
-                                   storedDays: $viewModel.days,
+                                   storedDays: $viewModel.storedDays,
                                    firsWeekday: .monday)
                     .frame(height: geo.size.height * 0.5)
+            }
+            .onAppear {
+                viewModel.fetchSavedDays()
             }
         }
         .padding(.horizontal, 24)
