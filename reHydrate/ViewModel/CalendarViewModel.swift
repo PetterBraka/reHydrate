@@ -54,7 +54,11 @@ final class CalendarViewModel: ObservableObject {
                     }
                 } else {
                     self?.getConsumed(for: days)
-                    self?.getAverage(for: days)
+                    if days.count > 1 {
+                        self?.getAverage(for: days)
+                    } else {
+                        self?.getAverage(for: self?.storedDays ?? [])
+                    }
                 }
             }.store(in: &tasks)
     }
