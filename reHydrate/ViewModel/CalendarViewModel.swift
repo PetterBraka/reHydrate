@@ -58,8 +58,8 @@ final class CalendarViewModel: ObservableObject {
     }
      
     func getConsumed(for days: [Day]) {
-        let consumed = days.first?.consumption.clean
-        let goal = days.first?.goal.clean
+        let consumed = days.last?.consumption.clean
+        let goal = days.last?.goal.clean
         self.consumtion = "\(consumed ?? "0")/\(goal ?? "0")L"
     }
     

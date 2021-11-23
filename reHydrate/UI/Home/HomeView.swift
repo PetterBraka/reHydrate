@@ -93,6 +93,9 @@ struct HomeView: View {
             .frame(height: 50)
             .padding(.horizontal, 24)
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            viewModel.fetchToday()
+        }
         .confirmationDialog("Drink options",
                             isPresented: $viewModel.showAlert) {
             Button("Remove \(viewModel.getValue(for: viewModel.interactedDrink))mL",
