@@ -19,6 +19,7 @@ protocol Repository {
     -> AnyPublisher<Day?, Error>
     func get(date: Date, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?)
     -> AnyPublisher<Day?, Error>
+    func getLatesGoal(predicate: NSPredicate?) -> AnyPublisher<Day?, Error>
     func getAll(predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?)
     -> AnyPublisher<[Day], Error>
 }
@@ -91,6 +92,27 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
             let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates:
                                                         [fromPredicate, toPredicate])
             request.predicate = datePredicate
+            do {
+                guard let results = try? self.managedObjectContext.fetch(request) else {
+                    return promise(.failure(CoreDataError.invalidManagedObjectType))
+                }
+                guard let singleResult = results.first else {
+                    return promise(.failure(CoreDataError.elementNotFound))
+                }
+                return promise(.success(singleResult))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getLatesGoal(predicate: NSPredicate?) -> AnyPublisher<T?, Error> {
+        Future { promise in
+            let entityName = String(describing: Day.self)
+            let request = NSFetchRequest<Day>(entityName: entityName)
+            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+            request.predicate = predicate
+            request.fetchLimit = 1
+            
             do {
                 guard let results = try? self.managedObjectContext.fetch(request) else {
                     return promise(.failure(CoreDataError.invalidManagedObjectType))

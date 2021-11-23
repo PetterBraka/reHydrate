@@ -9,11 +9,13 @@
 import Combine
 import CoreData
 import Foundation
+import CoreAudio
 
 protocol DayRepositoryInterface {
     func create(day: Day) -> AnyPublisher<Bool, Error>
     func delete(day: Day) -> AnyPublisher<Bool, Error>
     func getDay(for date: Date) -> AnyPublisher<Day?, Error>
+    func getLatestGoal() -> AnyPublisher<Double, Error>
     func getDays() -> AnyPublisher<[Day], Error>
     func update(goal: Double, for day: Day) -> AnyPublisher<Bool, Error>
     func update(consumption: Double, for day: Day) -> AnyPublisher<Bool, Error>
@@ -61,6 +63,17 @@ final class DayRepository: DayRepositoryInterface {
                     return day.toDomainModel()
                 }
                 return day
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getLatestGoal() -> AnyPublisher<Double, Error> {
+        repo.getLatesGoal(predicate: repoPredicate)
+            .map { day -> Double in
+                let day = day.map { day -> Day in
+                    return day.toDomainModel()
+                }
+                return day?.goal ?? 2
             }
             .eraseToAnyPublisher()
     }
