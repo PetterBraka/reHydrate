@@ -19,67 +19,66 @@ struct CalendarView: View {
     }
     
     var body: some View {
-        GeometryReader { geo in
-            VStack {
-                VStack(spacing: 16) {
-                    HStack {
-                        Button {
-                            viewModel.navigateToHome()
-                        } label: {
-                            Image.exit
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.label)
+        NavigationView {
+            ZStack {
+                Color.background
+                    .ignoresSafeArea()
+                
+                GeometryReader { geo in
+                    VStack {
+                        VStack(spacing: 16) {
+                            HStack {
+                                Text("Consumed:")
+                                    .font(.title)
+                                    .foregroundColor(.label)
+                                Spacer()
+                                Text(viewModel.consumtion)
+                                    .font(.title)
+                                    .foregroundColor(.label)
+                            }
+                            Divider()
+                            HStack {
+                                Text("Average:")
+                                    .font(.title)
+                                    .foregroundColor(.label)
+                                Spacer()
+                                Text(viewModel.average)
+                                    .font(.title)
+                                    .foregroundColor(.label)
+                            }
+                            Divider()
                         }
-                        .frame(width: 32)
-                        
                         Spacer()
-                        Text("Monday 15/11/21")
+                        CalendarModuleView(selectedDays: $viewModel.selectedDays,
+                                           storedDays: $viewModel.storedDays,
+                                           firsWeekday: .monday)
+                            .frame(height: geo.size.height * 0.5)
+                    }
+                    .onAppear {
+                        viewModel.fetchSavedDays()
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(viewModel.header)
+                        .font(.largeTitle)
+                        .foregroundColor(.label)
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        viewModel.navigateToHome()
+                    } label: {
+                        Image.exit
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .font(.largeTitle)
                             .foregroundColor(.label)
-                        Spacer()
                     }
-                    .padding(.vertical, 16)
-                    
-                    HStack {
-                        Text("Consumed:")
-                            .font(.title)
-                            .foregroundColor(.label)
-                        Spacer()
-                        Text(viewModel.consumtion)
-                            .font(.title)
-                            .foregroundColor(.label)
-                    }
-                    
-                    Divider()
-                    
-                    HStack {
-                        Text("Average:")
-                            .font(.title)
-                            .foregroundColor(.label)
-                        Spacer()
-                        Text(viewModel.average)
-                            .font(.title)
-                            .foregroundColor(.label)
-                    }
-                    
-                    Divider()
                 }
-                
-                Spacer()
-                
-                
-                CalendarModuleView(selectedDays: $viewModel.selectedDays,
-                                   storedDays: $viewModel.storedDays,
-                                   firsWeekday: .monday)
-                    .frame(height: geo.size.height * 0.5)
-            }
-            .onAppear {
-                viewModel.fetchSavedDays()
             }
         }
-        .padding(.horizontal, 24)
-        .background(Color.background.ignoresSafeArea())
     }
 }
 

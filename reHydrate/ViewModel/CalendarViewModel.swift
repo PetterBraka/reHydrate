@@ -16,6 +16,8 @@ final class CalendarViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var selectedDays = [Day]()
     @Published var storedDays = [Day]()
+    
+    @Published var header = ""
     @Published var consumtion = ""
     @Published var average = ""
     
@@ -58,9 +60,11 @@ final class CalendarViewModel: ObservableObject {
     }
      
     func getConsumed(for days: [Day]) {
-        let consumed = days.last?.consumption.clean
-        let goal = days.last?.goal.clean
+        let day = days.last
+        let consumed = day?.consumption.clean
+        let goal = day?.goal.clean
         self.consumtion = "\(consumed ?? "0")/\(goal ?? "0")L"
+        self.header = formatter.string(from: day?.date ?? Date())
     }
     
     func getAverage(for days: [Day]) {
