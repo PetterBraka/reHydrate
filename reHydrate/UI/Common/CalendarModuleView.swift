@@ -47,7 +47,6 @@ struct CalendarModuleView: UIViewRepresentable {
         calendar.appearance.titleFont = .body
         calendar.appearance.weekdayFont = .body
         calendar.appearance.headerTitleFont = .title
-        calendar.appearance.borderRadius = 1
         
         calendar.appearance.headerTitleColor = .label
         calendar.appearance.weekdayTextColor = .label
@@ -111,12 +110,11 @@ struct CalendarModuleView: UIViewRepresentable {
         }
         
         func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-            print("Selected \(formatter.string(from: date))")
-            selectedDays.append(Day(id: UUID(), consumption: 0, goal: 0, date: date))
-            self.updateVisibleCells(in: calendar)
-            if calendar.selectedDates.count > 1 {
-                // check if starting and ending date is the same when swipe gesture is used
+            if let selectedDay = storedDays.first(where: { $0.isSameDay(as: date) }) {
+                print("Selected \(formatter.string(from: date))")
+                selectedDays.append(selectedDay)
             }
+            self.updateVisibleCells(in: calendar)
         }
         
         func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {

@@ -10,11 +10,14 @@ import Foundation
 import Combine
 import CoreData
 import Swinject
+import SwiftUI
 
 final class CalendarViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var selectedDays = [Day]()
-    @Published var days = [Day]()
+    @Published var storedDays = [Day]()
+    @Published var consumtion = ""
+    @Published var average = ""
     
     private var presistenceController: PresistenceControllerProtocol
     private var viewContext: NSManagedObjectContext
@@ -36,10 +39,43 @@ final class CalendarViewModel: ObservableObject {
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         self.fetchDays()
+        setUpSubscriptions()
+    }
+    
+    func setUpSubscriptions() {
+        $selectedDays
+            .sink { [weak self] days in
+                if days.isEmpty {
+                    if let today = self?.storedDays.first(where: { $0.isSameDay(as: Date()) }) {
+                        self?.getConsumed(for: [today])
+                        self?.getAverage(for: self?.storedDays ?? [])
+                    }
+                } else {
+                    self?.getConsumed(for: days)
+                    self?.getAverage(for: days)
+                }
+            }.store(in: &tasks)
+    }
+     
+    func getConsumed(for days: [Day]) {
+        let consumed = days.first?.consumption.clean
+        let goal = days.first?.goal.clean
+        self.consumtion = "\(consumed ?? "0")/\(goal ?? "0")L"
+    }
+    
+    func getAverage(for days: [Day]) {
+        var totalConsumed = 0.0
+        days.forEach { totalConsumed = $0.consumption + totalConsumed }
+        let average = totalConsumed / Double(days.count)
+        self.average = "\(average.clean)L"
     }
     
     func navigateToHome() {
         navigateTo(.home)
+    }
+    
+    func fetchSavedDays() {
+        self.fetchDays()
     }
 }
 
@@ -55,7 +91,9 @@ extension CalendarViewModel {
                     break
                 }
             } receiveValue: { [weak self] days in
-                self?.days = days
+                self?.storedDays = days
+                self?.getConsumed(for: days)
+                self?.getAverage(for: days)
             }.store(in: &tasks)
     }
 }
