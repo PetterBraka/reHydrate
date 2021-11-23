@@ -52,7 +52,7 @@ struct CalendarView: View {
                         CalendarModuleView(selectedDays: $viewModel.selectedDays,
                                            storedDays: $viewModel.storedDays,
                                            firsWeekday: .monday)
-                            .frame(height: geo.size.height * 0.5)
+                            .frame(height: geo.size.height * 0.6)
                     }
                     .onAppear {
                         viewModel.fetchSavedDays()
