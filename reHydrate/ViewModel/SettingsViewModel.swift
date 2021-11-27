@@ -10,8 +10,11 @@ import Foundation
 import Combine
 import CoreData
 import Swinject
+import SwiftUI
 
 final class SettingsViewModel: ObservableObject {
+    @AppStorage(DefaultsName.darkMode) var isDarkMode = false
+    
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     
     private var presistenceController: PresistenceControllerProtocol
@@ -28,6 +31,11 @@ final class SettingsViewModel: ObservableObject {
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         self.fetchToday()
+    }
+    
+    func toggleDarkMode() {
+        isDarkMode.toggle()
+        print(isDarkMode ? "Dark mode on" : "Light mode on")
     }
     
     func navigateToHome() {
