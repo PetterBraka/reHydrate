@@ -17,6 +17,7 @@ extension UIColor {
 
 extension Color {
     static let label = Color("reHydrate.label")
+    static let button = Color("reHydrate.Button")
     static let background = Color("reHydrate.Background")
     static let tableViewBackground = Color("reHydrate.tablview.Background")
 }

@@ -29,9 +29,12 @@ extension Image {
     
     static let waterDrop = Image("waterDrop")
     
-    static let exit = Image(systemName: "x.circle")
+    static let back = Image(systemName: "chevron.left.circle")
     static let settings = Image(systemName: "gear.circle")
     static let calender = Image(systemName: "calendar.circle")
+    
+    static let darkMode = Image(systemName: "moon.circle.fill")
+    static let lightMode = Image(systemName: "sun.max.circle.fill")
 }
 
 extension UIImage {
@@ -54,7 +57,7 @@ extension UIImage {
     
     static let waterDrop = UIImage(named: "waterDrop")!
     
-    static let exit = UIImage(systemName: "x.circle")!
+    static let back = UIImage(systemName: "chevron.left.circle")!
     static let settings = UIImage(systemName: "gear.circle")!
     static let calender = UIImage(systemName: "calendar.circle")!
 }

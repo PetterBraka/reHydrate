@@ -74,9 +74,8 @@ struct HomeView: View {
                     viewModel.navigateToSettings()
                 } label: {
                     Image.settings
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.label)
+                        .font(.largeHeader)
+                        .foregroundColor(.button)
                 }
                 
                 Spacer()
@@ -85,12 +84,10 @@ struct HomeView: View {
                     viewModel.navigateToCalendar()
                 } label: {
                     Image.calender
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.label)
+                        .font(.largeHeader)
+                        .foregroundColor(.button)
                 }
             }
-            .frame(height: 50)
             .padding(.horizontal, 24)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in

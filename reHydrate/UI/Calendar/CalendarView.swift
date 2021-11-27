@@ -70,11 +70,9 @@ struct CalendarView: View {
                     Button {
                         viewModel.navigateToHome()
                     } label: {
-                        Image.exit
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
+                        Image.back
                             .font(.largeTitle)
-                            .foregroundColor(.label)
+                            .foregroundColor(.button)
                     }
                 }
             }
