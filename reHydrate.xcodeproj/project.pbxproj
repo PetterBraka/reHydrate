@@ -155,6 +155,7 @@
 		33E2B90D24FADAE60050B8A1 /* white-grey@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33E2B90A24FADAE60050B8A1 /* white-grey@1x.png */; };
 		33EC3A7B274D06070049E414 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7A274D06070049E414 /* SettingsView.swift */; };
 		33EC3A7D274D06680049E414 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7C274D06680049E414 /* SettingsViewModel.swift */; };
+		33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
 /* End PBXBuildFile section */
@@ -360,6 +361,7 @@
 		33E2B90A24FADAE60050B8A1 /* white-grey@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-grey@1x.png"; sourceTree = "<group>"; };
 		33EC3A7A274D06070049E414 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		33EC3A7C274D06680049E414 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33EFF4002470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = nb; path = nb.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				3387ED6A274AD9E50083D2C1 /* Home */,
 				3323160927430A060039EE23 /* Common */,
 				332315F32742B3430039EE23 /* AppView.swift */,
+				33231623274A75530039EE23 /* reHydrateApp.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -454,6 +457,7 @@
 			isa = PBXGroup;
 			children = (
 				3323160A27430A1B0039EE23 /* CalendarModuleView.swift */,
+				33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -526,7 +530,6 @@
 				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
 				3323161A274A61F30039EE23 /* PresistenceController.swift */,
-				33231623274A75530039EE23 /* reHydrateApp.swift */,
 			);
 			path = reHydrate;
 			sourceTree = "<group>";
@@ -1070,6 +1073,7 @@
 				33EC3A7B274D06070049E414 /* SettingsView.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
 				3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */,
+				33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				33593576257D4D8200C5612E /* CreditsVC.swift in Sources */,
 				3323161B274A61F30039EE23 /* PresistenceController.swift in Sources */,
@@ -1270,7 +1274,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = reHydrate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1278,7 +1282,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.4;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1292,7 +1296,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = reHydrate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1300,7 +1304,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.4;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
