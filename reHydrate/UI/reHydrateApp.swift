@@ -7,12 +7,16 @@
 //
 
 import SwiftUI
+import SwiftyUserDefaults
 
 @main
 struct reHydrateApp: App {
+    @AppStorage(DefaultsName.darkMode) private var isDarkMode = false
+    
     var body: some Scene {
         WindowGroup {
             AppView()
+                .preferredColorScheme(isDarkMode ? .dark : .light)
         }
     }
 }

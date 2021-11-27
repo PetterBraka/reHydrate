@@ -22,8 +22,23 @@ struct SettingsView: View {
             ZStack {
                 Color.background
                     .ignoresSafeArea()
-                
                 VStack {
+                    VStack {
+                        CheckBoxButton(isChecked: $viewModel.isDarkMode,
+                                       text: "Light mode",
+                                       highlightedText: "Dark mode",
+                                       image: .lightMode,
+                                       highlightedImage: .darkMode) {
+                            viewModel.toggleDarkMode()
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundColor(.tableViewBackground)
+                    )
+                    
                     Spacer()
                 }
                 .padding(.horizontal, 16)
@@ -37,11 +52,9 @@ struct SettingsView: View {
                         Button {
                             viewModel.navigateToHome()
                         } label: {
-                            Image.exit
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
+                            Image.back
                                 .font(.largeTitle)
-                                .foregroundColor(.label)
+                                .foregroundColor(.button)
                         }
                     }
                 })
