@@ -11,7 +11,7 @@ import SwiftyUserDefaults
 
 @main
 struct reHydrateApp: App {
-    @AppStorage(DefaultsName.darkMode) private var isDarkMode = false
+    @Preference(\.isDarkMode) var isDarkMode
     
     var body: some Scene {
         WindowGroup {
