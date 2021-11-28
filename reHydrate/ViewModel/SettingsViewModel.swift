@@ -13,7 +13,7 @@ import Swinject
 import SwiftUI
 
 final class SettingsViewModel: ObservableObject {
-    @AppStorage(DefaultsName.darkMode) var isDarkMode = false
+    @Preference(\.isDarkMode) var isDarkMode
     
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     

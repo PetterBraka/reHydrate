@@ -22,16 +22,3 @@ extension DefaultsKeys {
     var mediumDrinkOption: DefaultsKey<Double> { .init("mediumDrinkOption", defaultValue: 500) }
     var largeDrinkOption: DefaultsKey<Double> { .init("largeDrinkOption", defaultValue: 750) }
 }
-
-class DefaultsName {
-    static var appleLanguages = "AppleLanguages"
-    static var darkMode = "darkMode"
-    static var metricUnits = "metricUnits"
-    static var startingTime = "startignTime"
-    static var endingTime = "endingTime"
-    static var reminders = "reminders"
-    static var reminderInterval = "reminderInterval"
-    static var smallDrinkOption = "smallDrinkOption"
-    static var mediumDrinkOption = "mediumDrinkOption"
-    static var largeDrinkOption = "largeDrinkOption"
-}

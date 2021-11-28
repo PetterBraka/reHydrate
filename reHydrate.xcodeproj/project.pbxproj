@@ -156,6 +156,7 @@
 		33EC3A7B274D06070049E414 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7A274D06070049E414 /* SettingsView.swift */; };
 		33EC3A7D274D06680049E414 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7C274D06680049E414 /* SettingsViewModel.swift */; };
 		33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */; };
+		33EC3A8627539E590049E414 /* UserDefault+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A8527539E590049E414 /* UserDefault+Helper.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
 /* End PBXBuildFile section */
@@ -362,6 +363,7 @@
 		33EC3A7A274D06070049E414 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		33EC3A7C274D06680049E414 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
+		33EC3A8527539E590049E414 /* UserDefault+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Helper.swift"; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33EFF4002470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = nb; path = nb.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -514,6 +516,7 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				33EC3A8427539E480049E414 /* Helpers */,
 				3323161C274A63360039EE23 /* Managers */,
 				3323160E27441DB20039EE23 /* Old */,
 				33231617274420E60039EE23 /* reHydrate.xcdatamodeld */,
@@ -705,6 +708,14 @@
 				33EC3A7A274D06070049E414 /* SettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		33EC3A8427539E480049E414 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				33EC3A8527539E590049E414 /* UserDefault+Helper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		33F8CBEA24F568DC000143EC /* AppIcons */ = {
@@ -1057,6 +1068,7 @@
 				334282652497AE7600A3CF12 /* AppIconCell.swift in Sources */,
 				33B28F6F26BC802800DECA9F /* UITextField+Extensions.swift in Sources */,
 				3319AA33245334130049C676 /* SettingOptionCell.swift in Sources */,
+				33EC3A8627539E590049E414 /* UserDefault+Helper.swift in Sources */,
 				3323161327441E140039EE23 /* Day.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
 				3323161E274A63420039EE23 /* DayManager.swift in Sources */,
