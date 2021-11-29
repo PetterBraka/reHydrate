@@ -25,8 +25,8 @@ struct SettingsView: View {
                 VStack {
                     VStack {
                         CheckBoxButton(isChecked: $viewModel.isDarkMode,
-                                       text: "Light mode",
-                                       highlightedText: "Dark mode",
+                                       text: Localizable.Setting.lightMode,
+                                       highlightedText: Localizable.Setting.darkMode,
                                        image: .lightMode,
                                        highlightedImage: .darkMode) {
                             viewModel.toggleDarkMode()
@@ -43,11 +43,6 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal, 16)
                 .toolbar(content: {
-                    ToolbarItem(placement: .principal) {
-                        Text("Settings")
-                            .font(.largeTitle)
-                            .foregroundColor(.label)
-                    }
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button {
                             viewModel.navigateToHome()

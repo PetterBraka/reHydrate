@@ -93,7 +93,7 @@ struct HomeView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             viewModel.fetchToday()
         }
-        .confirmationDialog("Drink options",
+        .confirmationDialog(Localizable.Home.removeDrink,
                             isPresented: $viewModel.showAlert) {
             Button("Remove \(viewModel.getValue(for: viewModel.interactedDrink))mL",
                    role: .destructive) {
