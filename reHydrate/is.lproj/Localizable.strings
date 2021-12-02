@@ -39,6 +39,8 @@
 // Goal
 "ChangeGoal"       = "Breyta markmiði";
 "SetYourGoal"      = "Set your goal";
+"Goal"             = "Marki";
+
 // Reminders
 "Reminders"        = "Áminningar";
 "TurnOnReminders"  = "Kveikja á áminningum";

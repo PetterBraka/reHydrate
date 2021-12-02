@@ -30,6 +30,7 @@ extension Image {
     static let waterDrop = Image("waterDrop")
     
     static let back = Image(systemName: "chevron.left.circle")
+    static let open = Image(systemName: "chevron.forward")
     static let settings = Image(systemName: "gear.circle")
     static let calender = Image(systemName: "calendar.circle")
     

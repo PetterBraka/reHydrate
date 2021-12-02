@@ -72,14 +72,15 @@ struct Localizable {
     }
     
     struct Home {
-        static let add: String = NSLocalizedString("Add", comment: "String in settings for Add")
-        static let done: String = NSLocalizedString("Done", comment: "String in settings for Done")
-        static let cancel: String = NSLocalizedString("Cancel", comment: "String in settings for Cancel")
         static let editDrink: String = NSLocalizedString("EditDrink", comment: "String in settings for EditDrink")
         static let removeDrink: String = NSLocalizedString("RemoveDrink", comment: "String in settings for RemoveDrink")
         static let changeAmount: String = NSLocalizedString("ChangeAmount", comment: "String in settings for ChangeAmount")
         static let enterNewValue: String = NSLocalizedString("EnterNewValue", comment: "String in settings for EnterNewValue")
     }
+    
+    static let add: String = NSLocalizedString("Add", comment: "String in for Add")
+    static let done: String = NSLocalizedString("Done", comment: "String in for Done")
+    static let cancel: String = NSLocalizedString("Cancel", comment: "String in for Cancel")
     
     struct Setting {
         static let lightMode: String = NSLocalizedString("LightMode", comment: "String in settings for light mode")
@@ -93,6 +94,7 @@ struct Localizable {
         static let imperialSystem: String = NSLocalizedString("ImperialSystem", comment: "String in settings for ImperialSystem")
         static let changeGoal: String = NSLocalizedString("ChangeGoal", comment: "String in settings for ChangeGoal")
         static let setYourGoal: String = NSLocalizedString("SetYourGoal", comment: "String in settings for SetYourGoal")
+        static let goal: String = NSLocalizedString("Goal", comment: "String in settings for Goal")
         
         static let howToUse: String = NSLocalizedString("HowToUse", comment: "String in settings for HowToUse")
         static let dangerZone: String = NSLocalizedString("DangerZone", comment: "String in settings for DangerZone")

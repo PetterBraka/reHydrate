@@ -29,8 +29,8 @@
 // Units
 "UnitSystem"       = "Unit system";
 "Units"            = "Units";
-"MetricSystem"     = "Metric system";
-"ImperialSystem"   = "Imperial system";
+"MetricSystem"     = "Metric";
+"ImperialSystem"   = "Imperial";
 //Credits
 "Credits"          = "Credits";
 "Translations"     = "Translations";
@@ -39,6 +39,7 @@
 // Goal
 "ChangeGoal"       = "Change Goal";
 "SetYourGoal"      = "Set your goal";
+"Goal"             = "Goal";
 // Reminders
 "Reminders"        = "Reminders";
 "TurnOnReminders"  = "Turn on reminders";

@@ -29,8 +29,8 @@
 "is"         = "íslenskur";
 // Units
 "Units"            = "Enheter";
-"MetricSystem"     = "Metrisk system";
-"ImperialSystem"   = "Imperial system";
+"MetricSystem"     = "Metrisk";
+"ImperialSystem"   = "Imperial";
 //Credits
 "Credits"          = "Kreditter";
 "Translations"     = "Oversetting";
@@ -39,6 +39,7 @@
 // Goal
 "ChangeGoal"       = "Ender mål";
 "SetYourGoal"      = "Set ditt mål";
+"Goal"             = "Mål";
 // Reminders
 "Reminders"        = "Påminnelser";
 "TurnOnReminders"  = "Skru på påminnelser";

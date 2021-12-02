@@ -22,7 +22,7 @@ final class Preferences {
     }
     
     @UserDefault("AppleLanguages")
-    var languages: [String] = ["en"]
+    var languages: String = "en"
     @UserDefault("metricUnits")
     var isUsingMetric: Bool = true
     @UserDefault("reminders")

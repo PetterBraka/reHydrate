@@ -15,6 +15,17 @@ import SwiftUI
 final class SettingsViewModel: ObservableObject {
     @Preference(\.isDarkMode) var isDarkMode
     
+    @Published var languages: [String] = [Localizable.Setting.Language.english, Localizable.Setting.Language.german,
+                                          Localizable.Setting.Language.icelandic, Localizable.Setting.Language.norwegian]
+    @Published var selectedLanguage = "english"
+    @Published var selectedUnit = Localizable.Setting.metricSystem
+    @Published var selectedGoal: String = "" {
+        didSet {
+            if selectedGoal.count > 2 {
+                selectedGoal = oldValue
+            }
+        }
+    }
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     
     private var presistenceController: PresistenceControllerProtocol
@@ -31,6 +42,16 @@ final class SettingsViewModel: ObservableObject {
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         self.fetchToday()
+        setupSubscription()
+    }
+    
+    func setupSubscription() {
+        $selectedGoal
+            .sink { value in
+                if let goal = Double(value){
+                    self.today.goal = goal
+                }
+            }.store(in: &tasks)
     }
     
     func toggleDarkMode() {
@@ -56,6 +77,9 @@ extension SettingsViewModel {
             } receiveValue: { [weak self] day in
                 if let day = day {
                     self?.today = day
+                    if day.goal > 0 {
+                        self?.selectedGoal = "\(day.goal.clean)"
+                    }
                 }
             }.store(in: &tasks)
     }
