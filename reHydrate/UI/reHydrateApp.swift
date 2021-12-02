@@ -13,6 +13,10 @@ import SwiftyUserDefaults
 struct reHydrateApp: App {
     @Preference(\.isDarkMode) var isDarkMode
     
+    init(){
+        UITableView.appearance().backgroundColor = .background
+    }
+    
     var body: some Scene {
         WindowGroup {
             AppView()

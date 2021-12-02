@@ -158,6 +158,7 @@
 		33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */; };
 		33EC3A8627539E590049E414 /* UserDefault+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A8527539E590049E414 /* UserDefault+Helper.swift */; };
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
+		33EC3A8A2756C5090049E414 /* OptionsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A892756C5090049E414 /* OptionsButton.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
 /* End PBXBuildFile section */
@@ -366,6 +367,7 @@
 		33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
 		33EC3A8527539E590049E414 /* UserDefault+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Helper.swift"; sourceTree = "<group>"; };
 		33EC3A872754BA420049E414 /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
+		33EC3A892756C5090049E414 /* OptionsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsButton.swift; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33EFF4002470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = nb; path = nb.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 			children = (
 				3323160A27430A1B0039EE23 /* CalendarModuleView.swift */,
 				33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */,
+				33EC3A892756C5090049E414 /* OptionsButton.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1055,6 +1058,7 @@
 			files = (
 				3378767B24378A9400F5A732 /* StartVC.swift in Sources */,
 				33EC3A7D274D06680049E414 /* SettingsViewModel.swift in Sources */,
+				33EC3A8A2756C5090049E414 /* OptionsButton.swift in Sources */,
 				330929DB25B5DA5700DAE6C0 /* SaveAndLoad.swift in Sources */,
 				33231608274306BA0039EE23 /* CalendarView.swift in Sources */,
 				332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */,
