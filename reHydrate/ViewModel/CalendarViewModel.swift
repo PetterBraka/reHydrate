@@ -11,8 +11,11 @@ import Combine
 import CoreData
 import Swinject
 import SwiftUI
+import SwiftyUserDefaults
 
 final class CalendarViewModel: ObservableObject {
+    @Preference(\.languages) private var local
+    
     @Published var showAlert: Bool = false
     @Published var selectedDays = [Day]()
     @Published var storedDays = [Day]()
@@ -41,6 +44,7 @@ final class CalendarViewModel: ObservableObject {
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         self.fetchDays()
+        formatter.locale = .init(identifier: local)
         setUpSubscriptions()
     }
     

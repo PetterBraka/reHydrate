@@ -11,7 +11,7 @@ import SwiftyUserDefaults
 
 @main
 struct reHydrateApp: App {
-    @Preference(\.isDarkMode) var isDarkMode
+    @Preference(\.isDarkMode) private var isDarkMode
     
     init(){
         UITableView.appearance().backgroundColor = .background

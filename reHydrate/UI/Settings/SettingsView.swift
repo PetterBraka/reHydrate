@@ -12,7 +12,6 @@ struct SettingsView: View {
     enum Field: Hashable {
         case goal
     }
-    
     @StateObject var viewModel: SettingsViewModel
     @State var goal = ""
     
@@ -35,28 +34,30 @@ struct SettingsView: View {
                                        text: Localizable.Setting.lightMode,
                                        highlightedText: Localizable.Setting.darkMode,
                                        image: .lightMode,
-                                       highlightedImage: .darkMode) {
+                                       highlightedImage: .darkMode,
+                                       language: $viewModel.language) {
                             viewModel.toggleDarkMode()
                         }
                         HStack {
-                            Text(Localizable.Setting.appIcon)
+                            Text("AppIcon".localized(viewModel.language))
                             Spacer()
                             Image.open
                         }
                         OptionsButton(title: Localizable.Setting.Language.language,
                                       selectedItem: $viewModel.selectedLanguage,
-                                      items: viewModel.languages)
+                                      items: viewModel.languages,
+                                      language: $viewModel.language)
                     }
                     .listRowBackground(Color.tableViewBackground)
                     .padding(.vertical, 8)
                     Section {
                         HStack {
-                            Text(Localizable.Setting.units)
+                            Text(Localizable.Setting.units.localized(viewModel.language))
                             Spacer()
                             Picker("", selection: $viewModel.selectedUnit) {
-                                Text(Localizable.Setting.metricSystem)
+                                Text(Localizable.Setting.metricSystem.localized(viewModel.language))
                                     .tag(Localizable.Setting.metricSystem)
-                                Text(Localizable.Setting.imperialSystem)
+                                Text(Localizable.Setting.imperialSystem.localized(viewModel.language))
                                     .tag(Localizable.Setting.imperialSystem)
                             }
                             .pickerStyle(.segmented)
@@ -67,9 +68,9 @@ struct SettingsView: View {
                     .padding(.vertical, 8)
                     Section {
                         HStack {
-                            Text("\(Localizable.Setting.setYourGoal):")
+                            Text(Localizable.Setting.setYourGoal.localized(viewModel.language))
                             Spacer()
-                            TextField(Localizable.Setting.goal,
+                            TextField(Localizable.Setting.goal.localized(viewModel.language),
                                       text: $viewModel.selectedGoal)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.center)

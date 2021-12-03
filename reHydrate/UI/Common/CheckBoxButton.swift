@@ -15,6 +15,7 @@ struct CheckBoxButton: View {
     @State var highlightedText: String
     @State var image: Image
     @State var highlightedImage: Image
+    @Binding var language: Language
     
     var rowAction: () -> Void
     
@@ -25,7 +26,7 @@ struct CheckBoxButton: View {
             }
         } label: {
             HStack {
-                Text(isChecked ? highlightedText : text)
+                Text(isChecked ? highlightedText.localized(language) : text.localized(language))
                     .font(.body)
                     .foregroundColor(.label)
                 Spacer()
@@ -48,9 +49,3 @@ struct CheckBoxButton: View {
         }
     }
 }
-
-//struct CheckBoxButton_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CheckBoxButton()
-//    }
-//}
