@@ -12,14 +12,15 @@ struct OptionsButton: View {
     @State var title: String
     @Binding var selectedItem: String
     @State var items: [String]
+    @Binding var language: Language
     @State var isTapped = false
     
     var body: some View {
         HStack {
-            Text(title)
+            Text(title.localized(language))
                 .font(.body)
             Spacer()
-            Button(selectedItem.capitalized) {
+            Button(LocalizedStringKey(selectedItem)) {
                 isTapped.toggle()
             }
                 .font(.body)
@@ -36,17 +37,17 @@ struct OptionsButton: View {
         .onTapGesture {
             isTapped.toggle()
         }
-        .alert(title, isPresented: $isTapped, actions: {
+        .alert(title.localized(language), isPresented: $isTapped, actions: {
             ForEach(items, id: \.self) { item in
                 if let index = items.firstIndex(of: item) {
                     Button {
                         selectedItem = item
                     } label: {
-                        Text(items[index].capitalized)
+                        Text(LocalizedStringKey(items[index]))
                     }
                 }
             }
-            Button(Localizable.cancel, role: .cancel) {}
+            Button(LocalizedStringKey(Localizable.cancel), role: .cancel) {}
         })
 
     }
@@ -54,6 +55,6 @@ struct OptionsButton: View {
 
 struct DropDownButton_Previews: PreviewProvider {
     static var previews: some View {
-        OptionsButton(title: "", selectedItem: .constant(""), items: [])
+        OptionsButton(title: "", selectedItem: .constant(""), items: [], language: .constant(.english))
     }
 }
