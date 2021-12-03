@@ -26,7 +26,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var remindersOn: Bool = false
     @Published var startDate: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
     @Published var endDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
-    @Published var frequency: String = "0"
+    @Published var frequency: String = "60"
     
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     
