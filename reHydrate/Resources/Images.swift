@@ -36,6 +36,12 @@ extension Image {
     
     static let darkMode = Image(systemName: "moon.circle.fill")
     static let lightMode = Image(systemName: "sun.max.circle.fill")
+    
+    static let plus = Image(systemName: "plus")
+    static let minus = Image(systemName: "minus")
+    
+    static let remindersOn = Image(systemName: "bell.circle.fill")
+    static let remindersOff = Image(systemName: "bell.slash.circle")
 }
 
 extension UIImage {

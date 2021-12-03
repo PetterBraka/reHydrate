@@ -13,7 +13,7 @@ extension String {
     /// Localizes a string using given language from Language enum.
     /// - parameter language: The language that will be used to localized string.
     /// - Returns: localized string.
-    func localized(_ language: Language) -> String {
+    func local(_ language: Language) -> String {
         let path = Bundle.main.path(forResource: language.rawValue, ofType: "lproj")
         let bundle: Bundle
         if let path = path {
@@ -29,7 +29,7 @@ extension String {
     ///  - language: The language that will be used to localized string.
     ///  - args:  dynamic arguments provided for the localized string.
     /// - Returns: localized string.
-    func localized(_ language: Language, args arguments: CVarArg...) -> String {
+    func local(_ language: Language, args arguments: CVarArg...) -> String {
         let path = Bundle.main.path(forResource: language.rawValue, ofType: "lproj")
         let bundle: Bundle
         if let path = path {

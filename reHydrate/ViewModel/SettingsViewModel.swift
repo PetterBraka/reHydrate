@@ -22,7 +22,12 @@ final class SettingsViewModel: ObservableObject {
                                           Localizable.Setting.Language.norwegian]
     @Published var selectedLanguage = ""
     @Published var selectedUnit = Localizable.Setting.metricSystem
-    @Published var selectedGoal: String = "" 
+    @Published var selectedGoal: String = ""
+    @Published var remindersOn: Bool = false
+    @Published var startDate: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
+    @Published var endDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
+    @Published var frequency: String = "0"
+    
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     
     private var presistenceController: PresistenceControllerProtocol
@@ -44,16 +49,36 @@ final class SettingsViewModel: ObservableObject {
     }
     
     func setupSubscription() {
-        $selectedGoal
-            .sink { value in
-                if let goal = Double(value){
-                    self.today.goal = goal
-                }
-            }.store(in: &tasks)
+        $today.sink { updatedDay in
+            self.selectedGoal = updatedDay.goal.clean
+        }.store(in: &tasks)
         $selectedLanguage
+            .removeDuplicates()
             .sink { value in
                 self.language = Language(rawValue: value.lowercased()) ?? .english
             }.store(in: &tasks)
+    }
+    
+    func incrementGoal() {
+        today.goal += 1
+    }
+    
+    func decrementGoal() {
+        today.goal -= 1
+    }
+    
+    func incrementFrequency() {
+        if var frequency = Int(frequency) {
+            frequency += 15
+            self.frequency = "\(frequency)"
+        }
+    }
+    
+    func decrementFrequency() {
+        if var frequency = Int(frequency) {
+            frequency -= 15
+            self.frequency = "\(frequency)"
+        }
     }
     
     func toggleDarkMode() {
@@ -61,7 +86,13 @@ final class SettingsViewModel: ObservableObject {
         print(isDarkMode ? "Dark mode on" : "Light mode on")
     }
     
+    func toggleReminders() {
+        remindersOn.toggle()
+        print(remindersOn ? "Reminders on" : "Reminders off")
+    }
+    
     func navigateToHome() {
+        updateGoal(today.goal)
         navigateTo(.home)
     }
 }
@@ -84,5 +115,34 @@ extension SettingsViewModel {
                     }
                 }
             }.store(in: &tasks)
+    }
+    
+    func updateGoal(_ newGoal: Double) {
+        dayManager.dayRepository.update(goal: newGoal, for: today)
+            .sink { completion in
+                switch completion {
+                case let .failure(error):
+                    print("Error adding drink of type: \(newGoal), Error: \(error)")
+                default:
+                    break
+                }
+            } receiveValue: { [weak self] _ in
+                self?.saveAndFetch()
+            }.store(in: &tasks)
+    }
+    
+    private func saveAndFetch() {
+        dayManager.saveChanges()
+            .sink { completion in
+                switch completion {
+                case let .failure(error):
+                    print("Error saving \(error)")
+                default:
+                    break
+                }
+            } receiveValue: { [weak self] _ in
+                self?.fetchToday()
+            }.store(in: &tasks)
+
     }
 }

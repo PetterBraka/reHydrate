@@ -162,6 +162,7 @@
 		33EC3A8E275A8A7A0049E414 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A8D275A8A7A0049E414 /* String+Extensions.swift */; };
 		33EC3A91275A8C010049E414 /* LocalizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A90275A8C010049E414 /* LocalizationService.swift */; };
 		33EC3A93275A8C210049E414 /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A92275A8C210049E414 /* Notification+Extensions.swift */; };
+		33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A94275AC6B30049E414 /* StepperView.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
 /* End PBXBuildFile section */
@@ -374,6 +375,7 @@
 		33EC3A8D275A8A7A0049E414 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		33EC3A90275A8C010049E414 /* LocalizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationService.swift; sourceTree = "<group>"; };
 		33EC3A92275A8C210049E414 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
+		33EC3A94275AC6B30049E414 /* StepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperView.swift; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33EFF4002470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = nb; path = nb.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -472,6 +474,7 @@
 				3323160A27430A1B0039EE23 /* CalendarModuleView.swift */,
 				33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */,
 				33EC3A892756C5090049E414 /* OptionsButton.swift */,
+				33EC3A94275AC6B30049E414 /* StepperView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1113,6 +1116,7 @@
 				33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				33593576257D4D8200C5612E /* CreditsVC.swift in Sources */,
+				33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */,
 				3323161B274A61F30039EE23 /* PresistenceController.swift in Sources */,
 				332315EA274274090039EE23 /* Images.swift in Sources */,
 				332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */,

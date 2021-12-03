@@ -17,7 +17,7 @@ struct OptionsButton: View {
     
     var body: some View {
         HStack {
-            Text(title.localized(language))
+            Text(title.local(language))
                 .font(.body)
             Spacer()
             Button(LocalizedStringKey(selectedItem)) {
@@ -37,7 +37,7 @@ struct OptionsButton: View {
         .onTapGesture {
             isTapped.toggle()
         }
-        .alert(title.localized(language), isPresented: $isTapped, actions: {
+        .alert(title.local(language), isPresented: $isTapped, actions: {
             ForEach(items, id: \.self) { item in
                 if let index = items.firstIndex(of: item) {
                     Button {

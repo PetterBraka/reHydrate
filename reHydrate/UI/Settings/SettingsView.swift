@@ -39,7 +39,7 @@ struct SettingsView: View {
                             viewModel.toggleDarkMode()
                         }
                         HStack {
-                            Text("AppIcon".localized(viewModel.language))
+                            Text("AppIcon".local(viewModel.language))
                             Spacer()
                             Image.open
                         }
@@ -49,15 +49,14 @@ struct SettingsView: View {
                                       language: $viewModel.language)
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    .padding(.vertical, 8)
                     Section {
                         HStack {
-                            Text(Localizable.Setting.units.localized(viewModel.language))
+                            Text(Localizable.Setting.units.local(viewModel.language))
                             Spacer()
                             Picker("", selection: $viewModel.selectedUnit) {
-                                Text(Localizable.Setting.metricSystem.localized(viewModel.language))
+                                Text(Localizable.Setting.metricSystem.local(viewModel.language))
                                     .tag(Localizable.Setting.metricSystem)
-                                Text(Localizable.Setting.imperialSystem.localized(viewModel.language))
+                                Text(Localizable.Setting.imperialSystem.local(viewModel.language))
                                     .tag(Localizable.Setting.imperialSystem)
                             }
                             .pickerStyle(.segmented)
@@ -65,29 +64,51 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    .padding(.vertical, 8)
                     Section {
                         HStack {
-                            Text(Localizable.Setting.setYourGoal.localized(viewModel.language))
+                            Text(Localizable.Setting.setYourGoal.local(viewModel.language))
                             Spacer()
-                            TextField(Localizable.Setting.goal.localized(viewModel.language),
-                                      text: $viewModel.selectedGoal)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.center)
-                                .truncationMode(.tail)
-                                .padding(.vertical, 4)
-                                .padding(.horizontal, 16)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .strokeBorder()
-                                )
-                                .fixedSize()
-                                .focused($focusedField, equals: .goal)
-                                .foregroundColor(.label)
+                            StepperView(value: $viewModel.selectedGoal) {
+                                viewModel.incrementGoal()
+                            } onDecrement: {
+                                viewModel.decrementGoal()
+                            }
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    .padding(.vertical, 8)
+                    Section {
+                        CheckBoxButton(isChecked: $viewModel.remindersOn,
+                                       text: Localizable.Setting.Reminders.turnOnReminders,
+                                       highlightedText: Localizable.Setting.Reminders.turnOffReminders,
+                                       image: .remindersOff,
+                                       highlightedImage: .remindersOn,
+                                       language: $viewModel.language) {
+                                viewModel.toggleReminders()
+                        }
+                        if viewModel.remindersOn {
+                            HStack {
+                                Text(Localizable.Setting.Reminders.startingTime.local(viewModel.language))
+                                Spacer()
+                                DatePicker("", selection: $viewModel.startDate, displayedComponents: .hourAndMinute)
+                            }
+                            HStack {
+                                Text(Localizable.Setting.Reminders.endingTime.local(viewModel.language))
+                                Spacer()
+                                DatePicker("", selection: $viewModel.endDate, displayedComponents: .hourAndMinute)
+                            }
+                            HStack {
+                                Text(Localizable.Setting.Reminders.frequency.local(viewModel.language))
+                                Spacer()
+                                StepperView(value: $viewModel.frequency) {
+                                    viewModel.incrementFrequency()
+                                } onDecrement: {
+                                    viewModel.decrementFrequency()
+                                }
+
+                            }
+                        }
+                    }
+                    .listRowBackground(Color.tableViewBackground)
                 }
                 .font(.body)
                 .toolbar(content: {
