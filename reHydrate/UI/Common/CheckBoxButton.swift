@@ -26,7 +26,7 @@ struct CheckBoxButton: View {
             }
         } label: {
             HStack {
-                Text(isChecked ? highlightedText.localized(language) : text.localized(language))
+                Text(isChecked ? highlightedText.local(language) : text.local(language))
                     .font(.body)
                     .foregroundColor(.label)
                 Spacer()
