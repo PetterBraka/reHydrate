@@ -21,7 +21,6 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
     
-    
     @Published var languageOptions: [String] = [Localizable.Setting.Language.english,
                                           Localizable.Setting.Language.german,
                                           Localizable.Setting.Language.icelandic,
@@ -30,11 +29,14 @@ final class SettingsViewModel: ObservableObject {
     @Published var selectedUnit = Localizable.Setting.metricSystem
     @Published var selectedGoal: String = ""
     @Published var selectedRemindersOn: Bool = false
+    @Published var remindersPremitted: Bool = false
     @Published var selectedStartDate: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
     @Published var selectedEndDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
     @Published var selectedFrequency: String = "60"
     
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
+    
+    @Published var showNotificationAlert: Bool = false
     
     private var presistenceController: PresistenceControllerProtocol
     private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
@@ -57,6 +59,7 @@ final class SettingsViewModel: ObservableObject {
         selectedStartDate = remindersStart
         selectedEndDate = remindersEnd
         selectedFrequency = "\(reminderFrequency)"
+        checkNotificationAccess()
         setupSubscription()
     }
     
@@ -82,12 +85,19 @@ final class SettingsViewModel: ObservableObject {
             }.store(in: &tasks)
         $selectedRemindersOn
             .sink { isOn in
-                self.isRemindersOn = isOn
-                if isOn {
+                if self.remindersPremitted {
+                    self.isRemindersOn = isOn
+                }
+                if self.isRemindersOn {
                     self.notificationManager.setReminders()
                 } else {
                     self.notificationManager.deleteReminders()
                 }
+            }.store(in: &tasks)
+        
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+            .sink { _ in
+                self.checkNotificationAccess()
             }.store(in: &tasks)
     }
     
@@ -107,6 +117,19 @@ final class SettingsViewModel: ObservableObject {
     
     func toggleReminders() {
         selectedRemindersOn.toggle()
+    }
+    
+    func checkNotificationAccess() {
+        self.notificationManager.center.getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                if settings.authorizationStatus == .authorized {
+                    self.remindersPremitted = true
+                } else {
+                    self.remindersPremitted = false
+                    self.selectedRemindersOn = false
+                }
+            }
+        }
     }
     
     func updateStartTime() {

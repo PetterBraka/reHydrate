@@ -13,7 +13,6 @@ struct SettingsView: View {
         case goal
     }
     @StateObject var viewModel: SettingsViewModel
-    @State var goal = ""
     
     @FocusState private var focusedField: Field?
     
@@ -87,7 +86,11 @@ struct SettingsView: View {
                                        image: .remindersOff,
                                        highlightedImage: .remindersOn,
                                        language: $viewModel.language) {
+                            if viewModel.remindersPremitted {
                                 viewModel.toggleReminders()
+                            } else {
+                                viewModel.showNotificationAlert.toggle()
+                            }
                         }
                         if viewModel.selectedRemindersOn {
                             HStack {
@@ -121,6 +124,18 @@ struct SettingsView: View {
                     .listRowBackground(Color.tableViewBackground)
                 }
                 .font(.body)
+                .alert(Localizable.Popup.RemindersNotAllowed.local(viewModel.language),
+                       isPresented: $viewModel.showNotificationAlert) {
+                    Button(Localizable.cancel.local(viewModel.language), role: .cancel) {}
+                    Button(Localizable.Setting.openAppSettings.local(viewModel.language)) {
+                        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+                        if UIApplication.shared.canOpenURL(settingsUrl) {
+                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                                print("Settings opened: \(success)") // Prints true
+                            })
+                        }
+                    }
+                }
                 .toolbar(content: {
                     ToolbarItemGroup(placement: .keyboard) {
                         HStack {
