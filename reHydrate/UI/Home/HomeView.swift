@@ -24,7 +24,7 @@ struct HomeView: View {
                 .bold()
             Text(viewModel.getDate())
                 .font(.title)
-            Text("\(viewModel.getConsumed())/\(viewModel.getGoal())L")
+            Text("\(viewModel.getConsumed())/\(viewModel.getGoal())")
                 .font(.extraLargeTitle)
                 .bold()
             
@@ -32,7 +32,8 @@ struct HomeView: View {
             
             GeometryReader { geo in
                 HStack(alignment: .bottom) {
-                    DrinkView(drink: $viewModel.drinks[0],
+                    DrinkView(viewModel: viewModel,
+                              drink: $viewModel.drinks[0],
                               disable: false) {
                         viewModel.addDrink(viewModel.drinks[0])
                     } longPress: {
@@ -42,7 +43,8 @@ struct HomeView: View {
                     .frame(width: geo.size.width / 3,
                            height: 100,
                            alignment: .bottom)
-                    DrinkView(drink: $viewModel.drinks[1],
+                    DrinkView(viewModel: viewModel,
+                              drink: $viewModel.drinks[1],
                               disable: false) {
                         viewModel.addDrink(viewModel.drinks[1])
                     } longPress: {
@@ -52,7 +54,8 @@ struct HomeView: View {
                               .frame(width: geo.size.width / 3,
                                      height: 180,
                                      alignment: .bottom)
-                    DrinkView(drink: $viewModel.drinks[2],
+                    DrinkView(viewModel: viewModel,
+                              drink: $viewModel.drinks[2],
                               disable: false) {
                         viewModel.addDrink(viewModel.drinks[2])
                     } longPress: {
@@ -93,9 +96,12 @@ struct HomeView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             viewModel.fetchToday()
         }
+        .onAppear {
+            viewModel.fetchToday()
+        }
         .confirmationDialog(Localizable.Home.removeDrink,
                             isPresented: $viewModel.showAlert) {
-            Button("Remove \(viewModel.getValue(for: viewModel.interactedDrink))mL",
+            Button("Remove \(viewModel.getValue(for: viewModel.interactedDrink))",
                    role: .destructive) {
                 if let drink = viewModel.interactedDrink {
                     viewModel.removeDrink(drink)

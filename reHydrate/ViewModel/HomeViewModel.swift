@@ -13,6 +13,8 @@ import Swinject
 
 final class HomeViewModel: ObservableObject {
     @AppStorage("language") private var language = LocalizationService.shared.language
+    @Preference(\.isUsingMetric) private var isMetric
+    
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     @Published var drinks = [Drink(type: .small, size: 250),
                              Drink(type: .medium, size: 500),
@@ -44,20 +46,21 @@ final class HomeViewModel: ObservableObject {
     
     func getValue(for drink: Drink?) -> String {
         if let drink = drink {
-            return "\(drink.size.clean)"
+            let drinkValue = drink.size.convert(to: isMetric ? .milliliters : .imperialPints, from: .milliliters)
+            return drinkValue.clean + (isMetric ? "ml" : "pt")
         } else {
             return ""
         }
     }
     
     func getConsumed() -> String {
-        let consumed = today.consumption
+        let consumed = today.consumption.convert(to: isMetric ? .liters : .imperialPints, from: .liters)
         return consumed.clean
     }
     
     func getGoal() -> String {
-        let goal = today.goal
-        return goal.clean
+        let goal = today.goal.convert(to: isMetric ? .liters : .imperialPints, from: .liters)
+        return goal.clean + (isMetric ? "L" : "pt")
     }
     
     func getDate() -> String {

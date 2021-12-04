@@ -29,6 +29,7 @@ struct SettingsView: View {
                 Color.background
                     .ignoresSafeArea()
                 Form {
+                    // Apperance
                     Section {
                         CheckBoxButton(isChecked: $viewModel.isDarkMode,
                                        text: Localizable.Setting.lightMode,
@@ -49,6 +50,7 @@ struct SettingsView: View {
                                       language: $viewModel.language)
                     }
                     .listRowBackground(Color.tableViewBackground)
+                    // Units
                     Section {
                         HStack {
                             Text(Localizable.Setting.units.local(viewModel.language))
@@ -64,6 +66,7 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
+                    // Goal
                     Section {
                         HStack {
                             Text(Localizable.Setting.setYourGoal.local(viewModel.language))
@@ -76,6 +79,7 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
+                    // Notifications
                     Section {
                         CheckBoxButton(isChecked: $viewModel.selectedRemindersOn,
                                        text: Localizable.Setting.Reminders.turnOnReminders,
