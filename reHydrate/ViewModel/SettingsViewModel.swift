@@ -16,17 +16,23 @@ final class SettingsViewModel: ObservableObject {
     @AppStorage("language") var language = LocalizationService.shared.language
     @Preference(\.isDarkMode) var isDarkMode
     
-    @Published var languages: [String] = [Localizable.Setting.Language.english,
+    @Preference(\.isRemindersOn) private var isRemindersOn
+    @Preference(\.remindersStart) private var remindersStart
+    @Preference(\.remindersEnd) private var remindersEnd
+    @Preference(\.remindersInterval) private var reminderFrequency
+    
+    
+    @Published var languageOptions: [String] = [Localizable.Setting.Language.english,
                                           Localizable.Setting.Language.german,
                                           Localizable.Setting.Language.icelandic,
                                           Localizable.Setting.Language.norwegian]
-    @Published var selectedLanguage = ""
+    @Published var selectedLanguage: String = ""
     @Published var selectedUnit = Localizable.Setting.metricSystem
     @Published var selectedGoal: String = ""
-    @Published var remindersOn: Bool = false
-    @Published var startDate: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
-    @Published var endDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
-    @Published var frequency: String = "60"
+    @Published var selectedRemindersOn: Bool = false
+    @Published var selectedStartDate: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
+    @Published var selectedEndDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
+    @Published var selectedFrequency: String = "60"
     
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     
@@ -45,18 +51,32 @@ final class SettingsViewModel: ObservableObject {
         self.navigateTo = navigateTo
         self.fetchToday()
         selectedLanguage = language.rawValue
+        selectedRemindersOn = isRemindersOn
+        selectedStartDate = remindersStart
+        selectedEndDate = remindersEnd
+        selectedFrequency = "\(reminderFrequency)"
         setupSubscription()
     }
     
     func setupSubscription() {
-        $today.sink { updatedDay in
-            self.selectedGoal = updatedDay.goal.clean
-        }.store(in: &tasks)
+        $today
+            .sink { updatedDay in
+                self.selectedGoal = updatedDay.goal.clean
+            }.store(in: &tasks)
         $selectedLanguage
             .removeDuplicates()
             .sink { value in
                 self.language = Language(rawValue: value.lowercased()) ?? .english
             }.store(in: &tasks)
+        $selectedRemindersOn
+            .sink { isOn in
+                self.isRemindersOn = isOn
+            }.store(in: &tasks)
+    }
+    
+    func toggleDarkMode() {
+        isDarkMode.toggle()
+        print(isDarkMode ? "Dark mode on" : "Light mode on")
     }
     
     func incrementGoal() {
@@ -67,28 +87,33 @@ final class SettingsViewModel: ObservableObject {
         today.goal -= 1
     }
     
+    func toggleReminders() {
+        selectedRemindersOn.toggle()
+        print(selectedRemindersOn ? "Reminders on" : "Reminders off")
+    }
+    
+    func updateStartTime() {
+            remindersStart = selectedStartDate
+    }
+    
+    func updateEndTime() {
+        remindersEnd = selectedEndDate
+    }
+    
     func incrementFrequency() {
-        if var frequency = Int(frequency) {
+        if var frequency = Int(selectedFrequency) {
             frequency += 15
-            self.frequency = "\(frequency)"
+            self.selectedFrequency = "\(frequency)"
+            self.reminderFrequency = frequency
         }
     }
     
     func decrementFrequency() {
-        if var frequency = Int(frequency) {
+        if var frequency = Int(selectedFrequency) {
             frequency -= 15
-            self.frequency = "\(frequency)"
+            self.selectedFrequency = "\(frequency)"
+            self.reminderFrequency = frequency
         }
-    }
-    
-    func toggleDarkMode() {
-        isDarkMode.toggle()
-        print(isDarkMode ? "Dark mode on" : "Light mode on")
-    }
-    
-    func toggleReminders() {
-        remindersOn.toggle()
-        print(remindersOn ? "Reminders on" : "Reminders off")
     }
     
     func navigateToHome() {
@@ -98,7 +123,7 @@ final class SettingsViewModel: ObservableObject {
 }
 
 extension SettingsViewModel {
-    func fetchToday() {
+    private func fetchToday() {
         dayManager.dayRepository.getDay(for: Date())
             .sink { completion in
                 switch completion {
@@ -117,7 +142,7 @@ extension SettingsViewModel {
             }.store(in: &tasks)
     }
     
-    func updateGoal(_ newGoal: Double) {
+    private func updateGoal(_ newGoal: Double) {
         dayManager.dayRepository.update(goal: newGoal, for: today)
             .sink { completion in
                 switch completion {
@@ -143,6 +168,5 @@ extension SettingsViewModel {
             } receiveValue: { [weak self] _ in
                 self?.fetchToday()
             }.store(in: &tasks)
-
     }
 }

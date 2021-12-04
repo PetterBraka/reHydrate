@@ -45,7 +45,7 @@ struct SettingsView: View {
                         }
                         OptionsButton(title: Localizable.Setting.Language.language,
                                       selectedItem: $viewModel.selectedLanguage,
-                                      items: viewModel.languages,
+                                      items: viewModel.languageOptions,
                                       language: $viewModel.language)
                     }
                     .listRowBackground(Color.tableViewBackground)
@@ -77,7 +77,7 @@ struct SettingsView: View {
                     }
                     .listRowBackground(Color.tableViewBackground)
                     Section {
-                        CheckBoxButton(isChecked: $viewModel.remindersOn,
+                        CheckBoxButton(isChecked: $viewModel.selectedRemindersOn,
                                        text: Localizable.Setting.Reminders.turnOnReminders,
                                        highlightedText: Localizable.Setting.Reminders.turnOffReminders,
                                        image: .remindersOff,
@@ -85,21 +85,27 @@ struct SettingsView: View {
                                        language: $viewModel.language) {
                                 viewModel.toggleReminders()
                         }
-                        if viewModel.remindersOn {
+                        if viewModel.selectedRemindersOn {
                             HStack {
-                                Text(Localizable.Setting.Reminders.startingTime.local(viewModel.language))
-                                Spacer()
-                                DatePicker("", selection: $viewModel.startDate, displayedComponents: .hourAndMinute)
+                                DatePicker(Localizable.Setting.Reminders.startingTime.local(viewModel.language),
+                                           selection: $viewModel.selectedStartDate,
+                                           displayedComponents: .hourAndMinute)
+                                    .onSubmit {
+                                        viewModel.updateStartTime()
+                                    }
                             }
                             HStack {
-                                Text(Localizable.Setting.Reminders.endingTime.local(viewModel.language))
-                                Spacer()
-                                DatePicker("", selection: $viewModel.endDate, displayedComponents: .hourAndMinute)
+                                DatePicker(Localizable.Setting.Reminders.endingTime.local(viewModel.language),
+                                           selection: $viewModel.selectedEndDate,
+                                           displayedComponents: .hourAndMinute)
+                                    .onSubmit {
+                                        viewModel.updateEndTime()
+                                    }
                             }
                             HStack {
                                 Text(Localizable.Setting.Reminders.frequency.local(viewModel.language))
                                 Spacer()
-                                StepperView(value: $viewModel.frequency) {
+                                StepperView(value: $viewModel.selectedFrequency) {
                                     viewModel.incrementFrequency()
                                 } onDecrement: {
                                     viewModel.decrementFrequency()
