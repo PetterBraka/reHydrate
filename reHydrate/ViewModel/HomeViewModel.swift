@@ -12,6 +12,11 @@ import CoreData
 import Swinject
 
 final class HomeViewModel: ObservableObject {
+    enum AccessType {
+        case notification
+        case health
+    }
+    
     @AppStorage("language") private var language = LocalizationService.shared.language
     @Preference(\.isUsingMetric) private var isMetric
     
@@ -21,6 +26,10 @@ final class HomeViewModel: ObservableObject {
                              Drink(type: .large, size: 750)]
     @Published var showAlert: Bool = false
     @Published var interactedDrink: Drink?
+    @Published private var accessRequested: [AccessType] = []
+    
+    private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
+    private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
     
     private var presistenceController: PresistenceControllerProtocol
     private var viewContext: NSManagedObjectContext
@@ -41,7 +50,37 @@ final class HomeViewModel: ObservableObject {
         self.viewContext = presistenceController.container.viewContext
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
+        self.requestNotificationAccess()
         self.fetchToday()
+    }
+    
+    func requestNotificationAccess() {
+        notificationManager.requestAccess()
+            .sink { completion in
+                switch completion {
+                case let .failure(error):
+                    print("Failed requesting access too notification: \(error.localizedDescription)")
+                default:
+                    break
+                }
+            } receiveValue: { _ in
+                print("Notification requested")
+                self.requestHealthAccess()
+            }.store(in: &tasks)
+    }
+    
+    func requestHealthAccess() {
+        healthManager.requestAccess()
+            .sink {completion in
+                switch completion {
+                case let .failure(error):
+                    print("Failed requesting access too health: \(error.localizedDescription)")
+                default:
+                    break
+                }
+            } receiveValue: { _ in
+                print("Health requested")
+            }.store(in: &tasks)
     }
     
     func getValue(for drink: Drink?) -> String {
@@ -84,7 +123,8 @@ final class HomeViewModel: ObservableObject {
 //MARK: Save & Load
 extension HomeViewModel {
     private func createNewDay() {
-        let latestGoal = fetchLastGoal()
+        var latestGoal = fetchLastGoal()
+        latestGoal = (latestGoal > 0) ? latestGoal : 3
         let newDay = Day(id: UUID(), consumption: 0, goal: latestGoal, date: Date())
         dayManager.dayRepository.create(day: newDay)
             .sink { completion in

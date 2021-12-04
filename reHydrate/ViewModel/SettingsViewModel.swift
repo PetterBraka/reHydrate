@@ -37,7 +37,8 @@ final class SettingsViewModel: ObservableObject {
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     
     private var presistenceController: PresistenceControllerProtocol
-    private var notificationService = NotificationService()
+    private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
+    private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
     private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
     
@@ -76,16 +77,16 @@ final class SettingsViewModel: ObservableObject {
                 self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
                                                             from: .liters).clean
                 if self.isRemindersOn {
-                    self.notificationService.setReminders()
+                    self.notificationManager.setReminders()
                 }
             }.store(in: &tasks)
         $selectedRemindersOn
             .sink { isOn in
                 self.isRemindersOn = isOn
                 if isOn {
-                    self.notificationService.setReminders()
+                    self.notificationManager.setReminders()
                 } else {
-                    self.notificationService.deleteReminders()
+                    self.notificationManager.deleteReminders()
                 }
             }.store(in: &tasks)
     }
@@ -110,12 +111,12 @@ final class SettingsViewModel: ObservableObject {
     
     func updateStartTime() {
             remindersStart = selectedStartDate
-            notificationService.setReminders()
+        notificationManager.setReminders()
     }
     
     func updateEndTime() {
         remindersEnd = selectedEndDate
-        notificationService.setReminders()
+        notificationManager.setReminders()
     }
     
     func incrementFrequency() {
@@ -124,7 +125,7 @@ final class SettingsViewModel: ObservableObject {
             self.selectedFrequency = "\(frequency)"
             self.reminderFrequency = frequency
         }
-        notificationService.setReminders()
+        notificationManager.setReminders()
     }
     
     func decrementFrequency() {
@@ -133,7 +134,7 @@ final class SettingsViewModel: ObservableObject {
             self.selectedFrequency = "\(frequency)"
             self.reminderFrequency = frequency
         }
-        notificationService.setReminders()
+        notificationManager.setReminders()
     }
     
     func navigateToHome() {

@@ -163,7 +163,8 @@
 		33EC3A91275A8C010049E414 /* LocalizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A90275A8C010049E414 /* LocalizationService.swift */; };
 		33EC3A93275A8C210049E414 /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A92275A8C210049E414 /* Notification+Extensions.swift */; };
 		33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A94275AC6B30049E414 /* StepperView.swift */; };
-		33EC3A97275B60DC0049E414 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A96275B60DC0049E414 /* NotificationService.swift */; };
+		33EC3A97275B60DC0049E414 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A96275B60DC0049E414 /* NotificationManager.swift */; };
+		33EC3A9B275BE8690049E414 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A9A275BE8690049E414 /* HealthManager.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33FC842F243B992600848B7C /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC842E243B992600848B7C /* CalendarVC.swift */; };
 /* End PBXBuildFile section */
@@ -377,7 +378,8 @@
 		33EC3A90275A8C010049E414 /* LocalizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationService.swift; sourceTree = "<group>"; };
 		33EC3A92275A8C210049E414 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		33EC3A94275AC6B30049E414 /* StepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperView.swift; sourceTree = "<group>"; };
-		33EC3A96275B60DC0049E414 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		33EC3A96275B60DC0049E414 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		33EC3A9A275BE8690049E414 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33EFF4002470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = nb; path = nb.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 		3323160927430A060039EE23 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				332315E62742724D0039EE23 /* Drinkview.swift */,
 				3323160A27430A1B0039EE23 /* CalendarModuleView.swift */,
 				33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */,
 				33EC3A892756C5090049E414 /* OptionsButton.swift */,
@@ -505,6 +508,8 @@
 			isa = PBXGroup;
 			children = (
 				3323161D274A63420039EE23 /* DayManager.swift */,
+				33EC3A9A275BE8690049E414 /* HealthManager.swift */,
+				33EC3A96275B60DC0049E414 /* NotificationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -558,7 +563,6 @@
 		3387ED6A274AD9E50083D2C1 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				332315E62742724D0039EE23 /* Drinkview.swift */,
 				332315E4274271E20039EE23 /* HomeView.swift */,
 			);
 			path = Home;
@@ -742,7 +746,6 @@
 			isa = PBXGroup;
 			children = (
 				33EC3A90275A8C010049E414 /* LocalizationService.swift */,
-				33EC3A96275B60DC0049E414 /* NotificationService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1102,7 +1105,7 @@
 				3323161327441E140039EE23 /* Day.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
 				33EC3A91275A8C010049E414 /* LocalizationService.swift in Sources */,
-				33EC3A97275B60DC0049E414 /* NotificationService.swift in Sources */,
+				33EC3A97275B60DC0049E414 /* NotificationManager.swift in Sources */,
 				3323161E274A63420039EE23 /* DayManager.swift in Sources */,
 				3387ED6D274C03A70083D2C1 /* CalendarViewModel.swift in Sources */,
 				33C4319324827F2700E8EECA /* Bundle+Extensions.swift in Sources */,
@@ -1134,6 +1137,7 @@
 				33231622274A6FC70039EE23 /* ManagerAssembly.swift in Sources */,
 				33C431912482769B00E8EECA /* UIApplication+Extenstions.swift in Sources */,
 				33EC3A8E275A8A7A0049E414 /* String+Extensions.swift in Sources */,
+				33EC3A9B275BE8690049E414 /* HealthManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
