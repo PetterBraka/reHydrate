@@ -15,6 +15,7 @@ protocol HealthManagerProtocol {
     func needsAccessRequest() -> Bool
     func requestAccess() -> AnyPublisher<Void, Error>
     func getWater() -> AnyPublisher<[HKQuantity], Error>
+    func export(drink: Drink, _ date: Date) -> AnyPublisher<Void, Error>
 }
 
 // Possible errors that can occur
@@ -130,8 +131,9 @@ class HealthManager: HealthManagerProtocol {
                     print("Error Saving water consumtion: \(error.localizedDescription)")
                     promise(.failure(error))
                 }
+            } else {
+                promise(.failure(HealthError.cantSaveEmpty))
             }
-            promise(.failure(HealthError.cantSaveEmpty))
         }
         .receive(on: RunLoop.main)
         .eraseToAnyPublisher()
