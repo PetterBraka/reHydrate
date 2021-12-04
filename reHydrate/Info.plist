@@ -541,7 +541,7 @@
 	<key>NSHealthShareUsageDescription</key>
 	<string>We want to save your water consumption (gathered by this app) to your health app.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>We want to save your water consumption (gathered by this app) to your health app.</string>
+	<string>We want to import your water consumption and display it in this app.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -14,6 +14,14 @@ class ManagerAssembly: Assembly {
         // Presistence - Manager
         container.register(PresistenceControllerProtocol.self) { _ in
             PresistenceController()
-        }
+        }.inObjectScope(.container)
+        
+        container.register(HealthManagerProtocol.self) { _ in
+            HealthManager()
+        }.inObjectScope(.container)
+        
+        container.register(NotificationManager.self) {_ in
+            NotificationManager()
+        }.inObjectScope(.container)
     }
 }

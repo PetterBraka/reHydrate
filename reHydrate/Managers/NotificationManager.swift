@@ -1,5 +1,5 @@
 //
-//  NotificationService.swift
+//  NotificationManager.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 04/12/2021.
@@ -7,10 +7,11 @@
 //
 
 import SwiftUI
+import Combine
 
 // MARK: - Notifications
 
-class NotificationService {
+class NotificationManager {
     struct Reminder {
         var title = String()
         var body  = String()
@@ -24,11 +25,28 @@ class NotificationService {
     @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
     
+    static let shared = NotificationManager()
+    
+    private let center = UNUserNotificationCenter.current()
+    
+    func requestAccess() -> AnyPublisher<Void, Error> {
+        Future { [unowned self] promise in
+            self.center.requestAuthorization(options: [.alert, .sound]) { _, error in
+                guard let error = error else {
+                    promise(.success(()))
+                    return
+                }
+                promise(.failure(error))
+            }
+        }
+        .receive(on: RunLoop.main)
+        .eraseToAnyPublisher()
+    }
+    
     func deleteReminders() {
         print("Deleting reminders")
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removeAllDeliveredNotifications()
-        notificationCenter.removeAllPendingNotificationRequests()
+        self.center.removeAllDeliveredNotifications()
+        self.center.removeAllPendingNotificationRequests()
     }
     
     /**
@@ -97,9 +115,8 @@ class NotificationService {
                                             content: notification,
                                             trigger: trigger)
         
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.add(request, withCompletionHandler: nil)
-        notificationCenter.setNotificationCategories([category])
+        self.center.add(request, withCompletionHandler: nil)
+        self.center.setNotificationCategories([category])
     }
     
     /**
