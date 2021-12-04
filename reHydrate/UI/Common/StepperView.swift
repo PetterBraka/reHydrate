@@ -26,7 +26,7 @@ struct StepperView: View {
             
             Button {} label: {
                 Text(value)
-                    .bold()
+                    .font(.body)
                     .frame(minWidth: 16, minHeight: 16, maxHeight: 16)
             }
             .buttonStyle(.borderedProminent)

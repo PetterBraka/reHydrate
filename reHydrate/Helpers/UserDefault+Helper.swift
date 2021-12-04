@@ -30,9 +30,9 @@ final class Preferences {
     @UserDefault("reminders")
     var isRemindersOn: Bool = false
     @UserDefault("startignTime")
-    var remindersStart: Date? = nil
+    var remindersStart: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
     @UserDefault("endingTime")
-    var remindersEnd: Date? = nil
+    var remindersEnd: Date = DateComponents(calendar: .current, hour: 23, minute: 0).date ?? Date()
     @UserDefault("reminderInterval")
     var remindersInterval: Int = 30
     @UserDefault("smallDrinkOption")
