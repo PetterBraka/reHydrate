@@ -115,11 +115,19 @@ final class SettingsViewModel: ObservableObject {
         }
     }
     
+    func navigateToHome() {
+        updateGoal(today.goal)
+        navigateTo(.home)
+    }
+}
+
+//MARK: - Notification
+extension SettingsViewModel {
     func toggleReminders() {
         selectedRemindersOn.toggle()
     }
     
-    func checkNotificationAccess() {
+    private func checkNotificationAccess() {
         self.notificationManager.center.getNotificationSettings { settings in
             DispatchQueue.main.async {
                 if settings.authorizationStatus == .authorized {
@@ -159,13 +167,9 @@ final class SettingsViewModel: ObservableObject {
         }
         notificationManager.setReminders()
     }
-    
-    func navigateToHome() {
-        updateGoal(today.goal)
-        navigateTo(.home)
-    }
 }
 
+//MARK: - Save And Load
 extension SettingsViewModel {
     private func fetchToday() {
         dayManager.dayRepository.getDay(for: Date())
