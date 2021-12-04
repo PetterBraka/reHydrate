@@ -9,7 +9,11 @@
 import SwiftUI
 
 struct DrinkView: View {
+    @Preference(\.isUsingMetric) private var isMetric
+    @ObservedObject var viewModel: HomeViewModel
+    
     @Binding var drink: Drink
+    @State var subtitle: String = ""
     var disable: Bool
     var tapAction: () -> Void
     var longPress: () -> Void
@@ -21,7 +25,7 @@ struct DrinkView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .contrast(disable ? 0.1 : 1)
-                Text("\(drink.size.clean)mL")
+                Text(subtitle)
                     .font(.body)
                     .foregroundColor(.label)
             }
@@ -40,12 +44,17 @@ struct DrinkView: View {
                     tapAction()
                 })
         )
+        .onAppear {
+            subtitle = viewModel.getValue(for: drink)
+        }
     }
 }
 
 struct DrinkView_Previews: PreviewProvider {
     static var previews: some View {
-        DrinkView(drink: .constant(Drink(type: .medium, size: 500)),
+        DrinkView(viewModel: HomeViewModel(presistenceController: PresistenceController(),
+                                           navigateTo: { _ in}),
+                  drink: .constant(Drink(type: .medium, size: 500)),
                   disable: true) {} longPress: {}
     }
 }

@@ -62,7 +62,8 @@ final class SettingsViewModel: ObservableObject {
     func setupSubscription() {
         $today
             .sink { updatedDay in
-                self.selectedGoal = updatedDay.goal.clean
+                self.selectedGoal = updatedDay.goal.convert(to: self.isMetric ? .liters : .imperialPints,
+                                                            from: .liters).clean
             }.store(in: &tasks)
         $selectedLanguage
             .removeDuplicates()
@@ -71,7 +72,9 @@ final class SettingsViewModel: ObservableObject {
             }.store(in: &tasks)
         $selectedUnit
             .sink { unit in
-                self.isMetric = Localizable.Setting.metricSystem.local(self.language) == unit
+                self.isMetric = Localizable.Setting.metricSystem == unit
+                self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
+                                                            from: .liters).clean
                 if self.isRemindersOn {
                     self.notificationService.setReminders()
                 }
@@ -92,11 +95,13 @@ final class SettingsViewModel: ObservableObject {
     }
     
     func incrementGoal() {
-        today.goal += 1
+        today.goal += 0.5
     }
     
     func decrementGoal() {
-        today.goal -= 1
+        if today.goal > 0 {
+            today.goal -= 0.5
+        }
     }
     
     func toggleReminders() {
