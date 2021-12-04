@@ -15,7 +15,7 @@ import SwiftUI
 final class SettingsViewModel: ObservableObject {
     @AppStorage("language") var language = LocalizationService.shared.language
     @Preference(\.isDarkMode) var isDarkMode
-    
+    @Preference(\.isUsingMetric) private var isMetric
     @Preference(\.isRemindersOn) private var isRemindersOn
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
@@ -69,18 +69,26 @@ final class SettingsViewModel: ObservableObject {
             .sink { value in
                 self.language = Language(rawValue: value.lowercased()) ?? .english
             }.store(in: &tasks)
+        $selectedUnit
+            .sink { unit in
+                self.isMetric = Localizable.Setting.metricSystem.local(self.language) == unit
+                if self.isRemindersOn {
+                    self.notificationService.setReminders()
+                }
+            }.store(in: &tasks)
         $selectedRemindersOn
             .sink { isOn in
                 self.isRemindersOn = isOn
                 if isOn {
                     self.notificationService.setReminders()
+                } else {
+                    self.notificationService.deleteReminders()
                 }
             }.store(in: &tasks)
     }
     
     func toggleDarkMode() {
         isDarkMode.toggle()
-        print(isDarkMode ? "Dark mode on" : "Light mode on")
     }
     
     func incrementGoal() {
@@ -93,7 +101,6 @@ final class SettingsViewModel: ObservableObject {
     
     func toggleReminders() {
         selectedRemindersOn.toggle()
-        print(selectedRemindersOn ? "Reminders on" : "Reminders off")
     }
     
     func updateStartTime() {
