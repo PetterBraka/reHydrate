@@ -6,12 +6,13 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 import Combine
 import CoreData
 import Swinject
 
 final class HomeViewModel: ObservableObject {
+    @AppStorage("language") private var language = LocalizationService.shared.language
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     @Published var drinks = [Drink(type: .small, size: 250),
                              Drink(type: .medium, size: 500),
@@ -61,6 +62,7 @@ final class HomeViewModel: ObservableObject {
     
     func getDate() -> String {
         if let date = today.date {
+            formatter.locale = Locale(identifier: language.rawValue)
             return formatter.string(from: date)
         } else {
             return ""

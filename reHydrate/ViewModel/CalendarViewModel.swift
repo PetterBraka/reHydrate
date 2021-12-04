@@ -6,7 +6,6 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import Combine
 import CoreData
 import Swinject
@@ -14,7 +13,7 @@ import SwiftUI
 import SwiftyUserDefaults
 
 final class CalendarViewModel: ObservableObject {
-    @Preference(\.languages) private var local
+    @AppStorage("language") private var language = LocalizationService.shared.language
     
     @Published var showAlert: Bool = false
     @Published var selectedDays = [Day]()
@@ -44,7 +43,6 @@ final class CalendarViewModel: ObservableObject {
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         self.fetchDays()
-        formatter.locale = .init(identifier: local)
         setUpSubscriptions()
     }
     
@@ -68,11 +66,13 @@ final class CalendarViewModel: ObservableObject {
     }
      
     func getConsumed(for days: [Day]) {
-        let day = days.last
-        let consumed = day?.consumption.clean
-        let goal = day?.goal.clean
-        self.consumtion = "\(consumed ?? "0")/\(goal ?? "0")L"
-        self.header = formatter.string(from: day?.date ?? Date())
+        if let day = days.first {
+            let consumed = day.consumption.clean
+            let goal = day.goal.clean
+            self.consumtion = "\(consumed)/\(goal)L"
+            formatter.locale = Locale(identifier: language.rawValue)
+            self.header = formatter.string(from: day.date)
+        }
     }
     
     func getAverage(for days: [Day]) {
