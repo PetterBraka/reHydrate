@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 import CoreData
 import Swinject
+import HealthKit
 
 final class HomeViewModel: ObservableObject {
     enum AccessType {
@@ -27,6 +28,7 @@ final class HomeViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var interactedDrink: Drink?
     @Published private var accessRequested: [AccessType] = []
+    @Published private var healthData: [HKQuantity] = []
     
     private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
@@ -52,6 +54,7 @@ final class HomeViewModel: ObservableObject {
         self.navigateTo = navigateTo
         self.requestNotificationAccess()
         self.fetchToday()
+        self.getHealthData()
     }
     
     func requestNotificationAccess() {
@@ -109,6 +112,21 @@ final class HomeViewModel: ObservableObject {
         } else {
             return ""
         }
+    }
+    
+    func getHealthData() {
+        healthManager.getWater()
+            .sink { completion in
+                switch completion {
+                case let .failure(error):
+                    print(error)
+                default:
+                    break
+                }
+            } receiveValue: { quantities in
+                print(quantities.first?.doubleValue(for: .liter()))
+                self.healthData = quantities
+            }.store(in: &tasks)
     }
     
     func navigateToSettings() {
@@ -207,6 +225,17 @@ extension HomeViewModel {
             } receiveValue: { [weak self] _ in
                 self?.saveAndFetch()
             }.store(in: &tasks)
+        healthManager.export(drink: drink, Date())
+            .sink { completion in
+                switch completion {
+                case let .failure(error):
+                    print(error)
+                default:
+                    break
+                }
+            } receiveValue: { _ in }
+            .store(in: &tasks)
+
     }
     
     func removeDrink(_ drink: Drink) {
