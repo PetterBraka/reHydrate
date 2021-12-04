@@ -27,7 +27,7 @@ class NotificationManager {
     
     static let shared = NotificationManager()
     
-    private let center = UNUserNotificationCenter.current()
+    let center = UNUserNotificationCenter.current()
     
     func requestAccess() -> AnyPublisher<Void, Error> {
         Future { [unowned self] promise in
