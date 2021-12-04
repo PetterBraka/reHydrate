@@ -24,6 +24,13 @@ class NotificationService {
     @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
     
+    func deleteReminders() {
+        print("Deleting reminders")
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeAllDeliveredNotifications()
+        notificationCenter.removeAllPendingNotificationRequests()
+    }
+    
     /**
      Will set a notification for every half hour between 7 am and 11pm.
      
@@ -33,17 +40,13 @@ class NotificationService {
      ```
      */
     func setReminders(){
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removeAllDeliveredNotifications()
-        notificationCenter.removeAllPendingNotificationRequests()
-        
+        deleteReminders()
+        print("Created notifications")
         let difference = Calendar.current.dateComponents([.hour, .minute],
                                                          from: remindersStart,
                                                          to: remindersEnd)
         let differenceInMunutes = (difference.hour! * 60) + difference.minute!
         let totalNotifications = Double(differenceInMunutes / reminderFrequency).rounded(.down)
-        print("difference \(differenceInMunutes)")
-        print("total notifications \(totalNotifications)")
         var unit = String()
         var small  = String()
         var medium = String()
@@ -59,9 +62,6 @@ class NotificationService {
             large = String(format: "%.2f", Measurement(value: largeDrink, unit: UnitVolume.milliliters).converted(to: .fluidOunces).value)
             unit = "fl oz"
         }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/YYYY"
-        print(formatter.string(from: remindersStart))
         for index in 0...Int(totalNotifications) {
             if let notificationDate = Calendar.current.date(byAdding: .minute,
                                                             value: reminderFrequency * index,
@@ -76,9 +76,6 @@ class NotificationService {
                                     _ unit: String,
                                     _ medium: String,
                                     _ large: String) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        print("setting reminder for \(formatter.string(from: date))")
         let notification = getReminder()
         let smallDrinkAction = UNNotificationAction(identifier: "small",
                                                     title: "\(NSLocalizedString("Add", comment: "")) \(small)\(unit)",
