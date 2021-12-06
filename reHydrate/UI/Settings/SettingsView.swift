@@ -13,7 +13,7 @@ struct SettingsView: View {
         case goal
     }
     @StateObject var viewModel: SettingsViewModel
-    
+    @State var showIconSelection = false
     @FocusState private var focusedField: Field?
     
     init(navigateTo: @escaping ((AppState) -> Void)) {
@@ -38,11 +38,16 @@ struct SettingsView: View {
                                        language: $viewModel.language) {
                             viewModel.toggleDarkMode()
                         }
-                        HStack {
-                            Text("AppIcon".local(viewModel.language))
-                            Spacer()
-                            Image.open
+                        Button {
+                            showIconSelection = true
+                        } label: {
+                            HStack {
+                                Text(Localizable.Setting.appIcon.local(viewModel.language))
+                                Spacer()
+                                Image.open
+                            }
                         }
+                        .foregroundColor(.label)
                         OptionsButton(title: Localizable.Setting.Language.language,
                                       selectedItem: $viewModel.selectedLanguage,
                                       items: viewModel.languageOptions,
@@ -124,6 +129,11 @@ struct SettingsView: View {
                     .listRowBackground(Color.tableViewBackground)
                 }
                 .font(.body)
+                .sheet(isPresented: $showIconSelection) {
+                    AppIconSelectionView() {
+                        showIconSelection = false
+                    }
+                }
                 .alert(Localizable.Popup.RemindersNotAllowed.local(viewModel.language),
                        isPresented: $viewModel.showNotificationAlert) {
                     Button(Localizable.cancel.local(viewModel.language), role: .cancel) {}

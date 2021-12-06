@@ -32,6 +32,7 @@
 		33231624274A75530039EE23 /* reHydrateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231623274A75530039EE23 /* reHydrateApp.swift */; };
 		332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332E5A4524CCBF5000EF4D79 /* Extensions.swift */; };
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
+		335DA1FA275E7892002266D2 /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335DA1F9275E7892002266D2 /* AppIconSelectionView.swift */; };
 		336136A126B6E79F00C87FB5 /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* Hero */; };
 		336136A226B6E79F00C87FB5 /* Hero in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* Hero */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A526B6E7D500C87FB5 /* FSCalendar */; };
@@ -154,6 +155,7 @@
 		332E5A4524CCBF5000EF4D79 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		333B1326258D00F100340FB2 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33410F0D247C0A9D00C381AC /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
+		335DA1F9275E7892002266D2 /* AppIconSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3387ED68274AD9C40083D2C1 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
@@ -424,6 +426,7 @@
 			isa = PBXGroup;
 			children = (
 				33EC3A7A274D06070049E414 /* SettingsView.swift */,
+				335DA1F9275E7892002266D2 /* AppIconSelectionView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -627,6 +630,7 @@
 				3387ED6D274C03A70083D2C1 /* CalendarViewModel.swift in Sources */,
 				33C4319324827F2700E8EECA /* Bundle+Extensions.swift in Sources */,
 				33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */,
+				335DA1FA275E7892002266D2 /* AppIconSelectionView.swift in Sources */,
 				332315F42742B3430039EE23 /* AppView.swift in Sources */,
 				332315E5274271E20039EE23 /* HomeView.swift in Sources */,
 				332315EC274276290039EE23 /* Color.swift in Sources */,
