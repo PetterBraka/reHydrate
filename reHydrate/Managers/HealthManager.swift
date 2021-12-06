@@ -14,7 +14,7 @@ import UserNotifications
 protocol HealthManagerProtocol {
     func needsAccessRequest() -> Bool
     func requestAccess() -> AnyPublisher<Void, Error>
-    func getWater() -> AnyPublisher<[HKQuantity], Error>
+    func getWater(for date: Date) -> AnyPublisher<Double, Error>
     func export(drink: Drink, _ date: Date) -> AnyPublisher<Void, Error>
 }
 
@@ -30,14 +30,14 @@ enum HealthType: CaseIterable {
     fileprivate func toObjectType() -> HKObjectType {
         switch self {
         case .water:
-            return .quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
+            return .quantityType(forIdentifier: .dietaryWater)!
         }
     }
     
     fileprivate func toSampleType() -> HKQuantityType {
         switch self {
         case .water:
-            return .quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryWater)!
+            return .quantityType(forIdentifier: .dietaryWater)!
         }
     }
 }
@@ -70,47 +70,25 @@ class HealthManager: HealthManagerProtocol {
         .eraseToAnyPublisher()
     }
     
-    func getWater() -> AnyPublisher<[HKQuantity], Error> {
+    func getWater(for date: Date) -> AnyPublisher<Double, Error> {
         Future { [unowned self] promise in
-            guard let type: HKSampleType = writeTypes.first else {
+            let quantityType = HealthType.water.toSampleType()
+            guard healthStore.authorizationStatus(for: quantityType) == .sharingAuthorized else {
                 promise(.failure(HealthError.notAuthorized))
                 return
             }
             
-            guard healthStore.authorizationStatus(for: type) == .sharingAuthorized else {
-                promise(.failure(HealthError.notAuthorized))
-                return
-            }
+            let calendar = Calendar.current
+            let components = DateComponents(calendar: calendar,
+                                            timeZone: calendar.timeZone,
+                                            hour: 0, minute: 0, second: 0)
             
-            let calendar = NSCalendar.current
-            let components = calendar.dateComponents([.calendar, .year, .month, .day], from: Date())
-            
-            let startDate = calendar.date(from: components)!
-            let endDate = calendar.date(byAdding: .day, value: 1, to: startDate)!
-            
-            let today = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [])
-            
-            let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)]
-            
-            let HKcalendar = Calendar.current
-            // Create a 1-week interval.
-            let interval = DateComponents(day: 7)
-            // Set the anchor for 3 a.m. on Monday.
-            let HKcomponents = DateComponents(calendar: HKcalendar,
-                                            timeZone: HKcalendar.timeZone,
-                                            hour: 3,
-                                            minute: 0,
-                                            second: 0)
-            
-            guard let anchorDate = HKcalendar.nextDate(after: Date(),
-                                                     matching: HKcomponents,
+            guard let anchorDate = calendar.nextDate(after: Date(),
+                                                     matching: components,
                                                      matchingPolicy: .nextTime,
                                                      repeatedTimePolicy: .first,
                                                      direction: .backward) else {
                 fatalError("*** unable to find the previous Monday. ***")
-            }
-            guard let quantityType = HKObjectType.quantityType(forIdentifier: .dietaryWater) else {
-                fatalError("*** Unable to create a water type ***")
             }
             
             // Create the query.
@@ -118,62 +96,30 @@ class HealthManager: HealthManagerProtocol {
                                                     quantitySamplePredicate: nil,
                                                     options: .cumulativeSum,
                                                     anchorDate: anchorDate,
-                                                    intervalComponents: interval)
-            query.initialResultsHandler = {
-                query, results, error in
-                
+                                                    intervalComponents: DateComponents(day: 1))
+            query.initialResultsHandler = { query, results, error in
                 // Handle errors here.
-                if let error = error as? HKError {
-                    switch (error.code) {
-                    case .errorDatabaseInaccessible:
-                        // HealthKit couldn't access the database because the device is locked.
-                        return
-                    default:
-                        // Handle other HealthKit errors here.
-                        return
-                    }
-                }
+                if let error = error as? HKError { promise(.failure(error)) }
                 
-                guard let statsCollection = results else {
-                    // You should only hit this case if you have an unhandled error. Check for bugs
-                    // in your code that creates the query, or explicitly handle the error.
-                    assertionFailure("")
-                    return
-                }
-                let endDate = Date()
-                let threeMonthsAgo = DateComponents(month: -3)
+                guard let results = results else { return }
+                let startDate = calendar.startOfDay(for: date)
                 
-                guard let startDate = HKcalendar.date(byAdding: threeMonthsAgo, to: endDate) else {
+                guard let tomorrow = calendar.date(byAdding: DateComponents(day: 1), to: date) else {
                     fatalError("*** Unable to calculate the start date ***")
                 }
-                
-                // Plot the weekly step counts over the past 3 months.
-                // Enumerate over all the statistics objects between the start and end dates.
-                statsCollection.enumerateStatistics(from: startDate, to: endDate)
-                { (statistics, stop) in
+                results.enumerateStatistics(from: startDate, to: tomorrow) { (statistics, stop) in
                     if let quantity = statistics.sumQuantity() {
-                        let date = statistics.startDate
+                        let formatter = DateFormatter()
+                        formatter.dateStyle = .short
+                        let startDate = formatter.string(from: statistics.startDate)
                         let value = quantity.doubleValue(for: .liter())
                         
                         // Extract each week's data.
-                        print("start date: \(date) end date: \(statistics.endDate) - \(value)")
+                        print("start date: \(startDate) - \(value)")
+                        promise(.success(value))
                     }
                 }
             }
-            
-//            let query = HKSampleQuery(sampleType: type,
-//                                      predicate: today,
-//                                      limit: .max,
-//                                      sortDescriptors: sortDescriptors) { _, samplesOrNil, errorOrNil in
-//                if let error = errorOrNil {
-//                    promise(.failure(error))
-//                }
-//                guard let samples = samplesOrNil as? [HKQuantity] else {
-//                    promise(.success([]))
-//                    return
-//                }
-//                promise(.success(samples))
-//            }
             healthStore.execute(query)
         }
         .receive(on: DispatchQueue.main)
