@@ -42,6 +42,48 @@ extension Image {
     
     static let remindersOn = Image(systemName: "bell.circle.fill")
     static let remindersOff = Image(systemName: "bell.slash.circle")
+    
+    // Icons
+    static let whiteGray = Image("white-grey")
+    static let greyWhite = Image("grey-white")
+    static let blackWhite = Image("black-white")
+    
+    // Blue icons
+    static let whiteBlue = Image("white-blue")
+    static let blueWhite = Image("blue-white")
+    static let blackBlue = Image("black-blue")
+    
+    static let whiteGreen = Image("white-green")
+    static let greenWhite = Image("green-white")
+    static let blackGreen = Image("black-green")
+    static let whiteOrange = Image("white-orange")
+    static let orangeWhite = Image("orange-white")
+    static let blackOrange = Image("black-orange")
+    static let whitePink = Image("white-pink")
+    static let pinkWhite = Image("pink-white")
+    static let blackPink = Image("black-pink")
+    static let whitePurple = Image("white-purple")
+    static let purpleWhite = Image("purple-white")
+    static let blackPurple = Image("black-purple")
+    static let whiteRed = Image("white-red")
+    static let redWhite = Image("red-white")
+    static let blackRed = Image("black-red")
+    static let whiteYellow = Image("white-yellow")
+    static let yellowWhite = Image("yellow-white")
+    static let blackYellow = Image("black-yellow")
+    static let whiteRainbow = Image("white-rainbow")
+    static let rainbowWhite = Image("rainbow-white")
+    static let blackRainbow = Image("black-rainbow")
+    
+    static let icons: [Image] = [.whiteGray, .greyWhite, .blackWhite,
+                                 .whiteBlue, .blueWhite, .blackBlue,
+                                 .whiteGreen, .greenWhite, .blackGreen,
+                                 .whiteOrange, .orangeWhite, .blackOrange,
+                                 .whitePink, .pinkWhite, .blackPink,
+                                 .whitePurple, .purpleWhite, .blackPurple,
+                                 .whiteRed, .redWhite, .blackRed,
+                                 .whiteYellow, .yellowWhite, .blackYellow,
+                                 .whiteRainbow, .rainbowWhite, .blackRainbow]
 }
 
 extension UIImage {
