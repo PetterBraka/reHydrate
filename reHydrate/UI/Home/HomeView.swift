@@ -95,6 +95,7 @@ struct HomeView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             viewModel.fetchToday()
+            viewModel.fetchHealthData()
         }
         .onAppear {
             viewModel.fetchToday()
