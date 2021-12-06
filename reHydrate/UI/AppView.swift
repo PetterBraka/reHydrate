@@ -17,6 +17,18 @@ struct AppView: View {
         case .home:
             HomeView(navigateTo: viewModel.navigateTo)
                 .transition(homeTransition)
+                .gesture (
+                    DragGesture()
+                        .onEnded({ drag in
+                            if drag.startLocation.x > drag.location.x {
+                                print("Swipe Left")
+                                viewModel.navigateTo(.calendar)
+                            } else {
+                                print("Swipe Right")
+                                viewModel.navigateTo(.settings)
+                            }
+                        })
+                )
         case .settings:
             SettingsView(navigateTo: viewModel.navigateTo)
                 .transition( .slide)
@@ -24,6 +36,15 @@ struct AppView: View {
                     homeTransition = .asymmetric(insertion: .move(edge: .trailing),
                                                  removal: .move(edge: .leading))
                 }
+                .gesture (
+                    DragGesture()
+                        .onEnded({ drag in
+                            if drag.startLocation.x > drag.location.x {
+                                print("Swipe Left")
+                                viewModel.navigateTo(.home)
+                            }
+                        })
+                )
         case .calendar:
             CalendarView(navigateTo: viewModel.navigateTo)
                 .transition( .asymmetric(insertion: .move(edge: .trailing),
@@ -31,6 +52,15 @@ struct AppView: View {
                 .onAppear {
                     homeTransition = .slide
                 }
+                .gesture (
+                    DragGesture()
+                        .onEnded({ drag in
+                            if drag.startLocation.x < drag.location.x {
+                                print("Swipe Right")
+                                viewModel.navigateTo(.home)
+                            }
+                        })
+                )
         }
     }
 }
