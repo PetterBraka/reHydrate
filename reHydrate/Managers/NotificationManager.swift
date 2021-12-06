@@ -17,6 +17,8 @@ class NotificationManager {
         var body  = String()
     }
     
+    @AppStorage("language") private var language = LocalizationService.shared.language
+    
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
@@ -132,30 +134,30 @@ class NotificationManager {
      */
     private func getReminder()-> UNMutableNotificationContent{
         let reminder: [Reminder] = [
-            Reminder(title: Localizable.Notification.reminder1Title,
-                     body:  Localizable.Notification.reminder1Body),
-            Reminder(title: Localizable.Notification.reminder2Title,
-                     body:  Localizable.Notification.reminder2Body),
-            Reminder(title: Localizable.Notification.reminder3Title,
-                     body:  Localizable.Notification.reminder3Body),
-            Reminder(title: Localizable.Notification.reminder4Title,
-                     body:  Localizable.Notification.reminder4Body),
-            Reminder(title: Localizable.Notification.reminder5Title,
-                     body:  Localizable.Notification.reminder5Body),
-            Reminder(title: Localizable.Notification.reminder6Title,
-                     body:  Localizable.Notification.reminder6Body),
-            Reminder(title: Localizable.Notification.reminder7Title,
-                     body:  Localizable.Notification.reminder7Body),
-            Reminder(title: Localizable.Notification.reminder8Title,
-                     body:  Localizable.Notification.reminder8Body),
-            Reminder(title: Localizable.Notification.reminder9Title,
-                     body:  Localizable.Notification.reminder9Body),
-            Reminder(title: Localizable.Notification.reminder10Title,
-                     body:  Localizable.Notification.reminder10Body),
-            Reminder(title: Localizable.Notification.reminder11Title,
-                     body:  Localizable.Notification.reminder11Body),
-            Reminder(title: Localizable.Notification.reminder12Title,
-                     body:  Localizable.Notification.reminder12Body)]
+            Reminder(title: Localizable.Notification.reminder1Title.local(language),
+                     body:  Localizable.Notification.reminder1Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder2Title.local(language),
+                     body:  Localizable.Notification.reminder2Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder3Title.local(language),
+                     body:  Localizable.Notification.reminder3Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder4Title.local(language),
+                     body:  Localizable.Notification.reminder4Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder5Title.local(language),
+                     body:  Localizable.Notification.reminder5Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder6Title.local(language),
+                     body:  Localizable.Notification.reminder6Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder7Title.local(language),
+                     body:  Localizable.Notification.reminder7Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder8Title.local(language),
+                     body:  Localizable.Notification.reminder8Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder9Title.local(language),
+                     body:  Localizable.Notification.reminder9Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder10Title.local(language),
+                     body:  Localizable.Notification.reminder10Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder11Title.local(language),
+                     body:  Localizable.Notification.reminder11Body.local(language)),
+            Reminder(title: Localizable.Notification.reminder12Title.local(language),
+                     body:  Localizable.Notification.reminder12Body.local(language))]
         let randomIndex = Int.random(in: 0...reminder.count - 1)
         let notification = UNMutableNotificationContent()
         notification.title = reminder[randomIndex].title
@@ -167,26 +169,26 @@ class NotificationManager {
     
     private func getCongratulation()-> UNMutableNotificationContent{
         let reminder: [Reminder] = [
-            Reminder(title: Localizable.Notification.congrats1Title,
-                     body:  Localizable.Notification.congrats1Body),
-            Reminder(title: Localizable.Notification.congrats2Title,
-                     body:  Localizable.Notification.congrats2Body),
-            Reminder(title: Localizable.Notification.congrats3Title,
-                     body:  Localizable.Notification.congrats3Body),
-            Reminder(title: Localizable.Notification.congrats4Title,
-                     body:  Localizable.Notification.congrats4Body),
-            Reminder(title: Localizable.Notification.congrats5Title,
-                     body:  Localizable.Notification.congrats5Body),
-            Reminder(title: Localizable.Notification.congrats6Title,
-                     body:  Localizable.Notification.congrats6Body),
-            Reminder(title: Localizable.Notification.congrats7Title,
-                     body:  Localizable.Notification.congrats7Body),
-            Reminder(title: Localizable.Notification.congrats8Title,
-                     body:  Localizable.Notification.congrats8Body),
-            Reminder(title: Localizable.Notification.congrats9Title,
-                     body:  Localizable.Notification.congrats9Body),
-            Reminder(title: Localizable.Notification.congrats10Title,
-                     body:  Localizable.Notification.congrats10Body)]
+            Reminder(title: Localizable.Notification.congrats1Title.local(language),
+                     body:  Localizable.Notification.congrats1Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats2Title.local(language),
+                     body:  Localizable.Notification.congrats2Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats3Title.local(language),
+                     body:  Localizable.Notification.congrats3Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats4Title.local(language),
+                     body:  Localizable.Notification.congrats4Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats5Title.local(language),
+                     body:  Localizable.Notification.congrats5Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats6Title.local(language),
+                     body:  Localizable.Notification.congrats6Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats7Title.local(language),
+                     body:  Localizable.Notification.congrats7Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats8Title.local(language),
+                     body:  Localizable.Notification.congrats8Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats9Title.local(language),
+                     body:  Localizable.Notification.congrats9Body.local(language)),
+            Reminder(title: Localizable.Notification.congrats10Title.local(language),
+                     body:  Localizable.Notification.congrats10Body.local(language))]
         let randomIndex = Int.random(in: 0...reminder.count - 1)
         let notification = UNMutableNotificationContent()
         notification.title = reminder[randomIndex].title
