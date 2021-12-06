@@ -258,8 +258,8 @@
 			isa = PBXGroup;
 			children = (
 				332315F62742B4F10039EE23 /* AppViewModel.swift */,
-				3323161F274A64210039EE23 /* HomeViewModel.swift */,
 				3387ED6C274C03A70083D2C1 /* CalendarViewModel.swift */,
+				3323161F274A64210039EE23 /* HomeViewModel.swift */,
 				33EC3A7C274D06680049E414 /* SettingsViewModel.swift */,
 			);
 			path = ViewModel;
@@ -343,7 +343,6 @@
 				33EC3A8F275A8BE80049E414 /* Service */,
 				33EC3A8427539E480049E414 /* Helpers */,
 				3323161C274A63360039EE23 /* Managers */,
-				33231617274420E60039EE23 /* reHydrate.xcdatamodeld */,
 				3323160F27441DF60039EE23 /* Model */,
 				332316022742BD5E0039EE23 /* Repository */,
 				332315E8274273F20039EE23 /* Resources */,
@@ -351,12 +350,13 @@
 				332315F52742B4E00039EE23 /* ViewModel */,
 				332315E32742719F0039EE23 /* UI */,
 				33B28F6926BC7F6800DECA9F /* Extensions */,
-				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
+				3323161A274A61F30039EE23 /* PresistenceController.swift */,
 				33EFF3FE2470449A00D0A003 /* Localizable.strings */,
 				3378767F24378A9800F5A732 /* Assets.xcassets */,
 				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
+				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
-				3323161A274A61F30039EE23 /* PresistenceController.swift */,
+				33231617274420E60039EE23 /* reHydrate.xcdatamodeld */,
 			);
 			path = reHydrate;
 			sourceTree = "<group>";
