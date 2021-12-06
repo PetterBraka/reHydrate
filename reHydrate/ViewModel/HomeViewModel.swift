@@ -54,7 +54,6 @@ final class HomeViewModel: ObservableObject {
         self.navigateTo = navigateTo
         self.requestNotificationAccess()
         self.fetchToday()
-        self.getHealthData()
     }
     
     func requestNotificationAccess() {
@@ -74,6 +73,7 @@ final class HomeViewModel: ObservableObject {
     
     func requestHealthAccess() {
         healthManager.requestAccess()
+            .receive(on: RunLoop.main)
             .sink {completion in
                 switch completion {
                 case let .failure(error):
@@ -83,6 +83,7 @@ final class HomeViewModel: ObservableObject {
                 }
             } receiveValue: { _ in
                 print("Health requested")
+                self.getHealthData()
             }.store(in: &tasks)
     }
     
@@ -235,7 +236,6 @@ extension HomeViewModel {
                 }
             } receiveValue: { _ in }
             .store(in: &tasks)
-
     }
     
     func removeDrink(_ drink: Drink) {
@@ -245,6 +245,7 @@ extension HomeViewModel {
         if consumedTotal < 0 {
             consumedTotal = 0
         }
+        let drink = Drink(type: drink.type, size: -drink.size)
         dayManager.dayRepository.update(consumption: consumedTotal, for: today)
             .sink { completion in
                 switch completion {
@@ -256,5 +257,15 @@ extension HomeViewModel {
             } receiveValue: { [weak self] _ in
                 self?.saveAndFetch()
             }.store(in: &tasks)
+        healthManager.export(drink: drink, Date())
+            .sink { completion in
+                switch completion {
+                case let .failure(error):
+                    print(error)
+                default:
+                    break
+                }
+            } receiveValue: { _ in }
+            .store(in: &tasks)
     }
 }
