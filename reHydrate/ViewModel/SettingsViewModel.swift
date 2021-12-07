@@ -76,23 +76,37 @@ final class SettingsViewModel: ObservableObject {
             }.store(in: &tasks)
         $selectedUnit
             .sink { unit in
-                self.isMetric = Localizable.Setting.metricSystem == unit
-                self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
-                                                            from: .liters).clean
-                if self.isRemindersOn {
-                    self.notificationManager.setReminders()
+                if unit != Localizable.Setting.metricSystem {
+                    self.isMetric = Localizable.Setting.metricSystem == unit
+                    self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
+                                                                from: .liters).clean
+                    if self.isRemindersOn {
+                        self.notificationManager.setReminders()
+                    }
                 }
             }.store(in: &tasks)
         $selectedRemindersOn
             .sink { isOn in
-                if self.remindersPremitted {
-                    self.isRemindersOn = isOn
+                if self.isRemindersOn != isOn {
+                    if self.remindersPremitted {
+                        self.isRemindersOn = isOn
+                    }
+                    if self.isRemindersOn {
+                        self.notificationManager.setReminders()
+                    } else {
+                        self.notificationManager.deleteReminders()
+                    }
                 }
-                if self.isRemindersOn {
-                    self.notificationManager.setReminders()
-                } else {
-                    self.notificationManager.deleteReminders()
-                }
+            }.store(in: &tasks)
+        $selectedStartDate
+            .removeDuplicates()
+            .sink { _ in
+                self.updateStartTime()
+            }.store(in: &tasks)
+        $selectedEndDate
+            .removeDuplicates()
+            .sink { _ in
+                self.updateEndTime()
             }.store(in: &tasks)
         
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
@@ -141,13 +155,17 @@ extension SettingsViewModel {
     }
     
     func updateStartTime() {
+        if remindersStart != selectedStartDate {
             remindersStart = selectedStartDate
-        notificationManager.setReminders()
+            notificationManager.setReminders()
+        }
     }
     
     func updateEndTime() {
-        remindersEnd = selectedEndDate
-        notificationManager.setReminders()
+        if remindersEnd != selectedEndDate {
+            remindersEnd = selectedEndDate
+            notificationManager.setReminders()
+        }
     }
     
     func incrementFrequency() {
