@@ -12,8 +12,19 @@ struct AppIconSelectionView: View {
     @AppStorage("language") var language = LocalizationService.shared.language
     
     @EnvironmentObject var iconSettings: IconHelper
-    @State var selectedIcon: Icon = .blackWhite
+    @State var selectedIcon: Icon
     var dismiss: () -> Void
+    
+    init(dismiss: @escaping () -> Void) {
+        self.dismiss = dismiss
+        if let currentIcon = UIApplication.shared.alternateIconName,
+            let icon = Icon(rawValue: currentIcon) {
+            self.selectedIcon = icon
+        } else {
+            self.selectedIcon = .blackWhite
+        }
+        print(selectedIcon)
+    }
     
     var body: some View {
         NavigationView {
@@ -39,17 +50,13 @@ struct AppIconSelectionView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                         .overlay(RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.blue.opacity(0.9),
-                                            lineWidth: (icon == selectedIcon) ? 5 : 0))
+                                    .stroke(.blue,
+                                            lineWidth: (icon.rawValue == selectedIcon.rawValue) ? 4 : 0))
                         .padding(8)
                     }
                 }
             }
             .padding(.horizontal, 16)
-            .onAppear {
-                let index = iconSettings.currentIndex
-                selectedIcon = iconSettings.iconNames[index]
-            }
             .toolbar {
                 ToolbarItem(id: "done button", placement: .navigationBarTrailing) {
                     Button(Localizable.done, role: .cancel) {
