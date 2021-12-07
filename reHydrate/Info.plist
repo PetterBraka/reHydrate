@@ -258,7 +258,7 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>Black</string>
+				<string>black-white</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<false/>
