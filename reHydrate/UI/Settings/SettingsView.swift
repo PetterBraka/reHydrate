@@ -102,17 +102,11 @@ struct SettingsView: View {
                                 DatePicker(Localizable.Setting.Reminders.startingTime.local(viewModel.language),
                                            selection: $viewModel.selectedStartDate,
                                            displayedComponents: .hourAndMinute)
-                                    .onSubmit {
-                                        viewModel.updateStartTime()
-                                    }
                             }
                             HStack {
                                 DatePicker(Localizable.Setting.Reminders.endingTime.local(viewModel.language),
                                            selection: $viewModel.selectedEndDate,
                                            displayedComponents: .hourAndMinute)
-                                    .onSubmit {
-                                        viewModel.updateEndTime()
-                                    }
                             }
                             HStack {
                                 Text(Localizable.Setting.Reminders.frequency.local(viewModel.language))

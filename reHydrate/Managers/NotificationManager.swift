@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import UserNotifications
 
 // MARK: - Notifications
 
@@ -97,19 +98,19 @@ class NotificationManager {
                                     _ medium: String,
                                     _ large: String) {
         let notification = getReminder()
-        let smallDrinkAction = UNNotificationAction(identifier: "small",
-                                                    title: "\(NSLocalizedString("Add", comment: "")) \(small)\(unit)",
-                                                    options: UNNotificationActionOptions(rawValue: 0))
-        let mediumDrinkAction = UNNotificationAction(identifier: "medium",
-                                                     title: "\(NSLocalizedString("Add", comment: "")) \(medium)\(unit)",
-                                                     options: UNNotificationActionOptions(rawValue: 0))
-        let largeDrinkAction = UNNotificationAction(identifier: "large",
-                                                    title: "\(NSLocalizedString("Add", comment: "")) \(large)\(unit)",
-                                                    options: UNNotificationActionOptions(rawValue: 0))
-        let category = UNNotificationCategory(identifier: notification.categoryIdentifier,
-                                              actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction],
-                                              intentIdentifiers: [],
-                                              options: .customDismissAction)
+//        let smallDrinkAction = UNNotificationAction(identifier: "small",
+//                                                    title: "\(NSLocalizedString("Add", comment: "")) \(small)\(unit)",
+//                                                    options: UNNotificationActionOptions(rawValue: 0))
+//        let mediumDrinkAction = UNNotificationAction(identifier: "medium",
+//                                                     title: "\(NSLocalizedString("Add", comment: "")) \(medium)\(unit)",
+//                                                     options: UNNotificationActionOptions(rawValue: 0))
+//        let largeDrinkAction = UNNotificationAction(identifier: "large",
+//                                                    title: "\(NSLocalizedString("Add", comment: "")) \(large)\(unit)",
+//                                                    options: UNNotificationActionOptions(rawValue: 0))
+//        let category = UNNotificationCategory(identifier: notification.categoryIdentifier,
+//                                              actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction],
+//                                              intentIdentifiers: [],
+//                                              options: .customDismissAction)
         let date = Calendar.current.dateComponents([.hour, .minute], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
         let uuidString = UUID().uuidString
@@ -118,7 +119,7 @@ class NotificationManager {
                                             trigger: trigger)
         
         self.center.add(request, withCompletionHandler: nil)
-        self.center.setNotificationCategories([category])
+//        self.center.setNotificationCategories([category])
     }
     
     /**
