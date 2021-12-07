@@ -92,6 +92,7 @@ struct HomeView: View {
                 }
             }
             .padding(.horizontal, 24)
+            .padding(.bottom, 24)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             viewModel.fetchToday()
