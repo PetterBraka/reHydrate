@@ -11,41 +11,41 @@ import UIKit
 
 enum Icon: String, CaseIterable {
     // Icons
-    case whiteGray = "white-grey"
-    case greyWhite = "grey-white"
-    case blackWhite = "black-white"
+    case whiteGray = "whiteGrey"
+    case greyWhite = "greyWhite"
+    case blackWhite = "blackWhite"
     // Blue icons
-    case whiteBlue = "white-blue"
-    case blueWhite = "blue-white"
-    case blackBlue = "black-blue"
+    case whiteBlue = "whiteBlue"
+    case blueWhite = "blueWhite"
+    case blackBlue = "blackBlue"
     // Green icons
-    case whiteGreen = "white-green"
-    case greenWhite = "green-white"
-    case blackGreen = "black-green"
+    case whiteGreen = "whiteGreen"
+    case greenWhite = "greenWhite"
+    case blackGreen = "blackGreen"
     // Orange icons
-    case whiteOrange = "white-orange"
-    case orangeWhite = "orange-white"
-    case blackOrange = "black-orange"
+    case whiteOrange = "whiteOrange"
+    case orangeWhite = "orangeWhite"
+    case blackOrange = "blackOrange"
     // Pink icons
-    case whitePink = "white-pink"
-    case pinkWhite = "pink-white"
-    case blackPink = "black-pink"
+    case whitePink = "whitePink"
+    case pinkWhite = "pinkWhite"
+    case blackPink = "blackPink"
     // Purple icons
-    case whitePurple = "white-purple"
-    case purpleWhite = "purple-white"
-    case blackPurple = "black-purple"
+    case whitePurple = "whitePurple"
+    case purpleWhite = "purpleWhite"
+    case blackPurple = "blackPurple"
     // Red icons
-    case whiteRed = "white-red"
-    case redWhite = "red-white"
-    case blackRed = "black-red"
+    case whiteRed = "whiteRed"
+    case redWhite = "redWhite"
+    case blackRed = "blackRed"
     // Yellow icons
-    case whiteYellow = "white-yellow"
-    case yellowWhite = "yellow-white"
-    case blackYellow = "black-yellow"
+    case whiteYellow = "whiteYellow"
+    case yellowWhite = "yellowWhite"
+    case blackYellow = "blackYellow"
     // Rainbow icons
-    case whiteRainbow = "white-rainbow"
-    case rainbowWhite = "rainbow-white"
-    case blackRainbow = "black-rainbow"
+    case whiteRainbow = "whiteRainbow"
+    case rainbowWhite = "rainbowWhite"
+    case blackRainbow = "blackRainbow"
 }
 
 class IconHelper: ObservableObject {
