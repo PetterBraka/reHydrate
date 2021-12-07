@@ -21,6 +21,7 @@ struct reHydrateApp: App {
         WindowGroup {
             AppView()
                 .preferredColorScheme(isDarkMode ? .dark : .light)
+                .environmentObject(IconHelper())
         }
     }
 }
