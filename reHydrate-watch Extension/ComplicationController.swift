@@ -13,67 +13,62 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     var todayConsumed = Double()
     var todayGoal = Double()
     var todayDate = Date()
-    let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-    
+    weak var delegate = WKExtension.shared().delegate as? ExtensionDelegate
+
     func complicationDescriptors() async -> [CLKComplicationDescriptor] {
         let descriptor = CLKComplicationDescriptor(identifier: "reHydrate",
                                                    displayName: "reHydrate - Water tracker",
                                                    supportedFamilies: CLKComplicationFamily.allCases)
         return [descriptor]
     }
-    
+
     func currentTimelineEntry(for complication: CLKComplication) async -> CLKComplicationTimelineEntry? {
         // Call the handler with the current timeline entry
-        todayConsumed = delegate.todayConsumed
-        todayGoal = delegate.todayGoal
-        todayDate = delegate.todayDate
         if let template = getComplication(for: complication.family) {
             let timelineEntry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
             return timelineEntry
         }
         return nil
     }
-    
-    func privacyBehavior(for complication: CLKComplication) async -> CLKComplicationPrivacyBehavior { .showOnLockScreen }
-    
+
+    func privacyBehavior(for complication: CLKComplication)
+    async -> CLKComplicationPrivacyBehavior { .showOnLockScreen }
+
     func timelineEndDate(for complication: CLKComplication) async -> Date? { return nil }
-    
-    func timelineEntries(for complication: CLKComplication, after date: Date, limit: Int) async -> [CLKComplicationTimelineEntry]? {
-        todayConsumed = delegate.todayConsumed
-        todayGoal = delegate.todayGoal
-        todayDate = delegate.todayDate
-        todayDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: todayDate)!
-        
+
+    func timelineEntries(for complication: CLKComplication, after date: Date, limit: Int)
+    async -> [CLKComplicationTimelineEntry]? {
+        todayDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
+
         if let template = getComplication(for: complication.family) {
             let timelineEntry = CLKComplicationTimelineEntry(date: todayDate, complicationTemplate: template)
             return [timelineEntry]
         }
-        
+
         return nil
     }
-    
+
     func localizableSampleTemplate(for complication: CLKComplication) async -> CLKComplicationTemplate? {
-        todayConsumed = delegate.todayConsumed
-        todayGoal = delegate.todayGoal
-        todayDate = delegate.todayDate
-        todayDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: todayDate)!
-        
         return getComplication(for: complication.family)
     }
-    
+
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func getComplication(for family: CLKComplicationFamily) -> CLKComplicationTemplate? {
         let waterDrop = UIImage.waterDrop.withTintColor(.white)
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd/MM/yy"
-        todayConsumed = delegate.todayConsumed
-        todayGoal = delegate.todayGoal
-        todayDate = delegate.todayDate
+        todayConsumed = delegate?.todayConsumed ?? 0
+        todayGoal = delegate?.todayGoal ?? 3
+        todayDate = delegate?.todayDate ?? Date()
         var fillFraction = Float()
         if todayConsumed / todayGoal < 1 {
             fillFraction = Float(todayConsumed / todayGoal)
         } else {
             fillFraction = 1
         }
+        let guage = CLKSimpleGaugeProvider(style: .fill,
+                                           gaugeColor: UIColor().hexStringToUIColor("4a90e2"),
+                                           fillFraction: fillFraction)
         switch family {
         case .circularSmall:
             let template = CLKComplicationTemplateCircularSmallRingImage(
@@ -90,7 +85,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             return template
         case .graphicExtraLarge:
             let image = waterDrop.resized(toWidth: 45)!
-            let guage = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
             let template = CLKComplicationTemplateGraphicExtraLargeCircularOpenGaugeImage(
                 gaugeProvider: guage,
                 bottomImageProvider: .init(fullColorImage: image),
@@ -104,7 +98,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             return template
         case .modularLarge:
             var body2 = String()
-            if todayConsumed  < todayGoal  {
+            if todayConsumed  < todayGoal {
                 let toGo = todayGoal  - todayConsumed
                 body2 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body2 = "\(NSLocalizedString("goodJob", comment: ""))" }
@@ -126,7 +120,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             return template
         case .utilitarianLarge:
             var body = String()
-            if todayConsumed  < todayGoal  {
+            if todayConsumed  < todayGoal {
                 let toGo = todayGoal  - todayConsumed
                 body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
@@ -135,7 +129,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 imageProvider: .init(onePieceImage: waterDrop))
             return template
         case .graphicCorner:
-            let guage = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
             let template = CLKComplicationTemplateGraphicCornerGaugeText(
                 gaugeProvider: guage,
                 leadingTextProvider: CLKSimpleTextProvider(text: "0"),
@@ -144,7 +137,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             return template
         case .graphicCircular:
             let image = waterDrop.resized(toWidth: 10)!
-            let guage = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
             let template = CLKComplicationTemplateGraphicCircularOpenGaugeImage(
                 gaugeProvider: guage,
                 bottomImageProvider: .init(fullColorImage: image),
@@ -152,12 +144,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             return template
         case .graphicBezel:
             let image = waterDrop.resized(toWidth: 20)!
-            let guage = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
             let circularTemplate = CLKComplicationTemplateGraphicCircularClosedGaugeImage(
                 gaugeProvider: guage,
                 imageProvider: CLKFullColorImageProvider(fullColorImage: image))
             var body = String()
-            if todayConsumed  < todayGoal  {
+            if todayConsumed  < todayGoal {
                 let toGo = todayGoal  - todayConsumed
                 body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
@@ -167,11 +158,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             return template
         case .graphicRectangular:
             var body1 = String()
-            if todayConsumed  < todayGoal  {
+            if todayConsumed  < todayGoal {
                 let toGo = todayGoal  - todayConsumed
                 body1 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body1 = "\(NSLocalizedString("goodJob", comment: ""))" }
-            let guage = CLKSimpleGaugeProvider(style: .fill, gaugeColor: UIColor().hexStringToUIColor("4a90e2"), fillFraction: fillFraction)
             let template = CLKComplicationTemplateGraphicRectangularTextGauge(
                 headerTextProvider: CLKSimpleTextProvider(text: "reHydrate"),
                 body1TextProvider: CLKSimpleTextProvider(text: body1),

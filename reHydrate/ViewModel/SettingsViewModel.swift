@@ -20,7 +20,7 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
-    
+
     @Published var languageOptions: [String] = [Localizable.Setting.Language.english,
                                           Localizable.Setting.Language.german,
                                           Localizable.Setting.Language.icelandic,
@@ -33,20 +33,20 @@ final class SettingsViewModel: ObservableObject {
     @Published var selectedStartDate: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
     @Published var selectedEndDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
     @Published var selectedFrequency: String = "60"
-    
+
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
-    
+
     @Published var showNotificationAlert: Bool = false
-    
+
     private var presistenceController: PresistenceControllerProtocol
     private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
     private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
-    
+
     private var navigateTo: (AppState) -> Void
     private var dayManager: DayManager
-    
+
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
@@ -62,20 +62,17 @@ final class SettingsViewModel: ObservableObject {
         checkNotificationAccess()
         setupSubscription()
     }
-    
+
     func setupSubscription() {
-        $today
-            .sink { updatedDay in
+        $today.sink { updatedDay in
                 self.selectedGoal = updatedDay.goal.convert(to: self.isMetric ? .liters : .imperialPints,
                                                             from: .liters).clean
             }.store(in: &tasks)
         $selectedLanguage
-            .removeDuplicates()
-            .sink { value in
+            .removeDuplicates().sink { value in
                 self.language = Language(rawValue: value.lowercased()) ?? .english
             }.store(in: &tasks)
-        $selectedUnit
-            .sink { unit in
+        $selectedUnit.sink { unit in
                 if unit != Localizable.Setting.metricSystem {
                     self.isMetric = Localizable.Setting.metricSystem == unit
                     self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
@@ -85,8 +82,7 @@ final class SettingsViewModel: ObservableObject {
                     }
                 }
             }.store(in: &tasks)
-        $selectedRemindersOn
-            .sink { isOn in
+        $selectedRemindersOn.sink { isOn in
                 if self.isRemindersOn != isOn {
                     if self.remindersPremitted {
                         self.isRemindersOn = isOn
@@ -99,48 +95,46 @@ final class SettingsViewModel: ObservableObject {
                 }
             }.store(in: &tasks)
         $selectedStartDate
-            .removeDuplicates()
-            .sink { _ in
+            .removeDuplicates().sink { _ in
                 self.updateStartTime()
             }.store(in: &tasks)
         $selectedEndDate
-            .removeDuplicates()
-            .sink { _ in
+            .removeDuplicates().sink { _ in
                 self.updateEndTime()
             }.store(in: &tasks)
-        
+
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { _ in
                 self.checkNotificationAccess()
             }.store(in: &tasks)
     }
-    
+
     func toggleDarkMode() {
         isDarkMode.toggle()
     }
-    
+
     func incrementGoal() {
         today.goal += 0.5
     }
-    
+
     func decrementGoal() {
         if today.goal > 0 {
             today.goal -= 0.5
         }
     }
-    
+
     func navigateToHome() {
         updateGoal(today.goal)
         navigateTo(.home)
     }
 }
 
-//MARK: - Notification
+// MARK: - Notification
 extension SettingsViewModel {
     func toggleReminders() {
         selectedRemindersOn.toggle()
     }
-    
+
     private func checkNotificationAccess() {
         self.notificationManager.center.getNotificationSettings { settings in
             DispatchQueue.main.async {
@@ -153,21 +147,21 @@ extension SettingsViewModel {
             }
         }
     }
-    
+
     func updateStartTime() {
         if remindersStart != selectedStartDate {
             remindersStart = selectedStartDate
             notificationManager.setReminders()
         }
     }
-    
+
     func updateEndTime() {
         if remindersEnd != selectedEndDate {
             remindersEnd = selectedEndDate
             notificationManager.setReminders()
         }
     }
-    
+
     func incrementFrequency() {
         if var frequency = Int(selectedFrequency) {
             frequency += 15
@@ -176,7 +170,7 @@ extension SettingsViewModel {
         }
         notificationManager.setReminders()
     }
-    
+
     func decrementFrequency() {
         if var frequency = Int(selectedFrequency), frequency > 15 {
             frequency -= 15
@@ -187,7 +181,7 @@ extension SettingsViewModel {
     }
 }
 
-//MARK: - Save And Load
+// MARK: - Save And Load
 extension SettingsViewModel {
     private func fetchToday() {
         dayManager.dayRepository.getDay(for: Date())
@@ -207,7 +201,7 @@ extension SettingsViewModel {
                 }
             }.store(in: &tasks)
     }
-    
+
     private func updateGoal(_ newGoal: Double) {
         dayManager.dayRepository.update(goal: newGoal, for: today)
             .sink { completion in
@@ -221,7 +215,7 @@ extension SettingsViewModel {
                 self?.saveAndFetch()
             }.store(in: &tasks)
     }
-    
+
     private func saveAndFetch() {
         dayManager.saveChanges()
             .sink { completion in

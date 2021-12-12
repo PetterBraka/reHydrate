@@ -10,11 +10,11 @@ import SwiftUI
 
 struct AppIconSelectionView: View {
     @AppStorage("language") var language = LocalizationService.shared.language
-    
+
     @EnvironmentObject var iconSettings: IconHelper
     @State var selectedIcon: Icon
     var dismiss: () -> Void
-    
+
     init(dismiss: @escaping () -> Void) {
         self.dismiss = dismiss
         if let currentIcon = UIApplication.shared.alternateIconName,
@@ -25,7 +25,7 @@ struct AppIconSelectionView: View {
         }
         print(selectedIcon)
     }
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -76,6 +76,6 @@ struct AppIconSelectionView: View {
 
 struct AppIconSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        AppIconSelectionView() {}
+        AppIconSelectionView {}
     }
 }

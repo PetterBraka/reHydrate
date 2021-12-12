@@ -25,11 +25,11 @@ final class DayRepository: DayRepositoryInterface {
     private let repo: CoreDataRepository<DayModel>
     private let repoPredicate = NSPredicate(format: "TRUEPREDICATE")
     private let repoSortDescriptors = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
-    
+
     init(context: NSManagedObjectContext) {
         self.repo = CoreDataRepository<DayModel>(context: context)
     }
-    
+
     func create(day: Day) -> AnyPublisher<Bool, Error> {
         repo.create()
             .map { dayModel -> Bool in
@@ -38,7 +38,7 @@ final class DayRepository: DayRepositoryInterface {
             }
             .eraseToAnyPublisher()
     }
-    
+
     func delete(day: Day) -> AnyPublisher<Bool, Error> {
         repo.get(id: day.id.uuidString,
                  predicate: repoPredicate,
@@ -53,7 +53,7 @@ final class DayRepository: DayRepositoryInterface {
             }
             .eraseToAnyPublisher()
     }
-    
+
     func getDay(for date: Date) -> AnyPublisher<Day?, Error> {
         repo.get(date: date,
                  predicate: repoPredicate,
@@ -66,7 +66,7 @@ final class DayRepository: DayRepositoryInterface {
             }
             .eraseToAnyPublisher()
     }
-    
+
     func getLatestGoal() -> AnyPublisher<Double, Error> {
         repo.getLatesGoal(predicate: repoPredicate)
             .map { day -> Double in
@@ -77,7 +77,7 @@ final class DayRepository: DayRepositoryInterface {
             }
             .eraseToAnyPublisher()
     }
-    
+
     func getDays() -> AnyPublisher<[Day], Error> {
         repo.getAll(predicate: repoPredicate, sortDescriptors: repoSortDescriptors  )
             .map { daysModel -> [Day] in
@@ -88,7 +88,7 @@ final class DayRepository: DayRepositoryInterface {
             }
             .eraseToAnyPublisher()
     }
-    
+
     func update(goal: Double, for day: Day) -> AnyPublisher<Bool, Error> {
         repo.get(id: day.id.uuidString,
                  predicate: repoPredicate,
@@ -103,7 +103,7 @@ final class DayRepository: DayRepositoryInterface {
             }
             .eraseToAnyPublisher()
     }
-    
+
     func update(consumption: Double, for day: Day) -> AnyPublisher<Bool, Error> {
         repo.get(id: day.id.uuidString,
                  predicate: repoPredicate,

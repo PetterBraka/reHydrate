@@ -12,7 +12,7 @@ struct StepperView: View {
     @Binding var value: String
     var onIncrement: () -> Void
     var onDecrement: () -> Void
-    
+
     var body: some View {
         HStack(spacing: 4) {
             Button {
@@ -23,7 +23,7 @@ struct StepperView: View {
             }
             .buttonStyle(.bordered)
             .foregroundColor(.label)
-            
+
             Button {} label: {
                 Text(value)
                     .font(.body)
@@ -34,7 +34,7 @@ struct StepperView: View {
             .foregroundColor(.label)
             .tint(.buttonHighlighted)
             .shadow(radius: 1)
-            
+
             Button {
                 onIncrement()
             } label: {

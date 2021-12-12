@@ -10,12 +10,12 @@ import SwiftUI
 
 struct Drink: Identifiable, Hashable {
     var id = UUID()
-    
-    enum type {
+
+    enum Option {
         case small
         case medium
         case large
-        
+
         func getImage() -> Image {
             switch self {
             case .small: return Image.cup
@@ -24,7 +24,7 @@ struct Drink: Identifiable, Hashable {
             }
         }
     }
-    
-    var type: type?
+
+    var type: Option?
     var size: Double
 }

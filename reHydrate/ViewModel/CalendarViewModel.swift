@@ -14,28 +14,28 @@ import SwiftyUserDefaults
 
 final class CalendarViewModel: ObservableObject {
     @AppStorage("language") private var language = LocalizationService.shared.language
-    
+
     @Published var showAlert: Bool = false
     @Published var selectedDays = [Day]()
     @Published var storedDays = [Day]()
-    
+
     @Published var header = ""
     @Published var consumtion = ""
     @Published var average = ""
-    
+
     private var presistenceController: PresistenceControllerProtocol
     private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
-    
+
     private var navigateTo: (AppState) -> Void
     private var dayManager: DayManager
-    
+
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd MMM"
         return formatter
     }()
-    
+
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
@@ -45,7 +45,7 @@ final class CalendarViewModel: ObservableObject {
         self.fetchDays()
         setUpSubscriptions()
     }
-    
+
     func setUpSubscriptions() {
         $selectedDays
             .sink { [weak self] days in
@@ -64,7 +64,7 @@ final class CalendarViewModel: ObservableObject {
                 }
             }.store(in: &tasks)
     }
-     
+
     func getConsumed(for days: [Day]) {
         if let day = days.first {
             let consumed = day.consumption.clean
@@ -74,24 +74,24 @@ final class CalendarViewModel: ObservableObject {
             self.header = formatter.string(from: day.date)
         }
     }
-    
+
     func getAverage(for days: [Day]) {
         var totalConsumed = 0.0
         days.forEach { totalConsumed = $0.consumption + totalConsumed }
         let average = totalConsumed / Double(days.count)
         self.average = "\(average.clean)L"
     }
-    
+
     func navigateToHome() {
         navigateTo(.home)
     }
-    
+
     func fetchSavedDays() {
         self.fetchDays()
     }
 }
 
-//MARK: Save & Load
+// MARK: Save & Load
 extension CalendarViewModel {
     private func fetchDays() {
         dayManager.dayRepository.getDays()

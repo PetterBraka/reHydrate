@@ -11,10 +11,10 @@ import Swinject
 
 final class MainAssembler {
     public static let shared = MainAssembler()
-    
+
     let container: Container
     private let assembler: Assembler
-    
+
     private init() {
         container = Container()
         assembler = Assembler([ViewModelAssembler(), ManagerAssembly()],

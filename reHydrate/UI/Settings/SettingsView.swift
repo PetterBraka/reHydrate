@@ -15,13 +15,13 @@ struct SettingsView: View {
     @StateObject var viewModel: SettingsViewModel
     @State var showIconSelection = false
     @FocusState private var focusedField: Field?
-    
+
     init(navigateTo: @escaping ((AppState) -> Void)) {
         let viewModel = MainAssembler.shared.container.resolve(SettingsViewModel.self,
                                                                argument: navigateTo)!
         _viewModel = StateObject(wrappedValue: viewModel)
     }
-    
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -124,7 +124,7 @@ struct SettingsView: View {
                 }
                 .font(.body)
                 .sheet(isPresented: $showIconSelection) {
-                    AppIconSelectionView() {
+                    AppIconSelectionView {
                         showIconSelection = false
                     }
                 }
@@ -166,6 +166,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView() {_ in}
+        SettingsView {_ in}
     }
 }

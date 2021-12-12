@@ -13,12 +13,12 @@ import Combine
 final class DayManager {
     private let context: NSManagedObjectContext
     let dayRepository: DayRepository
-    
+
     init(context: NSManagedObjectContext) {
         self.context = context
         self.dayRepository = DayRepository(context: context)
     }
-    
+
     func saveChanges() -> AnyPublisher<Bool, Error> {
         Future { prommise in
             do {

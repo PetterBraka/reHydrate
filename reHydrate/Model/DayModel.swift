@@ -16,7 +16,7 @@ extension DayModel: DomainMappable {
                    goal: self.goal,
                    date: self.date)
     }
-    
+
     func updateCoreDataModel(_ day: Day) {
         self.id = day.id
         self.consumtion = day.consumption
