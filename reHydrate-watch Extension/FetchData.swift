@@ -10,8 +10,7 @@ import WatchKit
 import CoreData
 import Foundation
 
-
-let context = (WKExtension.shared().delegate as! ExtensionDelegate).persistentContainer.viewContext
+let context = (WKExtension.shared().delegate as? ExtensionDelegate).persistentContainer.viewContext
 let formatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "dd/MM/YYYY"
@@ -24,7 +23,7 @@ let formatter: DateFormatter = {
 /// - Returns: *[Day]* an array off days loaded
 public func fetchAllDays() -> [Day] {
     do {
-        let days = try context.fetch(Day.fetchRequest()) as! [Day]
+        let days = try context.fetch(Day.fetchRequest()) as? [Day]
         #if DEBUG
         days.forEach({$0.toPrint()})
         #endif
@@ -40,11 +39,12 @@ public func fetchAllDays() -> [Day] {
 
 /// Remove a specific day
 /// - Parameter day: The day you want to remove
-public func removeDay(day : Day){
+public func removeDay(day: Day) {
     context.delete(day)
 }
 
-/// Will get a day representing data for the current day. It will also set the goal to be the same as the goal from the previous day.
+/// Will get a day representing data for the current day.
+/// It will also set the goal to be the same as the goal from the previous day.
 /// - Returns: The day found to be equal to todays date.
 public func fetchToday() -> Day {
     do {
@@ -122,7 +122,7 @@ public func fetchDay(_ date: Date) -> Day? {
 /// - Returns: returns *Day* if found else nil
 public func fetchPreviousDay() -> Day? {
     do {
-        let days = try context.fetch(Day.fetchRequest()) as! [Day]
+        let days = try context.fetch(Day.fetchRequest()) as? [Day]
         #if DEBUG
         days.forEach({$0.toPrint()})
         #endif

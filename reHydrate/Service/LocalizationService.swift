@@ -20,9 +20,9 @@ class LocalizationService {
     static let shared = LocalizationService()
 
     private init() {}
-    
+
     @Preference(\.currentLanguage) private var currentLanguage
-    
+
     var language: Language {
         get {
             return Language(rawValue: currentLanguage) ?? .english

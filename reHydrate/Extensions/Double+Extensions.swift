@@ -9,7 +9,7 @@
 import Foundation
 
 extension Double {
-    
+
     /**
      Will clean up a **Double** so that it has a maximum of 1 desimal
      
@@ -25,9 +25,11 @@ extension Double {
      ```
      */
     var clean: String {
-        return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(format: "%.1f", self)
+        return self.truncatingRemainder(dividingBy: 1) == 0 ?
+        String(format: "%.0f", self) :
+        String(format: "%.1f", self)
     }
-    
+
     func convert(to newUnit: UnitVolume, from oldUnit: UnitVolume) -> Double {
         Measurement(value: self, unit: oldUnit).converted(to: newUnit).value
     }

@@ -50,9 +50,9 @@ enum Icon: String, CaseIterable {
 
 class IconHelper: ObservableObject {
     var iconNames: [Icon] = Icon.allCases
-    
+
     @Published var currentIndex = 0
-    
+
     init() {
         if let currentIcon = UIApplication.shared.alternateIconName {
             self.currentIndex = iconNames.firstIndex(of: Icon(rawValue: currentIcon) ?? .blackWhite) ?? 0

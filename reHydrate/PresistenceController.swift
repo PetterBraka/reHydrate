@@ -17,15 +17,15 @@ struct PresistenceController: PresistenceControllerProtocol {
     static func empty() -> PresistenceController {
         PresistenceController(inMemory: true)
     }
-    
+
     var container: NSPersistentContainer
-    
+
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "reHydrate")
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
-        container.loadPersistentStores { storeDescription, error in
+        container.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }

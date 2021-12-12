@@ -14,7 +14,7 @@ struct OptionsButton: View {
     @State var items: [String]
     @Binding var language: Language
     @State var isTapped = false
-    
+
     var body: some View {
         HStack {
             Text(title.local(language))

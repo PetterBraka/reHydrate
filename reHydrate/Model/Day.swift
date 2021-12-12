@@ -13,7 +13,7 @@ struct Day {
     var consumption: Double
     var goal: Double
     let date: Date!
-    
+
     func isSameDay(as date: Date) -> Bool {
         let calendar = Calendar(identifier: .gregorian)
         return calendar.isDate(self.date, inSameDayAs: date)

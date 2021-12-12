@@ -20,16 +20,16 @@ extension Font {
 extension UIFont {
     static let largeHeader = UIFont(name: "AmericanTypewriter", size: 50)
     static let largeHeaderBold = UIFont(name: "AmericanTypewriter-Bold", size: 50)
-    
+
     static let largeTitle = UIFont(name: "AmericanTypewriter", size: 30)
     static let largeTitleBold = UIFont(name: "AmericanTypewriter-Bold", size: 30)
-    
+
     static let title = UIFont(name: "AmericanTypewriter", size: 20)
     static let titleBold = UIFont(name: "AmericanTypewriter-Bold", size: 20)
-    
+
     static let body = UIFont(name: "AmericanTypewriter", size: 15)
     static let bodyBold = UIFont(name: "AmericanTypewriter-Bold", size: 15)
-    
+
     static let subTitle = UIFont(name: "AmericanTypewriter", size: 10)
     static let subTitleBold = UIFont(name: "AmericanTypewriter-Bold", size: 10)
 }

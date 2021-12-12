@@ -11,19 +11,19 @@ import FSCalendar
 
 struct CalendarView: View {
     @StateObject var viewModel: CalendarViewModel
-    
+
     init(navigateTo: @escaping ((AppState) -> Void)) {
         let viewModel = MainAssembler.shared.container.resolve(CalendarViewModel.self,
                                                                argument: navigateTo)!
         _viewModel = StateObject(wrappedValue: viewModel)
     }
-    
+
     var body: some View {
         NavigationView {
             ZStack {
                 Color.background
                     .ignoresSafeArea()
-                
+
                 GeometryReader { geo in
                     VStack {
                         VStack(spacing: 16) {
@@ -82,6 +82,6 @@ struct CalendarView: View {
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView() {_ in }
+        CalendarView {_ in }
     }
 }

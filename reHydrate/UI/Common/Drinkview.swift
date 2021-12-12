@@ -11,13 +11,13 @@ import SwiftUI
 struct DrinkView: View {
     @Preference(\.isUsingMetric) private var isMetric
     @ObservedObject var viewModel: HomeViewModel
-    
+
     @Binding var drink: Drink
     @State var subtitle: String = ""
     var disable: Bool
     var tapAction: () -> Void
     var longPress: () -> Void
-    
+
     var body: some View {
         Button {} label: {
             VStack {

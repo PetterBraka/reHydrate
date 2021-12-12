@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Day {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Day> {
@@ -19,7 +18,7 @@ extension Day {
     @NSManaged public var date: Date
     @NSManaged public var goal: Double
     @NSManaged public var consumed: Double
-    
+
     /// Will print all data form the day
     public func toPrint() {
         let formatter = DateFormatter()

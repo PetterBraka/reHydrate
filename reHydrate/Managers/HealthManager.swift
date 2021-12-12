@@ -26,14 +26,14 @@ enum HealthError: Error {
 
 enum HealthType: CaseIterable {
     case water
-    
+
     fileprivate func toObjectType() -> HKObjectType {
         switch self {
         case .water:
             return .quantityType(forIdentifier: .dietaryWater)!
         }
     }
-    
+
     fileprivate func toSampleType() -> HKQuantityType {
         switch self {
         case .water:
@@ -44,18 +44,18 @@ enum HealthType: CaseIterable {
 
 class HealthManager: HealthManagerProtocol {
     static let shared = HealthManager()
-    
+
     private let healthStore = HKHealthStore()
-    
+
     private let readTypes: Set<HKObjectType> = Set(HealthType.allCases.map { $0.toObjectType() })
     private let writeTypes: Set<HKSampleType> = Set(HealthType.allCases.map { $0.toSampleType() })
-    
+
     func needsAccessRequest() -> Bool {
         HealthType.allCases.contains { current in
             healthStore.authorizationStatus(for: current.toObjectType()) == .notDetermined
         }
     }
-    
+
     func requestAccess() -> AnyPublisher<Void, Error> {
         Future { [unowned self] promise in
             self.healthStore.requestAuthorization(toShare: self.writeTypes, read: self.readTypes) { _, error in
@@ -69,7 +69,7 @@ class HealthManager: HealthManagerProtocol {
         .receive(on: RunLoop.main)
         .eraseToAnyPublisher()
     }
-    
+
     func getWater(for date: Date) -> AnyPublisher<Double, Error> {
         Future { [unowned self] promise in
             let quantityType = HealthType.water.toSampleType()
@@ -77,12 +77,12 @@ class HealthManager: HealthManagerProtocol {
                 promise(.failure(HealthError.notAuthorized))
                 return
             }
-            
+
             let calendar = Calendar.current
             let components = DateComponents(calendar: calendar,
                                             timeZone: calendar.timeZone,
                                             hour: 0, minute: 0, second: 0)
-            
+
             guard let anchorDate = calendar.nextDate(after: Date(),
                                                      matching: components,
                                                      matchingPolicy: .nextTime,
@@ -90,30 +90,30 @@ class HealthManager: HealthManagerProtocol {
                                                      direction: .backward) else {
                 fatalError("*** unable to find the previous Monday. ***")
             }
-            
+
             // Create the query.
             let query = HKStatisticsCollectionQuery(quantityType: quantityType,
                                                     quantitySamplePredicate: nil,
                                                     options: .cumulativeSum,
                                                     anchorDate: anchorDate,
                                                     intervalComponents: DateComponents(day: 1))
-            query.initialResultsHandler = { query, results, error in
+            query.initialResultsHandler = { _, results, error in
                 // Handle errors here.
                 if let error = error as? HKError { promise(.failure(error)) }
-                
+
                 guard let results = results else { return }
                 let startDate = calendar.startOfDay(for: date)
-                
+
                 guard let tomorrow = calendar.date(byAdding: DateComponents(day: 1), to: date) else {
                     fatalError("*** Unable to calculate the start date ***")
                 }
-                results.enumerateStatistics(from: startDate, to: tomorrow) { (statistics, stop) in
+                results.enumerateStatistics(from: startDate, to: tomorrow) { (statistics, _) in
                     if let quantity = statistics.sumQuantity() {
                         let formatter = DateFormatter()
                         formatter.dateStyle = .short
                         let startDate = formatter.string(from: statistics.startDate)
                         let value = quantity.doubleValue(for: .liter())
-                        
+
                         // Extract each week's data.
                         print("start date: \(startDate) - \(value)")
                         promise(.success(value))
@@ -125,7 +125,7 @@ class HealthManager: HealthManagerProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
+
     /**
      Will export a drink to the health app
      

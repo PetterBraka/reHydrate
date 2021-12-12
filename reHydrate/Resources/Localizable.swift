@@ -34,7 +34,7 @@ struct Localizable {
         static let reminder11Body  = "reminder11Body"
         static let reminder12Title = "reminder12Title"
         static let reminder12Body  = "reminder12Body"
-        
+
         static let congrats1Title = "congrats1Title"
         static let congrats1Body = "congrats1Body"
         static let congrats2Title = "congrats2Title"
@@ -56,7 +56,7 @@ struct Localizable {
         static let congrats10Title = "congrats10Title"
         static let congrats10Body = "congrats10Body"
     }
-    
+
     struct Popup {
         static let To = "To"
         static let Minutes = "Minutes"
@@ -64,24 +64,24 @@ struct Localizable {
         static let RemindersSetFrom = "RemindersSetFrom"
         static let RemoveRemindersToast = "RemoveRemindersToast"
         static let FrequencyReminder = "FrequencyReminder"
-        
+
         static let ClearingDataAlert = "ClearingDataAlert"
         static let ClearingDataBody = "ClearingDataBody"
         static let ClearDataKeepData = "ClearDataKeepData"
         static let ClearDataRemoveData = "ClearDataRemoveData"
     }
-    
+
     struct Home {
         static let editDrink = "EditDrink"
         static let removeDrink = "RemoveDrink"
         static let changeAmount = "ChangeAmount"
         static let enterNewValue = "EnterNewValue"
     }
-    
+
     static let add = "Add"
     static let done = "Done"
     static let cancel = "Cancel"
-    
+
     struct Setting {
         static let lightMode = "LightMode"
         static let darkMode = "DarkMode"
@@ -95,13 +95,13 @@ struct Localizable {
         static let changeGoal = "ChangeGoal"
         static let setYourGoal = "SetYourGoal"
         static let goal = "Goal"
-        
+
         static let howToUse = "HowToUse"
         static let dangerZone = "DangerZone"
         static let openAppSettings = "OpenAppSettings"
         static let openHealthApp = "OpenHealthApp"
         static let removeData = "RemoveData"
-        
+
         static let introductions = "Introductions"
         static let devInsta = "DevInsta"
         static let featureRequest = "FeatureRequest"
@@ -110,7 +110,7 @@ struct Localizable {
         static let privacyPolicy = "PrivacyPolicy"
         static let versionNumber = "VersionNumber"
         static let CouldtSendMail = "CouldtSendMail"
-        
+
         struct Reminders {
             static let reminders = "Reminders"
             static let turnOnReminders = "TurnOnReminders"
@@ -119,14 +119,14 @@ struct Localizable {
             static let endingTime = "EndingTime"
             static let frequency = "Frequency"
         }
-            
+
         struct Credits {
             static let credits = "Credits"
             static let translations = "Translations"
             static let openSource = "Open-source"
             static let devDesign = "Dev&Design"
         }
-        
+
         struct Language {
             static let language = "Language"
             static let english = "en"
@@ -135,7 +135,7 @@ struct Localizable {
             static let icelandic = "is"
         }
     }
-    
+
     struct Tutorial {
         static let explenationDay = "ExplenationDay"
         static let explenationSummary = "ExplenationSummary"
@@ -145,7 +145,7 @@ struct Localizable {
         static let skip = "Skip"
         static let next = "Next"
     }
-    
+
     struct Calendar {
         static let goal = "Goal"
         static let water = "Water"
@@ -154,7 +154,7 @@ struct Localizable {
         static let drinkType = "DrinkType"
         static let drinkAmount = "DrinkAmount"
     }
-    
+
     struct Watch {
         static let toGo = "toGo"
         static let goodJob = "goodJob"

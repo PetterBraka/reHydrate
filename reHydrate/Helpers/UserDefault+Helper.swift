@@ -9,18 +9,17 @@
 import Combine
 import SwiftUI
 
-
 final class Preferences {
     static let standard = Preferences(userDefaults: .standard)
     fileprivate let userDefaults: UserDefaults
-    
+
     /// Sends through the changed key path whenever a change occurs.
     var preferencesChangedSubject = PassthroughSubject<AnyKeyPath, Never>()
-    
+
     init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
     }
-    
+
     @UserDefault("AppleLanguages")
     var languages: String = "en"
     @UserDefault("CurrentLanguage")
@@ -51,15 +50,15 @@ struct UserDefault<Value> {
     let defaultValue: Value
 
     var wrappedValue: Value {
-        get { fatalError("Wrapped value should not be used.") }
         set { fatalError("Wrapped value should not be used.") }
+        get { fatalError("Wrapped value should not be used.") }
     }
-    
+
     init(wrappedValue: Value, _ key: String) {
         self.defaultValue = wrappedValue
         self.key = key
     }
-    
+
     public static subscript(
         _enclosingInstance instance: Preferences,
         wrapped wrappedKeyPath: ReferenceWritableKeyPath<Preferences, Value>,
@@ -85,7 +84,7 @@ struct Preference<Value>: DynamicProperty {
     @ObservedObject private var preferencesObserver: PublisherObservableObject
     private let keyPath: ReferenceWritableKeyPath<Preferences, Value>
     private let preferences: Preferences
-    
+
     init(_ keyPath: ReferenceWritableKeyPath<Preferences, Value>, preferences: Preferences = .standard) {
         self.keyPath = keyPath
         self.preferences = preferences
@@ -113,7 +112,7 @@ struct Preference<Value>: DynamicProperty {
 
 final class PublisherObservableObject: ObservableObject {
     var subscriber: AnyCancellable?
-    
+
     init(publisher: AnyPublisher<Void, Never>) {
         subscriber = publisher.sink(receiveValue: { [weak self] _ in
             self?.objectWillChange.send()

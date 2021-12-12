@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		330C23D627665D4C00293092 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330C23D527665D4C00293092 /* AppDelegate.swift */; };
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		332315E5274271E20039EE23 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E4274271E20039EE23 /* HomeView.swift */; };
 		332315E72742724D0039EE23 /* Drinkview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E62742724D0039EE23 /* Drinkview.swift */; };
@@ -213,6 +214,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		330C23D527665D4C00293092 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3310709A244DBCD3008365A3 /* reHydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reHydrate.entitlements; sourceTree = "<group>"; };
 		332315E4274271E20039EE23 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		332315E62742724D0039EE23 /* Drinkview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drinkview.swift; sourceTree = "<group>"; };
@@ -616,6 +618,7 @@
 				332315E32742719F0039EE23 /* UI */,
 				33B28F6926BC7F6800DECA9F /* Extensions */,
 				3323161A274A61F30039EE23 /* PresistenceController.swift */,
+				330C23D527665D4C00293092 /* AppDelegate.swift */,
 				33EFF3FE2470449A00D0A003 /* Localizable.strings */,
 				3378767F24378A9800F5A732 /* Assets.xcassets */,
 				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
@@ -729,6 +732,7 @@
 			buildConfigurationList = 3378768724378A9800F5A732 /* Build configuration list for PBXNativeTarget "reHydrate" */;
 			buildPhases = (
 				3378766F24378A9400F5A732 /* Sources */,
+				330C23D727665F6600293092 /* ShellScript */,
 				3378767024378A9400F5A732 /* Frameworks */,
 				3378767124378A9400F5A732 /* Resources */,
 				33D24C3C24A0CC2400C7A23C /* Embed Watch Content */,
@@ -951,6 +955,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		330C23D727665F6600293092 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n    swiftlint\n    swiftlint autocorrect\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3378766F24378A9400F5A732 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -978,6 +1002,7 @@
 				33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */,
 				335DA1FA275E7892002266D2 /* AppIconSelectionView.swift in Sources */,
 				332315F42742B3430039EE23 /* AppView.swift in Sources */,
+				330C23D627665D4C00293092 /* AppDelegate.swift in Sources */,
 				335DA29F275F5A8A002266D2 /* AppIcons+Helper.swift in Sources */,
 				332315E5274271E20039EE23 /* HomeView.swift in Sources */,
 				332315EC274276290039EE23 /* Color.swift in Sources */,

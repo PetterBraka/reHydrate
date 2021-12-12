@@ -17,10 +17,10 @@ final class HomeViewModel: NSObject, ObservableObject {
         case notification
         case health
     }
-    
+
     @AppStorage("language") private var language = LocalizationService.shared.language
     @Preference(\.isUsingMetric) private var isMetric
-    
+
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     @Published var drinks = [Drink(type: .small, size: 250),
                              Drink(type: .medium, size: 500),
@@ -28,25 +28,25 @@ final class HomeViewModel: NSObject, ObservableObject {
     @Published var showAlert: Bool = false
     @Published var interactedDrink: Drink?
     @Published private var accessRequested: [AccessType] = []
-    
+
     private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
-    
+
     private var presistenceController: PresistenceControllerProtocol
     private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
-    
+
     private var navigateTo: (AppState) -> Void
     private var dayManager: DayManager
-    
+
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd MMM"
         return formatter
     }()
-    
+
     let session = WCSession.default
-    
+
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
@@ -61,9 +61,9 @@ final class HomeViewModel: NSObject, ObservableObject {
         requestNotificationAccess()
         fetchToday()
         fetchHealthData()
-        
+
     }
-    
+
     func requestNotificationAccess() {
         notificationManager.requestAccess()
             .sink { completion in
@@ -78,7 +78,7 @@ final class HomeViewModel: NSObject, ObservableObject {
                 self.requestHealthAccess()
             }.store(in: &tasks)
     }
-    
+
     func requestHealthAccess() {
         healthManager.requestAccess()
             .receive(on: RunLoop.main)
@@ -94,7 +94,7 @@ final class HomeViewModel: NSObject, ObservableObject {
                 self.fetchHealthData()
             }.store(in: &tasks)
     }
-    
+
     func getValue(for drink: Drink?) -> String {
         if let drink = drink {
             let drinkValue = drink.size.convert(to: isMetric ? .milliliters : .imperialPints, from: .milliliters)
@@ -103,17 +103,17 @@ final class HomeViewModel: NSObject, ObservableObject {
             return ""
         }
     }
-    
+
     func getConsumed() -> String {
         let consumed = today.consumption.convert(to: isMetric ? .liters : .imperialPints, from: .liters)
         return consumed.clean
     }
-    
+
     func getGoal() -> String {
         let goal = today.goal.convert(to: isMetric ? .liters : .imperialPints, from: .liters)
         return goal.clean + (isMetric ? "L" : "pt")
     }
-    
+
     func getDate() -> String {
         if let date = today.date {
             formatter.locale = Locale(identifier: language.rawValue)
@@ -122,17 +122,17 @@ final class HomeViewModel: NSObject, ObservableObject {
             return ""
         }
     }
-    
+
     func navigateToSettings() {
         navigateTo(.settings)
     }
-    
+
     func navigateToCalendar() {
         navigateTo(.calendar)
     }
 }
 
-//MARK: Save & Load
+// MARK: Save & Load
 extension HomeViewModel {
     private func createNewDay() {
         var latestGoal = fetchLastGoal()
@@ -151,7 +151,7 @@ extension HomeViewModel {
             }.store(in: &tasks)
 
     }
-    
+
     private func fetchLastGoal() -> Double {
         var goal = 0.0
         dayManager.dayRepository.getLatestGoal()
@@ -168,7 +168,7 @@ extension HomeViewModel {
             .store(in: &tasks)
         return goal
     }
-    
+
     func fetchToday() {
         dayManager.dayRepository.getDay(for: Date())
             .receive(on: RunLoop.main)
@@ -191,7 +191,7 @@ extension HomeViewModel {
                 }
             }.store(in: &tasks)
     }
-    
+
     private func saveAndFetch() {
         dayManager.saveChanges()
             .sink { completion in
@@ -206,7 +206,7 @@ extension HomeViewModel {
             }.store(in: &tasks)
 
     }
-    
+
     func addDrink(_ drink: Drink) {
         let consumed = Measurement(value: drink.size, unit: UnitVolume.milliliters)
         let consumedTotal = consumed.converted(to: .liters).value + today.consumption
@@ -223,11 +223,11 @@ extension HomeViewModel {
                 self?.saveAndFetch()
             }.store(in: &tasks)
     }
-    
+
     func removeDrink(_ drink: Drink) {
         let consumed = Measurement(value: drink.size, unit: UnitVolume.milliliters)
         var consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
-        
+
         if consumedTotal < 0 {
             consumedTotal = 0
         }
@@ -245,7 +245,7 @@ extension HomeViewModel {
                 self?.saveAndFetch()
             }.store(in: &tasks)
     }
-    
+
     private func updateTodaysConsumption(to value: Double) {
         guard value != today.consumption else { return }
         dayManager.dayRepository.update(consumption: value, for: today)
@@ -262,7 +262,7 @@ extension HomeViewModel {
     }
 }
 
-//MARK: HealthKit export & import
+// MARK: HealthKit export & import
 extension HomeViewModel {
     func fetchHealthData() {
         healthManager.getWater(for: Date())
@@ -277,7 +277,7 @@ extension HomeViewModel {
                 self.updateTodaysConsumption(to: consumed)
             }.store(in: &tasks)
     }
-    
+
     private func export(drink: Drink) {
         guard drink.size != 0 else { return }
         healthManager.export(drink: drink, Date())
@@ -296,7 +296,7 @@ extension HomeViewModel {
 // MARK: - Watch communications
 extension HomeViewModel: WCSessionDelegate {
     private func exportToWatch(today: Day) {
-        if WCSession.isSupported(){
+        if WCSession.isSupported() {
             let message = ["phoneDate": formatter.string(from: today.date),
                            "phoneGoal": String(today.goal),
                            "phoneConsumed": String(today.consumption),
@@ -308,33 +308,35 @@ extension HomeViewModel: WCSessionDelegate {
             }
         }
     }
-    
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+
+    func session(_ session: WCSession,
+                 activationDidCompleteWith activationState: WCSessionActivationState,
+                 error: Error?) {
         if activationState == .activated {
             print("connected to watch")
         } else {
             print("Can't connect")
         }
     }
-    
+
     func sessionDidBecomeInactive(_ session: WCSession) {
         print("Disconnected")
     }
-    
+
     func sessionDidDeactivate(_ session: WCSession) {
         print("Disconnected")
     }
-    
-    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+
+    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         print("Recived message from watch")
         handleWatch(message)
     }
-    
-    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any]) {
+
+    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
         print("Recived userInfo from watch")
         handleWatch(userInfo)
     }
-    
+
     private func handleWatch(_ data: [String: Any]) {
         print(data)
         guard formatter.string(from: today.date) == data["date"] as? String else { return }

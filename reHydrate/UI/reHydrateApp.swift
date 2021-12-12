@@ -9,14 +9,16 @@
 import SwiftUI
 import SwiftyUserDefaults
 
+// swiftlint:disable all
 @main
 struct reHydrateApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Preference(\.isDarkMode) private var isDarkMode
-    
-    init(){
+
+    init() {
         UITableView.appearance().backgroundColor = .background
     }
-    
+
     var body: some Scene {
         WindowGroup {
             AppView()

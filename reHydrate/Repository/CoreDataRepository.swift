@@ -12,7 +12,7 @@ import CoreData
 
 protocol Repository {
     associatedtype Day
-    
+
     func create() -> AnyPublisher<Day, Error>
     func delete(_ day: Day) -> AnyPublisher<Bool, Error>
     func get(id: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?)
@@ -31,13 +31,13 @@ enum CoreDataError: Error {
 
 class CoreDataRepository<T: NSManagedObject>: Repository {
     typealias Day = T
-    
+
     private let managedObjectContext: NSManagedObjectContext
-    
+
     init(context: NSManagedObjectContext) {
         self.managedObjectContext = context
     }
-    
+
     func create() -> AnyPublisher<T, Error> {
         Future { promise in
             let className = String(describing: Day.self)
@@ -48,7 +48,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
         }
         .eraseToAnyPublisher()
     }
-    
+
     func delete(_ day: T) -> AnyPublisher<Bool, Error> {
         Future { promise in
             self.managedObjectContext.delete(day)
@@ -56,7 +56,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
         }
         .eraseToAnyPublisher()
     }
-    
+
     func get(id: String,
              predicate: NSPredicate?,
              sortDescriptors: [NSSortDescriptor]?) -> AnyPublisher<T?, Error> {
@@ -76,7 +76,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
         }
         .eraseToAnyPublisher()
     }
-    
+
     func get(date: Date, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?) -> AnyPublisher<T?, Error> {
         Future { promise in
             let entityName = String(describing: Day.self)
@@ -104,7 +104,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
         }
         .eraseToAnyPublisher()
     }
-    
+
     func getLatesGoal(predicate: NSPredicate?) -> AnyPublisher<T?, Error> {
         Future { promise in
             let entityName = String(describing: Day.self)
@@ -112,7 +112,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
             request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
             request.predicate = predicate
             request.fetchLimit = 1
-            
+
             do {
                 guard let results = try? self.managedObjectContext.fetch(request) else {
                     return promise(.failure(CoreDataError.invalidManagedObjectType))
@@ -125,7 +125,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
         }
         .eraseToAnyPublisher()
     }
-    
+
     func getAll(predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?) -> AnyPublisher<[T], Error> {
         Future { promise in
             let entityName = String(describing: Day.self)
@@ -141,5 +141,5 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
         }
         .eraseToAnyPublisher()
     }
-    
+
 }

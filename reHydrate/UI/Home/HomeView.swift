@@ -10,13 +10,13 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
-    
+
     init(navigateTo: @escaping ((AppState) -> Void)) {
         let viewModel = MainAssembler.shared.container.resolve(HomeViewModel.self,
                                                                argument: navigateTo)!
         _viewModel = StateObject(wrappedValue: viewModel)
     }
-    
+
     var body: some View {
         VStack(spacing: 16) {
             Text("reHydrate")
@@ -27,9 +27,9 @@ struct HomeView: View {
             Text("\(viewModel.getConsumed())/\(viewModel.getGoal())")
                 .font(.extraLargeTitle)
                 .bold()
-            
+
             Spacer()
-            
+
             GeometryReader { geo in
                 HStack(alignment: .bottom) {
                     DrinkView(viewModel: viewModel,
@@ -69,9 +69,9 @@ struct HomeView: View {
                 .position(x: geo.size.width / 2, y: geo.size.height / 3)
             }
             .padding(.horizontal, 24)
-            
+
             Spacer()
-            
+
             HStack {
                 Button {
                     viewModel.navigateToSettings()
@@ -80,9 +80,9 @@ struct HomeView: View {
                         .font(.largeHeader)
                         .foregroundColor(.button)
                 }
-                
+
                 Spacer()
-                
+
                 Button {
                     viewModel.navigateToCalendar()
                 } label: {
@@ -116,6 +116,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView() {_ in }
+        HomeView {_ in }
     }
 }

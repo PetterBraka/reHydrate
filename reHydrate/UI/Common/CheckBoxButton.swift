@@ -10,15 +10,15 @@ import SwiftUI
 
 struct CheckBoxButton: View {
     @Binding var isChecked: Bool
-    
+
     @State var text: String
     @State var highlightedText: String
     @State var image: Image
     @State var highlightedImage: Image
     @Binding var language: Language
-    
+
     var rowAction: () -> Void
-    
+
     var body: some View {
         Button {
             withAnimation {

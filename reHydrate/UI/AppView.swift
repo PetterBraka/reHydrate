@@ -11,13 +11,13 @@ import SwiftUI
 struct AppView: View {
     @StateObject var viewModel = MainAssembler.shared.container.resolve(AppViewModel.self)!
     @State var homeTransition: AnyTransition = .slide
-    
+
     var body: some View {
         switch viewModel.currenState {
         case .home:
             HomeView(navigateTo: viewModel.navigateTo)
                 .transition(homeTransition)
-                .gesture (
+                .gesture(
                     DragGesture()
                         .onEnded({ drag in
                             if drag.startLocation.x > drag.location.x {
@@ -36,7 +36,7 @@ struct AppView: View {
                     homeTransition = .asymmetric(insertion: .move(edge: .trailing),
                                                  removal: .move(edge: .leading))
                 }
-                .gesture (
+                .gesture(
                     DragGesture()
                         .onEnded({ drag in
                             if drag.startLocation.x > drag.location.x {
@@ -52,7 +52,7 @@ struct AppView: View {
                 .onAppear {
                     homeTransition = .slide
                 }
-                .gesture (
+                .gesture(
                     DragGesture()
                         .onEnded({ drag in
                             if drag.startLocation.x < drag.location.x {
