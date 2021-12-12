@@ -115,6 +115,7 @@
 		335DA33F276017EC002266D2 /* whiteBlue@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2EE276017EC002266D2 /* whiteBlue@3x.png */; };
 		335DA340276017EC002266D2 /* whiteGreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2EF276017EC002266D2 /* whiteGreen@2x.png */; };
 		335DA341276017EC002266D2 /* blackYellow@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2F0276017EC002266D2 /* blackYellow@1x.png */; };
+		33600BD42764B3800061A771 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33600BD32764B3800061A771 /* Image.swift */; };
 		336136A126B6E79F00C87FB5 /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* Hero */; };
 		336136A226B6E79F00C87FB5 /* Hero in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* Hero */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A526B6E7D500C87FB5 /* FSCalendar */; };
@@ -320,6 +321,7 @@
 		335DA2EE276017EC002266D2 /* whiteBlue@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBlue@3x.png"; sourceTree = "<group>"; };
 		335DA2EF276017EC002266D2 /* whiteGreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteGreen@2x.png"; sourceTree = "<group>"; };
 		335DA2F0276017EC002266D2 /* blackYellow@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackYellow@1x.png"; sourceTree = "<group>"; };
+		33600BD32764B3800061A771 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3387ED68274AD9C40083D2C1 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
@@ -571,6 +573,14 @@
 			path = AppIcons;
 			sourceTree = "<group>";
 		};
+		33600BD22764B3740061A771 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				33600BD32764B3800061A771 /* Image.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
@@ -662,6 +672,7 @@
 		33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */ = {
 			isa = PBXGroup;
 			children = (
+				33600BD22764B3740061A771 /* Resources */,
 				33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */,
 				33DF9BED24B47D0A00699B1A /* ExtensionDelegate.swift */,
 				332E5A4524CCBF5000EF4D79 /* Extensions.swift */,
@@ -998,6 +1009,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */,
+				33600BD42764B3800061A771 /* Image.swift in Sources */,
 				33DF9BEE24B47D0A00699B1A /* ExtensionDelegate.swift in Sources */,
 				332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */,
 				33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */,
@@ -1233,7 +1245,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Debug;
 		};
@@ -1254,7 +1266,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Release;
 		};
@@ -1278,7 +1290,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Debug;
 		};
@@ -1302,7 +1314,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Release;
 		};

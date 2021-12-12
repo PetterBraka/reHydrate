@@ -21,7 +21,7 @@ struct DrinkView: View {
     var body: some View {
         Button {} label: {
             VStack {
-                drink.type.getImage()
+                drink.type?.getImage()
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .contrast(disable ? 0.1 : 1)
