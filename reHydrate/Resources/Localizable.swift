@@ -110,30 +110,30 @@ struct Localizable {
         static let privacyPolicy = "PrivacyPolicy"
         static let versionNumber = "VersionNumber"
         static let CouldtSendMail = "CouldtSendMail"
+    }
 
-        struct Reminders {
-            static let reminders = "Reminders"
-            static let turnOnReminders = "TurnOnReminders"
-            static let turnOffReminders = "TurnOffReminders"
-            static let startingTime = "StartingTime"
-            static let endingTime = "EndingTime"
-            static let frequency = "Frequency"
-        }
+    struct Reminders {
+        static let reminders = "Reminders"
+        static let turnOnReminders = "TurnOnReminders"
+        static let turnOffReminders = "TurnOffReminders"
+        static let startingTime = "StartingTime"
+        static let endingTime = "EndingTime"
+        static let frequency = "Frequency"
+    }
 
-        struct Credits {
-            static let credits = "Credits"
-            static let translations = "Translations"
-            static let openSource = "Open-source"
-            static let devDesign = "Dev&Design"
-        }
+    struct Credits {
+        static let credits = "Credits"
+        static let translations = "Translations"
+        static let openSource = "Open-source"
+        static let devDesign = "Dev&Design"
+    }
 
-        struct Language {
-            static let language = "Language"
-            static let english = "en"
-            static let norwegian = "nb"
-            static let german = "de"
-            static let icelandic = "is"
-        }
+    struct Language {
+        static let language = "Language"
+        static let english = "en"
+        static let norwegian = "nb"
+        static let german = "de"
+        static let icelandic = "is"
     }
 
     struct Tutorial {

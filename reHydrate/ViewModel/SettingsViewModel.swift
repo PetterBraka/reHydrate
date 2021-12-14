@@ -21,10 +21,10 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
 
-    @Published var languageOptions: [String] = [Localizable.Setting.Language.english,
-                                          Localizable.Setting.Language.german,
-                                          Localizable.Setting.Language.icelandic,
-                                          Localizable.Setting.Language.norwegian]
+    @Published var languageOptions: [String] = [Localizable.Language.english,
+                                          Localizable.Language.german,
+                                          Localizable.Language.icelandic,
+                                          Localizable.Language.norwegian]
     @Published var selectedLanguage: String = ""
     @Published var selectedUnit = Localizable.Setting.metricSystem
     @Published var selectedGoal: String = ""
