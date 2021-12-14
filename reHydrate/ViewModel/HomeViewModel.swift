@@ -60,8 +60,6 @@ final class HomeViewModel: NSObject, ObservableObject {
         }
         requestNotificationAccess()
         fetchToday()
-        fetchHealthData()
-
     }
 
     func requestNotificationAccess() {
@@ -186,6 +184,9 @@ extension HomeViewModel {
                 if let day = day {
                     self?.today = day
                     self?.exportToWatch(today: day)
+                    if day.consumption == 0 {
+                        self?.fetchHealthData()
+                    }
                 } else {
                     self?.createNewDay()
                 }
@@ -327,27 +328,24 @@ extension HomeViewModel: WCSessionDelegate {
         print("Disconnected")
     }
 
-    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        print("Recived message from watch")
-        handleWatch(message)
-    }
-
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
         print("Recived userInfo from watch")
         handleWatch(userInfo)
     }
 
     private func handleWatch(_ data: [String: Any]) {
-        print(data)
         guard formatter.string(from: today.date) == data["date"] as? String else { return }
         guard let watchConsumed = Double(data["consumed"] as? String ?? "0") else { return }
+        fetchToday()
         if today.consumption < watchConsumed {
+            print(data)
             let consumed = Measurement(value: watchConsumed, unit: UnitVolume.liters)
-            let differences = consumed.converted(to: .milliliters).value - today.consumption
-            updateTodaysConsumption(to: watchConsumed)
-            export(drink: Drink(size: differences))
+            let differences = consumed.converted(to: .milliliters).value - self.today.consumption
+            self.updateTodaysConsumption(to: watchConsumed)
+            self.export(drink: Drink(size: differences))
             print("Udated with data from watch")
         } else if today.consumption != watchConsumed {
+            print("Sending back data to watch")
             exportToWatch(today: today)
         }
     }
