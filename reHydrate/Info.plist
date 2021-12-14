@@ -145,6 +145,33 @@
                 <key>UIPrerenderedIcon</key>
                 <false/>
             </dict>
+            <key>whitelexipink</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>whitelexipink</string>
+                </array>
+                <key>UIPrerenderedIcon</key>
+                <false/>
+            </dict>
+            <key>lexipinkwhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>lexipinkwhite</string>
+                </array>
+                <key>UIPrerenderedIcon</key>
+                <false/>
+            </dict>
+            <key>blacklexipink</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>blacklexipink</string>
+                </array>
+                <key>UIPrerenderedIcon</key>
+                <false/>
+            </dict>
             <key>whitePurple</key>
             <dict>
                 <key>CFBundleIconFiles</key>

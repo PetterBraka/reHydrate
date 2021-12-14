@@ -8,6 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		330C23D627665D4C00293092 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330C23D527665D4C00293092 /* AppDelegate.swift */; };
+		330C240527688F7000293092 /* whitelexipink@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C23FC27688F6F00293092 /* whitelexipink@3x.png */; };
+		330C240627688F7000293092 /* whitelexipink@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C23FD27688F6F00293092 /* whitelexipink@1x.png */; };
+		330C240727688F7000293092 /* lexipinkwhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C23FE27688F6F00293092 /* lexipinkwhite@2x.png */; };
+		330C240827688F7000293092 /* blacklexipink@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C23FF27688F6F00293092 /* blacklexipink@3x.png */; };
+		330C240927688F7000293092 /* whitelexipink@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C240027688F6F00293092 /* whitelexipink@2x.png */; };
+		330C240A27688F7000293092 /* lexipinkwhite@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C240127688F6F00293092 /* lexipinkwhite@3x.png */; };
+		330C240B27688F7000293092 /* blacklexipink@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C240227688F6F00293092 /* blacklexipink@1x.png */; };
+		330C240C27688F7000293092 /* lexipinkwhite@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C240327688F7000293092 /* lexipinkwhite@1x.png */; };
+		330C240D27688F7000293092 /* blacklexipink@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C240427688F7000293092 /* blacklexipink@2x.png */; };
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		332315E5274271E20039EE23 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E4274271E20039EE23 /* HomeView.swift */; };
 		332315E72742724D0039EE23 /* Drinkview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E62742724D0039EE23 /* Drinkview.swift */; };
@@ -26,7 +35,6 @@
 		3323161127441E030039EE23 /* DayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161027441E030039EE23 /* DayModel.swift */; };
 		3323161327441E140039EE23 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161227441E140039EE23 /* Day.swift */; };
 		33231619274420E60039EE23 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 33231617274420E60039EE23 /* reHydrate.xcdatamodeld */; };
-		3323161B274A61F30039EE23 /* PresistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161A274A61F30039EE23 /* PresistenceController.swift */; };
 		3323161E274A63420039EE23 /* DayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161D274A63420039EE23 /* DayManager.swift */; };
 		33231620274A64210039EE23 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161F274A64210039EE23 /* HomeViewModel.swift */; };
 		33231622274A6FC70039EE23 /* ManagerAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231621274A6FC70039EE23 /* ManagerAssembly.swift */; };
@@ -215,6 +223,15 @@
 
 /* Begin PBXFileReference section */
 		330C23D527665D4C00293092 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		330C23FC27688F6F00293092 /* whitelexipink@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitelexipink@3x.png"; sourceTree = "<group>"; };
+		330C23FD27688F6F00293092 /* whitelexipink@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitelexipink@1x.png"; sourceTree = "<group>"; };
+		330C23FE27688F6F00293092 /* lexipinkwhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lexipinkwhite@2x.png"; sourceTree = "<group>"; };
+		330C23FF27688F6F00293092 /* blacklexipink@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blacklexipink@3x.png"; sourceTree = "<group>"; };
+		330C240027688F6F00293092 /* whitelexipink@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitelexipink@2x.png"; sourceTree = "<group>"; };
+		330C240127688F6F00293092 /* lexipinkwhite@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lexipinkwhite@3x.png"; sourceTree = "<group>"; };
+		330C240227688F6F00293092 /* blacklexipink@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blacklexipink@1x.png"; sourceTree = "<group>"; };
+		330C240327688F7000293092 /* lexipinkwhite@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lexipinkwhite@1x.png"; sourceTree = "<group>"; };
+		330C240427688F7000293092 /* blacklexipink@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blacklexipink@2x.png"; sourceTree = "<group>"; };
 		3310709A244DBCD3008365A3 /* reHydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reHydrate.entitlements; sourceTree = "<group>"; };
 		332315E4274271E20039EE23 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		332315E62742724D0039EE23 /* Drinkview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drinkview.swift; sourceTree = "<group>"; };
@@ -232,7 +249,6 @@
 		3323161027441E030039EE23 /* DayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayModel.swift; sourceTree = "<group>"; };
 		3323161227441E140039EE23 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		33231618274420E60039EE23 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
-		3323161A274A61F30039EE23 /* PresistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresistenceController.swift; sourceTree = "<group>"; };
 		3323161D274A63420039EE23 /* DayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayManager.swift; sourceTree = "<group>"; };
 		3323161F274A64210039EE23 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		33231621274A6FC70039EE23 /* ManagerAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerAssembly.swift; sourceTree = "<group>"; };
@@ -400,7 +416,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		332315E32742719F0039EE23 /* UI */ = {
+		332315E32742719F0039EE23 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				33EC3A77274D05E90049E414 /* Settings */,
@@ -410,12 +426,14 @@
 				332315F32742B3430039EE23 /* AppView.swift */,
 				33231623274A75530039EE23 /* reHydrateApp.swift */,
 			);
-			path = UI;
+			path = View;
 			sourceTree = "<group>";
 		};
 		332315E8274273F20039EE23 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3378767F24378A9800F5A732 /* Assets.xcassets */,
+				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
 				335DA1FB275ECE2D002266D2 /* AppIcons */,
 				332315E9274274090039EE23 /* Images.swift */,
 				332315EB274276290039EE23 /* Color.swift */,
@@ -502,6 +520,9 @@
 				335DA2E8276017EC002266D2 /* blackPink@1x.png */,
 				335DA2C4276017EA002266D2 /* blackPink@2x.png */,
 				335DA2AD276017E9002266D2 /* blackPink@3x.png */,
+				330C240227688F6F00293092 /* blacklexipink@1x.png */,
+				330C240427688F7000293092 /* blacklexipink@2x.png */,
+				330C23FF27688F6F00293092 /* blacklexipink@3x.png */,
 				335DA2B4276017E9002266D2 /* blackPurple@1x.png */,
 				335DA2D6276017EB002266D2 /* blackPurple@2x.png */,
 				335DA2A6276017E8002266D2 /* blackPurple@3x.png */,
@@ -532,6 +553,9 @@
 				335DA2D2276017EB002266D2 /* pinkWhite@1x.png */,
 				335DA2D8276017EB002266D2 /* pinkWhite@2x.png */,
 				335DA2A1276017E8002266D2 /* pinkWhite@3x.png */,
+				330C240327688F7000293092 /* lexipinkwhite@1x.png */,
+				330C23FE27688F6F00293092 /* lexipinkwhite@2x.png */,
+				330C240127688F6F00293092 /* lexipinkwhite@3x.png */,
 				335DA2E9276017EC002266D2 /* purpleWhite@1x.png */,
 				335DA2BE276017EA002266D2 /* purpleWhite@2x.png */,
 				335DA2A5276017E8002266D2 /* purpleWhite@3x.png */,
@@ -556,6 +580,9 @@
 				335DA2E2276017EB002266D2 /* whitePink@1x.png */,
 				335DA2CA276017EA002266D2 /* whitePink@2x.png */,
 				335DA2BB276017EA002266D2 /* whitePink@3x.png */,
+				330C23FD27688F6F00293092 /* whitelexipink@1x.png */,
+				330C240027688F6F00293092 /* whitelexipink@2x.png */,
+				330C23FC27688F6F00293092 /* whitelexipink@3x.png */,
 				335DA2C2276017EA002266D2 /* whitePurple@1x.png */,
 				335DA2A7276017E9002266D2 /* whitePurple@2x.png */,
 				335DA2A8276017E9002266D2 /* whitePurple@3x.png */,
@@ -607,21 +634,18 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				332315FB2742B60A0039EE23 /* DI */,
 				33EC3A8F275A8BE80049E414 /* Service */,
 				33EC3A8427539E480049E414 /* Helpers */,
 				3323161C274A63360039EE23 /* Managers */,
-				3323160F27441DF60039EE23 /* Model */,
 				332316022742BD5E0039EE23 /* Repository */,
-				332315E8274273F20039EE23 /* Resources */,
-				332315FB2742B60A0039EE23 /* DI */,
+				3323160F27441DF60039EE23 /* Model */,
 				332315F52742B4E00039EE23 /* ViewModel */,
-				332315E32742719F0039EE23 /* UI */,
+				332315E32742719F0039EE23 /* View */,
 				33B28F6926BC7F6800DECA9F /* Extensions */,
-				3323161A274A61F30039EE23 /* PresistenceController.swift */,
+				332315E8274273F20039EE23 /* Resources */,
 				330C23D527665D4C00293092 /* AppDelegate.swift */,
 				33EFF3FE2470449A00D0A003 /* Localizable.strings */,
-				3378767F24378A9800F5A732 /* Assets.xcassets */,
-				3378768124378A9800F5A732 /* LaunchScreen.storyboard */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
 				33231617274420E60039EE23 /* reHydrate.xcdatamodeld */,
@@ -865,9 +889,11 @@
 				335DA330276017EC002266D2 /* greyWhite@3x.png in Resources */,
 				335DA339276017EC002266D2 /* blackPink@1x.png in Resources */,
 				335DA325276017EC002266D2 /* whiteGrey@3x.png in Resources */,
+				330C240B27688F7000293092 /* blacklexipink@1x.png in Resources */,
 				335DA318276017EC002266D2 /* blackRainbow@1x.png in Resources */,
 				335DA31C276017EC002266D2 /* blueWhite@3x.png in Resources */,
 				335DA33A276017EC002266D2 /* purpleWhite@1x.png in Resources */,
+				330C240A27688F7000293092 /* lexipinkwhite@3x.png in Resources */,
 				335DA30E276017EC002266D2 /* greyWhite@2x.png in Resources */,
 				335DA32C276017EC002266D2 /* whiteGreen@3x.png in Resources */,
 				335DA2FD276017EC002266D2 /* greenWhite@1x.png in Resources */,
@@ -888,6 +914,7 @@
 				335DA33B276017EC002266D2 /* whiteBlue@2x.png in Resources */,
 				335DA301276017EC002266D2 /* yellowWhite@1x.png in Resources */,
 				335DA341276017EC002266D2 /* blackYellow@1x.png in Resources */,
+				330C240627688F7000293092 /* whitelexipink@1x.png in Resources */,
 				335DA309276017EC002266D2 /* whiteRainbow@1x.png in Resources */,
 				335DA2FA276017EC002266D2 /* whiteRed@1x.png in Resources */,
 				335DA323276017EC002266D2 /* pinkWhite@1x.png in Resources */,
@@ -900,6 +927,7 @@
 				335DA2F1276017EC002266D2 /* blueWhite@1x.png in Resources */,
 				335DA307276017EC002266D2 /* blackYellow@2x.png in Resources */,
 				335DA2FC276017EC002266D2 /* blackGreen@3x.png in Resources */,
+				330C240727688F7000293092 /* lexipinkwhite@2x.png in Resources */,
 				335DA316276017EC002266D2 /* blackRainbow@2x.png in Resources */,
 				335DA32A276017EC002266D2 /* blackWhite@3x.png in Resources */,
 				33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */,
@@ -911,13 +939,17 @@
 				335DA338276017EC002266D2 /* whiteRainbow@2x.png in Resources */,
 				335DA2FE276017EC002266D2 /* blackPink@3x.png in Resources */,
 				335DA2FB276017EC002266D2 /* yellowWhite@3x.png in Resources */,
+				330C240D27688F7000293092 /* blacklexipink@2x.png in Resources */,
 				335DA2F7276017EC002266D2 /* blackPurple@3x.png in Resources */,
+				330C240827688F7000293092 /* blacklexipink@3x.png in Resources */,
 				335DA308276017EC002266D2 /* whiteGreen@1x.png in Resources */,
 				335DA336276017EC002266D2 /* blackBlue@1x.png in Resources */,
+				330C240527688F7000293092 /* whitelexipink@3x.png in Resources */,
 				335DA2F2276017EC002266D2 /* pinkWhite@3x.png in Resources */,
 				335DA32D276017EC002266D2 /* blackRed@1x.png in Resources */,
 				335DA319276017EC002266D2 /* greyWhite@1x.png in Resources */,
 				335DA32E276017EC002266D2 /* whiteOrange@1x.png in Resources */,
+				330C240C27688F7000293092 /* lexipinkwhite@1x.png in Resources */,
 				335DA302276017EC002266D2 /* blackYellow@3x.png in Resources */,
 				335DA30F276017EC002266D2 /* purpleWhite@2x.png in Resources */,
 				335DA2F4276017EC002266D2 /* redWhite@1x.png in Resources */,
@@ -927,6 +959,7 @@
 				335DA322276017EC002266D2 /* rainbowWhite@2x.png in Resources */,
 				335DA317276017EC002266D2 /* whiteYellow@3x.png in Resources */,
 				335DA324276017EC002266D2 /* whiteRed@3x.png in Resources */,
+				330C240927688F7000293092 /* whitelexipink@2x.png in Resources */,
 				335DA33D276017EC002266D2 /* blueWhite@2x.png in Resources */,
 				335DA313276017EC002266D2 /* whitePurple@1x.png in Resources */,
 				335DA33E276017EC002266D2 /* whiteBlue@1x.png in Resources */,
@@ -1013,7 +1046,6 @@
 				33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */,
-				3323161B274A61F30039EE23 /* PresistenceController.swift in Sources */,
 				332315EA274274090039EE23 /* Images.swift in Sources */,
 				332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */,
 				33231620274A64210039EE23 /* HomeViewModel.swift in Sources */,
