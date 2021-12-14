@@ -344,7 +344,8 @@ extension HomeViewModel: WCSessionDelegate {
         if today.consumption < watchConsumed {
             let consumed = Measurement(value: watchConsumed, unit: UnitVolume.liters)
             let differences = consumed.converted(to: .milliliters).value - today.consumption
-            addDrink(Drink(size: differences))
+            updateTodaysConsumption(to: watchConsumed)
+            export(drink: Drink(size: differences))
             print("Udated with data from watch")
         } else if today.consumption != watchConsumed {
             exportToWatch(today: today)
