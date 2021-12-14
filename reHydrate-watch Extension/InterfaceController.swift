@@ -217,11 +217,6 @@ extension InterfaceController: WCSessionDelegate {
         }
     }
 
-    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        print("Recived message from phone")
-        handlePhone(message)
-    }
-
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
         print("Recived userInfo from phone")
         handlePhone(userInfo)
@@ -250,13 +245,12 @@ extension InterfaceController: WCSessionDelegate {
                 today.goal = goal
             }
             self.saveDays()
-            self.updateSummary()
+            self.updateLabel()
+            let delegate = WKExtension.shared().delegate as? ExtensionDelegate
+            delegate?.todayConsumed = today.consumed
+            delegate?.todayGoal = today.goal
+            delegate?.todayDate = today.date
         }
-        let delegate = WKExtension.shared().delegate as? ExtensionDelegate
-        delegate?.todayConsumed = today.consumed
-        delegate?.todayGoal = today.goal
-        delegate?.todayDate = today.date
-
         let server = CLKComplicationServer.sharedInstance()
         guard let activeComplications = server.activeComplications else { return }
         for complication in activeComplications {

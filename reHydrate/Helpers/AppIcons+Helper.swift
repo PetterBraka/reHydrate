@@ -26,14 +26,14 @@ enum Icon: String, CaseIterable {
     case whiteOrange = "whiteOrange"
     case orangeWhite = "orangeWhite"
     case blackOrange = "blackOrange"
-    // Pink icons
-    case whitePink = "whitePink"
-    case pinkWhite = "pinkWhite"
-    case blackPink = "blackPink"
     // LexiPink
     case whiteLexiPink = "whitelexipink"
     case lexiPinkWhite = "lexipinkwhite"
     case blackLexiPink = "blacklexipink"
+    // Pink icons
+    case whitePink = "whitePink"
+    case pinkWhite = "pinkWhite"
+    case blackPink = "blackPink"
     // Purple icons
     case whitePurple = "whitePurple"
     case purpleWhite = "purpleWhite"
