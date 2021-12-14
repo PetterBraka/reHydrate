@@ -59,6 +59,7 @@ final class HomeViewModel: NSObject, ObservableObject {
             session.activate()
         }
         requestNotificationAccess()
+        setupSubscribers()
         fetchToday()
     }
 
@@ -90,6 +91,21 @@ final class HomeViewModel: NSObject, ObservableObject {
             } receiveValue: { _ in
                 print("Health requested")
                 self.fetchHealthData()
+            }.store(in: &tasks)
+    }
+
+    func setupSubscribers() {
+        NotificationCenter.default.publisher(for: .addedSmallDrink)
+            .sink { _ in
+                self.addDrink(self.drinks[0])
+            }.store(in: &tasks)
+        NotificationCenter.default.publisher(for: .addedMediumDrink)
+            .sink { _ in
+                self.addDrink(self.drinks[1])
+            }.store(in: &tasks)
+        NotificationCenter.default.publisher(for: .addedLargeDrink)
+            .sink { _ in
+                self.addDrink(self.drinks[2])
             }.store(in: &tasks)
     }
 

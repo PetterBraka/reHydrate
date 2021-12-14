@@ -15,15 +15,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
             if response.actionIdentifier == "small" {
                 print("small button was pressed")
-//                updateConsumtion(drinkOptions[0])
+                NotificationCenter.default.post(name: .addedSmallDrink, object: nil)
                 completionHandler()
             } else if response.actionIdentifier == "medium"{
                 print("medium button was pressed")
-//                updateConsumtion(drinkOptions[1])
+                NotificationCenter.default.post(name: .addedMediumDrink, object: nil)
                 completionHandler()
             } else if response.actionIdentifier == "large"{
                 print("large button was pressed")
-//                updateConsumtion(drinkOptions[2])
+                NotificationCenter.default.post(name: .addedLargeDrink, object: nil)
                 completionHandler()
             } else {
                 print("unrecogniced button was pressed")
