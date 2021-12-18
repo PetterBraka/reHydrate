@@ -30,19 +30,19 @@ struct DrinkView: View {
                     .foregroundColor(.label)
             }
         }
-        .simultaneousGesture(
-            LongPressGesture()
-                .onEnded({ success in
+        .highPriorityGesture(
+            LongPressGesture(minimumDuration: 0.2, maximumDistance: 0.3)
+                .onEnded { success in
                     if success {
                         longPress()
                     }
-                })
+                }
         )
-        .highPriorityGesture(
+        .simultaneousGesture(
             TapGesture()
-                .onEnded({ _ in
+                .onEnded { _ in
                     tapAction()
-                })
+                }
         )
         .onAppear {
             subtitle = viewModel.getValue(for: drink)
