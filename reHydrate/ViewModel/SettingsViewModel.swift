@@ -21,6 +21,10 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
 
+    @Preference(\.smallDrink) private var smallDrink
+    @Preference(\.mediumDrink) private var mediumDrink
+    @Preference(\.largeDrink) private var largeDrink
+
     @Published var languageOptions: [String] = [Localizable.Language.english,
                                           Localizable.Language.german,
                                           Localizable.Language.icelandic,
@@ -64,15 +68,20 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func setupSubscription() {
-        $today.sink { updatedDay in
+        $today
+            .sink { updatedDay in
                 self.selectedGoal = updatedDay.goal.convert(to: self.isMetric ? .liters : .imperialPints,
                                                             from: .liters).clean
             }.store(in: &tasks)
         $selectedLanguage
             .removeDuplicates().sink { value in
                 self.language = Language(rawValue: value.lowercased()) ?? .english
+                if self.isRemindersOn {
+                    self.notificationManager.setReminders()
+                }
             }.store(in: &tasks)
-        $selectedUnit.sink { unit in
+        $selectedUnit
+            .sink { unit in
                 if unit != Localizable.Setting.metricSystem {
                     self.isMetric = Localizable.Setting.metricSystem == unit
                     self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
@@ -82,7 +91,16 @@ final class SettingsViewModel: ObservableObject {
                     }
                 }
             }.store(in: &tasks)
-        $selectedRemindersOn.sink { isOn in
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+            .sink { _ in
+                self.checkNotificationAccess()
+            }.store(in: &tasks)
+        setupNotificationSubscription()
+    }
+
+    func setupNotificationSubscription() {
+        $selectedRemindersOn
+            .sink { isOn in
                 if self.isRemindersOn != isOn {
                     if self.remindersPremitted {
                         self.isRemindersOn = isOn
@@ -95,17 +113,14 @@ final class SettingsViewModel: ObservableObject {
                 }
             }.store(in: &tasks)
         $selectedStartDate
-            .removeDuplicates().sink { _ in
+            .removeDuplicates()
+            .sink { _ in
                 self.updateStartTime()
             }.store(in: &tasks)
         $selectedEndDate
-            .removeDuplicates().sink { _ in
-                self.updateEndTime()
-            }.store(in: &tasks)
-
-        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+            .removeDuplicates()
             .sink { _ in
-                self.checkNotificationAccess()
+                self.updateEndTime()
             }.store(in: &tasks)
     }
 
