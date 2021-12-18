@@ -16,7 +16,7 @@ import WatchConnectivity
 class InterfaceController: WKInterfaceController {
     var metric  = true
     let context = (WKExtension.shared().delegate as? ExtensionDelegate)?.persistentContainer.viewContext
-    var smallDrink: Double = 300
+    var smallDrink: Double = 250
     var mediumDrink: Double = 500
     var largeDrink: Double  = 750
     var today: Day?
@@ -30,16 +30,25 @@ class InterfaceController: WKInterfaceController {
     @IBAction func smallButton() {
         let small = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
         today?.consumed += small.converted(to: .liters).value
+        if let today = today {
+            export(day: today)
+        }
         updateSummary()
     }
     @IBAction func mediumButton() {
         let medium = Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
         today?.consumed += medium.converted(to: .liters).value
+        if let today = today {
+            export(day: today)
+        }
         updateSummary()
     }
     @IBAction func largeButton() {
         let large = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
         today?.consumed += large.converted(to: .liters).value
+        if let today = today {
+            export(day: today)
+        }
         updateSummary()
     }
 
@@ -98,7 +107,6 @@ class InterfaceController: WKInterfaceController {
             server.reloadTimeline(for: complication)
         })
         saveDays()
-        export()
     }
 
     private func updateLabel() {
@@ -114,8 +122,7 @@ class InterfaceController: WKInterfaceController {
         }
     }
 
-    private func export() {
-        guard let today = today else { return }
+    private func export(day today: Day) {
         let message = ["date": formatter.string(from: today.date),
                        "metric": String(metric),
                        "consumed": String(today.consumed)] as [String: String]
