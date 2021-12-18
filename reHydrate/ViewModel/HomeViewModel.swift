@@ -344,6 +344,11 @@ extension HomeViewModel: WCSessionDelegate {
         print("Disconnected")
     }
 
+    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        print("Recived message from watched")
+        handleWatch(message)
+    }
+
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
         print("Recived userInfo from watch")
         handleWatch(userInfo)
