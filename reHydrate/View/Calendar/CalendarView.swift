@@ -19,13 +19,30 @@ struct CalendarView: View {
     }
 
     var body: some View {
-        NavigationView {
             ZStack {
                 Color.background
                     .ignoresSafeArea()
 
                 GeometryReader { geo in
                     VStack {
+                        HStack {
+                            Button {
+                                viewModel.navigateToHome()
+                            } label: {
+                                Image.back
+                                    .resizable()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundColor(.button)
+                            }
+                            Spacer()
+                            Text(viewModel.header)
+                                .font(.largeTitle)
+                                .foregroundColor(.label)
+                            Spacer()
+                            Color.clear
+                                .frame(width: 32, height: 32)
+                        }
+                        .padding(16)
                         VStack(spacing: 16) {
                             HStack {
                                 Text(LocalizedStringKey(Localizable.Calendar.consumed))
@@ -59,23 +76,6 @@ struct CalendarView: View {
                     }
                 }
                 .padding(.horizontal, 16)
-            }
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(viewModel.header)
-                        .font(.largeTitle)
-                        .foregroundColor(.label)
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        viewModel.navigateToHome()
-                    } label: {
-                        Image.back
-                            .font(.largeTitle)
-                            .foregroundColor(.button)
-                    }
-                }
-            }
         }
     }
 }

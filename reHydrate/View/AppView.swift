@@ -13,54 +13,18 @@ struct AppView: View {
     @State var homeTransition: AnyTransition = .slide
 
     var body: some View {
-        switch viewModel.currenState {
-        case .home:
-            HomeView(navigateTo: viewModel.navigateTo)
-                .transition(homeTransition)
-                .gesture(
-                    DragGesture()
-                        .onEnded({ drag in
-                            if drag.startLocation.x > drag.location.x {
-                                print("Swipe Left")
-                                viewModel.navigateTo(.calendar)
-                            } else {
-                                print("Swipe Right")
-                                viewModel.navigateTo(.settings)
-                            }
-                        })
-                )
-        case .settings:
-            SettingsView(navigateTo: viewModel.navigateTo)
-                .transition( .slide)
-                .onAppear {
-                    homeTransition = .asymmetric(insertion: .move(edge: .trailing),
-                                                 removal: .move(edge: .leading))
-                }
-                .gesture(
-                    DragGesture()
-                        .onEnded({ drag in
-                            if drag.startLocation.x > drag.location.x {
-                                print("Swipe Left")
-                                viewModel.navigateTo(.home)
-                            }
-                        })
-                )
-        case .calendar:
-            CalendarView(navigateTo: viewModel.navigateTo)
-                .transition( .asymmetric(insertion: .move(edge: .trailing),
-                                         removal: .move(edge: .leading)))
-                .onAppear {
-                    homeTransition = .slide
-                }
-                .gesture(
-                    DragGesture()
-                        .onEnded({ drag in
-                            if drag.startLocation.x < drag.location.x {
-                                print("Swipe Right")
-                                viewModel.navigateTo(.home)
-                            }
-                        })
-                )
+        ZStack {
+            Color.background
+                .ignoresSafeArea()
+            TabView(selection: $viewModel.currenState) {
+                SettingsView(navigateTo: viewModel.navigateTo)
+                    .tag(AppState.settings)
+                HomeView(navigateTo: viewModel.navigateTo)
+                    .tag(AppState.home)
+                CalendarView(navigateTo: viewModel.navigateTo)
+                    .tag(AppState.calendar)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
     }
 }

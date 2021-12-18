@@ -50,8 +50,8 @@ struct UserDefault<Value> {
     let defaultValue: Value
 
     var wrappedValue: Value {
-        set { fatalError("Wrapped value should not be used.") }
         get { fatalError("Wrapped value should not be used.") }
+        set { fatalError("Wrapped value should not be used.") }
     }
 
     init(wrappedValue: Value, _ key: String) {

@@ -23,143 +23,144 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color.background
-                    .ignoresSafeArea()
-                Form {
-                    // Apperance
-                    Section {
-                        CheckBoxButton(isChecked: $viewModel.isDarkMode,
-                                       text: Localizable.Setting.lightMode,
-                                       highlightedText: Localizable.Setting.darkMode,
-                                       image: .lightMode,
-                                       highlightedImage: .darkMode,
-                                       language: $viewModel.language) {
-                            viewModel.toggleDarkMode()
-                        }
-                        Button {
-                            showIconSelection = true
-                        } label: {
-                            HStack {
-                                Text(Localizable.Setting.appIcon.local(viewModel.language))
-                                Spacer()
-                                Image.open
-                            }
-                        }
-                        .foregroundColor(.label)
-                        OptionsButton(title: Localizable.Language.language,
-                                      selectedItem: $viewModel.selectedLanguage,
-                                      items: viewModel.languageOptions,
-                                      language: $viewModel.language)
+        ZStack {
+            Color.background
+                .ignoresSafeArea()
+            VStack(alignment: .leading, spacing: 0) {
+                    Button {
+                        viewModel.navigateToHome()
+                    } label: {
+                        Image.back
+                            .resizable()
+                            .frame(width: 36, height: 36)
+                            .foregroundColor(.button)
                     }
-                    .listRowBackground(Color.tableViewBackground)
-                    // Units
-                    Section {
+                    .padding([.leading, .top], 24)
+            Form {
+                // Apperance
+                Section {
+                    CheckBoxButton(isChecked: $viewModel.isDarkMode,
+                                   text: Localizable.Setting.lightMode,
+                                   highlightedText: Localizable.Setting.darkMode,
+                                   image: .lightMode,
+                                   highlightedImage: .darkMode,
+                                   language: $viewModel.language) {
+                        viewModel.toggleDarkMode()
+                    }
+                    Button {
+                        showIconSelection = true
+                    } label: {
                         HStack {
-                            Text(Localizable.Setting.units.local(viewModel.language))
+                            Text(Localizable.Setting.appIcon.local(viewModel.language))
                             Spacer()
-                            Picker("", selection: $viewModel.selectedUnit) {
-                                Text(Localizable.Setting.metricSystem.local(viewModel.language))
-                                    .tag(Localizable.Setting.metricSystem)
-                                Text(Localizable.Setting.imperialSystem.local(viewModel.language))
-                                    .tag(Localizable.Setting.imperialSystem)
-                            }
-                            .pickerStyle(.segmented)
-                            .fixedSize()
+                            Image.open
                         }
                     }
-                    .listRowBackground(Color.tableViewBackground)
-                    // Goal
-                    Section {
+                    .foregroundColor(.label)
+                    OptionsButton(title: Localizable.Language.language,
+                                  selectedItem: $viewModel.selectedLanguage,
+                                  items: viewModel.languageOptions,
+                                  language: $viewModel.language)
+                }
+                .listRowBackground(Color.tableViewBackground)
+                // Units
+                Section {
+                    HStack {
+                        Text(Localizable.Setting.units.local(viewModel.language))
+                        Spacer()
+                        Picker("", selection: $viewModel.selectedUnit) {
+                            Text(Localizable.Setting.metricSystem.local(viewModel.language))
+                                .tag(Localizable.Setting.metricSystem)
+                            Text(Localizable.Setting.imperialSystem.local(viewModel.language))
+                                .tag(Localizable.Setting.imperialSystem)
+                        }
+                        .pickerStyle(.segmented)
+                        .fixedSize()
+                    }
+                }
+                .listRowBackground(Color.tableViewBackground)
+                // Goal
+                Section {
+                    HStack {
+                        Text(Localizable.Setting.setYourGoal.local(viewModel.language))
+                        Spacer()
+                        StepperView(value: $viewModel.selectedGoal) {
+                            viewModel.incrementGoal()
+                        } onDecrement: {
+                            viewModel.decrementGoal()
+                        }
+                    }
+                }
+                .listRowBackground(Color.tableViewBackground)
+                // Notifications
+                Section {
+                    CheckBoxButton(isChecked: $viewModel.selectedRemindersOn,
+                                   text: Localizable.Reminders.turnOnReminders,
+                                   highlightedText: Localizable.Reminders.turnOffReminders,
+                                   image: .remindersOff,
+                                   highlightedImage: .remindersOn,
+                                   language: $viewModel.language) {
+                        if viewModel.remindersPremitted {
+                            viewModel.toggleReminders()
+                        } else {
+                            viewModel.showNotificationAlert.toggle()
+                        }
+                    }
+                    if viewModel.selectedRemindersOn {
                         HStack {
-                            Text(Localizable.Setting.setYourGoal.local(viewModel.language))
+                            DatePicker(Localizable.Reminders.startingTime.local(viewModel.language),
+                                       selection: $viewModel.selectedStartDate,
+                                       displayedComponents: .hourAndMinute)
+                        }
+                        HStack {
+                            DatePicker(Localizable.Reminders.endingTime.local(viewModel.language),
+                                       selection: $viewModel.selectedEndDate,
+                                       displayedComponents: .hourAndMinute)
+                        }
+                        HStack {
+                            Text(Localizable.Reminders.frequency.local(viewModel.language))
                             Spacer()
-                            StepperView(value: $viewModel.selectedGoal) {
-                                viewModel.incrementGoal()
+                            StepperView(value: $viewModel.selectedFrequency) {
+                                viewModel.incrementFrequency()
                             } onDecrement: {
-                                viewModel.decrementGoal()
+                                viewModel.decrementFrequency()
                             }
-                        }
-                    }
-                    .listRowBackground(Color.tableViewBackground)
-                    // Notifications
-                    Section {
-                        CheckBoxButton(isChecked: $viewModel.selectedRemindersOn,
-                                       text: Localizable.Reminders.turnOnReminders,
-                                       highlightedText: Localizable.Reminders.turnOffReminders,
-                                       image: .remindersOff,
-                                       highlightedImage: .remindersOn,
-                                       language: $viewModel.language) {
-                            if viewModel.remindersPremitted {
-                                viewModel.toggleReminders()
-                            } else {
-                                viewModel.showNotificationAlert.toggle()
-                            }
-                        }
-                        if viewModel.selectedRemindersOn {
-                            HStack {
-                                DatePicker(Localizable.Reminders.startingTime.local(viewModel.language),
-                                           selection: $viewModel.selectedStartDate,
-                                           displayedComponents: .hourAndMinute)
-                            }
-                            HStack {
-                                DatePicker(Localizable.Reminders.endingTime.local(viewModel.language),
-                                           selection: $viewModel.selectedEndDate,
-                                           displayedComponents: .hourAndMinute)
-                            }
-                            HStack {
-                                Text(Localizable.Reminders.frequency.local(viewModel.language))
-                                Spacer()
-                                StepperView(value: $viewModel.selectedFrequency) {
-                                    viewModel.incrementFrequency()
-                                } onDecrement: {
-                                    viewModel.decrementFrequency()
-                                }
 
-                            }
-                        }
-                    }
-                    .listRowBackground(Color.tableViewBackground)
-                }
-                .font(.body)
-                .sheet(isPresented: $showIconSelection) {
-                    AppIconSelectionView {
-                        showIconSelection = false
-                    }
-                }
-                .alert(Localizable.Popup.RemindersNotAllowed.local(viewModel.language),
-                       isPresented: $viewModel.showNotificationAlert) {
-                    Button(Localizable.cancel.local(viewModel.language), role: .cancel) {}
-                    Button(Localizable.Setting.openAppSettings.local(viewModel.language)) {
-                        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
-                        if UIApplication.shared.canOpenURL(settingsUrl) {
-                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                print("Settings opened: \(success)") // Prints true
-                            })
                         }
                     }
                 }
-                .toolbar(content: {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button(Localizable.done) {
-                                focusedField = nil
-                            }
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            viewModel.navigateToHome()
-                        } label: {
-                            Image.back
-                                .font(.largeTitle)
-                                .foregroundColor(.button)
-                        }
-                    }
-                })
+                .listRowBackground(Color.tableViewBackground)
             }
+            .font(.body)
+        }
+            .sheet(isPresented: $showIconSelection) {
+                AppIconSelectionView {
+                    showIconSelection = false
+                }
+            }
+
+            .alert(Localizable.Popup.RemindersNotAllowed.local(viewModel.language),
+                   isPresented: $viewModel.showNotificationAlert) {
+                Button(Localizable.cancel.local(viewModel.language), role: .cancel) {}
+                Button(Localizable.Setting.openAppSettings.local(viewModel.language)) {
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                }
+            }
+                   .toolbar(content: {
+                       ToolbarItemGroup(placement: .keyboard) {
+                           HStack {
+                               Spacer()
+                               Button(Localizable.done) {
+                                   focusedField = nil
+                               }
+                           }
+                       }
+                   })
         }
     }
 }
