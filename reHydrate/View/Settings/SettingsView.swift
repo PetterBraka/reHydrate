@@ -84,7 +84,7 @@ struct SettingsView: View {
                     HStack {
                         Text(Localizable.Setting.setYourGoal.local(viewModel.language))
                         Spacer()
-                        StepperView(value: $viewModel.selectedGoal) {
+                        StepperView(value: viewModel.selectedGoal) {
                             viewModel.incrementGoal()
                         } onDecrement: {
                             viewModel.decrementGoal()
@@ -120,7 +120,7 @@ struct SettingsView: View {
                         HStack {
                             Text(Localizable.Reminders.frequency.local(viewModel.language))
                             Spacer()
-                            StepperView(value: $viewModel.selectedFrequency) {
+                            StepperView(value: viewModel.getFrequency()) {
                                 viewModel.incrementFrequency()
                             } onDecrement: {
                                 viewModel.decrementFrequency()

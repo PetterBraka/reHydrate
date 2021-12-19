@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct StepperView: View {
-    @Binding var value: String
+    var value: String
     var onIncrement: () -> Void
     var onDecrement: () -> Void
 
@@ -27,7 +27,8 @@ struct StepperView: View {
             Button {} label: {
                 Text(value)
                     .font(.body)
-                    .frame(minWidth: 16, minHeight: 16, maxHeight: 16)
+                    .fixedSize(horizontal: true, vertical: false)
+                    .frame(height: 16)
             }
             .buttonStyle(.borderedProminent)
             .buttonBorderShape(.roundedRectangle)
@@ -49,6 +50,6 @@ struct StepperView: View {
 
 struct StepperView_Previews: PreviewProvider {
     static var previews: some View {
-        StepperView(value: .constant("2")) {} onDecrement: {}
+        StepperView(value: "2") {} onDecrement: {}
     }
 }
