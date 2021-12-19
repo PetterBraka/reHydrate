@@ -76,9 +76,7 @@ final class SettingsViewModel: ObservableObject {
         $selectedLanguage
             .removeDuplicates().sink { value in
                 self.language = Language(rawValue: value.lowercased()) ?? .english
-                if self.isRemindersOn {
-                    self.notificationManager.setReminders()
-                }
+                self.setUpNotifications()
             }.store(in: &tasks)
         $selectedUnit
             .sink { unit in
@@ -86,9 +84,7 @@ final class SettingsViewModel: ObservableObject {
                     self.isMetric = Localizable.Setting.metricSystem == unit
                     self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
                                                                 from: .liters).clean
-                    if self.isRemindersOn {
-                        self.notificationManager.setReminders()
-                    }
+                    self.setUpNotifications()
                 }
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
@@ -105,11 +101,7 @@ final class SettingsViewModel: ObservableObject {
                     if self.remindersPremitted {
                         self.isRemindersOn = isOn
                     }
-                    if self.isRemindersOn {
-                        self.notificationManager.setReminders()
-                    } else {
-                        self.notificationManager.deleteReminders()
-                    }
+                    self.setUpNotifications()
                 }
             }.store(in: &tasks)
         $selectedStartDate
@@ -130,16 +122,17 @@ final class SettingsViewModel: ObservableObject {
 
     func incrementGoal() {
         today.goal += 0.5
+        updateGoal(today.goal)
     }
 
     func decrementGoal() {
         if today.goal > 0 {
             today.goal -= 0.5
         }
+        updateGoal(today.goal)
     }
 
     func navigateToHome() {
-        updateGoal(today.goal)
         navigateTo(.home)
     }
 }
@@ -166,14 +159,14 @@ extension SettingsViewModel {
     func updateStartTime() {
         if remindersStart != selectedStartDate {
             remindersStart = selectedStartDate
-            notificationManager.setReminders()
+            setUpNotifications()
         }
     }
 
     func updateEndTime() {
         if remindersEnd != selectedEndDate {
             remindersEnd = selectedEndDate
-            notificationManager.setReminders()
+            setUpNotifications()
         }
     }
 
@@ -183,7 +176,7 @@ extension SettingsViewModel {
             self.selectedFrequency = "\(frequency)"
             self.reminderFrequency = frequency
         }
-        notificationManager.setReminders()
+        setUpNotifications()
     }
 
     func decrementFrequency() {
@@ -192,7 +185,11 @@ extension SettingsViewModel {
             self.selectedFrequency = "\(frequency)"
             self.reminderFrequency = frequency
         }
-        notificationManager.setReminders()
+        setUpNotifications()
+    }
+
+    private func setUpNotifications() {
+        notificationManager.requestReminders()
     }
 }
 
