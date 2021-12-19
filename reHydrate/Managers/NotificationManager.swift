@@ -20,6 +20,7 @@ class NotificationManager {
 
     @AppStorage("language") private var language = LocalizationService.shared.language
 
+    @Preference(\.isRemindersOn) private var isRemindersOn
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
@@ -31,6 +32,7 @@ class NotificationManager {
     static let shared = NotificationManager()
 
     let center = UNUserNotificationCenter.current()
+    var reachedGoal = false
 
     func requestAccess() -> AnyPublisher<Void, Error> {
         Future { [unowned self] promise in
@@ -44,6 +46,19 @@ class NotificationManager {
         }
         .receive(on: RunLoop.main)
         .eraseToAnyPublisher()
+    }
+
+    func requestReminders() {
+        guard isRemindersOn else {
+            deleteReminders()
+            return
+        }
+        deleteReminders()
+        if reachedGoal {
+            createCongratulation()
+        } else {
+            setReminders()
+        }
     }
 
     func deleteReminders() {
@@ -60,14 +75,33 @@ class NotificationManager {
      setReminders()
      ```
      */
-    func setReminders() {
-        deleteReminders()
-        print("Created notifications")
-        let difference = Calendar.current.dateComponents([.hour, .minute],
+    private func setReminders(forTomorrow: Bool = false) {
+        print("Creating notifications")
+        let time = Calendar.current.dateComponents([.hour, .minute],
                                                          from: remindersStart,
                                                          to: remindersEnd)
-        let differenceInMunutes = (difference.hour! * 60) + difference.minute!
+        let differenceInMunutes = (time.hour! * 60) + time.minute!
         let totalNotifications = Double(differenceInMunutes / reminderFrequency).rounded(.down)
+        for index in 0...Int(totalNotifications) {
+            guard let notificationDate = Calendar.current.date(byAdding: .minute,
+                                                               value: reminderFrequency * index,
+                                                               to: remindersStart) else { return }
+            createNotification(for: notificationDate)
+        }
+    }
+
+    private func createNotification(for date: Date) {
+        let notification = getReminder()
+        let date = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: date)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: notification,
+                                            trigger: trigger)
+        center.add(request, withCompletionHandler: nil)
+        center.setNotificationCategories([getActions()])
+    }
+
+    private func getActions() -> UNNotificationCategory {
         var unit = String()
         var small  = String()
         var medium = String()
@@ -86,21 +120,6 @@ class NotificationManager {
                             .converted(to: .fluidOunces).value)
             unit = "fl oz"
         }
-        for index in 0...Int(totalNotifications) {
-            if let notificationDate = Calendar.current.date(byAdding: .minute,
-                                                            value: reminderFrequency * index,
-                                                            to: remindersStart) {
-                createNotification(for: notificationDate, with: small, unit, medium, large)
-        }
-        }
-    }
-
-    private func createNotification(for date: Date,
-                                    with small: String,
-                                    _ unit: String,
-                                    _ medium: String,
-                                    _ large: String) {
-        let notification = getReminder()
         let smallDrinkAction = UNNotificationAction(identifier: "small",
                                                     title: "\(Localizable.add.local(language)) \(small)\(unit)",
                                                     options: .foreground)
@@ -110,19 +129,25 @@ class NotificationManager {
         let largeDrinkAction = UNNotificationAction(identifier: "large",
                                                     title: "\(Localizable.add.local(language)) \(large)\(unit)",
                                                     options: .foreground)
-        let category = UNNotificationCategory(identifier: notification.categoryIdentifier,
-                                              actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction],
-                                              intentIdentifiers: [],
-                                              options: .customDismissAction)
-        let date = Calendar.current.dateComponents([.hour, .minute], from: date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
-        let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(identifier: uuidString,
-                                            content: notification,
-                                            trigger: trigger)
+        return UNNotificationCategory(identifier: "water reminder",
+                                      actions: [smallDrinkAction, mediumDrinkAction, largeDrinkAction],
+                                      intentIdentifiers: [],
+                                      options: .customDismissAction)
+    }
 
-        self.center.add(request, withCompletionHandler: nil)
-        self.center.setNotificationCategories([category])
+    private func createCongratulation() {
+        let notfication = getCongratulation()
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: notfication,
+                                            trigger: trigger)
+        center.add(request) { error in
+            if let error = error {
+                print(error)
+            } else {
+                print("Added congrats message")
+            }
+        }
     }
 
     /**

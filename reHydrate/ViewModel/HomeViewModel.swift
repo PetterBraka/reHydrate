@@ -95,6 +95,17 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     func setupSubscribers() {
+        $today
+            .removeDuplicates(by: { $0.consumption == $1.consumption && $0.goal == $1.goal })
+            .sink { day in
+                if day.consumption > day.goal {
+                    print("Reached todays goal")
+                    self.notificationManager.reachedGoal = true
+                    self.notificationManager.requestReminders()
+                } else {
+                    self.notificationManager.reachedGoal = false
+                }
+            }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .addedSmallDrink)
             .sink { _ in
                 self.addDrink(self.drinks[0])
