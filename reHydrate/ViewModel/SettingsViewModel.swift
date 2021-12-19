@@ -170,6 +170,10 @@ extension SettingsViewModel {
         }
     }
 
+    func getFrequency() -> String {
+        "\(selectedFrequency) min"
+    }
+
     func incrementFrequency() {
         if var frequency = Int(selectedFrequency) {
             frequency += 15
