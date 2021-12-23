@@ -98,7 +98,7 @@ final class HomeViewModel: NSObject, ObservableObject {
         $today
             .removeDuplicates(by: { $0.consumption == $1.consumption && $0.goal == $1.goal })
             .sink { day in
-                if day.consumption > day.goal {
+                if day.consumption >= day.goal {
                     print("Reached todays goal")
                     self.notificationManager.reachedGoal = true
                     self.notificationManager.requestReminders()
@@ -366,19 +366,19 @@ extension HomeViewModel: WCSessionDelegate {
     }
 
     private func handleWatch(_ data: [String: Any]) {
+        fetchToday()
         guard formatter.string(from: today.date) == data["date"] as? String else { return }
         guard let watchConsumed = Double(data["consumed"] as? String ?? "0") else { return }
-        fetchToday()
-        if today.consumption < watchConsumed {
-            print(data)
-            let consumed = Measurement(value: watchConsumed, unit: UnitVolume.liters)
-            let differences = consumed.converted(to: .milliliters).value - self.today.consumption
-            self.updateTodaysConsumption(to: watchConsumed)
-            self.export(drink: Drink(size: differences))
-            print("Udated with data from watch")
-        } else if today.consumption != watchConsumed {
-            print("Sending back data to watch")
-            exportToWatch(today: today)
+        guard today.consumption < watchConsumed else {
+            print("Sending data to watch")
+            self.exportToWatch(today: today)
+            return
         }
+        print(data)
+        self.updateTodaysConsumption(to: watchConsumed)
+        let consumed = Measurement(value: watchConsumed - today.consumption, unit: UnitVolume.liters)
+        let differences = consumed.converted(to: .milliliters).value
+        self.export(drink: Drink(size: differences))
+        print("Udated with data from watch")
     }
 }
