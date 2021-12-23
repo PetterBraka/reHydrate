@@ -49,11 +49,7 @@ class NotificationManager {
     }
 
     func requestReminders() {
-        guard isRemindersOn else {
-            deleteReminders()
-            return
-        }
-        deleteReminders()
+        guard isRemindersOn else { return }
         if reachedGoal {
             createCongratulation()
         } else {
