@@ -76,7 +76,7 @@ final class SettingsViewModel: ObservableObject {
         $selectedLanguage
             .removeDuplicates().sink { value in
                 self.language = Language(rawValue: value.lowercased()) ?? .english
-                self.setUpNotifications()
+                self.requestReminders()
             }.store(in: &tasks)
         $selectedUnit
             .sink { unit in
@@ -84,7 +84,7 @@ final class SettingsViewModel: ObservableObject {
                     self.isMetric = Localizable.Setting.metricSystem == unit
                     self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
                                                                 from: .liters).clean
-                    self.setUpNotifications()
+                    self.requestReminders()
                 }
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
@@ -101,7 +101,7 @@ final class SettingsViewModel: ObservableObject {
                     if self.remindersPremitted {
                         self.isRemindersOn = isOn
                     }
-                    self.setUpNotifications()
+                    self.requestReminders()
                 }
             }.store(in: &tasks)
         $selectedStartDate
@@ -159,14 +159,14 @@ extension SettingsViewModel {
     func updateStartTime() {
         if remindersStart != selectedStartDate {
             remindersStart = selectedStartDate
-            setUpNotifications()
+            requestReminders()
         }
     }
 
     func updateEndTime() {
         if remindersEnd != selectedEndDate {
             remindersEnd = selectedEndDate
-            setUpNotifications()
+            requestReminders()
         }
     }
 
@@ -180,7 +180,7 @@ extension SettingsViewModel {
             self.selectedFrequency = "\(frequency)"
             self.reminderFrequency = frequency
         }
-        setUpNotifications()
+        requestReminders()
     }
 
     func decrementFrequency() {
@@ -189,10 +189,11 @@ extension SettingsViewModel {
             self.selectedFrequency = "\(frequency)"
             self.reminderFrequency = frequency
         }
-        setUpNotifications()
+        requestReminders()
     }
 
-    private func setUpNotifications() {
+    private func requestReminders() {
+        notificationManager.deleteReminders()
         notificationManager.requestReminders()
     }
 }
