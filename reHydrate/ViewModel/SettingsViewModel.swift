@@ -179,7 +179,7 @@ extension SettingsViewModel {
         self.reminderFrequency = frequency
         requestReminders()
     }
-    
+
     func decrementFrequency() {
         guard var frequency = Int(selectedFrequency), frequency > 15 else { return }
         frequency -= 15

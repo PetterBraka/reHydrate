@@ -758,8 +758,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3378768724378A9800F5A732 /* Build configuration list for PBXNativeTarget "reHydrate" */;
 			buildPhases = (
+				330C23D727665F6600293092 /* Run SwiftLint */,
 				3378766F24378A9400F5A732 /* Sources */,
-				330C23D727665F6600293092 /* ShellScript */,
 				3378767024378A9400F5A732 /* Frameworks */,
 				3378767124378A9400F5A732 /* Resources */,
 				33D24C3C24A0CC2400C7A23C /* Embed Watch Content */,
@@ -992,7 +992,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		330C23D727665F6600293092 /* ShellScript */ = {
+		330C23D727665F6600293092 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1001,13 +1001,14 @@
 			);
 			inputPaths = (
 			);
+			name = "Run SwiftLint";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n    swiftlint\n    swiftlint autocorrect\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n    swiftlint autocorrect\n    swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
