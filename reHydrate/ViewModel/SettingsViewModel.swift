@@ -157,17 +157,15 @@ extension SettingsViewModel {
     }
 
     func updateStartTime() {
-        if remindersStart != selectedStartDate {
-            remindersStart = selectedStartDate
-            requestReminders()
-        }
+        guard remindersStart != selectedStartDate else { return }
+        remindersStart = selectedStartDate
+        requestReminders()
     }
 
     func updateEndTime() {
-        if remindersEnd != selectedEndDate {
-            remindersEnd = selectedEndDate
-            requestReminders()
-        }
+        guard remindersEnd != selectedEndDate else { return }
+        remindersEnd = selectedEndDate
+        requestReminders()
     }
 
     func getFrequency() -> String {
@@ -175,20 +173,18 @@ extension SettingsViewModel {
     }
 
     func incrementFrequency() {
-        if var frequency = Int(selectedFrequency) {
-            frequency += 15
-            self.selectedFrequency = "\(frequency)"
-            self.reminderFrequency = frequency
-        }
+        guard var frequency = Int(selectedFrequency) else { return }
+        frequency += 15
+        self.selectedFrequency = "\(frequency)"
+        self.reminderFrequency = frequency
         requestReminders()
     }
-
+    
     func decrementFrequency() {
-        if var frequency = Int(selectedFrequency), frequency > 15 {
-            frequency -= 15
-            self.selectedFrequency = "\(frequency)"
-            self.reminderFrequency = frequency
-        }
+        guard var frequency = Int(selectedFrequency), frequency > 15 else { return }
+        frequency -= 15
+        self.selectedFrequency = "\(frequency)"
+        self.reminderFrequency = frequency
         requestReminders()
     }
 
