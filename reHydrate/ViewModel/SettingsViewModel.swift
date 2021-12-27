@@ -79,6 +79,11 @@ final class SettingsViewModel: ObservableObject {
         selectedRemindersOn = isRemindersOn
         selectedStartDate = remindersStart
         selectedEndDate = remindersEnd
+        if isMetric {
+            selectedUnit = Localizable.metricSystem
+        } else {
+            selectedUnit = Localizable.imperialSystem
+        }
         selectedFrequency = "\(reminderFrequency)"
         checkNotificationAccess()
         setupSubscription()
@@ -97,12 +102,15 @@ final class SettingsViewModel: ObservableObject {
             }.store(in: &tasks)
         $selectedUnit
             .sink { unit in
-                if unit != Localizable.metricSystem {
-                    self.isMetric = Localizable.metricSystem == unit
-                    self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
-                                                                from: .liters).clean
-                    self.requestReminders()
+                if Localizable.metricSystem == unit {
+                    self.unit = "ml"
+                } else {
+                    self.unit = "pt"
                 }
+                self.isMetric = Localizable.metricSystem == unit
+                self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
+                                                            from: .liters).clean
+                self.requestReminders()
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { _ in
@@ -231,7 +239,6 @@ extension SettingsViewModel {
     }
 
     private func requestReminders() {
-        notificationManager.deleteReminders()
         notificationManager.requestReminders()
     }
 }
