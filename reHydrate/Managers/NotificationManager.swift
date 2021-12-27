@@ -88,7 +88,7 @@ class NotificationManager {
 
     private func createNotification(for date: Date) {
         let notification = getReminder()
-        let date = Calendar.current.dateComponents([.month, .day, .hour, .minute], from: date)
+        let date = Calendar.current.dateComponents([.hour, .minute], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
         let request = UNNotificationRequest(identifier: UUID().uuidString,
                                             content: notification,
