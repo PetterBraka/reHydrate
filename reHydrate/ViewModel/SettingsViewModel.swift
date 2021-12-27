@@ -13,6 +13,14 @@ import Swinject
 import SwiftUI
 
 final class SettingsViewModel: ObservableObject {
+    enum SheetType: String, Identifiable {
+        var id: String {
+            self.rawValue
+        }
+
+        case editIcon
+    }
+
     @AppStorage("language") var language = LocalizationService.shared.language
     @Preference(\.isDarkMode) var isDarkMode
     @Preference(\.isUsingMetric) private var isMetric
@@ -20,18 +28,22 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
-
     @Preference(\.smallDrink) private var smallDrink
     @Preference(\.mediumDrink) private var mediumDrink
     @Preference(\.largeDrink) private var largeDrink
 
-    @Published var languageOptions: [String] = [Localizable.Language.english,
-                                          Localizable.Language.german,
-                                          Localizable.Language.icelandic,
-                                          Localizable.Language.norwegian]
+    @Published var languageOptions: [String] = [Localizable.english,
+                                          Localizable.german,
+                                          Localizable.icelandic,
+                                          Localizable.norwegian]
     @Published var selectedLanguage: String = ""
-    @Published var selectedUnit = Localizable.Setting.metricSystem
+    @Published var selectedUnit = Localizable.metricSystem
     @Published var selectedGoal: String = ""
+    @Published var small: String = ""
+    @Published var medium: String = ""
+    @Published var large: String = ""
+    @Published var unit: String = "ml"
+
     @Published var selectedRemindersOn: Bool = false
     @Published var remindersPremitted: Bool = false
     @Published var selectedStartDate: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
@@ -41,6 +53,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
 
     @Published var showNotificationAlert: Bool = false
+    @Published var showSheet: SheetType?
 
     private var presistenceController: PresistenceControllerProtocol
     private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
@@ -58,6 +71,10 @@ final class SettingsViewModel: ObservableObject {
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         self.fetchToday()
+        small = "\(smallDrink.clean)"
+        medium = "\(mediumDrink.clean)"
+        large = "\(largeDrink.clean)"
+
         selectedLanguage = language.rawValue
         selectedRemindersOn = isRemindersOn
         selectedStartDate = remindersStart
@@ -80,8 +97,8 @@ final class SettingsViewModel: ObservableObject {
             }.store(in: &tasks)
         $selectedUnit
             .sink { unit in
-                if unit != Localizable.Setting.metricSystem {
-                    self.isMetric = Localizable.Setting.metricSystem == unit
+                if unit != Localizable.metricSystem {
+                    self.isMetric = Localizable.metricSystem == unit
                     self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
                                                                 from: .liters).clean
                     self.requestReminders()
@@ -91,7 +108,32 @@ final class SettingsViewModel: ObservableObject {
             .sink { _ in
                 self.checkNotificationAccess()
             }.store(in: &tasks)
+        setupEditDrinkSubscription()
         setupNotificationSubscription()
+    }
+
+    func setupEditDrinkSubscription() {
+        $small
+            .removeDuplicates()
+            .sink { newValue in
+                guard newValue != self.small else { return }
+                guard let value = Double(newValue) else { return }
+                self.smallDrink = value
+            }.store(in: &tasks)
+        $medium
+            .removeDuplicates()
+            .sink { newValue in
+                guard newValue != self.medium else { return }
+                guard let value = Double(newValue) else { return }
+                self.mediumDrink = value
+            }.store(in: &tasks)
+        $large
+            .removeDuplicates()
+            .sink { newValue in
+                guard newValue != self.large else { return }
+                guard let value = Double(newValue) else { return }
+                self.largeDrink = value
+            }.store(in: &tasks)
     }
 
     func setupNotificationSubscription() {

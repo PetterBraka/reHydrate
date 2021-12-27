@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import SwiftyUserDefaults
 
 // swiftlint:disable all
 @main

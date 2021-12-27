@@ -10,10 +10,8 @@
 "Add"           = "Add";
 "Done"          = "Done";
 "Cancel"        = "Cancel";
-"EditDrink"     = "Edit drink";
 "RemoveDrink"   = "Take away this drink";
 "ChangeAmount"  = "Change the amount";
-"EnterNewValue" = "Enter new value";
 // Settings
 // Appearance
 "Appearance" = "Appearance";
@@ -40,6 +38,15 @@
 "ChangeGoal"       = "Change Goal";
 "SetYourGoal"      = "Set your goal";
 "Goal"             = "Goal";
+// Drink
+"Small"            = "Small";
+"Medium"           = "Medium";
+"Large"            = "Large";
+"EditDrink"        = "Edit drink";
+"EditDrinkSmall"   = "Small drink";
+"EditDrinkMedium"  = "Medium drink";
+"EditDrinkLarge"   = "Large drink";
+"EnterNewValue"    = "Enter new value";
 // Reminders
 "Reminders"        = "Reminders";
 "TurnOnReminders"  = "Turn on reminders";

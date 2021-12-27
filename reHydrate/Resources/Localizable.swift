@@ -57,106 +57,96 @@ struct Localizable {
         static let congrats10Body = "congrats10Body"
     }
 
-    struct Popup {
-        static let To = "To"
-        static let Minutes = "Minutes"
-        static let RemindersNotAllowed = "RemindersNotAllowed"
-        static let RemindersSetFrom = "RemindersSetFrom"
-        static let RemoveRemindersToast = "RemoveRemindersToast"
-        static let FrequencyReminder = "FrequencyReminder"
+    static let To = "To"
+    static let Minutes = "Minutes"
+    static let RemindersNotAllowed = "RemindersNotAllowed"
+    static let RemindersSetFrom = "RemindersSetFrom"
+    static let RemoveRemindersToast = "RemoveRemindersToast"
+    static let FrequencyReminder = "FrequencyReminder"
 
-        static let ClearingDataAlert = "ClearingDataAlert"
-        static let ClearingDataBody = "ClearingDataBody"
-        static let ClearDataKeepData = "ClearDataKeepData"
-        static let ClearDataRemoveData = "ClearDataRemoveData"
-    }
+    static let ClearingDataAlert = "ClearingDataAlert"
+    static let ClearingDataBody = "ClearingDataBody"
+    static let ClearDataKeepData = "ClearDataKeepData"
+    static let ClearDataRemoveData = "ClearDataRemoveData"
 
-    struct Home {
-        static let editDrink = "EditDrink"
-        static let removeDrink = "RemoveDrink"
-        static let changeAmount = "ChangeAmount"
-        static let enterNewValue = "EnterNewValue"
-    }
+    static let removeDrink = "RemoveDrink"
+    static let changeAmount = "ChangeAmount"
 
     static let add = "Add"
+    static let back = "Back"
     static let done = "Done"
     static let cancel = "Cancel"
 
-    struct Setting {
-        static let lightMode = "LightMode"
-        static let darkMode = "DarkMode"
-        static let appearance = "Appearance"
-        static let appIcon = "AppIcon"
-        static let back = "Back"
-        static let unitSystem = "UnitSystem"
-        static let units = "Units"
-        static let metricSystem = "MetricSystem"
-        static let imperialSystem = "ImperialSystem"
-        static let changeGoal = "ChangeGoal"
-        static let setYourGoal = "SetYourGoal"
-        static let goal = "Goal"
+    static let lightMode = "LightMode"
+    static let darkMode = "DarkMode"
+    static let appearance = "Appearance"
+    static let appIcon = "AppIcon"
 
-        static let howToUse = "HowToUse"
-        static let dangerZone = "DangerZone"
-        static let openAppSettings = "OpenAppSettings"
-        static let openHealthApp = "OpenHealthApp"
-        static let removeData = "RemoveData"
+    static let unitSystem = "UnitSystem"
+    static let units = "Units"
+    static let metricSystem = "MetricSystem"
+    static let imperialSystem = "ImperialSystem"
 
-        static let introductions = "Introductions"
-        static let devInsta = "DevInsta"
-        static let featureRequest = "FeatureRequest"
-        static let reportBug = "ReportBug"
-        static let contactUs = "ContactUs"
-        static let privacyPolicy = "PrivacyPolicy"
-        static let versionNumber = "VersionNumber"
-        static let CouldtSendMail = "CouldtSendMail"
-    }
+    static let changeGoal = "ChangeGoal"
+    static let setYourGoal = "SetYourGoal"
+    static let goal = "Goal"
 
-    struct Reminders {
-        static let reminders = "Reminders"
-        static let turnOnReminders = "TurnOnReminders"
-        static let turnOffReminders = "TurnOffReminders"
-        static let startingTime = "StartingTime"
-        static let endingTime = "EndingTime"
-        static let frequency = "Frequency"
-    }
+    static let small = "Small"
+    static let medium = "Medium"
+    static let large = "Large"
+    static let editDrink = "EditDrink"
+    static let editSmall = "EditDrinkSmall"
+    static let editMedium = "EditDrinkMedium"
+    static let editLarge = "EditDrinkLarge"
+    static let enterNewValue = "EnterNewValue"
 
-    struct Credits {
-        static let credits = "Credits"
-        static let translations = "Translations"
-        static let openSource = "Open-source"
-        static let devDesign = "Dev&Design"
-    }
+    static let howToUse = "HowToUse"
+    static let dangerZone = "DangerZone"
+    static let openAppSettings = "OpenAppSettings"
+    static let openHealthApp = "OpenHealthApp"
+    static let removeData = "RemoveData"
 
-    struct Language {
-        static let language = "Language"
-        static let english = "en"
-        static let norwegian = "nb"
-        static let german = "de"
-        static let icelandic = "is"
-    }
+    static let introductions = "Introductions"
+    static let devInsta = "DevInsta"
+    static let featureRequest = "FeatureRequest"
+    static let reportBug = "ReportBug"
+    static let contactUs = "ContactUs"
+    static let privacyPolicy = "PrivacyPolicy"
+    static let versionNumber = "VersionNumber"
+    static let CouldtSendMail = "CouldtSendMail"
 
-    struct Tutorial {
-        static let explenationDay = "ExplenationDay"
-        static let explenationSummary = "ExplenationSummary"
-        static let explenationDrinks = "ExplenationDrinks"
-        static let explenationSettings = "ExplenationSettings"
-        static let explenationCalendar = "ExplenationCalendar"
-        static let skip = "Skip"
-        static let next = "Next"
-    }
+    static let reminders = "Reminders"
+    static let turnOnReminders = "TurnOnReminders"
+    static let turnOffReminders = "TurnOffReminders"
+    static let startingTime = "StartingTime"
+    static let endingTime = "EndingTime"
+    static let frequency = "Frequency"
 
-    struct Calendar {
-        static let goal = "Goal"
-        static let water = "Water"
-        static let average = "Average"
-        static let consumed = "Consumed"
-        static let drinkType = "DrinkType"
-        static let drinkAmount = "DrinkAmount"
-    }
+    static let credits = "Credits"
+    static let translations = "Translations"
+    static let openSource = "Open-source"
+    static let devDesign = "Dev&Design"
 
-    struct Watch {
-        static let toGo = "toGo"
-        static let goodJob = "goodJob"
-    }
+    static let language = "Language"
+    static let english = "en"
+    static let norwegian = "nb"
+    static let german = "de"
+    static let icelandic = "is"
+
+    static let explenationDay = "ExplenationDay"
+    static let explenationSummary = "ExplenationSummary"
+    static let explenationDrinks = "ExplenationDrinks"
+    static let explenationSettings = "ExplenationSettings"
+    static let explenationCalendar = "ExplenationCalendar"
+    static let skip = "Skip"
+    static let next = "Next"
+
+    static let water = "Water"
+    static let average = "Average"
+    static let consumed = "Consumed"
+    static let drinkType = "DrinkType"
+    static let drinkAmount = "DrinkAmount"
+
+    static let toGo = "toGo"
+    static let goodJob = "goodJob"
 }

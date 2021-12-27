@@ -19,12 +19,13 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     @AppStorage("language") private var language = LocalizationService.shared.language
+    @Preference(\.smallDrink) private var smallDrink
+    @Preference(\.mediumDrink) private var mediumDrink
+    @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
 
     @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
-    @Published var drinks = [Drink(type: .small, size: 250),
-                             Drink(type: .medium, size: 500),
-                             Drink(type: .large, size: 750)]
+    @Published var drinks: [Drink] = []
     @Published var showAlert: Bool = false
     @Published var interactedDrink: Drink?
     @Published private var accessRequested: [AccessType] = []
@@ -54,13 +55,13 @@ final class HomeViewModel: NSObject, ObservableObject {
         self.dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         super.init()
+        updateDrinks()
         if WCSession.isSupported() {
             session.delegate = self
             session.activate()
         }
         requestNotificationAccess()
         setupSubscribers()
-        fetchToday()
     }
 
     func requestNotificationAccess() {
@@ -148,6 +149,12 @@ final class HomeViewModel: NSObject, ObservableObject {
         }
     }
 
+    func updateDrinks() {
+        drinks = [Drink(type: .small, size: smallDrink),
+                  Drink(type: .medium, size: mediumDrink),
+                  Drink(type: .large, size: largeDrink)]
+    }
+
     func navigateToSettings() {
         navigateTo(.settings)
     }
@@ -172,6 +179,7 @@ extension HomeViewModel {
                     break
                 }
             } receiveValue: { [weak self] _ in
+                print("succeeded with creating new day")
                 self?.saveAndFetch()
             }.store(in: &tasks)
 
@@ -183,7 +191,7 @@ extension HomeViewModel {
             .sink { completion in
                 switch completion {
                 case let .failure(error):
-                    print("Failed creating new day: \(error)")
+                    print("Failed getting last goal: \(error)")
                 default:
                     break
                 }
@@ -200,10 +208,12 @@ extension HomeViewModel {
             .sink { [weak self] completion in
                 switch completion {
                 case let .failure(error as CoreDataError):
-                    print("Failed fetching day \(error)")
+                    print("Failed fetching today \(error)")
                     if error == .elementNotFound {
                         self?.createNewDay()
                     }
+                case .finished:
+                    print("succeeded with finding today")
                 default:
                     break
                 }
@@ -302,6 +312,7 @@ extension HomeViewModel {
                     break
                 }
             } receiveValue: { consumed in
+                print("Got data from health")
                 self.updateTodaysConsumption(to: consumed)
             }.store(in: &tasks)
     }

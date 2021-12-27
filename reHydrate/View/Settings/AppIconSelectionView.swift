@@ -66,7 +66,7 @@ struct AppIconSelectionView: View {
                     .font(.title)
                 }
                 ToolbarItem(placement: .principal) {
-                    Text(Localizable.Setting.appIcon.local(language))
+                    Text(Localizable.appIcon.local(language))
                         .font(.title)
                 }
             }

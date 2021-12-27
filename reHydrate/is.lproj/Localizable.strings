@@ -10,9 +10,7 @@
 "Add"           = "Bæta";
 "Done"          = "Búið";
 "Cancel"        = "Hætta við";
-"EditDrink"     = "Breyta drikk";
 "RemoveDrink"   = "Taktu þennan drykk";
-"ChangeAmount"  = "Breyta magni";
 "EnterNewValue" = "Sláðu inn nýtt gildi";
 // Settings
 // Appearance
@@ -40,7 +38,15 @@
 "ChangeGoal"       = "Breyta markmiði";
 "SetYourGoal"      = "Set your goal";
 "Goal"             = "Marki";
-
+// Drink
+"Small"            = "Litlum";
+"Medium"           = "Miðlungs";
+"Large"            = "Stórum";
+"EditDrink"        = "Breyta drikk";
+"EditDrinkSmall"   = "Litlum drykk";
+"EditDrinkMedium"  = "Miðlungs drykk";
+"EditDrinkLarge"   = "Stórum drykk";
+"ChangeAmount"     = "Breyta magni";
 // Reminders
 "Reminders"        = "Áminningar";
 "TurnOnReminders"  = "Kveikja á áminningum";

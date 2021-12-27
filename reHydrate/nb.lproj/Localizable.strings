@@ -10,9 +10,7 @@
 "Add"           = "Legg til";
 "Done"          = "Ferdig";
 "Cancel"        = "Avbryt";
-"EditDrink"     = "Endre drikke";
 "RemoveDrink"   = "Fjern denne drinken";
-"ChangeAmount"  = "Endre mengde drikke";
 "EnterNewValue" = "Angi ny verdi";
 // SettingsVC
 // Appearance
@@ -40,6 +38,15 @@
 "ChangeGoal"       = "Ender mål";
 "SetYourGoal"      = "Set ditt mål";
 "Goal"             = "Mål";
+// Drink
+"Small"            = "Small";
+"Medium"           = "Medium";
+"Large"            = "Large";
+"EditDrink"        = "Endre drikke";
+"EditDrinkSmall"   = "Liten drikke";
+"EditDrinkMedium"  = "Medium drikke";
+"EditDrinkLarge"   = "Store drikke";
+"ChangeAmount"     = "Endre mengde drikke";
 // Reminders
 "Reminders"        = "Påminnelser";
 "TurnOnReminders"  = "Skru på påminnelser";
