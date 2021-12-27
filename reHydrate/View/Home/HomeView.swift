@@ -99,9 +99,10 @@ struct HomeView: View {
             viewModel.fetchHealthData()
         }
         .onAppear {
+            viewModel.updateDrinks()
             viewModel.fetchToday()
         }
-        .confirmationDialog(Localizable.Home.removeDrink,
+        .confirmationDialog(Localizable.removeDrink,
                             isPresented: $viewModel.showAlert) {
             Button("Remove \(viewModel.getValue(for: viewModel.interactedDrink))",
                    role: .destructive) {

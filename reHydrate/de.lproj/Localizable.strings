@@ -10,9 +10,7 @@
 "Add"           = "Hinzufügen";
 "Done"          = "Fertig";
 "Cancel"        = "Abbrechen";
-"EditDrink"     = "Getränk bearbeiten";
 "RemoveDrink"   = "Dieses Getränk entfernen";
-"ChangeAmount"  = "Die Menge ändern";
 "EnterNewValue" = "Gib einen Wert ein";
 // Settings
 // Appearance
@@ -40,6 +38,15 @@
 "ChangeGoal"       = "Ziel ändern";
 "SetYourGoal"      = "Setze dein Ziel";
 "Goal"             = "Ziel";
+// Drink
+"Small"            = "Kleines";
+"Medium"           = "Mittleres";
+"Large"            = "Großes";
+"EditDrink"        = "Getränk bearbeiten";
+"EditDrinkSmall"   = "kleines Getränk";
+"EditDrinkMedium"  = "mittleres Getränk";
+"EditDrinkLarge"   = "Großes Getränk";
+"ChangeAmount"     = "Die Menge ändern";
 // Reminders
 "Reminders"        = "Erinnerungen";
 "TurnOnReminders"  = "Erinnerungen einschalten";

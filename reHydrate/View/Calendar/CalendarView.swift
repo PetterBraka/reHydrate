@@ -45,7 +45,7 @@ struct CalendarView: View {
                         .padding(16)
                         VStack(spacing: 16) {
                             HStack {
-                                Text(LocalizedStringKey(Localizable.Calendar.consumed))
+                                Text(LocalizedStringKey(Localizable.consumed))
                                     .font(.title)
                                     .foregroundColor(.label)
                                 Spacer()
@@ -55,7 +55,7 @@ struct CalendarView: View {
                             }
                             Divider()
                             HStack {
-                                Text(LocalizedStringKey(Localizable.Calendar.average))
+                                Text(LocalizedStringKey(Localizable.average))
                                     .font(.title)
                                     .foregroundColor(.label)
                                 Spacer()
