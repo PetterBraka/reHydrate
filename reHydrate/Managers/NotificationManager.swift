@@ -30,10 +30,11 @@ class NotificationManager {
     @Preference(\.isUsingMetric) private var isMetric
 
     static let shared = NotificationManager()
-
-    let center = UNUserNotificationCenter.current()
+    
     var reachedGoal = false
-    var hasSetNotifications = false
+    private let center = UNUserNotificationCenter.current()
+    private var hasSetNotifications = false
+    private var hasBeenGratulated = false
 
     func requestAccess() -> AnyPublisher<Void, Error> {
         Future { [unowned self] promise in
@@ -93,6 +94,7 @@ class NotificationManager {
     }
 
     private func createNotification(for date: Date) {
+        guard !hasBeenGratulated else { return }
         let notification = getReminder()
         let date = Calendar.current.dateComponents([.hour, .minute], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
@@ -101,6 +103,7 @@ class NotificationManager {
                                             trigger: trigger)
         center.add(request, withCompletionHandler: nil)
         center.setNotificationCategories([getActions()])
+        hasBeenGratulated = true
     }
 
     private func getActions() -> UNNotificationCategory {
