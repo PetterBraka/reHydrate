@@ -126,8 +126,6 @@
 		335DA340276017EC002266D2 /* whiteGreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2EF276017EC002266D2 /* whiteGreen@2x.png */; };
 		335DA341276017EC002266D2 /* blackYellow@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2F0276017EC002266D2 /* blackYellow@1x.png */; };
 		33600BD42764B3800061A771 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33600BD32764B3800061A771 /* Image.swift */; };
-		336136A126B6E79F00C87FB5 /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* Hero */; };
-		336136A226B6E79F00C87FB5 /* Hero in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 336136A026B6E79F00C87FB5 /* Hero */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 336136A526B6E7D500C87FB5 /* FSCalendar */; };
 		33694FEF277CAA8E00D2FE66 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33694FEE277CAA8E00D2FE66 /* View+Extensions.swift */; };
 		33694FF1277CB09900D2FE66 /* EditDrinksSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33694FF0277CB09900D2FE66 /* EditDrinksSectionView.swift */; };
@@ -196,7 +194,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				336136A226B6E79F00C87FB5 /* Hero in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,7 +399,6 @@
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				332315FA2742B6020039EE23 /* Swinject in Frameworks */,
 				336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */,
-				336136A126B6E79F00C87FB5 /* Hero in Frameworks */,
 				33B28F6226BC7EB100DECA9F /* SwiftyUserDefaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -781,7 +777,6 @@
 			);
 			name = reHydrate;
 			packageProductDependencies = (
-				336136A026B6E79F00C87FB5 /* Hero */,
 				336136A526B6E7D500C87FB5 /* FSCalendar */,
 				33B28F6126BC7EB100DECA9F /* SwiftyUserDefaults */,
 				332315F92742B6020039EE23 /* Swinject */,
@@ -862,7 +857,6 @@
 			);
 			mainGroup = 3378766A24378A9300F5A732;
 			packageReferences = (
-				3361369F26B6E79F00C87FB5 /* XCRemoteSwiftPackageReference "Hero" */,
 				336136A426B6E7D500C87FB5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 				33B28F6026BC7EB100DECA9F /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */,
 				332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */,
@@ -1442,14 +1436,6 @@
 				minimumVersion = 2.8.0;
 			};
 		};
-		3361369F26B6E79F00C87FB5 /* XCRemoteSwiftPackageReference "Hero" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/HeroTransitions/Hero";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.6.1;
-			};
-		};
 		336136A426B6E7D500C87FB5 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
@@ -1473,11 +1459,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */;
 			productName = Swinject;
-		};
-		336136A026B6E79F00C87FB5 /* Hero */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3361369F26B6E79F00C87FB5 /* XCRemoteSwiftPackageReference "Hero" */;
-			productName = Hero;
 		};
 		336136A526B6E7D500C87FB5 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
