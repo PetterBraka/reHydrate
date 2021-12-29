@@ -37,7 +37,7 @@ struct SettingsView: View {
                         .foregroundColor(.button)
                 }
                 .padding([.leading, .top], 24)
-                .padding(.bottom, 8)
+                .padding(.bottom, 16)
                 List {
                     // Apperance
                     Section {
@@ -141,10 +141,23 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
+                    // Credits
+                    Section {
+                        Button {
+                            viewModel.showSheet = .credits
+                        } label: {
+                            HStack {
+                                Text(Localizable.credits.local(viewModel.language))
+                                Spacer()
+                                Image.open
+                            }
+                        }
+                    }
+                    .listRowBackground(Color.tableViewBackground)
                     // About app
                     Section {
                         Button {
-                            openLink(to: .email)
+                            openLink(to: .contactMe)
                         } label: {
                             HStack {
                                 Text(Localizable.contactUs.local(viewModel.language))
@@ -201,6 +214,10 @@ struct SettingsView: View {
                     AppIconSelectionView {
                         viewModel.showSheet = nil
                     }
+                case .credits:
+                    CreditsView {
+                        viewModel.showSheet = nil
+                    }
                 }
             }
             .alert(Localizable.RemindersNotAllowed.local(viewModel.language),
@@ -219,7 +236,7 @@ struct SettingsView: View {
                     ToolbarItemGroup(placement: .keyboard) {
                         HStack {
                             Spacer()
-                            Button(Localizable.done) {
+                            Button(Localizable.done.local(viewModel.language)) {
                                 focusedField = nil
                             }
                         }

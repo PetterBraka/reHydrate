@@ -8,16 +8,44 @@
 
 import SwiftUI
 
-enum WebSite: String {
-    case privacy = "https://github.com/PetterBraka/reHydrate/blob/master/Privacy-Policy.md"
-    case license = "https://github.com/PetterBraka/reHydrate/blob/master/LICENSE"
-    case devInsta = "https://www.instagram.com/braka.coding/"
-    case email = "mailto:Petter.braka@gmail.com?subject=reHydrate feedback&body=Hello I have an issue..."
+enum WebSite {
+    case privacy
+    case license
+    case devInsta
+    case contactMe
+    case helpTranslate
+
+    func getURL() -> String {
+        switch self {
+        case .privacy:
+            return "https://github.com/PetterBraka/reHydrate/blob/master/Privacy-Policy.md"
+        case .license:
+            return "https://github.com/PetterBraka/reHydrate/blob/master/LICENSE"
+        case .devInsta:
+            return "https://www.instagram.com/braka.coding/"
+        case .contactMe:
+            return "mailto:Petter.braka@gmail.com" +
+            "?subject=reHydrate feedback" +
+            "&body=Hello I have an issue..."
+        case .helpTranslate:
+            return "mailto:Petter.braka@gmail.com"  +
+                                        "?subject=reHydrate translation" +
+                                        "&body=Hello I would like to help translate your app"
+        }
+    }
 }
 
 extension View {
     func openLink(to webSite: WebSite) {
-        if let webSite = webSite.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+        if let webSite = webSite.getURL().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+           let url = URL(string: webSite),
+           UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+
+    func openLink(to webSite: String) {
+        if let webSite = webSite.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
            let url = URL(string: webSite),
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)

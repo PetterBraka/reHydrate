@@ -17,8 +17,8 @@ final class SettingsViewModel: ObservableObject {
         var id: String {
             self.rawValue
         }
-
         case editIcon
+        case credits
     }
 
     @AppStorage("language") var language = LocalizationService.shared.language
