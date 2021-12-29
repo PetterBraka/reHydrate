@@ -188,6 +188,20 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
+                    // Support dev
+                    Section {
+                        Button {
+                            openLink(to: .merch)
+                        } label: {
+                            HStack {
+                                Text(Localizable.merch.local(viewModel.language))
+                                Spacer()
+                                Image.open
+                            }
+                            .contentShape(Rectangle())
+                        }
+                    }
+                    .listRowBackground(Color.tableViewBackground)
                     // App info
                     Section {
                         HStack {
