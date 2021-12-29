@@ -55,7 +55,6 @@ class NotificationManager {
         print("Requested reminders")
         if reachedGoal {
             deleteReminders()
-            createCongratulation()
         } else {
             setReminders()
         }
@@ -140,7 +139,7 @@ class NotificationManager {
                                       options: .customDismissAction)
     }
 
-    private func createCongratulation() {
+    func createCongratulation() {
         let notfication = getCongratulation()
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString,
