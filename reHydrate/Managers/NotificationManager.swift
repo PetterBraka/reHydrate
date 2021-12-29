@@ -33,6 +33,7 @@ class NotificationManager {
 
     let center = UNUserNotificationCenter.current()
     var reachedGoal = false
+    var hasSetNotifications = false
 
     func requestAccess() -> AnyPublisher<Void, Error> {
         Future { [unowned self] promise in
@@ -50,6 +51,7 @@ class NotificationManager {
 
     func requestReminders() {
         guard isRemindersOn else { return }
+        print("Requested reminders")
         if reachedGoal {
             deleteReminders()
             createCongratulation()
@@ -62,6 +64,7 @@ class NotificationManager {
         print("Deleting reminders")
         self.center.removeAllDeliveredNotifications()
         self.center.removeAllPendingNotificationRequests()
+        hasSetNotifications = false
     }
 
     /**
@@ -73,6 +76,7 @@ class NotificationManager {
      ```
      */
     private func setReminders(forTomorrow: Bool = false) {
+        guard !hasSetNotifications else { return }
         print("Creating notifications")
         let time = Calendar.current.dateComponents([.hour, .minute],
                                                          from: remindersStart,
@@ -85,6 +89,7 @@ class NotificationManager {
                                                                to: remindersStart) else { return }
             createNotification(for: notificationDate)
         }
+        hasSetNotifications = true
     }
 
     private func createNotification(for date: Date) {

@@ -239,6 +239,7 @@ extension SettingsViewModel {
     }
 
     private func requestReminders() {
+        notificationManager.deleteReminders()
         notificationManager.requestReminders()
     }
 }
