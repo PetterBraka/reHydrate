@@ -34,6 +34,8 @@
 "Translations"     = "Übersetzungen";
 "Open-source"      = "Open-source";
 "Dev&Design"       = "Entwicklung & Design";
+"ThankYou"         = "Ein besonderes dankeschön an";
+"HelpTranslate"    = "Hilfe beim Übersetzen";
 // Goal
 "ChangeGoal"       = "Ziel ändern";
 "SetYourGoal"      = "Setze dein Ziel";

@@ -34,6 +34,8 @@
 "Translations"     = "Translations";
 "Open-source"      = "Open-source";
 "Dev&Design"       = "Development & Design";
+"ThankYou"         = "A special thank you to";
+"HelpTranslate"    = "Help translate";
 // Goal
 "ChangeGoal"       = "Change Goal";
 "SetYourGoal"      = "Set your goal";

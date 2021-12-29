@@ -59,7 +59,7 @@ struct AppIconSelectionView: View {
             .padding(.horizontal, 16)
             .toolbar {
                 ToolbarItem(id: "done button", placement: .navigationBarTrailing) {
-                    Button(Localizable.done, role: .cancel) {
+                    Button(Localizable.done.local(language), role: .cancel) {
                         dismiss()
                     }
                     .foregroundColor(.label)

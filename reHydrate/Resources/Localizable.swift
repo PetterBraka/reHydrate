@@ -126,6 +126,8 @@ struct Localizable {
     static let translations = "Translations"
     static let openSource = "Open-source"
     static let devDesign = "Dev&Design"
+    static let thankYou = "ThankYou"
+    static let helpTranslate = "HelpTranslate"
 
     static let language = "Language"
     static let english = "en"
