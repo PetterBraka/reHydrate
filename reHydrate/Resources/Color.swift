@@ -17,6 +17,7 @@ extension UIColor {
 
 extension Color {
     static let label = Color("reHydrate.label")
+    static let labelFaded = Color("reHydrate.label.Faded")
     static let labelHighlighted = Color("reHydrate.label.Highlighted")
     static let button = Color("reHydrate.Button")
     static let buttonHighlighted = Color("reHydrate.Button.Highlighted")
