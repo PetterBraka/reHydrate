@@ -14,6 +14,7 @@ enum WebSite {
     case devInsta
     case contactMe
     case helpTranslate
+    case merch
 
     func getURL() -> String {
         switch self {
@@ -31,6 +32,11 @@ enum WebSite {
             return "mailto:Petter.braka@gmail.com"  +
                                         "?subject=reHydrate translation" +
                                         "&body=Hello I would like to help translate your app"
+        case .merch:
+            return "https://www.redbubble.com/people/petter-braka/shop" +
+            "?artistUserName=petter-braka" +
+            "&asc=u&iaCode=all-departments" +
+            "&sortOrder=relevant#profile"
         }
     }
 }
