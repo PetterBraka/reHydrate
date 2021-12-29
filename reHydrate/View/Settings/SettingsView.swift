@@ -175,6 +175,21 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
+                    // App info
+                    Section {
+                        HStack {
+                        Spacer()
+                            VStack {
+                                Text("reHydrate")
+                                Text("\(Localizable.versionNumber.local(viewModel.language)) " +
+                                     "\(viewModel.appVersion ?? "1.0.0")")
+                            }
+                            .font(.body)
+                            .foregroundColor(Color.labelFaded)
+                        Spacer()
+                    }
+                    }
+                    .listRowBackground(Color.clear)
                 }
                 .listStyle(InsetGroupedListStyle())
                 .font(.body)
@@ -200,22 +215,16 @@ struct SettingsView: View {
                     }
                 }
             }
-                   .toolbar(content: {
-                       ToolbarItemGroup(placement: .keyboard) {
-                           HStack {
-                               Spacer()
-                               Button(Localizable.done) {
-                                   focusedField = nil
-                               }
-                           }
-                       }
-                   })
+            .toolbar(content: {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        HStack {
+                            Spacer()
+                            Button(Localizable.done) {
+                                focusedField = nil
+                            }
+                        }
+                    }
+                })
         }
-    }
-}
-
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView {_ in}
     }
 }

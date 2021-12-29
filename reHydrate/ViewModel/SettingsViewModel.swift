@@ -64,6 +64,8 @@ final class SettingsViewModel: ObservableObject {
     private var navigateTo: (AppState) -> Void
     private var dayManager: DayManager
 
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
