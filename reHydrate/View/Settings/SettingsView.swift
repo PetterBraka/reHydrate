@@ -95,79 +95,12 @@ struct SettingsView: View {
                     .listRowBackground(Color.tableViewBackground)
                     // Drink size
                     Section {
-                        // Small
-                        HStack {
-                            Text(Localizable.editSmall.local(viewModel.language))
-                            Spacer()
-                            HStack(spacing: 0) {
-                                TextField("", text: $viewModel.small, prompt: Text("Value"))
-                                    .keyboardType(.numberPad)
-                                    .focused($focusedField, equals: .small)
-                                    .multilineTextAlignment(.center)
-                                    .fixedSize()
-                                Text(viewModel.unit)
-                            }
-                            .padding(.vertical, 2)
-                            .padding(.horizontal, 8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder()
-                                    .foregroundColor(.label)
-                            )
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            focusedField = .small
-                        }
-                        // Medium
-                        HStack {
-                            Text(Localizable.editMedium.local(viewModel.language))
-                            Spacer()
-                            HStack(spacing: 0) {
-                                TextField("", text: $viewModel.medium, prompt: Text("Value"))
-                                    .keyboardType(.numberPad)
-                                    .focused($focusedField, equals: .medium)
-                                    .multilineTextAlignment(.center)
-                                    .fixedSize()
-                                Text(viewModel.unit)
-                            }
-                            .padding(.vertical, 2)
-                            .padding(.horizontal, 8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder()
-                                    .foregroundColor(.label)
-                            )
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            focusedField = .medium
-                        }
-                        // Large
-                        HStack {
-                            Text(Localizable.editLarge.local(viewModel.language))
-                            Spacer()
-                            HStack(spacing: 0) {
-                                TextField("", text: $viewModel.large, prompt: Text("Value"))
-                                    .keyboardType(.numberPad)
-                                    .focused($focusedField, equals: .large)
-                                    .font(.body)
-                                    .multilineTextAlignment(.center)
-                                    .fixedSize()
-                                Text(viewModel.unit)
-                            }
-                            .padding(.vertical, 2)
-                            .padding(.horizontal, 8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .strokeBorder()
-                                    .foregroundColor(.label)
-                            )
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            focusedField = .large
-                        }
+                        EditDrinksSectionView(focusedField: _focusedField,
+                                              small: $viewModel.small,
+                                              medium: $viewModel.medium,
+                                              large: $viewModel.large,
+                                              unit: $viewModel.unit,
+                                              language: viewModel.language)
                     }
                     .listRowBackground(Color.tableViewBackground)
                     // Notifications
