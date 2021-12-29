@@ -20,6 +20,7 @@ struct CalendarModuleView: UIViewRepresentable {
         case sunday = 1
     }
 
+    @AppStorage("language") var language = LocalizationService.shared.language
     @Binding var selectedDays: [Day]
     @Binding var storedDays: [Day]
     var firsWeekday: DayOfTheWeek
@@ -35,7 +36,7 @@ struct CalendarModuleView: UIViewRepresentable {
         let calendar = FSCalendar()
         calendar.delegate = context.coordinator
         calendar.dataSource = context.coordinator
-        calendar.locale = .current
+        calendar.locale = .init(identifier: language.rawValue)
         calendar.register(CalendarCell.self, forCellReuseIdentifier: "calendarCell")
 
         calendar.allowsMultipleSelection = true
@@ -55,7 +56,9 @@ struct CalendarModuleView: UIViewRepresentable {
         return calendar
     }
 
-    func updateUIView(_ uiView: FSCalendar, context: Context) {}
+    func updateUIView(_ uiView: FSCalendar, context: Context) {
+        uiView.locale = .init(identifier: language.rawValue)
+    }
 
     class Coordinator: NSObject, FSCalendarDelegate, FSCalendarDataSource {
 
