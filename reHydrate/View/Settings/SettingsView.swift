@@ -37,6 +37,7 @@ struct SettingsView: View {
                         .foregroundColor(.button)
                 }
                 .padding([.leading, .top], 24)
+                .padding(.bottom, 8)
                 List {
                     // Apperance
                     Section {
@@ -204,6 +205,40 @@ struct SettingsView: View {
                                 }
 
                             }
+                        }
+                    }
+                    .listRowBackground(Color.tableViewBackground)
+                    // About app
+                    Section {
+                        Button {
+                            openLink(to: .email)
+                        } label: {
+                            HStack {
+                                Text(Localizable.contactUs.local(viewModel.language))
+                                Spacer()
+                                Image.open
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        Button {
+                            openLink(to: .privacy)
+                        } label: {
+                            HStack {
+                                Text(Localizable.privacyPolicy.local(viewModel.language))
+                                Spacer()
+                                Image.open
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        Button {
+                            openLink(to: .devInsta)
+                        } label: {
+                            HStack {
+                                Text(Localizable.devInsta.local(viewModel.language))
+                                Spacer()
+                                Image.open
+                            }
+                            .contentShape(Rectangle())
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)

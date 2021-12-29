@@ -30,9 +30,9 @@ class NotificationManager {
     @Preference(\.isUsingMetric) private var isMetric
 
     static let shared = NotificationManager()
-    
+
     var reachedGoal = false
-    private let center = UNUserNotificationCenter.current()
+    let center = UNUserNotificationCenter.current()
     private var hasSetNotifications = false
     private var hasBeenGratulated = false
 
