@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import Firebase
 import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        FirebaseApp.configure()
         let center = UNUserNotificationCenter.current()
         center.delegate = self
             center.requestAuthorization(options: [.sound, .alert]) { granted, _ in
