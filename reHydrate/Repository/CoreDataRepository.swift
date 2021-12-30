@@ -6,9 +6,9 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import UIKit
 import Combine
 import CoreData
+import UIKit
 
 protocol Repository {
     associatedtype Day
@@ -16,12 +16,12 @@ protocol Repository {
     func create() -> AnyPublisher<Day, Error>
     func delete(_ day: Day) -> AnyPublisher<Bool, Error>
     func get(id: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?)
-    -> AnyPublisher<Day?, Error>
+        -> AnyPublisher<Day?, Error>
     func get(date: Date, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?)
-    -> AnyPublisher<Day?, Error>
+        -> AnyPublisher<Day?, Error>
     func getLatesGoal(predicate: NSPredicate?) -> AnyPublisher<Day?, Error>
     func getAll(predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?)
-    -> AnyPublisher<[Day], Error>
+        -> AnyPublisher<[Day], Error>
 }
 
 enum CoreDataError: Error {
@@ -35,7 +35,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
     private let managedObjectContext: NSManagedObjectContext
 
     init(context: NSManagedObjectContext) {
-        self.managedObjectContext = context
+        managedObjectContext = context
     }
 
     func create() -> AnyPublisher<T, Error> {
@@ -43,7 +43,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
             let className = String(describing: Day.self)
             guard let managedObject = NSEntityDescription.insertNewObject(forEntityName: className,
                                                                           into: self.managedObjectContext)
-                    as? Day else { return promise(.failure(CoreDataError.invalidManagedObjectType)) }
+                as? Day else { return promise(.failure(CoreDataError.invalidManagedObjectType)) }
             return promise(.success(managedObject))
         }
         .eraseToAnyPublisher()
@@ -90,7 +90,7 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
             let fromPredicate = NSPredicate(format: "date >= %@", startOfDay as NSDate)
             let toPredicate = NSPredicate(format: "date < %@", startOfNextDay! as NSDate)
             let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates:
-                                                        [fromPredicate, toPredicate])
+                [fromPredicate, toPredicate])
             request.predicate = datePredicate
             do {
                 guard let results = try? self.managedObjectContext.fetch(request) else {
@@ -141,5 +141,4 @@ class CoreDataRepository<T: NSManagedObject>: Repository {
         }
         .eraseToAnyPublisher()
     }
-
 }

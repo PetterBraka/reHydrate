@@ -9,7 +9,6 @@
 import Foundation
 
 extension String {
-
     /// Localizes a string using given language from Language enum.
     /// - parameter language: The language that will be used to localized string.
     /// - Returns: localized string.
@@ -46,6 +45,6 @@ extension String {
     ///   - bundle: the bundle where the Localizable.strings file lies.
     /// - Returns: localized string.
     private func localized(bundle: Bundle) -> String {
-        return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+        NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
     }
 }

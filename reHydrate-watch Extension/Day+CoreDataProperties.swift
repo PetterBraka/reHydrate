@@ -6,29 +6,28 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
-extension Day {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Day> {
-        return NSFetchRequest<Day>(entityName: "Day")
+public extension Day {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Day> {
+        NSFetchRequest<Day>(entityName: "Day")
     }
 
-    @NSManaged public var date: Date
-    @NSManaged public var goal: Double
-    @NSManaged public var consumed: Double
+    @NSManaged var date: Date
+    @NSManaged var goal: Double
+    @NSManaged var consumed: Double
 
     /// Will print all data form the day
-    public func toPrint() {
+    func toPrint() {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/YY"
         print("""
-            =========================
-            Date: \(formatter.string(from: self.date))
-            Consumed: \(self.consumed)
-            Goal: \(self.goal)
-            =========================
-            """)
+        =========================
+        Date: \(formatter.string(from: date))
+        Consumed: \(consumed)
+        Goal: \(goal)
+        =========================
+        """)
     }
 }

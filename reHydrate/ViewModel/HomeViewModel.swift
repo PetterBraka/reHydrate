@@ -6,10 +6,10 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import SwiftUI
 import Combine
 import CoreData
 import HealthKit
+import SwiftUI
 import WatchConnectivity
 
 final class HomeViewModel: NSObject, ObservableObject {
@@ -24,7 +24,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
 
-    @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
+    @Published var today = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     @Published var drinks: [Drink] = []
     @Published var showAlert: Bool = false
     @Published var interactedDrink: Drink?
@@ -51,8 +51,8 @@ final class HomeViewModel: NSObject, ObservableObject {
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
-        self.viewContext = presistenceController.container.viewContext
-        self.dayManager = DayManager(context: viewContext)
+        viewContext = presistenceController.container.viewContext
+        dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         super.init()
         updateDrinks()
@@ -82,7 +82,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     func requestHealthAccess() {
         healthManager.requestAccess()
             .receive(on: RunLoop.main)
-            .sink {completion in
+            .sink { completion in
                 switch completion {
                 case let .failure(error):
                     print("Failed requesting access too health: \(error.localizedDescription)")
@@ -165,6 +165,7 @@ final class HomeViewModel: NSObject, ObservableObject {
 }
 
 // MARK: Save & Load
+
 extension HomeViewModel {
     private func createNewDay() {
         var latestGoal = fetchLastGoal()
@@ -182,7 +183,6 @@ extension HomeViewModel {
                 print("succeeded with creating new day")
                 self?.saveAndFetch()
             }.store(in: &tasks)
-
     }
 
     private func fetchLastGoal() -> Double {
@@ -242,7 +242,6 @@ extension HomeViewModel {
             } receiveValue: { [weak self] _ in
                 self?.fetchToday()
             }.store(in: &tasks)
-
     }
 
     func addDrink(_ drink: Drink) {
@@ -301,6 +300,7 @@ extension HomeViewModel {
 }
 
 // MARK: HealthKit export & import
+
 extension HomeViewModel {
     func fetchHealthData() {
         healthManager.getWater(for: Date())
@@ -333,6 +333,7 @@ extension HomeViewModel {
 }
 
 // MARK: - Watch communications
+
 extension HomeViewModel: WCSessionDelegate {
     private func exportToWatch(today: Day) {
         if WCSession.isSupported() {
@@ -348,9 +349,9 @@ extension HomeViewModel: WCSessionDelegate {
         }
     }
 
-    func session(_ session: WCSession,
+    func session(_: WCSession,
                  activationDidCompleteWith activationState: WCSessionActivationState,
-                 error: Error?) {
+                 error _: Error?) {
         if activationState == .activated {
             print("connected to watch")
         } else {
@@ -358,20 +359,20 @@ extension HomeViewModel: WCSessionDelegate {
         }
     }
 
-    func sessionDidBecomeInactive(_ session: WCSession) {
+    func sessionDidBecomeInactive(_: WCSession) {
         print("Disconnected")
     }
 
-    func sessionDidDeactivate(_ session: WCSession) {
+    func sessionDidDeactivate(_: WCSession) {
         print("Disconnected")
     }
 
-    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+    func session(_: WCSession, didReceiveMessage message: [String: Any]) {
         print("Recived message from watched")
         handleWatch(message)
     }
 
-    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+    func session(_: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
         print("Recived userInfo from watch")
         handleWatch(userInfo)
     }
@@ -382,14 +383,14 @@ extension HomeViewModel: WCSessionDelegate {
         guard let watchConsumed = Double(data["consumed"] as? String ?? "0") else { return }
         guard today.consumption < watchConsumed else {
             print("Sending data to watch")
-            self.exportToWatch(today: today)
+            exportToWatch(today: today)
             return
         }
         print(data)
-        self.updateTodaysConsumption(to: watchConsumed)
+        updateTodaysConsumption(to: watchConsumed)
         let consumed = Measurement(value: watchConsumed - today.consumption, unit: UnitVolume.liters)
         let differences = consumed.converted(to: .milliliters).value
-        self.export(drink: Drink(size: differences))
+        export(drink: Drink(size: differences))
         print("Udated with data from watch")
     }
 }

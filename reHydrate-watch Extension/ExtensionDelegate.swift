@@ -6,11 +6,10 @@
 //  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import WatchKit
 import CoreData
+import WatchKit
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
-
     var todayConsumed = Double()
     var todayGoal = Double()
     var todayDate = Date()
@@ -65,7 +64,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "watchOS-CoreData")
-        container.loadPersistentStores { (_, error) in
+        container.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 fatalError("Unresolved Error \(error.localizedDescription), \(error.userInfo)")
             }
@@ -84,5 +83,4 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             }
         }
     }
-
 }

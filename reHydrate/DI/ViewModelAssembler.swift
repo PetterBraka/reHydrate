@@ -11,7 +11,6 @@ import Swinject
 
 final class ViewModelAssembler: Assembly {
     func assemble(container: Container) {
-
         // App - ViewModel
         container.register(AppViewModel.self) { _ in
             AppViewModel()

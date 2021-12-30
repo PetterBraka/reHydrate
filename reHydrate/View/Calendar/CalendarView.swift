@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import SwiftUI
 import FSCalendar
+import SwiftUI
 
 struct CalendarView: View {
     @StateObject var viewModel: CalendarViewModel
@@ -19,69 +19,69 @@ struct CalendarView: View {
     }
 
     var body: some View {
-            ZStack {
-                Color.background
-                    .ignoresSafeArea()
+        ZStack {
+            Color.background
+                .ignoresSafeArea()
 
-                GeometryReader { geo in
-                    VStack {
-                        HStack {
-                            Button {
-                                viewModel.navigateToHome()
-                            } label: {
-                                Image.back
-                                    .resizable()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundColor(.button)
-                            }
-                            Spacer()
-                            Text(viewModel.header)
-                                .font(.largeTitle)
-                                .foregroundColor(.label)
-                            Spacer()
-                            Color.clear
+            GeometryReader { geo in
+                VStack {
+                    HStack {
+                        Button {
+                            viewModel.navigateToHome()
+                        } label: {
+                            Image.back
+                                .resizable()
                                 .frame(width: 32, height: 32)
-                        }
-                        .padding(16)
-                        VStack(spacing: 16) {
-                            HStack {
-                                Text(LocalizedStringKey(Localizable.consumed))
-                                    .font(.title)
-                                    .foregroundColor(.label)
-                                Spacer()
-                                Text(viewModel.consumtion)
-                                    .font(.title)
-                                    .foregroundColor(.label)
-                            }
-                            Divider()
-                            HStack {
-                                Text(LocalizedStringKey(Localizable.average))
-                                    .font(.title)
-                                    .foregroundColor(.label)
-                                Spacer()
-                                Text(viewModel.average)
-                                    .font(.title)
-                                    .foregroundColor(.label)
-                            }
-                            Divider()
+                                .foregroundColor(.button)
                         }
                         Spacer()
-                        CalendarModuleView(selectedDays: $viewModel.selectedDays,
-                                           storedDays: $viewModel.storedDays,
-                                           firsWeekday: .monday)
-                            .frame(height: geo.size.height * 0.6)
+                        Text(viewModel.header)
+                            .font(.largeTitle)
+                            .foregroundColor(.label)
+                        Spacer()
+                        Color.clear
+                            .frame(width: 32, height: 32)
                     }
-                    .onAppear {
-                        viewModel.fetchSavedDays()
+                    .padding(16)
+                    VStack(spacing: 16) {
+                        HStack {
+                            Text(LocalizedStringKey(Localizable.consumed))
+                                .font(.title)
+                                .foregroundColor(.label)
+                            Spacer()
+                            Text(viewModel.consumtion)
+                                .font(.title)
+                                .foregroundColor(.label)
+                        }
+                        Divider()
+                        HStack {
+                            Text(LocalizedStringKey(Localizable.average))
+                                .font(.title)
+                                .foregroundColor(.label)
+                            Spacer()
+                            Text(viewModel.average)
+                                .font(.title)
+                                .foregroundColor(.label)
+                        }
+                        Divider()
                     }
+                    Spacer()
+                    CalendarModuleView(selectedDays: $viewModel.selectedDays,
+                                       storedDays: $viewModel.storedDays,
+                                       firsWeekday: .monday)
+                        .frame(height: geo.size.height * 0.6)
                 }
-                .padding(.horizontal, 16)
+                .onAppear {
+                    viewModel.fetchSavedDays()
+                }
+            }
+            .padding(.horizontal, 16)
         }
     }
 }
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView {_ in }
+        CalendarView { _ in }
     }
 }
