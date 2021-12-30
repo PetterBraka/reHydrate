@@ -10,247 +10,274 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>black-blue</key>
+			<key>blackBlue</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-blue</string>
+					<string>blackBlue</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-green</key>
+			<key>blackGreen</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-green</string>
+					<string>blackGreen</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-orange</key>
+			<key>blackOrange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-orange</string>
+					<string>blackOrange</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-pink</key>
+			<key>blackPink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-pink</string>
+					<string>blackPink</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-purple</key>
+			<key>blackPurple</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-purple</string>
+					<string>blackPurple</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-rainbow</key>
+			<key>blackRainbow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-rainbow</string>
+					<string>blackRainbow</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-red</key>
+			<key>blackRed</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-red</string>
+					<string>blackRed</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-white</key>
+			<key>blackWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-white</string>
+					<string>blackWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-yellow</key>
+			<key>blackYellow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-yellow</string>
+					<string>blackYellow</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>blue-white</key>
+			<key>blacklexipink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>blue-white</string>
+					<string>blacklexipink</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>green-white</key>
+			<key>blueWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>green-white</string>
+					<string>blueWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>grey-white</key>
+			<key>greenWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>grey-white</string>
+					<string>greenWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>orange-white</key>
+			<key>greyWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>orange-white</string>
+					<string>greyWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>pink-white</key>
+			<key>lexipinkwhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>pink-white</string>
+					<string>lexipinkwhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>purple-white</key>
+			<key>orangeWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>purple-white</string>
+					<string>orangeWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>rainbow-white</key>
+			<key>pinkWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>rainbow-white</string>
+					<string>pinkWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>red-white</key>
+			<key>purpleWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>red-white</string>
+					<string>purpleWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-blue</key>
+			<key>rainbowWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-blue</string>
+					<string>rainbowWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-green</key>
+			<key>redWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-green</string>
+					<string>redWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-grey</key>
+			<key>whiteBlue</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-grey</string>
+					<string>whiteBlue</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-orange</key>
+			<key>whiteGreen</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-orange</string>
+					<string>whiteGreen</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-pink</key>
+			<key>whiteGrey</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-pink</string>
+					<string>whiteGrey</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-purple</key>
+			<key>whiteOrange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-purple</string>
+					<string>whiteOrange</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-rainbow</key>
+			<key>whitePink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-rainbow</string>
+					<string>whitePink</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-red</key>
+			<key>whitePurple</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-red</string>
+					<string>whitePurple</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-yellow</key>
+			<key>whiteRainbow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-yellow</string>
+					<string>whiteRainbow</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>yellow-white</key>
+			<key>whiteRed</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>yellow-white</string>
+					<string>whiteRed</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>whiteYellow</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>whiteYellow</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>whitelexipink</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>whitelexipink</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>yellowWhite</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>yellowWhite</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
 		</dict>
@@ -258,8 +285,10 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>Black</string>
+				<string>blackWhite</string>
 			</array>
+			<key>CFBundleIconName</key>
+			<string>blackWhite</string>
 			<key>UIPrerenderedIcon</key>
 			<false/>
 		</dict>
@@ -268,247 +297,247 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>black-blue</key>
+			<key>blackBlue</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-blue</string>
+					<string>blackBlue</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-green</key>
+			<key>blackGreen</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-green</string>
+					<string>blackGreen</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-orange</key>
+			<key>blackOrange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-orange</string>
+					<string>blackOrange</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-pink</key>
+			<key>blackPink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-pink</string>
+					<string>blackPink</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-purple</key>
+			<key>blackPurple</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-purple</string>
+					<string>blackPurple</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-rainbow</key>
+			<key>blackRainbow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-rainbow</string>
+					<string>blackRainbow</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-red</key>
+			<key>blackRed</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-red</string>
+					<string>blackRed</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-white</key>
+			<key>blackWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-white</string>
+					<string>blackWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>black-yellow</key>
+			<key>blackYellow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>black-yellow</string>
+					<string>blackYellow</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>blue-white</key>
+			<key>blueWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>blue-white</string>
+					<string>blueWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>green-white</key>
+			<key>greenWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>green-white</string>
+					<string>greenWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>grey-white</key>
+			<key>greyWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>grey-white</string>
+					<string>greyWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>orange-white</key>
+			<key>orangeWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>orange-white</string>
+					<string>orangeWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>pink-white</key>
+			<key>pinkWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>pink-white</string>
+					<string>pinkWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>purple-white</key>
+			<key>purpleWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>purple-white</string>
+					<string>purpleWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>rainbow-white</key>
+			<key>rainbowWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>rainbow-white</string>
+					<string>rainbowWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>red-white</key>
+			<key>redWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>red-white</string>
+					<string>redWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-blue</key>
+			<key>whiteBlue</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-blue</string>
+					<string>whiteBlue</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-green</key>
+			<key>whiteGreen</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-green</string>
+					<string>whiteGreen</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-grey</key>
+			<key>whiteGrey</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-grey</string>
+					<string>whiteGrey</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-orange</key>
+			<key>whiteOrange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-orange</string>
+					<string>whiteOrange</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-pink</key>
+			<key>whitePink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-pink</string>
+					<string>whitePink</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-purple</key>
+			<key>whitePurple</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-purple</string>
+					<string>whitePurple</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-rainbow</key>
+			<key>whiteRainbow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-rainbow</string>
+					<string>whiteRainbow</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-red</key>
+			<key>whiteRed</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-red</string>
+					<string>whiteRed</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>white-yellow</key>
+			<key>whiteYellow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>white-yellow</string>
+					<string>whiteYellow</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>yellow-white</key>
+			<key>yellowWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>yellow-white</string>
+					<string>yellowWhite</string>
 				</array>
-				<key>Icon alredy includes gloss effects</key>
+				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
 		</dict>
@@ -536,28 +565,18 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
 	<string>We want to save your water consumption (gathered by this app) to your health app.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>We want to save your water consumption (gathered by this app) to your health app.</string>
+	<string>We want to import your water consumption and display it in this app.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
-		<true/>
-		<key>UISceneConfigurations</key>
-		<dict>
-			<key>UIWindowSceneSessionRoleApplication</key>
-			<array>
-				<dict>
-					<key>UISceneConfigurationName</key>
-					<string>Default Configuration</string>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-				</dict>
-			</array>
-		</dict>
+		<false/>
 	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

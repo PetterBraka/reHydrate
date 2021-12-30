@@ -17,20 +17,20 @@ extension UIImage {
             context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height), blendMode: .sourceAtop)
         }
     }
-    
+
     func renderResizedImage (newWidth: CGFloat) -> UIImage {
         let scale = newWidth / self.size.width
         let newHeight = self.size.height * scale
         let newSize = CGSize(width: newWidth, height: newHeight)
-        
+
         let renderer = UIGraphicsImageRenderer(size: newSize)
-        
+
         let image = renderer.image { (_) in
             self.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: newSize))
         }
         return image
     }
-    
+
     /**
      Will create a greayed out version of the image.
      
