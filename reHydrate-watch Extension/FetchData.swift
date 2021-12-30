@@ -5,10 +5,10 @@
 //  Created by Petter vang Brakalsvålet on 16/01/2021.
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
-import UIKit
-import WatchKit
 import CoreData
 import Foundation
+import UIKit
+import WatchKit
 
 let context = (WKExtension.shared().delegate as? ExtensionDelegate).persistentContainer.viewContext
 let formatter: DateFormatter = {
@@ -25,13 +25,13 @@ public func fetchAllDays() -> [Day] {
     do {
         let days = try context.fetch(Day.fetchRequest()) as? [Day]
         #if DEBUG
-        days.forEach({$0.toPrint()})
+            days.forEach { $0.toPrint() }
         #endif
         return days
     } catch {
         #if DEBUG
-        print("can't featch days")
-        print(error.localizedDescription)
+            print("can't featch days")
+            print(error.localizedDescription)
         #endif
         return [Day(context: context)]
     }
@@ -61,12 +61,12 @@ public func fetchToday() -> Day {
         // tries to get the day out of the array.
         let loadedDays = try context.fetch(request)
         #if DEBUG
-        loadedDays.forEach({$0.toPrint()})
+            loadedDays.forEach { $0.toPrint() }
         #endif
         // If today wasn't found it will create a new day.
         guard let today = loadedDays.first else {
             #if DEBUG
-            print("can't today")
+                print("can't today")
             #endif
             let allDays = fetchAllDays()
             let previousDay = allDays.last
@@ -78,8 +78,8 @@ public func fetchToday() -> Day {
         return today
     } catch {
         #if DEBUG
-        print("can't featch day")
-        print(error.localizedDescription)
+            print("can't featch day")
+            print(error.localizedDescription)
         #endif
         // If the loading of data fails, we create a new day
         let today = Day(context: context)
@@ -107,7 +107,7 @@ public func fetchDay(_ date: Date) -> Day? {
         // tries to get the day out of the array.
         let loadedDays = try context.fetch(request)
         #if DEBUG
-        loadedDays.forEach({$0.toPrint()})
+            loadedDays.forEach { $0.toPrint() }
         #endif
         let day = loadedDays.first
         return day
@@ -124,13 +124,13 @@ public func fetchPreviousDay() -> Day? {
     do {
         let days = try context.fetch(Day.fetchRequest()) as? [Day]
         #if DEBUG
-        days.forEach({$0.toPrint()})
+            days.forEach { $0.toPrint() }
         #endif
         return days[days.count - 1]
     } catch {
         #if DEBUG
-        print("can't featch day creating new day")
-        print(error.localizedDescription)
+            print("can't featch day creating new day")
+            print(error.localizedDescription)
         #endif
         let prevDay = Day(context: context)
         prevDay.date = Date()
@@ -146,8 +146,8 @@ public func saveDays() {
         try context.save()
     } catch {
         #if DEBUG
-        print("can't save days")
-        print(error.localizedDescription)
+            print("can't save days")
+            print(error.localizedDescription)
         #endif
     }
 }

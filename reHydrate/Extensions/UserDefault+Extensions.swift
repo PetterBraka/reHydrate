@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import SwiftyUserDefaults
 import Foundation
+import SwiftyUserDefaults
 
 extension DefaultsKeys {
     var lastVersion: DefaultsKey<Bool> { .init("version4.5.2", defaultValue: false) }

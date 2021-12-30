@@ -12,14 +12,12 @@ import UIKit
 var bundleKey: UInt8 = 0
 
 class LanguageBundle: Bundle {
-
     override func localizedString(forKey key: String,
                                   value: String?,
                                   table tableName: String?) -> String {
-
         guard let path = objc_getAssociatedObject(self, &bundleKey) as? String,
-              let bundle = Bundle(path: path) else {
-
+              let bundle = Bundle(path: path)
+        else {
             return super.localizedString(forKey: key, value: value, table: tableName)
         }
 
@@ -28,11 +26,8 @@ class LanguageBundle: Bundle {
 }
 
 extension Bundle {
-
     class func setLanguage(_ language: String) {
-
         defer {
-
             object_setClass(Bundle.main, LanguageBundle.self)
         }
 

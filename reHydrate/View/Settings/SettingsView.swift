@@ -14,6 +14,7 @@ struct SettingsView: View {
         case medium
         case large
     }
+
     @StateObject var viewModel: SettingsViewModel
     @FocusState private var focusedField: Field?
 
@@ -136,7 +137,6 @@ struct SettingsView: View {
                                 } onDecrement: {
                                     viewModel.decrementFrequency()
                                 }
-
                             }
                         }
                     }
@@ -205,16 +205,16 @@ struct SettingsView: View {
                     // App info
                     Section {
                         HStack {
-                        Spacer()
+                            Spacer()
                             VStack {
                                 Text("reHydrate")
                                 Text("\(Localizable.versionNumber.local(viewModel.language)) " +
-                                     "\(viewModel.appVersion ?? "1.0.0")")
+                                    "\(viewModel.appVersion ?? "1.0.0")")
                             }
                             .font(.body)
                             .foregroundColor(Color.labelFaded)
-                        Spacer()
-                    }
+                            Spacer()
+                        }
                     }
                     .listRowBackground(Color.clear)
                 }
@@ -240,22 +240,22 @@ struct SettingsView: View {
                 Button(Localizable.openAppSettings.local(viewModel.language)) {
                     guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
                     if UIApplication.shared.canOpenURL(settingsUrl) {
-                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                        UIApplication.shared.open(settingsUrl, completionHandler: { success in
                             print("Settings opened: \(success)") // Prints true
                         })
                     }
                 }
             }
             .toolbar(content: {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button(Localizable.done.local(viewModel.language)) {
-                                focusedField = nil
-                            }
+                ToolbarItemGroup(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button(Localizable.done.local(viewModel.language)) {
+                            focusedField = nil
                         }
                     }
-                })
+                }
+            })
         }
     }
 }

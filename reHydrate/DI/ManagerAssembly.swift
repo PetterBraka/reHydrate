@@ -20,7 +20,7 @@ class ManagerAssembly: Assembly {
             HealthManager()
         }.inObjectScope(.container)
 
-        container.register(NotificationManager.self) {_ in
+        container.register(NotificationManager.self) { _ in
             NotificationManager()
         }.inObjectScope(.container)
     }

@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 import UserNotifications
 
 // MARK: - Notifications
@@ -15,7 +15,7 @@ import UserNotifications
 class NotificationManager {
     struct Reminder {
         var title = String()
-        var body  = String()
+        var body = String()
     }
 
     @AppStorage("language") private var language = LocalizationService.shared.language
@@ -62,28 +62,28 @@ class NotificationManager {
 
     func deleteReminders() {
         print("Deleting reminders")
-        self.center.removeAllDeliveredNotifications()
-        self.center.removeAllPendingNotificationRequests()
+        center.removeAllDeliveredNotifications()
+        center.removeAllPendingNotificationRequests()
         hasSetNotifications = false
     }
 
     /**
      Will set a notification for every half hour between 7 am and 11pm.
-     
+
      # Example #
      ```
      setReminders()
      ```
      */
-    private func setReminders(forTomorrow: Bool = false) {
+    private func setReminders(forTomorrow _: Bool = false) {
         guard !hasSetNotifications else { return }
         print("Creating notifications")
         let time = Calendar.current.dateComponents([.hour, .minute],
-                                                         from: remindersStart,
-                                                         to: remindersEnd)
+                                                   from: remindersStart,
+                                                   to: remindersEnd)
         let differenceInMunutes = (time.hour! * 60) + time.minute!
         let totalNotifications = Double(differenceInMunutes / reminderFrequency).rounded(.down)
-        for index in 0...Int(totalNotifications) {
+        for index in 0 ... Int(totalNotifications) {
             guard let notificationDate = Calendar.current.date(byAdding: .minute,
                                                                value: reminderFrequency * index,
                                                                to: remindersStart) else { return }
@@ -107,9 +107,9 @@ class NotificationManager {
 
     private func getActions() -> UNNotificationCategory {
         var unit = String()
-        var small  = String()
+        var small = String()
         var medium = String()
-        var large  = String()
+        var large = String()
         if isMetric {
             small = String(format: "%.0f", Measurement(value: smallDrink, unit: UnitVolume.milliliters).value)
             medium = String(format: "%.0f", Measurement(value: mediumDrink, unit: UnitVolume.milliliters).value)
@@ -117,11 +117,11 @@ class NotificationManager {
             unit = "ml"
         } else {
             small = String(format: "%.2f", Measurement(value: smallDrink, unit: UnitVolume.milliliters)
-                            .converted(to: .fluidOunces).value)
+                .converted(to: .fluidOunces).value)
             medium = String(format: "%.2f", Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
-                                .converted(to: .fluidOunces).value)
+                .converted(to: .fluidOunces).value)
             large = String(format: "%.2f", Measurement(value: largeDrink, unit: UnitVolume.milliliters)
-                            .converted(to: .fluidOunces).value)
+                .converted(to: .fluidOunces).value)
             unit = "fl oz"
         }
         let smallDrinkAction = UNNotificationAction(identifier: "small",
@@ -156,10 +156,10 @@ class NotificationManager {
 
     /**
      Will return a random **UNMutableNotificationContent** a notifcation message.
-     
+
      # Notes: #
      1. This will pick out a message randomly so you could get the same message twice.
-     
+
      # Example #
      ```
      let notification = getReminder()
@@ -190,13 +190,14 @@ class NotificationManager {
             Reminder(title: Localizable.Notification.reminder11Title.local(language),
                      body: Localizable.Notification.reminder11Body.local(language)),
             Reminder(title: Localizable.Notification.reminder12Title.local(language),
-                     body: Localizable.Notification.reminder12Body.local(language))]
-        let randomIndex = Int.random(in: 0...reminder.count - 1)
+                     body: Localizable.Notification.reminder12Body.local(language))
+        ]
+        let randomIndex = Int.random(in: 0 ... reminder.count - 1)
         let notification = UNMutableNotificationContent()
         notification.title = reminder[randomIndex].title
-        notification.body  = reminder[randomIndex].body
+        notification.body = reminder[randomIndex].body
         notification.categoryIdentifier = "water reminder"
-        notification.sound  = .default
+        notification.sound = .default
         return notification
     }
 
@@ -221,13 +222,14 @@ class NotificationManager {
             Reminder(title: Localizable.Notification.congrats9Title.local(language),
                      body: Localizable.Notification.congrats9Body.local(language)),
             Reminder(title: Localizable.Notification.congrats10Title.local(language),
-                     body: Localizable.Notification.congrats10Body.local(language))]
-        let randomIndex = Int.random(in: 0...reminder.count - 1)
+                     body: Localizable.Notification.congrats10Body.local(language))
+        ]
+        let randomIndex = Int.random(in: 0 ... reminder.count - 1)
         let notification = UNMutableNotificationContent()
         notification.title = reminder[randomIndex].title
-        notification.body  = reminder[randomIndex].body
+        notification.body = reminder[randomIndex].body
         notification.categoryIdentifier = "congratulations"
-        notification.sound  = .default
+        notification.sound = .default
         return notification
     }
 }

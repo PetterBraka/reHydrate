@@ -26,17 +26,17 @@ enum WebSite {
             return "https://www.instagram.com/braka.coding/"
         case .contactMe:
             return "mailto:Petter.braka@gmail.com" +
-            "?subject=reHydrate feedback" +
-            "&body=Hello I have an issue..."
+                "?subject=reHydrate feedback" +
+                "&body=Hello I have an issue..."
         case .helpTranslate:
-            return "mailto:Petter.braka@gmail.com"  +
-                                        "?subject=reHydrate translation" +
-                                        "&body=Hello I would like to help translate your app"
+            return "mailto:Petter.braka@gmail.com" +
+                "?subject=reHydrate translation" +
+                "&body=Hello I would like to help translate your app"
         case .merch:
             return "https://www.redbubble.com/people/petter-braka/shop" +
-            "?artistUserName=petter-braka" +
-            "&asc=u&iaCode=all-departments" +
-            "&sortOrder=relevant#profile"
+                "?artistUserName=petter-braka" +
+                "&asc=u&iaCode=all-departments" +
+                "&sortOrder=relevant#profile"
         }
     }
 }

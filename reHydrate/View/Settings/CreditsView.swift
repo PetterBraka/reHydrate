@@ -15,68 +15,68 @@ struct CreditsView: View {
 
     @AppStorage("language") var language = LocalizationService.shared.language
     @State var credits: [Credit] =
-    [
-        Credit(name: "Petter Vang Braklsvålet",
-               webSite: "https://petterbraka.github.io/LinkTree/",
-               icons: "🌎 🇳🇴"),
-        Credit(name: "Alexandra Murphy",
-               webSite: "https://beacons.page/alexsmurphy",
-               icons: "🌎 🇬🇧"),
-        Credit(name: "Leo Mehing",
-               webSite: "https://structured.today",
-               icons: "🌎 🇩🇪"),
-        Credit(name: "Sævar Ingi Siggason",
-               webSite: "",
-               icons: "🇮🇸")
-    ]
+        [
+            Credit(name: "Petter Vang Braklsvålet",
+                   webSite: "https://petterbraka.github.io/LinkTree/",
+                   icons: "🌎 🇳🇴"),
+            Credit(name: "Alexandra Murphy",
+                   webSite: "https://beacons.page/alexsmurphy",
+                   icons: "🌎 🇬🇧"),
+            Credit(name: "Leo Mehing",
+                   webSite: "https://structured.today",
+                   icons: "🌎 🇩🇪"),
+            Credit(name: "Sævar Ingi Siggason",
+                   webSite: "",
+                   icons: "🇮🇸")
+        ]
     var dismiss: () -> Void
 
     var body: some View {
         NavigationView {
-                ScrollView {
-                    LazyVStack(spacing: 16) {
-                        ForEach(credits, id: \.self) { credit in
-                            Button {
-                                openLink(to: credit.webSite)
-                            } label: {
-                                HStack {
-                                    Text(credit.name)
-                                    Spacer()
-                                    Text(credit.icons)
-                                }
-                                .contentShape(Rectangle())
+            ScrollView {
+                LazyVStack(spacing: 16) {
+                    ForEach(credits, id: \.self) { credit in
+                        Button {
+                            openLink(to: credit.webSite)
+                        } label: {
+                            HStack {
+                                Text(credit.name)
+                                Spacer()
+                                Text(credit.icons)
                             }
-                            .font(.body)
-                            .foregroundColor(.label)
-                            if credit != credits.last {
-                                Divider()
-                            }
+                            .contentShape(Rectangle())
                         }
-                    }
-                    .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 5)
-                            .foregroundColor(.tableViewBackground)
-                    )
-                    .padding(.bottom, 8)
-                    Button {
-                        openLink(to: .helpTranslate)
-                    } label: {
-                        HStack {
-                            Text(Localizable.helpTranslate.local(language))
-                            Spacer()
-                            Image.open
-                        }
-                        .contentShape(Rectangle())
                         .font(.body)
                         .foregroundColor(.label)
+                        if credit != credits.last {
+                            Divider()
+                        }
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 5)
-                            .foregroundColor(.tableViewBackground)
-                    )
                 }
+                .padding(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundColor(.tableViewBackground)
+                )
+                .padding(.bottom, 8)
+                Button {
+                    openLink(to: .helpTranslate)
+                } label: {
+                    HStack {
+                        Text(Localizable.helpTranslate.local(language))
+                        Spacer()
+                        Image.open
+                    }
+                    .contentShape(Rectangle())
+                    .font(.body)
+                    .foregroundColor(.label)
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundColor(.tableViewBackground)
+                )
+            }
             .padding(.horizontal, 16)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
