@@ -132,6 +132,9 @@
 		33694FF3277CBADA00D2FE66 /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33694FF2277CBADA00D2FE66 /* CreditsView.swift */; };
 		3378768024378A9800F5A732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3378767F24378A9800F5A732 /* Assets.xcassets */; };
 		3378768324378A9800F5A732 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3378768124378A9800F5A732 /* LaunchScreen.storyboard */; };
+		337F1B0D277D4A2D00B2A819 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 337F1B0C277D4A2D00B2A819 /* GoogleService-Info.plist */; };
+		337F1B10277D4B6700B2A819 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 337F1B0F277D4B6700B2A819 /* FirebaseAnalytics */; };
+		337F1B12277D4B6700B2A819 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 337F1B11277D4B6700B2A819 /* FirebaseCrashlytics */; };
 		3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387ED68274AD9C40083D2C1 /* Drink.swift */; };
 		3387ED6D274C03A70083D2C1 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387ED6C274C03A70083D2C1 /* CalendarViewModel.swift */; };
 		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
@@ -347,6 +350,7 @@
 		33694FF2277CBADA00D2FE66 /* CreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsView.swift; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		337F1B0C277D4A2D00B2A819 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3387ED68274AD9C40083D2C1 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
 		3387ED6C274C03A70083D2C1 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
@@ -399,6 +403,8 @@
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				332315FA2742B6020039EE23 /* Swinject in Frameworks */,
 				336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */,
+				337F1B12277D4B6700B2A819 /* FirebaseCrashlytics in Frameworks */,
+				337F1B10277D4B6700B2A819 /* FirebaseAnalytics in Frameworks */,
 				33B28F6226BC7EB100DECA9F /* SwiftyUserDefaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -653,6 +659,7 @@
 				33EFF3FE2470449A00D0A003 /* Localizable.strings */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
+				337F1B0C277D4A2D00B2A819 /* GoogleService-Info.plist */,
 				33231617274420E60039EE23 /* reHydrate.xcdatamodeld */,
 			);
 			path = reHydrate;
@@ -768,6 +775,7 @@
 				3378767024378A9400F5A732 /* Frameworks */,
 				3378767124378A9400F5A732 /* Resources */,
 				33D24C3C24A0CC2400C7A23C /* Embed Watch Content */,
+				337F1B13277D4BE500B2A819 /* Run upload to firebase */,
 				336136A326B6E7A000C87FB5 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -780,6 +788,8 @@
 				336136A526B6E7D500C87FB5 /* FSCalendar */,
 				33B28F6126BC7EB100DECA9F /* SwiftyUserDefaults */,
 				332315F92742B6020039EE23 /* Swinject */,
+				337F1B0F277D4B6700B2A819 /* FirebaseAnalytics */,
+				337F1B11277D4B6700B2A819 /* FirebaseCrashlytics */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -860,6 +870,7 @@
 				336136A426B6E7D500C87FB5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 				33B28F6026BC7EB100DECA9F /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */,
 				332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */,
+				337F1B0E277D4B6700B2A819 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
@@ -878,6 +889,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				335DA314276017EC002266D2 /* blackRainbow@3x.png in Resources */,
+				337F1B0D277D4A2D00B2A819 /* GoogleService-Info.plist in Resources */,
 				335DA2F8276017EC002266D2 /* whitePurple@2x.png in Resources */,
 				335DA32B276017EC002266D2 /* blackRed@2x.png in Resources */,
 				335DA340276017EC002266D2 /* whiteGreen@2x.png in Resources */,
@@ -1012,6 +1024,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n    swiftlint\n    swiftlint autocorrect\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		337F1B13277D4BE500B2A819 /* Run upload to firebase */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Run upload to firebase";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1259,6 +1291,7 @@
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				INFOPLIST_FILE = reHydrate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1444,6 +1477,14 @@
 				minimumVersion = 2.8.2;
 			};
 		};
+		337F1B0E277D4B6700B2A819 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		33B28F6026BC7EB100DECA9F /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sunshinejr/SwiftyUserDefaults";
@@ -1464,6 +1505,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 336136A426B6E7D500C87FB5 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		337F1B0F277D4B6700B2A819 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 337F1B0E277D4B6700B2A819 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		337F1B11277D4B6700B2A819 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 337F1B0E277D4B6700B2A819 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 		33B28F6126BC7EB100DECA9F /* SwiftyUserDefaults */ = {
 			isa = XCSwiftPackageProductDependency;
