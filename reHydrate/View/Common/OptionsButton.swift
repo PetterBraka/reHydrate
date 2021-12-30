@@ -23,15 +23,15 @@ struct OptionsButton: View {
             Button(LocalizedStringKey(selectedItem)) {
                 isTapped.toggle()
             }
-                .font(.body)
-                .tint(.label)
-                .padding(.vertical, 4)
-                .padding(.horizontal, 16)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 5)
-                        .strokeBorder()
-                        .foregroundColor(.label)
-                )
+            .font(.body)
+            .tint(.label)
+            .padding(.vertical, 4)
+            .padding(.horizontal, 16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .strokeBorder()
+                    .foregroundColor(.label)
+            )
         }
         .contentShape(Rectangle())
         .onTapGesture {
@@ -49,7 +49,6 @@ struct OptionsButton: View {
             }
             Button(LocalizedStringKey(Localizable.cancel), role: .cancel) {}
         })
-
     }
 }
 

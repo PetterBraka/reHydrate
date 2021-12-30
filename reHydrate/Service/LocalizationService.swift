@@ -16,7 +16,6 @@ enum Language: String {
 }
 
 class LocalizationService {
-
     static let shared = LocalizationService()
 
     private init() {}
@@ -25,7 +24,7 @@ class LocalizationService {
 
     var language: Language {
         get {
-            return Language(rawValue: currentLanguage) ?? .english
+            Language(rawValue: currentLanguage) ?? .english
         } set {
             if newValue != language {
                 currentLanguage = newValue.rawValue

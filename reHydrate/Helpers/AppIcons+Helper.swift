@@ -12,44 +12,44 @@ import UIKit
 enum Icon: String, CaseIterable {
     // Icons
     case whiteGray = "whiteGrey"
-    case greyWhite = "greyWhite"
-    case blackWhite = "blackWhite"
+    case greyWhite
+    case blackWhite
     // Blue icons
-    case whiteBlue = "whiteBlue"
-    case blueWhite = "blueWhite"
-    case blackBlue = "blackBlue"
+    case whiteBlue
+    case blueWhite
+    case blackBlue
     // Green icons
-    case whiteGreen = "whiteGreen"
-    case greenWhite = "greenWhite"
-    case blackGreen = "blackGreen"
+    case whiteGreen
+    case greenWhite
+    case blackGreen
     // Orange icons
-    case whiteOrange = "whiteOrange"
-    case orangeWhite = "orangeWhite"
-    case blackOrange = "blackOrange"
+    case whiteOrange
+    case orangeWhite
+    case blackOrange
     // LexiPink
     case whiteLexiPink = "whitelexipink"
     case lexiPinkWhite = "lexipinkwhite"
     case blackLexiPink = "blacklexipink"
     // Pink icons
-    case whitePink = "whitePink"
-    case pinkWhite = "pinkWhite"
-    case blackPink = "blackPink"
+    case whitePink
+    case pinkWhite
+    case blackPink
     // Purple icons
-    case whitePurple = "whitePurple"
-    case purpleWhite = "purpleWhite"
-    case blackPurple = "blackPurple"
+    case whitePurple
+    case purpleWhite
+    case blackPurple
     // Red icons
-    case whiteRed = "whiteRed"
-    case redWhite = "redWhite"
-    case blackRed = "blackRed"
+    case whiteRed
+    case redWhite
+    case blackRed
     // Yellow icons
-    case whiteYellow = "whiteYellow"
-    case yellowWhite = "yellowWhite"
-    case blackYellow = "blackYellow"
+    case whiteYellow
+    case yellowWhite
+    case blackYellow
     // Rainbow icons
-    case whiteRainbow = "whiteRainbow"
-    case rainbowWhite = "rainbowWhite"
-    case blackRainbow = "blackRainbow"
+    case whiteRainbow
+    case rainbowWhite
+    case blackRainbow
 }
 
 class IconHelper: ObservableObject {
@@ -59,7 +59,7 @@ class IconHelper: ObservableObject {
 
     init() {
         if let currentIcon = UIApplication.shared.alternateIconName {
-            self.currentIndex = iconNames.firstIndex(of: Icon(rawValue: currentIcon) ?? .blackWhite) ?? 0
+            currentIndex = iconNames.firstIndex(of: Icon(rawValue: currentIcon) ?? .blackWhite) ?? 0
         }
     }
 }

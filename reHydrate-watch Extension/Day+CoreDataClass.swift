@@ -6,10 +6,8 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(Day)
-public class Day: NSManagedObject {
-
-}
+public class Day: NSManagedObject {}

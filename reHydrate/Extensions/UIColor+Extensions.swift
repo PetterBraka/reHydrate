@@ -11,12 +11,12 @@ import UIKit
 extension UIColor {
     /**
      Will convert an string of a hex color code to **UIColor**
-     
+
      - parameter hex: - A **String** whit the hex color code.
-     
+
      # Notes: #
      1. This will need an **String** in a hex coded style.
-     
+
      # Example #
      ```
      let color: UIColor = hexStringToUIColor ("#212121")
@@ -29,7 +29,7 @@ extension UIColor {
             cString.remove(at: cString.startIndex)
         }
 
-        if (cString.count) != 6 {
+        if cString.count != 6 {
             return UIColor.gray
         }
 

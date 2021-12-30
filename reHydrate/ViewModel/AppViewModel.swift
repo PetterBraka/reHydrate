@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 import SwiftUI
 
 enum AppState {

@@ -18,14 +18,14 @@ extension UIImage {
         }
     }
 
-    func renderResizedImage (newWidth: CGFloat) -> UIImage {
-        let scale = newWidth / self.size.width
-        let newHeight = self.size.height * scale
+    func renderResizedImage(newWidth: CGFloat) -> UIImage {
+        let scale = newWidth / size.width
+        let newHeight = size.height * scale
         let newSize = CGSize(width: newWidth, height: newHeight)
 
         let renderer = UIGraphicsImageRenderer(size: newSize)
 
-        let image = renderer.image { (_) in
+        let image = renderer.image { _ in
             self.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: newSize))
         }
         return image
@@ -33,9 +33,9 @@ extension UIImage {
 
     /**
      Will create a greayed out version of the image.
-     
+
      - returns: The image grayed out.
-     
+
      # Example #
      ```
      imageView.image  = imageView.image?.grayed
@@ -44,7 +44,7 @@ extension UIImage {
     var grayed: UIImage {
         guard let ciImage = CIImage(image: self)
         else { return self }
-        let filterParameters = [ kCIInputColorKey: CIColor.white, kCIInputIntensityKey: 1.0 ] as [String: Any]
+        let filterParameters = [kCIInputColorKey: CIColor.white, kCIInputIntensityKey: 1.0] as [String: Any]
         let grayscale = ciImage.applyingFilter("CIColorMonochrome", parameters: filterParameters)
         return UIImage(ciImage: grayscale)
     }

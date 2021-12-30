@@ -6,16 +6,15 @@
 //  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import UIKit
 import SwiftyUserDefaults
+import UIKit
 
 extension UIApplication {
-
     /**
      Will check if it is the first time the app is ever launched on this phone
-     
+
      - returns: **Bool** true if its the first time false if not.
-     
+
      # Example #
      ```
      if UIApplication.isFirstLaunch() {

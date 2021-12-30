@@ -7,9 +7,9 @@
 //
 
 import Combine
+import CoreAudio
 import CoreData
 import Foundation
-import CoreAudio
 
 protocol DayRepositoryInterface {
     func create(day: Day) -> AnyPublisher<Bool, Error>
@@ -27,7 +27,7 @@ final class DayRepository: DayRepositoryInterface {
     private let repoSortDescriptors = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
 
     init(context: NSManagedObjectContext) {
-        self.repo = CoreDataRepository<DayModel>(context: context)
+        repo = CoreDataRepository<DayModel>(context: context)
     }
 
     func create(day: Day) -> AnyPublisher<Bool, Error> {
@@ -60,7 +60,7 @@ final class DayRepository: DayRepositoryInterface {
                  sortDescriptors: repoSortDescriptors)
             .map { day -> Day? in
                 let day = day.map { day -> Day in
-                    return day.toDomainModel()
+                    day.toDomainModel()
                 }
                 return day
             }
@@ -71,7 +71,7 @@ final class DayRepository: DayRepositoryInterface {
         repo.getLatesGoal(predicate: repoPredicate)
             .map { day -> Double in
                 let day = day.map { day -> Day in
-                    return day.toDomainModel()
+                    day.toDomainModel()
                 }
                 return day?.goal ?? 2
             }
@@ -79,10 +79,10 @@ final class DayRepository: DayRepositoryInterface {
     }
 
     func getDays() -> AnyPublisher<[Day], Error> {
-        repo.getAll(predicate: repoPredicate, sortDescriptors: repoSortDescriptors  )
+        repo.getAll(predicate: repoPredicate, sortDescriptors: repoSortDescriptors)
             .map { daysModel -> [Day] in
                 let days = daysModel.map { daysModel -> Day in
-                    return daysModel.toDomainModel()
+                    daysModel.toDomainModel()
                 }
                 return days
             }

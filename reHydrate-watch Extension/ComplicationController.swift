@@ -31,12 +31,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         return nil
     }
 
-    func privacyBehavior(for complication: CLKComplication)
+    func privacyBehavior(for _: CLKComplication)
     async -> CLKComplicationPrivacyBehavior { .showOnLockScreen }
 
-    func timelineEndDate(for complication: CLKComplication) async -> Date? { return nil }
+    func timelineEndDate(for _: CLKComplication) async -> Date? { nil }
 
-    func timelineEntries(for complication: CLKComplication, after date: Date, limit: Int)
+    func timelineEntries(for complication: CLKComplication, after _: Date, limit _: Int)
     async -> [CLKComplicationTimelineEntry]? {
         todayDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
 
@@ -49,7 +49,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
 
     func localizableSampleTemplate(for complication: CLKComplication) async -> CLKComplicationTemplate? {
-        return getComplication(for: complication.family)
+        getComplication(for: complication.family)
     }
 
     // swiftlint:disable:next function_body_length cyclomatic_complexity
@@ -74,98 +74,111 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             let template = CLKComplicationTemplateCircularSmallRingImage(
                 imageProvider: .init(onePieceImage: waterDrop),
                 fillFraction: fillFraction,
-                ringStyle: .open)
+                ringStyle: .open
+            )
             return template
         case .extraLarge:
             let image = waterDrop.resized(toWidth: 45)!
             let template = CLKComplicationTemplateExtraLargeRingImage(
                 imageProvider: .init(onePieceImage: image),
                 fillFraction: fillFraction,
-                ringStyle: .closed)
+                ringStyle: .closed
+            )
             return template
         case .graphicExtraLarge:
             let image = waterDrop.resized(toWidth: 45)!
             let template = CLKComplicationTemplateGraphicExtraLargeCircularOpenGaugeImage(
                 gaugeProvider: guage,
                 bottomImageProvider: .init(fullColorImage: image),
-                centerTextProvider: CLKSimpleTextProvider(text: todayConsumed.clean))
+                centerTextProvider: CLKSimpleTextProvider(text: todayConsumed.clean)
+            )
             return template
         case .modularSmall:
             let template = CLKComplicationTemplateModularSmallRingImage(
                 imageProvider: .init(onePieceImage: waterDrop),
                 fillFraction: fillFraction,
-                ringStyle: .open)
+                ringStyle: .open
+            )
             return template
         case .modularLarge:
             var body2 = String()
-            if todayConsumed  < todayGoal {
-                let toGo = todayGoal  - todayConsumed
+            if todayConsumed < todayGoal {
+                let toGo = todayGoal - todayConsumed
                 body2 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body2 = "\(NSLocalizedString("goodJob", comment: ""))" }
             let template = CLKComplicationTemplateModularLargeStandardBody(
                 headerTextProvider: CLKSimpleTextProvider(text: "reHydrate"),
-                body1TextProvider: CLKSimpleTextProvider(text: "\(todayConsumed .clean)/\(todayGoal .clean)"),
-                body2TextProvider: CLKSimpleTextProvider(text: body2))
+                body1TextProvider: CLKSimpleTextProvider(text: "\(todayConsumed.clean)/\(todayGoal.clean)"),
+                body2TextProvider: CLKSimpleTextProvider(text: body2)
+            )
             return template
         case .utilitarianSmall:
             let template = CLKComplicationTemplateUtilitarianSmallRingImage(
                 imageProvider: .init(onePieceImage: waterDrop),
                 fillFraction: fillFraction,
-                ringStyle: .open)
+                ringStyle: .open
+            )
             return template
         case .utilitarianSmallFlat:
             let template = CLKComplicationTemplateUtilitarianSmallFlat(
-                textProvider: CLKSimpleTextProvider(text: "\(todayConsumed .clean)/\(todayGoal .clean)"),
-                imageProvider: .init(onePieceImage: waterDrop))
+                textProvider: CLKSimpleTextProvider(text: "\(todayConsumed.clean)/\(todayGoal.clean)"),
+                imageProvider: .init(onePieceImage: waterDrop)
+            )
             return template
         case .utilitarianLarge:
             var body = String()
-            if todayConsumed  < todayGoal {
-                let toGo = todayGoal  - todayConsumed
+            if todayConsumed < todayGoal {
+                let toGo = todayGoal - todayConsumed
                 body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
             let template = CLKComplicationTemplateUtilitarianLargeFlat(
                 textProvider: CLKSimpleTextProvider(text: body),
-                imageProvider: .init(onePieceImage: waterDrop))
+                imageProvider: .init(onePieceImage: waterDrop)
+            )
             return template
         case .graphicCorner:
             let template = CLKComplicationTemplateGraphicCornerGaugeText(
                 gaugeProvider: guage,
                 leadingTextProvider: CLKSimpleTextProvider(text: "0"),
-                trailingTextProvider: CLKSimpleTextProvider(text: "\(todayGoal .clean)"),
-                outerTextProvider: CLKSimpleTextProvider(text: "\(todayConsumed .clean)"))
+                trailingTextProvider: CLKSimpleTextProvider(text: "\(todayGoal.clean)"),
+                outerTextProvider: CLKSimpleTextProvider(text: "\(todayConsumed.clean)")
+            )
             return template
         case .graphicCircular:
             let image = waterDrop.resized(toWidth: 10)!
             let template = CLKComplicationTemplateGraphicCircularOpenGaugeImage(
                 gaugeProvider: guage,
                 bottomImageProvider: .init(fullColorImage: image),
-                centerTextProvider: CLKSimpleTextProvider(text: "\(todayConsumed .clean)"))
+                centerTextProvider: CLKSimpleTextProvider(text: "\(todayConsumed.clean)")
+            )
             return template
         case .graphicBezel:
             let image = waterDrop.resized(toWidth: 20)!
             let circularTemplate = CLKComplicationTemplateGraphicCircularClosedGaugeImage(
                 gaugeProvider: guage,
-                imageProvider: CLKFullColorImageProvider(fullColorImage: image))
+                imageProvider: CLKFullColorImageProvider(fullColorImage: image)
+            )
             var body = String()
-            if todayConsumed  < todayGoal {
-                let toGo = todayGoal  - todayConsumed
+            if todayConsumed < todayGoal {
+                let toGo = todayGoal - todayConsumed
                 body = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body = "\(NSLocalizedString("goodJob", comment: ""))" }
             let template = CLKComplicationTemplateGraphicBezelCircularText(
                 circularTemplate: circularTemplate,
-                textProvider: CLKSimpleTextProvider(text: body))
+                textProvider: CLKSimpleTextProvider(text: body)
+            )
             return template
         case .graphicRectangular:
             var body1 = String()
-            if todayConsumed  < todayGoal {
-                let toGo = todayGoal  - todayConsumed
+            if todayConsumed < todayGoal {
+                let toGo = todayGoal - todayConsumed
                 body1 = "\(toGo.clean) \(NSLocalizedString("toGo", comment: ""))"
             } else { body1 = "\(NSLocalizedString("goodJob", comment: ""))" }
             let template = CLKComplicationTemplateGraphicRectangularTextGauge(
                 headerTextProvider: CLKSimpleTextProvider(text: "reHydrate"),
                 body1TextProvider: CLKSimpleTextProvider(text: body1),
-                gaugeProvider: guage)
+                gaugeProvider: guage
+            )
             return template
         default:
             return nil
