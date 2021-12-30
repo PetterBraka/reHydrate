@@ -57,7 +57,6 @@ struct Localizable {
         static let congrats10Body = "congrats10Body"
     }
 
-    static let To = "To"
     static let Minutes = "Minutes"
     static let RemindersNotAllowed = "RemindersNotAllowed"
     static let RemindersSetFrom = "RemindersSetFrom"
