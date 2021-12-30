@@ -10,9 +10,7 @@
 "Add"           = "Legg til";
 "Done"          = "Ferdig";
 "Cancel"        = "Avbryt";
-"EditDrink"     = "Endre drikke";
 "RemoveDrink"   = "Fjern denne drinken";
-"ChangeAmount"  = "Endre mengde drikke";
 "EnterNewValue" = "Angi ny verdi";
 // SettingsVC
 // Appearance
@@ -29,16 +27,29 @@
 "is"         = "íslenskur";
 // Units
 "Units"            = "Enheter";
-"MetricSystem"     = "Metrisk system";
-"ImperialSystem"   = "Imperial system";
+"MetricSystem"     = "Metrisk";
+"ImperialSystem"   = "Imperial";
 //Credits
 "Credits"          = "Kreditter";
 "Translations"     = "Oversetting";
 "Open-source"      = "Open-source";
 "Dev&Design"       = "Utvikling & design";
+"ThankYou"         = "Tusen takk til";
+"HelpTranslate"    = "Hjelp oversett";
+"Merch"            = "Interessert i merch?";
 // Goal
 "ChangeGoal"       = "Ender mål";
 "SetYourGoal"      = "Set ditt mål";
+"Goal"             = "Mål";
+// Drink
+"Small"            = "Small";
+"Medium"           = "Medium";
+"Large"            = "Large";
+"EditDrink"        = "Endre drikke";
+"EditDrinkSmall"   = "Liten drikke";
+"EditDrinkMedium"  = "Medium drikke";
+"EditDrinkLarge"   = "Store drikke";
+"ChangeAmount"     = "Endre mengde drikke";
 // Reminders
 "Reminders"        = "Påminnelser";
 "TurnOnReminders"  = "Skru på påminnelser";
@@ -49,7 +60,7 @@
 // DangerZone
 "HowToUse"         = "Guide";
 "DangerZone"       = "Faresone";
-"OpenAppSettings"  = "Åpne app innstillinger";
+"OpenAppSettings"  = "Åpne innstillinger";
 "OpenHealthApp"    = "Åpne helse appen";
 "RemoveData"       = "Fjern data";
 // More

@@ -10,9 +10,7 @@
 "Add"           = "Hinzufügen";
 "Done"          = "Fertig";
 "Cancel"        = "Abbrechen";
-"EditDrink"     = "Getränk bearbeiten";
 "RemoveDrink"   = "Dieses Getränk entfernen";
-"ChangeAmount"  = "Die Menge ändern";
 "EnterNewValue" = "Gib einen Wert ein";
 // Settings
 // Appearance
@@ -29,16 +27,29 @@
 // Units
 "UnitSystem"       = "Einheitensystem";
 "Units"            = "Einheit";
-"MetricSystem"     = "Metrisches System";
-"ImperialSystem"   = "Imperiales System";
+"MetricSystem"     = "Metrisches";
+"ImperialSystem"   = "Imperiales";
 //Credits
 "Credits"          = "Danksagungen";
 "Translations"     = "Übersetzungen";
 "Open-source"      = "Open-source";
 "Dev&Design"       = "Entwicklung & Design";
+"ThankYou"         = "Ein besonderes dankeschön an";
+"HelpTranslate"    = "Hilfe beim Übersetzen";
+"Merch"            = "Interesse an Merch?";
 // Goal
 "ChangeGoal"       = "Ziel ändern";
 "SetYourGoal"      = "Setze dein Ziel";
+"Goal"             = "Ziel";
+// Drink
+"Small"            = "Kleines";
+"Medium"           = "Mittleres";
+"Large"            = "Großes";
+"EditDrink"        = "Getränk bearbeiten";
+"EditDrinkSmall"   = "kleines Getränk";
+"EditDrinkMedium"  = "mittleres Getränk";
+"EditDrinkLarge"   = "Großes Getränk";
+"ChangeAmount"     = "Die Menge ändern";
 // Reminders
 "Reminders"        = "Erinnerungen";
 "TurnOnReminders"  = "Erinnerungen einschalten";
@@ -49,7 +60,7 @@
 // DangerZone
 "HowToUse"         = "Verwendungsanleitung";
 "DangerZone"       = "Gefahrenzone";
-"OpenAppSettings"  = "App-Settings öffnen";
+"OpenAppSettings"  = "Settings öffnen";
 "OpenHealthApp"    = "Health-App öffnen";
 "RemoveData"       = "Daten löschen";
 // More

@@ -10,7 +10,7 @@ import UIKit
 import SwiftyUserDefaults
 
 extension UIApplication {
-    
+
     /**
      Will check if it is the first time the app is ever launched on this phone
      
@@ -33,4 +33,3 @@ extension UIApplication {
         return false
     }
 }
-
