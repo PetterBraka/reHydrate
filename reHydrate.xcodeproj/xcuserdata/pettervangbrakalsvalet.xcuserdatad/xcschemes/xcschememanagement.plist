@@ -4,20 +4,62 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Promises (Playground) 1.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+		<key>Promises (Playground) 2.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
+		<key>Promises (Playground).xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+		<key>Sample-iOS (Playground) 1.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>8</integer>
+		</dict>
+		<key>Sample-iOS (Playground) 2.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>9</integer>
+		</dict>
+		<key>Sample-iOS (Playground).xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
 		<key>reHydrate-watch (Complication).xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>8</integer>
+			<integer>3</integer>
 		</dict>
 		<key>reHydrate-watch (Notification).xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>7</integer>
+			<integer>2</integer>
 		</dict>
 		<key>reHydrate-watch.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>4</integer>
+			<integer>1</integer>
 		</dict>
 		<key>reHydrate.xcscheme_^#shared#^_</key>
 		<dict>
