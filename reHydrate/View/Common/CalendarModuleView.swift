@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import SwiftUI
 import FSCalendar
+import SwiftUI
 
 struct CalendarModuleView: UIViewRepresentable {
     enum DayOfTheWeek: UInt {
@@ -56,12 +56,11 @@ struct CalendarModuleView: UIViewRepresentable {
         return calendar
     }
 
-    func updateUIView(_ uiView: FSCalendar, context: Context) {
+    func updateUIView(_ uiView: FSCalendar, context _: Context) {
         uiView.locale = .init(identifier: language.rawValue)
     }
 
     class Coordinator: NSObject, FSCalendarDelegate, FSCalendarDataSource {
-
         var parent: CalendarModuleView
         @Binding var selectedDays: [Day]
         @Binding var storedDays: [Day]
@@ -75,7 +74,7 @@ struct CalendarModuleView: UIViewRepresentable {
         }()
 
         init(_ calender: CalendarModuleView) {
-            self.parent = calender
+            parent = calender
             _selectedDays = calender.$selectedDays
             _storedDays = calender.$storedDays
         }
@@ -89,20 +88,20 @@ struct CalendarModuleView: UIViewRepresentable {
             return cell!
         }
 
-        func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
+        func calendar(_: FSCalendar, imageFor date: Date) -> UIImage? {
             if let day = storedDays.first(where: { $0.isSameDay(as: date) }) {
-                let percent = (day.consumption / day.goal ) * 100
+                let percent = (day.consumption / day.goal) * 100
                 switch percent {
-                case 0...10:
+                case 0 ... 10:
                     return UIImage.waterDrop0
                         .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                case 10...30:
+                case 10 ... 30:
                     return UIImage.waterDrop25
                         .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                case 30...60:
+                case 30 ... 60:
                     return UIImage.waterDrop50
                         .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                case 60...80:
+                case 60 ... 80:
                     return UIImage.waterDrop75
                         .renderResizedImage(newWidth: parent.cellHeight * 0.4)
                 default:
@@ -113,22 +112,22 @@ struct CalendarModuleView: UIViewRepresentable {
             return nil
         }
 
-        func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        func calendar(_ calendar: FSCalendar, didSelect date: Date, at _: FSCalendarMonthPosition) {
             if let selectedDay = storedDays.first(where: { $0.isSameDay(as: date) }) {
                 print("Selected \(formatter.string(from: date))")
                 selectedDays.append(selectedDay)
             }
-            self.updateVisibleCells(in: calendar)
+            updateVisibleCells(in: calendar)
         }
 
-        func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        func calendar(_ calendar: FSCalendar, didDeselect date: Date, at _: FSCalendarMonthPosition) {
             print("deselected \(formatter.string(from: date))")
             selectedDays.removeAll(where: { $0.isSameDay(as: date) })
-            self.updateVisibleCells(in: calendar)
+            updateVisibleCells(in: calendar)
         }
 
         private func updateVisibleCells(in calendar: FSCalendar) {
-            calendar.visibleCells().forEach { (cell) in
+            calendar.visibleCells().forEach { cell in
                 guard let date = calendar.date(for: cell) else { return }
                 self.configure(cell: cell, for: date)
             }
@@ -181,10 +180,10 @@ struct CalendarModuleView: UIViewRepresentable {
                 let includesTomorrow = selectedDays.contains(where: { $0.isSameDay(as: tomorrow) })
                 let includesDate = selectedDays.contains(where: { $0.isSameDay(as: date) })
 
-                if includesYesterday && includesTomorrow {
+                if includesYesterday, includesTomorrow {
                     return .middle
                 }
-                if includesYesterday && includesDate {
+                if includesYesterday, includesDate {
                     return .rightBorder
                 }
                 if includesTomorrow {

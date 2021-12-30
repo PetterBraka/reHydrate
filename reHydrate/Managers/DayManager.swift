@@ -6,9 +6,9 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
-import CoreData
 import Combine
+import CoreData
+import Foundation
 
 final class DayManager {
     private let context: NSManagedObjectContext
@@ -16,7 +16,7 @@ final class DayManager {
 
     init(context: NSManagedObjectContext) {
         self.context = context
-        self.dayRepository = DayRepository(context: context)
+        dayRepository = DayRepository(context: context)
     }
 
     func saveChanges() -> AnyPublisher<Bool, Error> {

@@ -6,17 +6,18 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import Combine
 import CoreData
-import Swinject
+import Foundation
 import SwiftUI
+import Swinject
 
 final class SettingsViewModel: ObservableObject {
     enum SheetType: String, Identifiable {
         var id: String {
-            self.rawValue
+            rawValue
         }
+
         case editIcon
         case credits
     }
@@ -33,9 +34,9 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.largeDrink) private var largeDrink
 
     @Published var languageOptions: [String] = [Localizable.english,
-                                          Localizable.german,
-                                          Localizable.icelandic,
-                                          Localizable.norwegian]
+                                                Localizable.german,
+                                                Localizable.icelandic,
+                                                Localizable.norwegian]
     @Published var selectedLanguage: String = ""
     @Published var selectedUnit = Localizable.metricSystem
     @Published var selectedGoal: String = ""
@@ -51,7 +52,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var selectedEndDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
     @Published var selectedFrequency: String = "60"
 
-    @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
+    @Published var today = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
 
     @Published var showNotificationAlert: Bool = false
     @Published var showSheet: SheetType?
@@ -70,10 +71,10 @@ final class SettingsViewModel: ObservableObject {
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
-        self.viewContext = presistenceController.container.viewContext
-        self.dayManager = DayManager(context: viewContext)
+        viewContext = presistenceController.container.viewContext
+        dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
-        self.fetchToday()
+        fetchToday()
 
         selectedLanguage = language.rawValue
         selectedRemindersOn = isRemindersOn
@@ -207,13 +208,14 @@ final class SettingsViewModel: ObservableObject {
 }
 
 // MARK: - Notification
+
 extension SettingsViewModel {
     func toggleReminders() {
         selectedRemindersOn.toggle()
     }
 
     private func checkNotificationAccess() {
-        self.notificationManager.center.getNotificationSettings { settings in
+        notificationManager.center.getNotificationSettings { settings in
             DispatchQueue.main.async {
                 if settings.authorizationStatus == .authorized {
                     self.remindersPremitted = true
@@ -244,16 +246,16 @@ extension SettingsViewModel {
     func incrementFrequency() {
         guard var frequency = Int(selectedFrequency) else { return }
         frequency += 15
-        self.selectedFrequency = "\(frequency)"
-        self.reminderFrequency = frequency
+        selectedFrequency = "\(frequency)"
+        reminderFrequency = frequency
         requestReminders()
     }
 
     func decrementFrequency() {
         guard var frequency = Int(selectedFrequency), frequency > 15 else { return }
         frequency -= 15
-        self.selectedFrequency = "\(frequency)"
-        self.reminderFrequency = frequency
+        selectedFrequency = "\(frequency)"
+        reminderFrequency = frequency
         requestReminders()
     }
 
@@ -264,6 +266,7 @@ extension SettingsViewModel {
 }
 
 // MARK: - Save And Load
+
 extension SettingsViewModel {
     private func fetchToday() {
         dayManager.dayRepository.getDay(for: Date())
