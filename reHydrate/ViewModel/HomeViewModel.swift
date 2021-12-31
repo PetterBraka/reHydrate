@@ -102,7 +102,7 @@ final class HomeViewModel: NSObject, ObservableObject {
                 if day.consumption >= day.goal {
                     print("Reached todays goal")
                     self.notificationManager.reachedGoal = true
-                    self.notificationManager.createCongratulation()
+                    self.notificationManager.requestReminders()
                 } else {
                     self.notificationManager.reachedGoal = false
                 }
