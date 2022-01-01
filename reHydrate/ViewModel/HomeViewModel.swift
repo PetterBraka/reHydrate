@@ -168,134 +168,84 @@ final class HomeViewModel: NSObject, ObservableObject {
 
 extension HomeViewModel {
     private func createNewDay() {
-        var latestGoal = fetchLastGoal()
-        latestGoal = (latestGoal > 0) ? latestGoal : 3
-        let newDay = Day(id: UUID(), consumption: 0, goal: latestGoal, date: Date())
-        dayManager.dayRepository.create(day: newDay)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Failed creating new day: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                print("succeeded with creating new day")
-                self?.saveAndFetch()
-            }.store(in: &tasks)
-    }
-
-    private func fetchLastGoal() -> Double {
-        var goal = 0.0
-        dayManager.dayRepository.getLatestGoal()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Failed getting last goal: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { result in
-                goal = result
-            }
-            .store(in: &tasks)
-        return goal
+        Task {
+            do {
+                let previusGoal = try await dayManager.dayRepository.getLatestGoal()
+                let today = Day(id: UUID(), consumption: 0, goal: previusGoal ?? 3, date: Date())
+                try await dayManager.dayRepository.create(day: today)
+                await saveAndFetch()
+            } catch {}
+        }
     }
 
     func fetchToday() {
-        dayManager.dayRepository.getDay(for: Date())
-            .receive(on: RunLoop.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case let .failure(error as CoreDataError):
-                    print("Failed fetching today \(error)")
-                    if error == .elementNotFound {
-                        self?.createNewDay()
-                    }
-                case .finished:
-                    print("succeeded with finding today")
-                default:
-                    break
+        Task {
+            do {
+                let day = try await dayManager.dayRepository.getDay(for: Date())
+                self.today = day
+                exportToWatch(today: day)
+                fetchHealthData()
+            } catch {
+                if let error = error as? CoreDataError, error == .elementNotFound {
+                    createNewDay()
                 }
-            } receiveValue: { [weak self] day in
-                if let day = day {
-                    self?.today = day
-                    self?.exportToWatch(today: day)
-                    if day.consumption == 0 {
-                        self?.fetchHealthData()
-                    }
-                } else {
-                    self?.createNewDay()
-                }
-            }.store(in: &tasks)
+            }
+        }
     }
 
-    private func saveAndFetch() {
-        dayManager.saveChanges()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error saving \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.fetchToday()
-            }.store(in: &tasks)
+    private func saveAndFetch() async {
+        do {
+            try await dayManager.saveChanges()
+            fetchToday()
+        } catch {
+            print("Error saving \(error)")
+        }
     }
 
     func addDrink(_ drink: Drink) {
-        let consumed = Measurement(value: drink.size, unit: UnitVolume.milliliters)
+        let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
         let consumedTotal = consumed.converted(to: .liters).value + today.consumption
-        dayManager.dayRepository.update(consumption: consumedTotal, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error adding drink of type: \(drink), Error: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.export(drink: drink)
-                self?.saveAndFetch()
-            }.store(in: &tasks)
+        Task {
+            do {
+                try await dayManager.dayRepository.update(consumption: consumedTotal, for: today)
+                export(drink: drink)
+                await saveAndFetch()
+            } catch {
+                print("Error adding drink of type: \(drink), Error: \(error)")
+            }
+        }
     }
 
     func removeDrink(_ drink: Drink) {
-        let consumed = Measurement(value: drink.size, unit: UnitVolume.milliliters)
-        var consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
+        Task {
+            let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
+            var consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
 
-        if consumedTotal < 0 {
-            consumedTotal = 0
+            if consumedTotal < 0 {
+                consumedTotal = 0
+            }
+
+            let drink = Drink(type: drink.type, size: -drink.size)
+            do {
+                try await dayManager.dayRepository.update(consumption: consumedTotal, for: today)
+                export(drink: drink)
+                await saveAndFetch()
+            } catch {
+                print("Error adding drink of type: \(drink), Error: \(error)")
+            }
         }
-        let drink = Drink(type: drink.type, size: -drink.size)
-        dayManager.dayRepository.update(consumption: consumedTotal, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error adding drink of type: \(drink), Error: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.export(drink: drink)
-                self?.saveAndFetch()
-            }.store(in: &tasks)
     }
 
     private func updateTodaysConsumption(to value: Double) {
         guard value != today.consumption else { return }
-        dayManager.dayRepository.update(consumption: value, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error updating todays consumption: \(value), Error: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.saveAndFetch()
-            }.store(in: &tasks)
+        Task {
+            do {
+                try await dayManager.dayRepository.update(consumption: value, for: today)
+                await saveAndFetch()
+            } catch {
+                print("Error updating todays consumption: \(value), Error: \(error)")
+            }
+        }
     }
 }
 
