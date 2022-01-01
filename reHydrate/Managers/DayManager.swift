@@ -19,6 +19,15 @@ final class DayManager {
         dayRepository = DayRepository(context: context)
     }
 
+    func saveChanges() async throws {
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
+    }
+
     func saveChanges() -> AnyPublisher<Bool, Error> {
         Future { prommise in
             do {

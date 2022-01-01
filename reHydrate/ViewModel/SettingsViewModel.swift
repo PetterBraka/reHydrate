@@ -268,50 +268,37 @@ extension SettingsViewModel {
 // MARK: - Save And Load
 
 extension SettingsViewModel {
-    private func fetchToday() {
-        dayManager.dayRepository.getDay(for: Date())
-            .sink { completion in
-                switch completion {
-                case let .failure(error as CoreDataError):
-                    print("Failed fetching day \(error)")
-                default:
-                    break
+    func fetchToday() {
+        Task {
+            do {
+                let day = try await dayManager.dayRepository.getDay(for: Date())
+                self.today = day
+                if day.goal > 0 {
+                    selectedGoal = "\(day.goal.clean)"
                 }
-            } receiveValue: { [weak self] day in
-                if let day = day {
-                    self?.today = day
-                    if day.goal > 0 {
-                        self?.selectedGoal = "\(day.goal.clean)"
-                    }
-                }
-            }.store(in: &tasks)
+            } catch {
+                print("Failed fetching day \(error)")
+            }
+        }
     }
 
     private func updateGoal(_ newGoal: Double) {
-        dayManager.dayRepository.update(goal: newGoal, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error adding drink of type: \(newGoal), Error: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.saveAndFetch()
-            }.store(in: &tasks)
+        Task {
+            do {
+                try await dayManager.dayRepository.update(consumption: newGoal, for: today)
+                await saveAndFetch()
+            } catch {
+                print("Error adding drink of type: \(newGoal), Error: \(error)")
+            }
+        }
     }
 
-    private func saveAndFetch() {
-        dayManager.saveChanges()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error saving \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.fetchToday()
-            }.store(in: &tasks)
+    private func saveAndFetch() async {
+        do {
+            try await dayManager.saveChanges()
+            fetchToday()
+        } catch {
+            print("Error saving \(error)")
+        }
     }
 }

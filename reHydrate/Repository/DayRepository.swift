@@ -14,7 +14,7 @@ import Foundation
 protocol DayRepositoryInterface {
     func create(day: Day) async throws
     func delete(day: Day) async throws
-    func getDay(for date: Date) async throws -> Day?
+    func getDay(for date: Date) async throws -> Day
     func getLatestGoal() async throws -> Double?
     func getDays() async throws -> [Day]
     func update(goal: Double, for day: Day) async throws
@@ -39,17 +39,14 @@ final class DayRepository: DayRepositoryInterface {
         let day = try await repo.get(id: day.id.uuidString,
                                      predicate: repoPredicate,
                                      sortDescriptors: repoSortDescriptors)
-        guard let day = day else { throw CoreDataError.elementNotFound }
         repo.delete(day)
     }
 
-    func getDay(for date: Date) async throws -> Day? {
-        let days = try await repo.get(date: date,
-                                      predicate: repoPredicate,
-                                      sortDescriptors: repoSortDescriptors)
-        return days.map { dayModel in
-            dayModel.toDomainModel()
-        }
+    func getDay(for date: Date) async throws -> Day {
+        let day = try await repo.get(date: date,
+                                     predicate: repoPredicate,
+                                     sortDescriptors: repoSortDescriptors)
+        return day.toDomainModel()
     }
 
     func getLatestGoal() async throws -> Double? {
@@ -70,21 +67,13 @@ final class DayRepository: DayRepositoryInterface {
         let day = try await repo.get(id: day.id.uuidString,
                                      predicate: repoPredicate,
                                      sortDescriptors: repoSortDescriptors)
-        if let day = day {
-            day.goal = goal
-        } else {
-            throw CoreDataError.elementNotFound
-        }
+        day.goal = goal
     }
 
     func update(consumption: Double, for day: Day) async throws {
         let day = try await repo.get(id: day.id.uuidString,
                                      predicate: repoPredicate,
                                      sortDescriptors: repoSortDescriptors)
-        if let day = day {
-            day.consumtion = consumption
-        } else {
-            throw CoreDataError.elementNotFound
-        }
+        day.consumtion = consumption
     }
 }
