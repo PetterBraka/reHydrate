@@ -165,13 +165,13 @@ final class SettingsViewModel: ObservableObject {
             }.store(in: &tasks)
         $selectedStartDate
             .removeDuplicates()
-            .sink { _ in
-                self.updateStartTime()
+            .sink { date in
+                self.updateStartTime(with: date)
             }.store(in: &tasks)
         $selectedEndDate
             .removeDuplicates()
-            .sink { _ in
-                self.updateEndTime()
+            .sink { date in
+                self.updateEndTime(with: date)
             }.store(in: &tasks)
     }
 
@@ -228,15 +228,15 @@ extension SettingsViewModel {
         }
     }
 
-    func updateStartTime() {
-        guard remindersStart != selectedStartDate else { return }
-        remindersStart = selectedStartDate
+    func updateStartTime(with date: Date) {
+        guard remindersStart != date else { return }
+        remindersStart = date
         requestReminders()
     }
 
-    func updateEndTime() {
-        guard remindersEnd != selectedEndDate else { return }
-        remindersEnd = selectedEndDate
+    func updateEndTime(with date: Date) {
+        guard remindersEnd != date else { return }
+        remindersEnd = date
         requestReminders()
     }
 
@@ -244,17 +244,10 @@ extension SettingsViewModel {
         "\(selectedFrequency) min"
     }
 
-    func incrementFrequency() {
-        guard var frequency = Int(selectedFrequency) else { return }
-        frequency += 15
-        selectedFrequency = "\(frequency)"
-        reminderFrequency = frequency
-        requestReminders()
-    }
-
-    func decrementFrequency() {
+    func updateFrequency(shouldIncrese value: Bool) {
+        let increment = value ? 15 : -15
         guard var frequency = Int(selectedFrequency), frequency > 15 else { return }
-        frequency -= 15
+        frequency += increment
         selectedFrequency = "\(frequency)"
         reminderFrequency = frequency
         requestReminders()
@@ -262,7 +255,7 @@ extension SettingsViewModel {
 
     private func requestReminders() {
         notificationManager.deleteReminders()
-        notificationManager.setReminders()
+        notificationManager.createReminders()
     }
 }
 

@@ -133,9 +133,9 @@ struct SettingsView: View {
                                 Text(Localizable.frequency.local(viewModel.language))
                                 Spacer()
                                 StepperView(value: viewModel.getFrequency()) {
-                                    viewModel.incrementFrequency()
+                                    viewModel.updateFrequency(shouldIncrese: true)
                                 } onDecrement: {
-                                    viewModel.decrementFrequency()
+                                    viewModel.updateFrequency(shouldIncrese: false)
                                 }
                             }
                         }

@@ -42,6 +42,12 @@ final class HomeViewModel: NSObject, ObservableObject {
 
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE - dd MMM"
+        return formatter
+    }()
+
+    private var watchFormatter: DateFormatter = {
+        let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd MMM yyyy"
         return formatter
     }()
@@ -101,10 +107,9 @@ final class HomeViewModel: NSObject, ObservableObject {
             .sink { day in
                 if day.consumption >= day.goal {
                     print("Reached todays goal")
-                    self.notificationManager.reachedGoal = true
-                    self.notificationManager.requestReminders()
+                    self.notificationManager.createCongratulation()
                 } else {
-                    self.notificationManager.setReminders()
+                    self.notificationManager.createReminders()
                 }
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .addedSmallDrink)
@@ -289,7 +294,7 @@ extension HomeViewModel: WCSessionDelegate {
 
     private func exportToWatch(today: Day) {
         if WCSession.isSupported() {
-            let message = ["phoneDate": formatter.string(from: today.date),
+            let message = ["phoneDate": watchFormatter.string(from: today.date),
                            "phoneGoal": String(today.goal),
                            "phoneConsumed": String(today.consumption),
                            "phoneDrinks": "\(drinks[0].size),\(drinks[1].size),\(drinks[2].size)"]
@@ -333,7 +338,7 @@ extension HomeViewModel: WCSessionDelegate {
         Task {
             do {
                 guard let rawDate = data["date"] as? String,
-                      let watchDate = formatter.date(from: rawDate) else { throw WatchError.extractionError }
+                      let watchDate = watchFormatter.date(from: rawDate) else { throw WatchError.extractionError }
                 guard let rawConsumed = data["consumed"] as? String,
                       let watchConsumed = Double(rawConsumed) else { throw WatchError.extractionError }
                 let day = try await dayManager.dayRepository.getDay(for: watchDate)
