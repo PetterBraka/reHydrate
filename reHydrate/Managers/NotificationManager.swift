@@ -28,40 +28,14 @@ class NotificationManager {
     @Preference(\.mediumDrink) private var mediumDrink
     @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
-
-    @Published var hasReachedGoal: Bool = false
-    var tasks = Set<AnyCancellable>()
+    @Preference(\.hasReachedGoal) private var hasReachedGoal
 
     static let shared = NotificationManager()
 
     let center = UNUserNotificationCenter.current()
+    
     private var hasSetNotifications = false
-
-    init() {
-        $hasReachedGoal
-            .sink { reached in
-                if reached {
-                    self.deleteReminders()
-                    self.createCongratulation()
-                } else {
-                    self.createReminders()
-                }
-            }.store(in: &tasks)
-    }
-
-    func requestAccess() -> AnyPublisher<Void, Error> {
-        Future { [unowned self] promise in
-            self.center.requestAuthorization(options: [.alert, .sound]) { _, error in
-                guard let error = error else {
-                    promise(.success(()))
-                    return
-                }
-                promise(.failure(error))
-            }
-        }
-        .receive(on: RunLoop.main)
-        .eraseToAnyPublisher()
-    }
+    private var hasSetCongratsNotifications = false
 
     func requestAccess() async throws {
         try await center.requestAuthorization(options: [.alert, .sound])
@@ -92,8 +66,13 @@ class NotificationManager {
      ```
      */
     private func setReminders(forTomorrow _: Bool = false) {
-        guard !hasReachedGoal else { return }
+        guard !hasReachedGoal else {
+            deleteReminders()
+            createCongratulation()
+            return
+        }
         guard !hasSetNotifications else { return }
+        hasSetNotifications = true
         print("Creating notifications")
         let time = Calendar.current.dateComponents([.hour, .minute],
                                                    from: remindersStart,
@@ -106,7 +85,6 @@ class NotificationManager {
                                                                to: remindersStart) else { return }
             createNotification(for: notificationDate)
         }
-        hasSetNotifications = true
     }
 
     private func createNotification(for date: Date) {

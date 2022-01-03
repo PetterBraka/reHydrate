@@ -23,6 +23,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     @Preference(\.mediumDrink) private var mediumDrink
     @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
+    @Preference(\.hasReachedGoal) private var hasReachedGoal
 
     @Published var today = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     @Published var drinks: [Drink] = []
@@ -96,7 +97,7 @@ final class HomeViewModel: NSObject, ObservableObject {
         $today
             .removeDuplicates(by: { $0.consumption == $1.consumption })
             .sink { day in
-                self.notificationManager.hasReachedGoal = day.consumption >= day.goal
+                self.hasReachedGoal = day.consumption >= day.goal
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .addedSmallDrink)
             .sink { _ in
