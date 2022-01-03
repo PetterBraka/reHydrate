@@ -42,7 +42,7 @@ final class HomeViewModel: NSObject, ObservableObject {
 
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE - dd MMM"
+        formatter.dateFormat = "EEEE - dd MMM yyyy"
         return formatter
     }()
 
@@ -104,7 +104,7 @@ final class HomeViewModel: NSObject, ObservableObject {
                     self.notificationManager.reachedGoal = true
                     self.notificationManager.createCongratulation()
                 } else {
-                    self.notificationManager.reachedGoal = false
+                    self.notificationManager.setReminders()
                 }
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .addedSmallDrink)
@@ -203,31 +203,15 @@ extension HomeViewModel {
     }
 
     func fetchToday() {
-        dayManager.dayRepository.getDay(for: Date())
-            .receive(on: RunLoop.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case let .failure(error as CoreDataError):
-                    print("Failed fetching today \(error)")
-                    if error == .elementNotFound {
-                        self?.createNewDay()
-                    }
-                case .finished:
-                    print("succeeded with finding today")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] day in
-                if let day = day {
-                    self?.today = day
-                    self?.exportToWatch(today: day)
-                    if day.consumption == 0 {
-                        self?.fetchHealthData()
-                    }
-                } else {
-                    self?.createNewDay()
-                }
-            }.store(in: &tasks)
+        Task {
+            do {
+                let day = try await dayManager.fetchToday()
+                self.today = day
+                exportToWatch(today: day)
+            } catch {
+                createNewDay()
+            }
+        }
     }
 
     private func saveAndFetch() {
@@ -304,6 +288,7 @@ extension HomeViewModel {
 extension HomeViewModel {
     func fetchHealthData() {
         healthManager.getWater(for: Date())
+            .removeDuplicates()
             .sink { completion in
                 switch completion {
                 case let .failure(error):
