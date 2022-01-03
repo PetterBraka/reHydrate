@@ -17,8 +17,8 @@ protocol DayRepositoryInterface {
     func getDay(for date: Date) async throws -> Day
     func getLatestGoal() async throws -> Double?
     func getDays() async throws -> [Day]
-    func update(goal: Double, for day: Day) async throws
-    func update(consumption: Double, for day: Day) async throws
+    func update(goal: Double, for day: Date) async throws
+    func update(consumption: Double, for day: Date) async throws
 }
 
 final class DayRepository: DayRepositoryInterface {
@@ -63,15 +63,15 @@ final class DayRepository: DayRepositoryInterface {
         return days
     }
 
-    func update(goal: Double, for day: Day) async throws {
-        let day = try await repo.get(id: day.id.uuidString,
+    func update(goal: Double, for date: Date) async throws {
+        let day = try await repo.get(date: date,
                                      predicate: repoPredicate,
                                      sortDescriptors: repoSortDescriptors)
         day.goal = goal
     }
 
-    func update(consumption: Double, for day: Day) async throws {
-        let day = try await repo.get(id: day.id.uuidString,
+    func update(consumption: Double, for date: Date) async throws {
+        let day = try await repo.get(date: date,
                                      predicate: repoPredicate,
                                      sortDescriptors: repoSortDescriptors)
         day.consumtion = consumption

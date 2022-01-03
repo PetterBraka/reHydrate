@@ -298,7 +298,7 @@ extension SettingsViewModel {
     private func updateGoal(_ newGoal: Double) {
         Task {
             do {
-                try await dayManager.updateGoal(newGoal, for: today)
+                try await dayManager.update(goal: newGoal, for: Date())
                 saveAndFetch()
             } catch {
                 print("Error adding drink of type: \(newGoal), Error: \(error)")
