@@ -234,11 +234,10 @@ extension HomeViewModel {
         }
     }
 
-    private func updateTodaysConsumption(to value: Double) {
-        guard value != today.consumption else { return }
+    private func update(consumption value: Double, for date: Date) {
         Task {
             do {
-                try await dayManager.updateTodaysConsumption(to: value, for: today)
+                try await dayManager.update(consumption: value, for: date)
                 await saveAndFetch()
             } catch {
                 print("Error updating todays consumption: \(value), Error: \(error)")
@@ -261,7 +260,7 @@ extension HomeViewModel {
                 }
             } receiveValue: { consumed in
                 print("Got data from health")
-                self.updateTodaysConsumption(to: consumed)
+                self.update(consumption: consumed, for: Date())
             }.store(in: &tasks)
     }
 
@@ -334,11 +333,5 @@ extension HomeViewModel: WCSessionDelegate {
             exportToWatch(today: today)
             return
         }
-        print(data)
-        updateTodaysConsumption(to: watchConsumed)
-        let consumed = Measurement(value: watchConsumed - today.consumption, unit: UnitVolume.liters)
-        let differences = consumed.converted(to: .milliliters).value
-        export(drink: Drink(size: differences))
-        print("Udated with data from watch")
     }
 }

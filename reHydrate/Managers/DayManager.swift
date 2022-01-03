@@ -27,7 +27,7 @@ final class DayManager {
             throw error
         }
     }
-    
+
     func createToday() async throws -> Day {
         let previusGoal = try await dayRepository.getLatestGoal()
         let today = Day(id: UUID(), consumption: 0, goal: previusGoal ?? 3, date: Date())
@@ -42,29 +42,28 @@ final class DayManager {
 
     func addDrink(of size: Double, to day: Day) async throws {
         let consumedTotal = size + day.consumption
-        try await dayRepository.update(consumption: consumedTotal, for: day)
+        try await dayRepository.update(consumption: consumedTotal, for: day.date)
         try await saveChanges()
     }
 
     func removeDrink(of size: Double, to day: Day) async throws {
         var consumedTotal: Double = day.consumption - size
-        
+
         if consumedTotal < 0 {
             consumedTotal = 0
         }
-        
-        try await dayRepository.update(consumption: consumedTotal, for: day)
+
+        try await dayRepository.update(consumption: consumedTotal, for: day.date)
         try await saveChanges()
     }
 
-    func updateTodaysConsumption(to value: Double, for day: Day) async throws {
-        guard value != day.consumption else { return }
-        try await dayRepository.update(consumption: value, for: day)
+    func update(consumption value: Double, for date: Date) async throws {
+        try await dayRepository.update(consumption: value, for: date)
         try await saveChanges()
     }
-    
-    func updateGoal(_ newGoal: Double, for day: Day) async throws {
-        try await dayRepository.update(goal: newGoal, for: day)
+
+    func update(goal newGoal: Double, for date: Date) async throws {
+        try await dayRepository.update(goal: newGoal, for: date)
         try await saveChanges()
     }
 }
