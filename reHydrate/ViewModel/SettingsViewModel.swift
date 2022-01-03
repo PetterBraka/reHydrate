@@ -96,6 +96,7 @@ final class SettingsViewModel: ObservableObject {
     func setupSubscription() {
         $today
             .sink { updatedDay in
+                print(updatedDay)
                 self.selectedGoal = updatedDay.goal.convert(to: self.isMetric ? .liters : .imperialPints,
                                                             from: .liters).clean
             }.store(in: &tasks)
@@ -198,8 +199,8 @@ final class SettingsViewModel: ObservableObject {
     func decrementGoal() {
         if today.goal > 0 {
             today.goal -= 0.5
+            updateGoal(today.goal)
         }
-        updateGoal(today.goal)
     }
 
     func navigateToHome() {
@@ -268,50 +269,40 @@ extension SettingsViewModel {
 // MARK: - Save And Load
 
 extension SettingsViewModel {
-    private func fetchToday() {
-        dayManager.dayRepository.getDay(for: Date())
-            .sink { completion in
-                switch completion {
-                case let .failure(error as CoreDataError):
-                    print("Failed fetching day \(error)")
-                default:
-                    break
+    func fetchToday() {
+        Task {
+            do {
+                let day = try await dayManager.fetchToday()
+                self.today = day
+                if day.goal > 0 {
+                    selectedGoal = "\(day.goal.clean)"
                 }
-            } receiveValue: { [weak self] day in
-                if let day = day {
-                    self?.today = day
-                    if day.goal > 0 {
-                        self?.selectedGoal = "\(day.goal.clean)"
-                    }
-                }
-            }.store(in: &tasks)
-    }
-
-    private func updateGoal(_ newGoal: Double) {
-        dayManager.dayRepository.update(goal: newGoal, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error adding drink of type: \(newGoal), Error: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.saveAndFetch()
-            }.store(in: &tasks)
+            } catch {
+                print("Failed fetching day \(error)")
+            }
+        }
     }
 
     private func saveAndFetch() {
-        dayManager.saveChanges()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error saving \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.fetchToday()
-            }.store(in: &tasks)
+        Task {
+            do {
+                print(today)
+                try await dayManager.saveChanges()
+                fetchToday()
+            } catch {
+                print("Error saving \(error)")
+            }
+        }
+    }
+
+    private func updateGoal(_ newGoal: Double) {
+        Task {
+            do {
+                try await dayManager.update(goal: newGoal, for: Date())
+                saveAndFetch()
+            } catch {
+                print("Error adding drink of type: \(newGoal), Error: \(error)")
+            }
+        }
     }
 }
