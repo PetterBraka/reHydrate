@@ -191,11 +191,11 @@ extension HomeViewModel {
     }
 
     func addDrink(_ drink: Drink) {
-        let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
-        let consumedTotal = consumed.converted(to: .liters).value + today.consumption
+        let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
+        let consumed = rawConsumed.converted(to: .liters).value
         Task {
             do {
-                try await dayManager.addDrink(of: consumedTotal, to: today)
+                try await dayManager.addDrink(of: consumed, to: today)
                 export(drink: drink)
                 fetchToday()
             } catch {
@@ -205,16 +205,12 @@ extension HomeViewModel {
     }
 
     func removeDrink(_ drink: Drink) {
-        let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
-        let consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
+        let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
+        let consumed: Double = rawConsumed.converted(to: .liters).value
         Task {
             let drink = Drink(type: drink.type, size: -drink.size)
             do {
-                if consumedTotal < 0 {
-                    try await dayManager.removeDrink(of: 0, to: today)
-                } else {
-                    try await dayManager.removeDrink(of: consumedTotal, to: today)
-                }
+                try await dayManager.removeDrink(of: consumed < 0 ? 0 : consumed, to: today)
                 export(drink: drink)
                 fetchToday()
             } catch {
