@@ -71,34 +71,25 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     func requestNotificationAccess() {
-        notificationManager.requestAccess()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Failed requesting access too notification: \(error.localizedDescription)")
-                default:
-                    break
-                }
-            } receiveValue: { _ in
-                print("Notification requested")
-                self.requestHealthAccess()
-            }.store(in: &tasks)
+        Task {
+            do {
+                try await notificationManager.requestAccess()
+                requestHealthAccess()
+            } catch {
+                print("Failed requesting access too notification: \(error.localizedDescription)")
+            }
+        }
     }
 
     func requestHealthAccess() {
-        healthManager.requestAccess()
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Failed requesting access too health: \(error.localizedDescription)")
-                default:
-                    break
-                }
-            } receiveValue: { _ in
-                print("Health requested")
+        Task {
+            do {
+                try await healthManager.requestAccess()
                 self.fetchHealthData()
-            }.store(in: &tasks)
+            } catch {
+                print("Failed requesting access too health: \(error.localizedDescription)")
+            }
+        }
     }
 
     func setupSubscribers() {
@@ -172,7 +163,6 @@ extension HomeViewModel {
             do {
                 let day = try await dayManager.createToday()
                 today = day
-                await saveAndFetch()
             } catch {
                 print("Couldn't create new day for today. \(error.localizedDescription)")
             }
@@ -207,7 +197,7 @@ extension HomeViewModel {
             do {
                 try await dayManager.addDrink(of: consumedTotal, to: today)
                 export(drink: drink)
-                await saveAndFetch()
+                fetchToday()
             } catch {
                 print("Error adding drink of type: \(drink), Error: \(error)")
             }
@@ -226,7 +216,7 @@ extension HomeViewModel {
                     try await dayManager.removeDrink(of: consumedTotal, to: today)
                 }
                 export(drink: drink)
-                await saveAndFetch()
+                fetchToday()
             } catch {
                 print("Error adding drink of type: \(drink), Error: \(error)")
             }
@@ -237,7 +227,7 @@ extension HomeViewModel {
         Task {
             do {
                 try await dayManager.update(consumption: value, for: date)
-                await saveAndFetch()
+                fetchToday()
             } catch {
                 print("Error updating todays consumption: \(value), Error: \(error)")
             }
