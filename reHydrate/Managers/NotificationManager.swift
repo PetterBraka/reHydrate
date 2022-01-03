@@ -31,10 +31,8 @@ class NotificationManager {
 
     static let shared = NotificationManager()
 
-    var reachedGoal = false
     let center = UNUserNotificationCenter.current()
     private var hasSetNotifications = false
-    private var hasBeenGratulated = false
 
     func requestAccess() -> AnyPublisher<Void, Error> {
         Future { [unowned self] promise in
@@ -75,7 +73,8 @@ class NotificationManager {
      setReminders()
      ```
      */
-    private func setReminders(forTomorrow _: Bool = false) {
+    func setReminders(forTomorrow _: Bool = false) {
+        guard isRemindersOn else { return }
         guard !hasSetNotifications else { return }
         print("Creating notifications")
         let time = Calendar.current.dateComponents([.hour, .minute],
@@ -93,7 +92,6 @@ class NotificationManager {
     }
 
     private func createNotification(for date: Date) {
-        guard !hasBeenGratulated else { return }
         let notification = getReminder()
         let date = Calendar.current.dateComponents([.hour, .minute], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
@@ -102,7 +100,6 @@ class NotificationManager {
                                             trigger: trigger)
         center.add(request, withCompletionHandler: nil)
         center.setNotificationCategories([getActions()])
-        hasBeenGratulated = true
     }
 
     private func getActions() -> UNNotificationCategory {
@@ -140,6 +137,7 @@ class NotificationManager {
     }
 
     func createCongratulation() {
+        guard isRemindersOn else { return }
         let notfication = getCongratulation()
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString,

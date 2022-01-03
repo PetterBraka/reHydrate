@@ -22,7 +22,7 @@ class InterfaceController: WKInterfaceController {
     var today: Day?
     let formatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE - dd MMM"
+        dateFormatter.dateFormat = "EEEE - dd MMM yyyy"
         return dateFormatter
     }()
 
