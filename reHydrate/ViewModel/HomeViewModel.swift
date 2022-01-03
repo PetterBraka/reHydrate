@@ -283,7 +283,6 @@ extension HomeViewModel {
 
 extension HomeViewModel: WCSessionDelegate {
     enum WatchError: Error {
-        case invalidDate
         case extractionError
         case watchNotUpdated
     }
@@ -333,8 +332,8 @@ extension HomeViewModel: WCSessionDelegate {
     private func handleWatch(_ data: [String: Any]) {
         Task {
             do {
-                guard let rawDate = data["date"] as? String else { throw WatchError.extractionError }
-                guard let watchDate = formatter.date(from: rawDate) else { throw WatchError.invalidDate }
+                guard let rawDate = data["date"] as? String,
+                      let watchDate = formatter.date(from: rawDate) else { throw WatchError.extractionError }
                 guard let rawConsumed = data["consumed"] as? String,
                       let watchConsumed = Double(rawConsumed) else { throw WatchError.extractionError }
                 let day = try await dayManager.dayRepository.getDay(for: watchDate)
@@ -348,8 +347,6 @@ extension HomeViewModel: WCSessionDelegate {
             } catch {
                 if let error = error as? WatchError {
                     switch error {
-                    case .invalidDate:
-                        print("Watch isn't same day as phone")
                     case .extractionError:
                         print("Couldn't extract data from watch")
                     case .watchNotUpdated:
