@@ -102,7 +102,7 @@ final class HomeViewModel: NSObject, ObservableObject {
                 if day.consumption >= day.goal {
                     print("Reached todays goal")
                     self.notificationManager.reachedGoal = true
-                    self.notificationManager.createCongratulation()
+                    self.notificationManager.requestReminders()
                 } else {
                     self.notificationManager.setReminders()
                 }
@@ -168,38 +168,15 @@ final class HomeViewModel: NSObject, ObservableObject {
 
 extension HomeViewModel {
     private func createNewDay() {
-        var latestGoal = fetchLastGoal()
-        latestGoal = (latestGoal > 0) ? latestGoal : 3
-        let newDay = Day(id: UUID(), consumption: 0, goal: latestGoal, date: Date())
-        dayManager.dayRepository.create(day: newDay)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Failed creating new day: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                print("succeeded with creating new day")
-                self?.saveAndFetch()
-            }.store(in: &tasks)
-    }
-
-    private func fetchLastGoal() -> Double {
-        var goal = 0.0
-        dayManager.dayRepository.getLatestGoal()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Failed getting last goal: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { result in
-                goal = result
+        Task {
+            do {
+                let day = try await dayManager.createToday()
+                today = day
+                await saveAndFetch()
+            } catch {
+                print("Couldn't create new day for today. \(error.localizedDescription)")
             }
-            .store(in: &tasks)
-        return goal
+        }
     }
 
     func fetchToday() {
@@ -214,72 +191,57 @@ extension HomeViewModel {
         }
     }
 
-    private func saveAndFetch() {
-        dayManager.saveChanges()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error saving \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.fetchToday()
-            }.store(in: &tasks)
+    private func saveAndFetch() async {
+        do {
+            try await dayManager.saveChanges()
+            fetchToday()
+        } catch {
+            print("Error saving \(error)")
+        }
     }
 
     func addDrink(_ drink: Drink) {
-        let consumed = Measurement(value: drink.size, unit: UnitVolume.milliliters)
+        let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
         let consumedTotal = consumed.converted(to: .liters).value + today.consumption
-        dayManager.dayRepository.update(consumption: consumedTotal, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error adding drink of type: \(drink), Error: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.export(drink: drink)
-                self?.saveAndFetch()
-            }.store(in: &tasks)
+        Task {
+            do {
+                try await dayManager.addDrink(of: consumedTotal, to: today)
+                export(drink: drink)
+                await saveAndFetch()
+            } catch {
+                print("Error adding drink of type: \(drink), Error: \(error)")
+            }
+        }
     }
 
     func removeDrink(_ drink: Drink) {
-        let consumed = Measurement(value: drink.size, unit: UnitVolume.milliliters)
-        var consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
-
-        if consumedTotal < 0 {
-            consumedTotal = 0
-        }
-        let drink = Drink(type: drink.type, size: -drink.size)
-        dayManager.dayRepository.update(consumption: consumedTotal, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error adding drink of type: \(drink), Error: \(error)")
-                default:
-                    break
+        let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
+        let consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
+        Task {
+            let drink = Drink(type: drink.type, size: -drink.size)
+            do {
+                if consumedTotal < 0 {
+                    try await dayManager.removeDrink(of: 0, to: today)
+                } else {
+                    try await dayManager.removeDrink(of: consumedTotal, to: today)
                 }
-            } receiveValue: { [weak self] _ in
-                self?.export(drink: drink)
-                self?.saveAndFetch()
-            }.store(in: &tasks)
+                export(drink: drink)
+                await saveAndFetch()
+            } catch {
+                print("Error adding drink of type: \(drink), Error: \(error)")
+            }
+        }
     }
 
-    private func updateTodaysConsumption(to value: Double) {
-        guard value != today.consumption else { return }
-        dayManager.dayRepository.update(consumption: value, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error updating todays consumption: \(value), Error: \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.saveAndFetch()
-            }.store(in: &tasks)
+    private func update(consumption value: Double, for date: Date) {
+        Task {
+            do {
+                try await dayManager.update(consumption: value, for: date)
+                await saveAndFetch()
+            } catch {
+                print("Error updating todays consumption: \(value), Error: \(error)")
+            }
+        }
     }
 }
 
@@ -298,7 +260,7 @@ extension HomeViewModel {
                 }
             } receiveValue: { consumed in
                 print("Got data from health")
-                self.updateTodaysConsumption(to: consumed)
+                self.update(consumption: consumed, for: Date())
             }.store(in: &tasks)
     }
 
@@ -320,6 +282,11 @@ extension HomeViewModel {
 // MARK: - Watch communications
 
 extension HomeViewModel: WCSessionDelegate {
+    enum WatchError: Error {
+        case extractionError
+        case watchNotUpdated
+    }
+
     private func exportToWatch(today: Day) {
         if WCSession.isSupported() {
             let message = ["phoneDate": formatter.string(from: today.date),
@@ -363,19 +330,31 @@ extension HomeViewModel: WCSessionDelegate {
     }
 
     private func handleWatch(_ data: [String: Any]) {
-        fetchToday()
-        guard formatter.string(from: today.date) == data["date"] as? String else { return }
-        guard let watchConsumed = Double(data["consumed"] as? String ?? "0") else { return }
-        guard today.consumption < watchConsumed else {
-            print("Sending data to watch")
-            exportToWatch(today: today)
-            return
+        Task {
+            do {
+                guard let rawDate = data["date"] as? String,
+                      let watchDate = formatter.date(from: rawDate) else { throw WatchError.extractionError }
+                guard let rawConsumed = data["consumed"] as? String,
+                      let watchConsumed = Double(rawConsumed) else { throw WatchError.extractionError }
+                let day = try await dayManager.dayRepository.getDay(for: watchDate)
+                guard day.consumption < watchConsumed else { throw WatchError.watchNotUpdated }
+                print(data)
+                update(consumption: watchConsumed, for: watchDate)
+                let consumed = Measurement(value: watchConsumed - day.consumption, unit: UnitVolume.liters)
+                let differences = consumed.converted(to: .milliliters).value
+                export(drink: Drink(size: differences))
+                print("Udated with data from watch")
+            } catch {
+                if let error = error as? WatchError {
+                    switch error {
+                    case .extractionError:
+                        print("Couldn't extract data from watch")
+                    case .watchNotUpdated:
+                        print("Sending data to watch")
+                        exportToWatch(today: today)
+                    }
+                }
+            }
         }
-        print(data)
-        updateTodaysConsumption(to: watchConsumed)
-        let consumed = Measurement(value: watchConsumed - today.consumption, unit: UnitVolume.liters)
-        let differences = consumed.converted(to: .milliliters).value
-        export(drink: Drink(size: differences))
-        print("Udated with data from watch")
     }
 }
