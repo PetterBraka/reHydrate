@@ -58,7 +58,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var showSheet: SheetType?
 
     private var presistenceController: PresistenceControllerProtocol
-    private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
+    private var notificationManager = NotificationManager.shared
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
     private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
