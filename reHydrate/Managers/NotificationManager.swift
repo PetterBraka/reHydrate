@@ -48,23 +48,19 @@ class NotificationManager {
         .eraseToAnyPublisher()
     }
 
-    func requestReminders() {
-        guard isRemindersOn else { return }
-        print("Requested reminders")
-        if reachedGoal {
-            deleteReminders()
-            createCongratulation()
-        } else {
-            deleteReminders()
-            setReminders()
-        }
-    }
-
     func deleteReminders() {
         print("Deleting reminders")
         center.removeAllDeliveredNotifications()
         center.removeAllPendingNotificationRequests()
         hasSetNotifications = false
+    }
+
+    func createReminders() {
+        center.getPendingNotificationRequests { pending in
+            if pending.isEmpty {
+                self.setReminders()
+            }
+        }
     }
 
     /**
@@ -75,7 +71,7 @@ class NotificationManager {
      setReminders()
      ```
      */
-    func setReminders(forTomorrow _: Bool = false) {
+    private func setReminders(forTomorrow _: Bool = false) {
         guard isRemindersOn else { return }
         guard !hasSetNotifications else { return }
         print("Creating notifications")
