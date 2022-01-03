@@ -29,10 +29,25 @@ class NotificationManager {
     @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
 
+    @Published var hasReachedGoal: Bool = false
+    var tasks = Set<AnyCancellable>()
+
     static let shared = NotificationManager()
 
     let center = UNUserNotificationCenter.current()
     private var hasSetNotifications = false
+
+    init() {
+        $hasReachedGoal
+            .sink { reached in
+                if reached {
+                    self.deleteReminders()
+                    self.createCongratulation()
+                } else {
+                    self.createReminders()
+                }
+            }.store(in: &tasks)
+    }
 
     func requestAccess() -> AnyPublisher<Void, Error> {
         Future { [unowned self] promise in
@@ -74,6 +89,7 @@ class NotificationManager {
     private func setReminders(forTomorrow _: Bool = false) {
         guard isRemindersOn else { return }
         guard !hasSetNotifications else { return }
+        guard !hasReachedGoal else { return }
         print("Creating notifications")
         let time = Calendar.current.dateComponents([.hour, .minute],
                                                    from: remindersStart,
@@ -134,7 +150,7 @@ class NotificationManager {
                                       options: .customDismissAction)
     }
 
-    func createCongratulation() {
+    private func createCongratulation() {
         guard isRemindersOn else { return }
         let notfication = getCongratulation()
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
