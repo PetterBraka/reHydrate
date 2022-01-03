@@ -95,18 +95,15 @@ final class CalendarViewModel: ObservableObject {
 
 extension CalendarViewModel {
     private func fetchDays() {
-        dayManager.dayRepository.getDays()
-            .sink { completion in
-                switch completion {
-                case let .failure(error as CoreDataError):
-                    print("Failed fetching days \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] days in
-                self?.storedDays = days
-                self?.getConsumed(for: days)
-                self?.getAverage(for: days)
-            }.store(in: &tasks)
+        Task {
+            do {
+                let days = try await dayManager.dayRepository.getDays()
+                storedDays = days
+                getConsumed(for: days)
+                getAverage(for: days)
+            } catch {
+                print("Failed fetching days \(error)")
+            }
+        }
     }
 }

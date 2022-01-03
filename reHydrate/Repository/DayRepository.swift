@@ -12,13 +12,13 @@ import CoreData
 import Foundation
 
 protocol DayRepositoryInterface {
-    func create(day: Day) -> AnyPublisher<Bool, Error>
-    func delete(day: Day) -> AnyPublisher<Bool, Error>
-    func getDay(for date: Date) -> AnyPublisher<Day?, Error>
-    func getLatestGoal() -> AnyPublisher<Double, Error>
-    func getDays() -> AnyPublisher<[Day], Error>
-    func update(goal: Double, for day: Day) -> AnyPublisher<Bool, Error>
-    func update(consumption: Double, for day: Day) -> AnyPublisher<Bool, Error>
+    func create(day: Day) async throws
+    func delete(day: Day) async throws
+    func getDay(for date: Date) async throws -> Day
+    func getLatestGoal() async throws -> Double?
+    func getDays() async throws -> [Day]
+    func update(goal: Double, for day: Date) async throws
+    func update(consumption: Double, for day: Date) async throws
 }
 
 final class DayRepository: DayRepositoryInterface {
@@ -30,92 +30,50 @@ final class DayRepository: DayRepositoryInterface {
         repo = CoreDataRepository<DayModel>(context: context)
     }
 
-    func create(day: Day) -> AnyPublisher<Bool, Error> {
-        repo.create()
-            .map { dayModel -> Bool in
-                dayModel.updateCoreDataModel(day)
-                return true
-            }
-            .eraseToAnyPublisher()
+    func create(day: Day) async throws {
+        let dayModel = try await repo.create()
+        dayModel.updateCoreDataModel(day)
     }
 
-    func delete(day: Day) -> AnyPublisher<Bool, Error> {
-        repo.get(id: day.id.uuidString,
-                 predicate: repoPredicate,
-                 sortDescriptors: repoSortDescriptors)
-            .map { day -> Bool in
-                if let day = day {
-                    _ = self.repo.delete(day)
-                    return true
-                } else {
-                    return false
-                }
-            }
-            .eraseToAnyPublisher()
+    func delete(day: Day) async throws {
+        let day = try await repo.get(id: day.id.uuidString,
+                                     predicate: repoPredicate,
+                                     sortDescriptors: repoSortDescriptors)
+        repo.delete(day)
     }
 
-    func getDay(for date: Date) -> AnyPublisher<Day?, Error> {
-        repo.get(date: date,
-                 predicate: repoPredicate,
-                 sortDescriptors: repoSortDescriptors)
-            .map { day -> Day? in
-                let day = day.map { day -> Day in
-                    day.toDomainModel()
-                }
-                return day
-            }
-            .eraseToAnyPublisher()
+    func getDay(for date: Date) async throws -> Day {
+        let day = try await repo.get(date: date,
+                                     predicate: repoPredicate,
+                                     sortDescriptors: repoSortDescriptors)
+        return day.toDomainModel()
     }
 
-    func getLatestGoal() -> AnyPublisher<Double, Error> {
-        repo.getLatesGoal(predicate: repoPredicate)
-            .map { day -> Double in
-                let day = day.map { day -> Day in
-                    day.toDomainModel()
-                }
-                return day?.goal ?? 2
-            }
-            .eraseToAnyPublisher()
+    func getLatestGoal() async throws -> Double? {
+        let dayModel = try await repo.getLastObject(predicate: repoPredicate)
+        let day = dayModel?.toDomainModel()
+        return day?.goal
     }
 
-    func getDays() -> AnyPublisher<[Day], Error> {
-        repo.getAll(predicate: repoPredicate, sortDescriptors: repoSortDescriptors)
-            .map { daysModel -> [Day] in
-                let days = daysModel.map { daysModel -> Day in
-                    daysModel.toDomainModel()
-                }
-                return days
-            }
-            .eraseToAnyPublisher()
+    func getDays() async throws -> [Day] {
+        let dayModels = try await repo.getAll(predicate: repoPredicate, sortDescriptors: repoSortDescriptors)
+        let days = dayModels.map { daysModel -> Day in
+            daysModel.toDomainModel()
+        }
+        return days
     }
 
-    func update(goal: Double, for day: Day) -> AnyPublisher<Bool, Error> {
-        repo.get(id: day.id.uuidString,
-                 predicate: repoPredicate,
-                 sortDescriptors: repoSortDescriptors)
-            .map { day -> Bool in
-                if let day = day {
-                    day.goal = goal
-                    return true
-                } else {
-                    return false
-                }
-            }
-            .eraseToAnyPublisher()
+    func update(goal: Double, for date: Date) async throws {
+        let day = try await repo.get(date: date,
+                                     predicate: repoPredicate,
+                                     sortDescriptors: repoSortDescriptors)
+        day.goal = goal
     }
 
-    func update(consumption: Double, for day: Day) -> AnyPublisher<Bool, Error> {
-        repo.get(id: day.id.uuidString,
-                 predicate: repoPredicate,
-                 sortDescriptors: repoSortDescriptors)
-            .map { day -> Bool in
-                if let day = day {
-                    day.consumtion = consumption
-                    return true
-                } else {
-                    return false
-                }
-            }
-            .eraseToAnyPublisher()
+    func update(consumption: Double, for date: Date) async throws {
+        let day = try await repo.get(date: date,
+                                     predicate: repoPredicate,
+                                     sortDescriptors: repoSortDescriptors)
+        day.consumtion = consumption
     }
 }

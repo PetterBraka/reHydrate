@@ -55,7 +55,9 @@ class NotificationManager {
         print("Requested reminders")
         if reachedGoal {
             deleteReminders()
+            createCongratulation()
         } else {
+            deleteReminders()
             setReminders()
         }
     }
