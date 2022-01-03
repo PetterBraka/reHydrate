@@ -63,6 +63,10 @@ class NotificationManager {
         .eraseToAnyPublisher()
     }
 
+    func requestAccess() async throws {
+        try await center.requestAuthorization(options: [.alert, .sound])
+    }
+
     func deleteReminders() {
         print("Deleting reminders")
         center.removeAllDeliveredNotifications()
@@ -71,6 +75,7 @@ class NotificationManager {
     }
 
     func createReminders() {
+        guard isRemindersOn else { return }
         center.getPendingNotificationRequests { pending in
             if pending.isEmpty {
                 self.setReminders()
@@ -87,9 +92,8 @@ class NotificationManager {
      ```
      */
     private func setReminders(forTomorrow _: Bool = false) {
-        guard isRemindersOn else { return }
-        guard !hasSetNotifications else { return }
         guard !hasReachedGoal else { return }
+        guard !hasSetNotifications else { return }
         print("Creating notifications")
         let time = Calendar.current.dateComponents([.hour, .minute],
                                                    from: remindersStart,
