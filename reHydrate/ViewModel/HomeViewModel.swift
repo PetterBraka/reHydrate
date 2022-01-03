@@ -282,6 +282,12 @@ extension HomeViewModel {
 // MARK: - Watch communications
 
 extension HomeViewModel: WCSessionDelegate {
+    enum WatchError: Error {
+        case invalidDate
+        case extractionError
+        case watchNotUpdated
+    }
+
     private func exportToWatch(today: Day) {
         if WCSession.isSupported() {
             let message = ["phoneDate": formatter.string(from: today.date),
@@ -325,13 +331,33 @@ extension HomeViewModel: WCSessionDelegate {
     }
 
     private func handleWatch(_ data: [String: Any]) {
-        fetchToday()
-        guard formatter.string(from: today.date) == data["date"] as? String else { return }
-        guard let watchConsumed = Double(data["consumed"] as? String ?? "0") else { return }
-        guard today.consumption < watchConsumed else {
-            print("Sending data to watch")
-            exportToWatch(today: today)
-            return
+        Task {
+            do {
+                guard let rawDate = data["date"] as? String else { throw WatchError.extractionError }
+                guard let watchDate = formatter.date(from: rawDate) else { throw WatchError.invalidDate }
+                guard let rawConsumed = data["consumed"] as? String,
+                      let watchConsumed = Double(rawConsumed) else { throw WatchError.extractionError }
+                let day = try await dayManager.dayRepository.getDay(for: watchDate)
+                guard day.consumption < watchConsumed else { throw WatchError.watchNotUpdated }
+                print(data)
+                update(consumption: watchConsumed, for: watchDate)
+                let consumed = Measurement(value: watchConsumed - day.consumption, unit: UnitVolume.liters)
+                let differences = consumed.converted(to: .milliliters).value
+                export(drink: Drink(size: differences))
+                print("Udated with data from watch")
+            } catch {
+                if let error = error as? WatchError {
+                    switch error {
+                    case .invalidDate:
+                        print("Watch isn't same day as phone")
+                    case .extractionError:
+                        print("Couldn't extract data from watch")
+                    case .watchNotUpdated:
+                        print("Sending data to watch")
+                        exportToWatch(today: today)
+                    }
+                }
+            }
         }
     }
 }
