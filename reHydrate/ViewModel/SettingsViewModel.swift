@@ -96,6 +96,7 @@ final class SettingsViewModel: ObservableObject {
     func setupSubscription() {
         $today
             .sink { updatedDay in
+                print(updatedDay)
                 self.selectedGoal = updatedDay.goal.convert(to: self.isMetric ? .liters : .imperialPints,
                                                             from: .liters).clean
             }.store(in: &tasks)
@@ -198,8 +199,8 @@ final class SettingsViewModel: ObservableObject {
     func decrementGoal() {
         if today.goal > 0 {
             today.goal -= 0.5
+            updateGoal(today.goal)
         }
-        updateGoal(today.goal)
     }
 
     func navigateToHome() {
@@ -271,7 +272,7 @@ extension SettingsViewModel {
     func fetchToday() {
         Task {
             do {
-                let day = try await dayManager.dayRepository.getDay(for: Date())
+                let day = try await dayManager.fetchToday()
                 self.today = day
                 if day.goal > 0 {
                     selectedGoal = "\(day.goal.clean)"
@@ -282,23 +283,26 @@ extension SettingsViewModel {
         }
     }
 
-    private func updateGoal(_ newGoal: Double) {
+    private func saveAndFetch() {
         Task {
             do {
-                try await dayManager.dayRepository.update(consumption: newGoal, for: today)
-                await saveAndFetch()
+                print(today)
+                try await dayManager.saveChanges()
+                fetchToday()
             } catch {
-                print("Error adding drink of type: \(newGoal), Error: \(error)")
+                print("Error saving \(error)")
             }
         }
     }
 
-    private func saveAndFetch() async {
-        do {
-            try await dayManager.saveChanges()
-            fetchToday()
-        } catch {
-            print("Error saving \(error)")
+    private func updateGoal(_ newGoal: Double) {
+        Task {
+            do {
+                try await dayManager.updateGoal(newGoal, for: today)
+                saveAndFetch()
+            } catch {
+                print("Error adding drink of type: \(newGoal), Error: \(error)")
+            }
         }
     }
 }

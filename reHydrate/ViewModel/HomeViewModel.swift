@@ -170,25 +170,24 @@ extension HomeViewModel {
     private func createNewDay() {
         Task {
             do {
-                let previusGoal = try await dayManager.dayRepository.getLatestGoal()
-                let today = Day(id: UUID(), consumption: 0, goal: previusGoal ?? 3, date: Date())
-                try await dayManager.dayRepository.create(day: today)
+                let day = try await dayManager.createToday()
+                today = day
                 await saveAndFetch()
-            } catch {}
+            } catch {
+                print("Couldn't create new day for today. \(error.localizedDescription)")
+            }
         }
     }
 
     func fetchToday() {
         Task {
             do {
-                let day = try await dayManager.dayRepository.getDay(for: Date())
+                let day = try await dayManager.fetchToday()
                 self.today = day
                 exportToWatch(today: day)
                 fetchHealthData()
             } catch {
-                if let error = error as? CoreDataError, error == .elementNotFound {
-                    createNewDay()
-                }
+                createNewDay()
             }
         }
     }
@@ -207,7 +206,7 @@ extension HomeViewModel {
         let consumedTotal = consumed.converted(to: .liters).value + today.consumption
         Task {
             do {
-                try await dayManager.dayRepository.update(consumption: consumedTotal, for: today)
+                try await dayManager.addDrink(of: consumedTotal, to: today)
                 export(drink: drink)
                 await saveAndFetch()
             } catch {
@@ -217,17 +216,16 @@ extension HomeViewModel {
     }
 
     func removeDrink(_ drink: Drink) {
+        let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
+        let consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
         Task {
-            let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
-            var consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
-
-            if consumedTotal < 0 {
-                consumedTotal = 0
-            }
-
             let drink = Drink(type: drink.type, size: -drink.size)
             do {
-                try await dayManager.dayRepository.update(consumption: consumedTotal, for: today)
+                if consumedTotal < 0 {
+                    try await dayManager.removeDrink(of: 0, to: today)
+                } else {
+                    try await dayManager.removeDrink(of: consumedTotal, to: today)
+                }
                 export(drink: drink)
                 await saveAndFetch()
             } catch {
@@ -240,7 +238,7 @@ extension HomeViewModel {
         guard value != today.consumption else { return }
         Task {
             do {
-                try await dayManager.dayRepository.update(consumption: value, for: today)
+                try await dayManager.updateTodaysConsumption(to: value, for: today)
                 await saveAndFetch()
             } catch {
                 print("Error updating todays consumption: \(value), Error: \(error)")
