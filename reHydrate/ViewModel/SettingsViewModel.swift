@@ -95,32 +95,33 @@ final class SettingsViewModel: ObservableObject {
 
     func setupSubscription() {
         $today
-            .sink { updatedDay in
-                print(updatedDay)
-                self.selectedGoal = updatedDay.goal.convert(to: self.isMetric ? .liters : .imperialPints,
-                                                            from: .liters).clean
+            .sink { [weak self] day in
+                print(day)
+                guard let isMetric = self?.isMetric else { return }
+                self?.selectedGoal = day.goal.convert(to: isMetric ? .liters : .imperialPints,
+                                                      from: .liters).clean
             }.store(in: &tasks)
         $selectedLanguage
-            .removeDuplicates().sink { value in
-                self.language = Language(rawValue: value.lowercased()) ?? .english
-                self.requestReminders()
+            .removeDuplicates().sink { [weak self] value in
+                self?.language = Language(rawValue: value.lowercased()) ?? .english
+                self?.requestReminders()
             }.store(in: &tasks)
         $selectedUnit
-            .sink { unit in
+            .sink { [weak self] unit in
                 if Localizable.metricSystem == unit {
-                    self.unit = "ml"
+                    self?.unit = "ml"
                 } else {
-                    self.unit = "pt"
+                    self?.unit = "pt"
                 }
-                self.isMetric = Localizable.metricSystem == unit
-                self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
-                                                            from: .liters).clean
-                self.setDrinks()
-                self.requestReminders()
+                self?.isMetric = Localizable.metricSystem == unit
+                self?.selectedGoal = self?.today.goal.convert(to: self?.isMetric ?? true ? .liters : .imperialPints,
+                                                              from: .liters).clean ?? "3"
+                self?.setDrinks()
+                self?.requestReminders()
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-            .sink { _ in
-                self.checkNotificationAccess()
+            .sink { [weak self] _ in
+                self?.checkNotificationAccess()
             }.store(in: &tasks)
         setupEditDrinkSubscription()
         setupNotificationSubscription()
@@ -129,49 +130,52 @@ final class SettingsViewModel: ObservableObject {
     func setupEditDrinkSubscription() {
         $small
             .removeDuplicates()
-            .sink { newValue in
+            .sink { [weak self] newValue in
                 guard let value = Double(newValue) else { return }
-                let size = Measurement(value: value, unit: self.isMetric ? UnitVolume.milliliters : .imperialPints)
+                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
+                let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self.smallDrink = metricSize
+                self?.smallDrink = metricSize
             }.store(in: &tasks)
         $medium
             .removeDuplicates()
-            .sink { newValue in
+            .sink { [weak self] newValue in
                 guard let value = Double(newValue) else { return }
-                let size = Measurement(value: value, unit: self.isMetric ? UnitVolume.milliliters : .imperialPints)
+                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
+                let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self.mediumDrink = metricSize
+                self?.mediumDrink = metricSize
             }.store(in: &tasks)
         $large
             .removeDuplicates()
-            .sink { newValue in
+            .sink { [weak self] newValue in
                 guard let value = Double(newValue) else { return }
-                let size = Measurement(value: value, unit: self.isMetric ? UnitVolume.milliliters : .imperialPints)
+                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
+                let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self.largeDrink = metricSize
+                self?.largeDrink = metricSize
             }.store(in: &tasks)
     }
 
     func setupNotificationSubscription() {
         $selectedRemindersOn
-            .sink { isOn in
-                if self.isRemindersOn != isOn {
-                    if self.remindersPremitted {
-                        self.isRemindersOn = isOn
+            .sink { [weak self] isOn in
+                if self?.isRemindersOn != isOn {
+                    if self?.remindersPremitted == true {
+                        self?.isRemindersOn = isOn
                     }
-                    self.requestReminders()
+                    self?.requestReminders()
                 }
             }.store(in: &tasks)
         $selectedStartDate
             .removeDuplicates()
-            .sink { date in
-                self.updateStartTime(with: date)
+            .sink { [weak self] date in
+                self?.updateStartTime(with: date)
             }.store(in: &tasks)
         $selectedEndDate
             .removeDuplicates()
-            .sink { date in
-                self.updateEndTime(with: date)
+            .sink { [weak self] date in
+                self?.updateEndTime(with: date)
             }.store(in: &tasks)
     }
 
@@ -256,7 +260,7 @@ extension SettingsViewModel {
 
     private func requestReminders() {
         notificationManager.deleteReminders()
-        notificationManager.createReminders()
+        notificationManager.requestReminders()
     }
 }
 
