@@ -244,9 +244,10 @@ extension SettingsViewModel {
         "\(selectedFrequency) min"
     }
 
-    func updateFrequency(shouldIncrese value: Bool) {
-        let increment = value ? 15 : -15
-        guard var frequency = Int(selectedFrequency), frequency > 15 else { return }
+    func updateFrequency(shouldIncrese: Bool) {
+        let increment = shouldIncrese ? 15 : -15
+        guard var frequency = Int(selectedFrequency),
+              shouldIncrese || (frequency > 15) else { return }
         frequency += increment
         selectedFrequency = "\(frequency)"
         reminderFrequency = frequency
