@@ -23,6 +23,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     @Preference(\.mediumDrink) private var mediumDrink
     @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
+    @Preference(\.hasReachedGoal) private var hasReachedGoal
 
     @Published var today = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     @Published var drinks: [Drink] = []
@@ -30,7 +31,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     @Published var interactedDrink: Drink?
     @Published private var accessRequested: [AccessType] = []
 
-    private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
+    private var notificationManager = NotificationManager.shared
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
 
     private var presistenceController: PresistenceControllerProtocol
@@ -71,41 +72,32 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     func requestNotificationAccess() {
-        notificationManager.requestAccess()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Failed requesting access too notification: \(error.localizedDescription)")
-                default:
-                    break
-                }
-            } receiveValue: { _ in
-                print("Notification requested")
-                self.requestHealthAccess()
-            }.store(in: &tasks)
+        Task {
+            do {
+                try await notificationManager.requestAccess()
+                requestHealthAccess()
+            } catch {
+                print("Failed requesting access too notification: \(error.localizedDescription)")
+            }
+        }
     }
 
     func requestHealthAccess() {
-        healthManager.requestAccess()
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Failed requesting access too health: \(error.localizedDescription)")
-                default:
-                    break
-                }
-            } receiveValue: { _ in
-                print("Health requested")
+        Task {
+            do {
+                try await healthManager.requestAccess()
                 self.fetchHealthData()
-            }.store(in: &tasks)
+            } catch {
+                print("Failed requesting access too health: \(error.localizedDescription)")
+            }
+        }
     }
 
     func setupSubscribers() {
         $today
             .removeDuplicates(by: { $0.consumption == $1.consumption })
             .sink { day in
-                self.notificationManager.hasReachedGoal = day.consumption >= day.goal
+                self.hasReachedGoal = day.consumption >= day.goal
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .addedSmallDrink)
             .sink { _ in
@@ -172,7 +164,6 @@ extension HomeViewModel {
             do {
                 let day = try await dayManager.createToday()
                 today = day
-                await saveAndFetch()
             } catch {
                 print("Couldn't create new day for today. \(error.localizedDescription)")
             }
@@ -201,13 +192,13 @@ extension HomeViewModel {
     }
 
     func addDrink(_ drink: Drink) {
-        let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
-        let consumedTotal = consumed.converted(to: .liters).value + today.consumption
+        let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
+        let consumed = rawConsumed.converted(to: .liters).value
         Task {
             do {
-                try await dayManager.addDrink(of: consumedTotal, to: today)
+                try await dayManager.addDrink(of: consumed, to: today)
                 export(drink: drink)
-                await saveAndFetch()
+                fetchToday()
             } catch {
                 print("Error adding drink of type: \(drink), Error: \(error)")
             }
@@ -215,18 +206,14 @@ extension HomeViewModel {
     }
 
     func removeDrink(_ drink: Drink) {
-        let consumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
-        let consumedTotal: Double = today.consumption - consumed.converted(to: .liters).value
+        let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
+        let consumed: Double = rawConsumed.converted(to: .liters).value
         Task {
             let drink = Drink(type: drink.type, size: -drink.size)
             do {
-                if consumedTotal < 0 {
-                    try await dayManager.removeDrink(of: 0, to: today)
-                } else {
-                    try await dayManager.removeDrink(of: consumedTotal, to: today)
-                }
+                try await dayManager.removeDrink(of: consumed < 0 ? 0 : consumed, to: today)
                 export(drink: drink)
-                await saveAndFetch()
+                fetchToday()
             } catch {
                 print("Error adding drink of type: \(drink), Error: \(error)")
             }
@@ -237,7 +224,7 @@ extension HomeViewModel {
         Task {
             do {
                 try await dayManager.update(consumption: value, for: date)
-                await saveAndFetch()
+                fetchToday()
             } catch {
                 print("Error updating todays consumption: \(value), Error: \(error)")
             }
