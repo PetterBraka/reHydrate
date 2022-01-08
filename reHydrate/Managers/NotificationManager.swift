@@ -33,7 +33,7 @@ class NotificationManager {
     static let shared = NotificationManager()
 
     let center = UNUserNotificationCenter.current()
-    
+
     private var hasSetNotifications = false
     private var hasSetCongratsNotifications = false
 
