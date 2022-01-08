@@ -13,7 +13,7 @@ import UserNotifications
 
 protocol HealthManagerProtocol {
     func needsAccessRequest() -> Bool
-    func requestAccess() -> AnyPublisher<Void, Error>
+    func requestAccess() async throws
     func getWater(for date: Date) -> AnyPublisher<Double, Error>
     func export(drink: Drink, _ date: Date) -> AnyPublisher<Void, Error>
 }
@@ -56,18 +56,9 @@ class HealthManager: HealthManagerProtocol {
         }
     }
 
-    func requestAccess() -> AnyPublisher<Void, Error> {
-        Future { [unowned self] promise in
-            self.healthStore.requestAuthorization(toShare: self.writeTypes, read: self.readTypes) { _, error in
-                guard let error = error else {
-                    promise(.success(()))
-                    return
-                }
-                promise(.failure(error))
-            }
-        }
-        .receive(on: RunLoop.main)
-        .eraseToAnyPublisher()
+    func requestAccess() async throws {
+        try await healthStore.requestAuthorization(toShare: writeTypes,
+                                                   read: readTypes)
     }
 
     func getWater(for date: Date) -> AnyPublisher<Double, Error> {

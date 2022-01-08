@@ -42,6 +42,8 @@ final class Preferences {
     var largeDrink: Double = 750
     @UserDefault("darkMode")
     var isDarkMode: Bool = false
+    @UserDefault("hasReachedGoal")
+    var hasReachedGoal: Bool = false
 }
 
 @propertyWrapper
