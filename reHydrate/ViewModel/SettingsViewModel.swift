@@ -96,7 +96,6 @@ final class SettingsViewModel: ObservableObject {
     func setupSubscription() {
         $today
             .sink { [weak self] day in
-                print(day)
                 guard let isMetric = self?.isMetric else { return }
                 self?.selectedGoal = day.goal.convert(to: isMetric ? .liters : .imperialPints,
                                                       from: .liters).clean
