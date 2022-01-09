@@ -94,12 +94,6 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     func setupSubscribers() {
-        $today
-            .removeDuplicates(by: { $0.consumption == $1.consumption })
-            .sink { [weak self] day in
-                self?.hasReachedGoal = day.consumption >= day.goal
-                self?.notificationManager.requestReminders()
-            }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .addedSmallDrink)
             .sink { [weak self] _ in
                 guard let drink = self?.drinks[0] else { return }
@@ -179,6 +173,8 @@ extension HomeViewModel {
             do {
                 let day = try await dayManager.fetchToday()
                 self.today = day
+                hasReachedGoal = day.consumption >= day.goal
+                notificationManager.requestReminders()
                 exportToWatch(today: day)
             } catch {
                 createNewDay()
