@@ -8,6 +8,7 @@
 
 import Combine
 import CoreData
+import FirebaseAnalytics
 import HealthKit
 import SwiftUI
 import WatchConnectivity
@@ -194,6 +195,7 @@ extension HomeViewModel {
     func addDrink(_ drink: Drink) {
         let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
         let consumed = rawConsumed.converted(to: .liters).value
+        Analytics.track(event: .addDrink)
         Task {
             do {
                 try await dayManager.addDrink(of: consumed, to: today)
@@ -208,6 +210,7 @@ extension HomeViewModel {
     func removeDrink(_ drink: Drink) {
         let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
         let consumed: Double = rawConsumed.converted(to: .liters).value
+        Analytics.track(event: .removeDrink)
         Task {
             let drink = Drink(type: drink.type, size: -drink.size)
             do {
