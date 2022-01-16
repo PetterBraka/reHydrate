@@ -122,11 +122,13 @@ struct SettingsView: View {
                             HStack {
                                 DatePicker(Localizable.startingTime.local(viewModel.language),
                                            selection: $viewModel.selectedStartDate,
+                                           in: viewModel.remindersStartRange,
                                            displayedComponents: .hourAndMinute)
                             }
                             HStack {
                                 DatePicker(Localizable.endingTime.local(viewModel.language),
                                            selection: $viewModel.selectedEndDate,
+                                           in: viewModel.remindersEndRange,
                                            displayedComponents: .hourAndMinute)
                             }
                             HStack {

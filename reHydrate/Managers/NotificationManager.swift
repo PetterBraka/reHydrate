@@ -46,10 +46,16 @@ class NotificationManager {
         center.removeAllDeliveredNotifications()
         center.removeAllPendingNotificationRequests()
         hasSetNotifications = false
+        hasSetCongratsNotifications = false
     }
 
-    func createReminders() {
+    func requestReminders() {
         guard isRemindersOn else { return }
+        guard !hasReachedGoal else {
+            deleteReminders()
+            createCongratulation()
+            return
+        }
         center.getPendingNotificationRequests { pending in
             if pending.isEmpty {
                 self.setReminders()
@@ -66,12 +72,8 @@ class NotificationManager {
      ```
      */
     private func setReminders(forTomorrow _: Bool = false) {
-        guard !hasReachedGoal else {
-            deleteReminders()
-            createCongratulation()
-            return
-        }
         guard !hasSetNotifications else { return }
+        guard remindersStart < remindersEnd else { return }
         hasSetNotifications = true
         print("Creating notifications")
         let time = Calendar.current.dateComponents([.hour, .minute],
