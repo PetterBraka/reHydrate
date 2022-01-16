@@ -73,6 +73,7 @@ class NotificationManager {
      */
     private func setReminders(forTomorrow _: Bool = false) {
         guard !hasSetNotifications else { return }
+        guard remindersStart < remindersEnd else { return }
         hasSetNotifications = true
         print("Creating notifications")
         let time = Calendar.current.dateComponents([.hour, .minute],
