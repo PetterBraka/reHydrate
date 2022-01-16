@@ -53,7 +53,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var selectedFrequency: String = "60"
 
     var remindersStartRange: ClosedRange<Date> {
-        let startRange = Calendar.current.startOfDay(for: Date())
+        let startRange = Calendar.current.startOfDay(for: selectedStartDate)
         if let endRange = Calendar.current.date(byAdding: .hour, value: -1, to: selectedEndDate) {
             return startRange ... endRange
         } else {
@@ -64,7 +64,7 @@ final class SettingsViewModel: ObservableObject {
 
     var remindersEndRange: ClosedRange<Date> {
         if let startRange = Calendar.current.date(byAdding: .hour, value: 1, to: selectedStartDate),
-           let endRange = Calendar.current.date(bySettingHour: 23, minute: 00, second: 00, of: Date()) {
+           let endRange = Calendar.current.date(bySettingHour: 23, minute: 00, second: 00, of: selectedEndDate) {
             return startRange ... endRange
         } else {
             let startRange = Calendar.current.startOfDay(for: Date())
