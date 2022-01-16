@@ -52,6 +52,24 @@ final class SettingsViewModel: ObservableObject {
     @Published var selectedEndDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
     @Published var selectedFrequency: String = "60"
 
+    var remindersStartRange: ClosedRange<Date> {
+        let startRange = Calendar.current.startOfDay(for: selectedStartDate)
+        let endRange = Calendar.current.date(byAdding: .hour, value: -1, to: selectedEndDate)!
+
+        return startRange ... endRange
+    }
+
+    var remindersEndRange: ClosedRange<Date> {
+        if let startRange = Calendar.current.date(byAdding: .hour, value: 1, to: selectedStartDate),
+           let endRange = Calendar.current.date(bySettingHour: 23, minute: 00, second: 00, of: Date()) {
+            return startRange ... endRange
+        } else {
+            let startRange = Calendar.current.startOfDay(for: Date())
+            let endRange = Calendar.current.date(bySettingHour: 23, minute: 00, second: 00, of: Date())!
+            return startRange ... endRange
+        }
+    }
+
     @Published var today = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
 
     @Published var showNotificationAlert: Bool = false
@@ -233,12 +251,14 @@ extension SettingsViewModel {
 
     func updateStartTime(with date: Date) {
         guard remindersStart != date else { return }
+        guard remindersStart < remindersEnd else { return }
         remindersStart = date
         requestReminders()
     }
 
     func updateEndTime(with date: Date) {
         guard remindersEnd != date else { return }
+        guard remindersStart < remindersEnd else { return }
         remindersEnd = date
         requestReminders()
     }
