@@ -31,11 +31,18 @@ class NotificationManager {
     @Preference(\.hasReachedGoal) private var hasReachedGoal
 
     static let shared = NotificationManager()
+    private var dayManager: DayManager
 
     let center = UNUserNotificationCenter.current()
 
     private var hasSetNotifications = false
     private var hasSetCongratsNotifications = false
+
+    init() {
+        let presistenceController = MainAssembler.shared.container.resolve(PresistenceControllerProtocol.self)!
+        let viewContext = presistenceController.container.viewContext
+        dayManager = DayManager(context: viewContext)
+    }
 
     func requestAccess() async throws {
         try await center.requestAuthorization(options: [.alert, .sound])
@@ -50,15 +57,19 @@ class NotificationManager {
     }
 
     func requestReminders() {
-        guard isRemindersOn else { return }
-        guard !hasReachedGoal else {
-            deleteReminders()
-            createCongratulation()
-            return
-        }
-        center.getPendingNotificationRequests { pending in
-            if pending.isEmpty {
-                self.setReminders()
+        Task {
+            let day = try await dayManager.createToday()
+            hasReachedGoal = day.consumption >= day.goal
+            guard isRemindersOn else { return }
+            guard !hasReachedGoal else {
+                deleteReminders()
+                createCongratulation()
+                return
+            }
+            center.getPendingNotificationRequests { pending in
+                if pending.isEmpty {
+                    self.setReminders()
+                }
             }
         }
     }

@@ -174,7 +174,6 @@ extension HomeViewModel {
             do {
                 let day = try await dayManager.fetchToday()
                 self.today = day
-                hasReachedGoal = day.consumption >= day.goal
                 notificationManager.requestReminders()
                 exportToWatch(today: day)
             } catch {
