@@ -6,6 +6,7 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import FirebaseAnalytics
 import SwiftUI
 
 struct AppView: View {
@@ -25,6 +26,9 @@ struct AppView: View {
                     .tag(AppState.calendar)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
+        }
+        .onAppear {
+            Analytics.track(event: .startUp)
         }
     }
 }
