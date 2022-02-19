@@ -51,7 +51,7 @@ class NotificationManager {
 
     func requestReminders(for day: Day) {
         Task {
-            hasReachwedGoal = day.consumption >= day.goal
+            hasReachedGoal = day.consumption >= day.goal
             guard isRemindersOn else { return }
             guard !hasReachedGoal else {
                 deleteReminders()
