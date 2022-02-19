@@ -174,7 +174,7 @@ extension HomeViewModel {
             do {
                 let day = try await dayManager.fetchToday()
                 self.today = day
-                notificationManager.requestReminders()
+                notificationManager.requestReminders(for: day)
                 exportToWatch(today: day)
             } catch {
                 createNewDay()
@@ -318,32 +318,45 @@ extension HomeViewModel: WCSessionDelegate {
         handleWatch(userInfo)
     }
 
+    func updateWatchWith(_ consumed: Double, _ date: Date, for day: Day) throws {
+        guard day.consumption < consumed else { throw WatchError.watchNotUpdated }
+        update(consumption: consumed, for: date)
+        let consumed = Measurement(value: consumed - day.consumption, unit: UnitVolume.liters)
+        let differences = consumed.converted(to: .milliliters).value
+        export(drink: Drink(size: differences))
+        print("Udated with data from watch")
+    }
+
     private func handleWatch(_ data: [String: Any]) {
-        Task {
-            do {
-                guard let rawDate = data["date"] as? String,
-                      let watchDate = watchFormatter.date(from: rawDate) else { throw WatchError.extractionError }
-                guard let rawConsumed = data["consumed"] as? String,
-                      let watchConsumed = Double(rawConsumed) else { throw WatchError.extractionError }
-                let day = try await dayManager.dayRepository.getDay(for: watchDate)
-                guard day.consumption < watchConsumed else { throw WatchError.watchNotUpdated }
-                print(data)
-                update(consumption: watchConsumed, for: watchDate)
-                let consumed = Measurement(value: watchConsumed - day.consumption, unit: UnitVolume.liters)
-                let differences = consumed.converted(to: .milliliters).value
-                export(drink: Drink(size: differences))
-                print("Udated with data from watch")
-            } catch {
-                if let error = error as? WatchError {
-                    switch error {
-                    case .extractionError:
-                        print("Couldn't extract data from watch")
-                    case .watchNotUpdated:
-                        print("Sending data to watch")
-                        exportToWatch(today: today)
+        if let rawDate = data["date"] as? String,
+           let watchDate = watchFormatter.date(from: rawDate),
+           let rawConsumed = data["consumed"] as? String,
+           let watchConsumed = Double(rawConsumed) {
+            Task {
+                do {
+                    print(data)
+                    let day = try await dayManager.dayRepository.getDay(for: watchDate)
+                    try updateWatchWith(watchConsumed, watchDate, for: day)
+                } catch {
+                    if let error = error as? CoreDataError, error == .elementNotFound {
+                        Task {
+                            let day = try await dayManager.createToday()
+                            try updateWatchWith(watchConsumed, watchDate, for: day)
+                        }
+                    }
+                    if let error = error as? WatchError {
+                        switch error {
+                        case .extractionError:
+                            print("Couldn't extract data from watch")
+                        case .watchNotUpdated:
+                            print("Sending data to watch")
+                            exportToWatch(today: today)
+                        }
                     }
                 }
             }
+        } else {
+            print("Couldn't extract data from watch")
         }
     }
 }
