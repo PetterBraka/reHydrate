@@ -86,7 +86,7 @@ class CoreDataRepository<Day: NSManagedObject>: Repository {
             [fromPredicate, toPredicate])
         request.predicate = datePredicate
         guard let results = try? managedObjectContext.fetch(request) else {
-            throw CoreDataError.invalidManagedObjectType
+            throw CoreDataError.elementNotFound
         }
         guard let singleElement = results.first else {
             throw CoreDataError.elementNotFound

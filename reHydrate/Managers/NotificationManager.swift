@@ -49,16 +49,19 @@ class NotificationManager {
         hasSetCongratsNotifications = false
     }
 
-    func requestReminders() {
-        guard isRemindersOn else { return }
-        guard !hasReachedGoal else {
-            deleteReminders()
-            createCongratulation()
-            return
-        }
-        center.getPendingNotificationRequests { pending in
-            if pending.isEmpty {
-                self.setReminders()
+    func requestReminders(for day: Day) {
+        Task {
+            hasReachedGoal = day.consumption >= day.goal
+            guard isRemindersOn else { return }
+            guard !hasReachedGoal else {
+                deleteReminders()
+                createCongratulation()
+                return
+            }
+            center.getPendingNotificationRequests { pending in
+                if pending.isEmpty {
+                    self.setReminders()
+                }
             }
         }
     }
