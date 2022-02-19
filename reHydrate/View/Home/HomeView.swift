@@ -51,9 +51,9 @@ struct HomeView: View {
                         viewModel.interactedDrink = viewModel.drinks[1]
                         viewModel.showAlert.toggle()
                     }
-                              .frame(width: geo.size.width / 3,
-                                     height: 180,
-                                     alignment: .bottom)
+                    .frame(width: geo.size.width / 3,
+                           height: 180,
+                           alignment: .bottom)
                     DrinkView(viewModel: viewModel,
                               drink: $viewModel.drinks[2],
                               disable: false) {
@@ -62,9 +62,9 @@ struct HomeView: View {
                         viewModel.interactedDrink = viewModel.drinks[2]
                         viewModel.showAlert.toggle()
                     }
-                              .frame(width: geo.size.width / 3,
-                                     height: 250,
-                                     alignment: .bottom)
+                    .frame(width: geo.size.width / 3,
+                           height: 250,
+                           alignment: .bottom)
                 }
                 .position(x: geo.size.width / 2, y: geo.size.height / 3)
             }
@@ -117,6 +117,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView {_ in }
+        HomeView { _ in }
     }
 }

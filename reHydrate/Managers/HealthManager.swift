@@ -13,7 +13,7 @@ import UserNotifications
 
 protocol HealthManagerProtocol {
     func needsAccessRequest() -> Bool
-    func requestAccess() -> AnyPublisher<Void, Error>
+    func requestAccess() async throws
     func getWater(for date: Date) -> AnyPublisher<Double, Error>
     func export(drink: Drink, _ date: Date) -> AnyPublisher<Void, Error>
 }
@@ -56,18 +56,9 @@ class HealthManager: HealthManagerProtocol {
         }
     }
 
-    func requestAccess() -> AnyPublisher<Void, Error> {
-        Future { [unowned self] promise in
-            self.healthStore.requestAuthorization(toShare: self.writeTypes, read: self.readTypes) { _, error in
-                guard let error = error else {
-                    promise(.success(()))
-                    return
-                }
-                promise(.failure(error))
-            }
-        }
-        .receive(on: RunLoop.main)
-        .eraseToAnyPublisher()
+    func requestAccess() async throws {
+        try await healthStore.requestAuthorization(toShare: writeTypes,
+                                                   read: readTypes)
     }
 
     func getWater(for date: Date) -> AnyPublisher<Double, Error> {
@@ -87,7 +78,8 @@ class HealthManager: HealthManagerProtocol {
                                                      matching: components,
                                                      matchingPolicy: .nextTime,
                                                      repeatedTimePolicy: .first,
-                                                     direction: .backward) else {
+                                                     direction: .backward)
+            else {
                 fatalError("*** unable to find the previous Monday. ***")
             }
 
@@ -107,7 +99,7 @@ class HealthManager: HealthManagerProtocol {
                 guard let tomorrow = calendar.date(byAdding: DateComponents(day: 1), to: date) else {
                     fatalError("*** Unable to calculate the start date ***")
                 }
-                results.enumerateStatistics(from: startDate, to: tomorrow) { (statistics, _) in
+                results.enumerateStatistics(from: startDate, to: tomorrow) { statistics, _ in
                     if let quantity = statistics.sumQuantity() {
                         let formatter = DateFormatter()
                         formatter.dateStyle = .short
@@ -128,14 +120,14 @@ class HealthManager: HealthManagerProtocol {
 
     /**
      Will export a drink to the health app
-     
+
      - parameter waterAmount: - The amount of water the drink contains.
      - parameter date: -The date the drink was consumed.
      - warning: Will print an error if it wasn't able to export the drink, or if it was successfull.
-     
+
      # Example #
      ```
-     
+
      exportDrinkToHealth(200, Date.init())
      ```
      */
@@ -146,7 +138,7 @@ class HealthManager: HealthManagerProtocol {
                                       start: date, end: date)
         return Future { promise in
             if drink.size != 0 {
-                HKHealthStore().save(sample) { (_, error) in
+                HKHealthStore().save(sample) { _, error in
                     guard let error = error else {
                         print("Successfully saved water consumtion")
                         promise(.success(()))

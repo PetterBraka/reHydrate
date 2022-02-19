@@ -6,27 +6,27 @@
 //  Copyright © 2020 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import UIKit
-import WatchKit
 import ClockKit
 import CoreData
 import Foundation
+import UIKit
 import WatchConnectivity
+import WatchKit
 
 class InterfaceController: WKInterfaceController {
-    var metric  = true
+    var metric = true
     let context = (WKExtension.shared().delegate as? ExtensionDelegate)?.persistentContainer.viewContext
     var smallDrink: Double = 250
     var mediumDrink: Double = 500
-    var largeDrink: Double  = 750
+    var largeDrink: Double = 750
     var today: Day?
     let formatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE - dd MMM"
+        dateFormatter.dateFormat = "EEEE - dd MMM yyyy"
         return dateFormatter
     }()
 
-    @IBOutlet weak var summaryLable: WKInterfaceLabel!
+    @IBOutlet var summaryLable: WKInterfaceLabel!
     @IBAction func smallButton() {
         let small = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
         today?.consumed += small.converted(to: .liters).value
@@ -35,6 +35,7 @@ class InterfaceController: WKInterfaceController {
         }
         updateSummary()
     }
+
     @IBAction func mediumButton() {
         let medium = Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
         today?.consumed += medium.converted(to: .liters).value
@@ -43,6 +44,7 @@ class InterfaceController: WKInterfaceController {
         }
         updateSummary()
     }
+
     @IBAction func largeButton() {
         let large = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
         today?.consumed += large.converted(to: .liters).value
@@ -73,16 +75,16 @@ class InterfaceController: WKInterfaceController {
                 session.activate()
             }
         }
-        let delegate  = WKExtension.shared().delegate as? ExtensionDelegate
+        let delegate = WKExtension.shared().delegate as? ExtensionDelegate
         if let today = today {
             delegate?.todayConsumed = today.consumed
             delegate?.todayGoal = today.goal
             delegate?.todayDate = today.date
         }
         let server = CLKComplicationServer.sharedInstance()
-        server.activeComplications?.forEach({ (complication) in
+        server.activeComplications?.forEach { complication in
             server.reloadTimeline(for: complication)
-        })
+        }
     }
 
     override func didDeactivate() {
@@ -95,17 +97,17 @@ class InterfaceController: WKInterfaceController {
             delegate?.todayDate = today.date
         }
         let server = CLKComplicationServer.sharedInstance()
-        server.activeComplications?.forEach({ (complication) in
+        server.activeComplications?.forEach { complication in
             server.reloadTimeline(for: complication)
-        })
+        }
     }
 
     private func updateSummary() {
         updateLabel()
         let server = CLKComplicationServer.sharedInstance()
-        server.activeComplications?.forEach({ (complication) in
+        server.activeComplications?.forEach { complication in
             server.reloadTimeline(for: complication)
-        })
+        }
         saveDays()
     }
 
@@ -115,10 +117,10 @@ class InterfaceController: WKInterfaceController {
         let goalAmount = Measurement(value: Double(today.goal), unit: UnitVolume.liters)
         if metric {
             summaryLable.setText("\(consumedAmount.converted(to: .liters).value.clean)/" +
-                                 "\(goalAmount.converted(to: .liters).value.clean)L")
+                "\(goalAmount.converted(to: .liters).value.clean)L")
         } else {
             summaryLable.setText("\(consumedAmount.converted(to: .imperialPints).value.clean)/" +
-                                 "\(goalAmount.converted(to: .imperialPints).value.clean)pt")
+                "\(goalAmount.converted(to: .imperialPints).value.clean)pt")
         }
     }
 
@@ -138,6 +140,7 @@ class InterfaceController: WKInterfaceController {
 }
 
 // MARK: - Load and Save days
+
 extension InterfaceController {
     /// Loading all days saved to core data.
     /// - Returns: *[Day]* an array off days loaded
@@ -209,11 +212,10 @@ extension InterfaceController {
             print(error.localizedDescription)
         }
     }
-
 }
 
 extension InterfaceController: WCSessionDelegate {
-    func session(_ session: WCSession,
+    func session(_: WCSession,
                  activationDidCompleteWith activationState: WCSessionActivationState,
                  error: Error?) {
         if activationState == .activated {
@@ -224,7 +226,7 @@ extension InterfaceController: WCSessionDelegate {
         }
     }
 
-    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
+    func session(_: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
         print("Recived userInfo from phone")
         handlePhone(userInfo)
     }
@@ -236,9 +238,9 @@ extension InterfaceController: WCSessionDelegate {
 
         if let drinkOptions = data["phoneDrinks"] as? String {
             let drinks = drinkOptions.components(separatedBy: ",")
-            self.smallDrink  = Double(drinks[0]) ?? 300.0
-            self.mediumDrink = Double(drinks[1]) ?? 500.0
-            self.largeDrink  = Double(drinks[2]) ?? 750.0
+            smallDrink = Double(drinks[0]) ?? 300.0
+            mediumDrink = Double(drinks[1]) ?? 500.0
+            largeDrink = Double(drinks[2]) ?? 750.0
         }
 
         let today = fetchToday()

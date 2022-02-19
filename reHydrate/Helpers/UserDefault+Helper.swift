@@ -42,6 +42,8 @@ final class Preferences {
     var largeDrink: Double = 750
     @UserDefault("darkMode")
     var isDarkMode: Bool = false
+    @UserDefault("hasReachedGoal")
+    var hasReachedGoal: Bool = false
 }
 
 @propertyWrapper
@@ -56,7 +58,7 @@ struct UserDefault<Value> {
     }
 
     init(wrappedValue: Value, _ key: String) {
-        self.defaultValue = wrappedValue
+        defaultValue = wrappedValue
         self.key = key
     }
 
@@ -95,7 +97,7 @@ struct Preference<Value>: DynamicProperty {
                 changedKeyPath == keyPath
             }.map { _ in () }
             .eraseToAnyPublisher()
-        self.preferencesObserver = .init(publisher: publisher)
+        preferencesObserver = .init(publisher: publisher)
     }
 
     var wrappedValue: Value {

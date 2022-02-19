@@ -6,17 +6,18 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import Combine
 import CoreData
-import Swinject
+import Foundation
 import SwiftUI
+import Swinject
 
 final class SettingsViewModel: ObservableObject {
     enum SheetType: String, Identifiable {
         var id: String {
-            self.rawValue
+            rawValue
         }
+
         case editIcon
         case credits
     }
@@ -33,9 +34,9 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.largeDrink) private var largeDrink
 
     @Published var languageOptions: [String] = [Localizable.english,
-                                          Localizable.german,
-                                          Localizable.icelandic,
-                                          Localizable.norwegian]
+                                                Localizable.german,
+                                                Localizable.icelandic,
+                                                Localizable.norwegian]
     @Published var selectedLanguage: String = ""
     @Published var selectedUnit = Localizable.metricSystem
     @Published var selectedGoal: String = ""
@@ -51,13 +52,34 @@ final class SettingsViewModel: ObservableObject {
     @Published var selectedEndDate: Date = DateComponents(calendar: .current, hour: 22, minute: 0).date ?? Date()
     @Published var selectedFrequency: String = "60"
 
-    @Published var today: Day = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
+    var remindersStartRange: ClosedRange<Date> {
+        let startRange = Calendar.current.startOfDay(for: selectedStartDate)
+        if let endRange = Calendar.current.date(byAdding: .hour, value: -1, to: selectedEndDate) {
+            return startRange ... endRange
+        } else {
+            let endRange = Calendar.current.date(bySettingHour: 12, minute: 00, second: 00, of: Date())!
+            return startRange ... endRange
+        }
+    }
+
+    var remindersEndRange: ClosedRange<Date> {
+        if let startRange = Calendar.current.date(byAdding: .hour, value: 1, to: selectedStartDate),
+           let endRange = Calendar.current.date(bySettingHour: 23, minute: 00, second: 00, of: selectedEndDate) {
+            return startRange ... endRange
+        } else {
+            let startRange = Calendar.current.startOfDay(for: Date())
+            let endRange = Calendar.current.date(bySettingHour: 23, minute: 00, second: 00, of: Date())!
+            return startRange ... endRange
+        }
+    }
+
+    @Published var today = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
 
     @Published var showNotificationAlert: Bool = false
     @Published var showSheet: SheetType?
 
     private var presistenceController: PresistenceControllerProtocol
-    private var notificationManager = MainAssembler.shared.container.resolve(NotificationManager.self)!
+    private var notificationManager = NotificationManager.shared
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
     private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
@@ -70,10 +92,10 @@ final class SettingsViewModel: ObservableObject {
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
-        self.viewContext = presistenceController.container.viewContext
-        self.dayManager = DayManager(context: viewContext)
+        viewContext = presistenceController.container.viewContext
+        dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
-        self.fetchToday()
+        fetchToday()
 
         selectedLanguage = language.rawValue
         selectedRemindersOn = isRemindersOn
@@ -94,31 +116,32 @@ final class SettingsViewModel: ObservableObject {
 
     func setupSubscription() {
         $today
-            .sink { updatedDay in
-                self.selectedGoal = updatedDay.goal.convert(to: self.isMetric ? .liters : .imperialPints,
-                                                            from: .liters).clean
+            .sink { [weak self] day in
+                guard let isMetric = self?.isMetric else { return }
+                self?.selectedGoal = day.goal.convert(to: isMetric ? .liters : .imperialPints,
+                                                      from: .liters).clean
             }.store(in: &tasks)
         $selectedLanguage
-            .removeDuplicates().sink { value in
-                self.language = Language(rawValue: value.lowercased()) ?? .english
-                self.requestReminders()
+            .removeDuplicates().sink { [weak self] value in
+                self?.language = Language(rawValue: value.lowercased()) ?? .english
+                self?.requestReminders()
             }.store(in: &tasks)
         $selectedUnit
-            .sink { unit in
+            .sink { [weak self] unit in
                 if Localizable.metricSystem == unit {
-                    self.unit = "ml"
+                    self?.unit = "ml"
                 } else {
-                    self.unit = "pt"
+                    self?.unit = "pt"
                 }
-                self.isMetric = Localizable.metricSystem == unit
-                self.selectedGoal = self.today.goal.convert(to: self.isMetric ? .liters : .imperialPints,
-                                                            from: .liters).clean
-                self.setDrinks()
-                self.requestReminders()
+                self?.isMetric = Localizable.metricSystem == unit
+                self?.selectedGoal = self?.today.goal.convert(to: self?.isMetric ?? true ? .liters : .imperialPints,
+                                                              from: .liters).clean ?? "3"
+                self?.setDrinks()
+                self?.requestReminders()
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-            .sink { _ in
-                self.checkNotificationAccess()
+            .sink { [weak self] _ in
+                self?.checkNotificationAccess()
             }.store(in: &tasks)
         setupEditDrinkSubscription()
         setupNotificationSubscription()
@@ -127,49 +150,52 @@ final class SettingsViewModel: ObservableObject {
     func setupEditDrinkSubscription() {
         $small
             .removeDuplicates()
-            .sink { newValue in
+            .sink { [weak self] newValue in
                 guard let value = Double(newValue) else { return }
-                let size = Measurement(value: value, unit: self.isMetric ? UnitVolume.milliliters : .imperialPints)
+                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
+                let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self.smallDrink = metricSize
+                self?.smallDrink = metricSize
             }.store(in: &tasks)
         $medium
             .removeDuplicates()
-            .sink { newValue in
+            .sink { [weak self] newValue in
                 guard let value = Double(newValue) else { return }
-                let size = Measurement(value: value, unit: self.isMetric ? UnitVolume.milliliters : .imperialPints)
+                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
+                let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self.mediumDrink = metricSize
+                self?.mediumDrink = metricSize
             }.store(in: &tasks)
         $large
             .removeDuplicates()
-            .sink { newValue in
+            .sink { [weak self] newValue in
                 guard let value = Double(newValue) else { return }
-                let size = Measurement(value: value, unit: self.isMetric ? UnitVolume.milliliters : .imperialPints)
+                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
+                let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self.largeDrink = metricSize
+                self?.largeDrink = metricSize
             }.store(in: &tasks)
     }
 
     func setupNotificationSubscription() {
         $selectedRemindersOn
-            .sink { isOn in
-                if self.isRemindersOn != isOn {
-                    if self.remindersPremitted {
-                        self.isRemindersOn = isOn
+            .sink { [weak self] isOn in
+                if self?.isRemindersOn != isOn {
+                    if self?.remindersPremitted == true {
+                        self?.isRemindersOn = isOn
                     }
-                    self.requestReminders()
+                    self?.requestReminders()
                 }
             }.store(in: &tasks)
         $selectedStartDate
             .removeDuplicates()
-            .sink { _ in
-                self.updateStartTime()
+            .sink { [weak self] date in
+                self?.updateStartTime(with: date)
             }.store(in: &tasks)
         $selectedEndDate
             .removeDuplicates()
-            .sink { _ in
-                self.updateEndTime()
+            .sink { [weak self] date in
+                self?.updateEndTime(with: date)
             }.store(in: &tasks)
     }
 
@@ -197,8 +223,8 @@ final class SettingsViewModel: ObservableObject {
     func decrementGoal() {
         if today.goal > 0 {
             today.goal -= 0.5
+            updateGoal(today.goal)
         }
-        updateGoal(today.goal)
     }
 
     func navigateToHome() {
@@ -207,13 +233,14 @@ final class SettingsViewModel: ObservableObject {
 }
 
 // MARK: - Notification
+
 extension SettingsViewModel {
     func toggleReminders() {
         selectedRemindersOn.toggle()
     }
 
     private func checkNotificationAccess() {
-        self.notificationManager.center.getNotificationSettings { settings in
+        notificationManager.center.getNotificationSettings { settings in
             DispatchQueue.main.async {
                 if settings.authorizationStatus == .authorized {
                     self.remindersPremitted = true
@@ -225,15 +252,17 @@ extension SettingsViewModel {
         }
     }
 
-    func updateStartTime() {
-        guard remindersStart != selectedStartDate else { return }
-        remindersStart = selectedStartDate
+    func updateStartTime(with date: Date) {
+        guard remindersStart != date else { return }
+        guard remindersStart < remindersEnd else { return }
+        remindersStart = date
         requestReminders()
     }
 
-    func updateEndTime() {
-        guard remindersEnd != selectedEndDate else { return }
-        remindersEnd = selectedEndDate
+    func updateEndTime(with date: Date) {
+        guard remindersEnd != date else { return }
+        guard remindersStart < remindersEnd else { return }
+        remindersEnd = date
         requestReminders()
     }
 
@@ -241,74 +270,59 @@ extension SettingsViewModel {
         "\(selectedFrequency) min"
     }
 
-    func incrementFrequency() {
-        guard var frequency = Int(selectedFrequency) else { return }
-        frequency += 15
-        self.selectedFrequency = "\(frequency)"
-        self.reminderFrequency = frequency
-        requestReminders()
-    }
-
-    func decrementFrequency() {
-        guard var frequency = Int(selectedFrequency), frequency > 15 else { return }
-        frequency -= 15
-        self.selectedFrequency = "\(frequency)"
-        self.reminderFrequency = frequency
+    func updateFrequency(shouldIncrese: Bool) {
+        let increment = shouldIncrese ? 15 : -15
+        guard var frequency = Int(selectedFrequency),
+              shouldIncrese || (frequency > 15) else { return }
+        frequency += increment
+        selectedFrequency = "\(frequency)"
+        reminderFrequency = frequency
         requestReminders()
     }
 
     private func requestReminders() {
         notificationManager.deleteReminders()
-        notificationManager.requestReminders()
+        notificationManager.requestReminders(for: today)
     }
 }
 
 // MARK: - Save And Load
-extension SettingsViewModel {
-    private func fetchToday() {
-        dayManager.dayRepository.getDay(for: Date())
-            .sink { completion in
-                switch completion {
-                case let .failure(error as CoreDataError):
-                    print("Failed fetching day \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] day in
-                if let day = day {
-                    self?.today = day
-                    if day.goal > 0 {
-                        self?.selectedGoal = "\(day.goal.clean)"
-                    }
-                }
-            }.store(in: &tasks)
-    }
 
-    private func updateGoal(_ newGoal: Double) {
-        dayManager.dayRepository.update(goal: newGoal, for: today)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error adding drink of type: \(newGoal), Error: \(error)")
-                default:
-                    break
+extension SettingsViewModel {
+    func fetchToday() {
+        Task {
+            do {
+                let day = try await dayManager.fetchToday()
+                self.today = day
+                if day.goal > 0 {
+                    selectedGoal = "\(day.goal.clean)"
                 }
-            } receiveValue: { [weak self] _ in
-                self?.saveAndFetch()
-            }.store(in: &tasks)
+            } catch {
+                print("Failed fetching day \(error)")
+            }
+        }
     }
 
     private func saveAndFetch() {
-        dayManager.saveChanges()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print("Error saving \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] _ in
-                self?.fetchToday()
-            }.store(in: &tasks)
+        Task {
+            do {
+                print(today)
+                try await dayManager.saveChanges()
+                fetchToday()
+            } catch {
+                print("Error saving \(error)")
+            }
+        }
+    }
+
+    private func updateGoal(_ newGoal: Double) {
+        Task {
+            do {
+                try await dayManager.update(goal: newGoal, for: Date())
+                saveAndFetch()
+            } catch {
+                print("Error adding drink of type: \(newGoal), Error: \(error)")
+            }
+        }
     }
 }

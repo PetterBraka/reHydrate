@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 extension Image {
     static let cup = Image("Cup")

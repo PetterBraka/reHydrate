@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 extension UIColor {
     static let label = UIColor(named: "reHydrate.label")!

@@ -18,10 +18,10 @@ struct AppIconSelectionView: View {
     init(dismiss: @escaping () -> Void) {
         self.dismiss = dismiss
         if let currentIcon = UIApplication.shared.alternateIconName,
-            let icon = Icon(rawValue: currentIcon) {
-            self.selectedIcon = icon
+           let icon = Icon(rawValue: currentIcon) {
+            selectedIcon = icon
         } else {
-            self.selectedIcon = .blackWhite
+            selectedIcon = .blackWhite
         }
         print(selectedIcon)
     }
@@ -50,8 +50,8 @@ struct AppIconSelectionView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                         .overlay(RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.blue,
-                                            lineWidth: (icon.rawValue == selectedIcon.rawValue) ? 4 : 0))
+                            .stroke(.blue,
+                                    lineWidth: (icon.rawValue == selectedIcon.rawValue) ? 4 : 0))
                         .padding(8)
                     }
                 }

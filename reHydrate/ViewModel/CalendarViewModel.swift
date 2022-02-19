@@ -8,9 +8,9 @@
 
 import Combine
 import CoreData
-import Swinject
 import SwiftUI
 import SwiftyUserDefaults
+import Swinject
 
 final class CalendarViewModel: ObservableObject {
     @AppStorage("language") private var language = LocalizationService.shared.language
@@ -39,10 +39,10 @@ final class CalendarViewModel: ObservableObject {
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
-        self.viewContext = presistenceController.container.viewContext
-        self.dayManager = DayManager(context: viewContext)
+        viewContext = presistenceController.container.viewContext
+        dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
-        self.fetchDays()
+        fetchDays()
         setUpSubscriptions()
     }
 
@@ -69,9 +69,9 @@ final class CalendarViewModel: ObservableObject {
         if let day = days.first {
             let consumed = day.consumption.clean
             let goal = day.goal.clean
-            self.consumtion = "\(consumed)/\(goal)L"
+            consumtion = "\(consumed)/\(goal)L"
             formatter.locale = Locale(identifier: language.rawValue)
-            self.header = formatter.string(from: day.date)
+            header = formatter.string(from: day.date)
         }
     }
 
@@ -87,25 +87,23 @@ final class CalendarViewModel: ObservableObject {
     }
 
     func fetchSavedDays() {
-        self.fetchDays()
+        fetchDays()
     }
 }
 
 // MARK: Save & Load
+
 extension CalendarViewModel {
     private func fetchDays() {
-        dayManager.dayRepository.getDays()
-            .sink { completion in
-                switch completion {
-                case let .failure(error as CoreDataError):
-                    print("Failed fetching days \(error)")
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] days in
-                self?.storedDays = days
-                self?.getConsumed(for: days)
-                self?.getAverage(for: days)
-            }.store(in: &tasks)
+        Task {
+            do {
+                let days = try await dayManager.dayRepository.getDays()
+                storedDays = days
+                getConsumed(for: days)
+                getAverage(for: days)
+            } catch {
+                print("Failed fetching days \(error)")
+            }
+        }
     }
 }
