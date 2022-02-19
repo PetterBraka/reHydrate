@@ -173,6 +173,8 @@
 		33EC3A97275B60DC0049E414 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A96275B60DC0049E414 /* NotificationManager.swift */; };
 		33EC3A9B275BE8690049E414 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A9A275BE8690049E414 /* HealthManager.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
+		33F4521027C14D6700CF68A2 /* WaterShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F4520F27C14D6600CF68A2 /* WaterShape.swift */; };
+		33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F4521127C14D7A00CF68A2 /* WaveView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -391,6 +393,8 @@
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		33F4520F27C14D6600CF68A2 /* WaterShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaterShape.swift; sourceTree = "<group>"; };
+		33F4521127C14D7A00CF68A2 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -448,6 +452,7 @@
 				332315EB274276290039EE23 /* Color.swift */,
 				332315ED274278340039EE23 /* Font.swift */,
 				33EC3A872754BA420049E414 /* Localizable.swift */,
+				33F4520F27C14D6600CF68A2 /* WaterShape.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -485,6 +490,7 @@
 		3323160927430A060039EE23 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				33F4521127C14D7A00CF68A2 /* WaveView.swift */,
 				332315E62742724D0039EE23 /* Drinkview.swift */,
 				3323160A27430A1B0039EE23 /* CalendarModuleView.swift */,
 				33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */,
@@ -1095,6 +1101,7 @@
 				3323160D27441B030039EE23 /* DayRepository.swift in Sources */,
 				33EC3A7B274D06070049E414 /* SettingsView.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
+				33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */,
 				3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */,
 				33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
@@ -1105,6 +1112,7 @@
 				332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */,
 				33231620274A64210039EE23 /* HomeViewModel.swift in Sources */,
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
+				33F4521027C14D6700CF68A2 /* WaterShape.swift in Sources */,
 				33694FF1277CB09900D2FE66 /* EditDrinksSectionView.swift in Sources */,
 				33EC3A882754BA420049E414 /* Localizable.swift in Sources */,
 				33EC3A93275A8C210049E414 /* Notification+Extensions.swift in Sources */,
