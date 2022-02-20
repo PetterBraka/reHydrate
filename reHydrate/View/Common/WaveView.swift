@@ -25,27 +25,27 @@ struct WaveView<Content: View>: View {
      Fills a container with moving water.
 
      - Parameters:
-        - Color: The color of the water
-        - OffsetPrecent: How many percent the wather will move up and down.
-        - MaxOffset: The maximum hight of the water wave.
-        - isReversed: Indecates if the water animation should move left to right or right to left.
-        - fillLevel: How much of the container will be filled by the water
-        - maxFillLevel: The max hight the water can fill.
-        - container: The container that would be filled with water,
+     - Color: The color of the water
+     - OffsetPrecent: How many percent the wather will move up and down.
+     - MaxOffset: The maximum hight of the water wave.
+     - isReversed: Indecates if the water animation should move left to right or right to left.
+     - fillLevel: How much of the container will be filled by the water
+     - maxFillLevel: The max hight the water can fill.
+     - container: The container that would be filled with water,
 
      # Example #
      ```
      WaveView(color: .blue,
-              offsetPercent: 10,
-              waterLevel: $waterLevel) {
-         Image.largeBottle
-             .resizable()
+     offsetPercent: 10,
+     waterLevel: $waterLevel) {
+     Image.largeBottle
+     .resizable()
      }
      .aspectRatio(contentMode: .fit)
      ```
      */
     internal init(color: Color,
-                  offsetPercent: CGFloat,
+                  offsetPercent: CGFloat = 10,
                   maxOffset: CGFloat = 0.25,
                   isReversed: Bool = false,
                   fillLevel: Binding<CGFloat>,
@@ -82,6 +82,20 @@ struct WaveView<Content: View>: View {
             container
                 .ignoresSafeArea()
         }
+        .gesture(
+            DragGesture()
+                .onChanged { value in
+                    let dragHeight = -value.translation.height
+                    let screenHeight = UIScreen.main.bounds.height
+                    var relativeHight = min(0.01, dragHeight / screenHeight / 25)
+                    relativeHight = max(-0.01, relativeHight)
+                    print(relativeHight)
+                    let newHight = max(0.1, fillLevel + relativeHight)
+                    withAnimation {
+                        fillLevel = newHight < maxFillLevel ? newHight : maxFillLevel
+                    }
+                }
+        )
     }
 
     func getPath(size: CGSize) -> Path {

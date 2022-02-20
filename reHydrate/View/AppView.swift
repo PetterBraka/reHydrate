@@ -27,7 +27,7 @@ struct AppView: View {
 //                    .tag(AppState.calendar)
 //            }
 //            .tabViewStyle(.page(indexDisplayMode: .never))
-            WaveView(color: .blue, offsetPercent: 10, fillLevel: $waterLevel) {
+            WaveView(color: .blue, fillLevel: $waterLevel) {
                 Image.largeBottle
                     .resizable()
                     .opacity(0.5)
