@@ -48,6 +48,7 @@ final class CalendarViewModel: ObservableObject {
 
     func setUpSubscriptions() {
         $selectedDays
+            .receive(on: RunLoop.main)
             .sink { [weak self] days in
                 if days.isEmpty {
                     if let today = self?.storedDays.first(where: { $0.isSameDay(as: Date()) }) {
@@ -95,7 +96,7 @@ final class CalendarViewModel: ObservableObject {
 
 extension CalendarViewModel {
     private func fetchDays() {
-        Task {
+        Task { @MainActor in
             do {
                 let days = try await dayManager.dayRepository.getDays()
                 storedDays = days
