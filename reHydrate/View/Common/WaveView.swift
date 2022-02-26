@@ -17,6 +17,7 @@ struct WaveView<Content: View>: View {
     @State var maxOffset: CGFloat = 0.25
     @State var isReversed: Bool
     @Binding var fillLevel: CGFloat
+    @State var minFillLevel: CGFloat
     @State var maxFillLevel: CGFloat
 
     @ViewBuilder var container: Content
@@ -49,6 +50,7 @@ struct WaveView<Content: View>: View {
                   maxOffset: CGFloat = 0.25,
                   isReversed: Bool = false,
                   fillLevel: Binding<CGFloat>,
+                  minFillLevel: CGFloat = 0.2,
                   maxFillLevel: CGFloat = 0.7,
                   container: () -> Content) {
         _fillLevel = fillLevel
@@ -56,6 +58,7 @@ struct WaveView<Content: View>: View {
         _offsetPercent = State(wrappedValue: offsetPercent)
         _maxOffset = State(wrappedValue: maxOffset)
         _isReversed = State(wrappedValue: isReversed)
+        _minFillLevel = State(wrappedValue: minFillLevel)
         _maxFillLevel = State(wrappedValue: maxFillLevel)
         self.container = container()
     }
@@ -89,10 +92,16 @@ struct WaveView<Content: View>: View {
                     let screenHeight = UIScreen.main.bounds.height
                     var relativeHight = min(0.01, dragHeight / screenHeight / 25)
                     relativeHight = max(-0.01, relativeHight)
-                    print(relativeHight)
                     let newHight = max(0.1, fillLevel + relativeHight)
                     withAnimation {
                         fillLevel = newHight < maxFillLevel ? newHight : maxFillLevel
+                        if newHight > maxFillLevel {
+                            fillLevel = maxFillLevel
+                        } else if newHight < minFillLevel {
+                            fillLevel = minFillLevel
+                        } else {
+                            fillLevel = newHight
+                        }
                     }
                 }
         )
