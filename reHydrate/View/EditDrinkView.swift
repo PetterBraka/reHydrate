@@ -17,6 +17,8 @@ struct EditDrinkView: View {
         Drink(type: .large, size: 750)
     ]
     @State var selectedDrink: Drink?
+    @State var minFill: CGFloat = 0.2
+    @State var maxFill: CGFloat = 0.7
 
     var body: some View {
         NavigationView {
@@ -24,16 +26,34 @@ struct EditDrinkView: View {
                 Color.background
                     .ignoresSafeArea()
                 VStack {
-                    WaveView(color: .blue, fillLevel: $fillLevel) {
-                        selectedDrink?.type?.getImage()
-                            .resizable()
+                    GeometryReader { proxy in
+                        let size = proxy.size
+                        HStack {
+                            WaveView(color: .blue,
+                                     fillLevel: $fillLevel,
+                                     minFillLevel: minFill,
+                                     maxFillLevel: maxFill) {
+                                selectedDrink?.type?.getImage()
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .opacity(0.5)
+                            }
                             .aspectRatio(contentMode: .fit)
-                            .opacity(0.5)
+                            .frame(width: size.width * 0.6,
+                                   height: size.height,
+                                   alignment: .bottom)
+                            Slider(value: $fillLevel,
+                                   in: minFill ... maxFill)
+                                .rotationEffect(Angle(degrees: -90))
+                                .frame(height: size.height)
+                        }
                     }
-                    .frame(width: UIScreen.main.bounds.width * 0.75,
-                           alignment: .bottom)
                     .padding(32)
-                    HStack(alignment: .bottom, spacing: 16) {
+                    Rectangle()
+                        .fill(Color.button)
+                        .frame(width: UIScreen.main.bounds.width,
+                               height: 2)
+                    HStack(alignment: .bottom) {
                         ForEach(drinkOptions, id: \.id) { drink in
                             Button {
                                 selectedDrink = drink
@@ -48,7 +68,7 @@ struct EditDrinkView: View {
                                     .foregroundColor(selectedDrink == drink ? .button : .clear)
                             )
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 50)
+                            .frame(width: 60)
                             .padding(8)
                         }
                     }
