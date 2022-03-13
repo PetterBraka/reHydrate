@@ -10,15 +10,7 @@ import SwiftUI
 
 struct EditDrinkView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var fillLevel: CGFloat = 0.3
-    @State var drinkOptions: [Drink] = [
-        Drink(type: .small, size: 300),
-        Drink(type: .medium, size: 500),
-        Drink(type: .large, size: 750)
-    ]
-    @State var selectedDrink: Drink?
-    @State var minFill: CGFloat = 0.2
-    @State var maxFill: CGFloat = 0.7
+    @StateObject var viewModel = EditDrinkViewModel()
 
     var body: some View {
         NavigationView {
@@ -30,10 +22,11 @@ struct EditDrinkView: View {
                         let size = proxy.size
                         HStack {
                             WaveView(color: .blue,
-                                     fillLevel: $fillLevel,
-                                     minFillLevel: minFill,
-                                     maxFillLevel: maxFill) {
-                                selectedDrink?.type?.getImage()
+                                     fillLevel: $viewModel.fillLevel,
+                                     currentFill: $viewModel.fillLabel,
+                                     minFillLevel: viewModel.minFill,
+                                     maxFillLevel: viewModel.maxFill) {
+                                viewModel.selectedDrink?.type?.getImage()
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .opacity(0.5)
@@ -42,8 +35,8 @@ struct EditDrinkView: View {
                             .frame(width: size.width * 0.6,
                                    height: size.height,
                                    alignment: .bottom)
-                            Slider(value: $fillLevel,
-                                   in: minFill ... maxFill)
+                            Slider(value: $viewModel.fillLevel,
+                                   in: viewModel.minFill ... viewModel.maxFill)
                                 .rotationEffect(Angle(degrees: -90))
                                 .frame(height: size.height)
                         }
@@ -54,9 +47,9 @@ struct EditDrinkView: View {
                         .frame(width: UIScreen.main.bounds.width,
                                height: 2)
                     HStack(alignment: .bottom) {
-                        ForEach(drinkOptions, id: \.id) { drink in
+                        ForEach(viewModel.drinkOptions, id: \.id) { drink in
                             Button {
-                                selectedDrink = drink
+                                viewModel.select(drink)
                             } label: {
                                 drink.type?.getImage()
                                     .resizable()
@@ -65,7 +58,7 @@ struct EditDrinkView: View {
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke()
-                                    .foregroundColor(selectedDrink == drink ? .button : .clear)
+                                    .foregroundColor(viewModel.selectedDrink == drink ? .button : .clear)
                             )
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 60)
@@ -74,7 +67,7 @@ struct EditDrinkView: View {
                     }
                 }
                 .onAppear {
-                    selectedDrink = drinkOptions[1]
+                    viewModel.select(viewModel.drinkOptions[1])
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {

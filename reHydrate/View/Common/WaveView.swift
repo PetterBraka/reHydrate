@@ -17,6 +17,7 @@ struct WaveView<Content: View>: View {
     @State var maxOffset: CGFloat = 0.25
     @State var isReversed: Bool
     @Binding var fillLevel: CGFloat
+    @Binding var currentFill: String
     @State var minFillLevel: CGFloat
     @State var maxFillLevel: CGFloat
 
@@ -50,10 +51,12 @@ struct WaveView<Content: View>: View {
                   maxOffset: CGFloat = 0.25,
                   isReversed: Bool = false,
                   fillLevel: Binding<CGFloat>,
+                  currentFill: Binding<String>,
                   minFillLevel: CGFloat = 0.2,
                   maxFillLevel: CGFloat = 0.7,
                   container: () -> Content) {
         _fillLevel = fillLevel
+        _currentFill = currentFill
         _color = State(wrappedValue: color)
         _offsetPercent = State(wrappedValue: offsetPercent)
         _maxOffset = State(wrappedValue: maxOffset)
@@ -83,7 +86,17 @@ struct WaveView<Content: View>: View {
                 container
             }
             container
-                .ignoresSafeArea()
+            GeometryReader { proxy in
+                Text(currentFill)
+                    .padding(8)
+                    .foregroundColor(.labelHighlighted)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.label)
+                    )
+                    .position(x: proxy.size.width / 2,
+                              y: proxy.size.height * (1 - fillLevel))
+            }
         }
         .gesture(
             DragGesture()
@@ -109,7 +122,7 @@ struct WaveView<Content: View>: View {
 
     func getPath(size: CGSize) -> Path {
         Path { path in
-            let fill = size.height * (1 - (fillLevel < maxFillLevel ? fillLevel : maxFillLevel))
+            let fill = size.height * (1 - fillLevel)
             let width = size.width
             let maxOffset = size.height * self.maxOffset
             path.move(to: CGPoint(x: 0, y: fill))
