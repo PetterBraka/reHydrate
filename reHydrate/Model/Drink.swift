@@ -23,6 +23,22 @@ struct Drink: Identifiable, Hashable {
             case .large: return Image.largeBottle
             }
         }
+
+        func getMax() -> Int {
+            switch self {
+            case .small: return 400
+            case .medium: return 700
+            case .large: return 1200
+            }
+        }
+
+        func getMin() -> Int {
+            switch self {
+            case .small: return 100
+            case .medium: return 300
+            case .large: return 500
+            }
+        }
     }
 
     var type: Option?
