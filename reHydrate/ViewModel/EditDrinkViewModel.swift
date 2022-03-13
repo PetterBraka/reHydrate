@@ -35,8 +35,10 @@ class EditDrinkViewModel: ObservableObject {
             .sink { [weak self] fill in
                 guard var drink = self?.selectedDrink,
                       let max = drink.type?.getMax() else { return }
-                drink.size = CGFloat(max) * fill
-                self?.selectedDrink?.size = CGFloat(max) * fill
+                let size = Double(max) * Double(fill)
+                drink.size = size
+                self?.selectedDrink?.size = size
+                self?.fillLabel = size.clean + "ml"
                 switch drink.type {
                 case .small:
                     self?.drinkOptions[0] = drink
