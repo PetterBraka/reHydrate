@@ -20,6 +20,7 @@ final class AppViewModel: ObservableObject {
     private var subscriptions = Set<AnyCancellable>()
 
     @Published var currenState: AppState = .home
+    @Published var showSheet: Bool = true
 
     private func navigate(to state: AppState) {
         withAnimation {
