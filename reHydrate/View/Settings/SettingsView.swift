@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftyUserDefaults
 
 struct SettingsView: View {
     enum Field: Hashable {
@@ -247,6 +248,11 @@ struct SettingsView: View {
                         })
                     }
                 }
+            }
+            .onAppear {
+                viewModel.small = Defaults.smallDrink.clean
+                viewModel.medium = Defaults.mediumDrink.clean
+                viewModel.large = Defaults.largeDrink.clean
             }
             .toolbar(content: {
                 ToolbarItemGroup(placement: .keyboard) {
