@@ -10,6 +10,7 @@ import Combine
 import CoreData
 import Foundation
 import SwiftUI
+import SwiftyUserDefaults
 import Swinject
 
 final class SettingsViewModel: ObservableObject {
@@ -29,9 +30,6 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
-    @Preference(\.smallDrink) private var smallDrink
-    @Preference(\.mediumDrink) private var mediumDrink
-    @Preference(\.largeDrink) private var largeDrink
 
     @Published var languageOptions: [String] = [Localizable.english,
                                                 Localizable.german,
@@ -155,7 +153,7 @@ final class SettingsViewModel: ObservableObject {
                 let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
                 let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self?.smallDrink = metricSize
+                Defaults.smallDrink = metricSize
             }.store(in: &tasks)
         $medium
             .removeDuplicates()
@@ -164,7 +162,7 @@ final class SettingsViewModel: ObservableObject {
                 let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
                 let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self?.mediumDrink = metricSize
+                Defaults.mediumDrink = metricSize
             }.store(in: &tasks)
         $large
             .removeDuplicates()
@@ -173,7 +171,7 @@ final class SettingsViewModel: ObservableObject {
                 let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
                 let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                self?.largeDrink = metricSize
+                Defaults.largeDrink = metricSize
             }.store(in: &tasks)
     }
 
@@ -200,13 +198,13 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func setDrinks() {
-        let smallSize = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
+        let smallSize = Measurement(value: Defaults.smallDrink, unit: UnitVolume.milliliters)
         let smallValue = smallSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         small = "\(smallValue.clean)"
-        let mediumSize = Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
+        let mediumSize = Measurement(value: Defaults.mediumDrink, unit: UnitVolume.milliliters)
         let mediumValue = mediumSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         medium = "\(mediumValue.clean)"
-        let largeSize = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
+        let largeSize = Measurement(value: Defaults.largeDrink, unit: UnitVolume.milliliters)
         let largeValue = largeSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         large = "\(largeValue.clean)"
     }
