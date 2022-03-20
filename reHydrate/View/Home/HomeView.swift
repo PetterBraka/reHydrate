@@ -38,7 +38,7 @@ struct HomeView: View {
                         viewModel.addDrink(viewModel.drinks[0])
                     }
                     .contextMenu {
-                        Button(Localizable.editDrink) {
+                        Button(Localizable.editDrink.local(viewModel.language)) {
                             NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[0])
                         }
                         Button("Remove \(viewModel.getValue(for: viewModel.drinks[0]))",
@@ -55,7 +55,7 @@ struct HomeView: View {
                         viewModel.addDrink(viewModel.drinks[1])
                     }
                     .contextMenu {
-                        Button(Localizable.editDrink) {
+                        Button(Localizable.editDrink.local(viewModel.language)) {
                             NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[1])
                         }
                         Button("Remove \(viewModel.getValue(for: viewModel.drinks[1]))",
@@ -72,7 +72,7 @@ struct HomeView: View {
                         viewModel.addDrink(viewModel.drinks[2])
                     }
                     .contextMenu {
-                        Button(Localizable.editDrink) {
+                        Button(Localizable.editDrink.local(viewModel.language)) {
                             NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[2])
                         }
                         Button("Remove \(viewModel.getValue(for: viewModel.drinks[2]))",

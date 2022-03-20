@@ -14,4 +14,5 @@ extension Notification.Name {
     static let addedMediumDrink = Notification.Name("addedMediumDrink")
     static let addedLargeDrink = Notification.Name("addedLargeDrink")
     static let editDrink = Notification.Name("editDrink")
+    static let savedDrink = Notification.Name("savedDrink")
 }

@@ -53,7 +53,7 @@ class EditDrinkViewModel: ObservableObject {
     }
 
     func saveDrink() {
-        let drinkSize = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
+        let drinkSize = Measurement(value: selectedDrink.size, unit: UnitVolume.milliliters)
         let drinkValue = drinkSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         switch selectedDrink.type {
         case .small:
@@ -65,5 +65,6 @@ class EditDrinkViewModel: ObservableObject {
         default:
             break
         }
+        NotificationCenter.default.post(name: .savedDrink, object: selectedDrink)
     }
 }

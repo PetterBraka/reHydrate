@@ -39,6 +39,7 @@ struct EditDrinkView: View {
             }
             .padding(.vertical, 24)
             Button {
+                viewModel.saveDrink()
                 action()
             } label: {
                 HStack {
