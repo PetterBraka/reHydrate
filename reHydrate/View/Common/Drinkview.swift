@@ -13,7 +13,6 @@ struct DrinkView: View {
     @ObservedObject var viewModel: HomeViewModel
 
     @Binding var drink: Drink
-    @State var subtitle: String = ""
     var disable: Bool
     var tapAction: () -> Void
 
@@ -26,13 +25,19 @@ struct DrinkView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .contrast(disable ? 0.1 : 1)
-                Text(subtitle)
+                Text(getValue(for: drink))
                     .font(.body)
                     .foregroundColor(.label)
             }
         }
-        .onAppear {
-            subtitle = viewModel.getValue(for: drink)
+    }
+
+    func getValue(for drink: Drink?) -> String {
+        if let drink = drink {
+            let drinkValue = drink.size.convert(to: isMetric ? .milliliters : .imperialPints, from: .milliliters)
+            return drinkValue.clean + (isMetric ? "ml" : "pt")
+        } else {
+            return ""
         }
     }
 }
