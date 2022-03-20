@@ -17,10 +17,20 @@ enum AppState {
 }
 
 final class AppViewModel: ObservableObject {
-    private var subscriptions = Set<AnyCancellable>()
+    private var tasks = Set<AnyCancellable>()
 
     @Published var currenState: AppState = .home
-    @Published var showSheet: Bool = true
+    @Published var showPopUp: Bool = false
+    @Published var editingDrink: Drink?
+
+    init() {
+        NotificationCenter.default.publisher(for: .editDrink)
+            .sink { notification in
+                guard let drink = notification.object as? Drink else { return }
+                self.editingDrink = drink
+                self.showPopUp = true
+            }.store(in: &tasks)
+    }
 
     private func navigate(to state: AppState) {
         withAnimation {
