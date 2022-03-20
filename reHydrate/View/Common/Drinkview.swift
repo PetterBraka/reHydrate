@@ -16,10 +16,11 @@ struct DrinkView: View {
     @State var subtitle: String = ""
     var disable: Bool
     var tapAction: () -> Void
-    var longPress: () -> Void
 
     var body: some View {
-        Button {} label: {
+        Button {
+            tapAction()
+        } label: {
             VStack {
                 drink.type?.getImage()
                     .resizable()
@@ -30,20 +31,6 @@ struct DrinkView: View {
                     .foregroundColor(.label)
             }
         }
-        .highPriorityGesture(
-            LongPressGesture(minimumDuration: 0.2, maximumDistance: 0.3)
-                .onEnded { success in
-                    if success {
-                        longPress()
-                    }
-                }
-        )
-        .simultaneousGesture(
-            TapGesture()
-                .onEnded { _ in
-                    tapAction()
-                }
-        )
         .onAppear {
             subtitle = viewModel.getValue(for: drink)
         }
@@ -55,6 +42,6 @@ struct DrinkView_Previews: PreviewProvider {
         DrinkView(viewModel: HomeViewModel(presistenceController: PresistenceController(),
                                            navigateTo: { _ in }),
                   drink: .constant(Drink(type: .medium, size: 500)),
-                  disable: true) {} longPress: {}
+                  disable: true) {}
     }
 }

@@ -36,9 +36,15 @@ struct HomeView: View {
                               drink: $viewModel.drinks[0],
                               disable: false) {
                         viewModel.addDrink(viewModel.drinks[0])
-                    } longPress: {
-                        viewModel.interactedDrink = viewModel.drinks[0]
-                        viewModel.showAlert.toggle()
+                    }
+                    .contextMenu {
+                        Button(Localizable.editDrink) {
+                            NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[0])
+                        }
+                        Button("Remove \(viewModel.getValue(for: viewModel.drinks[0]))",
+                               role: .destructive) {
+                            viewModel.removeDrink(viewModel.drinks[0])
+                        }
                     }
                     .frame(width: geo.size.width / 3,
                            height: 100,
@@ -47,9 +53,15 @@ struct HomeView: View {
                               drink: $viewModel.drinks[1],
                               disable: false) {
                         viewModel.addDrink(viewModel.drinks[1])
-                    } longPress: {
-                        viewModel.interactedDrink = viewModel.drinks[1]
-                        viewModel.showAlert.toggle()
+                    }
+                    .contextMenu {
+                        Button(Localizable.editDrink) {
+                            NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[1])
+                        }
+                        Button("Remove \(viewModel.getValue(for: viewModel.drinks[1]))",
+                               role: .destructive) {
+                            viewModel.removeDrink(viewModel.drinks[1])
+                        }
                     }
                     .frame(width: geo.size.width / 3,
                            height: 180,
@@ -58,9 +70,15 @@ struct HomeView: View {
                               drink: $viewModel.drinks[2],
                               disable: false) {
                         viewModel.addDrink(viewModel.drinks[2])
-                    } longPress: {
-                        viewModel.interactedDrink = viewModel.drinks[2]
-                        viewModel.showAlert.toggle()
+                    }
+                    .contextMenu {
+                        Button(Localizable.editDrink) {
+                            NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[2])
+                        }
+                        Button("Remove \(viewModel.getValue(for: viewModel.drinks[2]))",
+                               role: .destructive) {
+                            viewModel.removeDrink(viewModel.drinks[2])
+                        }
                     }
                     .frame(width: geo.size.width / 3,
                            height: 250,
@@ -101,15 +119,6 @@ struct HomeView: View {
         .onAppear {
             viewModel.updateDrinks()
             viewModel.fetchToday()
-        }
-        .confirmationDialog(Localizable.removeDrink,
-                            isPresented: $viewModel.showAlert) {
-            Button("Remove \(viewModel.getValue(for: viewModel.interactedDrink))",
-                   role: .destructive) {
-                if let drink = viewModel.interactedDrink {
-                    viewModel.removeDrink(drink)
-                }
-            }
         }
         .background(Color.background.ignoresSafeArea())
     }
