@@ -11,7 +11,6 @@ import CoreData
 import FirebaseAnalytics
 import HealthKit
 import SwiftUI
-import SwiftyUserDefaults
 import WatchConnectivity
 
 final class HomeViewModel: NSObject, ObservableObject {
@@ -21,6 +20,9 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     @AppStorage("language") var language = LocalizationService.shared.language
+    @Preference(\.smallDrink) private var smallDrink
+    @Preference(\.mediumDrink) private var mediumDrink
+    @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
     @Preference(\.hasReachedGoal) private var hasReachedGoal
 
@@ -151,9 +153,9 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     func updateDrinks() {
-        drinks = [Drink(type: .small, size: Defaults.smallDrink),
-                  Drink(type: .medium, size: Defaults.mediumDrink),
-                  Drink(type: .large, size: Defaults.largeDrink)]
+        drinks = [Drink(type: .small, size: smallDrink),
+                  Drink(type: .medium, size: mediumDrink),
+                  Drink(type: .large, size: largeDrink)]
     }
 
     func navigateToSettings() {

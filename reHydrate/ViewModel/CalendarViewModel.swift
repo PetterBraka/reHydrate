@@ -9,7 +9,6 @@
 import Combine
 import CoreData
 import SwiftUI
-import SwiftyUserDefaults
 import Swinject
 
 final class CalendarViewModel: ObservableObject {
