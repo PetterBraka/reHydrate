@@ -8,27 +8,6 @@
 
 import Combine
 import SwiftUI
-import SwiftyUserDefaults
-
-extension DefaultsKeys {
-    var currentLanguage: DefaultsKey<String> { .init("AppleLanguages", defaultValue: "en") }
-    var isUsingMetric: DefaultsKey<Bool> { .init("metricUnits", defaultValue: true) }
-    var isRemindersOn: DefaultsKey<Bool> { .init("reminders", defaultValue: false) }
-    var remindersStart: DefaultsKey<Date> { .init("startignTime",
-                                                  defaultValue: DateComponents(calendar: .current,
-                                                                               hour: 8,
-                                                                               minute: 0).date ?? Date()) }
-    var remindersEnd: DefaultsKey<Date> { .init("endingTime",
-                                                defaultValue: DateComponents(calendar: .current,
-                                                                             hour: 23,
-                                                                             minute: 0).date ?? Date()) }
-    var remindersInterval: DefaultsKey<Int> { .init("reminderInterval", defaultValue: 30) }
-    var smallDrink: DefaultsKey<Double> { .init("smallDrinkOption", defaultValue: 300) }
-    var mediumDrink: DefaultsKey<Double> { .init("mediumDrinkOption", defaultValue: 500) }
-    var largeDrink: DefaultsKey<Double> { .init("largeDrinkOption", defaultValue: 750) }
-    var isDarkMode: DefaultsKey<Bool> { .init("darkMode", defaultValue: false) }
-    var hasReachedGoal: DefaultsKey<Bool> { .init("hasReachedGoal", defaultValue: false) }
-}
 
 final class Preferences {
     static let standard = Preferences(userDefaults: .standard)
@@ -41,29 +20,29 @@ final class Preferences {
         self.userDefaults = userDefaults
     }
 
-    @AppStorage("AppleLanguages")
+    @UserDefault("AppleLanguages")
     var languages: String = "en"
-    @AppStorage("CurrentLanguage")
+    @UserDefault("CurrentLanguage")
     var currentLanguage: String = "en"
-    @AppStorage("metricUnits")
+    @UserDefault("metricUnits")
     var isUsingMetric: Bool = true
-    @AppStorage("reminders")
+    @UserDefault("reminders")
     var isRemindersOn: Bool = false
     @UserDefault("startignTime")
     var remindersStart: Date = DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()
     @UserDefault("endingTime")
     var remindersEnd: Date = DateComponents(calendar: .current, hour: 23, minute: 0).date ?? Date()
-    @AppStorage("reminderInterval")
+    @UserDefault("reminderInterval")
     var remindersInterval: Int = 30
-    @AppStorage("smallDrinkOption")
+    @UserDefault("smallDrinkOption")
     var smallDrink: Double = 300
-    @AppStorage("mediumDrinkOption")
+    @UserDefault("mediumDrinkOption")
     var mediumDrink: Double = 500
-    @AppStorage("largeDrinkOption")
+    @UserDefault("largeDrinkOption")
     var largeDrink: Double = 750
-    @AppStorage("darkMode")
+    @UserDefault("darkMode")
     var isDarkMode: Bool = false
-    @AppStorage("hasReachedGoal")
+    @UserDefault("hasReachedGoal")
     var hasReachedGoal: Bool = false
 }
 

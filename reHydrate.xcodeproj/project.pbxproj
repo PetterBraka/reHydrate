@@ -144,14 +144,12 @@
 		339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */; };
 		3394C8F927CA1A0C00DDF8F8 /* EditDrinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3394C8F827CA1A0C00DDF8F8 /* EditDrinkView.swift */; };
 		33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */; };
-		33B28F6226BC7EB100DECA9F /* SwiftyUserDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 33B28F6126BC7EB100DECA9F /* SwiftyUserDefaults */; };
 		33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6A26BC7FAB00DECA9F /* UIImage+Extensions.swift */; };
 		33B28F6D26BC7FCD00DECA9F /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6C26BC7FCD00DECA9F /* Double+Extensions.swift */; };
 		33B28F6F26BC802800DECA9F /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6E26BC802800DECA9F /* UITextField+Extensions.swift */; };
 		33B28F7226BC807C00DECA9F /* UserDefault+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F7126BC807C00DECA9F /* UserDefault+Extensions.swift */; };
 		33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58825123A1900658867 /* Day+CoreDataClass.swift */; };
 		33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */; };
-		33C431912482769B00E8EECA /* UIApplication+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C431902482769B00E8EECA /* UIApplication+Extenstions.swift */; };
 		33C4319324827F2700E8EECA /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C4319224827F2700E8EECA /* Bundle+Extensions.swift */; };
 		33DC394C27DE093100361022 /* EditDrinkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DC394B27DE093100361022 /* EditDrinkViewModel.swift */; };
 		33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BDC24B47D0900699B1A /* Interface.storyboard */; };
@@ -365,7 +363,6 @@
 		33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33C1288A256267D100C6FA8B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33C4318B247EDA6700E8EECA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		33C431902482769B00E8EECA /* UIApplication+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extenstions.swift"; sourceTree = "<group>"; };
 		33C4319224827F2700E8EECA /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		33CD6D58243BE53B00EF0335 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		33DC394B27DE093100361022 /* EditDrinkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDrinkViewModel.swift; sourceTree = "<group>"; };
@@ -409,7 +406,6 @@
 				336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */,
 				337F1B12277D4B6700B2A819 /* FirebaseCrashlytics in Frameworks */,
 				337F1B10277D4B6700B2A819 /* FirebaseAnalytics in Frameworks */,
-				33B28F6226BC7EB100DECA9F /* SwiftyUserDefaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -706,7 +702,6 @@
 			isa = PBXGroup;
 			children = (
 				33C4319224827F2700E8EECA /* Bundle+Extensions.swift */,
-				33C431902482769B00E8EECA /* UIApplication+Extenstions.swift */,
 				33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */,
 				33B28F6A26BC7FAB00DECA9F /* UIImage+Extensions.swift */,
 				33B28F6C26BC7FCD00DECA9F /* Double+Extensions.swift */,
@@ -806,7 +801,6 @@
 			name = reHydrate;
 			packageProductDependencies = (
 				336136A526B6E7D500C87FB5 /* FSCalendar */,
-				33B28F6126BC7EB100DECA9F /* SwiftyUserDefaults */,
 				332315F92742B6020039EE23 /* Swinject */,
 				337F1B0F277D4B6700B2A819 /* FirebaseAnalytics */,
 				337F1B11277D4B6700B2A819 /* FirebaseCrashlytics */,
@@ -888,7 +882,6 @@
 			mainGroup = 3378766A24378A9300F5A732;
 			packageReferences = (
 				336136A426B6E7D500C87FB5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
-				33B28F6026BC7EB100DECA9F /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */,
 				332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */,
 				337F1B0E277D4B6700B2A819 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
@@ -1123,7 +1116,6 @@
 				3323160B27430A1B0039EE23 /* CalendarModuleView.swift in Sources */,
 				33B28F6D26BC7FCD00DECA9F /* Double+Extensions.swift in Sources */,
 				33231622274A6FC70039EE23 /* ManagerAssembly.swift in Sources */,
-				33C431912482769B00E8EECA /* UIApplication+Extenstions.swift in Sources */,
 				33EC3A8E275A8A7A0049E414 /* String+Extensions.swift in Sources */,
 				33EC3A9B275BE8690049E414 /* HealthManager.swift in Sources */,
 			);
@@ -1510,14 +1502,6 @@
 				minimumVersion = 8.0.0;
 			};
 		};
-		33B28F6026BC7EB100DECA9F /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sunshinejr/SwiftyUserDefaults";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.3.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1540,11 +1524,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 337F1B0E277D4B6700B2A819 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
-		};
-		33B28F6126BC7EB100DECA9F /* SwiftyUserDefaults */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 33B28F6026BC7EB100DECA9F /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */;
-			productName = SwiftyUserDefaults;
 		};
 /* End XCSwiftPackageProductDependency section */
 

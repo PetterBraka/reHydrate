@@ -10,7 +10,6 @@ import Combine
 import CoreData
 import Foundation
 import SwiftUI
-import SwiftyUserDefaults
 import Swinject
 
 final class SettingsViewModel: ObservableObject {
@@ -24,13 +23,17 @@ final class SettingsViewModel: ObservableObject {
     }
 
     @AppStorage("language") var language = LocalizationService.shared.language
-    @Preference(\.isDarkMode) var isDarkMode
+    @Preference(\.isDarkMode) private var isDarkMode
     @Preference(\.isUsingMetric) private var isMetric
     @Preference(\.isRemindersOn) private var isRemindersOn
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
+    @Preference(\.smallDrink) private var smallDrink
+    @Preference(\.mediumDrink) private var mediumDrink
+    @Preference(\.largeDrink) private var largeDrink
 
+    @Published var isDarkModeOn = false
     @Published var languageOptions: [String] = [Localizable.english,
                                                 Localizable.german,
                                                 Localizable.icelandic,
@@ -93,6 +96,7 @@ final class SettingsViewModel: ObservableObject {
         viewContext = presistenceController.container.viewContext
         dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
+        isDarkModeOn = isDarkMode
         fetchToday()
 
         selectedLanguage = language.rawValue
@@ -113,6 +117,11 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func setupSubscription() {
+        $isDarkModeOn
+            .removeDuplicates()
+            .sink { [weak self] value in
+                self?.isDarkMode = value
+            }.store(in: &tasks)
         $today
             .sink { [weak self] day in
                 guard let isMetric = self?.isMetric else { return }
@@ -153,7 +162,7 @@ final class SettingsViewModel: ObservableObject {
                 let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
                 let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                Defaults.smallDrink = metricSize
+                self?.smallDrink = metricSize
             }.store(in: &tasks)
         $medium
             .removeDuplicates()
@@ -162,7 +171,7 @@ final class SettingsViewModel: ObservableObject {
                 let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
                 let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                Defaults.mediumDrink = metricSize
+                self?.mediumDrink = metricSize
             }.store(in: &tasks)
         $large
             .removeDuplicates()
@@ -171,7 +180,7 @@ final class SettingsViewModel: ObservableObject {
                 let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
                 let size = Measurement(value: value, unit: unit)
                 let metricSize = size.converted(to: .milliliters).value
-                Defaults.largeDrink = metricSize
+                self?.largeDrink = metricSize
             }.store(in: &tasks)
     }
 
@@ -198,19 +207,15 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func setDrinks() {
-        let smallSize = Measurement(value: Defaults.smallDrink, unit: UnitVolume.milliliters)
+        let smallSize = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
         let smallValue = smallSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         small = "\(smallValue.clean)"
-        let mediumSize = Measurement(value: Defaults.mediumDrink, unit: UnitVolume.milliliters)
+        let mediumSize = Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
         let mediumValue = mediumSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         medium = "\(mediumValue.clean)"
-        let largeSize = Measurement(value: Defaults.largeDrink, unit: UnitVolume.milliliters)
+        let largeSize = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
         let largeValue = largeSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         large = "\(largeValue.clean)"
-    }
-
-    func toggleDarkMode() {
-        isDarkMode.toggle()
     }
 
     func incrementGoal() {

@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import SwiftyUserDefaults
 
 struct SettingsView: View {
     enum Field: Hashable {
@@ -43,13 +42,13 @@ struct SettingsView: View {
                 List {
                     // Apperance
                     Section {
-                        CheckBoxButton(isChecked: $viewModel.isDarkMode,
+                        CheckBoxButton(isChecked: $viewModel.isDarkModeOn,
                                        text: Localizable.lightMode,
                                        highlightedText: Localizable.darkMode,
                                        image: .lightMode,
                                        highlightedImage: .darkMode,
                                        language: $viewModel.language) {
-                            viewModel.toggleDarkMode()
+                            viewModel.isDarkModeOn.toggle()
                         }
                         Button {
                             viewModel.showSheet = .editIcon
@@ -248,11 +247,6 @@ struct SettingsView: View {
                         })
                     }
                 }
-            }
-            .onAppear {
-                viewModel.small = Defaults.smallDrink.clean
-                viewModel.medium = Defaults.mediumDrink.clean
-                viewModel.large = Defaults.largeDrink.clean
             }
             .toolbar(content: {
                 ToolbarItemGroup(placement: .keyboard) {
