@@ -154,33 +154,37 @@ final class SettingsViewModel: ObservableObject {
         setupNotificationSubscription()
     }
 
+    func updateDrink(with newValue: Double) -> Double {
+        let unit = isMetric ? UnitVolume.milliliters : .imperialPints
+        let size = Measurement(value: newValue, unit: unit)
+        let metricSize = size.converted(to: .milliliters).value
+        return metricSize
+    }
+
     func setupEditDrinkSubscription() {
         $small
             .removeDuplicates()
             .sink { [weak self] newValue in
-                guard let value = Double(newValue) else { return }
-                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
-                let size = Measurement(value: value, unit: unit)
-                let metricSize = size.converted(to: .milliliters).value
-                self?.smallDrink = metricSize
+                guard let value = Double(newValue),
+                      let size = self?.updateDrink(with: value)
+                else { return }
+                self?.smallDrink = size
             }.store(in: &tasks)
         $medium
             .removeDuplicates()
             .sink { [weak self] newValue in
-                guard let value = Double(newValue) else { return }
-                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
-                let size = Measurement(value: value, unit: unit)
-                let metricSize = size.converted(to: .milliliters).value
-                self?.mediumDrink = metricSize
+                guard let value = Double(newValue),
+                      let size = self?.updateDrink(with: value)
+                else { return }
+                self?.mediumDrink = size
             }.store(in: &tasks)
         $large
             .removeDuplicates()
             .sink { [weak self] newValue in
-                guard let value = Double(newValue) else { return }
-                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
-                let size = Measurement(value: value, unit: unit)
-                let metricSize = size.converted(to: .milliliters).value
-                self?.largeDrink = metricSize
+                guard let value = Double(newValue),
+                      let size = self?.updateDrink(with: value)
+                else { return }
+                self?.largeDrink = size
             }.store(in: &tasks)
     }
 
