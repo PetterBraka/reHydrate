@@ -27,10 +27,9 @@ struct EditDrinkView: View {
                          currentFill: $viewModel.fillLabel,
                          minFillLevel: viewModel.minFill,
                          maxFillLevel: viewModel.maxFill) {
-                    viewModel.selectedDrink.type?.getImage()
+                    viewModel.selectedDrink.type.getImage(with: 0)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .opacity(0.5)
                 }
                 .aspectRatio(contentMode: .fit)
                 Slider(value: $viewModel.fillLevel,
