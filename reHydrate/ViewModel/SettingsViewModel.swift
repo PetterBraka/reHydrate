@@ -29,9 +29,9 @@ final class SettingsViewModel: ObservableObject {
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
-    @Preference(\.smallDrink) private var smallDrink
-    @Preference(\.mediumDrink) private var mediumDrink
-    @Preference(\.largeDrink) private var largeDrink
+    @Preference(\.smallDrink) var smallDrink
+    @Preference(\.mediumDrink) var mediumDrink
+    @Preference(\.largeDrink) var largeDrink
 
     @Published var isDarkModeOn = false
     @Published var languageOptions: [String] = [Localizable.english,
