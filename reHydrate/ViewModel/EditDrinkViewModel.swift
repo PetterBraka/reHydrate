@@ -26,7 +26,7 @@ class EditDrinkViewModel: ObservableObject {
     init(drink: Drink) {
         selectedDrink = drink
         minFill = 0.2
-        maxFill = 0.9
+        maxFill = 0.8
         fillLevel = 0.5
 
         let max = drink.type.getMax()
@@ -39,7 +39,7 @@ class EditDrinkViewModel: ObservableObject {
             .sink { [weak self] fill in
                 guard var drink = self?.selectedDrink else { return }
                 let max = drink.type.getMax()
-                let size = Double(max) * Double(fill)
+                let size = Double(max) * Double(fill == 0.8 ? 1 : fill)
                 drink.size = size
                 self?.selectedDrink.size = size
                 self?.fillLabel = "\(Int(size))ml"
