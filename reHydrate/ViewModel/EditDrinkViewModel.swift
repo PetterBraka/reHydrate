@@ -26,10 +26,10 @@ class EditDrinkViewModel: ObservableObject {
     init(drink: Drink) {
         selectedDrink = drink
         minFill = 0.2
-        maxFill = 0.75
+        maxFill = 0.9
         fillLevel = 0.5
 
-        guard let max = drink.type?.getMax() else { return }
+        let max = drink.type.getMax()
         fillLevel = Double(drink.size) / Double(max)
         setupSubscribers()
     }
@@ -37,8 +37,8 @@ class EditDrinkViewModel: ObservableObject {
     func setupSubscribers() {
         $fillLevel
             .sink { [weak self] fill in
-                guard var drink = self?.selectedDrink,
-                      let max = drink.type?.getMax() else { return }
+                guard var drink = self?.selectedDrink else { return }
+                let max = drink.type.getMax()
                 let size = Double(max) * Double(fill)
                 drink.size = size
                 self?.selectedDrink.size = size
@@ -47,7 +47,7 @@ class EditDrinkViewModel: ObservableObject {
     }
 
     func select(_ drink: Drink) {
-        guard let max = drink.type?.getMax() else { return }
+        let max = drink.type.getMax()
         selectedDrink = drink
         fillLevel = CGFloat(drink.size / Double(max))
     }
@@ -62,8 +62,6 @@ class EditDrinkViewModel: ObservableObject {
             mediumDrink = drinkValue
         case .large:
             largeDrink = drinkValue
-        default:
-            break
         }
         NotificationCenter.default.post(name: .savedDrink, object: selectedDrink)
     }

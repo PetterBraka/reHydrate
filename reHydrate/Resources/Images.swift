@@ -10,9 +10,54 @@ import SwiftUI
 import UIKit
 
 extension Image {
-    static let cup = Image("Cup")
+    static let glass = Image("Glass")
     static let bottle = Image("Bottle")
-    static let largeBottle = Image("Flask")
+    static let largeBottle = Image("Reusable Bottle")
+
+    static func getGlass(with fill: Double) -> Image {
+        switch fill {
+        case 0:
+            return Image("Glass")
+        case 0.1 ... 0.3:
+            return Image("Glass fill 25")
+        case 0.3 ... 0.6:
+            return Image("Glass fill 50")
+        case 0.6 ... 0.8:
+            return Image("Glass fill 75")
+        default:
+            return Image("Glass fill 100")
+        }
+    }
+
+    static func getBottle(with fill: Double) -> Image {
+        switch fill {
+        case 0:
+            return Image("Bottle")
+        case 0.1 ... 0.3:
+            return Image("Bottle fill 25")
+        case 0.3 ... 0.6:
+            return Image("Bottle fill 50")
+        case 0.6 ... 0.8:
+            return Image("Bottle fill 75")
+        default:
+            return Image("Bottle fill 100")
+        }
+    }
+
+    static func getReusableBottle(with fill: Double) -> Image {
+        switch fill {
+        case 0:
+            return Image("Reusable Bottle")
+        case 0.1 ... 0.3:
+            return Image("Reusable Bottle fill 25")
+        case 0.3 ... 0.6:
+            return Image("Reusable Bottle fill 50")
+        case 0.6 ... 0.8:
+            return Image("Reusable Bottle fill 75")
+        default:
+            return Image("Reusable Bottle fill 100")
+        }
+    }
 
     static let logo = Image("reHydrateLogo")
 

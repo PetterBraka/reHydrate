@@ -14,8 +14,14 @@ extension DefaultsKeys {
     var currentLanguage: DefaultsKey<String> { .init("AppleLanguages", defaultValue: "en") }
     var isUsingMetric: DefaultsKey<Bool> { .init("metricUnits", defaultValue: true) }
     var isRemindersOn: DefaultsKey<Bool> { .init("reminders", defaultValue: false) }
-    var remindersStart: DefaultsKey<Date> { .init("startignTime", defaultValue: DateComponents(calendar: .current, hour: 8, minute: 0).date ?? Date()) }
-    var remindersEnd: DefaultsKey<Date> { .init("endingTime", defaultValue: DateComponents(calendar: .current, hour: 23, minute: 0).date ?? Date()) }
+    var remindersStart: DefaultsKey<Date> { .init("startignTime",
+                                                  defaultValue: DateComponents(calendar: .current,
+                                                                               hour: 8,
+                                                                               minute: 0).date ?? Date()) }
+    var remindersEnd: DefaultsKey<Date> { .init("endingTime",
+                                                defaultValue: DateComponents(calendar: .current,
+                                                                             hour: 23,
+                                                                             minute: 0).date ?? Date()) }
     var remindersInterval: DefaultsKey<Int> { .init("reminderInterval", defaultValue: 30) }
     var smallDrink: DefaultsKey<Double> { .init("smallDrinkOption", defaultValue: 300) }
     var mediumDrink: DefaultsKey<Double> { .init("mediumDrinkOption", defaultValue: 500) }

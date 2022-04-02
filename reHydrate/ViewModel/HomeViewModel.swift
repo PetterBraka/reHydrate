@@ -118,8 +118,6 @@ final class HomeViewModel: NSObject, ObservableObject {
                     self?.drinks[1] = drink
                 case .large:
                     self?.drinks[2] = drink
-                default:
-                    break
                 }
             }.store(in: &tasks)
     }
@@ -335,7 +333,7 @@ extension HomeViewModel: WCSessionDelegate {
         update(consumption: consumed, for: date)
         let consumed = Measurement(value: consumed - day.consumption, unit: UnitVolume.liters)
         let differences = consumed.converted(to: .milliliters).value
-        export(drink: Drink(size: differences))
+        export(drink: Drink(type: .medium, size: differences))
         print("Udated with data from watch")
     }
 
