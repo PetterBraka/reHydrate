@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct EditDrinksSectionView: View {
+    @Preference(\.isUsingMetric) private var isMetric
     @FocusState var focusedField: SettingsView.Field?
     @Binding var small: String
     @Binding var medium: String
@@ -23,6 +24,13 @@ struct EditDrinksSectionView: View {
             Spacer()
             HStack(spacing: 0) {
                 TextField("", text: $small, prompt: Text("Value"))
+                    .onSubmit {
+                        guard let value = Double(small) else { return }
+                        var size = updateDrink(with: value, max: 400, min: 100)
+                        let measurement = Measurement(value: size, unit: UnitVolume.milliliters)
+                        size = measurement.converted(to: isMetric ? .milliliters : .imperialPints).value
+                        small = size.clean
+                    }
                     .keyboardType(.numberPad)
                     .focused($focusedField, equals: .small)
                     .multilineTextAlignment(.center)
@@ -47,6 +55,13 @@ struct EditDrinksSectionView: View {
             Spacer()
             HStack(spacing: 0) {
                 TextField("", text: $medium, prompt: Text("Value"))
+                    .onSubmit {
+                        guard let value = Double(medium) else { return }
+                        var size = updateDrink(with: value, max: 700, min: 300)
+                        let measurement = Measurement(value: size, unit: UnitVolume.milliliters)
+                        size = measurement.converted(to: isMetric ? .milliliters : .imperialPints).value
+                        medium = size.clean
+                    }
                     .keyboardType(.numberPad)
                     .focused($focusedField, equals: .medium)
                     .multilineTextAlignment(.center)
@@ -71,6 +86,13 @@ struct EditDrinksSectionView: View {
             Spacer()
             HStack(spacing: 0) {
                 TextField("", text: $large, prompt: Text("Value"))
+                    .onSubmit {
+                        guard let value = Double(large) else { return }
+                        var size = updateDrink(with: value, max: 1200, min: 500)
+                        let measurement = Measurement(value: size, unit: UnitVolume.milliliters)
+                        size = measurement.converted(to: isMetric ? .milliliters : .imperialPints).value
+                        large = size.clean
+                    }
                     .keyboardType(.numberPad)
                     .focused($focusedField, equals: .large)
                     .font(.body)
@@ -89,6 +111,19 @@ struct EditDrinksSectionView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             focusedField = .large
+        }
+    }
+
+    func updateDrink(with newValue: Double, max: Double, min: Double) -> Double {
+        let unit = isMetric ? UnitVolume.milliliters : .imperialPints
+        let size = Measurement(value: newValue, unit: unit)
+        let metricSize = size.converted(to: .milliliters).value
+        if metricSize >= max {
+            return max
+        } else if metricSize < min {
+            return min
+        } else {
+            return metricSize
         }
     }
 }
