@@ -44,6 +44,8 @@ final class Preferences {
     var isDarkMode: Bool = false
     @UserDefault("hasReachedGoal")
     var hasReachedGoal: Bool = false
+    @UserDefault(wrappedValue: nil, "reachedGoalOnDate")
+    var reachedGoalOnDate: Date?
 }
 
 @propertyWrapper
