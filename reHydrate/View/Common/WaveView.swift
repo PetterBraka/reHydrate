@@ -88,6 +88,7 @@ struct WaveView<Content: View>: View {
             container
             GeometryReader { proxy in
                 Text(currentFill)
+                    .font(.body)
                     .padding(8)
                     .foregroundColor(.labelHighlighted)
                     .background(
