@@ -20,6 +20,7 @@ struct WaveView<Content: View>: View {
     @Binding var currentFill: String
     @State var minFillLevel: CGFloat
     @State var maxFillLevel: CGFloat
+    @State var emptySpace: CGFloat
 
     @ViewBuilder var container: Content
 
@@ -54,6 +55,7 @@ struct WaveView<Content: View>: View {
                   currentFill: Binding<String>,
                   minFillLevel: CGFloat = 0.2,
                   maxFillLevel: CGFloat = 0.7,
+                  emptySpace: CGFloat,
                   container: () -> Content) {
         _fillLevel = fillLevel
         _currentFill = currentFill
@@ -63,22 +65,26 @@ struct WaveView<Content: View>: View {
         _isReversed = State(wrappedValue: isReversed)
         _minFillLevel = State(wrappedValue: minFillLevel)
         _maxFillLevel = State(wrappedValue: maxFillLevel)
+        _emptySpace = State(wrappedValue: emptySpace)
         self.container = container()
     }
 
     var body: some View {
         ZStack {
-            TimelineView(.animation) { timeLine in
-                Canvas { context, size in
-                    let now = timeLine.date.timeIntervalSinceReferenceDate
-                    let angle = now.remainder(dividingBy: 2)
-                    let offset = angle * size.width
-                    context.translateBy(x: isReversed ? -offset : offset, y: 0)
-                    context.fill(getPath(size: size), with: .color(color))
-                    context.translateBy(x: -size.width, y: 0)
-                    context.fill(getPath(size: size), with: .color(color))
-                    context.translateBy(x: size.width * 2, y: 0)
-                    context.fill(getPath(size: size), with: .color(color))
+            VStack {
+                Spacer(minLength: emptySpace)
+                TimelineView(.animation) { timeLine in
+                    Canvas { context, size in
+                        let now = timeLine.date.timeIntervalSinceReferenceDate
+                        let angle = now.remainder(dividingBy: 2)
+                        let offset = angle * size.width
+                        context.translateBy(x: isReversed ? -offset : offset, y: 0)
+                        context.fill(getPath(size: size), with: .color(color))
+                        context.translateBy(x: -size.width, y: 0)
+                        context.fill(getPath(size: size), with: .color(color))
+                        context.translateBy(x: size.width * 2, y: 0)
+                        context.fill(getPath(size: size), with: .color(color))
+                    }
                 }
             }
             .opacity(0.8)
@@ -86,17 +92,20 @@ struct WaveView<Content: View>: View {
                 container
             }
             container
-            GeometryReader { proxy in
-                Text(currentFill)
-                    .font(.body)
-                    .padding(8)
-                    .foregroundColor(.labelHighlighted)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.label)
-                    )
-                    .position(x: proxy.size.width / 2,
-                              y: proxy.size.height * (1 - fillLevel))
+            VStack {
+                Spacer(minLength: emptySpace)
+                GeometryReader { proxy in
+                    Text(currentFill)
+                        .font(.body)
+                        .padding(8)
+                        .foregroundColor(.labelHighlighted)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color.label)
+                        )
+                        .position(x: proxy.size.width / 2,
+                                  y: proxy.size.height * (1 - fillLevel))
+                }
             }
         }
         .gesture(
@@ -108,14 +117,14 @@ struct WaveView<Content: View>: View {
                     relativeHight = max(-0.01, relativeHight)
                     let newHight = max(0.1, fillLevel + relativeHight)
                     withAnimation {
-                        fillLevel = newHight < maxFillLevel ? newHight : maxFillLevel
-                        if newHight > maxFillLevel {
-                            fillLevel = maxFillLevel
-                        } else if newHight < minFillLevel {
-                            fillLevel = minFillLevel
-                        } else {
-                            fillLevel = newHight
-                        }
+//                        fillLevel = newHight < maxFillLevel ? newHight : maxFillLevel
+//                        if newHight > maxFillLevel {
+//                            fillLevel = maxFillLevel
+//                        } else if newHight < minFillLevel {
+//                            fillLevel = minFillLevel
+//                        } else {
+                        fillLevel = newHight
+//                        }
                     }
                 }
         )

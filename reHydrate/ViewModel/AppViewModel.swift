@@ -20,8 +20,8 @@ final class AppViewModel: ObservableObject {
     private var tasks = Set<AnyCancellable>()
 
     @Published var currenState: AppState = .home
-    @Published var showPopUp: Bool = false
-    @Published var editingDrink: Drink?
+    @Published var showPopUp: Bool = true
+    @Published var editingDrink: Drink? = Drink(type: .small, size: 400)
 
     init() {
         NotificationCenter.default.publisher(for: .editDrink)

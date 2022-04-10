@@ -26,7 +26,8 @@ struct EditDrinkView: View {
                          fillLevel: $viewModel.fillLevel,
                          currentFill: $viewModel.fillLabel,
                          minFillLevel: viewModel.minFill,
-                         maxFillLevel: viewModel.maxFill) {
+                         maxFillLevel: viewModel.maxFill,
+                         emptySpace: viewModel.emptySpace) {
                     viewModel.selectedDrink.type.getImage(with: 0)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
