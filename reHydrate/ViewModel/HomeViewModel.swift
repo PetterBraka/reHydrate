@@ -19,7 +19,7 @@ final class HomeViewModel: NSObject, ObservableObject {
         case health
     }
 
-    @AppStorage("language") private var language = LocalizationService.shared.language
+    @AppStorage("language") var language = LocalizationService.shared.language
     @Preference(\.smallDrink) private var smallDrink
     @Preference(\.mediumDrink) private var mediumDrink
     @Preference(\.largeDrink) private var largeDrink
@@ -109,6 +109,18 @@ final class HomeViewModel: NSObject, ObservableObject {
             .sink { [weak self] _ in
                 guard let drink = self?.drinks[2] else { return }
                 self?.addDrink(drink)
+            }.store(in: &tasks)
+        NotificationCenter.default.publisher(for: .savedDrink)
+            .sink { [weak self] notification in
+                guard let drink = notification.object as? Drink else { return }
+                switch drink.type {
+                case .small:
+                    self?.drinks[0] = drink
+                case .medium:
+                    self?.drinks[1] = drink
+                case .large:
+                    self?.drinks[2] = drink
+                }
             }.store(in: &tasks)
     }
 
@@ -323,7 +335,7 @@ extension HomeViewModel: WCSessionDelegate {
         update(consumption: consumed, for: date)
         let consumed = Measurement(value: consumed - day.consumption, unit: UnitVolume.liters)
         let differences = consumed.converted(to: .milliliters).value
-        export(drink: Drink(size: differences))
+        export(drink: Drink(type: .medium, size: differences))
         print("Udated with data from watch")
     }
 

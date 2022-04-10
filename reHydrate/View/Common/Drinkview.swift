@@ -13,39 +13,31 @@ struct DrinkView: View {
     @ObservedObject var viewModel: HomeViewModel
 
     @Binding var drink: Drink
-    @State var subtitle: String = ""
     var disable: Bool
     var tapAction: () -> Void
-    var longPress: () -> Void
 
     var body: some View {
-        Button {} label: {
+        Button {
+            tapAction()
+        } label: {
             VStack {
-                drink.type?.getImage()
+                drink.type.getImage(with: drink.getFill())
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .contrast(disable ? 0.1 : 1)
-                Text(subtitle)
+                Text(getValue(for: drink))
                     .font(.body)
                     .foregroundColor(.label)
             }
         }
-        .highPriorityGesture(
-            LongPressGesture(minimumDuration: 0.2, maximumDistance: 0.3)
-                .onEnded { success in
-                    if success {
-                        longPress()
-                    }
-                }
-        )
-        .simultaneousGesture(
-            TapGesture()
-                .onEnded { _ in
-                    tapAction()
-                }
-        )
-        .onAppear {
-            subtitle = viewModel.getValue(for: drink)
+    }
+
+    func getValue(for drink: Drink?) -> String {
+        if let drink = drink {
+            let drinkValue = drink.size.convert(to: isMetric ? .milliliters : .imperialPints, from: .milliliters)
+            return drinkValue.clean + (isMetric ? "ml" : "pt")
+        } else {
+            return ""
         }
     }
 }
@@ -55,6 +47,6 @@ struct DrinkView_Previews: PreviewProvider {
         DrinkView(viewModel: HomeViewModel(presistenceController: PresistenceController(),
                                            navigateTo: { _ in }),
                   drink: .constant(Drink(type: .medium, size: 500)),
-                  disable: true) {} longPress: {}
+                  disable: true) {}
     }
 }

@@ -23,16 +23,17 @@ final class SettingsViewModel: ObservableObject {
     }
 
     @AppStorage("language") var language = LocalizationService.shared.language
-    @Preference(\.isDarkMode) var isDarkMode
+    @Preference(\.isDarkMode) private var isDarkMode
     @Preference(\.isUsingMetric) private var isMetric
     @Preference(\.isRemindersOn) private var isRemindersOn
     @Preference(\.remindersStart) private var remindersStart
     @Preference(\.remindersEnd) private var remindersEnd
     @Preference(\.remindersInterval) private var reminderFrequency
-    @Preference(\.smallDrink) private var smallDrink
-    @Preference(\.mediumDrink) private var mediumDrink
-    @Preference(\.largeDrink) private var largeDrink
+    @Preference(\.smallDrink) var smallDrink
+    @Preference(\.mediumDrink) var mediumDrink
+    @Preference(\.largeDrink) var largeDrink
 
+    @Published var isDarkModeOn = false
     @Published var languageOptions: [String] = [Localizable.english,
                                                 Localizable.german,
                                                 Localizable.icelandic,
@@ -95,6 +96,7 @@ final class SettingsViewModel: ObservableObject {
         viewContext = presistenceController.container.viewContext
         dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
+        isDarkModeOn = isDarkMode
         fetchToday()
 
         selectedLanguage = language.rawValue
@@ -115,6 +117,11 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func setupSubscription() {
+        $isDarkModeOn
+            .removeDuplicates()
+            .sink { [weak self] value in
+                self?.isDarkMode = value
+            }.store(in: &tasks)
         $today
             .sink { [weak self] day in
                 guard let isMetric = self?.isMetric else { return }
@@ -147,33 +154,37 @@ final class SettingsViewModel: ObservableObject {
         setupNotificationSubscription()
     }
 
+    func updateDrink(with newValue: Double) -> Double {
+        let unit = isMetric ? UnitVolume.milliliters : .imperialPints
+        let size = Measurement(value: newValue, unit: unit)
+        let metricSize = size.converted(to: .milliliters).value
+        return metricSize
+    }
+
     func setupEditDrinkSubscription() {
         $small
             .removeDuplicates()
             .sink { [weak self] newValue in
-                guard let value = Double(newValue) else { return }
-                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
-                let size = Measurement(value: value, unit: unit)
-                let metricSize = size.converted(to: .milliliters).value
-                self?.smallDrink = metricSize
+                guard let value = Double(newValue),
+                      let size = self?.updateDrink(with: value)
+                else { return }
+                self?.smallDrink = size
             }.store(in: &tasks)
         $medium
             .removeDuplicates()
             .sink { [weak self] newValue in
-                guard let value = Double(newValue) else { return }
-                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
-                let size = Measurement(value: value, unit: unit)
-                let metricSize = size.converted(to: .milliliters).value
-                self?.mediumDrink = metricSize
+                guard let value = Double(newValue),
+                      let size = self?.updateDrink(with: value)
+                else { return }
+                self?.mediumDrink = size
             }.store(in: &tasks)
         $large
             .removeDuplicates()
             .sink { [weak self] newValue in
-                guard let value = Double(newValue) else { return }
-                let unit = self?.isMetric ?? true ? UnitVolume.milliliters : .imperialPints
-                let size = Measurement(value: value, unit: unit)
-                let metricSize = size.converted(to: .milliliters).value
-                self?.largeDrink = metricSize
+                guard let value = Double(newValue),
+                      let size = self?.updateDrink(with: value)
+                else { return }
+                self?.largeDrink = size
             }.store(in: &tasks)
     }
 
@@ -209,10 +220,6 @@ final class SettingsViewModel: ObservableObject {
         let largeSize = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
         let largeValue = largeSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         large = "\(largeValue.clean)"
-    }
-
-    func toggleDarkMode() {
-        isDarkMode.toggle()
     }
 
     func incrementGoal() {

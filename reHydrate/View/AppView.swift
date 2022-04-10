@@ -26,6 +26,19 @@ struct AppView: View {
                     .tag(AppState.calendar)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
+            if viewModel.showPopUp {
+                Color.gray
+                    .opacity(0.5)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.showPopUp = false
+                    }
+                if let selectedDrink = viewModel.editingDrink {
+                    EditDrinkView(drink: selectedDrink) {
+                        viewModel.showPopUp = false
+                    }
+                }
+            }
         }
         .onAppear {
             Analytics.track(event: .startUp)
