@@ -40,15 +40,15 @@ struct SettingsView: View {
                 .padding([.leading, .top], 24)
                 .padding(.bottom, 16)
                 List {
-                    // Apperance
+                    // - MARK: Apperance
                     Section {
-                        CheckBoxButton(isChecked: $viewModel.isDarkMode,
+                        CheckBoxButton(isChecked: $viewModel.isDarkModeOn,
                                        text: Localizable.lightMode,
                                        highlightedText: Localizable.darkMode,
                                        image: .lightMode,
                                        highlightedImage: .darkMode,
                                        language: $viewModel.language) {
-                            viewModel.toggleDarkMode()
+                            viewModel.isDarkModeOn.toggle()
                         }
                         Button {
                             viewModel.showSheet = .editIcon
@@ -65,7 +65,7 @@ struct SettingsView: View {
                                       language: $viewModel.language)
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    // Units
+                    // - MARK: Units
                     Section {
                         HStack {
                             Text(Localizable.units.local(viewModel.language))
@@ -81,7 +81,7 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    // Goal
+                    // - MARK: Goal
                     Section {
                         HStack {
                             Text(Localizable.setYourGoal.local(viewModel.language))
@@ -94,7 +94,7 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    // Drink size
+                    // - MARK: Edit drinks
                     Section {
                         EditDrinksSectionView(focusedField: _focusedField,
                                               small: $viewModel.small,
@@ -104,7 +104,7 @@ struct SettingsView: View {
                                               language: viewModel.language)
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    // Notifications
+                    // - MARK: Notifications
                     Section {
                         CheckBoxButton(isChecked: $viewModel.selectedRemindersOn,
                                        text: Localizable.turnOnReminders,
@@ -143,7 +143,7 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    // Credits
+                    // - MARK: Credits
                     Section {
                         Button {
                             viewModel.showSheet = .credits
@@ -156,7 +156,7 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    // About app
+                    // - MARK: About app
                     Section {
                         Button {
                             openLink(to: .contactMe)
@@ -190,7 +190,7 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    // Support dev
+                    // - MARK: Support dev
                     Section {
                         Button {
                             openLink(to: .merch)
@@ -204,7 +204,7 @@ struct SettingsView: View {
                         }
                     }
                     .listRowBackground(Color.tableViewBackground)
-                    // App info
+                    // - MARK: App info
                     Section {
                         HStack {
                             Spacer()
@@ -224,6 +224,11 @@ struct SettingsView: View {
                 .font(.body)
             }
             .foregroundColor(.label)
+            .onAppear {
+                viewModel.small = viewModel.smallDrink.clean
+                viewModel.medium = viewModel.mediumDrink.clean
+                viewModel.large = viewModel.largeDrink.clean
+            }
             .sheet(item: $viewModel.showSheet) { sheet in
                 switch sheet {
                 case .editIcon:
