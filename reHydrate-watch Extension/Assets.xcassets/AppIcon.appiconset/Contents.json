@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "reHydrate-48.png",
+      "filename" : "defaultLogoWatch48.png",
       "idiom" : "watch",
       "role" : "notificationCenter",
       "scale" : "2x",
@@ -9,7 +9,7 @@
       "subtype" : "38mm"
     },
     {
-      "filename" : "reHydrate-55.png",
+      "filename" : "defaultLogoWatch55.png",
       "idiom" : "watch",
       "role" : "notificationCenter",
       "scale" : "2x",
@@ -17,20 +17,21 @@
       "subtype" : "42mm"
     },
     {
-      "filename" : "reHydrate-58.png",
+      "filename" : "defaultLogoWatch58.png",
       "idiom" : "watch",
       "role" : "companionSettings",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "reHydrate-87.png",
+      "filename" : "defaultLogoWatch87.png",
       "idiom" : "watch",
       "role" : "companionSettings",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
+      "filename" : "defaultLogoWatch66.png",
       "idiom" : "watch",
       "role" : "notificationCenter",
       "scale" : "2x",
@@ -38,7 +39,7 @@
       "subtype" : "45mm"
     },
     {
-      "filename" : "reHydrade-80.png",
+      "filename" : "defaultLogoWatch80.png",
       "idiom" : "watch",
       "role" : "appLauncher",
       "scale" : "2x",
@@ -46,7 +47,7 @@
       "subtype" : "38mm"
     },
     {
-      "filename" : "reHydrade-88.png",
+      "filename" : "defaultLogoWatch88.png",
       "idiom" : "watch",
       "role" : "appLauncher",
       "scale" : "2x",
@@ -54,6 +55,7 @@
       "subtype" : "40mm"
     },
     {
+      "filename" : "defaultLogoWatch92.png",
       "idiom" : "watch",
       "role" : "appLauncher",
       "scale" : "2x",
@@ -61,7 +63,7 @@
       "subtype" : "41mm"
     },
     {
-      "filename" : "reHydrade-100.png",
+      "filename" : "defaultLogoWatch100.png",
       "idiom" : "watch",
       "role" : "appLauncher",
       "scale" : "2x",
@@ -69,6 +71,7 @@
       "subtype" : "44mm"
     },
     {
+      "filename" : "defaultLogoWatch102.png",
       "idiom" : "watch",
       "role" : "appLauncher",
       "scale" : "2x",
@@ -76,7 +79,7 @@
       "subtype" : "45mm"
     },
     {
-      "filename" : "reHydrade-172.png",
+      "filename" : "defaultLogoWatch172.png",
       "idiom" : "watch",
       "role" : "quickLook",
       "scale" : "2x",
@@ -84,7 +87,7 @@
       "subtype" : "38mm"
     },
     {
-      "filename" : "reHydrade-196.png",
+      "filename" : "defaultLogoWatch196.png",
       "idiom" : "watch",
       "role" : "quickLook",
       "scale" : "2x",
@@ -92,7 +95,7 @@
       "subtype" : "42mm"
     },
     {
-      "filename" : "reHydrade-216.png",
+      "filename" : "defaultLogoWatch216.png",
       "idiom" : "watch",
       "role" : "quickLook",
       "scale" : "2x",
@@ -100,6 +103,7 @@
       "subtype" : "44mm"
     },
     {
+      "filename" : "defaultLogoWatch234.png",
       "idiom" : "watch",
       "role" : "quickLook",
       "scale" : "2x",
@@ -107,7 +111,7 @@
       "subtype" : "45mm"
     },
     {
-      "filename" : "reHydrade-1024.png",
+      "filename" : "defaultLogoWatch1024.png",
       "idiom" : "watch-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
