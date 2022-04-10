@@ -50,8 +50,8 @@ class EditDrinkViewModel: ObservableObject {
                 let max = drink.type.getMax()
                 var size: Double
                 size = Double(max) * Double(fill)
-                drink.size = size
-                self?.selectedDrink.size = size
+                drink.size = size.rounded()
+                self?.selectedDrink.size = size.rounded()
                 self?.fillLabel = "\(Int(size))ml"
             }.store(in: &tasks)
     }
