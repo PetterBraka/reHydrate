@@ -15,6 +15,7 @@ class EditDrinkViewModel: ObservableObject {
     @Published var fillLabel: String = "ml"
     @Published var minFill: CGFloat
     @Published var maxFill: CGFloat
+    var emptySpace: CGFloat
 
     @Preference(\.smallDrink) private var smallDrink
     @Preference(\.mediumDrink) private var mediumDrink
@@ -26,11 +27,19 @@ class EditDrinkViewModel: ObservableObject {
     init(drink: Drink) {
         selectedDrink = drink
         minFill = 0.2
-        maxFill = 0.8
+        maxFill = 1
         fillLevel = 0.5
 
-        let max = drink.type.getMax()
-        fillLevel = Double(drink.size) / Double(max)
+        switch drink.type {
+        case .small:
+            emptySpace = 25
+        case .medium, .large:
+            emptySpace = 75
+        }
+
+        let max = Double(drink.type.getMax())
+        let level = Double(drink.size) / max
+        fillLevel = level
         setupSubscribers()
     }
 
@@ -39,9 +48,10 @@ class EditDrinkViewModel: ObservableObject {
             .sink { [weak self] fill in
                 guard var drink = self?.selectedDrink else { return }
                 let max = drink.type.getMax()
-                let size = Double(max) * Double(fill == 0.8 ? 1 : fill)
-                drink.size = size
-                self?.selectedDrink.size = size
+                var size: Double
+                size = Double(max) * Double(fill)
+                drink.size = size.rounded()
+                self?.selectedDrink.size = size.rounded()
                 self?.fillLabel = "\(Int(size))ml"
             }.store(in: &tasks)
     }
