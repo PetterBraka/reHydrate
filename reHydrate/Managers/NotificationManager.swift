@@ -29,6 +29,7 @@ class NotificationManager {
     @Preference(\.largeDrink) private var largeDrink
     @Preference(\.isUsingMetric) private var isMetric
     @Preference(\.hasReachedGoal) private var hasReachedGoal
+    @Preference(\.reachedGoalOnDate) private var reachedGoalOnDate
 
     static let shared = NotificationManager()
 
@@ -138,7 +139,10 @@ class NotificationManager {
     }
 
     private func createCongratulation() {
-        guard isRemindersOn else { return }
+        let calender = Calendar.current
+        guard isRemindersOn,
+              let reachedGoalOnDate = reachedGoalOnDate ?? calender.date(byAdding: .init(day: -1), to: Date()),
+              !Calendar.current.isDateInToday(reachedGoalOnDate) else { return }
         let notfication = getCongratulation()
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString,
@@ -151,6 +155,7 @@ class NotificationManager {
                 print("Added congrats message")
             }
         }
+        self.reachedGoalOnDate = Date()
     }
 
     /**
