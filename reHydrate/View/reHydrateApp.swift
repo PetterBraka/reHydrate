@@ -12,12 +12,11 @@ import SwiftUI
 @main
 struct reHydrateApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    private let settingsRepository: SettingsRepository = .shared
-    private var isDarkMode: Bool { settingsRepository.isDarkMode }
+    @Preference(\.isDarkMode) private var isDarkMode
+    @Environment(\.scenePhase) private var scenePhase
 
     init() {
         UITableView.appearance().backgroundColor = .background
-        UICollectionView.appearance().backgroundColor = .background
     }
 
     var body: some Scene {
@@ -25,6 +24,17 @@ struct reHydrateApp: App {
             AppView()
                 .preferredColorScheme(isDarkMode ? .dark : .light)
                 .environmentObject(IconHelper())
+                .onChange(of: scenePhase) { phase in
+                    switch phase {
+                    case .active:
+                        print("App is now active")
+                    case .background:
+                        print("Going into the background")
+                        appDelegate.scheduleAppRefresh()
+                    default:
+                        print("App is now in an unknonw state")
+                    }
+                }
         }
     }
 }

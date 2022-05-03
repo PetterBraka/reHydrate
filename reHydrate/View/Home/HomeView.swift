@@ -9,12 +9,12 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel: HomeViewModel
+    @ObservedObject var viewModel: HomeViewModel
 
     init(navigateTo: @escaping ((AppState) -> Void)) {
         let viewModel = MainAssembler.shared.container.resolve(HomeViewModel.self,
                                                                argument: navigateTo)!
-        _viewModel = StateObject(wrappedValue: viewModel)
+        _viewModel = ObservedObject(initialValue: viewModel)
     }
 
     var body: some View {

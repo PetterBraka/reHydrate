@@ -1,9 +1,0 @@
-included: # paths to include during linting. `--path` is ignored if present.
-  - ../reHydrate
-  - ../reHydrate-watch
-  - ../reHydrate-watch Extension
-excluded:
-
-identifier_name:
-  excluded:
-    - id

@@ -26,7 +26,6 @@
 		332315EE274278340039EE23 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315ED274278340039EE23 /* Font.swift */; };
 		332315F42742B3430039EE23 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315F32742B3430039EE23 /* AppView.swift */; };
 		332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315F62742B4F10039EE23 /* AppViewModel.swift */; };
-		332315FA2742B6020039EE23 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 332315F92742B6020039EE23 /* Swinject */; };
 		332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315FC2742B61D0039EE23 /* MainAssembler.swift */; };
 		332315FF2742B6920039EE23 /* ViewModelAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315FE2742B6920039EE23 /* ViewModelAssembler.swift */; };
 		332316042742BD6C0039EE23 /* CoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332316032742BD6C0039EE23 /* CoreDataRepository.swift */; };
@@ -42,6 +41,7 @@
 		33231624274A75530039EE23 /* reHydrateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231623274A75530039EE23 /* reHydrateApp.swift */; };
 		332DBF632794154E00A6B16C /* Analytics+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332DBF622794154E00A6B16C /* Analytics+Extensions.swift */; };
 		332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332E5A4524CCBF5000EF4D79 /* Extensions.swift */; };
+		333E75A128061F1F00366DE3 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 333E75A028061F1F00366DE3 /* Swinject */; };
 		33410F0E247C0A9D00C381AC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33410F0D247C0A9D00C381AC /* CalendarCell.swift */; };
 		335DA1FA275E7892002266D2 /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335DA1F9275E7892002266D2 /* AppIconSelectionView.swift */; };
 		335DA29F275F5A8A002266D2 /* AppIcons+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335DA29E275F5A8A002266D2 /* AppIcons+Helper.swift */; };
@@ -136,7 +136,6 @@
 		337F1B0D277D4A2D00B2A819 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 337F1B0C277D4A2D00B2A819 /* GoogleService-Info.plist */; };
 		337F1B10277D4B6700B2A819 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 337F1B0F277D4B6700B2A819 /* FirebaseAnalytics */; };
 		337F1B12277D4B6700B2A819 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 337F1B11277D4B6700B2A819 /* FirebaseCrashlytics */; };
-		337F1B4B277E0A9C00B2A819 /* .swift-version in Resources */ = {isa = PBXBuildFile; fileRef = 337F1B4A277E0A9C00B2A819 /* .swift-version */; };
 		3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387ED68274AD9C40083D2C1 /* Drink.swift */; };
 		3387ED6D274C03A70083D2C1 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387ED6C274C03A70083D2C1 /* CalendarViewModel.swift */; };
 		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
@@ -347,11 +346,6 @@
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		337F1B0C277D4A2D00B2A819 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		337F1B46277E09CE00B2A819 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		337F1B47277E09CE00B2A819 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		337F1B48277E09CE00B2A819 /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.resolved; sourceTree = "<group>"; };
-		337F1B49277E09CE00B2A819 /* Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
-		337F1B4A277E0A9C00B2A819 /* .swift-version */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-version"; sourceTree = "<group>"; };
 		3387ED68274AD9C40083D2C1 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
 		3387ED6C274C03A70083D2C1 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
@@ -406,7 +400,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
-				332315FA2742B6020039EE23 /* Swinject in Frameworks */,
+				333E75A128061F1F00366DE3 /* Swinject in Frameworks */,
 				336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */,
 				337F1B12277D4B6700B2A819 /* FirebaseCrashlytics in Frameworks */,
 				337F1B10277D4B6700B2A819 /* FirebaseAnalytics in Frameworks */,
@@ -632,8 +626,6 @@
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
-				337F1B4A277E0A9C00B2A819 /* .swift-version */,
-				337F1B45277E09B700B2A819 /* BuildTools */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				33DF9BDB24B47D0900699B1A /* reHydrate-watch */,
 				33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */,
@@ -673,17 +665,6 @@
 				33231617274420E60039EE23 /* reHydrate.xcdatamodeld */,
 			);
 			path = reHydrate;
-			sourceTree = "<group>";
-		};
-		337F1B45277E09B700B2A819 /* BuildTools */ = {
-			isa = PBXGroup;
-			children = (
-				337F1B47277E09CE00B2A819 /* .swiftlint.yml */,
-				337F1B49277E09CE00B2A819 /* Empty.swift */,
-				337F1B48277E09CE00B2A819 /* Package.resolved */,
-				337F1B46277E09CE00B2A819 /* Package.swift */,
-			);
-			path = BuildTools;
 			sourceTree = "<group>";
 		};
 		3387ED6A274AD9E50083D2C1 /* Home */ = {
@@ -807,9 +788,9 @@
 			name = reHydrate;
 			packageProductDependencies = (
 				336136A526B6E7D500C87FB5 /* FSCalendar */,
-				332315F92742B6020039EE23 /* Swinject */,
 				337F1B0F277D4B6700B2A819 /* FirebaseAnalytics */,
 				337F1B11277D4B6700B2A819 /* FirebaseCrashlytics */,
+				333E75A028061F1F00366DE3 /* Swinject */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -888,8 +869,8 @@
 			mainGroup = 3378766A24378A9300F5A732;
 			packageReferences = (
 				336136A426B6E7D500C87FB5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
-				332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */,
 				337F1B0E277D4B6700B2A819 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				333E759F28061F1F00366DE3 /* XCRemoteSwiftPackageReference "swinject" */,
 			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
@@ -976,7 +957,6 @@
 				335DA338276017EC002266D2 /* whiteRainbow@2x.png in Resources */,
 				335DA2FE276017EC002266D2 /* blackPink@3x.png in Resources */,
 				335DA2FB276017EC002266D2 /* yellowWhite@3x.png in Resources */,
-				337F1B4B277E0A9C00B2A819 /* .swift-version in Resources */,
 				330C240D27688F7000293092 /* blacklexipink@2x.png in Resources */,
 				335DA2F7276017EC002266D2 /* blackPurple@3x.png in Resources */,
 				330C240827688F7000293092 /* blacklexipink@3x.png in Resources */,
@@ -1043,7 +1023,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd BuildTools\n# swift package update #Uncomment this line temporarily to update the version \n# used to the latest matching your BuildTools/Package.swift file\n/usr/bin/xcrun --sdk macosx swift run -c release swiftformat \"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --fix --path \"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --path \"$SRCROOT\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n    swiftlint\n    swiftlint --fix\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		337F1B13277D4BE500B2A819 /* Run upload to firebase */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1314,6 +1294,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1327,6 +1308,7 @@
 				MARKETING_VERSION = 5.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1337,6 +1319,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
@@ -1349,6 +1332,7 @@
 				MARKETING_VERSION = 5.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1486,12 +1470,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */ = {
+		333E759F28061F1F00366DE3 /* XCRemoteSwiftPackageReference "swinject" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/swinject/swinject";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 2.8.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
 			};
 		};
 		336136A426B6E7D500C87FB5 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
@@ -1513,9 +1497,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		332315F92742B6020039EE23 /* Swinject */ = {
+		333E75A028061F1F00366DE3 /* Swinject */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 332315F82742B6020039EE23 /* XCRemoteSwiftPackageReference "swinject" */;
+			package = 333E759F28061F1F00366DE3 /* XCRemoteSwiftPackageReference "swinject" */;
 			productName = Swinject;
 		};
 		336136A526B6E7D500C87FB5 /* FSCalendar */ = {
