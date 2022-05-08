@@ -36,7 +36,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     private var notificationManager = NotificationManager.shared
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
 
-    private var presistenceController: PresistenceControllerProtocol
+    private var presistenceController: PersistenceControllerProtocol
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
@@ -56,7 +56,7 @@ final class HomeViewModel: NSObject, ObservableObject {
 
     let session = WCSession.default
 
-    init(presistenceController: PresistenceControllerProtocol,
+    init(presistenceController: PersistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
         let viewContext = presistenceController.container.viewContext
@@ -72,7 +72,7 @@ final class HomeViewModel: NSObject, ObservableObject {
         setupSubscribers()
     }
 
-    init(presistenceController: PresistenceControllerProtocol,
+    init(presistenceController: PersistenceControllerProtocol,
          context: NSManagedObjectContext) {
         self.presistenceController = presistenceController
         dayManager = DayManager(context: context)

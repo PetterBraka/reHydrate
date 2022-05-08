@@ -12,8 +12,8 @@ import Swinject
 class ManagerAssembly: Assembly {
     func assemble(container: Container) {
         // Presistence - Manager
-        container.register(PresistenceControllerProtocol.self) { _ in
-            PresistenceController()
+        container.register(PersistenceControllerProtocol.self) { _ in
+            PersistenceController()
         }.inObjectScope(.container)
 
         container.register(HealthManagerProtocol.self) { _ in

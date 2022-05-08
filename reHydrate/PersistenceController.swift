@@ -9,14 +9,14 @@
 import Combine
 import CoreData
 
-protocol PresistenceControllerProtocol {
+protocol PersistenceControllerProtocol {
     var container: NSPersistentContainer { get }
     func newBackgroundContext() -> NSManagedObjectContext
 }
 
-struct PresistenceController: PresistenceControllerProtocol {
-    static func empty() -> PresistenceController {
-        PresistenceController(inMemory: true)
+struct PersistenceController: PersistenceControllerProtocol {
+    static func empty() -> PersistenceController {
+        PersistenceController(inMemory: true)
     }
 
     var container: NSPersistentContainer

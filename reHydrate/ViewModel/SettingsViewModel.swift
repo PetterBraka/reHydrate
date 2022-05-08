@@ -80,7 +80,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var showNotificationAlert: Bool = false
     @Published var showSheet: SheetType?
 
-    private var presistenceController: PresistenceControllerProtocol
+    private var presistenceController: PersistenceControllerProtocol
     private var notificationManager = NotificationManager.shared
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
     private var tasks = Set<AnyCancellable>()
@@ -90,7 +90,7 @@ final class SettingsViewModel: ObservableObject {
 
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
-    init(presistenceController: PresistenceControllerProtocol,
+    init(presistenceController: PersistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
         let viewContext = presistenceController.container.viewContext

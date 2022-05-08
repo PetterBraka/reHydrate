@@ -39,7 +39,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
 
-        let presistentController = MainAssembler.shared.container.resolve(PresistenceControllerProtocol.self)!
+        let presistentController = MainAssembler.shared.container.resolve(PersistenceControllerProtocol.self)!
         let context =  presistentController.newBackgroundContext()
         let viewModel = HomeViewModel(presistenceController: presistentController,
                                       context: context)

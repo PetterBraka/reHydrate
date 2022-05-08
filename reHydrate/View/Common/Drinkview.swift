@@ -45,7 +45,7 @@ struct DrinkView: View {
 
 struct DrinkView_Previews: PreviewProvider {
     static var previews: some View {
-        DrinkView(viewModel: HomeViewModel(presistenceController: PresistenceController(),
+        DrinkView(viewModel: HomeViewModel(presistenceController: PersistenceController(),
                                            navigateTo: { _ in }),
                   drink: .constant(Drink(type: .medium, size: 500)),
                   disable: true) {}

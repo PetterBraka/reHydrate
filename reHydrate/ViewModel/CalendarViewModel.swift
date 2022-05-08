@@ -24,7 +24,7 @@ final class CalendarViewModel: ObservableObject {
     @Published var consumtion = ""
     @Published var average = ""
 
-    private var presistenceController: PresistenceControllerProtocol
+    private var presistenceController: PersistenceControllerProtocol
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
@@ -36,7 +36,7 @@ final class CalendarViewModel: ObservableObject {
         return formatter
     }()
 
-    init(presistenceController: PresistenceControllerProtocol,
+    init(presistenceController: PersistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
         let viewContext = presistenceController.container.viewContext
