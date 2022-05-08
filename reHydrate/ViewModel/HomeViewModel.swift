@@ -37,7 +37,6 @@ final class HomeViewModel: NSObject, ObservableObject {
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
 
     private var presistenceController: PresistenceControllerProtocol
-    private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
@@ -60,7 +59,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
         self.presistenceController = presistenceController
-        viewContext = presistenceController.container.viewContext
+        let viewContext = presistenceController.container.viewContext
         dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         super.init()
