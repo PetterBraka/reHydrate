@@ -21,7 +21,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
         BGTaskScheduler.shared.register(
             forTaskWithIdentifier: "com.braka.reHydrate.fetchHealth",
-            using: DispatchQueue(label: "FetchingHealth", qos: .background)) { task in
+            using: DispatchQueue(label: "background.fetch.health.data")) { task in
                 self.handleHealthRefresh(task)
             }
 
@@ -34,26 +34,41 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
 
     private func handleHealthRefresh(_ task: BGTask) {
+        scheduleAppRefresh()
+
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+
+        let presistentController = MainAssembler.shared.container.resolve(PresistenceControllerProtocol.self)!
+        let context =  presistentController.newBackgroundContext()
+        let viewModel = HomeViewModel(presistenceController: presistentController,
+                                      context: context)
+
+        let operations = [
+            BlockOperation {
+                viewModel.fetchHealthData()
+            }
+        ]
+
+        let lastOperation = operations.last!
+
         task.expirationHandler = {
-            task.setTaskCompleted(success: false)
+            queue.cancelAllOperations()
         }
 
-        let navigateTo: (AppState) -> Void = {_ in }
-        let homeViewModel = MainAssembler.shared.container.resolve(HomeViewModel.self,
-                                                                   argument: navigateTo)!
-        homeViewModel.futureFetchHealthData()
-            .sink { _ in
-                task.setTaskCompleted(success: true)
-            }.store(in: &tasks)
-        print("Doing background jobs")
-        scheduleAppRefresh()
+        lastOperation.completionBlock = {
+            task.setTaskCompleted(success: !lastOperation.isCancelled)
+        }
+
+        queue.addOperations(operations, waitUntilFinished: false)
     }
 
     func scheduleAppRefresh() {
         do {
             let request = BGAppRefreshTaskRequest(identifier: "com.braka.reHydrate.fetchHealth")
-            request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 60 * 1)
+            request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 30)
             try BGTaskScheduler.shared.submit(request)
+            print("Task has been submitted.\nRequested task: \(request)")
         } catch {
             print(error)
         }

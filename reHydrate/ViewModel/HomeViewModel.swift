@@ -72,6 +72,21 @@ final class HomeViewModel: NSObject, ObservableObject {
         setupSubscribers()
     }
 
+    init(presistenceController: PresistenceControllerProtocol,
+         context: NSManagedObjectContext) {
+        self.presistenceController = presistenceController
+        dayManager = DayManager(context: context)
+        self.navigateTo = { _ in }
+        super.init()
+        updateDrinks()
+        if WCSession.isSupported() {
+            session.delegate = self
+            session.activate()
+        }
+        requestNotificationAccess()
+        setupSubscribers()
+    }
+
     func requestNotificationAccess() {
         Task {
             do {
@@ -251,20 +266,6 @@ extension HomeViewModel {
             }
         }
     }
-
-    private func futureUpdate(consumption value: Double, for date: Date) -> Future<Bool, Never> {
-        Future { promise in
-            Task {
-                do {
-                    try await self.dayManager.update(consumption: value, for: date)
-                    self.fetchToday()
-                    promise(.success(true))
-                } catch {
-                    print("Error updating todays consumption: \(value), Error: \(error)")
-                }
-            }
-        }
-    }
 }
 
 // MARK: HealthKit export & import
@@ -284,26 +285,6 @@ extension HomeViewModel {
                 print("Got data from health")
                 self.update(consumption: consumed, for: Date())
             }.store(in: &tasks)
-    }
-
-    func futureFetchHealthData() -> Future<Bool, Never> {
-        Future<Bool, Never> { promise in
-            self.healthManager.getWater(for: Date())
-                .removeDuplicates()
-                .sink { completion in
-                    switch completion {
-                    case let .failure(error):
-                        print(error)
-                    default:
-                        break
-                    }
-                } receiveValue: { consumed in
-                    print("Got data from health")
-                    self.futureUpdate(consumption: consumed, for: Date()).sink { success in
-                        promise(.success(success))
-                    }.store(in: &self.tasks)
-                }.store(in: &self.tasks)
-        }
     }
 
     private func export(drink: Drink) {

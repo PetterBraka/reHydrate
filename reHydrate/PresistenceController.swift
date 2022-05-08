@@ -11,6 +11,7 @@ import CoreData
 
 protocol PresistenceControllerProtocol {
     var container: NSPersistentContainer { get }
+    func newBackgroundContext() -> NSManagedObjectContext
 }
 
 struct PresistenceController: PresistenceControllerProtocol {
@@ -30,5 +31,15 @@ struct PresistenceController: PresistenceControllerProtocol {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergePolicy(merge: NSMergePolicyType
+            .mergeByPropertyStoreTrumpMergePolicyType)
+    }
+
+    func newBackgroundContext() -> NSManagedObjectContext {
+        let backgroundContext = container.newBackgroundContext()
+        backgroundContext.automaticallyMergesChangesFromParent = true
+        backgroundContext.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType)
+        return backgroundContext
     }
 }
