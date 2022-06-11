@@ -12,7 +12,8 @@ import SwiftUI
 @main
 struct reHydrateApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @Preference(\.isDarkMode) private var isDarkMode
+    private let settingsRepository: SettingsRepository = .shared
+    private var isDarkMode: Bool { settingsRepository.isDarkMode }
 
     init() {
         UITableView.appearance().backgroundColor = .background

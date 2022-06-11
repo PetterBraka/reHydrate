@@ -47,7 +47,7 @@ struct SettingsView: View {
                                        highlightedText: Localizable.darkMode,
                                        image: .lightMode,
                                        highlightedImage: .darkMode,
-                                       language: $viewModel.language) {
+                                       language: viewModel.language) {
                             viewModel.isDarkModeOn.toggle()
                         }
                         Button {
@@ -62,7 +62,7 @@ struct SettingsView: View {
                         OptionsButton(title: Localizable.language,
                                       selectedItem: $viewModel.selectedLanguage,
                                       items: viewModel.languageOptions,
-                                      language: $viewModel.language)
+                                      language: viewModel.language)
                     }
                     .listRowBackground(Color.tableViewBackground)
                     // - MARK: Units
@@ -111,7 +111,7 @@ struct SettingsView: View {
                                        highlightedText: Localizable.turnOffReminders,
                                        image: .remindersOff,
                                        highlightedImage: .remindersOn,
-                                       language: $viewModel.language) {
+                                       language: viewModel.language) {
                             if viewModel.remindersPremitted {
                                 viewModel.toggleReminders()
                             } else {

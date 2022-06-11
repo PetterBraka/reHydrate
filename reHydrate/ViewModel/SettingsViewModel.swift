@@ -12,6 +12,7 @@ import Foundation
 import SwiftUI
 import Swinject
 
+@MainActor
 final class SettingsViewModel: ObservableObject {
     enum SheetType: String, Identifiable {
         var id: String {
@@ -22,16 +23,17 @@ final class SettingsViewModel: ObservableObject {
         case credits
     }
 
-    @AppStorage("language") var language = LocalizationService.shared.language
-    @Preference(\.isDarkMode) private var isDarkMode
-    @Preference(\.isUsingMetric) private var isMetric
-    @Preference(\.isRemindersOn) private var isRemindersOn
-    @Preference(\.remindersStart) private var remindersStart
-    @Preference(\.remindersEnd) private var remindersEnd
-    @Preference(\.remindersInterval) private var reminderFrequency
-    @Preference(\.smallDrink) var smallDrink
-    @Preference(\.mediumDrink) var mediumDrink
-    @Preference(\.largeDrink) var largeDrink
+    private let settingsRepository: SettingsRepository = .shared
+    var language: Language { settingsRepository.language }
+    var isDarkMode: Bool { settingsRepository.isDarkMode }
+    var isMetric: Bool { settingsRepository.isMetric }
+    var isRemindersOn: Bool { settingsRepository.isRemindersOn }
+    var remindersStart: Date { settingsRepository.remindersStart }
+    var remindersEnd: Date { settingsRepository.remindersEnd }
+    var reminderFrequency: Int { settingsRepository.reminderFrequency }
+    var smallDrink: Double { settingsRepository.smallDrink }
+    var mediumDrink: Double { settingsRepository.mediumDrink }
+    var largeDrink: Double { settingsRepository.largeDrink }
 
     @Published var isDarkModeOn = false
     @Published var languageOptions: [String] = [Localizable.english,
@@ -120,7 +122,7 @@ final class SettingsViewModel: ObservableObject {
         $isDarkModeOn
             .removeDuplicates()
             .sink { [weak self] value in
-                self?.isDarkMode = value
+                self?.settingsRepository.isDarkMode = value
             }.store(in: &tasks)
         $today
             .sink { [weak self] day in
@@ -130,7 +132,7 @@ final class SettingsViewModel: ObservableObject {
             }.store(in: &tasks)
         $selectedLanguage
             .removeDuplicates().sink { [weak self] value in
-                self?.language = Language(rawValue: value.lowercased()) ?? .english
+                self?.settingsRepository.language = Language(rawValue: value.lowercased()) ?? .english
                 self?.requestReminders()
             }.store(in: &tasks)
         $selectedUnit
@@ -140,7 +142,7 @@ final class SettingsViewModel: ObservableObject {
                 } else {
                     self?.unit = "pt"
                 }
-                self?.isMetric = Localizable.metricSystem == unit
+                self?.settingsRepository.isMetric = Localizable.metricSystem == unit
                 self?.selectedGoal = self?.today.goal.convert(to: self?.isMetric ?? true ? .liters : .imperialPints,
                                                               from: .liters).clean ?? "3"
                 self?.setDrinks()
@@ -168,7 +170,7 @@ final class SettingsViewModel: ObservableObject {
                 guard let value = Double(newValue),
                       let size = self?.updateDrink(with: value)
                 else { return }
-                self?.smallDrink = size
+                self?.settingsRepository.smallDrink = size
             }.store(in: &tasks)
         $medium
             .removeDuplicates()
@@ -176,7 +178,7 @@ final class SettingsViewModel: ObservableObject {
                 guard let value = Double(newValue),
                       let size = self?.updateDrink(with: value)
                 else { return }
-                self?.mediumDrink = size
+                self?.settingsRepository.mediumDrink = size
             }.store(in: &tasks)
         $large
             .removeDuplicates()
@@ -184,7 +186,7 @@ final class SettingsViewModel: ObservableObject {
                 guard let value = Double(newValue),
                       let size = self?.updateDrink(with: value)
                 else { return }
-                self?.largeDrink = size
+                self?.settingsRepository.largeDrink = size
             }.store(in: &tasks)
     }
 
@@ -193,7 +195,7 @@ final class SettingsViewModel: ObservableObject {
             .sink { [weak self] isOn in
                 if self?.isRemindersOn != isOn {
                     if self?.remindersPremitted == true {
-                        self?.isRemindersOn = isOn
+                        self?.settingsRepository.isRemindersOn = isOn
                     }
                     self?.requestReminders()
                 }
@@ -262,14 +264,14 @@ extension SettingsViewModel {
     func updateStartTime(with date: Date) {
         guard remindersStart != date else { return }
         guard remindersStart < remindersEnd else { return }
-        remindersStart = date
+        settingsRepository.remindersStart = date
         requestReminders()
     }
 
     func updateEndTime(with date: Date) {
         guard remindersEnd != date else { return }
         guard remindersStart < remindersEnd else { return }
-        remindersEnd = date
+        settingsRepository.remindersEnd = date
         requestReminders()
     }
 
@@ -283,7 +285,7 @@ extension SettingsViewModel {
               shouldIncrese || (frequency > 15) else { return }
         frequency += increment
         selectedFrequency = "\(frequency)"
-        reminderFrequency = frequency
+        settingsRepository.reminderFrequency = frequency
         requestReminders()
     }
 

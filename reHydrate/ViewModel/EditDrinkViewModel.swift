@@ -17,10 +17,11 @@ class EditDrinkViewModel: ObservableObject {
     @Published var maxFill: CGFloat
     var emptySpace: CGFloat
 
-    @Preference(\.smallDrink) private var smallDrink
-    @Preference(\.mediumDrink) private var mediumDrink
-    @Preference(\.largeDrink) private var largeDrink
-    @Preference(\.isUsingMetric) private var isMetric
+    private let settingsRepository: SettingsRepository = .shared
+    var isMetric: Bool { settingsRepository.isMetric }
+    var smallDrink: Double { settingsRepository.smallDrink }
+    var mediumDrink: Double { settingsRepository.mediumDrink }
+    var largeDrink: Double { settingsRepository.largeDrink }
 
     var tasks = Set<AnyCancellable>()
 
@@ -67,11 +68,11 @@ class EditDrinkViewModel: ObservableObject {
         let drinkValue = drinkSize.converted(to: isMetric ? .milliliters : .imperialPints).value
         switch selectedDrink.type {
         case .small:
-            smallDrink = drinkValue
+            settingsRepository.smallDrink = drinkValue
         case .medium:
-            mediumDrink = drinkValue
+            settingsRepository.mediumDrink = drinkValue
         case .large:
-            largeDrink = drinkValue
+            settingsRepository.largeDrink = drinkValue
         }
         NotificationCenter.default.post(name: .savedDrink, object: selectedDrink)
     }
