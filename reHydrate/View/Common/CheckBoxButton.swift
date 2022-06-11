@@ -15,7 +15,7 @@ struct CheckBoxButton: View {
     @State var highlightedText: String
     @State var image: Image
     @State var highlightedImage: Image
-    @Binding var language: Language
+    var language: Language
 
     var rowAction: () -> Void
 

@@ -18,18 +18,17 @@ class NotificationManager {
         var body = String()
     }
 
-    @AppStorage("language") private var language = LocalizationService.shared.language
-
-    @Preference(\.isRemindersOn) private var isRemindersOn
-    @Preference(\.remindersStart) private var remindersStart
-    @Preference(\.remindersEnd) private var remindersEnd
-    @Preference(\.remindersInterval) private var reminderFrequency
-    @Preference(\.smallDrink) private var smallDrink
-    @Preference(\.mediumDrink) private var mediumDrink
-    @Preference(\.largeDrink) private var largeDrink
-    @Preference(\.isUsingMetric) private var isMetric
-    @Preference(\.hasReachedGoal) private var hasReachedGoal
-    @Preference(\.reachedGoalOnDate) private var reachedGoalOnDate
+    private let settingsRepository: SettingsRepository = .shared
+    var language: Language { settingsRepository.language }
+    var isMetric: Bool { settingsRepository.isMetric }
+    var isRemindersOn: Bool { settingsRepository.isRemindersOn }
+    var remindersStart: Date { settingsRepository.remindersStart }
+    var remindersEnd: Date { settingsRepository.remindersEnd }
+    var reminderFrequency: Int { settingsRepository.reminderFrequency }
+    var smallDrink: Double { settingsRepository.smallDrink }
+    var mediumDrink: Double { settingsRepository.mediumDrink }
+    var largeDrink: Double { settingsRepository.largeDrink }
+    var hasReachedGoal: Bool { settingsRepository.hasReachedGoal }
 
     static let shared = NotificationManager()
 
@@ -50,9 +49,10 @@ class NotificationManager {
         hasSetCongratsNotifications = false
     }
 
+    @MainActor
     func requestReminders(for day: Day) {
         Task {
-            hasReachedGoal = day.consumption >= day.goal
+            settingsRepository.hasReachedGoal = day.consumption >= day.goal
             guard isRemindersOn else { return }
             guard !hasReachedGoal else {
                 deleteReminders()
@@ -139,10 +139,7 @@ class NotificationManager {
     }
 
     private func createCongratulation() {
-        let calender = Calendar.current
-        guard isRemindersOn,
-              let reachedGoalOnDate = reachedGoalOnDate ?? calender.date(byAdding: .init(day: -1), to: Date()),
-              !Calendar.current.isDateInToday(reachedGoalOnDate) else { return }
+        guard isRemindersOn else { return }
         let notfication = getCongratulation()
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString,
@@ -155,7 +152,7 @@ class NotificationManager {
                 print("Added congrats message")
             }
         }
-        self.reachedGoalOnDate = Date()
+        settingsRepository.reachedGoalOnDate = Date()
     }
 
     /**

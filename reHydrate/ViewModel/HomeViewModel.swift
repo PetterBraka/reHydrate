@@ -19,12 +19,13 @@ final class HomeViewModel: NSObject, ObservableObject {
         case health
     }
 
-    @AppStorage("language") var language = LocalizationService.shared.language
-    @Preference(\.smallDrink) private var smallDrink
-    @Preference(\.mediumDrink) private var mediumDrink
-    @Preference(\.largeDrink) private var largeDrink
-    @Preference(\.isUsingMetric) private var isMetric
-    @Preference(\.hasReachedGoal) private var hasReachedGoal
+    private let settingsRepository: SettingsRepository = .shared
+    var language: Language { settingsRepository.language }
+    var isMetric: Bool { settingsRepository.isMetric }
+    var smallDrink: Double { settingsRepository.smallDrink }
+    var mediumDrink: Double { settingsRepository.mediumDrink }
+    var largeDrink: Double { settingsRepository.largeDrink }
+    var hasReachedGoal: Bool { settingsRepository.hasReachedGoal }
 
     @Published var today = Day(id: UUID(), consumption: 0, goal: 3, date: Date())
     @Published var drinks: [Drink] = []
@@ -170,6 +171,7 @@ final class HomeViewModel: NSObject, ObservableObject {
 // MARK: Save & Load
 
 extension HomeViewModel {
+    @MainActor
     private func createNewDay() {
         Task {
             do {
@@ -181,6 +183,7 @@ extension HomeViewModel {
         }
     }
 
+    @MainActor
     func fetchToday() {
         Task {
             do {
@@ -197,7 +200,7 @@ extension HomeViewModel {
     private func saveAndFetch() async {
         do {
             try await dayManager.saveChanges()
-            fetchToday()
+            await fetchToday()
         } catch {
             print("Error saving \(error)")
         }
@@ -211,7 +214,7 @@ extension HomeViewModel {
             do {
                 try await dayManager.addDrink(of: consumed, to: today)
                 export(drink: drink)
-                fetchToday()
+                await fetchToday()
             } catch {
                 print("Error adding drink of type: \(drink), Error: \(error)")
             }
@@ -227,7 +230,7 @@ extension HomeViewModel {
             do {
                 try await dayManager.removeDrink(of: consumed < 0 ? 0 : consumed, to: today)
                 export(drink: drink)
-                fetchToday()
+                await fetchToday()
             } catch {
                 print("Error adding drink of type: \(drink), Error: \(error)")
             }
@@ -238,7 +241,7 @@ extension HomeViewModel {
         Task {
             do {
                 try await dayManager.update(consumption: value, for: date)
-                fetchToday()
+                await fetchToday()
             } catch {
                 print("Error updating todays consumption: \(value), Error: \(error)")
             }

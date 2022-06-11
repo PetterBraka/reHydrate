@@ -12,7 +12,7 @@ struct OptionsButton: View {
     @State var title: String
     @Binding var selectedItem: String
     @State var items: [String]
-    @Binding var language: Language
+    var language: Language
     @State var isTapped = false
 
     var body: some View {
@@ -54,6 +54,6 @@ struct OptionsButton: View {
 
 struct DropDownButton_Previews: PreviewProvider {
     static var previews: some View {
-        OptionsButton(title: "", selectedItem: .constant(""), items: [], language: .constant(.english))
+        OptionsButton(title: "", selectedItem: .constant(""), items: [], language: .english)
     }
 }
