@@ -49,10 +49,9 @@ class NotificationManager {
         hasSetCongratsNotifications = false
     }
 
-    @MainActor
     func requestReminders(for day: Day) {
+        settingsRepository.hasReachedGoal = day.consumption >= day.goal
         Task {
-            settingsRepository.hasReachedGoal = day.consumption >= day.goal
             guard isRemindersOn else { return }
             guard !hasReachedGoal else {
                 deleteReminders()

@@ -12,7 +12,6 @@ import Foundation
 import SwiftUI
 import Swinject
 
-@MainActor
 final class SettingsViewModel: ObservableObject {
     enum SheetType: String, Identifiable {
         var id: String {
@@ -156,11 +155,9 @@ final class SettingsViewModel: ObservableObject {
         setupNotificationSubscription()
     }
 
-    func updateDrink(with newValue: Double) -> Double {
-        let unit = isMetric ? UnitVolume.milliliters : .imperialPints
-        let size = Measurement(value: newValue, unit: unit)
-        let metricSize = size.converted(to: .milliliters).value
-        return metricSize
+    func updateDrinkForSaving(with newValue: Double) -> Double {
+        newValue.convert(to: .milliliters,
+                         from: isMetric ? .milliliters : .imperialPints)
     }
 
     func setupEditDrinkSubscription() {
@@ -168,7 +165,7 @@ final class SettingsViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] newValue in
                 guard let value = Double(newValue),
-                      let size = self?.updateDrink(with: value)
+                      let size = self?.updateDrinkForSaving(with: value)
                 else { return }
                 self?.settingsRepository.smallDrink = size
             }.store(in: &tasks)
@@ -176,7 +173,7 @@ final class SettingsViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] newValue in
                 guard let value = Double(newValue),
-                      let size = self?.updateDrink(with: value)
+                      let size = self?.updateDrinkForSaving(with: value)
                 else { return }
                 self?.settingsRepository.mediumDrink = size
             }.store(in: &tasks)
@@ -184,7 +181,7 @@ final class SettingsViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] newValue in
                 guard let value = Double(newValue),
-                      let size = self?.updateDrink(with: value)
+                      let size = self?.updateDrinkForSaving(with: value)
                 else { return }
                 self?.settingsRepository.largeDrink = size
             }.store(in: &tasks)
@@ -213,15 +210,21 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func setDrinks() {
-        let smallSize = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
-        let smallValue = smallSize.converted(to: isMetric ? .milliliters : .imperialPints).value
-        small = "\(smallValue.clean)"
-        let mediumSize = Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
-        let mediumValue = mediumSize.converted(to: isMetric ? .milliliters : .imperialPints).value
-        medium = "\(mediumValue.clean)"
-        let largeSize = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
-        let largeValue = largeSize.converted(to: isMetric ? .milliliters : .imperialPints).value
-        large = "\(largeValue.clean)"
+        let smallLocalDrink = smallDrink.convert(
+            to: isMetric ? .milliliters : .imperialPints,
+            from: .milliliters
+        )
+        small = "\(smallLocalDrink.clean)"
+        let mediumLocalDrink = mediumDrink.convert(
+            to: isMetric ? .milliliters : .imperialPints,
+            from: .milliliters
+        )
+        medium = "\(mediumLocalDrink.clean)"
+        let largeLocalDrink = largeDrink.convert(
+            to: isMetric ? .milliliters : .imperialPints,
+            from: .milliliters
+        )
+        large = "\(largeLocalDrink.clean)"
     }
 
     func incrementGoal() {
