@@ -10,5 +10,5 @@ import UIKit
 
 extension UIImage {
     static let SFwaterDrop = UIImage(named: "waterDrop")!
-    static let waterDrop = UIImage(named: "water-drop")!
+    static let waterDrop = UIImage(named: "Water-drop")!
 }
