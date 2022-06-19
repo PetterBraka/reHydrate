@@ -220,7 +220,7 @@ struct SettingsView: View {
                     }
                     .listRowBackground(Color.clear)
                 }
-                .listStyle(InsetGroupedListStyle())
+                .listStyle(.insetGrouped)
                 .font(.body)
             }
             .foregroundColor(.label)
