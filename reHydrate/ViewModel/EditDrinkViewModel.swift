@@ -47,13 +47,20 @@ class EditDrinkViewModel: ObservableObject {
     func setupSubscribers() {
         $fillLevel
             .sink { [weak self] fill in
-                guard var drink = self?.selectedDrink else { return }
+                guard let drink = self?.selectedDrink,
+                      let isMetric = self?.isMetric else { return }
                 let max = drink.type.getMax()
                 var size: Double
                 size = Double(max) * Double(fill)
-                drink.size = size.rounded()
-                self?.selectedDrink.size = size.rounded()
-                self?.fillLabel = "\(Int(size))ml"
+                var drinkValue = size.convert(
+                    to: isMetric ? .milliliters : .imperialPints,
+                    from: .milliliters
+                )
+                if isMetric {
+                    drinkValue.round()
+                }
+                self?.selectedDrink.size = drinkValue
+                self?.fillLabel = drinkValue.clean + (isMetric ? "ml" : "pt")
             }.store(in: &tasks)
     }
 
@@ -64,8 +71,10 @@ class EditDrinkViewModel: ObservableObject {
     }
 
     func saveDrink() {
-        let drinkSize = Measurement(value: selectedDrink.size, unit: UnitVolume.milliliters)
-        let drinkValue = drinkSize.converted(to: isMetric ? .milliliters : .imperialPints).value
+        let drinkValue = selectedDrink.size.convert(
+            to: .milliliters,
+            from: isMetric ? .milliliters : .imperialPints
+        )
         switch selectedDrink.type {
         case .small:
             settingsRepository.smallDrink = drinkValue
@@ -74,6 +83,6 @@ class EditDrinkViewModel: ObservableObject {
         case .large:
             settingsRepository.largeDrink = drinkValue
         }
-        NotificationCenter.default.post(name: .savedDrink, object: selectedDrink)
+        NotificationCenter.default.post(name: .savedDrink, object: drinkValue)
     }
 }
