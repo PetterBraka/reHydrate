@@ -135,12 +135,18 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     func getConsumed() -> String {
-        let consumed = today.consumption.convert(to: isMetric ? .liters : .imperialPints, from: .liters)
+        let consumed = today.consumption.convert(
+            to: isMetric ? .liters : .imperialPints,
+            from: .liters
+        )
         return consumed.clean
     }
 
     func getGoal() -> String {
-        let goal = today.goal.convert(to: isMetric ? .liters : .imperialPints, from: .liters)
+        let goal = today.goal.convert(
+            to: isMetric ? .liters : .imperialPints,
+            from: .liters
+        )
         return goal.clean + (isMetric ? "L" : "pt")
     }
 
@@ -207,8 +213,7 @@ extension HomeViewModel {
     }
 
     func addDrink(_ drink: Drink) {
-        let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
-        let consumed = rawConsumed.converted(to: .liters).value
+        let consumed = drink.size.convert(to: .liters, from: .milliliters)
         Analytics.track(event: .addDrink)
         Task {
             do {
