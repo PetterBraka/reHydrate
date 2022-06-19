@@ -156,8 +156,11 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func updateDrinkForSaving(with newValue: Double) -> Double {
-        newValue.convert(to: .milliliters,
-                         from: isMetric ? .milliliters : .imperialPints)
+        let metricValue = newValue.convert(
+            to: .milliliters,
+            from: isMetric ? .milliliters : .imperialPints
+        )
+        return metricValue.rounded()
     }
 
     func setupEditDrinkSubscription() {
@@ -210,20 +213,29 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func setDrinks() {
-        let smallLocalDrink = smallDrink.convert(
+        var smallLocalDrink = smallDrink.convert(
             to: isMetric ? .milliliters : .imperialPints,
             from: .milliliters
         )
+        if isMetric {
+            smallLocalDrink.round()
+        }
         small = "\(smallLocalDrink.clean)"
-        let mediumLocalDrink = mediumDrink.convert(
+        var mediumLocalDrink = mediumDrink.convert(
             to: isMetric ? .milliliters : .imperialPints,
             from: .milliliters
         )
+        if isMetric {
+            mediumLocalDrink.round()
+        }
         medium = "\(mediumLocalDrink.clean)"
-        let largeLocalDrink = largeDrink.convert(
+        var largeLocalDrink = largeDrink.convert(
             to: isMetric ? .milliliters : .imperialPints,
             from: .milliliters
         )
+        if isMetric {
+            largeLocalDrink.round()
+        }
         large = "\(largeLocalDrink.clean)"
     }
 
