@@ -12,7 +12,9 @@ import SwiftUI
 import Swinject
 
 final class CalendarViewModel: ObservableObject {
-    @AppStorage("language") private var language = LocalizationService.shared.language
+    private let settingsRepository: SettingsRepository = .shared
+    var language: Language { settingsRepository.language }
+    var isMetric: Bool { settingsRepository.isMetric }
 
     @Published var showAlert: Bool = false
     @Published var selectedDays = [Day]()
@@ -67,9 +69,9 @@ final class CalendarViewModel: ObservableObject {
 
     func getConsumed(for days: [Day]) {
         if let day = days.first {
-            let consumed = day.consumption.clean
-            let goal = day.goal.clean
-            consumtion = "\(consumed)/\(goal)L"
+            let consumed = getLocalized(value: day.consumption)
+            let goal = getLocalized(value: day.goal)
+            consumtion = "\(consumed)/\(goal)\(getUnit())"
             formatter.locale = Locale(identifier: language.rawValue)
             header = formatter.string(from: day.date)
         }
@@ -79,7 +81,16 @@ final class CalendarViewModel: ObservableObject {
         var totalConsumed = 0.0
         days.forEach { totalConsumed = $0.consumption + totalConsumed }
         let average = totalConsumed / Double(days.count)
-        self.average = "\(average.clean)L"
+        self.average = "\(getLocalized(value: average))\(getUnit())"
+    }
+
+    func getLocalized(value: Double) -> String {
+        let drinkValue = value.convert(to: isMetric ? .liters : .imperialPints, from: .liters)
+        return drinkValue.clean
+    }
+
+    func getUnit() -> String {
+        isMetric ? "ml" : "pt"
     }
 
     func navigateToHome() {
