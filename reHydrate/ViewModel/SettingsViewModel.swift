@@ -22,16 +22,17 @@ final class SettingsViewModel: ObservableObject {
         case credits
     }
 
-    @AppStorage("language") var language = LocalizationService.shared.language
-    @Preference(\.isDarkMode) private var isDarkMode
-    @Preference(\.isUsingMetric) private var isMetric
-    @Preference(\.isRemindersOn) private var isRemindersOn
-    @Preference(\.remindersStart) private var remindersStart
-    @Preference(\.remindersEnd) private var remindersEnd
-    @Preference(\.remindersInterval) private var reminderFrequency
-    @Preference(\.smallDrink) var smallDrink
-    @Preference(\.mediumDrink) var mediumDrink
-    @Preference(\.largeDrink) var largeDrink
+    private let settingsRepository: SettingsRepository = .shared
+    var language: Language { settingsRepository.language }
+    var isDarkMode: Bool { settingsRepository.isDarkMode }
+    var isMetric: Bool { settingsRepository.isMetric }
+    var isRemindersOn: Bool { settingsRepository.isRemindersOn }
+    var remindersStart: Date { settingsRepository.remindersStart }
+    var remindersEnd: Date { settingsRepository.remindersEnd }
+    var reminderFrequency: Int { settingsRepository.reminderFrequency }
+    var smallDrink: Double { settingsRepository.smallDrink }
+    var mediumDrink: Double { settingsRepository.mediumDrink }
+    var largeDrink: Double { settingsRepository.largeDrink }
 
     @Published var isDarkModeOn = false
     @Published var languageOptions: [String] = [Localizable.english,
@@ -120,7 +121,7 @@ final class SettingsViewModel: ObservableObject {
         $isDarkModeOn
             .removeDuplicates()
             .sink { [weak self] value in
-                self?.isDarkMode = value
+                self?.settingsRepository.isDarkMode = value
             }.store(in: &tasks)
         $today
             .sink { [weak self] day in
@@ -130,7 +131,7 @@ final class SettingsViewModel: ObservableObject {
             }.store(in: &tasks)
         $selectedLanguage
             .removeDuplicates().sink { [weak self] value in
-                self?.language = Language(rawValue: value.lowercased()) ?? .english
+                self?.settingsRepository.language = Language(rawValue: value.lowercased()) ?? .english
                 self?.requestReminders()
             }.store(in: &tasks)
         $selectedUnit
@@ -140,7 +141,7 @@ final class SettingsViewModel: ObservableObject {
                 } else {
                     self?.unit = "pt"
                 }
-                self?.isMetric = Localizable.metricSystem == unit
+                self?.settingsRepository.isMetric = Localizable.metricSystem == unit
                 self?.selectedGoal = self?.today.goal.convert(to: self?.isMetric ?? true ? .liters : .imperialPints,
                                                               from: .liters).clean ?? "3"
                 self?.setDrinks()
@@ -154,11 +155,12 @@ final class SettingsViewModel: ObservableObject {
         setupNotificationSubscription()
     }
 
-    func updateDrink(with newValue: Double) -> Double {
-        let unit = isMetric ? UnitVolume.milliliters : .imperialPints
-        let size = Measurement(value: newValue, unit: unit)
-        let metricSize = size.converted(to: .milliliters).value
-        return metricSize
+    func updateDrinkForSaving(with newValue: Double) -> Double {
+        let metricValue = newValue.convert(
+            to: .milliliters,
+            from: isMetric ? .milliliters : .imperialPints
+        )
+        return metricValue.rounded()
     }
 
     func setupEditDrinkSubscription() {
@@ -166,25 +168,25 @@ final class SettingsViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] newValue in
                 guard let value = Double(newValue),
-                      let size = self?.updateDrink(with: value)
+                      let size = self?.updateDrinkForSaving(with: value)
                 else { return }
-                self?.smallDrink = size
+                self?.settingsRepository.smallDrink = size
             }.store(in: &tasks)
         $medium
             .removeDuplicates()
             .sink { [weak self] newValue in
                 guard let value = Double(newValue),
-                      let size = self?.updateDrink(with: value)
+                      let size = self?.updateDrinkForSaving(with: value)
                 else { return }
-                self?.mediumDrink = size
+                self?.settingsRepository.mediumDrink = size
             }.store(in: &tasks)
         $large
             .removeDuplicates()
             .sink { [weak self] newValue in
                 guard let value = Double(newValue),
-                      let size = self?.updateDrink(with: value)
+                      let size = self?.updateDrinkForSaving(with: value)
                 else { return }
-                self?.largeDrink = size
+                self?.settingsRepository.largeDrink = size
             }.store(in: &tasks)
     }
 
@@ -193,7 +195,7 @@ final class SettingsViewModel: ObservableObject {
             .sink { [weak self] isOn in
                 if self?.isRemindersOn != isOn {
                     if self?.remindersPremitted == true {
-                        self?.isRemindersOn = isOn
+                        self?.settingsRepository.isRemindersOn = isOn
                     }
                     self?.requestReminders()
                 }
@@ -211,15 +213,30 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func setDrinks() {
-        let smallSize = Measurement(value: smallDrink, unit: UnitVolume.milliliters)
-        let smallValue = smallSize.converted(to: isMetric ? .milliliters : .imperialPints).value
-        small = "\(smallValue.clean)"
-        let mediumSize = Measurement(value: mediumDrink, unit: UnitVolume.milliliters)
-        let mediumValue = mediumSize.converted(to: isMetric ? .milliliters : .imperialPints).value
-        medium = "\(mediumValue.clean)"
-        let largeSize = Measurement(value: largeDrink, unit: UnitVolume.milliliters)
-        let largeValue = largeSize.converted(to: isMetric ? .milliliters : .imperialPints).value
-        large = "\(largeValue.clean)"
+        var smallLocalDrink = smallDrink.convert(
+            to: isMetric ? .milliliters : .imperialPints,
+            from: .milliliters
+        )
+        if isMetric {
+            smallLocalDrink.round()
+        }
+        small = "\(smallLocalDrink.clean)"
+        var mediumLocalDrink = mediumDrink.convert(
+            to: isMetric ? .milliliters : .imperialPints,
+            from: .milliliters
+        )
+        if isMetric {
+            mediumLocalDrink.round()
+        }
+        medium = "\(mediumLocalDrink.clean)"
+        var largeLocalDrink = largeDrink.convert(
+            to: isMetric ? .milliliters : .imperialPints,
+            from: .milliliters
+        )
+        if isMetric {
+            largeLocalDrink.round()
+        }
+        large = "\(largeLocalDrink.clean)"
     }
 
     func incrementGoal() {
@@ -262,14 +279,14 @@ extension SettingsViewModel {
     func updateStartTime(with date: Date) {
         guard remindersStart != date else { return }
         guard remindersStart < remindersEnd else { return }
-        remindersStart = date
+        settingsRepository.remindersStart = date
         requestReminders()
     }
 
     func updateEndTime(with date: Date) {
         guard remindersEnd != date else { return }
         guard remindersStart < remindersEnd else { return }
-        remindersEnd = date
+        settingsRepository.remindersEnd = date
         requestReminders()
     }
 
@@ -283,7 +300,7 @@ extension SettingsViewModel {
               shouldIncrese || (frequency > 15) else { return }
         frequency += increment
         selectedFrequency = "\(frequency)"
-        reminderFrequency = frequency
+        settingsRepository.reminderFrequency = frequency
         requestReminders()
     }
 
