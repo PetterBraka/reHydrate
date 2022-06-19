@@ -224,11 +224,6 @@ struct SettingsView: View {
                 .font(.body)
             }
             .foregroundColor(.label)
-            .onAppear {
-                viewModel.small = viewModel.smallDrink.clean
-                viewModel.medium = viewModel.mediumDrink.clean
-                viewModel.large = viewModel.largeDrink.clean
-            }
             .sheet(item: $viewModel.showSheet) { sheet in
                 switch sheet {
                 case .editIcon:
