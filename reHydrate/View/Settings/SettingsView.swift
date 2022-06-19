@@ -224,6 +224,9 @@ struct SettingsView: View {
                 .font(.body)
             }
             .foregroundColor(.label)
+            .onAppear {
+                viewModel.setDrinks()
+            }
             .sheet(item: $viewModel.showSheet) { sheet in
                 switch sheet {
                 case .editIcon:
