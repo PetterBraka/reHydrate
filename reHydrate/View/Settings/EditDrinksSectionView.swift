@@ -96,7 +96,7 @@ struct EditDrinksSectionView: View {
                     }
                     .keyboardType(.numberPad)
                     .focused($focusedField, equals: .large)
-                    .font(.body)
+                    .font(.brandBody)
                     .multilineTextAlignment(.center)
                     .fixedSize()
                 Text(unit)

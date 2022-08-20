@@ -27,7 +27,7 @@ struct DrinkView: View {
                     .aspectRatio(contentMode: .fit)
                     .contrast(disable ? 0.1 : 1)
                 Text(getValue(for: drink))
-                    .font(.body)
+                    .font(.brandBody)
                     .foregroundColor(.label)
             }
         }

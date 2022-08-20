@@ -36,7 +36,7 @@ struct CalendarView: View {
                         }
                         Spacer()
                         Text(viewModel.header)
-                            .font(.largeTitle)
+                            .font(.brandLargeTitle)
                             .foregroundColor(.label)
                         Spacer()
                         Color.clear
@@ -46,21 +46,21 @@ struct CalendarView: View {
                     VStack(spacing: 16) {
                         HStack {
                             Text(LocalizedStringKey(Localizable.consumed))
-                                .font(.title)
+                                .font(.brandTitle)
                                 .foregroundColor(.label)
                             Spacer()
                             Text(viewModel.consumtion)
-                                .font(.title)
+                                .font(.brandTitle)
                                 .foregroundColor(.label)
                         }
                         Divider()
                         HStack {
                             Text(LocalizedStringKey(Localizable.average))
-                                .font(.title)
+                                .font(.brandTitle)
                                 .foregroundColor(.label)
                             Spacer()
                             Text(viewModel.average)
-                                .font(.title)
+                                .font(.brandTitle)
                                 .foregroundColor(.label)
                         }
                         Divider()

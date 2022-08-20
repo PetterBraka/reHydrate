@@ -18,12 +18,12 @@ struct OptionsButton: View {
     var body: some View {
         HStack {
             Text(title.local(language))
-                .font(.body)
+                .font(.brandBody)
             Spacer()
             Button(LocalizedStringKey(selectedItem)) {
                 isTapped.toggle()
             }
-            .font(.body)
+            .font(.brandBody)
             .tint(.label)
             .padding(.vertical, 4)
             .padding(.horizontal, 16)

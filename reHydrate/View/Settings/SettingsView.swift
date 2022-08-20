@@ -213,7 +213,7 @@ struct SettingsView: View {
                                 Text("\(Localizable.versionNumber.local(viewModel.language)) " +
                                     "\(viewModel.appVersion ?? "1.0.0")")
                             }
-                            .font(.body)
+                            .font(.brandBody)
                             .foregroundColor(Color.labelFaded)
                             Spacer()
                         }
@@ -221,7 +221,7 @@ struct SettingsView: View {
                     .listRowBackground(Color.clear)
                 }
                 .listStyle(.insetGrouped)
-                .font(.body)
+                .font(.brandBody)
             }
             .foregroundColor(.label)
             .onAppear {

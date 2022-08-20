@@ -63,11 +63,11 @@ struct AppIconSelectionView: View {
                         dismiss()
                     }
                     .foregroundColor(.label)
-                    .font(.title)
+                    .font(.brandTitle)
                 }
                 ToolbarItem(placement: .principal) {
                     Text(Localizable.appIcon.local(language))
-                        .font(.title)
+                        .font(.brandTitle)
                 }
             }
         }

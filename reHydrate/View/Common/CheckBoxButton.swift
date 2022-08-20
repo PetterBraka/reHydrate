@@ -27,16 +27,16 @@ struct CheckBoxButton: View {
         } label: {
             HStack {
                 Text(isChecked ? highlightedText.local(language) : text.local(language))
-                    .font(.body)
+                    .font(.brandBody)
                     .foregroundColor(.label)
                 Spacer()
                 if isChecked {
                     highlightedImage
-                        .font(.largeTitle)
+                        .font(.brandLargeTitle)
                         .foregroundColor(.button)
                 } else {
                     image
-                        .font(.largeTitle)
+                        .font(.brandLargeTitle)
                         .foregroundColor(.button)
                 }
             }

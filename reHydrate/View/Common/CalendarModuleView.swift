@@ -44,9 +44,9 @@ struct CalendarModuleView: UIViewRepresentable {
         calendar.swipeToChooseGesture.minimumPressDuration = 0.3
         calendar.firstWeekday = firsWeekday.rawValue
 
-        calendar.appearance.titleFont = .body
-        calendar.appearance.weekdayFont = .body
-        calendar.appearance.headerTitleFont = .title
+        calendar.appearance.titleFont = .brandBody
+        calendar.appearance.weekdayFont = .brandBody
+        calendar.appearance.headerTitleFont = .brandTitle
 
         calendar.appearance.headerTitleColor = .label
         calendar.appearance.weekdayTextColor = .label

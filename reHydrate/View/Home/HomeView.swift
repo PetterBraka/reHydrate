@@ -20,12 +20,12 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 16) {
             Text("reHydrate")
-                .font(.largeHeader)
+                .font(.brandLargeHeader)
                 .bold()
             Text(viewModel.getDate())
-                .font(.title)
+                .font(.brandTitle)
             Text("\(viewModel.getConsumed())/\(viewModel.getGoal())")
-                .font(.extraLargeTitle)
+                .font(.brandExtraLargeTitle)
                 .bold()
 
             Spacer()
@@ -95,7 +95,7 @@ struct HomeView: View {
                     viewModel.navigateToSettings()
                 } label: {
                     Image.settings
-                        .font(.largeHeader)
+                        .font(.brandLargeHeader)
                         .foregroundColor(.button)
                 }
 
@@ -105,7 +105,7 @@ struct HomeView: View {
                     viewModel.navigateToCalendar()
                 } label: {
                     Image.calender
-                        .font(.largeHeader)
+                        .font(.brandLargeHeader)
                         .foregroundColor(.button)
                 }
             }

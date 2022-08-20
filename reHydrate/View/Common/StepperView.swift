@@ -26,7 +26,7 @@ struct StepperView: View {
 
             Button {} label: {
                 Text(value)
-                    .font(.body)
+                    .font(.brandBody)
                     .fixedSize(horizontal: true, vertical: false)
                     .frame(height: 16)
             }

@@ -46,7 +46,7 @@ struct CreditsView: View {
                             }
                             .contentShape(Rectangle())
                         }
-                        .font(.body)
+                        .font(.brandBody)
                         .foregroundColor(.label)
                         if credit != credits.last {
                             Divider()
@@ -68,7 +68,7 @@ struct CreditsView: View {
                         Image.open
                     }
                     .contentShape(Rectangle())
-                    .font(.body)
+                    .font(.brandBody)
                     .foregroundColor(.label)
                 }
                 .padding()
@@ -84,11 +84,11 @@ struct CreditsView: View {
                         dismiss()
                     }
                     .foregroundColor(.label)
-                    .font(.title)
+                    .font(.brandTitle)
                 }
                 ToolbarItem(placement: .principal) {
                     Text(Localizable.thankYou.local(language))
-                        .font(.title)
+                        .font(.brandTitle)
                         .foregroundColor(.label)
                 }
             }

@@ -96,7 +96,7 @@ struct WaveView<Content: View>: View {
                 Spacer(minLength: emptySpace)
                 GeometryReader { proxy in
                     Text(currentFill)
-                        .font(.body)
+                        .font(.brandBody)
                         .padding(8)
                         .foregroundColor(.labelHighlighted)
                         .background(
