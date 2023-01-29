@@ -970,6 +970,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		330C23D727665F6600293092 /* Run BuildTools */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -988,6 +989,7 @@
 		};
 		337F1B13277D4BE500B2A819 /* Run upload to firebase */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
