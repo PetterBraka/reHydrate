@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct DrinkView: View {
-    private let settingsRepository: SettingsRepository = .shared
+    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var isMetric: Bool { settingsRepository.isMetric }
     @ObservedObject var viewModel: HomeViewModel
 

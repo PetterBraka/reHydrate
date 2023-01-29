@@ -18,7 +18,7 @@ class NotificationManager {
         var body = String()
     }
 
-    private let settingsRepository: SettingsRepository = .shared
+    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
     var isMetric: Bool { settingsRepository.isMetric }
     var isRemindersOn: Bool { settingsRepository.isRemindersOn }
@@ -29,8 +29,6 @@ class NotificationManager {
     var mediumDrink: Double { settingsRepository.mediumDrink }
     var largeDrink: Double { settingsRepository.largeDrink }
     var hasReachedGoal: Bool { settingsRepository.hasReachedGoal }
-
-    static let shared = NotificationManager()
 
     let center = UNUserNotificationCenter.current()
 

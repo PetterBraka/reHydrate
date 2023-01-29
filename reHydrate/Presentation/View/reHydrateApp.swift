@@ -12,7 +12,7 @@ import SwiftUI
 @main
 struct reHydrateApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    private let settingsRepository: SettingsRepository = .shared
+    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     private var isDarkMode: Bool { settingsRepository.isDarkMode }
 
     init() {

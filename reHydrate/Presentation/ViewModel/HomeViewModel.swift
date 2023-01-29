@@ -19,7 +19,7 @@ final class HomeViewModel: NSObject, ObservableObject {
         case health
     }
 
-    private let settingsRepository: SettingsRepository = .shared
+    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
     var isMetric: Bool { settingsRepository.isMetric }
     var smallDrink: Double { settingsRepository.smallDrink }
@@ -33,7 +33,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     @Published var interactedDrink: Drink?
     @Published private var accessRequested: [AccessType] = []
 
-    private var notificationManager = NotificationManager.shared
+    private var notificationManager: NotificationManager = MainAssembler.resolve()
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
     private var tasks = Set<AnyCancellable>()
 

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct EditDrinksSectionView: View {
-    private let settingsRepository: SettingsRepository = .shared
+    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var isMetric: Bool { settingsRepository.isMetric }
     @FocusState var focusedField: SettingsView.Field?
     @Binding var small: String

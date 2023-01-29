@@ -12,7 +12,7 @@ import SwiftUI
 import Swinject
 
 final class CalendarViewModel: ObservableObject {
-    private let settingsRepository: SettingsRepository = .shared
+    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     private let dayService: DayServiceProtocol = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
     var isMetric: Bool { settingsRepository.isMetric }

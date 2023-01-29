@@ -171,6 +171,7 @@
 		33EC3A9B275BE8690049E414 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A9A275BE8690049E414 /* HealthManager.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F4521127C14D7A00CF68A2 /* WaveView.swift */; };
+		A132EF872986BE9D006C5DB1 /* RepositoryAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A132EF862986BE9D006C5DB1 /* RepositoryAssembly.swift */; };
 		A13A2A4828551E930039084A /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13A2A4728551E930039084A /* SettingsRepository.swift */; };
 		A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */; };
 		A1BD34A5285F3E7C00876A3D /* UICollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */; };
@@ -374,6 +375,7 @@
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		33F4521127C14D7A00CF68A2 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
+		A132EF862986BE9D006C5DB1 /* RepositoryAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryAssembly.swift; sourceTree = "<group>"; };
 		A13A2A4728551E930039084A /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
 		A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
 		A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollection+Extensions.swift"; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 				332315FC2742B61D0039EE23 /* MainAssembler.swift */,
 				332315FE2742B6920039EE23 /* ViewModelAssembler.swift */,
 				33231621274A6FC70039EE23 /* ManagerAssembly.swift */,
+				A132EF862986BE9D006C5DB1 /* RepositoryAssembly.swift */,
 			);
 			path = DI;
 			sourceTree = "<group>";
@@ -1043,6 +1046,7 @@
 				33EC3A8A2756C5090049E414 /* OptionsButton.swift in Sources */,
 				33231608274306BA0039EE23 /* CalendarView.swift in Sources */,
 				33DC394C27DE093100361022 /* EditDrinkViewModel.swift in Sources */,
+				A132EF872986BE9D006C5DB1 /* RepositoryAssembly.swift in Sources */,
 				332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */,
 				332315EE274278340039EE23 /* Font.swift in Sources */,
 				33231619274420E60039EE23 /* reHydrate.xcdatamodeld in Sources */,

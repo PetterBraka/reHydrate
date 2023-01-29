@@ -17,7 +17,7 @@ class EditDrinkViewModel: ObservableObject {
     @Published var maxFill: CGFloat
     var emptySpace: CGFloat
 
-    private let settingsRepository: SettingsRepository = .shared
+    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var isMetric: Bool { settingsRepository.isMetric }
     var smallDrink: Double { settingsRepository.smallDrink }
     var mediumDrink: Double { settingsRepository.mediumDrink }
