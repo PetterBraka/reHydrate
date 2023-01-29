@@ -14,19 +14,23 @@ protocol DayRepositoryProtocol {
 }
 
 final class DayRepository {
-    let service: DayService = MainAssembler.resolve()
+    let service: DayServiceProtocol = MainAssembler.resolve()
 
     init() {}
+    
+    func fetchDay(for date: Date = .now) async throws -> Day {
+        if let today = try? await service.getDay(for: date) {
+            return today
+        } else {
+            return try await createToday()
+        }
+    }
 
-    func createToday() async throws -> Day {
+    private func createToday() async throws -> Day {
         let previusGoal = try await service.getLatestGoal()
         let today = Day(id: UUID(), consumption: 0, goal: previusGoal ?? 3, date: Date())
         try await service.create(day: today)
         return today
-    }
-
-    func fetchToday() async throws -> Day {
-        try await service.getDay(for: Date())
     }
 
     func addDrink(of size: Double, to day: Day) async throws {

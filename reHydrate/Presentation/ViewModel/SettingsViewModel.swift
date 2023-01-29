@@ -24,7 +24,7 @@ final class SettingsViewModel: ObservableObject {
     
     private let notificationManager: NotificationManager = MainAssembler.resolve()
     private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
-    private let dayManager: DayRepository = MainAssembler.resolve()
+    private let dayRepository: DayRepository = MainAssembler.resolve()
 
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
@@ -310,7 +310,7 @@ extension SettingsViewModel {
     func fetchToday() {
         Task {
             do {
-                let day = try await dayManager.fetchToday()
+                let day = try await dayRepository.fetchDay()
                 self.today = day
                 if day.goal > 0 {
                     selectedGoal = "\(day.goal.clean)"
@@ -321,22 +321,10 @@ extension SettingsViewModel {
         }
     }
 
-    private func saveAndFetch() {
-        Task {
-            do {
-                print(today)
-                fetchToday()
-            } catch {
-                print("Error saving \(error)")
-            }
-        }
-    }
-
     private func updateGoal(_ newGoal: Double) {
         Task {
             do {
-                try await dayManager.update(goal: newGoal, for: Date())
-                saveAndFetch()
+                try await dayRepository.update(goal: newGoal, for: Date())
             } catch {
                 print("Error adding drink of type: \(newGoal), Error: \(error)")
             }

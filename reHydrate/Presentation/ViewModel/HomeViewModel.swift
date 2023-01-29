@@ -38,7 +38,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
-    private var dayManager: DayRepository = MainAssembler.resolve()
+    private var dayRepository: DayRepository = MainAssembler.resolve()
 
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -170,38 +170,18 @@ final class HomeViewModel: NSObject, ObservableObject {
 // MARK: Save & Load
 
 extension HomeViewModel {
-    @MainActor
-    private func createNewDay() {
-        Task {
-            do {
-                let day = try await dayManager.createToday()
-                today = day
-            } catch {
-                print("Couldn't create new day for today. \(error.localizedDescription)")
-            }
-        }
-    }
 
     @MainActor
     func fetchToday() {
         Task {
             do {
-                let day = try await dayManager.fetchToday()
+                let day = try await dayRepository.fetchDay()
                 self.today = day
                 notificationManager.requestReminders(for: day)
                 exportToWatch(today: day)
             } catch {
-                createNewDay()
+                print("Failed to get today\(error.localizedDescription)")
             }
-        }
-    }
-
-    private func saveAndFetch() async {
-        do {
-            try await dayManager.saveChanges()
-            await fetchToday()
-        } catch {
-            print("Error saving \(error)")
         }
     }
 
@@ -210,7 +190,7 @@ extension HomeViewModel {
         Analytics.track(event: .addDrink)
         Task {
             do {
-                try await dayManager.addDrink(of: consumed, to: today)
+                try await dayRepository.addDrink(of: consumed, to: today)
                 export(drink: drink)
                 await fetchToday()
             } catch {
@@ -226,7 +206,7 @@ extension HomeViewModel {
         Task {
             let drink = Drink(type: drink.type, size: -drink.size)
             do {
-                try await dayManager.removeDrink(of: consumed < 0 ? 0 : consumed, to: today)
+                try await dayRepository.removeDrink(of: consumed < 0 ? 0 : consumed, to: today)
                 export(drink: drink)
                 await fetchToday()
             } catch {
@@ -238,7 +218,7 @@ extension HomeViewModel {
     private func update(consumption value: Double, for date: Date) {
         Task {
             do {
-                try await dayManager.update(consumption: value, for: date)
+                try await dayRepository.update(consumption: value, for: date)
                 await fetchToday()
             } catch {
                 print("Error updating todays consumption: \(value), Error: \(error)")
@@ -348,12 +328,12 @@ extension HomeViewModel: WCSessionDelegate {
             Task {
                 do {
                     print(data)
-                    let day = try await dayManager.service.getDay(for: watchDate)
+                    let day = try await dayRepository.fetchDay(for: watchDate)
                     try updateWatchWith(watchConsumed, watchDate, for: day)
                 } catch {
                     if let error = error as? CoreDataError, error == .elementNotFound {
                         Task {
-                            let day = try await dayManager.createToday()
+                            let day = try await dayRepository.fetchDay()
                             try updateWatchWith(watchConsumed, watchDate, for: day)
                         }
                     }
