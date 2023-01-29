@@ -13,6 +13,7 @@ import Swinject
 
 final class CalendarViewModel: ObservableObject {
     private let settingsRepository: SettingsRepository = .shared
+    private let dayService: DayServiceProtocol = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
     var isMetric: Bool { settingsRepository.isMetric }
 
@@ -24,12 +25,9 @@ final class CalendarViewModel: ObservableObject {
     @Published var consumtion = ""
     @Published var average = ""
 
-    private var presistenceController: PresistenceControllerProtocol
-    private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
-    private var dayManager: DayManager
 
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -39,9 +37,6 @@ final class CalendarViewModel: ObservableObject {
 
     init(presistenceController: PresistenceControllerProtocol,
          navigateTo: @escaping ((AppState) -> Void)) {
-        self.presistenceController = presistenceController
-        viewContext = presistenceController.container.viewContext
-        dayManager = DayManager(context: viewContext)
         self.navigateTo = navigateTo
         fetchDays()
         setUpSubscriptions()
@@ -108,7 +103,7 @@ extension CalendarViewModel {
     private func fetchDays() {
         Task { @MainActor in
             do {
-                let days = try await dayManager.dayRepository.getDays()
+                let days = try await dayService.getDays()
                 storedDays = days
                 getConsumed(for: days)
                 getAverage(for: days)

@@ -11,7 +11,7 @@ import SwiftUI
 class SettingsRepository: ObservableObject {
     static let shared = SettingsRepository()
 
-    @AppStorage("language") var language = LocalizationService.shared.language
+    @AppStorage("language") var language = LocalizationHelper.shared.language
     @Preference(\.isDarkMode) var isDarkMode
     @Preference(\.isUsingMetric) var isMetric
     @Preference(\.isRemindersOn) var isRemindersOn

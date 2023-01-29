@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct EditDrinkView: View {
-    @AppStorage("language") private var language = LocalizationService.shared.language
+    @AppStorage("language") private var language = LocalizationHelper.shared.language
     @StateObject var viewModel: EditDrinkViewModel
 
     var action: () -> Void

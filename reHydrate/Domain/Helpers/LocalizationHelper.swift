@@ -1,5 +1,5 @@
 //
-//  LocalizationService.swift
+//  LocalizationHelper.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 03/12/2021.
@@ -15,8 +15,8 @@ enum Language: String {
     case german = "de"
 }
 
-class LocalizationService {
-    static let shared = LocalizationService()
+class LocalizationHelper {
+    static let shared = LocalizationHelper()
 
     private init() {}
 

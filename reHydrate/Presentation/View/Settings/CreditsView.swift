@@ -13,7 +13,7 @@ struct CreditsView: View {
         var name, webSite, icons: String
     }
 
-    @AppStorage("language") var language = LocalizationService.shared.language
+    @AppStorage("language") var language = LocalizationHelper.shared.language
     @State var credits: [Credit] =
         [
             Credit(name: "Petter Vang Braklsvålet",

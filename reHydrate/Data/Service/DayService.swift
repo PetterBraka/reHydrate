@@ -22,59 +22,57 @@ protocol DayServiceProtocol {
 }
 
 final class DayService: DayServiceProtocol {
-    private let repo: CoreDataManager<DayModel>
+    private let manager: CoreDataManager<DayModel>
     private let defaultSort = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
-
+    
     init(context: NSManagedObjectContext) {
-        repo = CoreDataManager<DayModel>(context: context)
+        manager = CoreDataManager<DayModel>(context: context)
     }
-
+    
     func create(day: Day) async throws {
-        let dayModel = try await repo.create()
+        let dayModel = try await manager.create()
         dayModel.updateCoreDataModel(day)
     }
-
+    
     func delete(day: Day) async throws {
         let predicate = NSPredicate(format: "id == %@", day.id.uuidString)
-        let day = try await repo.get(using: predicate,
-                                     sortDescriptors: defaultSort)
-        repo.delete(day)
+        let day = try await manager.get(using: predicate,
+                                        sortDescriptors: defaultSort)
+        manager.delete(day)
     }
-
+    
     func getDay(for date: Date) async throws -> Day {
         let datePredicate = getPredicate(from: date)
-        let day = try await repo.get(using: datePredicate,
-                                     sortDescriptors: defaultSort)
+        let day = try await manager.get(using: datePredicate,
+                                        sortDescriptors: defaultSort)
         return day.toDomainModel()
     }
-
+    
     func getLatestGoal() async throws -> Double? {
-        let dayModel = try await repo.getLastObject(using: nil,
-                                                    sortDescriptors: defaultSort)
+        let dayModel = try await manager.getLastObject(using: nil,
+                                                       sortDescriptors: defaultSort)
         let day = dayModel?.toDomainModel()
         return day?.goal
     }
-
+    
     func getDays() async throws -> [Day] {
-        let dayModels = try await repo.getAll(using: nil,
-                                              sortDescriptors: defaultSort)
-        let days = dayModels.map { daysModel -> Day in
-            daysModel.toDomainModel()
-        }
+        let dayModels = try await manager.getAll(using: nil,
+                                                 sortDescriptors: defaultSort)
+        let days = dayModels.map { $0.toDomainModel() }
         return days
     }
-
+    
     func update(goal: Double, for date: Date) async throws {
         let datePredicate = getPredicate(from: date)
-        let day = try await repo.get(using: datePredicate,
-                                     sortDescriptors: defaultSort)
+        let day = try await manager.get(using: datePredicate,
+                                        sortDescriptors: defaultSort)
         day.goal = goal
     }
-
+    
     func update(consumption: Double, for date: Date) async throws {
         let datePredicate = getPredicate(from: date)
-        let day = try await repo.get(using: datePredicate,
-                                     sortDescriptors: defaultSort)
+        let day = try await manager.get(using: datePredicate,
+                                        sortDescriptors: defaultSort)
         day.consumtion = consumption
     }
     

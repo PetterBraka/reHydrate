@@ -20,4 +20,12 @@ final class MainAssembler {
         assembler = Assembler([ViewModelAssembler(), ManagerAssembly()],
                               container: container)
     }
+    
+    public static func resolve<T>() -> T {
+        if let object = shared.container.resolve(T.self) {
+            return object
+        } else {
+            fatalError("Tried to resolve \(T.self) but it wasn't found.")
+        }
+    }
 }

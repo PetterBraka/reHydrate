@@ -20,7 +20,7 @@ struct CalendarModuleView: UIViewRepresentable {
         case sunday = 1
     }
 
-    @AppStorage("language") var language = LocalizationService.shared.language
+    @AppStorage("language") var language = LocalizationHelper.shared.language
     @Binding var selectedDays: [Day]
     @Binding var storedDays: [Day]
     var firsWeekday: DayOfTheWeek

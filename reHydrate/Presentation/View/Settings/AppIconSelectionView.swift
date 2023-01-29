@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct AppIconSelectionView: View {
-    @AppStorage("language") var language = LocalizationService.shared.language
+    @AppStorage("language") var language = LocalizationHelper.shared.language
 
     @EnvironmentObject var iconSettings: IconHelper
     @State var selectedIcon: Icon
