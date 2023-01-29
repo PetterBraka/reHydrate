@@ -11,6 +11,13 @@ import SwiftUI
 struct Drink: Identifiable, Hashable {
     var id = UUID()
 
+    var type: Option
+    var size: Double
+
+    var fill: Double {
+        size / Double(type.max)
+    }
+    
     enum Option {
         case small
         case medium
@@ -24,7 +31,7 @@ struct Drink: Identifiable, Hashable {
             }
         }
 
-        func getMax() -> Int {
+        var max: Int {
             switch self {
             case .small: return 400
             case .medium: return 700
@@ -32,19 +39,12 @@ struct Drink: Identifiable, Hashable {
             }
         }
 
-        func getMin() -> Int {
+        var min: Int {
             switch self {
             case .small: return 100
             case .medium: return 300
             case .large: return 500
             }
         }
-    }
-
-    var type: Option
-    var size: Double
-
-    func getFill() -> Double {
-        size / Double(type.getMax())
     }
 }

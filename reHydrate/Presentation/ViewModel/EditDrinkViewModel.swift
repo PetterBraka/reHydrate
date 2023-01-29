@@ -38,7 +38,7 @@ class EditDrinkViewModel: ObservableObject {
             emptySpace = 75
         }
 
-        let max = Double(drink.type.getMax())
+        let max = Double(drink.type.max)
         let level = Double(drink.size) / max
         fillLevel = level
         setupSubscribers()
@@ -49,7 +49,7 @@ class EditDrinkViewModel: ObservableObject {
             .sink { [weak self] fill in
                 guard let drink = self?.selectedDrink,
                       let isMetric = self?.isMetric else { return }
-                let max = drink.type.getMax()
+                let max = drink.type.max
                 var size: Double
                 size = Double(max) * Double(fill)
                 var drinkValue = size.convert(
@@ -65,7 +65,7 @@ class EditDrinkViewModel: ObservableObject {
     }
 
     func select(_ drink: Drink) {
-        let max = drink.type.getMax()
+        let max = drink.type.max
         selectedDrink = drink
         fillLevel = CGFloat(drink.size / Double(max))
     }

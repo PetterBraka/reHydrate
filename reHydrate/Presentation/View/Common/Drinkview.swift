@@ -22,7 +22,7 @@ struct DrinkView: View {
             tapAction()
         } label: {
             VStack {
-                drink.type.getImage(with: drink.getFill())
+                drink.type.getImage(with: drink.fill)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .contrast(disable ? 0.1 : 1)
