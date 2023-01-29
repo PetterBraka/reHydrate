@@ -15,14 +15,11 @@ protocol Repository {
 
     func create() async throws -> Day
     func delete(_ day: Day)
-    func get(id: String,
-             predicate: NSPredicate?,
+    func get(using predicate: NSPredicate?,
              sortDescriptors: [NSSortDescriptor]?) async throws -> Day
-    func get(date: Date,
-             predicate: NSPredicate?,
-             sortDescriptors: [NSSortDescriptor]?) async throws -> Day
-    func getLastObject(predicate: NSPredicate?) async throws -> Day?
-    func getAll(predicate: NSPredicate?,
+    func getLastObject(using predicate: NSPredicate?,
+                       sortDescriptors: [NSSortDescriptor]?) async throws -> Day?
+    func getAll(using predicate: NSPredicate?,
                 sortDescriptors: [NSSortDescriptor]?) async throws -> [Day]
 }
 
@@ -52,14 +49,12 @@ class CoreDataRepository<Day: NSManagedObject>: Repository {
         managedObjectContext.delete(day)
     }
 
-    func get(id: String,
-             predicate: NSPredicate?,
+    func get(using predicate: NSPredicate?,
              sortDescriptors: [NSSortDescriptor]?) async throws -> Day {
         let entityName = String(describing: Day.self)
         let request = NSFetchRequest<Day>(entityName: entityName)
         request.sortDescriptors = sortDescriptors
         request.predicate = predicate
-        request.predicate = NSPredicate(format: "id == %@", id)
         guard let results = try? managedObjectContext.fetch(request) else {
             throw CoreDataError.invalidManagedObjectType
         }
@@ -69,35 +64,11 @@ class CoreDataRepository<Day: NSManagedObject>: Repository {
         return singleElement
     }
 
-    func get(date: Date,
-             predicate: NSPredicate?,
-             sortDescriptors: [NSSortDescriptor]?) async throws -> Day {
+    func getLastObject(using predicate: NSPredicate?,
+                       sortDescriptors: [NSSortDescriptor]?) async throws -> Day? {
         let entityName = String(describing: Day.self)
         let request = NSFetchRequest<Day>(entityName: entityName)
-        request.sortDescriptors = sortDescriptors
-        request.predicate = predicate
-        // Get day's beginning & tomorrows beginning time
-        let startOfDay = Calendar.current.startOfDay(for: date)
-        let startOfNextDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)
-        // Sets conditions for date to be within day
-        let fromPredicate = NSPredicate(format: "date >= %@", startOfDay as NSDate)
-        let toPredicate = NSPredicate(format: "date < %@", startOfNextDay! as NSDate)
-        let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates:
-            [fromPredicate, toPredicate])
-        request.predicate = datePredicate
-        guard let results = try? managedObjectContext.fetch(request) else {
-            throw CoreDataError.elementNotFound
-        }
-        guard let singleElement = results.first else {
-            throw CoreDataError.elementNotFound
-        }
-        return singleElement
-    }
-
-    func getLastObject(predicate: NSPredicate?) async throws -> Day? {
-        let entityName = String(describing: Day.self)
-        let request = NSFetchRequest<Day>(entityName: entityName)
-        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+        request.sortDescriptors = []
         request.predicate = predicate
         request.fetchLimit = 1
 
@@ -107,7 +78,7 @@ class CoreDataRepository<Day: NSManagedObject>: Repository {
         return results.first
     }
 
-    func getAll(predicate: NSPredicate?,
+    func getAll(using predicate: NSPredicate?,
                 sortDescriptors: [NSSortDescriptor]?) async throws -> [Day] {
         let entityName = String(describing: Day.self)
         let request = NSFetchRequest<Day>(entityName: entityName)

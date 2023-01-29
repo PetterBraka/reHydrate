@@ -23,8 +23,7 @@ protocol DayRepositoryInterface {
 
 final class DayRepository: DayRepositoryInterface {
     private let repo: CoreDataRepository<DayModel>
-    private let repoPredicate = NSPredicate(format: "TRUEPREDICATE")
-    private let repoSortDescriptors = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
+    private let defaultSort = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
 
     init(context: NSManagedObjectContext) {
         repo = CoreDataRepository<DayModel>(context: context)
@@ -36,27 +35,29 @@ final class DayRepository: DayRepositoryInterface {
     }
 
     func delete(day: Day) async throws {
-        let day = try await repo.get(id: day.id.uuidString,
-                                     predicate: repoPredicate,
-                                     sortDescriptors: repoSortDescriptors)
+        let predicate = NSPredicate(format: "id == %@", day.id.uuidString)
+        let day = try await repo.get(using: predicate,
+                                     sortDescriptors: defaultSort)
         repo.delete(day)
     }
 
     func getDay(for date: Date) async throws -> Day {
-        let day = try await repo.get(date: date,
-                                     predicate: repoPredicate,
-                                     sortDescriptors: repoSortDescriptors)
+        let datePredicate = getPredicate(from: date)
+        let day = try await repo.get(using: datePredicate,
+                                     sortDescriptors: defaultSort)
         return day.toDomainModel()
     }
 
     func getLatestGoal() async throws -> Double? {
-        let dayModel = try await repo.getLastObject(predicate: repoPredicate)
+        let dayModel = try await repo.getLastObject(using: nil,
+                                                    sortDescriptors: defaultSort)
         let day = dayModel?.toDomainModel()
         return day?.goal
     }
 
     func getDays() async throws -> [Day] {
-        let dayModels = try await repo.getAll(predicate: repoPredicate, sortDescriptors: repoSortDescriptors)
+        let dayModels = try await repo.getAll(using: nil,
+                                              sortDescriptors: defaultSort)
         let days = dayModels.map { daysModel -> Day in
             daysModel.toDomainModel()
         }
@@ -64,16 +65,28 @@ final class DayRepository: DayRepositoryInterface {
     }
 
     func update(goal: Double, for date: Date) async throws {
-        let day = try await repo.get(date: date,
-                                     predicate: repoPredicate,
-                                     sortDescriptors: repoSortDescriptors)
+        let datePredicate = getPredicate(from: date)
+        let day = try await repo.get(using: datePredicate,
+                                     sortDescriptors: defaultSort)
         day.goal = goal
     }
 
     func update(consumption: Double, for date: Date) async throws {
-        let day = try await repo.get(date: date,
-                                     predicate: repoPredicate,
-                                     sortDescriptors: repoSortDescriptors)
+        let datePredicate = getPredicate(from: date)
+        let day = try await repo.get(using: datePredicate,
+                                     sortDescriptors: defaultSort)
         day.consumtion = consumption
+    }
+    
+    private func getPredicate(from date: Date) -> NSCompoundPredicate {
+        // Get day's beginning & tomorrows beginning time
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        let startOfNextDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)
+        // Sets conditions for date to be within day
+        let fromPredicate = NSPredicate(format: "date >= %@", startOfDay as NSDate)
+        let toPredicate = NSPredicate(format: "date < %@", startOfNextDay! as NSDate)
+        let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates:
+                                                    [fromPredicate, toPredicate])
+        return datePredicate
     }
 }
