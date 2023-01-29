@@ -23,10 +23,10 @@ final class SettingsViewModel: ObservableObject {
     }
     
     private let notificationManager: NotificationManager = MainAssembler.resolve()
+    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
     private let dayRepository: DayRepository = MainAssembler.resolve()
 
-    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
     var isDarkMode: Bool { settingsRepository.isDarkMode }
     var isMetric: Bool { settingsRepository.isMetric }

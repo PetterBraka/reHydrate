@@ -18,6 +18,10 @@ final class HomeViewModel: NSObject, ObservableObject {
         case notification
         case health
     }
+    
+    private let notificationManager: NotificationManager = MainAssembler.resolve()
+    private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
+    private let dayRepository: DayRepository = MainAssembler.resolve()
 
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
@@ -32,13 +36,9 @@ final class HomeViewModel: NSObject, ObservableObject {
     @Published var showAlert: Bool = false
     @Published var interactedDrink: Drink?
     @Published private var accessRequested: [AccessType] = []
-
-    private var notificationManager: NotificationManager = MainAssembler.resolve()
-    private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
-    private var dayRepository: DayRepository = MainAssembler.resolve()
 
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()

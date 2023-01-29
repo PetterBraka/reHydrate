@@ -9,15 +9,6 @@
 import CoreData
 import Foundation
 
-//protocol DayServiceProtocol {
-//    func create(day: Day) async throws
-//    func delete(day: Day) async throws
-//    func getDay(for date: Date) async throws -> Day
-//    func getLatestGoal() async throws -> Double?
-//    func getDays() async throws -> [Day]
-//    func update(goal: Double, for day: Date) async throws
-//    func update(consumption: Double, for day: Date) async throws
-//}
 protocol ServiceProtocol {
     associatedtype DomainModel
     associatedtype DataModel
