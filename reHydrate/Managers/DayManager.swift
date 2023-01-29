@@ -12,11 +12,11 @@ import Foundation
 
 final class DayManager {
     private let context: NSManagedObjectContext
-    let dayRepository: DayRepository
+    let dayRepository: DayService
 
     init(context: NSManagedObjectContext) {
         self.context = context
-        dayRepository = DayRepository(context: context)
+        dayRepository = DayService(context: context)
     }
 
     func saveChanges() async throws {

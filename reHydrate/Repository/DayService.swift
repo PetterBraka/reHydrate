@@ -1,5 +1,5 @@
 //
-//  DayRepository.swift
+//  DayService.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 16/11/2021.
@@ -11,7 +11,7 @@ import CoreAudio
 import CoreData
 import Foundation
 
-protocol DayRepositoryInterface {
+protocol DayServiceProtocol {
     func create(day: Day) async throws
     func delete(day: Day) async throws
     func getDay(for date: Date) async throws -> Day
@@ -21,7 +21,7 @@ protocol DayRepositoryInterface {
     func update(consumption: Double, for day: Date) async throws
 }
 
-final class DayRepository: DayRepositoryInterface {
+final class DayService: DayServiceProtocol {
     private let repo: CoreDataManager<DayModel>
     private let defaultSort = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
 
