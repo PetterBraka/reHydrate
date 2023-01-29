@@ -18,10 +18,11 @@ final class DrinkService: ServiceProtocol {
         manager = CoreDataManager<DrinkModel>(context: context)
     }
     
-    func create(_ item: Drink) async throws {
+    func create(_ item: Drink) async throws -> DrinkModel{
         let drinkModel = try await manager.create()
         drinkModel.updateCoreDataModel(item)
         try await save()
+        return drinkModel
     }
     
     func delete(_ item: Drink) async throws {

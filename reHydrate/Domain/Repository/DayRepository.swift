@@ -12,18 +12,20 @@ import Foundation
 protocol DayRepositoryProtocol {
     func fetchDay(for date: Date) async throws -> Day
     func fetchAll() async throws -> [Day]
-    func addDrink(of size: Double, to day: Day) async throws
-    func removeDrink(of size: Double, to day: Day) async throws
+    func addDrink(of size: Double, to day: Day) async throws -> Day
+    func removeDrink(of size: Double, to day: Day) async throws -> Day
     func update(consumption newConsumption: Double, forDayAt date: Date) async throws -> Day
     func update(goal newGoal: Double, forDayAt date: Date) async throws -> Day
 }
 
-final class DayRepository {
-    let service: DayService = MainAssembler.resolve()
+final class DayRepository: DayRepositoryProtocol {
+    let service: DayService
 
-    init() {}
+    init(service: DayService) {
+        self.service = service
+    }
     
-    func fetchDay(for date: Date = .now) async throws -> Day {
+    func fetchDay(for date: Date) async throws -> Day {
         if let today = try? await service.getElement(for: date) {
             return today.toDomainModel()
         } else {
@@ -39,8 +41,7 @@ final class DayRepository {
     private func createToday() async throws -> Day {
         let previusGoal = try await service.getLatestElement().goal
         let today = Day(id: UUID(), consumption: 0, goal: previusGoal, date: Date())
-        try await service.create(today)
-        return today
+        return try await service.create(today).toDomainModel()
     }
 
     func addDrink(of size: Double, to day: Day) async throws -> Day {

@@ -13,5 +13,13 @@ class RepositoryAssembly: Assembly {
         container.register(SettingsRepository.self) { _ in
             SettingsRepository()
         }.inObjectScope(.container)
+        
+        container.register(DayRepositoryProtocol.self) { resolver in
+            DayRepository(service: resolver.resolve(DayService.self)!)
+        }.inObjectScope(.container)
+        
+        container.register(DrinkRepositoryProtocol.self) { resolver in
+            DrinkRepository(service: resolver.resolve(DrinkService.self)!)
+        }.inObjectScope(.container)
     }
 }

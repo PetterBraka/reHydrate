@@ -21,7 +21,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     
     private let notificationManager: NotificationManager = MainAssembler.resolve()
     private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
-    private let dayRepository: DayRepository = MainAssembler.resolve()
+    private let dayRepository: DayRepositoryProtocol = MainAssembler.resolve()
 
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
@@ -180,7 +180,7 @@ extension HomeViewModel {
     func fetchToday() {
         Task {
             do {
-                let day = try await dayRepository.fetchDay()
+                let day = try await dayRepository.fetchDay(for: .now)
                 today = day
             } catch {
                 print("Failed to get today\(error.localizedDescription)")
@@ -337,7 +337,7 @@ extension HomeViewModel: WCSessionDelegate {
                 } catch {
                     if let error = error as? CoreDataError, error == .elementNotFound {
                         Task {
-                            let day = try await dayRepository.fetchDay()
+                            let day = try await dayRepository.fetchDay(for: .now)
                             try updateWatchWith(watchConsumed, watchDate, for: day)
                         }
                     }

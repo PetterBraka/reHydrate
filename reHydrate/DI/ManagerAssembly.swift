@@ -23,9 +23,5 @@ class ManagerAssembly: Assembly {
         container.register(NotificationManager.self) { _ in
             NotificationManager()
         }.inObjectScope(.container)
-        
-        container.register(DayRepository.self) { resolver in
-            DayRepository()
-        }.inObjectScope(.container)
     }
 }

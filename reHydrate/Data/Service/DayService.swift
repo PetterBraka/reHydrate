@@ -17,10 +17,11 @@ final class DayService: ServiceProtocol {
         manager = CoreDataManager<DayModel>(context: context)
     }
     
-    func create(_ item: Day) async throws {
+    func create(_ item: Day) async throws -> DayModel {
         let dayModel = try await manager.create()
         dayModel.updateCoreDataModel(item)
         try await save()
+        return dayModel
     }
     
     func delete(_ item: Day) async throws {

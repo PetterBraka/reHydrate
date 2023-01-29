@@ -25,7 +25,7 @@ final class SettingsViewModel: ObservableObject {
     private let notificationManager: NotificationManager = MainAssembler.resolve()
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
-    private let dayRepository: DayRepository = MainAssembler.resolve()
+    private let dayRepository: DayRepositoryProtocol = MainAssembler.resolve()
 
     var language: Language { settingsRepository.language }
     var isDarkMode: Bool { settingsRepository.isDarkMode }
@@ -310,7 +310,7 @@ extension SettingsViewModel {
     func fetchToday() {
         Task {
             do {
-                let day = try await dayRepository.fetchDay()
+                let day = try await dayRepository.fetchDay(for: .now)
                 today = day
             } catch {
                 print("Failed fetching day \(error)")
