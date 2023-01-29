@@ -35,13 +35,10 @@ final class HomeViewModel: NSObject, ObservableObject {
 
     private var notificationManager = NotificationManager.shared
     private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
-
-    private var presistenceController: PresistenceControllerProtocol
-    private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
-    private var dayManager: DayManager
+    private var dayManager: DayManager = MainAssembler.resolve()
 
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -57,11 +54,7 @@ final class HomeViewModel: NSObject, ObservableObject {
 
     let session = WCSession.default
 
-    init(presistenceController: PresistenceControllerProtocol,
-         navigateTo: @escaping ((AppState) -> Void)) {
-        self.presistenceController = presistenceController
-        viewContext = presistenceController.container.viewContext
-        dayManager = DayManager(context: viewContext)
+    init(navigateTo: @escaping ((AppState) -> Void)) {
         self.navigateTo = navigateTo
         super.init()
         updateDrinks()

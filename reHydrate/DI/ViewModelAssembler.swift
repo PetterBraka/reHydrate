@@ -18,20 +18,17 @@ final class ViewModelAssembler: Assembly {
 
         // Home - ViewModel
         container.register(HomeViewModel.self) { resolver, state in
-            HomeViewModel(presistenceController: resolver.resolve(PresistenceControllerProtocol.self)!,
-                          navigateTo: state)
+            HomeViewModel(navigateTo: state)
         }.inObjectScope(.container)
 
         // Calendar - ViewModel
         container.register(CalendarViewModel.self) { resolver, state in
-            CalendarViewModel(presistenceController: resolver.resolve(PresistenceControllerProtocol.self)!,
-                              navigateTo: state)
+            CalendarViewModel(navigateTo: state)
         }.inObjectScope(.container)
 
         // Settings - ViewModel
         container.register(SettingsViewModel.self) { reslover, state in
-            SettingsViewModel(presistenceController: reslover.resolve(PresistenceControllerProtocol.self)!,
-                              navigateTo: state)
+            SettingsViewModel(navigateTo: state)
         }.inObjectScope(.container)
     }
 }

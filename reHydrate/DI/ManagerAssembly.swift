@@ -28,6 +28,6 @@ class ManagerAssembly: Assembly {
             let presistenceController = resolver.resolve(PresistenceControllerProtocol.self)!
             let viewContext = presistenceController.container.viewContext
             return DayManager(context: viewContext)
-        }
+        }.inObjectScope(.container)
     }
 }

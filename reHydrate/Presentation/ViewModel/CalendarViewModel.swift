@@ -35,8 +35,7 @@ final class CalendarViewModel: ObservableObject {
         return formatter
     }()
 
-    init(presistenceController: PresistenceControllerProtocol,
-         navigateTo: @escaping ((AppState) -> Void)) {
+    init(navigateTo: @escaping ((AppState) -> Void)) {
         self.navigateTo = navigateTo
         fetchDays()
         setUpSubscriptions()

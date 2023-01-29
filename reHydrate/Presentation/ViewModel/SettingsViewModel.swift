@@ -21,6 +21,10 @@ final class SettingsViewModel: ObservableObject {
         case editIcon
         case credits
     }
+    
+    private let notificationManager = NotificationManager.shared
+    private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
+    private let dayManager: DayManager = MainAssembler.resolve()
 
     private let settingsRepository: SettingsRepository = .shared
     var language: Language { settingsRepository.language }
@@ -79,23 +83,13 @@ final class SettingsViewModel: ObservableObject {
 
     @Published var showNotificationAlert: Bool = false
     @Published var showSheet: SheetType?
-
-    private var presistenceController: PresistenceControllerProtocol
-    private var notificationManager = NotificationManager.shared
-    private var healthManager = MainAssembler.shared.container.resolve(HealthManagerProtocol.self)!
-    private var viewContext: NSManagedObjectContext
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
-    private var dayManager: DayManager
 
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
-    init(presistenceController: PresistenceControllerProtocol,
-         navigateTo: @escaping ((AppState) -> Void)) {
-        self.presistenceController = presistenceController
-        viewContext = presistenceController.container.viewContext
-        dayManager = DayManager(context: viewContext)
+    init(navigateTo: @escaping ((AppState) -> Void)) {
         self.navigateTo = navigateTo
         isDarkModeOn = isDarkMode
         fetchToday()
