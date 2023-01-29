@@ -18,10 +18,9 @@ struct Day {
         let calendar = Calendar(identifier: .gregorian)
         return calendar.isDate(self.date, inSameDayAs: date)
     }
-}
-
-protocol DomainMappable {
-    associatedtype DomainModelType
-    func toDomainModel() -> DomainModelType
-    func updateCoreDataModel(_ model: DomainModelType)
+    
+    func toLocal() -> (consumption: String, goal: String) {
+        let converted = UnitConversionHelper.getLocal(self)
+        return (converted.consumtion.clean, converted.goal.clean)
+    }
 }

@@ -123,31 +123,6 @@ final class HomeViewModel: NSObject, ObservableObject {
             }.store(in: &tasks)
     }
 
-    func getValue(for drink: Drink?) -> String {
-        if let drink = drink {
-            let drinkValue = drink.size.convert(to: isMetric ? .milliliters : .imperialPints, from: .milliliters)
-            return drinkValue.clean + (isMetric ? "ml" : "pt")
-        } else {
-            return ""
-        }
-    }
-
-    func getConsumed() -> String {
-        let consumed = today.consumption.convert(
-            to: isMetric ? .liters : .imperialPints,
-            from: .liters
-        )
-        return consumed.clean
-    }
-
-    func getGoal() -> String {
-        let goal = today.goal.convert(
-            to: isMetric ? .liters : .imperialPints,
-            from: .liters
-        )
-        return goal.clean + (isMetric ? "L" : "pt")
-    }
-
     func getDate() -> String {
         if let date = today.date {
             formatter.locale = Locale(identifier: language.rawValue)

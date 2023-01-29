@@ -24,7 +24,8 @@ struct HomeView: View {
                 .bold()
             Text(viewModel.getDate())
                 .font(.brandTitle)
-            Text("\(viewModel.getConsumed())/\(viewModel.getGoal())")
+            let consumedGoal = viewModel.today.toLocal()
+            Text("\(consumedGoal.consumption))/\(consumedGoal.goal)")
                 .font(.brandExtraLargeTitle)
                 .bold()
 
@@ -41,7 +42,7 @@ struct HomeView: View {
                         Button(Localizable.editDrink.local(viewModel.language)) {
                             NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[0])
                         }
-                        Button("Remove \(viewModel.getValue(for: viewModel.drinks[0]))",
+                        Button("Remove \(viewModel.drinks[0].toLocal())",
                                role: .destructive) {
                             viewModel.removeDrink(viewModel.drinks[0])
                         }
@@ -58,7 +59,7 @@ struct HomeView: View {
                         Button(Localizable.editDrink.local(viewModel.language)) {
                             NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[1])
                         }
-                        Button("Remove \(viewModel.getValue(for: viewModel.drinks[1]))",
+                        Button("Remove \(viewModel.drinks[1].toLocal())",
                                role: .destructive) {
                             viewModel.removeDrink(viewModel.drinks[1])
                         }
@@ -75,7 +76,7 @@ struct HomeView: View {
                         Button(Localizable.editDrink.local(viewModel.language)) {
                             NotificationCenter.default.post(name: .editDrink, object: viewModel.drinks[2])
                         }
-                        Button("Remove \(viewModel.getValue(for: viewModel.drinks[2]))",
+                        Button("Remove \(viewModel.drinks[2].toLocal())",
                                role: .destructive) {
                             viewModel.removeDrink(viewModel.drinks[2])
                         }

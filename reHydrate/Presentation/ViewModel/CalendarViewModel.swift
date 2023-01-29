@@ -63,9 +63,8 @@ final class CalendarViewModel: ObservableObject {
 
     func getConsumed(for days: [Day]) {
         if let day = days.first {
-            let consumed = getLocalized(value: day.consumption)
-            let goal = getLocalized(value: day.goal)
-            consumtion = "\(consumed)/\(goal)\(getUnit())"
+            let consumedGoal = day.toLocal()
+            consumtion = "\(consumedGoal.consumption)/\(consumedGoal.goal)"
             formatter.locale = Locale(identifier: language.rawValue)
             header = formatter.string(from: day.date)
         }

@@ -181,6 +181,8 @@
 		A13A2A4828551E930039084A /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13A2A4728551E930039084A /* SettingsRepository.swift */; };
 		A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */; };
 		A1BD34A5285F3E7C00876A3D /* UICollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */; };
+		A1C2DADB2987086A003D75C9 /* UnitConversionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C2DADA2987086A003D75C9 /* UnitConversionHelper.swift */; };
+		A1C2DADD29870A97003D75C9 /* DomainMappingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C2DADC29870A97003D75C9 /* DomainMappingProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -391,6 +393,8 @@
 		A13A2A4728551E930039084A /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
 		A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
 		A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollection+Extensions.swift"; sourceTree = "<group>"; };
+		A1C2DADA2987086A003D75C9 /* UnitConversionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitConversionHelper.swift; sourceTree = "<group>"; };
+		A1C2DADC29870A97003D75C9 /* DomainMappingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainMappingProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -746,6 +750,7 @@
 				33EC3A90275A8C010049E414 /* LocalizationHelper.swift */,
 				33EC3A8527539E590049E414 /* UserDefault+Helper.swift */,
 				335DA29E275F5A8A002266D2 /* AppIcons+Helper.swift */,
+				A1C2DADA2987086A003D75C9 /* UnitConversionHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -765,6 +770,7 @@
 			children = (
 				3323161027441E030039EE23 /* DayModel.swift */,
 				A132EF972986DC50006C5DB1 /* DrinkModel.swift */,
+				A1C2DADC29870A97003D75C9 /* DomainMappingProtocol.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1108,6 +1114,7 @@
 				330C23D627665D4C00293092 /* AppDelegate.swift in Sources */,
 				A132EF9B2986E04F006C5DB1 /* PredicateHelper.swift in Sources */,
 				335DA29F275F5A8A002266D2 /* AppIcons+Helper.swift in Sources */,
+				A1C2DADD29870A97003D75C9 /* DomainMappingProtocol.swift in Sources */,
 				332315E5274271E20039EE23 /* HomeView.swift in Sources */,
 				A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */,
 				A1BD34A5285F3E7C00876A3D /* UICollection+Extensions.swift in Sources */,
@@ -1129,6 +1136,7 @@
 				332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */,
 				33231620274A64210039EE23 /* HomeViewModel.swift in Sources */,
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
+				A1C2DADB2987086A003D75C9 /* UnitConversionHelper.swift in Sources */,
 				33694FF1277CB09900D2FE66 /* EditDrinksSectionView.swift in Sources */,
 				33EC3A882754BA420049E414 /* Localizable.swift in Sources */,
 				33EC3A93275A8C210049E414 /* Notification+Extensions.swift in Sources */,

@@ -18,6 +18,10 @@ struct Drink: Identifiable, Hashable {
         size / Double(type.max)
     }
     
+    func toLocal(withUnit symbol: Bool = true) -> String {
+        UnitConversionHelper.getLocal(self, withUnit: symbol)
+    }
+    
     enum Option {
         case small
         case medium
