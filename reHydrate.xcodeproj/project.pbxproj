@@ -140,7 +140,6 @@
 		3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387ED68274AD9C40083D2C1 /* Drink.swift */; };
 		3387ED6D274C03A70083D2C1 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3387ED6C274C03A70083D2C1 /* CalendarViewModel.swift */; };
 		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
-		3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */; };
 		3394C8F927CA1A0C00DDF8F8 /* EditDrinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3394C8F827CA1A0C00DDF8F8 /* EditDrinkView.swift */; };
 		33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */; };
@@ -961,7 +960,6 @@
 			files = (
 				3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */,
 				33DF9BE024B47D0A00699B1A /* Assets.xcassets in Resources */,
-				3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */,
 				33DF9BF224B47D0A00699B1A /* Assets.xcassets in Resources */,
 				33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */,
 			);
