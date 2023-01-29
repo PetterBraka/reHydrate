@@ -24,7 +24,7 @@ final class SettingsViewModel: ObservableObject {
     
     private let notificationManager: NotificationManager = MainAssembler.resolve()
     private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
-    private let dayManager: DayManager = MainAssembler.resolve()
+    private let dayManager: DayRepository = MainAssembler.resolve()
 
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
@@ -325,7 +325,6 @@ extension SettingsViewModel {
         Task {
             do {
                 print(today)
-                try await dayManager.saveChanges()
                 fetchToday()
             } catch {
                 print("Error saving \(error)")

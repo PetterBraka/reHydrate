@@ -6,8 +6,6 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Combine
-import CoreAudio
 import CoreData
 import Foundation
 
@@ -32,6 +30,11 @@ final class DayService: DayServiceProtocol {
     func create(day: Day) async throws {
         let dayModel = try await manager.create()
         dayModel.updateCoreDataModel(day)
+        try await manager.saveChanges()
+    }
+    
+    func save() async throws {
+        try await manager.saveChanges()
     }
     
     func delete(day: Day) async throws {
@@ -39,6 +42,7 @@ final class DayService: DayServiceProtocol {
         let day = try await manager.get(using: predicate,
                                         sortDescriptors: defaultSort)
         manager.delete(day)
+        try await manager.saveChanges()
     }
     
     func getDay(for date: Date) async throws -> Day {
@@ -67,6 +71,7 @@ final class DayService: DayServiceProtocol {
         let day = try await manager.get(using: datePredicate,
                                         sortDescriptors: defaultSort)
         day.goal = goal
+        try await manager.saveChanges()
     }
     
     func update(consumption: Double, for date: Date) async throws {
@@ -74,6 +79,7 @@ final class DayService: DayServiceProtocol {
         let day = try await manager.get(using: datePredicate,
                                         sortDescriptors: defaultSort)
         day.consumtion = consumption
+        try await manager.saveChanges()
     }
     
     private func getPredicate(from date: Date) -> NSCompoundPredicate {

@@ -29,24 +29,33 @@ enum CoreDataError: Error {
 }
 
 class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProtocol {
-    private let managedObjectContext: NSManagedObjectContext
+    private let context: NSManagedObjectContext
 
     init(context: NSManagedObjectContext) {
-        managedObjectContext = context
+        self.context = context
     }
 
     func create() async throws -> Entity {
         let className = String(describing: Entity.self)
         guard let managedObject = NSEntityDescription.insertNewObject(forEntityName: className,
-                                                                      into: managedObjectContext) as? Entity
+                                                                      into: context) as? Entity
         else {
             throw CoreDataError.invalidManagedObjectType
         }
         return managedObject
     }
 
+    func saveChanges() async throws {
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
+    }
+
     func delete(_ entity: Entity) {
-        managedObjectContext.delete(entity)
+        context.delete(entity)
     }
 
     func get(using predicate: NSPredicate?,
@@ -55,7 +64,7 @@ class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProtocol {
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = sortDescriptors
         request.predicate = predicate
-        guard let results = try? managedObjectContext.fetch(request) else {
+        guard let results = try? context.fetch(request) else {
             throw CoreDataError.invalidManagedObjectType
         }
         guard let singleElement = results.first else {
@@ -72,7 +81,7 @@ class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProtocol {
         request.predicate = predicate
         request.fetchLimit = 1
 
-        guard let results = try? managedObjectContext.fetch(request) else {
+        guard let results = try? context.fetch(request) else {
             throw CoreDataError.invalidManagedObjectType
         }
         return results.first
@@ -84,7 +93,7 @@ class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProtocol {
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = sortDescriptors
         request.predicate = predicate
-        guard let result = try? managedObjectContext.fetch(request) else {
+        guard let result = try? context.fetch(request) else {
             throw CoreDataError.invalidManagedObjectType
         }
         return result

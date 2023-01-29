@@ -24,10 +24,8 @@ class ManagerAssembly: Assembly {
             NotificationManager()
         }.inObjectScope(.container)
         
-        container.register(DayManager.self) { resolver in
-            let presistenceController = resolver.resolve(PresistenceControllerProtocol.self)!
-            let viewContext = presistenceController.container.viewContext
-            return DayManager(context: viewContext)
+        container.register(DayRepository.self) { resolver in
+            DayRepository()
         }.inObjectScope(.container)
     }
 }

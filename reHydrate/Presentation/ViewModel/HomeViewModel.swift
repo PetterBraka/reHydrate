@@ -38,7 +38,7 @@ final class HomeViewModel: NSObject, ObservableObject {
     private var tasks = Set<AnyCancellable>()
 
     private var navigateTo: (AppState) -> Void
-    private var dayManager: DayManager = MainAssembler.resolve()
+    private var dayManager: DayRepository = MainAssembler.resolve()
 
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -348,7 +348,7 @@ extension HomeViewModel: WCSessionDelegate {
             Task {
                 do {
                     print(data)
-                    let day = try await dayManager.dayRepository.getDay(for: watchDate)
+                    let day = try await dayManager.service.getDay(for: watchDate)
                     try updateWatchWith(watchConsumed, watchDate, for: day)
                 } catch {
                     if let error = error as? CoreDataError, error == .elementNotFound {
