@@ -13,7 +13,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     var todayConsumed = Double()
     var todayGoal = Double()
     var todayDate = Date()
-    weak var delegate = WKExtension.shared().delegate as? ExtensionDelegate
+    weak var delegate = WKApplication.shared().delegate as? ExtensionDelegate
 
     func complicationDescriptors() async -> [CLKComplicationDescriptor] {
         let descriptor = CLKComplicationDescriptor(identifier: "reHydrate",

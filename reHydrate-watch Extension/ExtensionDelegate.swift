@@ -9,7 +9,8 @@
 import CoreData
 import WatchKit
 
-class ExtensionDelegate: NSObject, WKExtensionDelegate {
+@main
+class ExtensionDelegate: NSObject, WKApplicationDelegate {
     var todayConsumed = Double()
     var todayGoal = Double()
     var todayDate = Date()

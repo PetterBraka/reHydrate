@@ -154,7 +154,6 @@
 		33DC394C27DE093100361022 /* EditDrinkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DC394B27DE093100361022 /* EditDrinkViewModel.swift */; };
 		33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BDC24B47D0900699B1A /* Interface.storyboard */; };
 		33DF9BE024B47D0A00699B1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BDF24B47D0A00699B1A /* Assets.xcassets */; };
-		33DF9BE724B47D0A00699B1A /* reHydrate-watch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 33DF9BE624B47D0A00699B1A /* reHydrate-watch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		33DF9BEC24B47D0A00699B1A /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */; };
 		33DF9BEE24B47D0A00699B1A /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BED24B47D0A00699B1A /* ExtensionDelegate.swift */; };
 		33DF9BF024B47D0A00699B1A /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */; };
@@ -179,13 +178,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		33DF9BE824B47D0A00699B1A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 33DF9BE524B47D0A00699B1A;
-			remoteInfo = "reHydrate-watch Extension";
-		};
 		33DF9BF424B47D0A00699B1A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
@@ -205,17 +197,6 @@
 				33DF9BF624B47D0A00699B1A /* reHydrate-watch.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		33DF9BF924B47D0A00699B1A /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				33DF9BE724B47D0A00699B1A /* reHydrate-watch Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -372,7 +353,6 @@
 		33DF9BDD24B47D0900699B1A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		33DF9BDF24B47D0A00699B1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33DF9BE124B47D0A00699B1A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		33DF9BE624B47D0A00699B1A /* reHydrate-watch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "reHydrate-watch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		33DF9BED24B47D0A00699B1A /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
@@ -410,13 +390,6 @@
 				336136A626B6E7D500C87FB5 /* FSCalendar in Frameworks */,
 				337F1B12277D4B6700B2A819 /* FirebaseCrashlytics in Frameworks */,
 				337F1B10277D4B6700B2A819 /* FirebaseAnalytics in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		33DF9BE324B47D0A00699B1A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -647,7 +620,6 @@
 			children = (
 				3378767324378A9400F5A732 /* reHydrate.app */,
 				33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */,
-				33DF9BE624B47D0A00699B1A /* reHydrate-watch Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -820,35 +792,17 @@
 			buildConfigurationList = 33DF9BFD24B47D0A00699B1A /* Build configuration list for PBXNativeTarget "reHydrate-watch" */;
 			buildPhases = (
 				33DF9BD824B47D0900699B1A /* Resources */,
-				33DF9BF924B47D0A00699B1A /* Embed App Extensions */,
 				A34F8E3F57DD5DEC8477CA29 /* Frameworks */,
+				33DF9BE224B47D0A00699B1A /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				33DF9BE924B47D0A00699B1A /* PBXTargetDependency */,
 			);
 			name = "reHydrate-watch";
 			productName = "reHydrate-watch";
 			productReference = 33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */;
-			productType = "com.apple.product-type.application.watchapp2";
-		};
-		33DF9BE524B47D0A00699B1A /* reHydrate-watch Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 33DF9BFC24B47D0A00699B1A /* Build configuration list for PBXNativeTarget "reHydrate-watch Extension" */;
-			buildPhases = (
-				33DF9BE224B47D0A00699B1A /* Sources */,
-				33DF9BE324B47D0A00699B1A /* Frameworks */,
-				33DF9BE424B47D0A00699B1A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "reHydrate-watch Extension";
-			productName = "reHydrate-watch Extension";
-			productReference = 33DF9BE624B47D0A00699B1A /* reHydrate-watch Extension.appex */;
-			productType = "com.apple.product-type.watchkit2-extension";
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -860,16 +814,13 @@
 					watchComplicationsTemplate,
 				);
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1420;
 				ORGANIZATIONNAME = "Petter vang Brakalsvålet";
 				TargetAttributes = {
 					3378767224378A9400F5A732 = {
 						CreatedOnToolsVersion = 11.4;
 					};
 					33DF9BD924B47D0900699B1A = {
-						CreatedOnToolsVersion = 11.5;
-					};
-					33DF9BE524B47D0A00699B1A = {
 						CreatedOnToolsVersion = 11.5;
 					};
 				};
@@ -897,7 +848,6 @@
 			targets = (
 				3378767224378A9400F5A732 /* reHydrate */,
 				33DF9BD924B47D0900699B1A /* reHydrate-watch */,
-				33DF9BE524B47D0A00699B1A /* reHydrate-watch Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -1009,18 +959,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */,
 				33DF9BE024B47D0A00699B1A /* Assets.xcassets in Resources */,
 				3390F51724C8DF9800B7D350 /* Localizable.strings in Resources */,
-				33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		33DF9BE424B47D0A00699B1A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 				33DF9BF224B47D0A00699B1A /* Assets.xcassets in Resources */,
-				3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */,
+				33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1147,11 +1090,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		33DF9BE924B47D0A00699B1A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 33DF9BE524B47D0A00699B1A /* reHydrate-watch Extension */;
-			targetProxy = 33DF9BE824B47D0A00699B1A /* PBXContainerItemProxy */;
-		};
 		33DF9BF524B47D0A00699B1A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 33DF9BD924B47D0900699B1A /* reHydrate-watch */;
@@ -1359,11 +1297,15 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
-				IBSC_MODULE = reHydrate_watch_Extension;
 				INFOPLIST_FILE = "reHydrate-watch/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 5.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1380,62 +1322,18 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
-				IBSC_MODULE = reHydrate_watch_Extension;
 				INFOPLIST_FILE = "reHydrate-watch/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 5.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
-			};
-			name = Release;
-		};
-		33DF9BFA24B47D0A00699B1A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = DCQ3V8BLU5;
-				INFOPLIST_FILE = "reHydrate-watch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 5.2.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
-			};
-			name = Debug;
-		};
-		33DF9BFB24B47D0A00699B1A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = DCQ3V8BLU5;
-				INFOPLIST_FILE = "reHydrate-watch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 5.2.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1461,15 +1359,6 @@
 			buildConfigurations = (
 				3378768824378A9800F5A732 /* Debug */,
 				3378768924378A9800F5A732 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		33DF9BFC24B47D0A00699B1A /* Build configuration list for PBXNativeTarget "reHydrate-watch Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				33DF9BFA24B47D0A00699B1A /* Debug */,
-				33DF9BFB24B47D0A00699B1A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
