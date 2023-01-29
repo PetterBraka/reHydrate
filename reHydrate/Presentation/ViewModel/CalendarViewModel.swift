@@ -13,7 +13,7 @@ import Swinject
 
 final class CalendarViewModel: ObservableObject {
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
-    private let dayService: DayServiceProtocol = MainAssembler.resolve()
+    private let dayRepository: DayRepositoryProtocol = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
     var isMetric: Bool { settingsRepository.isMetric }
 
@@ -102,7 +102,7 @@ extension CalendarViewModel {
     private func fetchDays() {
         Task { @MainActor in
             do {
-                let days = try await dayService.getDays()
+                let days = try await dayRepository.fetchAll()
                 storedDays = days
                 getConsumed(for: days)
                 getAverage(for: days)

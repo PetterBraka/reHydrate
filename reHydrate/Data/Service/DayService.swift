@@ -9,17 +9,27 @@
 import CoreData
 import Foundation
 
-protocol DayServiceProtocol {
-    func create(day: Day) async throws
-    func delete(day: Day) async throws
-    func getDay(for date: Date) async throws -> Day
-    func getLatestGoal() async throws -> Double?
-    func getDays() async throws -> [Day]
-    func update(goal: Double, for day: Date) async throws
-    func update(consumption: Double, for day: Date) async throws
+//protocol DayServiceProtocol {
+//    func create(day: Day) async throws
+//    func delete(day: Day) async throws
+//    func getDay(for date: Date) async throws -> Day
+//    func getLatestGoal() async throws -> Double?
+//    func getDays() async throws -> [Day]
+//    func update(goal: Double, for day: Date) async throws
+//    func update(consumption: Double, for day: Date) async throws
+//}
+protocol ServiceProtocol {
+    associatedtype DomainModel
+    associatedtype DataModel
+    func create(_ item: DomainModel) async throws
+    func delete(_ item: DomainModel) async throws
+    func getElement(for date: Date) async throws -> DataModel
+    func getLatestElement() async throws -> DataModel
+    func getAll() async throws -> [DataModel]
+    func save() async throws
 }
 
-final class DayService: DayServiceProtocol {
+final class DayService: ServiceProtocol {
     private let manager: CoreDataManager<DayModel>
     private let defaultSort = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
     
@@ -27,9 +37,17 @@ final class DayService: DayServiceProtocol {
         manager = CoreDataManager<DayModel>(context: context)
     }
     
-    func create(day: Day) async throws {
+    func create(_ item: Day) async throws {
         let dayModel = try await manager.create()
-        dayModel.updateCoreDataModel(day)
+        dayModel.updateCoreDataModel(item)
+        try await manager.saveChanges()
+    }
+    
+    func delete(_ item: Day) async throws {
+        let predicate = NSPredicate(format: "id == %@", item.id.uuidString)
+        let day = try await manager.get(using: predicate,
+                                        sortDescriptors: defaultSort)
+        manager.delete(day)
         try await manager.saveChanges()
     }
     
@@ -37,49 +55,25 @@ final class DayService: DayServiceProtocol {
         try await manager.saveChanges()
     }
     
-    func delete(day: Day) async throws {
-        let predicate = NSPredicate(format: "id == %@", day.id.uuidString)
-        let day = try await manager.get(using: predicate,
-                                        sortDescriptors: defaultSort)
-        manager.delete(day)
-        try await manager.saveChanges()
-    }
-    
-    func getDay(for date: Date) async throws -> Day {
+    func getElement(for date: Date) async throws -> DayModel {
         let datePredicate = getPredicate(from: date)
         let day = try await manager.get(using: datePredicate,
                                         sortDescriptors: defaultSort)
-        return day.toDomainModel()
+        return day
     }
     
-    func getLatestGoal() async throws -> Double? {
-        let dayModel = try await manager.getLastObject(using: nil,
-                                                       sortDescriptors: defaultSort)
-        let day = dayModel?.toDomainModel()
-        return day?.goal
+    func getLatestElement() async throws -> DayModel {
+        guard let dayModel = try await manager.getLastObject(using: nil,
+                                                             sortDescriptors: defaultSort) else {
+            throw CoreDataError.elementNotFound
+        }
+        return dayModel
     }
     
-    func getDays() async throws -> [Day] {
+    func getAll() async throws -> [DayModel] {
         let dayModels = try await manager.getAll(using: nil,
                                                  sortDescriptors: defaultSort)
-        let days = dayModels.map { $0.toDomainModel() }
-        return days
-    }
-    
-    func update(goal: Double, for date: Date) async throws {
-        let datePredicate = getPredicate(from: date)
-        let day = try await manager.get(using: datePredicate,
-                                        sortDescriptors: defaultSort)
-        day.goal = goal
-        try await manager.saveChanges()
-    }
-    
-    func update(consumption: Double, for date: Date) async throws {
-        let datePredicate = getPredicate(from: date)
-        let day = try await manager.get(using: datePredicate,
-                                        sortDescriptors: defaultSort)
-        day.consumtion = consumption
-        try await manager.saveChanges()
+        return dayModels
     }
     
     private func getPredicate(from date: Date) -> NSCompoundPredicate {

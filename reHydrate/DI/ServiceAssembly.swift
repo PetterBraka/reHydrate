@@ -10,7 +10,7 @@ import Swinject
 
 final class ServiceAssembly: Assembly {
     func assemble(container: Container) {
-        container.register(DayServiceProtocol.self) { resolver in
+        container.register(DayService.self) { resolver in
             let presistenceController = resolver.resolve(PresistenceControllerProtocol.self)!
             let viewContext = presistenceController.container.viewContext
             return DayService(context: viewContext)

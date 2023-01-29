@@ -35,7 +35,6 @@
 		3323160D27441B030039EE23 /* DayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323160C27441B020039EE23 /* DayService.swift */; };
 		3323161127441E030039EE23 /* DayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161027441E030039EE23 /* DayModel.swift */; };
 		3323161327441E140039EE23 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161227441E140039EE23 /* Day.swift */; };
-		33231619274420E60039EE23 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 33231617274420E60039EE23 /* reHydrate.xcdatamodeld */; };
 		33231620274A64210039EE23 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323161F274A64210039EE23 /* HomeViewModel.swift */; };
 		33231622274A6FC70039EE23 /* ManagerAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231621274A6FC70039EE23 /* ManagerAssembly.swift */; };
 		33231624274A75530039EE23 /* reHydrateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231623274A75530039EE23 /* reHydrateApp.swift */; };
@@ -173,6 +172,8 @@
 		A132EF872986BE9D006C5DB1 /* RepositoryAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A132EF862986BE9D006C5DB1 /* RepositoryAssembly.swift */; };
 		A132EF892986BF8E006C5DB1 /* DayRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A132EF882986BF8E006C5DB1 /* DayRepository.swift */; };
 		A132EF8C2986C279006C5DB1 /* ServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A132EF8B2986C279006C5DB1 /* ServiceAssembly.swift */; };
+		A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */; };
+		A132EF942986C8A4006C5DB1 /* DrinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A132EF932986C8A4006C5DB1 /* DrinkService.swift */; };
 		A13A2A4828551E930039084A /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13A2A4728551E930039084A /* SettingsRepository.swift */; };
 		A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */; };
 		A1BD34A5285F3E7C00876A3D /* UICollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */; };
@@ -230,7 +231,6 @@
 		3323160C27441B020039EE23 /* DayService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayService.swift; sourceTree = "<group>"; };
 		3323161027441E030039EE23 /* DayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayModel.swift; sourceTree = "<group>"; };
 		3323161227441E140039EE23 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
-		33231618274420E60039EE23 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
 		3323161F274A64210039EE23 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		33231621274A6FC70039EE23 /* ManagerAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerAssembly.swift; sourceTree = "<group>"; };
 		33231623274A75530039EE23 /* reHydrateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reHydrateApp.swift; sourceTree = "<group>"; };
@@ -378,6 +378,8 @@
 		A132EF862986BE9D006C5DB1 /* RepositoryAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryAssembly.swift; sourceTree = "<group>"; };
 		A132EF882986BF8E006C5DB1 /* DayRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRepository.swift; sourceTree = "<group>"; };
 		A132EF8B2986C279006C5DB1 /* ServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAssembly.swift; sourceTree = "<group>"; };
+		A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
+		A132EF932986C8A4006C5DB1 /* DrinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkService.swift; sourceTree = "<group>"; };
 		A13A2A4728551E930039084A /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
 		A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
 		A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollection+Extensions.swift"; sourceTree = "<group>"; };
@@ -640,7 +642,7 @@
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
 				337F1B0C277D4A2D00B2A819 /* GoogleService-Info.plist */,
-				33231617274420E60039EE23 /* reHydrate.xcdatamodeld */,
+				A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */,
 			);
 			path = reHydrate;
 			sourceTree = "<group>";
@@ -743,6 +745,7 @@
 			isa = PBXGroup;
 			children = (
 				3323160C27441B020039EE23 /* DayService.swift */,
+				A132EF932986C8A4006C5DB1 /* DrinkService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1060,7 +1063,6 @@
 				A132EF872986BE9D006C5DB1 /* RepositoryAssembly.swift in Sources */,
 				332315FD2742B61D0039EE23 /* MainAssembler.swift in Sources */,
 				332315EE274278340039EE23 /* Font.swift in Sources */,
-				33231619274420E60039EE23 /* reHydrate.xcdatamodeld in Sources */,
 				332315FF2742B6920039EE23 /* ViewModelAssembler.swift in Sources */,
 				33B28F7226BC807C00DECA9F /* UserDefault+Extensions.swift in Sources */,
 				332316042742BD6C0039EE23 /* CoreDataManager.swift in Sources */,
@@ -1084,6 +1086,7 @@
 				330C23D627665D4C00293092 /* AppDelegate.swift in Sources */,
 				335DA29F275F5A8A002266D2 /* AppIcons+Helper.swift in Sources */,
 				332315E5274271E20039EE23 /* HomeView.swift in Sources */,
+				A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */,
 				A1BD34A5285F3E7C00876A3D /* UICollection+Extensions.swift in Sources */,
 				332315EC274276290039EE23 /* Color.swift in Sources */,
 				3323160D27441B030039EE23 /* DayService.swift in Sources */,
@@ -1093,6 +1096,7 @@
 				33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */,
 				3387ED69274AD9C40083D2C1 /* Drink.swift in Sources */,
 				33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */,
+				A132EF942986C8A4006C5DB1 /* DrinkService.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				332DBF632794154E00A6B16C /* Analytics+Extensions.swift in Sources */,
 				33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */,
@@ -1465,16 +1469,6 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		33231617274420E60039EE23 /* reHydrate.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				33231618274420E60039EE23 /* reHydrate.xcdatamodel */,
-			);
-			currentVersion = 33231618274420E60039EE23 /* reHydrate.xcdatamodel */;
-			path = reHydrate.xcdatamodeld;
-			sourceTree = SOURCE_ROOT;
-			versionGroupType = wrapper.xcdatamodel;
-		};
 		339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
@@ -1483,6 +1477,16 @@
 			currentVersion = 339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */;
 			path = "watchOS-CoreData.xcdatamodeld";
 			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */,
+			);
+			currentVersion = A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */;
+			path = reHydrate.xcdatamodeld;
+			sourceTree = SOURCE_ROOT;
 			versionGroupType = wrapper.xcdatamodel;
 		};
 /* End XCVersionGroup section */

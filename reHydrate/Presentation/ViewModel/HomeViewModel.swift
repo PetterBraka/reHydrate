@@ -116,6 +116,11 @@ final class HomeViewModel: NSObject, ObservableObject {
                     self?.drinks[2] = drink
                 }
             }.store(in: &tasks)
+        $today
+            .sink { [weak self] updateDay in
+                self?.notificationManager.requestReminders(for: updateDay)
+                self?.exportToWatch(today: updateDay)
+            }.store(in: &tasks)
     }
 
     func getValue(for drink: Drink?) -> String {
@@ -176,9 +181,7 @@ extension HomeViewModel {
         Task {
             do {
                 let day = try await dayRepository.fetchDay()
-                self.today = day
-                notificationManager.requestReminders(for: day)
-                exportToWatch(today: day)
+                today = day
             } catch {
                 print("Failed to get today\(error.localizedDescription)")
             }
@@ -190,9 +193,9 @@ extension HomeViewModel {
         Analytics.track(event: .addDrink)
         Task {
             do {
-                try await dayRepository.addDrink(of: consumed, to: today)
+                let updatedDay = try await dayRepository.addDrink(of: consumed, to: today)
                 export(drink: drink)
-                await fetchToday()
+                today = updatedDay
             } catch {
                 print("Error adding drink of type: \(drink), Error: \(error)")
             }
@@ -206,9 +209,9 @@ extension HomeViewModel {
         Task {
             let drink = Drink(type: drink.type, size: -drink.size)
             do {
-                try await dayRepository.removeDrink(of: consumed < 0 ? 0 : consumed, to: today)
+                let updatedDay = try await dayRepository.removeDrink(of: consumed < 0 ? 0 : consumed, to: today)
                 export(drink: drink)
-                await fetchToday()
+                today = updatedDay
             } catch {
                 print("Error adding drink of type: \(drink), Error: \(error)")
             }
@@ -218,8 +221,9 @@ extension HomeViewModel {
     private func update(consumption value: Double, for date: Date) {
         Task {
             do {
-                try await dayRepository.update(consumption: value, for: date)
-                await fetchToday()
+                let updatedDay = try await dayRepository.update(consumption: value,
+                                                                forDayAt: date)
+                today = updatedDay
             } catch {
                 print("Error updating todays consumption: \(value), Error: \(error)")
             }

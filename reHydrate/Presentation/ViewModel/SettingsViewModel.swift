@@ -311,10 +311,7 @@ extension SettingsViewModel {
         Task {
             do {
                 let day = try await dayRepository.fetchDay()
-                self.today = day
-                if day.goal > 0 {
-                    selectedGoal = "\(day.goal.clean)"
-                }
+                today = day
             } catch {
                 print("Failed fetching day \(error)")
             }
@@ -324,7 +321,8 @@ extension SettingsViewModel {
     private func updateGoal(_ newGoal: Double) {
         Task {
             do {
-                try await dayRepository.update(goal: newGoal, for: Date())
+                let updatedDay = try await dayRepository.update(goal: newGoal, forDayAt: Date())
+                today = updatedDay
             } catch {
                 print("Error adding drink of type: \(newGoal), Error: \(error)")
             }
