@@ -22,11 +22,11 @@ protocol DayRepositoryInterface {
 }
 
 final class DayRepository: DayRepositoryInterface {
-    private let repo: CoreDataRepository<DayModel>
+    private let repo: CoreDataManager<DayModel>
     private let defaultSort = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
 
     init(context: NSManagedObjectContext) {
-        repo = CoreDataRepository<DayModel>(context: context)
+        repo = CoreDataManager<DayModel>(context: context)
     }
 
     func create(day: Day) async throws {
