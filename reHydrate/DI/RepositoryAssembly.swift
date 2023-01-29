@@ -18,8 +18,10 @@ class RepositoryAssembly: Assembly {
             DayRepository(service: resolver.resolve(DayService.self)!)
         }.inObjectScope(.container)
         
-        container.register(DrinkRepositoryProtocol.self) { resolver in
-            DrinkRepository(service: resolver.resolve(DrinkService.self)!)
-        }.inObjectScope(.container)
+        if #available(iOS 16.4, *) {
+            container.register(DrinkRepositoryProtocol.self) { resolver in
+                DrinkRepository(service: resolver.resolve(DrinkService.self)!)
+            }.inObjectScope(.container)
+        }
     }
 }

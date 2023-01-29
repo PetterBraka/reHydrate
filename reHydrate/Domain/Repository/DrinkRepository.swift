@@ -15,6 +15,7 @@ protocol DrinkRepositoryProtocol {
     func update(sizeOf size: Double, drink: Drink) async throws -> Drink
 }
 
+@available(iOS, introduced: 16.4)
 final class DrinkRepository: DrinkRepositoryProtocol {
     let settingsRepo: SettingsRepository = MainAssembler.resolve()
     let service: DrinkService
