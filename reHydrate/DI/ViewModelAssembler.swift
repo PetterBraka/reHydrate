@@ -17,17 +17,17 @@ final class ViewModelAssembler: Assembly {
         }.inObjectScope(.container)
 
         // Home - ViewModel
-        container.register(HomeViewModel.self) { resolver, state in
+        container.register(HomeViewModel.self) { _, state in
             HomeViewModel(navigateTo: state)
         }.inObjectScope(.container)
 
         // Calendar - ViewModel
-        container.register(CalendarViewModel.self) { resolver, state in
+        container.register(CalendarViewModel.self) { _, state in
             CalendarViewModel(navigateTo: state)
         }.inObjectScope(.container)
 
         // Settings - ViewModel
-        container.register(SettingsViewModel.self) { reslover, state in
+        container.register(SettingsViewModel.self) { _, state in
             SettingsViewModel(navigateTo: state)
         }.inObjectScope(.container)
     }

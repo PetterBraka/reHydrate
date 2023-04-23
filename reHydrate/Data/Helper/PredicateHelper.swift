@@ -16,7 +16,7 @@ final class PredicateHelper {
         let fromPredicate = NSPredicate(format: "date >= %@", startOfDay as NSDate)
         let toPredicate = NSPredicate(format: "date < %@", startOfNextDay! as NSDate)
         let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates:
-                                                    [fromPredicate, toPredicate])
+            [fromPredicate, toPredicate])
         return datePredicate
     }
 }

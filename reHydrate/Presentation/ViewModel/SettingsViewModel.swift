@@ -21,7 +21,7 @@ final class SettingsViewModel: ObservableObject {
         case editIcon
         case credits
     }
-    
+
     private let notificationManager: NotificationManager = MainAssembler.resolve()
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     private let healthManager: HealthManagerProtocol = MainAssembler.resolve()

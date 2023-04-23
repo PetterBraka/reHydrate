@@ -24,7 +24,7 @@ final class DayRepository: DayRepositoryProtocol {
     init(service: DayService) {
         self.service = service
     }
-    
+
     func fetchDay(for date: Date) async throws -> Day {
         if let today = try? await service.getElement(for: date) {
             return today.toDomainModel()
@@ -32,7 +32,7 @@ final class DayRepository: DayRepositoryProtocol {
             return try await createToday()
         }
     }
-    
+
     func fetchAll() async throws -> [Day] {
         let dayModels = try await service.getAll()
         return dayModels.map { $0.toDomainModel() }
@@ -66,10 +66,10 @@ final class DayRepository: DayRepositoryProtocol {
     func update(goal newGoal: Double, forDayAt date: Date) async throws -> Day {
         try await set(goal: newGoal, forDayAt: date).toDomainModel()
     }
-    
+
     private func set(goal newGoal: Double? = nil,
-                        consumption newConsumption: Double? = nil,
-                        forDayAt date: Date) async throws -> DayModel{
+                     consumption newConsumption: Double? = nil,
+                     forDayAt date: Date) async throws -> DayModel {
         let day = try await service.getElement(for: date)
         if let newGoal {
             day.goal = newGoal

@@ -74,7 +74,7 @@ class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProtocol {
     }
 
     func getLastObject(using predicate: NSPredicate?,
-                       sortDescriptors: [NSSortDescriptor]?) async throws -> Entity? {
+                       sortDescriptors _: [NSSortDescriptor]?) async throws -> Entity? {
         let entityName = String(describing: Entity.self)
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = []

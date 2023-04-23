@@ -18,7 +18,7 @@ final class HomeViewModel: NSObject, ObservableObject {
         case notification
         case health
     }
-    
+
     private let notificationManager: NotificationManager = MainAssembler.resolve()
     private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
     private let dayRepository: DayRepositoryProtocol = MainAssembler.resolve()
@@ -150,7 +150,6 @@ final class HomeViewModel: NSObject, ObservableObject {
 // MARK: Save & Load
 
 extension HomeViewModel {
-
     @MainActor
     func fetchToday() {
         Task {

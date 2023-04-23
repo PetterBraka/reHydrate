@@ -18,7 +18,7 @@ struct Day {
         let calendar = Calendar(identifier: .gregorian)
         return calendar.isDate(self.date, inSameDayAs: date)
     }
-    
+
     func toLocal() -> (consumption: String, goal: String) {
         let converted = UnitConversionHelper.getLocal(self)
         return (converted.consumtion.clean, converted.goal.clean)

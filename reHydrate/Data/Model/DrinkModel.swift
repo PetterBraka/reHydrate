@@ -13,11 +13,11 @@ extension DrinkModel: DomainMappable {
     func toDomainModel() -> Drink {
         let drinkOption: Drink.Option
         switch Int(size) {
-        case Drink.Option.small.min...Drink.Option.small.max:
+        case Drink.Option.small.min ... Drink.Option.small.max:
             drinkOption = .small
-        case Drink.Option.medium.min...Drink.Option.medium.max:
+        case Drink.Option.medium.min ... Drink.Option.medium.max:
             drinkOption = .medium
-        case Drink.Option.large.min...Drink.Option.large.max:
+        case Drink.Option.large.min ... Drink.Option.large.max:
             drinkOption = .large
         default:
             drinkOption = .medium

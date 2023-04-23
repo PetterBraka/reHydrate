@@ -23,9 +23,9 @@ final class DrinkRepository: DrinkRepositoryProtocol {
     init(service: DrinkService) {
         self.service = service
     }
-    
+
     @available(*, deprecated,
-                message: "This is only designed to migrate from version 5.2.2 to 6.0.0")
+               message: "This is only designed to migrate from version 5.2.2 to 6.0.0")
     func migrate() async throws -> [Drink] {
         let smallDrink = await settingsRepo.smallDrink
         let mediumDrink = await settingsRepo.mediumDrink
@@ -36,23 +36,22 @@ final class DrinkRepository: DrinkRepositoryProtocol {
         return [small, medium, large]
     }
 
-    
-    func fetchDrinks(for date: Date) async throws -> [Drink] {
+    func fetchDrinks(for _: Date) async throws -> [Drink] {
         try await service.getAll().map { $0.toDomainModel() }
     }
-    
+
     func remove(drink: Drink) async throws {
         try await service.delete(drink)
     }
-    
+
     func addDrink(_ size: Double, _ type: Drink.Option) async throws -> Drink {
         let drinkModel = try await service.create(Drink(type: type, size: size))
         return drinkModel.toDomainModel()
     }
-    
+
     func update(sizeOf size: Double, drink: Drink) async throws -> Drink {
         let drinkModels = try await service.getAll()
-        guard let drinkModel = drinkModels.first(where: { $0.id == drink.id})
+        guard let drinkModel = drinkModels.first(where: { $0.id == drink.id })
         else { throw CoreDataError.elementNotFound }
         drinkModel.size = size
         try await service.save()
