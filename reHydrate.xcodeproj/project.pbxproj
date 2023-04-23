@@ -1037,8 +1037,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		330C23D727665F6600293092 /* Run BuildTools */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -1050,9 +1049,9 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexit 0\ncd BuildTools\n# swift package update #Uncomment this line temporarily to update the version \n# used to the latest matching your BuildTools/Package.swift file\n/usr/bin/xcrun --sdk macosx swift run -c release swiftformat \"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --fix --path \"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --path \"$SRCROOT\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# exit 0\ncd BuildTools\n# swift package update #Uncomment this line temporarily to update the version \n# used to the latest matching your BuildTools/Package.swift file\n/usr/bin/xcrun --sdk macosx swift run -c release swiftformat --disable trailingClosures \"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --fix --path \"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --path \"$SRCROOT\"\n";
 		};
 		337F1B13277D4BE500B2A819 /* Run upload to firebase */ = {
 			isa = PBXShellScriptBuildPhase;
