@@ -391,6 +391,7 @@
 		A132EF9A2986E04F006C5DB1 /* PredicateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredicateHelper.swift; sourceTree = "<group>"; };
 		A132EF9C2986FF7A006C5DB1 /* DrinkRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkRepository.swift; sourceTree = "<group>"; };
 		A13A2A4728551E930039084A /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
+		A15303FA29F54D5E00BA03F4 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 		A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
 		A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollection+Extensions.swift"; sourceTree = "<group>"; };
 		A1C2DADA2987086A003D75C9 /* UnitConversionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitConversionHelper.swift; sourceTree = "<group>"; };
@@ -623,6 +624,7 @@
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
+				A15303FA29F54D5E00BA03F4 /* Core */,
 				337F1B4A277E0A9C00B2A819 /* .swift-version */,
 				337F1B45277E09B700B2A819 /* BuildTools */,
 				3378767524378A9400F5A732 /* reHydrate */,
