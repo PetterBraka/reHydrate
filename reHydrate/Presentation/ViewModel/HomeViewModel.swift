@@ -92,18 +92,24 @@ final class HomeViewModel: NSObject, ObservableObject {
     func setupSubscribers() {
         NotificationCenter.default.publisher(for: .addedSmallDrink)
             .sink { [weak self] _ in
-                guard let drink = self?.drinks[0] else { return }
-                self?.addDrink(drink)
+                Task { @MainActor [weak self] in
+                    guard let drink = self?.drinks[0] else { return }
+                    self?.addDrink(drink)
+                }
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .addedMediumDrink)
             .sink { [weak self] _ in
-                guard let drink = self?.drinks[1] else { return }
-                self?.addDrink(drink)
+                Task { @MainActor [weak self] in
+                    guard let drink = self?.drinks[1] else { return }
+                    self?.addDrink(drink)
+                }
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .addedLargeDrink)
             .sink { [weak self] _ in
-                guard let drink = self?.drinks[2] else { return }
-                self?.addDrink(drink)
+                Task { @MainActor [weak self] in
+                    guard let drink = self?.drinks[2] else { return }
+                    self?.addDrink(drink)
+                }
             }.store(in: &tasks)
         NotificationCenter.default.publisher(for: .savedDrink)
             .sink { [weak self] notification in
@@ -159,6 +165,7 @@ extension HomeViewModel {
         }
     }
 
+    @MainActor
     func addDrink(_ drink: Drink) {
         let consumed = drink.size.convert(to: .liters, from: .milliliters)
         Analytics.track(event: .addDrink)
@@ -173,6 +180,7 @@ extension HomeViewModel {
         }
     }
 
+    @MainActor
     func removeDrink(_ drink: Drink) {
         let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
         let consumed: Double = rawConsumed.converted(to: .liters).value
@@ -189,6 +197,7 @@ extension HomeViewModel {
         }
     }
 
+    @MainActor
     private func update(consumption value: Double, for date: Date) {
         Task {
             do {
@@ -206,33 +215,22 @@ extension HomeViewModel {
 
 extension HomeViewModel {
     func fetchHealthData() {
-        healthManager.getWater(for: Date())
-            .removeDuplicates()
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
+        healthManager.getWater(for: .now) { [weak self] result in
+            Task { @MainActor [weak self] in
+                switch result {
+                case let.success(consumed):
+                    self?.update(consumption: consumed, for: .now)
+                case let.failure(error):
                     print(error)
-                default:
                     break
                 }
-            } receiveValue: { consumed in
-                print("Got data from health")
-                self.update(consumption: consumed, for: Date())
-            }.store(in: &tasks)
+            }
+        }
     }
 
     private func export(drink: Drink) {
         guard drink.size != 0 else { return }
-        healthManager.export(drinkOfSize: drink.size, .now)
-            .sink { completion in
-                switch completion {
-                case let .failure(error):
-                    print(error)
-                default:
-                    break
-                }
-            } receiveValue: { _ in }
-            .store(in: &tasks)
+        healthManager.export(drinkOfSize: drink.size, .now) { _ in }
     }
 }
 
@@ -286,6 +284,7 @@ extension HomeViewModel: WCSessionDelegate {
         handleWatch(userInfo)
     }
 
+    @MainActor
     func updateWatchWith(_ consumed: Double, _ date: Date, for day: Day) throws {
         guard day.consumption < consumed else { throw WatchError.watchNotUpdated }
         update(consumption: consumed, for: date)
@@ -304,13 +303,11 @@ extension HomeViewModel: WCSessionDelegate {
                 do {
                     print(data)
                     let day = try await dayRepository.fetchDay(for: watchDate)
-                    try updateWatchWith(watchConsumed, watchDate, for: day)
+                    try await updateWatchWith(watchConsumed, watchDate, for: day)
                 } catch {
                     if let error = error as? CoreDataError, error == .elementNotFound {
-                        Task {
-                            let day = try await dayRepository.fetchDay(for: .now)
-                            try updateWatchWith(watchConsumed, watchDate, for: day)
-                        }
+                        let day = try await dayRepository.fetchDay(for: .now)
+                        try await updateWatchWith(watchConsumed, watchDate, for: day)
                     }
                     if let error = error as? WatchError {
                         switch error {

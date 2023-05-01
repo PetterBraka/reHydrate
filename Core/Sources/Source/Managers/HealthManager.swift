@@ -11,13 +11,15 @@ import Foundation
 import HealthKit
 import UserNotifications
 import CoreInterfaceKit
+import os
 
 public class HealthManager: HealthManagerProtocol {
+    private static let logger = Logger(subsystem: "health.manager", category: "HealthKit")
     private let healthStore = HKHealthStore()
-
+    
     private let readTypes: Set<HKObjectType> = Set(HealthType.allCases.map { $0.toObjectType() })
     private let writeTypes: Set<HKSampleType> = Set(HealthType.allCases.map { $0.toSampleType() })
-
+    
     public var needsAccess: Bool {
         HealthType.allCases.contains { current in
             healthStore.authorizationStatus(for: current.toObjectType()) == .notDetermined
@@ -25,49 +27,15 @@ public class HealthManager: HealthManagerProtocol {
     }
     
     public init() {}
-
+    
     public func requestAccess() async throws {
         try await healthStore.requestAuthorization(toShare: writeTypes,
                                                    read: readTypes)
     }
     
     /// Will get the water consumption for the date passed in
-    public func getWater(for date: Date) -> AnyPublisher<Double, Error> {
-        Future { [weak self] promise in
-            guard let self = self else {
-                promise(.failure(HealthError.somethingWentWrong))
-                return
-            }
-            self.getWater(for: date) { result in
-                promise(result)
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-
-    /**
-     Will export a drink to the health app
-
-     - parameter waterAmount: - The amount of water consumed.
-     - parameter date: -The date of consumption.
-     */
-    public func export(drinkOfSize drink: Double, _ date: Date) -> AnyPublisher<Void, Error> {
-        Future { [weak self] promise in
-            guard let self = self else {
-                promise(.failure(HealthError.somethingWentWrong))
-                return
-            }
-            self.export(drinkOfSize: drink, date) { result in
-                promise(result)
-            }
-        }.eraseToAnyPublisher()
-    }
-}
-
-
-private extension HealthManager {
-    func getWater(for date: Date,
-                          completion: @escaping (Result<Double, Error>) -> Void) {
+    public func getWater(for date: Date,
+                         completion: @escaping (Result<Double, Error>) -> Void) {
         let quantityType = HealthType.water.toSampleType()
         guard healthStore.authorizationStatus(for: quantityType) == .sharingAuthorized else {
             completion(.failure(HealthError.notAuthorized))
@@ -122,8 +90,14 @@ private extension HealthManager {
         healthStore.execute(query)
     }
     
-    func export(drinkOfSize drink: Double, _ date: Date,
-                        completion: @escaping (Result<Void, Error>) -> Void) {
+    /**
+     Will export a drink to the health app
+     
+     - parameter waterAmount: - The amount of water consumed.
+     - parameter date: -The date of consumption.
+     */
+    public func export(drinkOfSize drink: Double, _ date: Date,
+                       completion: @escaping (Result<Void, Error>) -> Void) {
         let quantity = HKQuantity(unit: HKUnit.literUnit(with: .milli),
                                   doubleValue: drink)
         let sample = HKQuantitySample(type: HealthType.water.toSampleType(),

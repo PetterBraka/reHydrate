@@ -25,7 +25,7 @@ struct HomeView: View {
             Text(viewModel.getDate())
                 .font(.brandTitle)
             let consumedGoal = viewModel.today.toLocal()
-            Text("\(consumedGoal.consumption))/\(consumedGoal.goal)")
+            Text("\(consumedGoal.consumption)/\(consumedGoal.goal)")
                 .font(.brandExtraLargeTitle)
                 .bold()
 
@@ -119,6 +119,8 @@ struct HomeView: View {
         }
         .onAppear {
             viewModel.updateDrinks()
+        }
+        .task {
             viewModel.fetchToday()
         }
         .background(Color.background.ignoresSafeArea())

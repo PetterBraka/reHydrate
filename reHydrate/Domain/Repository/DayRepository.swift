@@ -31,8 +31,8 @@ final class DayRepository: DayRepositoryProtocol {
     }
 
     private func createToday() async throws -> Day {
-        let previusGoal = try await service.getLatestElement().goal
-        let today = Day(id: UUID(), consumption: 0, goal: previusGoal, date: Date())
+        let previusGoal = try? await service.getLatestElement().goal
+        let today = Day(id: UUID(), consumption: 0, goal: previusGoal ?? 3, date: Date())
         return try await service.create(today).toDomainModel()
     }
 
