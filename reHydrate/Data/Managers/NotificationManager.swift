@@ -56,10 +56,9 @@ class NotificationManager {
                 createCongratulation()
                 return
             }
-            center.getPendingNotificationRequests { pending in
-                if pending.isEmpty {
-                    self.setReminders()
-                }
+            let pending = await center.pendingNotificationRequests()
+            if pending.isEmpty {
+                self.setReminders()
             }
         }
     }
