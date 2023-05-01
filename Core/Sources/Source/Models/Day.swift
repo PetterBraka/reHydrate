@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import CoreInterfaceKit
 
-public struct Day {
+public struct Day: DayProtocol {
     public let id: UUID
     public var consumption: Double
     public var goal: Double

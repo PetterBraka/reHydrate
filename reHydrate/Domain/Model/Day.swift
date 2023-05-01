@@ -7,12 +7,16 @@
 //
 
 import Foundation
+import CoreInterfaceKit
+import CoreKit
 
-public struct Day {
+public struct Day: DayProtocol {
     public let id: UUID
-    var consumption: Double
-    var goal: Double
-    let date: Date!
+    public var consumption: Double
+    public var goal: Double
+    public let date: Date
+    
+    private let settingsRepo: SettingsRepository = MainAssembler.resolve()
 
     func isSameDay(as date: Date) -> Bool {
         let calendar = Calendar(identifier: .gregorian)
@@ -20,7 +24,8 @@ public struct Day {
     }
 
     func toLocal() -> (consumption: String, goal: String) {
-        let converted = UnitConversionHelper.getLocal(self)
+        let converted = UnitConversionHelper.getLocal(self,
+                                                      inMetric: settingsRepo.isMetric)
         return (converted.consumtion.clean, converted.goal.clean)
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import Swinject
+import CoreInterfaceKit
 
 class RepositoryAssembly: Assembly {
     func assemble(container: Container) {
@@ -14,12 +15,12 @@ class RepositoryAssembly: Assembly {
             SettingsRepository()
         }.inObjectScope(.container)
 
-        container.register(DayRepositoryProtocol.self) { resolver in
+        container.register(DayRepository.self) { resolver in
             DayRepository(service: resolver.resolve(DayService.self)!)
         }.inObjectScope(.container)
 
         if #available(iOS 16.4, *) {
-            container.register(DrinkRepositoryProtocol.self) { resolver in
+            container.register(DrinkRepository.self) { resolver in
                 DrinkRepository(service: resolver.resolve(DrinkService.self)!)
             }.inObjectScope(.container)
         }

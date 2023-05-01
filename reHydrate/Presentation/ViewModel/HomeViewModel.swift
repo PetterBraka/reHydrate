@@ -22,7 +22,7 @@ final class HomeViewModel: NSObject, ObservableObject {
 
     private let notificationManager: NotificationManager = MainAssembler.resolve()
     private let healthManager: HealthManagerProtocol = MainAssembler.resolve()
-    private let dayRepository: DayRepositoryProtocol = MainAssembler.resolve()
+    private let dayRepository: DayRepository = MainAssembler.resolve()
 
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
@@ -125,12 +125,8 @@ final class HomeViewModel: NSObject, ObservableObject {
     }
 
     func getDate() -> String {
-        if let date = today.date {
-            formatter.locale = Locale(identifier: language.rawValue)
-            return formatter.string(from: date)
-        } else {
-            return ""
-        }
+        formatter.locale = Locale(identifier: language.rawValue)
+        return formatter.string(from: today.date)
     }
 
     func updateDrinks() {

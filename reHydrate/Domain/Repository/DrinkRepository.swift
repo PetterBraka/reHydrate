@@ -7,13 +7,7 @@
 //
 
 import Foundation
-
-protocol DrinkRepositoryProtocol {
-    func fetchDrinks(for date: Date) async throws -> [Drink]
-    func remove(drink: Drink) async throws
-    func addDrink(_ size: Double, _ type: Drink.Option) async throws -> Drink
-    func update(sizeOf size: Double, drink: Drink) async throws -> Drink
-}
+import CoreInterfaceKit
 
 @available(iOS, introduced: 16.4)
 final class DrinkRepository: DrinkRepositoryProtocol {
@@ -44,7 +38,7 @@ final class DrinkRepository: DrinkRepositoryProtocol {
         try await service.delete(drink)
     }
 
-    func addDrink(_ size: Double, _ type: Drink.Option) async throws -> Drink {
+    func addDrink(_ size: Double, _ type: DrinkType) async throws -> Drink {
         let drinkModel = try await service.create(Drink(type: type, size: size))
         return drinkModel.toDomainModel()
     }

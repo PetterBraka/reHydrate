@@ -178,7 +178,6 @@
 		A1A261F029FFAE74006C837B /* CoreInterfaceKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1A261EF29FFAE74006C837B /* CoreInterfaceKit */; };
 		A1A261F229FFAE74006C837B /* CoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1A261F129FFAE74006C837B /* CoreKit */; };
 		A1BD34A5285F3E7C00876A3D /* UICollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */; };
-		A1C2DADB2987086A003D75C9 /* UnitConversionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C2DADA2987086A003D75C9 /* UnitConversionHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -385,7 +384,6 @@
 		A15303FA29F54D5E00BA03F4 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 		A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
 		A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollection+Extensions.swift"; sourceTree = "<group>"; };
-		A1C2DADA2987086A003D75C9 /* UnitConversionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitConversionHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -741,7 +739,6 @@
 			children = (
 				33EC3A90275A8C010049E414 /* LocalizationHelper.swift */,
 				33EC3A8527539E590049E414 /* UserDefault+Helper.swift */,
-				A1C2DADA2987086A003D75C9 /* UnitConversionHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1112,7 +1109,6 @@
 				332315F72742B4F10039EE23 /* AppViewModel.swift in Sources */,
 				33231620274A64210039EE23 /* HomeViewModel.swift in Sources */,
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
-				A1C2DADB2987086A003D75C9 /* UnitConversionHelper.swift in Sources */,
 				33694FF1277CB09900D2FE66 /* EditDrinksSectionView.swift in Sources */,
 				33EC3A882754BA420049E414 /* Localizable.swift in Sources */,
 				33EC3A93275A8C210049E414 /* Notification+Extensions.swift in Sources */,

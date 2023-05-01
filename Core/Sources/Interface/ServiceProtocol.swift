@@ -10,6 +10,7 @@ import Foundation
 public protocol ServiceProtocol {
     associatedtype DomainModel
     associatedtype DataModel
+
     func create(_ item: DomainModel) async throws -> DataModel
     func delete(_ item: DomainModel) async throws
     func save() async throws

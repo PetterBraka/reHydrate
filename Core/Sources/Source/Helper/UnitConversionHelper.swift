@@ -9,8 +9,9 @@
 import Foundation
 import CoreInterfaceKit
 
-final class UnitConversionHelper {
-    static func getLocal(_ day: Day, inMetric: Bool) -> (consumtion: Double, goal: Double) {
+public final class UnitConversionHelper {
+    public static func getLocal(_ day: any DayProtocol,
+                                inMetric: Bool) -> (consumtion: Double, goal: Double) {
         let consumed = day.consumption.convert(
             to: inMetric ? .liters : .imperialPints,
             from: .liters
@@ -22,7 +23,7 @@ final class UnitConversionHelper {
         return (consumed, goal)
     }
 
-    static func getLocal(_ drink: Drink,
+    public static func getLocal(_ drink: any DrinkProtocol,
                          withUnit symbol: Bool,
                          inMetric: Bool) -> String {
         let unit: UnitVolume = inMetric ? .milliliters : .imperialPints

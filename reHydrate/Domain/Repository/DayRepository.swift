@@ -8,15 +8,7 @@
 
 import Combine
 import Foundation
-
-protocol DayRepositoryProtocol {
-    func fetchDay(for date: Date) async throws -> Day
-    func fetchAll() async throws -> [Day]
-    func addDrink(of size: Double, to day: Day) async throws -> Day
-    func removeDrink(of size: Double, to day: Day) async throws -> Day
-    func update(consumption newConsumption: Double, forDayAt date: Date) async throws -> Day
-    func update(goal newGoal: Double, forDayAt date: Date) async throws -> Day
-}
+import CoreInterfaceKit
 
 final class DayRepository: DayRepositoryProtocol {
     let service: DayService

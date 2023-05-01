@@ -15,7 +15,7 @@ extension DayModel: DomainMappable {
         Day(id: id ?? UUID(),
             consumption: consumtion,
             goal: goal,
-            date: date)
+            date: date ?? .now)
     }
     
     public func update(with item: Day) {

@@ -7,48 +7,56 @@
 //
 
 import SwiftUI
+import CoreInterfaceKit
+import CoreKit
 
-public struct Drink: Identifiable, Hashable {
-    public var id = UUID()
+public struct Drink: DrinkProtocol {
+    public let id: UUID
 
-    var type: Option
-    var size: Double
+    public var type: DrinkType
+    public var size: Double
 
-    var fill: Double {
+    public var fill: Double {
         size / Double(type.max)
+    }
+    
+    private let settingsRepo: SettingsRepository = MainAssembler.resolve()
+    
+    init(id: UUID = UUID(),
+         type: DrinkType,
+         size: Double) {
+        self.id = id
+        self.type = type
+        self.size = size
     }
 
     func toLocal(withUnit symbol: Bool = true) -> String {
-        UnitConversionHelper.getLocal(self, withUnit: symbol)
+        UnitConversionHelper.getLocal(self, withUnit: symbol,
+                                      inMetric: settingsRepo.isMetric)
     }
-
-    enum Option {
-        case small
-        case medium
-        case large
-
-        func getImage(with fill: Double) -> Image {
-            switch self {
-            case .small: return .getGlass(with: fill)
-            case .medium: return .getBottle(with: fill)
-            case .large: return .getReusableBottle(with: fill)
-            }
+    
+    func getImage(with fill: Double? = nil) -> Image {
+        let fill = fill ?? self.fill
+        switch type {
+        case .small: return .getGlass(with: fill)
+        case .medium: return .getBottle(with: fill)
+        case .large: return .getReusableBottle(with: fill)
         }
+    }
+}
 
-        var max: Int {
-            switch self {
-            case .small: return 400
-            case .medium: return 700
-            case .large: return 1200
-            }
-        }
-
-        var min: Int {
-            switch self {
-            case .small: return 100
-            case .medium: return 300
-            case .large: return 500
-            }
-        }
+extension Drink: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(type)
+        hasher.combine(size)
+        hasher.combine(fill)
+    }
+    
+    public static func == (lhs: Drink, rhs: Drink) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.type == rhs.type &&
+        lhs.size == rhs.size &&
+        lhs.fill == rhs.fill
     }
 }

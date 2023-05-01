@@ -1,8 +1,9 @@
 import Foundation
 
 public protocol DrinkRepositoryProtocol {
-    func fetchDrinks(for date: Date) async throws -> [Drink]
-    func remove(drink: Drink) async throws
-    func addDrink(_ size: Double) async throws -> Drink
-    func update(sizeOf size: Double, drink: Drink) async throws -> Drink
+    associatedtype DrinkProtocol
+    func fetchDrinks(for date: Date) async throws -> [DrinkProtocol]
+    func remove(drink: DrinkProtocol) async throws
+    func addDrink(_ size: Double, _ type: DrinkType) async throws -> DrinkProtocol
+    func update(sizeOf size: Double, drink: DrinkProtocol) async throws -> DrinkProtocol
 }

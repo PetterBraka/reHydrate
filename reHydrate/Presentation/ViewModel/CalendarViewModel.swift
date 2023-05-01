@@ -10,10 +10,11 @@ import Combine
 import CoreData
 import SwiftUI
 import Swinject
+import CoreInterfaceKit
 
 final class CalendarViewModel: ObservableObject {
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()
-    private let dayRepository: DayRepositoryProtocol = MainAssembler.resolve()
+    private let dayRepository: DayRepository = MainAssembler.resolve()
     var language: Language { settingsRepository.language }
     var isMetric: Bool { settingsRepository.isMetric }
 
