@@ -7,8 +7,8 @@
 //
 
 import CoreData
-import Foundation
 import CoreInterfaceKit
+import Foundation
 
 extension DayModel: DomainMappable {
     public func toDomainModel() -> Day {
@@ -17,7 +17,7 @@ extension DayModel: DomainMappable {
             goal: goal,
             date: date ?? .now)
     }
-    
+
     public func update(with item: Day) {
         id = item.id
         consumtion = item.consumption

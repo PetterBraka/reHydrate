@@ -1,6 +1,6 @@
 //
 //  DataTests.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 30/04/2023.
 //
@@ -8,7 +8,6 @@
 import XCTest
 
 final class DataTests: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -27,9 +26,8 @@ final class DataTests: XCTestCase {
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
-        self.measure {
+        measure {
             // Put the code you want to measure the time of here.
         }
     }
-
 }

@@ -7,8 +7,8 @@
 //
 
 import CoreData
-import Foundation
 import CoreInterfaceKit
+import Foundation
 
 extension DrinkModel: DomainMappable {
     public func toDomainModel() -> Drink {
@@ -27,7 +27,7 @@ extension DrinkModel: DomainMappable {
                      type: drinkOption,
                      size: size)
     }
-    
+
     public func update(with item: Drink) {
         id = item.id
         size = item.size

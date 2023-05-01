@@ -6,16 +6,16 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import CoreInterfaceKit
 import CoreKit
+import Foundation
 
 public struct Day: DayProtocol {
     public let id: UUID
     public var consumption: Double
     public var goal: Double
     public let date: Date
-    
+
     private let settingsRepo: SettingsRepository = MainAssembler.resolve()
 
     func isSameDay(as date: Date) -> Bool {

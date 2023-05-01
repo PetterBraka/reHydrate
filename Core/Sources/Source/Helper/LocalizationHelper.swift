@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import CoreInterfaceKit
+import Foundation
 
 class LocalizationHelper {
     static let shared = LocalizationHelper()
@@ -17,7 +17,7 @@ class LocalizationHelper {
     private var currentLanguage: String {
         get {
             UserDefaults.getValue(for: Preference.currentLanguage) ??
-            Preference.currentLanguage.default as? String ?? ""
+                Preference.currentLanguage.default as? String ?? ""
         }
         set {
             UserDefaults.setValue(newValue, for: Preference.currentLanguage)

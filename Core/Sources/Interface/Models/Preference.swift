@@ -1,6 +1,6 @@
 //
 //  Preference.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 30/04/2023.
 //
@@ -21,7 +21,7 @@ public enum Preference {
     case darkMode
     case hasReachedGoal
     case reachedGoalOnDate
-    
+
     public var `default`: Any? {
         switch self {
         case .appleLanguages:
@@ -52,7 +52,7 @@ public enum Preference {
             return nil
         }
     }
-    
+
     public var key: String {
         switch self {
         case .appleLanguages:

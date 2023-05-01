@@ -1,6 +1,6 @@
 //
 //  DomainMappable.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 23/04/2023.
 //

@@ -1,6 +1,6 @@
 //
 //  DayProtocol.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 01/05/2023.
 //

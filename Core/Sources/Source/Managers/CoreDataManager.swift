@@ -7,16 +7,16 @@
 //
 
 import CoreData
-import Foundation
 import CoreInterfaceKit
+import Foundation
 
 public final class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProtocol {
     private let context: NSManagedObjectContext
-    
+
     public init(context: NSManagedObjectContext) {
         self.context = context
     }
-    
+
     public func create() async throws -> Entity {
         let className = String(describing: Entity.self)
         guard let managedObject = NSEntityDescription.insertNewObject(forEntityName: className,
@@ -26,7 +26,7 @@ public final class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProt
         }
         return managedObject
     }
-    
+
     /// Will try to save the changes made but if it fails it will roll it back
     public func saveChanges() async throws {
         do {
@@ -36,13 +36,14 @@ public final class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProt
             throw error
         }
     }
-    
+
     public func delete(_ entity: Entity) {
         context.delete(entity)
     }
-    
+
     public func get(using predicate: NSPredicate?,
-             sortDescriptors: [NSSortDescriptor]?) async throws -> Entity {
+                    sortDescriptors: [NSSortDescriptor]?) async throws -> Entity
+    {
         let entityName = String(describing: Entity.self)
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = sortDescriptors
@@ -53,15 +54,16 @@ public final class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProt
         }
         return singleElement
     }
-    
+
     public func getLastObject(using predicate: NSPredicate?,
-                       sortDescriptors _: [NSSortDescriptor]?) async throws -> Entity {
+                              sortDescriptors _: [NSSortDescriptor]?) async throws -> Entity
+    {
         let entityName = String(describing: Entity.self)
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = []
         request.predicate = predicate
         request.fetchLimit = 1
-        
+
         let results = try context.fetch(request)
         guard let element = results.first
         else {
@@ -69,9 +71,10 @@ public final class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProt
         }
         return element
     }
-    
+
     public func getAll(using predicate: NSPredicate?,
-                sortDescriptors: [NSSortDescriptor]?) async throws -> [Entity] {
+                       sortDescriptors: [NSSortDescriptor]?) async throws -> [Entity]
+    {
         let entityName = String(describing: Entity.self)
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = sortDescriptors

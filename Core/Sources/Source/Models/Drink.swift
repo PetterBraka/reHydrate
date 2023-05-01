@@ -18,10 +18,11 @@ public struct Drink: DrinkProtocol {
     public var fill: Double {
         size / Double(type.max)
     }
-    
+
     public init(id: UUID = UUID(),
                 type: DrinkType,
-                size: Double) {
+                size: Double)
+    {
         self.id = id
         self.type = type
         self.size = size

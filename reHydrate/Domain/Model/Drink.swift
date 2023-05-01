@@ -6,9 +6,9 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import SwiftUI
 import CoreInterfaceKit
 import CoreKit
+import SwiftUI
 
 public struct Drink: DrinkProtocol {
     public let id: UUID
@@ -19,9 +19,9 @@ public struct Drink: DrinkProtocol {
     public var fill: Double {
         size / Double(type.max)
     }
-    
+
     private let settingsRepo: SettingsRepository = MainAssembler.resolve()
-    
+
     init(id: UUID = UUID(),
          type: DrinkType,
          size: Double) {
@@ -34,7 +34,7 @@ public struct Drink: DrinkProtocol {
         UnitConversionHelper.getLocal(self, withUnit: symbol,
                                       inMetric: settingsRepo.isMetric)
     }
-    
+
     func getImage(with fill: Double? = nil) -> Image {
         let fill = fill ?? self.fill
         switch type {
@@ -52,11 +52,11 @@ extension Drink: Hashable {
         hasher.combine(size)
         hasher.combine(fill)
     }
-    
+
     public static func == (lhs: Drink, rhs: Drink) -> Bool {
         lhs.id == rhs.id &&
-        lhs.type == rhs.type &&
-        lhs.size == rhs.size &&
-        lhs.fill == rhs.fill
+            lhs.type == rhs.type &&
+            lhs.size == rhs.size &&
+            lhs.fill == rhs.fill
     }
 }

@@ -6,9 +6,9 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import SwiftUI
 import CoreInterfaceKit
 import CoreKit
+import SwiftUI
 
 struct AppIconSelectionView: View {
     @AppStorage("language") var language = LocalizationHelper.shared.language

@@ -32,12 +32,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
 
     func privacyBehavior(for _: CLKComplication)
-    async -> CLKComplicationPrivacyBehavior { .showOnLockScreen }
+        async -> CLKComplicationPrivacyBehavior { .showOnLockScreen }
 
     func timelineEndDate(for _: CLKComplication) async -> Date? { nil }
 
     func timelineEntries(for complication: CLKComplication, after _: Date, limit _: Int)
-    async -> [CLKComplicationTimelineEntry]? {
+        async -> [CLKComplicationTimelineEntry]? {
         todayDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
 
         if let template = getComplication(for: complication.family) {

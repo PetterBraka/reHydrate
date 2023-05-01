@@ -1,12 +1,12 @@
 //
 //  HealthManagerProtocol.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 23/04/2023.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 public protocol HealthManagerProtocol {
     var needsAccess: Bool { get }

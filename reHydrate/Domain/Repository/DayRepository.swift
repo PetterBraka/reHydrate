@@ -7,8 +7,8 @@
 //
 
 import Combine
-import Foundation
 import CoreInterfaceKit
+import Foundation
 
 final class DayRepository: DayRepositoryProtocol {
     let service: DayService

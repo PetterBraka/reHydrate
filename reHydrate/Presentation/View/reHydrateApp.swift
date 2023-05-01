@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import SwiftUI
 import CoreKit
+import SwiftUI
 
 // swiftlint:disable all
 @main

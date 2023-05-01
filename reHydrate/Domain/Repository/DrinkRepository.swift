@@ -6,8 +6,8 @@
 //  Copyright © 2023 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import CoreInterfaceKit
+import Foundation
 
 @available(iOS, introduced: 16.4)
 final class DrinkRepository: DrinkRepositoryProtocol {

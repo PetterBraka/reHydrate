@@ -134,7 +134,7 @@ struct WaveView<Content: View>: View {
         Path { path in
             let fill = size.height * (1 - fillLevel)
             let width = size.width
-            let maxOffset = size.height * self.maxOffset
+            let maxOffset = size.height * maxOffset
             path.move(to: CGPoint(x: 0, y: fill))
             path.addCurve(to: CGPoint(x: width, y: fill),
                           control1: CGPoint(x: width * 0.5,

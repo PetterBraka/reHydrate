@@ -8,9 +8,9 @@
 
 import Combine
 import CoreData
+import CoreInterfaceKit
 import SwiftUI
 import Swinject
-import CoreInterfaceKit
 
 final class CalendarViewModel: ObservableObject {
     private let settingsRepository: SettingsRepository = MainAssembler.resolve()

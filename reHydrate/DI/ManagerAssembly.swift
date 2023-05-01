@@ -6,9 +6,9 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
 import CoreInterfaceKit
 import CoreKit
+import Foundation
 import Swinject
 
 class ManagerAssembly: Assembly {

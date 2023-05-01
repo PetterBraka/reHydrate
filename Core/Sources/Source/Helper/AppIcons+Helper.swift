@@ -6,8 +6,8 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import UIKit
 import CoreInterfaceKit
+import UIKit
 
 public final class IconHelper: ObservableObject {
     public let iconNames: [Icon] = Icon.allCases

@@ -7,8 +7,8 @@
 //
 
 import CoreData
-import CoreKit
 import CoreInterfaceKit
+import CoreKit
 import Foundation
 
 final class DayService: ServiceProtocol {
@@ -41,7 +41,7 @@ final class DayService: ServiceProtocol {
     func getElement(for date: Date) async throws -> DayModel {
         try await manager.get(using: .getElement(at: date), sortDescriptors: defaultSort)
     }
-    
+
     func getElement(with id: UUID) async throws -> DayModel {
         try await manager.get(using: .getElement(with: id), sortDescriptors: nil)
     }

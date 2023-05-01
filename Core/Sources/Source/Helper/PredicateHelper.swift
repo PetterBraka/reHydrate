@@ -10,7 +10,7 @@ import Foundation
 
 public struct PredicateHelper {
     private init() {}
-    
+
     /// Generates a predicate representating the start to the end of the date passed in
     public static func getElement(at date: Date) -> NSCompoundPredicate {
         let startOfDay = Calendar.current.startOfDay(for: date)
@@ -22,7 +22,7 @@ public struct PredicateHelper {
             [fromPredicate, toPredicate])
         return datePredicate
     }
-    
+
     public static func getElement(with id: String) -> NSPredicate {
         NSPredicate(format: "id == %@", id)
     }
@@ -32,7 +32,7 @@ public extension NSPredicate {
     static func getElement(at date: Date) -> NSCompoundPredicate {
         PredicateHelper.getElement(at: date)
     }
-    
+
     static func getElement(with id: UUID) -> NSPredicate {
         PredicateHelper.getElement(with: id.uuidString)
     }

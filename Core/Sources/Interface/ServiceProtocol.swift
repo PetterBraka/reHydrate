@@ -1,6 +1,6 @@
 //
 //  ServiceProtocol.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 30/04/2023.
 //

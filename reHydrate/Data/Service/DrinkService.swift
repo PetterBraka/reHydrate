@@ -7,8 +7,8 @@
 //
 
 import CoreData
-import CoreKit
 import CoreInterfaceKit
+import CoreKit
 import Foundation
 
 final class DrinkService: ServiceProtocol {
@@ -39,7 +39,7 @@ final class DrinkService: ServiceProtocol {
     func getElement(for date: Date) async throws -> DrinkModel {
         try await manager.get(using: .getElement(at: date), sortDescriptors: nil)
     }
-    
+
     func getElement(with id: UUID) async throws -> DrinkModel {
         try await manager.get(using: .getElement(with: id), sortDescriptors: nil)
     }

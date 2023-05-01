@@ -6,8 +6,8 @@
 //  Copyright © 2023 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Swinject
 import CoreInterfaceKit
+import Swinject
 
 class RepositoryAssembly: Assembly {
     func assemble(container: Container) {

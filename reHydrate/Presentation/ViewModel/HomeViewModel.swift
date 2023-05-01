@@ -218,11 +218,10 @@ extension HomeViewModel {
         healthManager.getWater(for: .now) { [weak self] result in
             Task { @MainActor [weak self] in
                 switch result {
-                case let.success(consumed):
+                case let .success(consumed):
                     self?.update(consumption: consumed, for: .now)
-                case let.failure(error):
+                case let .failure(error):
                     print(error)
-                    break
                 }
             }
         }
