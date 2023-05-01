@@ -8,6 +8,7 @@
 
 import Combine
 import CoreData
+import CoreInterfaceKit
 import FirebaseAnalytics
 import HealthKit
 import SwiftUI
@@ -226,7 +227,7 @@ extension HomeViewModel {
 
     private func export(drink: Drink) {
         guard drink.size != 0 else { return }
-        healthManager.export(drink: drink, Date())
+        healthManager.export(drinkOfSize: drink.size, .now)
             .sink { completion in
                 switch completion {
                 case let .failure(error):
