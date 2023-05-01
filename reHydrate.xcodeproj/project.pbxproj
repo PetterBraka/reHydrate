@@ -326,10 +326,6 @@
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3378767F24378A9800F5A732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		337F1B0C277D4A2D00B2A819 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		337F1B46277E09CE00B2A819 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		337F1B47277E09CE00B2A819 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		337F1B48277E09CE00B2A819 /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.resolved; sourceTree = "<group>"; };
-		337F1B49277E09CE00B2A819 /* Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		337F1B4A277E0A9C00B2A819 /* .swift-version */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-version"; sourceTree = "<group>"; };
 		3387ED68274AD9C40083D2C1 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
 		3387ED6C274C03A70083D2C1 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
@@ -383,6 +379,7 @@
 		A13A2A4728551E930039084A /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
 		A15303FA29F54D5E00BA03F4 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 		A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
+		A1A261F429FFEFDF006C837B /* BuildTools */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BuildTools; sourceTree = "<group>"; };
 		A1BD34A4285F3E7C00876A3D /* UICollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollection+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -612,9 +609,9 @@
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
+				A1A261F429FFEFDF006C837B /* BuildTools */,
 				A15303FA29F54D5E00BA03F4 /* Core */,
 				337F1B4A277E0A9C00B2A819 /* .swift-version */,
-				337F1B45277E09B700B2A819 /* BuildTools */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				33DF9BDB24B47D0900699B1A /* reHydrate-watch */,
 				33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */,
@@ -648,17 +645,6 @@
 				A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */,
 			);
 			path = reHydrate;
-			sourceTree = "<group>";
-		};
-		337F1B45277E09B700B2A819 /* BuildTools */ = {
-			isa = PBXGroup;
-			children = (
-				337F1B47277E09CE00B2A819 /* .swiftlint.yml */,
-				337F1B49277E09CE00B2A819 /* Empty.swift */,
-				337F1B48277E09CE00B2A819 /* Package.resolved */,
-				337F1B46277E09CE00B2A819 /* Package.swift */,
-			);
-			path = BuildTools;
 			sourceTree = "<group>";
 		};
 		3387ED6A274AD9E50083D2C1 /* Home */ = {
@@ -1016,7 +1002,8 @@
 /* Begin PBXShellScriptBuildPhase section */
 		330C23D727665F6600293092 /* Run BuildTools */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			alwaysOutOfDate = 1;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -1028,7 +1015,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# exit 0\ncd BuildTools\n# swift package update #Uncomment this line temporarily to update the version \n# used to the latest matching your BuildTools/Package.swift file\n/usr/bin/xcrun --sdk macosx swift run -c release swiftformat --disable trailingClosures \"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --fix --path \"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --path \"$SRCROOT\"\n";
 		};

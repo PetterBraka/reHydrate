@@ -29,3 +29,5 @@ struct reHydrateApp: App {
         }
     }
 }
+
+// swiftlint:enable all

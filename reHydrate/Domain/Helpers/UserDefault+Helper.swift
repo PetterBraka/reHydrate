@@ -57,6 +57,7 @@ struct UserDefault<Value> {
         // swiftlint:disable unused_setter_value
         get { fatalError("Wrapped value should not be used.") }
         set { fatalError("Wrapped value should not be used.") }
+        // swiftlint:enable unused_setter_value
     }
 
     init(wrappedValue: Value, _ key: String) {
