@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct Day {
-    let id: UUID
+public struct Day {
+    public let id: UUID
     var consumption: Double
     var goal: Double
     let date: Date!

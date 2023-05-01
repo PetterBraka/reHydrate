@@ -7,11 +7,11 @@
 //
 
 import CoreData
+import CoreKit
+import CoreInterfaceKit
 import Foundation
 
 final class DrinkService: ServiceProtocol {
-    typealias DataModel = DrinkModel
-    typealias DomainModel = Drink
     private let manager: CoreDataManager<DrinkModel>
 
     init(context: NSManagedObjectContext) {
@@ -20,14 +20,13 @@ final class DrinkService: ServiceProtocol {
 
     func create(_ item: Drink) async throws -> DrinkModel {
         let drinkModel = try await manager.create()
-        drinkModel.updateCoreDataModel(item)
+        drinkModel.update(with: item)
         try await save()
         return drinkModel
     }
 
     func delete(_ item: Drink) async throws {
-        let predicate = NSPredicate(format: "id == %@", item.id.uuidString)
-        let drinkModel = try await manager.get(using: predicate,
+        let drinkModel = try await manager.get(using: .getElement(with: item.id),
                                                sortDescriptors: nil)
         manager.delete(drinkModel)
         try await manager.saveChanges()
@@ -38,24 +37,18 @@ final class DrinkService: ServiceProtocol {
     }
 
     func getElement(for date: Date) async throws -> DrinkModel {
-        let datePredicate = PredicateHelper.getPredicate(from: date)
-        let drinkModel = try await manager.get(using: datePredicate,
-                                               sortDescriptors: nil)
-        return drinkModel
+        try await manager.get(using: .getElement(at: date), sortDescriptors: nil)
+    }
+    
+    func getElement(with id: UUID) async throws -> DrinkModel {
+        try await manager.get(using: .getElement(with: id), sortDescriptors: nil)
     }
 
     func getLatestElement() async throws -> DrinkModel {
-        guard let drinkModel = try await manager.getLastObject(using: nil,
-                                                               sortDescriptors: nil)
-        else {
-            throw CoreDataError.elementNotFound
-        }
-        return drinkModel
+        try await manager.getLastObject(using: nil, sortDescriptors: nil)
     }
 
     func getAll() async throws -> [DrinkModel] {
-        let drinkModels = try await manager.getAll(using: nil,
-                                                   sortDescriptors: nil)
-        return drinkModels
+        try await manager.getAll(using: nil, sortDescriptors: nil)
     }
 }

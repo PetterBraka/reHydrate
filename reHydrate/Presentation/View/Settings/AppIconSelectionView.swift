@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import CoreInterfaceKit
+import CoreKit
 
 struct AppIconSelectionView: View {
     @AppStorage("language") var language = LocalizationHelper.shared.language

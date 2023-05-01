@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CoreInterfaceKit
+import CoreKit
 import Swinject
 
 class ManagerAssembly: Assembly {

@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-struct Drink: Identifiable, Hashable {
-    var id = UUID()
+public struct Drink: Identifiable, Hashable {
+    public var id = UUID()
 
     var type: Option
     var size: Double

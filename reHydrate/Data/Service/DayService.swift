@@ -7,11 +7,14 @@
 //
 
 import CoreData
+import CoreKit
+import CoreInterfaceKit
 import Foundation
 
 final class DayService: ServiceProtocol {
     private let manager: CoreDataManager<DayModel>
-    private let defaultSort = [NSSortDescriptor(keyPath: \DayModel.date, ascending: false)]
+    private let defaultSort = [NSSortDescriptor(keyPath: \DayModel.date,
+                                                ascending: false)]
 
     init(context: NSManagedObjectContext) {
         manager = CoreDataManager<DayModel>(context: context)
@@ -19,14 +22,13 @@ final class DayService: ServiceProtocol {
 
     func create(_ item: Day) async throws -> DayModel {
         let dayModel = try await manager.create()
-        dayModel.updateCoreDataModel(item)
+        dayModel.update(with: item)
         try await save()
         return dayModel
     }
 
     func delete(_ item: Day) async throws {
-        let predicate = NSPredicate(format: "id == %@", item.id.uuidString)
-        let day = try await manager.get(using: predicate,
+        let day = try await manager.get(using: .getElement(with: item.id),
                                         sortDescriptors: defaultSort)
         manager.delete(day)
         try await manager.saveChanges()
@@ -37,24 +39,18 @@ final class DayService: ServiceProtocol {
     }
 
     func getElement(for date: Date) async throws -> DayModel {
-        let datePredicate = PredicateHelper.getPredicate(from: date)
-        let day = try await manager.get(using: datePredicate,
-                                        sortDescriptors: defaultSort)
-        return day
+        try await manager.get(using: .getElement(at: date), sortDescriptors: defaultSort)
+    }
+    
+    func getElement(with id: UUID) async throws -> DayModel {
+        try await manager.get(using: .getElement(with: id), sortDescriptors: nil)
     }
 
     func getLatestElement() async throws -> DayModel {
-        guard let dayModel = try await manager.getLastObject(using: nil,
-                                                             sortDescriptors: defaultSort)
-        else {
-            throw CoreDataError.elementNotFound
-        }
-        return dayModel
+        try await manager.getLastObject(using: nil, sortDescriptors: defaultSort)
     }
 
     func getAll() async throws -> [DayModel] {
-        let dayModels = try await manager.getAll(using: nil,
-                                                 sortDescriptors: defaultSort)
-        return dayModels
+        try await manager.getAll(using: nil, sortDescriptors: defaultSort)
     }
 }

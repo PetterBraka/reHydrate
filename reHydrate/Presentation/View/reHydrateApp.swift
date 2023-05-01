@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import CoreKit
 
 // swiftlint:disable all
 @main

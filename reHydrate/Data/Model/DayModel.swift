@@ -8,19 +8,20 @@
 
 import CoreData
 import Foundation
+import CoreInterfaceKit
 
 extension DayModel: DomainMappable {
-    func toDomainModel() -> Day {
+    public func toDomainModel() -> Day {
         Day(id: id ?? UUID(),
             consumption: consumtion,
             goal: goal,
             date: date)
     }
-
-    func updateCoreDataModel(_ day: Day) {
-        id = day.id
-        consumtion = day.consumption
-        goal = day.goal
-        date = day.date
+    
+    public func update(with item: Day) {
+        id = item.id
+        consumtion = item.consumption
+        goal = item.goal
+        date = item.date
     }
 }

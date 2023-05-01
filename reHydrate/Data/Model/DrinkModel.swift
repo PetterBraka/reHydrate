@@ -8,9 +8,10 @@
 
 import CoreData
 import Foundation
+import CoreInterfaceKit
 
 extension DrinkModel: DomainMappable {
-    func toDomainModel() -> Drink {
+    public func toDomainModel() -> Drink {
         let drinkOption: Drink.Option
         switch Int(size) {
         case Drink.Option.small.min ... Drink.Option.small.max:
@@ -26,9 +27,9 @@ extension DrinkModel: DomainMappable {
                      type: drinkOption,
                      size: size)
     }
-
-    func updateCoreDataModel(_ drink: Drink) {
-        id = drink.id
-        size = drink.size
+    
+    public func update(with item: Drink) {
+        id = item.id
+        size = item.size
     }
 }

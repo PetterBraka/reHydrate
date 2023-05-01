@@ -50,9 +50,7 @@ final class DrinkRepository: DrinkRepositoryProtocol {
     }
 
     func update(sizeOf size: Double, drink: Drink) async throws -> Drink {
-        let drinkModels = try await service.getAll()
-        guard let drinkModel = drinkModels.first(where: { $0.id == drink.id })
-        else { throw CoreDataError.elementNotFound }
+        let drinkModel = try await service.getElement(with: drink.id)
         drinkModel.size = size
         try await service.save()
         return drinkModel.toDomainModel()
