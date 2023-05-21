@@ -17,7 +17,6 @@
 		330C240B27688F7000293092 /* blacklexipink@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C240227688F6F00293092 /* blacklexipink@1x.png */; };
 		330C240C27688F7000293092 /* lexipinkwhite@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C240327688F7000293092 /* lexipinkwhite@1x.png */; };
 		330C240D27688F7000293092 /* blacklexipink@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 330C240427688F7000293092 /* blacklexipink@2x.png */; };
-		330C240F2768916100293092 /* PresistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330C240E2768916100293092 /* PresistenceController.swift */; };
 		3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33CD6D58243BE53B00EF0335 /* HealthKit.framework */; };
 		332315E5274271E20039EE23 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E4274271E20039EE23 /* HomeView.swift */; };
 		332315E72742724D0039EE23 /* Drinkview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E62742724D0039EE23 /* Drinkview.swift */; };
@@ -215,7 +214,6 @@
 		330C240227688F6F00293092 /* blacklexipink@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blacklexipink@1x.png"; sourceTree = "<group>"; };
 		330C240327688F7000293092 /* lexipinkwhite@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lexipinkwhite@1x.png"; sourceTree = "<group>"; };
 		330C240427688F7000293092 /* blacklexipink@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blacklexipink@2x.png"; sourceTree = "<group>"; };
-		330C240E2768916100293092 /* PresistenceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresistenceController.swift; sourceTree = "<group>"; };
 		3310709A244DBCD3008365A3 /* reHydrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reHydrate.entitlements; sourceTree = "<group>"; };
 		332315E4274271E20039EE23 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		332315E62742724D0039EE23 /* Drinkview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drinkview.swift; sourceTree = "<group>"; };
@@ -753,7 +751,6 @@
 				33EC3A8F275A8BE80049E414 /* Service */,
 				3323161C274A63360039EE23 /* Managers */,
 				A132EF8A2986C036006C5DB1 /* Model */,
-				330C240E2768916100293092 /* PresistenceController.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1064,7 +1061,6 @@
 				33694FEF277CAA8E00D2FE66 /* View+Extensions.swift in Sources */,
 				3323161327441E140039EE23 /* Day.swift in Sources */,
 				A132EF8C2986C279006C5DB1 /* ServiceAssembly.swift in Sources */,
-				330C240F2768916100293092 /* PresistenceController.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
 				33EC3A91275A8C010049E414 /* LocalizationHelper.swift in Sources */,
 				33EC3A97275B60DC0049E414 /* NotificationManager.swift in Sources */,

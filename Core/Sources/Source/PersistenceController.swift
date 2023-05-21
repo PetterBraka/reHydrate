@@ -1,5 +1,5 @@
 //
-//  PresistenceController.swift
+//  PersistenceController.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 21/11/2021.
@@ -9,12 +9,14 @@
 import CoreData
 import CoreInterfaceKit
 
-public struct PresistenceController: PresistenceControllerProtocol {
-    static func empty() -> PresistenceController {
-        PresistenceController(inMemory: true)
+public struct PersistenceController: PersistenceControllerProtocol {
+    static func empty() -> PersistenceController {
+        PersistenceController(inMemory: true)
     }
 
     public var container: NSPersistentContainer
+
+    public var context: NSManagedObjectContext { container.viewContext }
 
     public init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "reHydrate")
