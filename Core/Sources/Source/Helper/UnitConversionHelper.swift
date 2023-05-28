@@ -11,8 +11,7 @@ import Foundation
 
 public enum UnitConversionHelper {
     public static func getLocal(_ day: any DayProtocol,
-                                inMetric: Bool) -> (consumtion: Double, goal: Double)
-    {
+                                inMetric: Bool) -> (consumtion: Double, goal: Double) {
         let consumed = day.consumption.convert(
             to: inMetric ? .liters : .imperialPints,
             from: .liters
@@ -26,8 +25,7 @@ public enum UnitConversionHelper {
 
     public static func getLocal(_ drink: any DrinkProtocol,
                                 withUnit symbol: Bool,
-                                inMetric: Bool) -> String
-    {
+                                inMetric: Bool) -> String {
         let unit: UnitVolume = inMetric ? .milliliters : .imperialPints
 
         let drinkValue = drink.size.convert(

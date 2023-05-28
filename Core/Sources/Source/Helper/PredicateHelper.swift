@@ -11,7 +11,7 @@ import Foundation
 public struct PredicateHelper {
     private init() {}
 
-    /// Generates a predicate representating the start to the end of the date passed in
+    /// Generates a predicate representing the start to the end of the date passed in
     public static func getElement(at date: Date) -> NSCompoundPredicate {
         let startOfDay = Calendar.current.startOfDay(for: date)
         let startOfNextDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)

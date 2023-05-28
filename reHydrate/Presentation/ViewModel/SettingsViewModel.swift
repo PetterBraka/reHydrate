@@ -9,9 +9,8 @@
 import Combine
 import CoreData
 import CoreInterfaceKit
-import Foundation
+import CoreKit
 import SwiftUI
-import Swinject
 
 final class SettingsViewModel: ObservableObject {
     enum SheetType: String, Identifiable {

@@ -42,8 +42,7 @@ public final class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProt
     }
 
     public func get(using predicate: NSPredicate?,
-                    sortDescriptors: [NSSortDescriptor]?) async throws -> Entity
-    {
+                    sortDescriptors: [NSSortDescriptor]?) async throws -> Entity {
         let entityName = String(describing: Entity.self)
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = sortDescriptors
@@ -56,8 +55,7 @@ public final class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProt
     }
 
     public func getLastObject(using predicate: NSPredicate?,
-                              sortDescriptors _: [NSSortDescriptor]?) async throws -> Entity
-    {
+                              sortDescriptors _: [NSSortDescriptor]?) async throws -> Entity {
         let entityName = String(describing: Entity.self)
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = []
@@ -73,8 +71,7 @@ public final class CoreDataManager<Entity: NSManagedObject>: CoreDataManagerProt
     }
 
     public func getAll(using predicate: NSPredicate?,
-                       sortDescriptors: [NSSortDescriptor]?) async throws -> [Entity]
-    {
+                       sortDescriptors: [NSSortDescriptor]?) async throws -> [Entity] {
         let entityName = String(describing: Entity.self)
         let request = NSFetchRequest<Entity>(entityName: entityName)
         request.sortDescriptors = sortDescriptors

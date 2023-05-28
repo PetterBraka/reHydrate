@@ -9,8 +9,8 @@
 import CoreInterfaceKit
 import Foundation
 
-class LocalizationHelper {
-    static let shared = LocalizationHelper()
+public class LocalizationHelper {
+    public static let shared = LocalizationHelper()
 
     private init() {}
 
@@ -24,7 +24,7 @@ class LocalizationHelper {
         }
     }
 
-    var language: Language {
+    public var language: Language {
         get {
             Language(rawValue: currentLanguage) ?? .english
         } set {

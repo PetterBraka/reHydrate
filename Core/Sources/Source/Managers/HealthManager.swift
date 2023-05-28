@@ -35,8 +35,7 @@ public class HealthManager: HealthManagerProtocol {
 
     /// Will get the water consumption for the date passed in
     public func getWater(for date: Date,
-                         completion: @escaping (Result<Double, Error>) -> Void)
-    {
+                         completion: @escaping (Result<Double, Error>) -> Void) {
         let quantityType = HealthType.water.toSampleType()
         guard healthStore.authorizationStatus(for: quantityType) == .sharingAuthorized else {
             completion(.failure(HealthError.notAuthorized))
@@ -98,8 +97,7 @@ public class HealthManager: HealthManagerProtocol {
      - parameter date: -The date of consumption.
      */
     public func export(drinkOfSize drink: Double, _ date: Date,
-                       completion: @escaping (Result<Void, Error>) -> Void)
-    {
+                       completion: @escaping (Result<Void, Error>) -> Void) {
         let quantity = HKQuantity(unit: HKUnit.literUnit(with: .milli),
                                   doubleValue: drink)
         let sample = HKQuantitySample(type: HealthType.water.toSampleType(),

@@ -159,7 +159,6 @@
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
 		33EC3A8A2756C5090049E414 /* OptionsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A892756C5090049E414 /* OptionsButton.swift */; };
 		33EC3A8E275A8A7A0049E414 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A8D275A8A7A0049E414 /* String+Extensions.swift */; };
-		33EC3A91275A8C010049E414 /* LocalizationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A90275A8C010049E414 /* LocalizationHelper.swift */; };
 		33EC3A93275A8C210049E414 /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A92275A8C210049E414 /* Notification+Extensions.swift */; };
 		33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A94275AC6B30049E414 /* StepperView.swift */; };
 		33EC3A97275B60DC0049E414 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A96275B60DC0049E414 /* NotificationManager.swift */; };
@@ -357,7 +356,6 @@
 		33EC3A872754BA420049E414 /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
 		33EC3A892756C5090049E414 /* OptionsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsButton.swift; sourceTree = "<group>"; };
 		33EC3A8D275A8A7A0049E414 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
-		33EC3A90275A8C010049E414 /* LocalizationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationHelper.swift; sourceTree = "<group>"; };
 		33EC3A92275A8C210049E414 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		33EC3A94275AC6B30049E414 /* StepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperView.swift; sourceTree = "<group>"; };
 		33EC3A96275B60DC0049E414 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -721,7 +719,6 @@
 		33EC3A8427539E480049E414 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				33EC3A90275A8C010049E414 /* LocalizationHelper.swift */,
 				33EC3A8527539E590049E414 /* UserDefault+Helper.swift */,
 			);
 			path = Helpers;
@@ -790,6 +787,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3378768724378A9800F5A732 /* Build configuration list for PBXNativeTarget "reHydrate" */;
 			buildPhases = (
+				A173ED042A23A76600401284 /* Run Formatter */,
 				330C23D727665F6600293092 /* Run BuildTools */,
 				3378766F24378A9400F5A732 /* Sources */,
 				3378767024378A9400F5A732 /* Frameworks */,
@@ -1000,7 +998,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		330C23D727665F6600293092 /* Run BuildTools */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
@@ -1015,7 +1012,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# exit 0\ncd BuildTools\n# swift package update #Uncomment this line temporarily to update the version \n# used to the latest matching your BuildTools/Package.swift file\n/usr/bin/xcrun --sdk macosx swift run -c release swiftformat --disable trailingClosures \"$SRCROOT\"\n\nexport PATH=\"$SRCROOT\"\n/usr/bin/xcrun --sdk macosx swift run swiftlint --fix\n/usr/bin/xcrun --sdk macosx swift run swiftlint \n";
+			shellScript = "# exit 0\ncd BuildTools\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift run swiftlint --fix\nswift run swiftlint \n";
 		};
 		337F1B13277D4BE500B2A819 /* Run upload to firebase */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1037,6 +1034,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+		A173ED042A23A76600401284 /* Run Formatter */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Formatter";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd BuildTools\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n# swift package update #Uncomment this line temporarily to update the version \n# used to the latest matching your BuildTools/Package.swift file\nswift run -c release swiftformat \\\n    --disable   trailingClosures, \\\n                wrapMultilineStatementBraces \\\n    \"$SRCROOT\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1062,7 +1077,6 @@
 				3323161327441E140039EE23 /* Day.swift in Sources */,
 				A132EF8C2986C279006C5DB1 /* ServiceAssembly.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
-				33EC3A91275A8C010049E414 /* LocalizationHelper.swift in Sources */,
 				33EC3A97275B60DC0049E414 /* NotificationManager.swift in Sources */,
 				A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */,
 				3387ED6D274C03A70083D2C1 /* CalendarViewModel.swift in Sources */,

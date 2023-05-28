@@ -21,8 +21,7 @@ public struct Drink: DrinkProtocol {
 
     public init(id: UUID = UUID(),
                 type: DrinkType,
-                size: Double)
-    {
+                size: Double) {
         self.id = id
         self.type = type
         self.size = size

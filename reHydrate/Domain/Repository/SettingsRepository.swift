@@ -6,6 +6,7 @@
 //  Copyright © 2022 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import CoreKit
 import SwiftUI
 
 class SettingsRepository: ObservableObject {

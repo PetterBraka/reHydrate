@@ -6,6 +6,7 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import CoreKit
 import SwiftUI
 
 struct EditDrinksSectionView: View {

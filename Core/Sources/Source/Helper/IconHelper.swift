@@ -1,5 +1,5 @@
 //
-//  AppIcons+Helper.swift
+//  IconHelper+Helper.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 07/12/2021.

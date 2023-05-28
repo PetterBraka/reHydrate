@@ -18,8 +18,7 @@ public struct Day: DayProtocol {
     public init(id: UUID = UUID(),
                 consumption: Double,
                 goal: Double,
-                date: Date)
-    {
+                date: Date) {
         self.id = id
         self.consumption = consumption
         self.goal = goal

@@ -9,6 +9,7 @@
 import Combine
 import CoreData
 import CoreInterfaceKit
+import CoreKit
 import SwiftUI
 import Swinject
 
