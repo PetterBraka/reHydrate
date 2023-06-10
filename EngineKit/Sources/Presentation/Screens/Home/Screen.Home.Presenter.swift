@@ -9,8 +9,7 @@ import HomePresentationInterface
 
 public extension Screen.Home {
     final class HomePresenter: HomePresenterType {
-        public func perform(_: HomePresentationInterface.Home.Action) {
-            <#code#>
+        public func perform(action: Home.Action) {
         }
     }
 }

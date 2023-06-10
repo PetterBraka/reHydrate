@@ -7,5 +7,5 @@
 //
 
 public protocol HomePresenterType: AnyObject {
-    func perform(_ action: Home.Action)
+    func perform(action: Home.Action)
 }
