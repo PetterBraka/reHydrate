@@ -123,14 +123,6 @@ struct HomeScreen: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        HomeScreen(observer: .init(date: .now,
-                                   consumed: 0,
-                                   goal: 0,
-                                   drinks: [
-                                    .init(type: .small, size: 300),
-                                    .init(type: .medium, size: 500),
-                                    .init(type: .large, size: 750)
-                                   ],
-                                   unit: (small: .milliliters, large: .liters)))
+        HomeScreen(observer: .mock)
     }
 }

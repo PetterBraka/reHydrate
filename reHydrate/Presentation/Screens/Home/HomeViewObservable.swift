@@ -47,3 +47,17 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
         presenter?.perform(action)
     }
 }
+
+extension HomeScreenObservable {
+    static let mock = HomeScreenObservable(
+        date: .now,
+        consumed: 0.200,
+        goal: 3.2,
+        drinks: [
+            .init(type: .small, size: 300),
+            .init(type: .medium, size: 500),
+            .init(type: .large, size: 750)
+        ],
+        unit: (small: .milliliters, large: .liters)
+    )
+}
