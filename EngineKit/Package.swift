@@ -13,7 +13,7 @@ let package: Package = {
     let engineKit = "EngineKit"
     let presentation = "Presentation"
 
-    let home = "Home"
+    let dayService = "DayService"
 
     return Package(
         name: engineKit,
@@ -27,10 +27,10 @@ let package: Package = {
             .target(name: presentation,
                     dependencies: [
                         .byName(name: presentationInterface),
-                        .byName(name: home),
+                        .byName(name: dayService),
                     ]),
         ] +
-            .targets(forPackage: home)
+            .targets(forPackage: dayService)
     )
 }()
 
