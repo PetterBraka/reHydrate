@@ -25,24 +25,30 @@ struct HomeScreen: View {
         .safeAreaInset(edge: .bottom) {
             navigationBar
         }
-        .background(Color.background.ignoresSafeArea())
+        .background(Color.background)
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 
     @ViewBuilder
     private var header: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 8) {
             Text(String(localized: "ui.app,title.text",
                         defaultValue: "reHydrate",
                         comment: "The name of the app"))
                 .font(.brandTitle3)
                 .bold()
             Text(observer.date.localized)
-                .font(.brandTitle)
+                .lineLimit(nil)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.brandTitle2)
             Text("\(observer.consumed.clean)" +
                  "/" +
-                 "\(observer.goal.clean)")
+                 "\(observer.goal.clean)" +
+                 "\(observer.unit.large.symbol)")
                 .font(.brandTitle3)
                 .bold()
+                .padding(.top, 16)
         }
     }
 
@@ -91,6 +97,9 @@ struct HomeScreen: View {
                 // TODO: Add support to navigate to settings
             } label: {
                 Image.settings
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 64)
                     .font(.brandLargeHeader)
                     .foregroundColor(.button)
             }
@@ -101,6 +110,9 @@ struct HomeScreen: View {
                 // TODO: Add support to navigate to history
             } label: {
                 Image.calendar
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 64)
                     .font(.brandLargeHeader)
                     .foregroundColor(.button)
             }

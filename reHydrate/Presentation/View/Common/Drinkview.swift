@@ -25,7 +25,7 @@ struct DrinkView: View {
                 getImage(fill: fill, type: containerType)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                Text("\(size.clean)\(unit.symbol)")
+                Text("\(size.clean) \(unit.symbol)")
                     .font(.brandBody)
                     .foregroundColor(.label)
             }
