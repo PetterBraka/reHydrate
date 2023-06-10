@@ -17,6 +17,9 @@ let package: Package = {
 
     return Package(
         name: engineKit,
+        platforms: [
+            .iOS(.v16),
+        ],
         products: [.library(name: engineKit, targets: [engineKit])],
         dependencies: [.package(path: "../\(presentationInterface)")],
         targets: [
