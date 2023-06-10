@@ -32,14 +32,14 @@ class CalendarCell: FSCalendarCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        let selectionLayer = UIImageView(image: UIImage.circle)
-        contentView.insertSubview(selectionLayer, at: 1)
-        self.selectionLayer = selectionLayer
+//        let selectionLayer = UIImageView(image: UIImage.circle)
+//        contentView.insertSubview(selectionLayer, at: 1)
+//        self.selectionLayer = selectionLayer
 
-        let circleImageView = UIImageView(image: UIImage.circle.withRenderingMode(.alwaysTemplate))
-        circleImageView.tintColor = .systemBlue
-        contentView.insertSubview(circleImageView, at: 0)
-        todayHighlighter = circleImageView
+//        let circleImageView = UIImageView(image: UIImage.circle.withRenderingMode(.alwaysTemplate))
+//        circleImageView.tintColor = .systemBlue
+//        contentView.insertSubview(circleImageView, at: 0)
+//        todayHighlighter = circleImageView
 
         shapeLayer.isHidden = true
 
@@ -55,15 +55,15 @@ class CalendarCell: FSCalendarCell {
                                         height: contentView.bounds.height + 5)
         selectionLayer.frame = CGRect(x: 0, y: 0, width: contentView.bounds.width,
                                       height: contentView.bounds.height + 5)
-        if selectionType == .middle {
-            selectionLayer.image = UIImage.midSelected
-        } else if selectionType == .leftBorder {
-            selectionLayer.image = UIImage.leftSelected
-        } else if selectionType == .rightBorder {
-            selectionLayer.image = UIImage.rightSelected
-        } else if selectionType == .single {
-            selectionLayer.image = UIImage.circle
-        }
+//        if selectionType == .middle {
+//            selectionLayer.image = UIImage.midSelected
+//        } else if selectionType == .leftBorder {
+//            selectionLayer.image = UIImage.leftSelected
+//        } else if selectionType == .rightBorder {
+//            selectionLayer.image = UIImage.rightSelected
+//        } else if selectionType == .single {
+//            selectionLayer.image = UIImage.circle
+//        }
     }
 
     override func configureAppearance() {

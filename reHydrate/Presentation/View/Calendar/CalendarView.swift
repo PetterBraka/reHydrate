@@ -36,7 +36,7 @@ struct CalendarView: View {
                         }
                         Spacer()
                         Text(viewModel.header)
-                            .font(.brandLargeTitle)
+                            .font(.brandTitle2)
                             .foregroundColor(.label)
                         Spacer()
                         Color.clear

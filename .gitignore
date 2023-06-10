@@ -90,3 +90,5 @@ fastlane/test_output
 iOSInjectionProject/
 *.xcuserstate
 .DS_Store
+reHydrate/Resources/Assets.xcassets/selection/LeftSelected.imageset/.DS_Store
+*.DS_Store

@@ -117,14 +117,7 @@ struct WaveView<Content: View>: View {
                     relativeHight = max(-0.01, relativeHight)
                     let newHight = max(0.1, fillLevel + relativeHight)
                     withAnimation {
-//                        fillLevel = newHight < maxFillLevel ? newHight : maxFillLevel
-//                        if newHight > maxFillLevel {
-//                            fillLevel = maxFillLevel
-//                        } else if newHight < minFillLevel {
-//                            fillLevel = minFillLevel
-//                        } else {
                         fillLevel = newHight
-//                        }
                     }
                 }
         )

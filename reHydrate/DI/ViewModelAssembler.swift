@@ -17,8 +17,8 @@ final class ViewModelAssembler: Assembly {
         }.inObjectScope(.container)
 
         // Home - ViewModel
-        container.register(HomeViewModel.self) { _, state in
-            HomeViewModel(navigateTo: state)
+        container.register(LegacyHomeViewModel.self) { _, state in
+            LegacyHomeViewModel(navigateTo: state)
         }.inObjectScope(.container)
 
         // Calendar - ViewModel

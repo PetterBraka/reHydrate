@@ -45,15 +45,15 @@ struct CalendarModuleView: UIViewRepresentable {
         calendar.swipeToChooseGesture.minimumPressDuration = 0.3
         calendar.firstWeekday = firsWeekday.rawValue
 
-        calendar.appearance.titleFont = .brandBody
-        calendar.appearance.weekdayFont = .brandBody
-        calendar.appearance.headerTitleFont = .brandTitle
+//        calendar.appearance.titleFont = .brandBody
+//        calendar.appearance.weekdayFont = .brandBody
+//        calendar.appearance.headerTitleFont = .brandTitle
 
-        calendar.appearance.headerTitleColor = .label
-        calendar.appearance.weekdayTextColor = .label
-        calendar.appearance.titleTodayColor = .label
-        calendar.appearance.titleDefaultColor = .label
-        calendar.appearance.titleSelectionColor = .label
+//        calendar.appearance.headerTitleColor = .label
+//        calendar.appearance.weekdayTextColor = .label
+//        calendar.appearance.titleTodayColor = .label
+//        calendar.appearance.titleDefaultColor = .label
+//        calendar.appearance.titleSelectionColor = .label
         return calendar
     }
 
@@ -92,23 +92,23 @@ struct CalendarModuleView: UIViewRepresentable {
         func calendar(_: FSCalendar, imageFor date: Date) -> UIImage? {
             if let day = storedDays.first(where: { $0.isSameDay(as: date) }) {
                 let percent = (day.consumption / day.goal) * 100
-                switch percent {
-                case 0 ... 10:
-                    return UIImage.waterDrop0
-                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                case 10 ... 30:
-                    return UIImage.waterDrop25
-                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                case 30 ... 60:
-                    return UIImage.waterDrop50
-                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                case 60 ... 80:
-                    return UIImage.waterDrop75
-                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                default:
-                    return UIImage.waterDrop100
-                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
-                }
+//                switch percent {
+//                case 0 ... 10:
+//                    return UIImage.waterDrop0
+//                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+//                case 10 ... 30:
+//                    return UIImage.waterDrop25
+//                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+//                case 30 ... 60:
+//                    return UIImage.waterDrop50
+//                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+//                case 60 ... 80:
+//                    return UIImage.waterDrop75
+//                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+//                default:
+//                    return UIImage.waterDrop100
+//                        .renderResizedImage(newWidth: parent.cellHeight * 0.4)
+//                }
             }
             return nil
         }

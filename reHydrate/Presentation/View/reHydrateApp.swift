@@ -17,8 +17,8 @@ struct reHydrateApp: App {
     private var isDarkMode: Bool { settingsRepository.isDarkMode }
 
     init() {
-        UITableView.appearance().backgroundColor = .background
-        UICollectionView.appearance().backgroundColor = .background
+//        UITableView.appearance().backgroundColor = .background
+//        UICollectionView.appearance().backgroundColor = .background
     }
 
     var body: some Scene {

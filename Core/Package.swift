@@ -13,8 +13,8 @@ let package = Package(
     targets: [
         .target(name: "CoreKit",
                 dependencies: ["CoreInterfaceKit"],
-                path: "Sources/Source"),
-        .target(name: "CoreInterfaceKit", path: "Sources/Interface"),
+                path: "Sources/CoreKit"),
+        .target(name: "CoreInterfaceKit", path: "Sources/CoreInterfaceKit"),
         .testTarget(name: "CoreTests",
                     dependencies: ["CoreKit"],
                     path: "Sources/Tests"),

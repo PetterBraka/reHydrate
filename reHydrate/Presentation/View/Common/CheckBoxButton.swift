@@ -33,11 +33,11 @@ struct CheckBoxButton: View {
                 Spacer()
                 if isChecked {
                     highlightedImage
-                        .font(.brandLargeTitle)
+                        .font(.brandTitle2)
                         .foregroundColor(.button)
                 } else {
                     image
-                        .font(.brandLargeTitle)
+                        .font(.brandTitle2)
                         .foregroundColor(.button)
                 }
             }

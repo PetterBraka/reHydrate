@@ -10,12 +10,11 @@ import Combine
 import CoreData
 import CoreInterfaceKit
 import CoreKit
-import FirebaseAnalytics
 import HealthKit
 import SwiftUI
 import WatchConnectivity
 
-final class HomeViewModel: NSObject, ObservableObject {
+final class LegacyHomeViewModel: NSObject, ObservableObject {
     enum AccessType {
         case notification
         case health
@@ -153,7 +152,7 @@ final class HomeViewModel: NSObject, ObservableObject {
 
 // MARK: Save & Load
 
-extension HomeViewModel {
+extension LegacyHomeViewModel {
     @MainActor
     func fetchToday() {
         Task {
@@ -169,7 +168,6 @@ extension HomeViewModel {
     @MainActor
     func addDrink(_ drink: Drink) {
         let consumed = drink.size.convert(to: .liters, from: .milliliters)
-        Analytics.track(event: .addDrink)
         Task {
             do {
                 let updatedDay = try await dayRepository.addDrink(of: consumed, to: today)
@@ -185,7 +183,6 @@ extension HomeViewModel {
     func removeDrink(_ drink: Drink) {
         let rawConsumed = Measurement(value: drink.size, unit: isMetric ? UnitVolume.milliliters : .imperialPints)
         let consumed: Double = rawConsumed.converted(to: .liters).value
-        Analytics.track(event: .removeDrink)
         Task {
             let drink = Drink(type: drink.type, size: -drink.size)
             do {
@@ -214,7 +211,7 @@ extension HomeViewModel {
 
 // MARK: HealthKit export & import
 
-extension HomeViewModel {
+extension LegacyHomeViewModel {
     func fetchHealthData() {
         healthManager.getWater(for: .now) { [weak self] result in
             Task { @MainActor [weak self] in
@@ -236,7 +233,7 @@ extension HomeViewModel {
 
 // MARK: - Watch communications
 
-extension HomeViewModel: WCSessionDelegate {
+extension LegacyHomeViewModel: WCSessionDelegate {
     enum WatchError: Error {
         case extractionError
         case watchNotUpdated

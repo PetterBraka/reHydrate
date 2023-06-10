@@ -6,47 +6,53 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import CoreInterfaceKit
 import SwiftUI
 
 struct DrinkView: View {
-    private let settingsRepository: SettingsRepository = MainAssembler.resolve()
-    var isMetric: Bool { settingsRepository.isMetric }
-    @ObservedObject var viewModel: HomeViewModel
+    let fill: Double
+    let size: Double
+    let unit: UnitVolume
+    let containerType: DrinkType
 
-    @Binding var drink: Drink
-    var disable: Bool
-    var tapAction: () -> Void
+    let didTapAction: () -> Void
 
     var body: some View {
         Button {
-            tapAction()
+            didTapAction()
         } label: {
             VStack {
-                drink.getImage()
+                getImage(fill: fill, type: containerType)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .contrast(disable ? 0.1 : 1)
-                Text(getValue(for: drink))
+                Text("\(size.clean)\(unit.symbol)")
                     .font(.brandBody)
                     .foregroundColor(.label)
             }
         }
     }
 
-    func getValue(for drink: Drink?) -> String {
-        if let drink = drink {
-            let drinkValue = drink.size.convert(to: isMetric ? .milliliters : .imperialPints, from: .milliliters)
-            return drinkValue.clean + (isMetric ? "ml" : "pt")
-        } else {
-            return ""
+    func getImage(fill: Double, type: DrinkType) -> Image {
+        switch type {
+        case .small: return .getGlass(with: fill)
+        case .medium: return .getBottle(with: fill)
+        case .large: return .getReusableBottle(with: fill)
         }
     }
 }
 
 struct DrinkView_Previews: PreviewProvider {
     static var previews: some View {
-        DrinkView(viewModel: HomeViewModel(navigateTo: { _ in }),
-                  drink: .constant(Drink(type: .medium, size: 500)),
-                  disable: true) {}
+        HStack {
+            DrinkView(fill: 0.5,
+                      size: 500,
+                      unit: .milliliters,
+                      containerType: .medium) {}
+            DrinkView(fill: 0.75,
+                      size: 700,
+                      unit: .milliliters,
+                      containerType: .medium) {}
+                .disabled(true)
+        }
     }
 }

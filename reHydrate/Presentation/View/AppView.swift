@@ -6,7 +6,6 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import FirebaseAnalytics
 import SwiftUI
 
 struct AppView: View {
@@ -20,8 +19,8 @@ struct AppView: View {
             TabView(selection: $viewModel.currenState) {
                 SettingsView(navigateTo: viewModel.navigateTo)
                     .tag(AppState.settings)
-                HomeView(navigateTo: viewModel.navigateTo)
-                    .tag(AppState.home)
+//                HomeView(navigateTo: viewModel.navigateTo)
+//                    .tag(AppState.home)
                 CalendarView(navigateTo: viewModel.navigateTo)
                     .tag(AppState.calendar)
             }
@@ -39,9 +38,6 @@ struct AppView: View {
                     }
                 }
             }
-        }
-        .onAppear {
-            Analytics.track(event: .startUp)
         }
     }
 }
