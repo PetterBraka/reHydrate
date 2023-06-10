@@ -40,8 +40,8 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
             self.goal = goal
         case let .setUnit(small, large):
             unit = (small, large)
-        case let .setDrink(newDrink, oldDrink):
-            drinks = drinks.map { $0.id == oldDrink.id ? newDrink : $0}
+        case let .setDrink(newDrink):
+            drinks = drinks.map { $0.id == newDrink.id ? newDrink : $0}
         }
     }
 

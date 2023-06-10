@@ -8,27 +8,39 @@
 import HomePresentationInterface
 
 public extension Screen.Home {
-    typealias Engine = (
-        AnyObject
-    )
-    typealias Router = (
-        AnyObject
-    )
-    typealias Tracker = (
-        AnyObject
-    )
-    
     final class HomePresenter: HomePresenterType {
+        typealias Engine = (
+            AnyObject
+        )
+        typealias Router = (
+            HomeRoutable
+        )
+        typealias Tracker = (
+            AnyObject
+        )
+        
+        private let engine: Engine
+        private let router: Router
+        private let tracker: Tracker
+        
+        init(engine: Engine,
+             router: Router,
+             tracker: Tracker) {
+            self.engine = engine
+            self.router = router
+            self.tracker = tracker
+        }
+        
         public func perform(action: Home.Action) {
             switch action {
             case .didTapHistory:
-                <#code#>
+                router.showHistory()
             case .didTapSettings:
-                <#code#>
+                router.showSettings()
             case let .didTapAddDrink(drink):
                 <#code#>
             case let .didTapEditDrink(drink):
-                <#code#>
+                router.showEdit(drink: drink)
             case let .didTapRemoveDrink(drink):
                 <#code#>
             }

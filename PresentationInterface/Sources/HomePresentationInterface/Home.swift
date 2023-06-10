@@ -13,8 +13,7 @@ public enum Home {
         case setConsumption(Double)
         case setGoal(Double)
         case setUnit(small: UnitVolume, large: UnitVolume)
-        case setDrink(newDrink: ViewModel.Drink,
-                      oldDrink: ViewModel.Drink)
+        case setDrink(newDrink: ViewModel.Drink)
     }
 
     public enum Action {
@@ -70,6 +69,3 @@ public extension Home.ViewModel {
         }
     }
 }
-
-extension Home.ViewModel.Drink: Equatable {}
-extension Home.ViewModel.Container: Equatable {}
