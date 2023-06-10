@@ -15,13 +15,13 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
     @Published var date: Date
     @Published var consumed: Double
     @Published var goal: Double
-    @Published var drinks: [Drink]
+    @Published var drinks: [Home.ViewModel.Drink]
     @Published var unit: (small: UnitVolume, large: UnitVolume)
 
     init(date: Date,
          consumed: Double,
          goal: Double,
-         drinks: [Drink],
+         drinks: [Home.ViewModel.Drink],
          unit: (small: UnitVolume, large: UnitVolume)) {
         self.date = date
         self.consumed = consumed
@@ -30,7 +30,7 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
         self.unit = unit
     }
 
-    func perform(_ update: Home.Update) {
+    func perform(update: Home.Update) {
         switch update {
         case let .setDate(date):
             self.date = date
@@ -40,10 +40,12 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
             self.goal = goal
         case let .setUnit(small, large):
             unit = (small, large)
+        case let .setDrink(newDrink, oldDrink):
+            drinks = drinks.map { $0.id == oldDrink.id ? newDrink : $0}
         }
     }
 
-    func perform(_ action: Home.Action) {
+    func perform(action: Home.Action) {
         presenter?.perform(action)
     }
 }
@@ -54,9 +56,9 @@ extension HomeScreenObservable {
         consumed: 0.200,
         goal: 3.2,
         drinks: [
-            .init(type: .small, size: 300),
-            .init(type: .medium, size: 500),
-            .init(type: .large, size: 750)
+            .init(size: 300, container: .small),
+            .init(size: 500, container: .medium),
+            .init(size: 750, container: .large)
         ],
         unit: (small: .milliliters, large: .liters)
     )

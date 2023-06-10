@@ -13,10 +13,16 @@ public enum Home {
         case setConsumption(Double)
         case setGoal(Double)
         case setUnit(small: UnitVolume, large: UnitVolume)
+        case setDrink(newDrink: ViewModel.Drink,
+                      oldDrink: ViewModel.Drink)
     }
 
     public enum Action {
-        case addDrink(ViewModel.Container)
+        case didTapHistory
+        case didTapSettings
+        case didTapAddDrink(ViewModel.Drink)
+        case didTapEditDrink(ViewModel.Drink)
+        case didTapRemoveDrink(ViewModel.Drink)
     }
 
     public struct ViewModel {}
@@ -64,3 +70,6 @@ public extension Home.ViewModel {
         }
     }
 }
+
+extension Home.ViewModel.Drink: Equatable {}
+extension Home.ViewModel.Container: Equatable {}

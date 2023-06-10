@@ -55,15 +55,15 @@ struct HomeScreen: View {
     @ViewBuilder
     private var drinksSection: some View {
         HStack(alignment: .bottom) {
-            ForEach(observer.drinks) { drink in
+            ForEach(observer.drinks, id: \.id) { drink in
                 let index = observer.drinks.firstIndex(of: drink) ?? 0
                 DrinkView(
                     fill: drink.fill,
                     size: drink.size,
                     unit: observer.unit.small,
-                    containerType: drink.type
+                    containerType: drink.container
                 ) {
-                    // TODO: Add support to consume a drink
+                    observer.perform(action: .didTapAddDrink(drink))
                 }
                 .frame(maxHeight: (100 * CGFloat(index + 1)),
                        alignment: .bottom)
@@ -75,7 +75,7 @@ struct HomeScreen: View {
                         defaultValue: "Edit drink",
                         comment: "An button to edit the a drink."
                     )) {
-                        // TODO: Add support to edit drink
+                        observer.perform(action: .didTapEditDrink(drink))
                     }
                     Button(String(
                         localized: "ui.home.removeDrink.button",
@@ -83,7 +83,7 @@ struct HomeScreen: View {
                         comment: "An button to remove a drink of a given size and unit"
                     ),
                     role: .destructive) {
-                        // TODO: Add support to remove drink
+                        observer.perform(action: .didTapRemoveDrink(drink))
                     }
                 }
             }
@@ -94,7 +94,7 @@ struct HomeScreen: View {
     private var navigationBar: some View {
         HStack {
             Button {
-                // TODO: Add support to navigate to settings
+                observer.perform(action: .didTapSettings)
             } label: {
                 Image.settings
                     .resizable()
@@ -107,7 +107,7 @@ struct HomeScreen: View {
             Spacer()
             
             Button {
-                // TODO: Add support to navigate to history
+                observer.perform(action: .didTapHistory)
             } label: {
                 Image.calendar
                     .resizable()

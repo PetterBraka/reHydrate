@@ -6,5 +6,5 @@
 //
 
 public protocol HomeSceneType {
-    func perform(_ update: Home.Update)
+    func perform(update: Home.Update)
 }

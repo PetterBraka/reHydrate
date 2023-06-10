@@ -6,14 +6,14 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import CoreInterfaceKit
 import SwiftUI
+import HomePresentationInterface
 
 struct DrinkView: View {
     let fill: Double
     let size: Double
     let unit: UnitVolume
-    let containerType: DrinkType
+    let containerType: Home.ViewModel.Container
 
     let didTapAction: () -> Void
 
