@@ -34,7 +34,7 @@ struct HomeScreen: View {
             Text(String(localized: "ui.app,title.text",
                         defaultValue: "reHydrate",
                         comment: "The name of the app"))
-                .font(.brandTitle2)
+                .font(.brandTitle3)
                 .bold()
             Text(observer.date.localized)
                 .font(.brandTitle)
