@@ -10,12 +10,26 @@ import SwiftUI
 import HomePresentationInterface
 
 struct DrinkView: View {
-    let fill: Double
-    let size: Double
-    let unit: UnitVolume
-    let containerType: Home.ViewModel.Container
+    typealias Container = Home.ViewModel.Container
+    
+    private let fill: Double
+    private let size: Double
+    private let unit: UnitVolume
+    private let containerType: Container
 
-    let didTapAction: () -> Void
+    private let didTapAction: () -> Void
+    
+    init(fill: Double,
+         size: Double,
+         unit: UnitVolume,
+         containerType: Container,
+         didTapAction: @escaping () -> Void) {
+        self.fill = fill
+        self.size = size
+        self.unit = unit
+        self.containerType = containerType
+        self.didTapAction = didTapAction
+    }
 
     var body: some View {
         Button {
@@ -32,7 +46,7 @@ struct DrinkView: View {
         }
     }
 
-    func getImage(fill: Double, type: DrinkType) -> Image {
+    private func getImage(fill: Double, type: Container) -> Image {
         switch type {
         case .small: return .getGlass(with: fill)
         case .medium: return .getBottle(with: fill)
