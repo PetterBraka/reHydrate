@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct AppView: View {
+    private let sceneFactory = SceneFactory()
     @StateObject var viewModel = MainAssembler.shared.container.resolve(AppViewModel.self)!
     @State var homeTransition: AnyTransition = .slide
 
@@ -19,8 +20,8 @@ struct AppView: View {
             TabView(selection: $viewModel.currenState) {
                 SettingsView(navigateTo: viewModel.navigateTo)
                     .tag(AppState.settings)
-//                HomeView(navigateTo: viewModel.navigateTo)
-//                    .tag(AppState.home)
+                sceneFactory.makeHomeScreen()
+                .tag(AppState.home)
                 CalendarView(navigateTo: viewModel.navigateTo)
                     .tag(AppState.calendar)
             }

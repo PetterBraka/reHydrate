@@ -69,3 +69,5 @@ public extension Home.ViewModel {
         }
     }
 }
+
+extension Home.ViewModel.Drink: Equatable {}
