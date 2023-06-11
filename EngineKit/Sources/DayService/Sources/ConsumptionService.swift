@@ -7,16 +7,20 @@
 
 import DayServiceInterface
 
-final class ConsumptionService: ConsumptionServiceType {
+public final class ConsumptionService: ConsumptionServiceType {
     private var day = Day(date: .now,
                           consumed: 0,
                           goal: 3)
     
-    func add(drink: Drink) {
+    public init() {}
+    
+    public func add(drink: Drink) -> Double {
         day.consumed += UnitHelper.drinkToLiters(drink)
+        return day.consumed
     }
     
-    func remove(drink: Drink) {
+    public func remove(drink: Drink) -> Double {
         day.consumed -= UnitHelper.drinkToLiters(drink)
+        return day.consumed
     }
 }

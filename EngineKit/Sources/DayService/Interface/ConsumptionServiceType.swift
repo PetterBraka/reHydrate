@@ -6,6 +6,6 @@
 //
 
 public protocol ConsumptionServiceType {
-    func add(drink: Drink)
-    func remove(drink: Drink)
+    func add(drink: Drink) -> Double
+    func remove(drink: Drink) -> Double
 }

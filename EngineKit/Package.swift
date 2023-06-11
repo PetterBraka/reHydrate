@@ -13,52 +13,81 @@ let package: Package = {
     let engineKit = "EngineKit"
     let presentation = "Presentation"
 
-    let dayService = "DayService"
+    let dayService = Feature(withName: "DayService")
 
     return Package(
         name: engineKit,
         platforms: [
             .iOS(.v16),
         ],
-        products: [.library(name: engineKit, targets: [engineKit])],
+        products: [
+            .library(name: engineKit, targets: [engineKit]),
+            .library(name: presentation, targets: [presentation])
+        ],
         dependencies: [.package(path: "../\(presentationInterface)")],
         targets: [
-            .target(name: engineKit, dependencies: []),
+            .target(name: engineKit,
+                    dependencies: [
+                        .byName(name: dayService.source),
+                        .byName(name: dayService.interface)
+                    ]),
             .target(name: presentation,
                     dependencies: [
                         .byName(name: presentationInterface),
-                        .byName(name: dayService),
+                        .byName(name: dayService.source),
                     ]),
         ] +
-            .targets(forPackage: dayService)
+            .targets(forFeature: dayService)
     )
 }()
 
+struct Feature {
+    let source: String
+    let interface: String
+    let mocks: String
+    let tests: String
+    
+    init(source: String,
+         interface: String,
+         mocks: String,
+         tests: String) {
+        self.source = source
+        self.interface = interface
+        self.mocks = mocks
+        self.tests = tests
+    }
+    
+    init(withName name: String) {
+        self.source = name
+        self.interface = name + "Interface"
+        self.mocks = name + "Mocks"
+        self.tests = name + "Tests"
+    }
+}
+
 extension Array where Element == Target {
     static func targets(
-        forPackage packageName: String,
+        forFeature feature: Feature,
         sourceDependancy: [Target.Dependency] = [],
         interfaceDependancy: [Target.Dependency] = [],
         mocksDependancy: [Target.Dependency] = [],
         testsDependancy: [Target.Dependency] = []
     ) -> [Target] {
-        let rootPath = "Sources/\(packageName)"
-        let interfaceName = packageName + "Interface"
-        let mocksName = packageName + "Mocks"
-        let testsName = packageName + "Tests"
+        let rootPath = "Sources/\(feature.source)"
 
         return [
-            .target(name: packageName,
-                    dependencies: [.byName(name: interfaceName)] + sourceDependancy,
+            .target(name: feature.source,
+                    dependencies: [.byName(name: feature.interface)] + sourceDependancy,
                     path: rootPath + "/Sources"),
-            .target(name: interfaceName,
+            .target(name: feature.interface,
                     dependencies: interfaceDependancy,
                     path: rootPath + "/Interface"),
-            .target(name: mocksName,
-                    dependencies: [.byName(name: interfaceName)] + mocksDependancy,
+            .target(name: feature.mocks,
+                    dependencies: [.byName(name: feature.interface)] + mocksDependancy,
                     path: rootPath + "/Mocks"),
-            .testTarget(name: testsName,
-                        dependencies: [.byName(name: packageName), .byName(name: mocksName)] + testsDependancy,
+            .testTarget(name: feature.tests,
+                        dependencies: [.byName(name: feature.source),
+                                       .byName(name: feature.mocks)] + testsDependancy,
                         path: rootPath + "/Tests"),
         ]
     }
