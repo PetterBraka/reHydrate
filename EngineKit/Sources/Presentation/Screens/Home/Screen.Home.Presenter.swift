@@ -5,30 +5,27 @@
 //  Created by Petter vang Brakalsvålet on 09/06/2023.
 //
 
+import DayServiceInterface
 import HomePresentationInterface
 
-public extension Screen.Home {
-    final class HomePresenter: HomePresenterType {
-        typealias Engine = (
-            AnyObject
+extension Screen.Home {
+    public final class Presenter: HomePresenterType {
+        public typealias Engine = (
+            HasConsumptionService
         )
-        typealias Router = (
+        public typealias Router = (
             HomeRoutable
-        )
-        typealias Tracker = (
-            AnyObject
         )
         
         private let engine: Engine
         private let router: Router
-        private let tracker: Tracker
         
-        init(engine: Engine,
-             router: Router,
-             tracker: Tracker) {
+        public weak var scene: HomeSceneType?
+        
+        public init(engine: Engine,
+                    router: Router) {
             self.engine = engine
             self.router = router
-            self.tracker = tracker
         }
         
         public func perform(action: Home.Action) {
@@ -38,12 +35,35 @@ public extension Screen.Home {
             case .didTapSettings:
                 router.showSettings()
             case let .didTapAddDrink(drink):
-                <#code#>
+                let consumption = engine.consumptionService.add(drink: .init(from: drink))
+                scene?.perform(update: .setConsumption(consumption))
             case let .didTapEditDrink(drink):
                 router.showEdit(drink: drink)
             case let .didTapRemoveDrink(drink):
-                <#code#>
+                let consumption = engine.consumptionService.remove(drink: .init(from: drink))
+                scene?.perform(update: .setConsumption(consumption))
             }
+        }
+    }
+}
+
+extension Drink {
+    init(from drink: Home.ViewModel.Drink) {
+        self = Drink(id: drink.id,
+                     size: drink.size,
+                     container: .init(from: drink.container))
+    }
+}
+
+extension Container {
+    init(from container: Home.ViewModel.Container) {
+        switch container {
+        case .large:
+            self = .large
+        case .medium:
+            self = .medium
+        case .small:
+            self = .small
         }
     }
 }
