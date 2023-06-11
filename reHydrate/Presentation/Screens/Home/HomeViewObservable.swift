@@ -8,9 +8,11 @@
 
 import Foundation
 import HomePresentationInterface
+import Presentation
+import EngineKit
 
 final class HomeScreenObservable: ObservableObject, HomeSceneType {
-    private weak var presenter: HomePresenterType?
+    var presenter: HomePresenterType
 
     @Published var date: Date
     @Published var consumed: Double
@@ -18,11 +20,13 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
     @Published var drinks: [Home.ViewModel.Drink]
     @Published var unit: (small: UnitVolume, large: UnitVolume)
 
-    init(date: Date,
+    init(presenter: HomePresenterType,
+         date: Date,
          consumed: Double,
          goal: Double,
          drinks: [Home.ViewModel.Drink],
          unit: (small: UnitVolume, large: UnitVolume)) {
+        self.presenter = presenter
         self.date = date
         self.consumed = consumed
         self.goal = goal
@@ -46,12 +50,13 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
     }
 
     func perform(action: Home.Action) {
-        presenter?.perform(action: action)
+        presenter.perform(action: action)
     }
 }
 
 extension HomeScreenObservable {
     static let mock = HomeScreenObservable(
+        presenter: Screen.Home.Presenter(engine: Engine(), router: Router()),
         date: .now,
         consumed: 0.200,
         goal: 3.2,
