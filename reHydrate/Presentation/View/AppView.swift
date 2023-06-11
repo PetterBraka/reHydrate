@@ -7,23 +7,30 @@
 //
 
 import SwiftUI
+import Presentation
 
 struct AppView: View {
-    private let sceneFactory = SceneFactory()
+    @ObservedObject var observer: RouterObservable
     @StateObject var viewModel = MainAssembler.shared.container.resolve(AppViewModel.self)!
     @State var homeTransition: AnyTransition = .slide
+    
+    init() {
+        let router = SceneFactory.shared.router
+        observer = RouterObservable(router: router, tab: .home)
+        router.sceneObserver = observer
+    }
 
     var body: some View {
         ZStack {
             Color.background
                 .ignoresSafeArea()
-            TabView(selection: $viewModel.currenState) {
+            TabView(selection: $observer.tab) {
                 SettingsView(navigateTo: viewModel.navigateTo)
-                    .tag(AppState.settings)
-                sceneFactory.makeHomeScreen()
-                .tag(AppState.home)
+                    .tag(Tab.settings)
+                SceneFactory.shared.makeHomeScreen()
+                    .tag(Tab.home)
                 CalendarView(navigateTo: viewModel.navigateTo)
-                    .tag(AppState.calendar)
+                    .tag(Tab.history)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             if viewModel.showPopUp {

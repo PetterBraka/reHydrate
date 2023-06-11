@@ -8,18 +8,18 @@
 import HomePresentationInterface
 
 public final class Router {
+    public weak var sceneObserver: RouterObservableType?
+    
     public init() {}
 }
 
 extension Router: HomeRoutable {
     public func showSettings() {
-        // TODO: Show Settings
-        print("Show settings")
+        sceneObserver?.setTab(to: .settings)
     }
     
     public func showHistory() {
-        // TODO: Show History
-        print("Show history")
+        sceneObserver?.setTab(to: .history)
     }
     
     public func showEdit(drink: Home.ViewModel.Drink) {

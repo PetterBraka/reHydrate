@@ -10,8 +10,10 @@ import EngineKit
 import Presentation
 
 public final class SceneFactory {
-    let engine = Engine()
-    let router = Router()
+    public static let shared = SceneFactory()
+    
+    private let engine = Engine()
+    public let router = Router()
     
     init() {}
     
