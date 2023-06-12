@@ -7,13 +7,13 @@
 
 import Foundation
 
-public struct Drink: Identifiable {
+public struct Drink {
     public let id: UUID
     
     public let container: Container
     public var size: Double
     
-    public init(id: UUID = UUID(),
+    public init(id: UUID,
                 size: Double,
                 container: Container) {
         self.id = id

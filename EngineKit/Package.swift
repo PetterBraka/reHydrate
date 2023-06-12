@@ -14,6 +14,7 @@ let package: Package = {
     let presentation = "Presentation"
 
     let dayService = Feature(withName: "DayService")
+    let drinkService = Feature(withName: "DrinkService")
 
     return Package(
         name: engineKit,
@@ -29,15 +30,18 @@ let package: Package = {
             .target(name: engineKit,
                     dependencies: [
                         .byName(name: dayService.source),
-                        .byName(name: dayService.interface)
+                        .byName(name: drinkService.source),
                     ]),
             .target(name: presentation,
                     dependencies: [
                         .byName(name: presentationInterface),
                         .byName(name: dayService.source),
+                        .byName(name: drinkService.source),
                     ]),
-        ] +
-            .targets(forFeature: dayService)
+        ]
+            .withTargets(forFeature: dayService,
+                         interfaceDependancy: [.byName(name: drinkService.interface)])
+            .withTargets(forFeature: drinkService)
     )
 }()
 
@@ -66,6 +70,22 @@ struct Feature {
 }
 
 extension Array where Element == Target {
+    func withTargets(
+        forFeature feature: Feature,
+        sourceDependancy: [Target.Dependency] = [],
+        interfaceDependancy: [Target.Dependency] = [],
+        mocksDependancy: [Target.Dependency] = [],
+        testsDependancy: [Target.Dependency] = []
+    ) -> [Target] {
+        self + .targets(
+            forFeature: feature,
+            sourceDependancy: sourceDependancy,
+            interfaceDependancy: interfaceDependancy,
+            mocksDependancy: mocksDependancy,
+            testsDependancy: testsDependancy
+        )
+    }
+    
     static func targets(
         forFeature feature: Feature,
         sourceDependancy: [Target.Dependency] = [],

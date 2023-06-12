@@ -6,6 +6,7 @@
 //
 
 import DayServiceInterface
+import DrinkServiceInterface
 import HomePresentationInterface
 
 extension Screen.Home {

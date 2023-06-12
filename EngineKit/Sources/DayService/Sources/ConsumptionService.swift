@@ -6,6 +6,8 @@
 //
 
 import DayServiceInterface
+import DrinkServiceInterface
+import DrinkService
 
 public final class ConsumptionService: ConsumptionServiceType {
     private var day = Day(date: .now,
