@@ -21,6 +21,9 @@ public final class ConsumptionService: ConsumptionServiceType {
     
     public func remove(drink: Drink) -> Double {
         day.consumed -= UnitHelper.drinkToLiters(drink)
+        if day.consumed < 0 {
+            day.consumed = 0
+        }
         return day.consumed
     }
 }

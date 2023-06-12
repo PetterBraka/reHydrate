@@ -79,7 +79,7 @@ struct HomeScreen: View {
                     }
                     Button(String(
                         localized: "ui.home.removeDrink.button",
-                        defaultValue: "Remove \(drink.fill)\(observer.unit.small.symbol)",
+                        defaultValue: "Remove \(drink.size.clean)\(observer.unit.small.symbol)",
                         comment: "An button to remove a drink of a given size and unit"
                     ),
                     role: .destructive) {
