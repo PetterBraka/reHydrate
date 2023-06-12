@@ -6,7 +6,9 @@
 //
 
 import DayServiceInterface
+import DrinkServiceInterface
 
 public protocol HasService:
-    HasConsumptionService
+    HasConsumptionService,
+    HasDrinksService
 {}
