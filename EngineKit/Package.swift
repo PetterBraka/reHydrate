@@ -5,16 +5,11 @@ import PackageDescription
 
 let package: Package = {
     // MARK: External dependencies
-
     let presentationInterface = "PresentationInterface"
 
     // MARK: Packages
-
     let engineKit = "EngineKit"
     let presentation = "Presentation"
-
-    let dayService = Feature(withName: "DayService")
-    let drinkService = Feature(withName: "DrinkService")
 
     return Package(
         name: engineKit,
@@ -29,65 +24,66 @@ let package: Package = {
         targets: [
             .target(name: engineKit,
                     dependencies: [
-                        .byName(name: dayService.source),
-                        .byName(name: drinkService.source),
+                        .source(.dayService),
+                        .source(.drinkService)
                     ]),
             .target(name: presentation,
                     dependencies: [
                         .byName(name: presentationInterface),
-                        .byName(name: dayService.source),
-                        .byName(name: drinkService.source),
+                        .source(.dayService),
+                        .source(.drinkService),
                     ]),
         ]
-            .withTargets(forFeature: dayService,
-                         interfaceDependancy: [.byName(name: drinkService.interface)])
-            .withTargets(forFeature: drinkService)
+            .with(targetsFrom: .dayService,
+                  interfaceDependancy: [.interface(.drinkService)])
+            .with(targetsFrom: .drinkService)
     )
 }()
 
-struct Feature {
-    let source: String
-    let interface: String
-    let mocks: String
-    let tests: String
-    
-    init(source: String,
-         interface: String,
-         mocks: String,
-         tests: String) {
-        self.source = source
-        self.interface = interface
-        self.mocks = mocks
-        self.tests = tests
+enum Feature: String {
+    case dayService = "DayService"
+    case drinkService = "DrinkService"
+}
+
+extension Feature {
+    var source: String {
+        rawValue
     }
     
-    init(withName name: String) {
-        self.source = name
-        self.interface = name + "Interface"
-        self.mocks = name + "Mocks"
-        self.tests = name + "Tests"
+    var interface: String {
+        rawValue + "Interface"
+    }
+    
+    var mocks: String {
+        rawValue + "Mocks"
+    }
+    
+    var tests: String {
+        rawValue + "Tests"
+    }
+}
+
+extension Target.Dependency {
+    static func source(_ feature: Feature) -> Target.Dependency {
+        .byName(name: feature.source)
+    }
+    
+    static func interface(_ feature: Feature) -> Target.Dependency {
+        .byName(name: feature.interface)
+    }
+    
+    static func mocks(_ feature: Feature) -> Target.Dependency {
+        .byName(name: feature.mocks)
+    }
+    
+    static func tests(_ feature: Feature) -> Target.Dependency {
+        .byName(name: feature.tests)
     }
 }
 
 extension Array where Element == Target {
-    func withTargets(
-        forFeature feature: Feature,
-        sourceDependancy: [Target.Dependency] = [],
-        interfaceDependancy: [Target.Dependency] = [],
-        mocksDependancy: [Target.Dependency] = [],
-        testsDependancy: [Target.Dependency] = []
-    ) -> [Target] {
-        self + .targets(
-            forFeature: feature,
-            sourceDependancy: sourceDependancy,
-            interfaceDependancy: interfaceDependancy,
-            mocksDependancy: mocksDependancy,
-            testsDependancy: testsDependancy
-        )
-    }
-    
-    static func targets(
-        forFeature feature: Feature,
+    func with(
+        targetsFrom feature: Feature,
         sourceDependancy: [Target.Dependency] = [],
         interfaceDependancy: [Target.Dependency] = [],
         mocksDependancy: [Target.Dependency] = [],
@@ -95,7 +91,7 @@ extension Array where Element == Target {
     ) -> [Target] {
         let rootPath = "Sources/\(feature.source)"
 
-        return [
+        let newTargets: [Target] = [
             .target(name: feature.source,
                     dependencies: [.byName(name: feature.interface)] + sourceDependancy,
                     path: rootPath + "/Sources"),
@@ -110,5 +106,6 @@ extension Array where Element == Target {
                                        .byName(name: feature.mocks)] + testsDependancy,
                         path: rootPath + "/Tests"),
         ]
+        return self + newTargets
     }
 }
