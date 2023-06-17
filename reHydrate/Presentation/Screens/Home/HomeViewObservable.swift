@@ -12,7 +12,7 @@ import Presentation
 import EngineKit
 
 final class HomeScreenObservable: ObservableObject, HomeSceneType {
-    var presenter: HomePresenterType
+    private let presenter: HomePresenterType
 
     @Published var date: Date
     @Published var consumed: Double

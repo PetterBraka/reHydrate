@@ -7,12 +7,10 @@
 //
 
 import SwiftUI
-import Presentation
+import PresentationKit
 
 struct AppView: View {
     @ObservedObject var observer: RouterObservable
-    @StateObject var viewModel = MainAssembler.shared.container.resolve(AppViewModel.self)!
-    @State var homeTransition: AnyTransition = .slide
     
     init() {
         let router = SceneFactory.shared.router
@@ -25,26 +23,19 @@ struct AppView: View {
             Color.background
                 .ignoresSafeArea()
             TabView(selection: $observer.tab) {
-                SettingsView(navigateTo: viewModel.navigateTo)
+                SceneFactory.shared.makeSettingsScreen()
                     .tag(Tab.settings)
                 SceneFactory.shared.makeHomeScreen()
                     .tag(Tab.home)
-                CalendarView(navigateTo: viewModel.navigateTo)
-                    .tag(Tab.history)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            if viewModel.showPopUp {
+            if case .some = observer.popUp {
                 Color.gray
                     .opacity(0.5)
                     .ignoresSafeArea()
                     .onTapGesture {
-                        viewModel.showPopUp = false
+                        observer.dismissPopUp()
                     }
-                if let selectedDrink = viewModel.editingDrink {
-                    EditDrinkView(drink: selectedDrink) {
-                        viewModel.showPopUp = false
-                    }
-                }
             }
         }
     }

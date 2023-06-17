@@ -38,6 +38,43 @@ public final class SceneFactory {
         
         return HomeScreen(observer: observer)
     }
+    
+    func makeSettingsScreen() -> SettingsScreen {
+        let presenter = Screen.Settings.Presenter(engine: engine,
+                                                  router: router)
+        let drinks = getDrinks()
+        let observer = SettingsScreenObservable(
+            presenter: presenter,
+            language: engine.languageService.getSelectedLanguage(),
+            languageOptions: engine.languageService.getLanguageOptions(),
+            isDarkMode: true, // TODO: Petter add dark mode
+            isMetric: true, // TODO: Petter add different unit systems
+            goal: 3, // TODO: Petter add fetching of goal
+            unit: .liters,
+            isRemindersOn: false, // TODO: Petter add Reminders
+            remindersStart: .distantPast,
+            remindersStartRange: Date.distantPast ... .distantFuture,
+            remindersEnd: .distantFuture,
+            remindersEndRange: Date.distantPast ... .distantFuture,
+            reminderFrequency: 60,
+            small: drinks[0],
+            medium: drinks[1],
+            large: drinks[2])
+        presenter.scene = observer
+
+        return SettingsScreen(observer: observer)
+    }
+}
+
+private extension SceneFactory {
+    func getDrinks() -> [Drink] {
+        let result = engine.drinksService.getSavedDrinks()
+        if case .success(let foundDrinks) = result, !foundDrinks.isEmpty {
+            return foundDrinks
+        } else {
+            return engine.drinksService.resetToDefault()
+        }
+    }
 }
 
 extension Home.ViewModel.Drink {

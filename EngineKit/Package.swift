@@ -25,7 +25,8 @@ let package: Package = {
             .target(name: engineKit,
                     dependencies: [
                         .source(.dayService),
-                        .source(.drinkService)
+                        .source(.drinkService),
+                        .source(.languageService)
                     ]),
             .target(name: presentation,
                     dependencies: [
@@ -37,12 +38,14 @@ let package: Package = {
             .with(targetsFrom: .dayService,
                   interfaceDependancy: [.interface(.drinkService)])
             .with(targetsFrom: .drinkService)
+            .with(targetsFrom: .languageService)
     )
 }()
 
 enum Feature: String {
     case dayService = "DayService"
     case drinkService = "DrinkService"
+    case languageService = "LanguageService"
 }
 
 extension Feature {

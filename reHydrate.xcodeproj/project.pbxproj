@@ -154,6 +154,7 @@
 		33EC3A97275B60DC0049E414 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A96275B60DC0049E414 /* NotificationManager.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F4521127C14D7A00CF68A2 /* WaveView.swift */; };
+		A11D4CD92A3D9F4C00A70B9B /* SettingsViewObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsViewObservable.swift */; };
 		A132EF872986BE9D006C5DB1 /* RepositoryAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A132EF862986BE9D006C5DB1 /* RepositoryAssembly.swift */; };
 		A132EF892986BF8E006C5DB1 /* DayRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A132EF882986BF8E006C5DB1 /* DayRepository.swift */; };
 		A132EF8C2986C279006C5DB1 /* ServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A132EF8B2986C279006C5DB1 /* ServiceAssembly.swift */; };
@@ -358,6 +359,7 @@
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		33F4521127C14D7A00CF68A2 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
+		A11D4CD82A3D9F4C00A70B9B /* SettingsViewObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewObservable.swift; sourceTree = "<group>"; };
 		A132EF862986BE9D006C5DB1 /* RepositoryAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryAssembly.swift; sourceTree = "<group>"; };
 		A132EF882986BF8E006C5DB1 /* DayRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRepository.swift; sourceTree = "<group>"; };
 		A132EF8B2986C279006C5DB1 /* ServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAssembly.swift; sourceTree = "<group>"; };
@@ -732,6 +734,7 @@
 			isa = PBXGroup;
 			children = (
 				33EC3A7A274D06070049E414 /* SettingsView.swift */,
+				A11D4CD82A3D9F4C00A70B9B /* SettingsViewObservable.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1090,6 +1093,7 @@
 				33B28F6F26BC802800DECA9F /* UITextField+Extensions.swift in Sources */,
 				33EC3A8627539E590049E414 /* UserDefault+Helper.swift in Sources */,
 				33694FEF277CAA8E00D2FE66 /* View+Extensions.swift in Sources */,
+				A11D4CD92A3D9F4C00A70B9B /* SettingsViewObservable.swift in Sources */,
 				3323161327441E140039EE23 /* Day.swift in Sources */,
 				A132EF8C2986C279006C5DB1 /* ServiceAssembly.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,

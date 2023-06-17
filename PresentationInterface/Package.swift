@@ -5,7 +5,9 @@ import PackageDescription
 
 let package: Package = {
     let rootPackage = "PresentationInterface"
+    
     let home = "HomePresentationInterface"
+    let settings = "SettingsPresentationInterface"
 
     return Package(
         name: rootPackage,
@@ -24,13 +26,11 @@ let package: Package = {
                 name: rootPackage,
                 dependencies: [
                     .byName(name: home),
+                    .byName(name: settings)
                 ]
             ),
             .target(name: home),
-            .testTarget(
-                name: rootPackage + "Tests",
-                dependencies: [.byName(name: rootPackage)]
-            ),
+            .target(name: settings),
         ]
     )
 }()

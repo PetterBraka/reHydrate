@@ -17,12 +17,11 @@ struct EditDrinksSectionView: View {
     @Binding var medium: String
     @Binding var large: String
     @Binding var unit: String
-    var language: Language
 
     var body: some View {
         // Small
         HStack {
-            Text(Localizable.editSmall.local(language))
+            Text(Localizable.editSmall)
             Spacer()
             HStack(spacing: 0) {
                 TextField("", text: $small, prompt: Text("Value"))
@@ -53,7 +52,7 @@ struct EditDrinksSectionView: View {
         }
         // Medium
         HStack {
-            Text(Localizable.editMedium.local(language))
+            Text(Localizable.editMedium)
             Spacer()
             HStack(spacing: 0) {
                 TextField("", text: $medium, prompt: Text("Value"))
@@ -84,7 +83,7 @@ struct EditDrinksSectionView: View {
         }
         // Large
         HStack {
-            Text(Localizable.editLarge.local(language))
+            Text(Localizable.editLarge)
             Spacer()
             HStack(spacing: 0) {
                 TextField("", text: $large, prompt: Text("Value"))

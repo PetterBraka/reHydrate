@@ -6,7 +6,6 @@
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import CoreKit
 import SwiftUI
 
 struct CheckBoxButton: View {
@@ -16,7 +15,6 @@ struct CheckBoxButton: View {
     @State var highlightedText: String
     @State var image: Image
     @State var highlightedImage: Image
-    var language: Language
 
     var rowAction: () -> Void
 
@@ -27,7 +25,7 @@ struct CheckBoxButton: View {
             }
         } label: {
             HStack {
-                Text(isChecked ? highlightedText.local(language) : text.local(language))
+                Text(isChecked ? highlightedText : text)
                     .font(.brandBody)
                     .foregroundColor(.label)
                 Spacer()

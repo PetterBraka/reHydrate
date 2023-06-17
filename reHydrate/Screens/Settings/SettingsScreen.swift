@@ -1,22 +1,17 @@
 //
-//  SettingsView.swift
+//  SettingsScreen.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 23/11/2021.
 //  Copyright © 2021 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import DrinkServiceInterface
 import SwiftUI
 
-struct SettingsView: View {
-    enum Field: Hashable {
-        case small
-        case medium
-        case large
-    }
-    
-    @ObservedObject var observer: SettingsViewObservable
-    @FocusState private var focusedField: Field?
+struct SettingsScreen: View {
+    @ObservedObject var observer: SettingsScreenObservable
+    @FocusState private var focusedField: Container?
 
     var body: some View {
         ZStack {
@@ -89,8 +84,6 @@ struct SettingsView: View {
                 units
                 // - MARK: Goal
                 editGoal
-                // - MARK: Edit drinks
-                editDrinks
                 // - MARK: Notifications
                 notifications
                 // - MARK: Credits
@@ -169,17 +162,6 @@ struct SettingsView: View {
                 .pickerStyle(.segmented)
                 .fixedSize()
             }
-        }
-    }
-    
-    @ViewBuilder
-    var editDrinks: some View {
-        Section {
-            EditDrinksSectionView(focusedField: _focusedField,
-                                  small: $observer.small,
-                                  medium: $observer.medium,
-                                  large: $observer.large,
-                                  unit: $observer.unit)
         }
     }
     
