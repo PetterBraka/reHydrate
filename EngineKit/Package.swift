@@ -6,6 +6,7 @@ import PackageDescription
 let package: Package = {
     // MARK: External dependencies
     let presentationInterface = "PresentationInterface"
+    let blackbird = "Blackbird"
 
     // MARK: Packages
     let engineKit = "EngineKit"
@@ -14,21 +15,31 @@ let package: Package = {
         name: engineKit,
         platforms: [
             .iOS(.v16),
+            .macOS(.v13)
         ],
         products: [
             .library(name: engineKit, targets: [engineKit]),
+        ],
+        dependencies: [
+            .blackbird
         ],
         targets: [
             .target(name: engineKit,
                     dependencies: [
                         .source(.dayService),
                         .source(.drinkService),
+                        .source(.languageService),
+                        .source(.databaseService)
                     ]),
+            .target(name: "TestHelper")
         ]
             .with(targetsFrom: .dayService,
                   interfaceDependancy: [.interface(.drinkService)])
             .with(targetsFrom: .drinkService)
             .with(targetsFrom: .languageService)
+            .with(targetsFrom: .databaseService,
+                  sourceDependancy: [.blackbird],
+                  interfaceDependancy: [.blackbird])
     )
 }()
 
@@ -36,6 +47,7 @@ enum Feature: String {
     case dayService = "DayService"
     case drinkService = "DrinkService"
     case languageService = "LanguageService"
+    case databaseService = "DatabaseService"
 }
 
 extension Feature {
@@ -56,7 +68,16 @@ extension Feature {
     }
 }
 
+extension Package.Dependency {
+    static let blackbird: Package.Dependency = .package(
+        url: "https://github.com/marcoarment/Blackbird.git",
+        exact: .init(0, 5, 0)
+    )
+}
+
 extension Target.Dependency {
+    static let blackbird: Target.Dependency = .byName(name: "Blackbird")
+    
     static func source(_ feature: Feature) -> Target.Dependency {
         .byName(name: feature.source)
     }
@@ -96,6 +117,8 @@ extension Array where Element == Target {
                     path: rootPath + "/Mocks"),
             .testTarget(name: feature.tests,
                         dependencies: [.byName(name: feature.source),
+                                       .byName(name: feature.mocks),
+                                       .byName(name: "TestHelper")] + testsDependancy,
                         path: rootPath + "/Tests"),
         ]
         return self + newTargets
