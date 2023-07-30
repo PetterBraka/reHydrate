@@ -32,19 +32,22 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         if response.actionIdentifier == "small" {
-            print("small button was pressed")
-            NotificationCenter.default.post(name: .addedSmallDrink, object: nil)
+            // TODO: add small drink
+//            print("small button was pressed")
+//            NotificationCenter.default.post(name: .addedSmallDrink, object: nil)
             completionHandler()
         } else if response.actionIdentifier == "medium" {
-            print("medium button was pressed")
-            NotificationCenter.default.post(name: .addedMediumDrink, object: nil)
+            // TODO: add medium drink
+//            print("medium button was pressed")
+//            NotificationCenter.default.post(name: .addedMediumDrink, object: nil)
             completionHandler()
         } else if response.actionIdentifier == "large" {
-            print("large button was pressed")
-            NotificationCenter.default.post(name: .addedLargeDrink, object: nil)
+            // TODO: add large drink
+//            print("large button was pressed")
+//            NotificationCenter.default.post(name: .addedLargeDrink, object: nil)
             completionHandler()
         } else {
-            print("unrecogniced button was pressed")
+            print("unrecognised button was pressed")
         }
     }
 }

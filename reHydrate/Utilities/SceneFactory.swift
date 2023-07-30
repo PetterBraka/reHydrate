@@ -6,7 +6,9 @@
 //  Copyright © 2023 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import Foundation
 import EngineKit
+import PresentationKit
 import HomePresentationInterface
 import DrinkServiceInterface
 
@@ -21,6 +23,7 @@ public final class SceneFactory {
     func makeHomeScreen() -> HomeScreen {
         let presenter = Screen.Home.Presenter(engine: engine,
                                               router: router)
+        let drinks = getDrinks()
         let observer = HomeScreenObservable(presenter: presenter,
                                             date: .now, consumed: 0, goal: 3,
                                             drinks: drinks.map { .init(from: $0) },

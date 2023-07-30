@@ -121,12 +121,17 @@
 		33DF9BF024B47D0A00699B1A /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */; };
 		33DF9BF224B47D0A00699B1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BF124B47D0A00699B1A /* Assets.xcassets */; };
 		33DF9BF624B47D0A00699B1A /* reHydrate-watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7A274D06070049E414 /* SettingsScreen.swift */; };
 		33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */; };
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
 		33EC3A8A2756C5090049E414 /* OptionsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A892756C5090049E414 /* OptionsButton.swift */; };
 		33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A94275AC6B30049E414 /* StepperView.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F4521127C14D7A00CF68A2 /* WaveView.swift */; };
+		A114C6C22A63DD2F00F53770 /* PresentationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A114C6C12A63DD2F00F53770 /* PresentationKit */; };
+		A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */; };
+		A13258B92A6433D400B3D5F5 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13258B82A6433D400B3D5F5 /* Icon.swift */; };
+		A13258BB2A6433EB00B3D5F5 /* IconHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13258BA2A6433EB00B3D5F5 /* IconHelper.swift */; };
 		A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */; };
 		A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1614D522A362E8C00235D02 /* SceneFactory.swift */; };
 		A183BCEB2A3122CB00D42033 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE82A3120C900D42033 /* Images.swift */; };
@@ -136,6 +141,7 @@
 		A183BCF12A3126BE00D42033 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A183BCEF2A3126BE00D42033 /* LaunchScreen.storyboard */; };
 		A183BCF92A33B78400D42033 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCF82A33B78400D42033 /* HomeScreen.swift */; };
 		A183BD002A33C52E00D42033 /* Date+localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCFF2A33C52E00D42033 /* Date+localized.swift */; };
+		A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BD012A33C70300D42033 /* HomeScreenObservable.swift */; };
 		A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */; };
 		A1AF32D52A347C7000FD0C7C /* EngineKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1AF32D42A347C7000FD0C7C /* EngineKit */; };
 		A1AF32D72A347C7000FD0C7C /* PresentationInterface in Frameworks */ = {isa = PBXBuildFile; productRef = A1AF32D62A347C7000FD0C7C /* PresentationInterface */; };
@@ -285,6 +291,7 @@
 		33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		33DF9BF124B47D0A00699B1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33DF9BF324B47D0A00699B1A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33EC3A7A274D06070049E414 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
 		33EC3A872754BA420049E414 /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
 		33EC3A892756C5090049E414 /* OptionsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsButton.swift; sourceTree = "<group>"; };
@@ -294,6 +301,10 @@
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		33F4521127C14D7A00CF68A2 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
+		A114C6C02A63DAAE00F53770 /* PresentationKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationKit; sourceTree = "<group>"; };
+		A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenObservable.swift; sourceTree = "<group>"; };
+		A13258B82A6433D400B3D5F5 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
+		A13258BA2A6433EB00B3D5F5 /* IconHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconHelper.swift; sourceTree = "<group>"; };
 		A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
 		A1614D522A362E8C00235D02 /* SceneFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneFactory.swift; sourceTree = "<group>"; };
 		A183BCE62A3120C900D42033 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -303,6 +314,7 @@
 		A183BCF02A3126BE00D42033 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A183BCF82A33B78400D42033 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		A183BCFF2A33C52E00D42033 /* Date+localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+localized.swift"; sourceTree = "<group>"; };
+		A183BD012A33C70300D42033 /* HomeScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenObservable.swift; sourceTree = "<group>"; };
 		A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
 		A1AF32D32A346D6F00FD0C7C /* PresentationInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationInterface; sourceTree = "<group>"; };
@@ -314,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
+				A114C6C22A63DD2F00F53770 /* PresentationKit in Frameworks */,
 				A1AF32D52A347C7000FD0C7C /* EngineKit in Frameworks */,
 				A1AF32D72A347C7000FD0C7C /* PresentationInterface in Frameworks */,
 			);
@@ -351,6 +364,7 @@
 				33EC3A892756C5090049E414 /* OptionsButton.swift */,
 				33EC3A94275AC6B30049E414 /* StepperView.swift */,
 			);
+			path = CommonUI;
 			sourceTree = "<group>";
 		};
 		335DA1FB275ECE2D002266D2 /* AppIcons */ = {
@@ -462,6 +476,8 @@
 			isa = PBXGroup;
 			children = (
 				A1AF32D22A346CA200FD0C7C /* EngineKit */,
+				A114C6C02A63DAAE00F53770 /* PresentationKit */,
+				A1AF32D32A346D6F00FD0C7C /* PresentationInterface */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				33DF9BDB24B47D0900699B1A /* reHydrate-watch */,
 				33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */,
@@ -482,6 +498,9 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				33231623274A75530039EE23 /* reHydrateApp.swift */,
+				A183BCF62A33B75000D42033 /* Screens */,
+				3323160927430A060039EE23 /* CommonUI */,
 				A1614D512A362E7300235D02 /* Utilities */,
 				33B28F6926BC7F6800DECA9F /* Extensions */,
 				332315E8274273F20039EE23 /* Resources */,
@@ -533,22 +552,30 @@
 			path = "reHydrate-watch Extension";
 			sourceTree = "<group>";
 		};
+		A11D4CD72A3C34A500A70B9B /* Settings */ = {
 			isa = PBXGroup;
 			children = (
 				A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */,
 				33694FF2277CBADA00D2FE66 /* CreditsView.swift */,
+				33EC3A7A274D06070049E414 /* SettingsScreen.swift */,
+				A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		A13258B72A6433CF00B3D5F5 /* Icon */ = {
 			isa = PBXGroup;
 			children = (
+				A13258B82A6433D400B3D5F5 /* Icon.swift */,
+				A13258BA2A6433EB00B3D5F5 /* IconHelper.swift */,
 			);
+			path = Icon;
 			sourceTree = "<group>";
 		};
 		A1614D512A362E7300235D02 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A13258B72A6433CF00B3D5F5 /* Icon */,
 				A1614D522A362E8C00235D02 /* SceneFactory.swift */,
 			);
 			path = Utilities;
@@ -567,6 +594,7 @@
 		A183BCF62A33B75000D42033 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				332315F32742B3430039EE23 /* AppView.swift */,
 				A11D4CD72A3C34A500A70B9B /* Settings */,
 				A183BCF72A33B75A00D42033 /* Home */,
 			);
@@ -576,6 +604,7 @@
 		A183BCF72A33B75A00D42033 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				A183BD012A33C70300D42033 /* HomeScreenObservable.swift */,
 				A183BCF82A33B78400D42033 /* HomeScreen.swift */,
 			);
 			path = Home;
@@ -611,6 +640,7 @@
 			packageProductDependencies = (
 				A1AF32D42A347C7000FD0C7C /* EngineKit */,
 				A1AF32D62A347C7000FD0C7C /* PresentationInterface */,
+				A114C6C12A63DD2F00F53770 /* PresentationKit */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -801,13 +831,17 @@
 				33EC3A8A2756C5090049E414 /* OptionsButton.swift in Sources */,
 				33B28F6F26BC802800DECA9F /* UITextField+Extensions.swift in Sources */,
 				33694FEF277CAA8E00D2FE66 /* View+Extensions.swift in Sources */,
+				A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
+				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,
 				A183BCED2A3122D100D42033 /* Color.swift in Sources */,
 				A183BCEB2A3122CB00D42033 /* Images.swift in Sources */,
 				A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */,
+				A13258BB2A6433EB00B3D5F5 /* IconHelper.swift in Sources */,
 				332315F42742B3430039EE23 /* AppView.swift in Sources */,
 				330C23D627665D4C00293092 /* AppDelegate.swift in Sources */,
 				A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */,
+				33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
 				33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */,
 				33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */,
@@ -821,6 +855,7 @@
 				A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */,
 				A183BCF92A33B78400D42033 /* HomeScreen.swift in Sources */,
 				33B28F6D26BC7FCD00DECA9F /* Double+Extensions.swift in Sources */,
+				A13258B92A6433D400B3D5F5 /* Icon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1128,7 +1163,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A114C6C12A63DD2F00F53770 /* PresentationKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = PresentationKit;
 		};
 		A1AF32D42A347C7000FD0C7C /* EngineKit */ = {
 			isa = XCSwiftPackageProductDependency;

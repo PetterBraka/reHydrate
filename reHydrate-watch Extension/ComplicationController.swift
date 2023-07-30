@@ -52,7 +52,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         getComplication(for: complication.family)
     }
 
-    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func getComplication(for family: CLKComplicationFamily) -> CLKComplicationTemplate? {
         let waterDrop = UIImage.waterDrop.withTintColor(.white)
         let formatter = DateFormatter()
