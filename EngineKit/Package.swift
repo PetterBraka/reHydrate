@@ -99,27 +99,35 @@ extension Array where Element == Target {
     func with(
         targetsFrom feature: Feature,
         sourceDependancy: [Target.Dependency] = [],
+        sourceResources: [Resource]? = nil,
         interfaceDependancy: [Target.Dependency] = [],
+        interfaceResources: [Resource]? = nil,
         mocksDependancy: [Target.Dependency] = [],
-        testsDependancy: [Target.Dependency] = []
+        mocksResources: [Resource]? = nil,
+        testsDependancy: [Target.Dependency] = [],
+        testsResources: [Resource]? = nil
     ) -> [Target] {
         let rootPath = "Sources/\(feature.source)"
 
         let newTargets: [Target] = [
             .target(name: feature.source,
                     dependencies: [.byName(name: feature.interface)] + sourceDependancy,
-                    path: rootPath + "/Sources"),
+                    path: rootPath + "/Sources",
+                    resources: sourceResources),
             .target(name: feature.interface,
                     dependencies: interfaceDependancy,
-                    path: rootPath + "/Interface"),
+                    path: rootPath + "/Interface",
+                    resources: interfaceResources),
             .target(name: feature.mocks,
                     dependencies: [.byName(name: feature.interface)] + mocksDependancy,
-                    path: rootPath + "/Mocks"),
+                    path: rootPath + "/Mocks",
+                    resources: mocksResources),
             .testTarget(name: feature.tests,
                         dependencies: [.byName(name: feature.source),
                                        .byName(name: feature.mocks),
                                        .byName(name: "TestHelper")] + testsDependancy,
-                        path: rootPath + "/Tests"),
+                        path: rootPath + "/Tests",
+                        resources: testsResources),
         ]
         return self + newTargets
     }
