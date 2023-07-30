@@ -9,4 +9,6 @@ import Blackbird
 
 public protocol DatabaseType {
     var db: Blackbird.Database { get }
+    
+    func close()
 }

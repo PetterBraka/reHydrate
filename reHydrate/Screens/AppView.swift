@@ -11,9 +11,11 @@ import PresentationKit
 
 struct AppView: View {
     @ObservedObject var observer: RouterObservable
+    let sceneFactory: SceneFactory
     
-    init() {
-        let router = SceneFactory.shared.router
+    init(_ sceneFactory: SceneFactory) {
+        self.sceneFactory = sceneFactory
+        let router = sceneFactory.router
         observer = RouterObservable(router: router, tab: .home)
         router.sceneObserver = observer
     }
@@ -23,7 +25,7 @@ struct AppView: View {
             Color.background
                 .ignoresSafeArea()
             TabView(selection: $observer.tab) {
-                SceneFactory.shared.makeHomeScreen()
+                sceneFactory.makeHomeScreen()
                     .tag(Tab.home)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -41,6 +43,6 @@ struct AppView: View {
 
 struct AppView_Previews: PreviewProvider {
     static var previews: some View {
-        AppView()
+        AppView(SceneFactory())
     }
 }

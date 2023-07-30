@@ -14,7 +14,7 @@ struct reHydrateApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppView()
+            AppView(appDelegate.sceneFactory)
                 .environmentObject(IconHelper())
         }
     }

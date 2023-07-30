@@ -10,9 +10,10 @@ import UIKit
 import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    public let sceneFactory = SceneFactory()
     func application(_: UIApplication,
                      didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil)
-        -> Bool {
+    -> Bool {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         center.requestAuthorization(options: [.sound, .alert]) { granted, _ in
@@ -20,11 +21,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         return true
     }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        sceneFactory.engine.database.close()
+    }
+    
 
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 willPresent _: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions)
-                                    -> Void) {
+                                -> Void) {
         completionHandler([.sound, .banner, .list])
     }
 

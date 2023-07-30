@@ -12,10 +12,8 @@ import PresentationKit
 import HomePresentationInterface
 import DrinkServiceInterface
 
-public final class SceneFactory {
-    public static let shared = SceneFactory()
-    
-    private let engine = Engine()
+public final class SceneFactory: ObservableObject {
+    public let engine = Engine()
     public let router = Router()
     
     init() {}

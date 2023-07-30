@@ -15,14 +15,15 @@ import DatabaseServiceInterface
 import DatabaseService
 
 public final class Engine {
+    
     public init() {}
     
-    private let database = Database()
+    public lazy var database: DatabaseType = Database()
+    public lazy var dayManager: DayManagerType = DayManager(database: database)
     
     public lazy var consumptionService: ConsumptionServiceType = ConsumptionService()
     public lazy var drinksService: DrinkServiceType = DrinkService()
     public lazy var languageService: LanguageServiceType = LanguageService()
-    public lazy var dayManager: DayManagerType = DayManager(database: database)
 }
 
 extension Engine: HasService {}

@@ -122,14 +122,15 @@
 		33DF9BF224B47D0A00699B1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BF124B47D0A00699B1A /* Assets.xcassets */; };
 		33DF9BF624B47D0A00699B1A /* reHydrate-watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7A274D06070049E414 /* SettingsScreen.swift */; };
-		33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */; };
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
-		33EC3A8A2756C5090049E414 /* OptionsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A892756C5090049E414 /* OptionsButton.swift */; };
-		33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A94275AC6B30049E414 /* StepperView.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
-		33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F4521127C14D7A00CF68A2 /* WaveView.swift */; };
-		A114C6C22A63DD2F00F53770 /* PresentationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A114C6C12A63DD2F00F53770 /* PresentationKit */; };
 		A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */; };
+		A126D24B2A76665800A296BA /* EngineKit in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24A2A76665800A296BA /* EngineKit */; };
+		A126D24D2A76665800A296BA /* PresentationInterface in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24C2A76665800A296BA /* PresentationInterface */; };
+		A126D24F2A76665900A296BA /* PresentationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24E2A76665900A296BA /* PresentationKit */; };
+		A126D2512A7667C200A296BA /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A126D2502A7667C200A296BA /* CheckBoxButton.swift */; };
+		A126D2552A76684E00A296BA /* StepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A126D2542A76684E00A296BA /* StepperView.swift */; };
+		A126D2582A76C61B00A296BA /* Blackbird in Frameworks */ = {isa = PBXBuildFile; productRef = A126D2572A76C61B00A296BA /* Blackbird */; };
 		A13258B92A6433D400B3D5F5 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13258B82A6433D400B3D5F5 /* Icon.swift */; };
 		A13258BB2A6433EB00B3D5F5 /* IconHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13258BA2A6433EB00B3D5F5 /* IconHelper.swift */; };
 		A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */; };
@@ -143,8 +144,6 @@
 		A183BD002A33C52E00D42033 /* Date+localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCFF2A33C52E00D42033 /* Date+localized.swift */; };
 		A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BD012A33C70300D42033 /* HomeScreenObservable.swift */; };
 		A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */; };
-		A1AF32D52A347C7000FD0C7C /* EngineKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1AF32D42A347C7000FD0C7C /* EngineKit */; };
-		A1AF32D72A347C7000FD0C7C /* PresentationInterface in Frameworks */ = {isa = PBXBuildFile; productRef = A1AF32D62A347C7000FD0C7C /* PresentationInterface */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -292,17 +291,15 @@
 		33DF9BF124B47D0A00699B1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33DF9BF324B47D0A00699B1A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33EC3A7A274D06070049E414 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
-		33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
 		33EC3A872754BA420049E414 /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
-		33EC3A892756C5090049E414 /* OptionsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsButton.swift; sourceTree = "<group>"; };
-		33EC3A94275AC6B30049E414 /* StepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperView.swift; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		33F4521127C14D7A00CF68A2 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 		A114C6C02A63DAAE00F53770 /* PresentationKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationKit; sourceTree = "<group>"; };
 		A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenObservable.swift; sourceTree = "<group>"; };
+		A126D2502A7667C200A296BA /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
+		A126D2542A76684E00A296BA /* StepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperView.swift; sourceTree = "<group>"; };
 		A13258B82A6433D400B3D5F5 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		A13258BA2A6433EB00B3D5F5 /* IconHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconHelper.swift; sourceTree = "<group>"; };
 		A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
@@ -325,10 +322,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A126D2582A76C61B00A296BA /* Blackbird in Frameworks */,
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
-				A114C6C22A63DD2F00F53770 /* PresentationKit in Frameworks */,
-				A1AF32D52A347C7000FD0C7C /* EngineKit in Frameworks */,
-				A1AF32D72A347C7000FD0C7C /* PresentationInterface in Frameworks */,
+				A126D24D2A76665800A296BA /* PresentationInterface in Frameworks */,
+				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
+				A126D24F2A76665900A296BA /* PresentationKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,11 +356,9 @@
 		3323160927430A060039EE23 /* CommonUI */ = {
 			isa = PBXGroup;
 			children = (
-				33F4521127C14D7A00CF68A2 /* WaveView.swift */,
 				332315E62742724D0039EE23 /* Drinkview.swift */,
-				33EC3A80274D39AF0049E414 /* CheckBoxButton.swift */,
-				33EC3A892756C5090049E414 /* OptionsButton.swift */,
-				33EC3A94275AC6B30049E414 /* StepperView.swift */,
+				A126D2502A7667C200A296BA /* CheckBoxButton.swift */,
+				A126D2542A76684E00A296BA /* StepperView.swift */,
 			);
 			path = CommonUI;
 			sourceTree = "<group>";
@@ -638,9 +634,10 @@
 			);
 			name = reHydrate;
 			packageProductDependencies = (
-				A1AF32D42A347C7000FD0C7C /* EngineKit */,
-				A1AF32D62A347C7000FD0C7C /* PresentationInterface */,
-				A114C6C12A63DD2F00F53770 /* PresentationKit */,
+				A126D24A2A76665800A296BA /* EngineKit */,
+				A126D24C2A76665800A296BA /* PresentationInterface */,
+				A126D24E2A76665900A296BA /* PresentationKit */,
+				A126D2572A76C61B00A296BA /* Blackbird */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -698,6 +695,7 @@
 			);
 			mainGroup = 3378766A24378A9300F5A732;
 			packageReferences = (
+				A126D2562A76C61B00A296BA /* XCRemoteSwiftPackageReference "Blackbird" */,
 			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
@@ -828,7 +826,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33EC3A8A2756C5090049E414 /* OptionsButton.swift in Sources */,
 				33B28F6F26BC802800DECA9F /* UITextField+Extensions.swift in Sources */,
 				33694FEF277CAA8E00D2FE66 /* View+Extensions.swift in Sources */,
 				A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */,
@@ -836,6 +833,7 @@
 				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,
 				A183BCED2A3122D100D42033 /* Color.swift in Sources */,
 				A183BCEB2A3122CB00D42033 /* Images.swift in Sources */,
+				A126D2552A76684E00A296BA /* StepperView.swift in Sources */,
 				A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */,
 				A13258BB2A6433EB00B3D5F5 /* IconHelper.swift in Sources */,
 				332315F42742B3430039EE23 /* AppView.swift in Sources */,
@@ -843,16 +841,14 @@
 				A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */,
 				33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
-				33F4521227C14D7A00CF68A2 /* WaveView.swift in Sources */,
-				33EC3A81274D39AF0049E414 /* CheckBoxButton.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
-				33EC3A95275AC6B30049E414 /* StepperView.swift in Sources */,
 				33694FF3277CBADA00D2FE66 /* CreditsView.swift in Sources */,
 				A183BCEC2A3122CE00D42033 /* Font.swift in Sources */,
 				A183BD002A33C52E00D42033 /* Date+localized.swift in Sources */,
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
 				33EC3A882754BA420049E414 /* Localizable.swift in Sources */,
 				A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */,
+				A126D2512A7667C200A296BA /* CheckBoxButton.swift in Sources */,
 				A183BCF92A33B78400D42033 /* HomeScreen.swift in Sources */,
 				33B28F6D26BC7FCD00DECA9F /* Double+Extensions.swift in Sources */,
 				A13258B92A6433D400B3D5F5 /* Icon.swift in Sources */,
@@ -1162,18 +1158,34 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCSwiftPackageProductDependency section */
-		A114C6C12A63DD2F00F53770 /* PresentationKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PresentationKit;
+/* Begin XCRemoteSwiftPackageReference section */
+		A126D2562A76C61B00A296BA /* XCRemoteSwiftPackageReference "Blackbird" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marcoarment/Blackbird";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
 		};
-		A1AF32D42A347C7000FD0C7C /* EngineKit */ = {
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A126D24A2A76665800A296BA /* EngineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EngineKit;
 		};
-		A1AF32D62A347C7000FD0C7C /* PresentationInterface */ = {
+		A126D24C2A76665800A296BA /* PresentationInterface */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationInterface;
+		};
+		A126D24E2A76665900A296BA /* PresentationKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PresentationKit;
+		};
+		A126D2572A76C61B00A296BA /* Blackbird */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A126D2562A76C61B00A296BA /* XCRemoteSwiftPackageReference "Blackbird" */;
+			productName = Blackbird;
 		};
 /* End XCSwiftPackageProductDependency section */
 

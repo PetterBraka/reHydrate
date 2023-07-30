@@ -14,5 +14,6 @@ public protocol HasService:
     HasConsumptionService,
     HasDrinksService,
     HasLanguageService,
-    HasDayManagerType
+    HasDatabaseService,
+    HasDayManagerService
 {}
