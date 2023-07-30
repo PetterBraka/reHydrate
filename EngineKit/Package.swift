@@ -9,7 +9,6 @@ let package: Package = {
 
     // MARK: Packages
     let engineKit = "EngineKit"
-    let presentation = "Presentation"
 
     return Package(
         name: engineKit,
@@ -18,19 +17,10 @@ let package: Package = {
         ],
         products: [
             .library(name: engineKit, targets: [engineKit]),
-            .library(name: presentation, targets: [presentation])
         ],
-        dependencies: [.package(path: "../\(presentationInterface)")],
         targets: [
             .target(name: engineKit,
                     dependencies: [
-                        .source(.dayService),
-                        .source(.drinkService),
-                        .source(.languageService)
-                    ]),
-            .target(name: presentation,
-                    dependencies: [
-                        .byName(name: presentationInterface),
                         .source(.dayService),
                         .source(.drinkService),
                     ]),
@@ -106,7 +96,6 @@ extension Array where Element == Target {
                     path: rootPath + "/Mocks"),
             .testTarget(name: feature.tests,
                         dependencies: [.byName(name: feature.source),
-                                       .byName(name: feature.mocks)] + testsDependancy,
                         path: rootPath + "/Tests"),
         ]
         return self + newTargets

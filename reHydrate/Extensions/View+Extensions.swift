@@ -43,18 +43,18 @@ enum WebSite {
 
 extension View {
     func openLink(to webSite: WebSite) {
-        if let webSite = webSite.getURL().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-           let url = URL(string: webSite),
-           UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
+        guard let webSite = webSite.getURL().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: webSite),
+              UIApplication.shared.canOpenURL(url)
+        else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 
     func openLink(to webSite: String) {
-        if let webSite = webSite.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-           let url = URL(string: webSite),
-           UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
+        guard let webSite = webSite.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: webSite),
+              UIApplication.shared.canOpenURL(url)
+        else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }
