@@ -7,10 +7,12 @@
 
 import DayServiceInterface
 import DrinkServiceInterface
+import LanguageServiceInterface
 import DatabaseServiceInterface
 
 public protocol HasService:
     HasConsumptionService,
     HasDrinksService,
+    HasLanguageService,
     HasDayManagerType
 {}

@@ -9,6 +9,8 @@ import DayServiceInterface
 import DayService
 import DrinkServiceInterface
 import DrinkService
+import LanguageServiceInterface
+import LanguageService
 import DatabaseServiceInterface
 import DatabaseService
 
@@ -19,6 +21,7 @@ public final class Engine {
     
     public lazy var consumptionService: ConsumptionServiceType = ConsumptionService()
     public lazy var drinksService: DrinkServiceType = DrinkService()
+    public lazy var languageService: LanguageServiceType = LanguageService()
     public lazy var dayManager: DayManagerType = DayManager(database: database)
 }
 
