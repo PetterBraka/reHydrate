@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Drink {
+public struct Drink: Identifiable {
     public let id: UUID
     
     public let container: Container
