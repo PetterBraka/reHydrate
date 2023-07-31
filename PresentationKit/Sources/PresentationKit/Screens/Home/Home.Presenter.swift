@@ -31,8 +31,16 @@ extension Screen.Home {
             self.router = router
         }
         
+        @MainActor
         public func perform(action: Home.Action) {
             switch action {
+            case .didAppear:
+                Task(priority: .high) {
+                    let today = await engine.consumptionService.getToday()
+                    scene?.perform(update: .setToday(consumption: today.consumed,
+                                                     goal: today.goal,
+                                                     date: today.date))
+                }
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:

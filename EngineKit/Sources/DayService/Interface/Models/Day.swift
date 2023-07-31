@@ -8,12 +8,12 @@
 import Foundation
 
 public struct Day {
-    public let id: UUID
+    public let id: String
     public let date: Date
     public var consumed: Double
     public var goal: Double
     
-    public init(id: UUID = UUID(),
+    public init(id: String = UUID().uuidString,
                 date: Date,
                 consumed: Double,
                 goal: Double) {

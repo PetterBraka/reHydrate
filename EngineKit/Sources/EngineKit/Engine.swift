@@ -21,7 +21,7 @@ public final class Engine {
     public lazy var database: DatabaseType = Database()
     public lazy var dayManager: DayManagerType = DayManager(database: database)
     
-    public lazy var consumptionService: ConsumptionServiceType = ConsumptionService()
+    public lazy var consumptionService: ConsumptionServiceType = ConsumptionService(engine: self)
     public lazy var drinksService: DrinkServiceType = DrinkService()
     public lazy var languageService: LanguageServiceType = LanguageService()
 }

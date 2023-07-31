@@ -7,15 +7,15 @@
 
 import Foundation
 
+public let dbFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.timeStyle = .none
+    formatter.dateFormat = "dd/MM/yyyy"
+    return formatter
+}()
+
 extension Date {
-    private static let formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .none
-        formatter.dateFormat = "dd/MM/yyyy"
-        return formatter
-    }()
-    
     func toString() -> String {
-        Self.formatter.string(from: self)
+        dbFormatter.string(from: self)
     }
 }

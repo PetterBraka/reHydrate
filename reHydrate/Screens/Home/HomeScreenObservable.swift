@@ -32,10 +32,15 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
         self.goal = goal
         self.drinks = drinks
         self.unit = unit
+        perform(action: .didAppear)
     }
 
     func perform(update: Home.Update) {
         switch update {
+        case let .setToday(consumption, goal, date):
+            self.consumed = consumption
+            self.goal = goal
+            self.date = date
         case let .setDate(date):
             self.date = date
         case let .setConsumption(consumed):

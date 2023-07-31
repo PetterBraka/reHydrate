@@ -10,6 +10,7 @@ import Foundation
 public enum Home {
     public enum Update {
         case setDate(Date)
+        case setToday(consumption: Double, goal: Double, date: Date)
         case setConsumption(Double)
         case setGoal(Double)
         case setUnit(small: UnitVolume, large: UnitVolume)
@@ -17,6 +18,7 @@ public enum Home {
     }
 
     public enum Action {
+        case didAppear
         case didTapHistory
         case didTapSettings
         case didTapAddDrink(ViewModel.Drink)
