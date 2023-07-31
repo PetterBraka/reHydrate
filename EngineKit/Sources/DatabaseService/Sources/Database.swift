@@ -14,6 +14,7 @@ public class Database: DatabaseType {
     
     public init() {
         do {
+#if TARGET_IPHONE_SIMULATOR
             let filename = "db.sqlite"
             let fileURL = try FileManager.default
                 .url(for: .applicationSupportDirectory,
@@ -22,6 +23,9 @@ public class Database: DatabaseType {
                      create: true)
                 .appendingPathComponent(filename)
             self.db = try .init(path: fileURL.absoluteString)
+#else
+            self.db = try .inMemoryDatabase()
+#endif
         } catch {
             fatalError("Database couldn't be initialised - \(error)")
         }

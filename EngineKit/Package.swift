@@ -4,10 +4,6 @@
 import PackageDescription
 
 let package: Package = {
-    // MARK: External dependencies
-    let presentationInterface = "PresentationInterface"
-    let blackbird = "Blackbird"
-
     // MARK: Packages
     let engineKit = "EngineKit"
 
@@ -34,6 +30,7 @@ let package: Package = {
             .target(name: "TestHelper")
         ]
             .with(targetsFrom: .dayService,
+                  sourceDependancy: [.source(.databaseService)],
                   interfaceDependancy: [.interface(.drinkService)])
             .with(targetsFrom: .drinkService)
             .with(targetsFrom: .languageService)

@@ -72,7 +72,7 @@ public final class DayManager: DayManagerType {
         return foundDay
     }
     
-    public func fetchLast() async throws -> DayModel? {
+    public func fetchLast() async throws -> DayModel {
         guard let foundDay = try await DayModel.read(from: db, orderBy: .descending(\.$date), limit: 1).first
         else {
             throw DatabaseError.noElementFound

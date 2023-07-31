@@ -16,5 +16,5 @@ public protocol DayManagerType: DbManagerType {
     func deleteDays(in range: ClosedRange<Date>) async throws
     func fetchAll() async throws -> [DayModel]
     func fetch(with date: Date) async throws -> DayModel
-    func fetchLast() async throws -> DayModel?
+    func fetchLast() async throws -> DayModel
 }
