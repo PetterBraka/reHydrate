@@ -6,7 +6,6 @@
 //
 
 import XCTest
-import Foundation
 import TestHelper
 @testable import DatabaseService
 import DatabaseServiceInterface
