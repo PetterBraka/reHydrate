@@ -21,6 +21,10 @@ final class DayManagerTests: XCTestCase {
     override func setUp() {
         self.sut = DayManager(database: database)
     }
+    
+    override func tearDown() async throws {
+        try assertDbIsClosed()
+    }
 
     func test_createNewDay_success() async throws {
         let day = try await sut.createNewDay(date: referenceDate, goal: 3)
