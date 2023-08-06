@@ -27,7 +27,7 @@ let package: Package = {
                         .source(.languageService),
                         .source(.databaseService)
                     ]),
-            .target(name: "TestHelper")
+            .testHelper
         ]
             .with(targetsFrom: .dayService,
                   sourceDependancy: [.source(.databaseService)],
@@ -39,6 +39,22 @@ let package: Package = {
                   interfaceDependancy: [.blackbird])
     )
 }()
+
+extension Package.Dependency {
+    static let blackbird: Package.Dependency = .package(
+        url: "https://github.com/marcoarment/Blackbird.git",
+        .upToNextMajor(from: .init(0, 5, 0))
+    )
+}
+
+extension Target {
+    static let testHelper: Target = .target(name: "TestHelper")
+}
+
+extension Target.Dependency {
+    static let testHelper: Target.Dependency = .byName(name: "TestHelper")
+    static let blackbird: Target.Dependency = .byName(name: "Blackbird")
+}
 
 enum Feature: String {
     case dayService = "DayService"
@@ -65,15 +81,7 @@ extension Feature {
     }
 }
 
-extension Package.Dependency {
-    static let blackbird: Package.Dependency = .package(
-        url: "https://github.com/marcoarment/Blackbird.git",
-        exact: .init(0, 5, 0)
-    )
-}
-
 extension Target.Dependency {
-    static let blackbird: Target.Dependency = .byName(name: "Blackbird")
     
     static func source(_ feature: Feature) -> Target.Dependency {
         .byName(name: feature.source)
@@ -120,9 +128,11 @@ extension Array where Element == Target {
                     path: rootPath + "/Mocks",
                     resources: mocksResources),
             .testTarget(name: feature.tests,
-                        dependencies: [.byName(name: feature.source),
-                                       .byName(name: feature.mocks),
-                                       .byName(name: "TestHelper")] + testsDependancy,
+                        dependencies: [
+                            .byName(name: feature.source),
+                            .byName(name: feature.mocks),
+                            .testHelper
+                        ] + testsDependancy,
                         path: rootPath + "/Tests",
                         resources: testsResources),
         ]
