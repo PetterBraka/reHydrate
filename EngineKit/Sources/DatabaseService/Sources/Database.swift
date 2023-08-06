@@ -7,33 +7,47 @@
 
 import Blackbird
 import DatabaseServiceInterface
-import Foundation
+import OSLog
 
 public class Database: DatabaseType {
-    public private(set) var  db: Blackbird.Database
+    private let logger = Logger(subsystem: "engine.databaseService", category: "database")
+    private var db: Blackbird.Database?
+    
+    public private(set) var path: String
     
     public init() {
         do {
-#if TARGET_IPHONE_SIMULATOR
-            let filename = "db.sqlite"
-            let fileURL = try FileManager.default
-                .url(for: .applicationSupportDirectory,
+            self.path = try FileManager
+                .default
+                .url(for: .documentDirectory,
                      in: .userDomainMask,
                      appropriateFor: nil,
                      create: true)
-                .appendingPathComponent(filename)
-            self.db = try .init(path: fileURL.absoluteString)
-#else
-            self.db = try .inMemoryDatabase()
-#endif
+                .appendingPathComponent("db.sqlite")
+                .absoluteString
+            logger.debug("DB path - \(self.path)")
         } catch {
-            fatalError("Database couldn't be initialised - \(error)")
+            fatalError("Path to database couldn't be deffined - \(error)")
         }
     }
     
-    public func close() {
-        Task {
-            await db.close()
+    public func openDb() throws -> Blackbird.Database {
+        if let db {
+            return db
         }
+        do {
+            let db = try Blackbird.Database(path: path)
+            self.db = db
+            return db
+        } catch {
+            logger.error("DB couldn't be opened - \(error.localizedDescription)")
+            throw error
+        }
+    }
+    
+    public func close(_ db: Blackbird.Database) async {
+        await db.close()
+        self.db = nil
+    }
     }
 }

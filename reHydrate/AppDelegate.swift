@@ -21,11 +21,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         return true
     }
-    
-    func applicationWillTerminate(_ application: UIApplication) {
-        sceneFactory.engine.database.close()
-    }
-    
 
     func userNotificationCenter(_: UNUserNotificationCenter,
                                 willPresent _: UNNotification,

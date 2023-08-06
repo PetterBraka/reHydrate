@@ -32,7 +32,6 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
         self.goal = goal
         self.drinks = drinks
         self.unit = unit
-        perform(action: .didAppear)
     }
 
     func perform(update: Home.Update) {

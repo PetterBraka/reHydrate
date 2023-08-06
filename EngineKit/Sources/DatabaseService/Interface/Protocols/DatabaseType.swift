@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DatabaseType.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 29/07/2023.
@@ -8,7 +8,8 @@
 import Blackbird
 
 public protocol DatabaseType {
-    var db: Blackbird.Database { get }
+    var path: String { get }
     
-    func close()
+    func openDb() throws -> Blackbird.Database
+    func close(_ db: Blackbird.Database) async
 }

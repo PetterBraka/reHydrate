@@ -28,9 +28,12 @@ public final class ConsumptionService: ConsumptionServiceType {
     }
     
     public func getToday() async -> Day {
-        guard let day = try? await engine.dayManager.fetch(with: .now).toDay() else {
+        guard let foundDay = try? await engine.dayManager.fetch(with: .now),
+                let day = Day(with: foundDay)
+        else {
             let lastDay = try? await engine.dayManager.fetchLast()
-            guard let day = try? await engine.dayManager.createNewDay(date: .now, goal: lastDay?.goal ?? 3).toDay()
+            guard let newDay = try? await engine.dayManager.createNewDay(date: .now, goal: lastDay?.goal ?? 3),
+                  let day = Day(with: newDay)
             else {
                 fatalError("Unable to create a new day")
             }
@@ -61,12 +64,13 @@ public final class ConsumptionService: ConsumptionServiceType {
     }
 }
 
-extension DayModel {
-    func toDay() -> Day? {
-        guard let date = dbFormatter.date(from: date) else { return nil }
-        return Day(id: id,
-                   date: date,
-                   consumed: consumed,
-                   goal: goal)
+extension Day {
+    init?(with day: DayModel) {
+        guard let date = dbFormatter.date(from: day.date)
+        else { return nil }
+        self.init(id: day.id,
+                 date: date,
+                 consumed: day.consumed,
+                 goal: day.goal)
     }
 }
