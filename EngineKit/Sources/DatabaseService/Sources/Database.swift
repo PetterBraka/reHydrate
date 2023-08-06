@@ -11,9 +11,7 @@ import OSLog
 
 public class Database: DatabaseType {
     private let logger = Logger(subsystem: "engine.databaseService", category: "database")
-    private var db: Blackbird.Database?
-    
-    public private(set) var path: String
+    private let path: String
     
     public init() {
         do {
@@ -31,23 +29,45 @@ public class Database: DatabaseType {
         }
     }
     
-    public func openDb() throws -> Blackbird.Database {
-        if let db {
-            return db
-        }
+    func openDb() throws -> Blackbird.Database {
         do {
-            let db = try Blackbird.Database(path: path)
-            self.db = db
-            return db
+            return try Blackbird.Database(path: path)
         } catch {
-            logger.error("DB couldn't be opened - \(error.localizedDescription)")
+            logger.error("DB couldn't be opened - \(error.localizedDescription, privacy: .sensitive)")
             throw error
         }
     }
     
-    public func close(_ db: Blackbird.Database) async {
+    func close(_ db: Blackbird.Database) async {
         await db.close()
-        self.db = nil
     }
+    
+    public func write<Element: BlackbirdModel>(_ element: Element) async throws {
+        let db = try openDb()
+        try await element.write(to: db)
+        await close(db)
+    }
+    
+    public func read<Element: BlackbirdModel>(
+        matching: BlackbirdModelColumnExpression<Element>?,
+        orderBy: BlackbirdModelOrderClause<Element>,
+        limit: Int?
+    ) async throws -> [Element] {
+        let db = try openDb()
+        let elements = try await Element.read(from: db, matching: matching, orderBy: orderBy, limit: limit)
+        await close(db)
+        return elements
+    }
+    
+    public func delete<Element: BlackbirdModel>(_ element: Element) async throws {
+        let db = try openDb()
+        try await element.delete(from: db)
+        await close(db)
+    }
+    
+    public func delete<Element: BlackbirdModel>(matching: BlackbirdModelColumnExpression<Element>) async throws {
+        let db = try openDb()
+        try await Element.delete(from: db, matching: matching)
+        await close(db)
     }
 }

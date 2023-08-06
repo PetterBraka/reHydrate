@@ -8,8 +8,14 @@
 import Blackbird
 
 public protocol DatabaseType {
-    var path: String { get }
+    func write<Element: BlackbirdModel>(_ element: Element) async throws
     
-    func openDb() throws -> Blackbird.Database
-    func close(_ db: Blackbird.Database) async
+    func read<Element: BlackbirdModel>(
+        matching: BlackbirdModelColumnExpression<Element>?,
+        orderBy: BlackbirdModelOrderClause<Element>,
+        limit: Int?
+    ) async throws -> [Element]
+    
+    func delete<Element: BlackbirdModel>(_ element: Element) async throws
+    func delete<Element: BlackbirdModel>(matching: BlackbirdModelColumnExpression<Element>) async throws
 }
