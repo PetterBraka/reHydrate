@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol DayManagerType: DbManagerType {
+public protocol DayManagerType {
     func createNewDay(date: Date, goal: Double) async throws -> DayModel
     func update(consumed: Double, forDayAt date: Date) async throws
     

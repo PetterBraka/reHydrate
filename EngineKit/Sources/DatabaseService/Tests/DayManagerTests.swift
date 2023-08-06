@@ -12,13 +12,13 @@ import TestHelper
 import DatabaseServiceInterface
 import DatabaseServiceMocks
 
-final class DayDbManagerTests: XCTestCase {
+final class DayManagerTests: XCTestCase {
     let referenceDate = XCTest.referenceDate
     
     var sut: DayManagerType!
     
     override func setUp() {
-        self.sut = DayManager(database: Database())
+        self.sut = DayManager(database: database)
     }
 
     func test_createNewDay_success() async throws {
@@ -115,7 +115,7 @@ final class DayDbManagerTests: XCTestCase {
     }
 }
 
-private extension DayDbManagerTests {
+private extension DayManagerTests {
     func assert(givenDay: DayModel,
                 expectedDay: DayModel,
                 file: StaticString = #file,
