@@ -13,16 +13,29 @@ public class Database: DatabaseType {
     private let logger = Logger(subsystem: "engine.databaseService", category: "database")
     private let path: String
     
+    #if DEBUG
+    public var db: Blackbird.Database?
+    #endif
+    
     public init() {
         do {
-            self.path = try FileManager
-                .default
-                .url(for: .documentDirectory,
-                     in: .userDomainMask,
-                     appropriateFor: nil,
-                     create: true)
-                .appendingPathComponent("db.sqlite")
-                .absoluteString
+            // Checks if tests are being ran and changes the DB path to be in a `temporaryDirectory`
+            if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+                self.path = FileManager
+                    .default
+                    .temporaryDirectory
+                    .appendingPathComponent("db.sqlite")
+                    .absoluteString
+            } else {
+                self.path = try FileManager
+                    .default
+                    .url(for: .documentDirectory,
+                         in: .userDomainMask,
+                         appropriateFor: nil,
+                         create: true)
+                    .appendingPathComponent("db.sqlite")
+                    .absoluteString
+            }
             logger.debug("DB path - \(self.path)")
         } catch {
             fatalError("Path to database couldn't be deffined - \(error)")
@@ -31,7 +44,12 @@ public class Database: DatabaseType {
     
     func openDb() throws -> Blackbird.Database {
         do {
-            return try Blackbird.Database(path: path)
+            let db = try Blackbird.Database(path: path)
+            #if DEBUG
+            self.db = nil
+            self.db = db
+            #endif
+            return db
         } catch {
             logger.error("DB couldn't be opened - \(error.localizedDescription, privacy: .sensitive)")
             throw error

@@ -8,6 +8,10 @@
 import Blackbird
 
 public protocol DatabaseType {
+    #if DEBUG
+    var db: Blackbird.Database? { get }
+    #endif
+    
     func write<Element: BlackbirdModel>(_ element: Element) async throws
     
     func read<Element: BlackbirdModel>(
