@@ -15,7 +15,11 @@ import DatabaseServiceMocks
 final class DayDbManagerTests: XCTestCase {
     let referenceDate = XCTest.referenceDate
     
-    let sut = DayDbManager(database: DatabaseStub())
+    var sut: DayManagerType!
+    
+    override func setUp() {
+        self.sut = DayManager(database: Database())
+    }
 
     func test_createNewDay_success() async throws {
         let day = try await sut.createNewDay(date: referenceDate, goal: 3)
@@ -39,22 +43,18 @@ final class DayDbManagerTests: XCTestCase {
     
     func test_fetchLast_success() async throws {
         try await preLoad4Days()
-        guard let lastDate = XCTest.referenceDates.last,
-              let lastDay = try await sut.fetchLast()
+        guard let lastDate = XCTest.referenceDates.last
         else {
             XCTFail("No day found")
             return
         }
+        let lastDay = try await sut.fetchLast()
         XCTAssertEqual(lastDay.date, lastDate.toString())
     }
     
     func test_deleteDay_success() async throws {
         try await preLoad4Days()
-        guard let dayToDelete = try await sut.fetchLast()
-        else {
-            XCTFail("No day found")
-            return
-        }
+        let dayToDelete = try await sut.fetchLast()
         try await sut.delete(dayToDelete)
         let days = try await sut.fetchAll()
         XCTAssertEqual(days.count, 3)
