@@ -35,7 +35,6 @@ let package: Package = {
             .with(targetsFrom: .drinkService)
             .with(targetsFrom: .languageService)
             .with(targetsFrom: .databaseService,
-                  sourceDependancy: [.blackbird],
                   interfaceDependancy: [.blackbird])
     )
 }()
@@ -53,7 +52,7 @@ extension Target {
 
 extension Target.Dependency {
     static let testHelper: Target.Dependency = .byName(name: "TestHelper")
-    static let blackbird: Target.Dependency = .byName(name: "Blackbird")
+    static let blackbird: Target.Dependency = .product(name: "Blackbird", package: "Blackbird")
 }
 
 enum Feature: String {
