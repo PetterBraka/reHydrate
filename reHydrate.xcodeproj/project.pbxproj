@@ -143,6 +143,7 @@
 		A183BD002A33C52E00D42033 /* Date+localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCFF2A33C52E00D42033 /* Date+localized.swift */; };
 		A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BD012A33C70300D42033 /* HomeScreenObservable.swift */; };
 		A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */; };
+		A19F28BC2A80D44E0005717A /* Blackbird in Frameworks */ = {isa = PBXBuildFile; productRef = A19F28BB2A80D44E0005717A /* Blackbird */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -321,6 +322,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A19F28BC2A80D44E0005717A /* Blackbird in Frameworks */,
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				A126D24D2A76665800A296BA /* PresentationInterface in Frameworks */,
 				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
@@ -635,6 +637,7 @@
 				A126D24A2A76665800A296BA /* EngineKit */,
 				A126D24C2A76665800A296BA /* PresentationInterface */,
 				A126D24E2A76665900A296BA /* PresentationKit */,
+				A19F28BB2A80D44E0005717A /* Blackbird */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -692,6 +695,7 @@
 			);
 			mainGroup = 3378766A24378A9300F5A732;
 			packageReferences = (
+				A19F28BA2A80D44E0005717A /* XCRemoteSwiftPackageReference "Blackbird" */,
 			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
@@ -1156,6 +1160,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		A19F28BA2A80D44E0005717A /* XCRemoteSwiftPackageReference "Blackbird" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marcoarment/Blackbird.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		A126D24A2A76665800A296BA /* EngineKit */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1168,6 +1183,11 @@
 		A126D24E2A76665900A296BA /* PresentationKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationKit;
+		};
+		A19F28BB2A80D44E0005717A /* Blackbird */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A19F28BA2A80D44E0005717A /* XCRemoteSwiftPackageReference "Blackbird" */;
+			productName = Blackbird;
 		};
 /* End XCSwiftPackageProductDependency section */
 
