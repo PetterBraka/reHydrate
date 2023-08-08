@@ -15,7 +15,9 @@ public struct DayModel: BlackbirdModel {
     @BlackbirdColumn public var consumed: Double
     @BlackbirdColumn public var goal: Double
     
-    public init(id: String, date: String, consumed: Double, goal: Double) {
+    public init(id: String, date: String,
+                consumed: Double,
+                goal: Double) {
         self.id = id
         self.date = date
         self.consumed = consumed
