@@ -20,6 +20,19 @@ public let dbTimeFormatter: DateFormatter = {
     formatter.timeZone = .gmt
     return formatter
 }()
+
+private let dbToDateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    guard let dateFormat = dbDateFormatter.dateFormat,
+          let timeFormate = dbTimeFormatter.dateFormat
+    else {
+        fatalError("Date or time formatter hasn't been set correctly!")
+    }
+    formatter.dateFormat = "\(dateFormat) \(timeFormate)"
+    formatter.timeZone = .gmt
+    return formatter
+}()
+
 extension Date {
     func toDateString() -> String {
         dbDateFormatter.string(from: self)
@@ -29,5 +42,15 @@ extension Date {
         dbTimeFormatter.string(from: self)
     }
     
+    public func inSameDayAs(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(self, inSameDayAs: date)
+    }
+    
+    public init?(date: String, time: String) {
+        let dateAndTime = "\(date) \(time)"
+        guard let date = dbToDateFormatter.date(from: dateAndTime)
+        else { return nil }
+        self = date
     }
 }
