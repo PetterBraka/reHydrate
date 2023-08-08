@@ -32,5 +32,24 @@ final class DateExtensionTests: XCTestCase {
     func test_toDateString_invalidDay() {
         XCTAssertNotEqual(referenceDate.toDateString(), "1/07/2023")
     }
+    
+    func test_toTimeString_success() {
+        XCTAssertEqual(referenceDate.toTimeString(), "15:59:03")
+    }
+    
+    func test_toTimeString_invalidSeconds() {
+        XCTAssertNotEqual(referenceDate.toTimeString(), "15:59")
+    }
+    
+    func test_toTimeString_invalidMinutes() {
+        XCTAssertNotEqual(referenceDate.toTimeString(), "15::03")
+    }
+    
+    func test_toTimeString_invalidHours() {
+        XCTAssertNotEqual(referenceDate.toTimeString(), ":59:03")
+    }
+    
+    func test_toTimeString_invalidSeperator() {
+        XCTAssertNotEqual(referenceDate.toTimeString(), "15-59-03")
     }
 }
