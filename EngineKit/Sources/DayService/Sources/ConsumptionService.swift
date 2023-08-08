@@ -66,7 +66,7 @@ public final class ConsumptionService: ConsumptionServiceType {
 
 extension Day {
     init?(with day: DayModel) {
-        guard let date = dbFormatter.date(from: day.date)
+        guard let date = dbDateFormatter.date(from: day.date)
         else { return nil }
         self.init(id: day.id,
                  date: date,

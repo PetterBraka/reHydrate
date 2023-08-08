@@ -7,7 +7,7 @@
 
 import Foundation
 
-public let dbFormatter: DateFormatter = {
+public let dbDateFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.timeStyle = .none
     formatter.dateFormat = "dd/MM/yyyy"
@@ -15,7 +15,8 @@ public let dbFormatter: DateFormatter = {
 }()
 
 extension Date {
-    func toString() -> String {
-        dbFormatter.string(from: self)
+    func toDateString() -> String {
+        dbDateFormatter.string(from: self)
+    }
     }
 }

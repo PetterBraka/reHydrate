@@ -45,7 +45,7 @@ final class DayManagerTests: XCTestCase {
         let days = try await sut.fetchAll()
         XCTAssertEqual(days.count, 4)
         XCTAssertEqual(days.map(\.date),
-                       XCTest.referenceDates.map { $0.toString() })
+                       XCTest.referenceDates.map { $0.toDateString() })
         try assertDbIsClosed()
     }
     
@@ -57,7 +57,7 @@ final class DayManagerTests: XCTestCase {
             return
         }
         let lastDay = try await sut.fetchLast()
-        XCTAssertEqual(lastDay.date, lastDate.toString())
+        XCTAssertEqual(lastDay.date, lastDate.toDateString())
         try assertDbIsClosed()
     }
     
@@ -81,7 +81,7 @@ final class DayManagerTests: XCTestCase {
         let days = try await sut.fetchAll()
         try assertDbIsClosed()
         XCTAssertEqual(days.count, 3)
-        XCTAssertFalse(days.contains(where: { $0.date == dateToDelete.toString() }))
+        XCTAssertFalse(days.contains(where: { $0.date == dateToDelete.toDateString() }))
     }
     
     func test_deleteDatesInRange_success() async throws {
@@ -98,7 +98,7 @@ final class DayManagerTests: XCTestCase {
         try assertDbIsClosed()
         XCTAssertEqual(days.count, 1)
         let day = try XCTUnwrap(days.first)
-        XCTAssertEqual(day.date, lastDate.toString())
+        XCTAssertEqual(day.date, lastDate.toDateString())
     }
     
     func test_deleteDatesInClosedRange_success() async throws {

@@ -13,23 +13,24 @@ import TestHelper
 final class DateExtensionTests: XCTestCase {
     let referenceDate = XCTest.referenceDate
     
-    func test_toString_success() {
-        XCTAssertEqual(referenceDate.toString(), "01/07/2023")
+    func test_toDateString() {
+        XCTAssertEqual(referenceDate.toDateString(), "01/07/2023")
     }
     
-    func test_toString_invalidYear() {
-        XCTAssertNotEqual(referenceDate.toString(), "01/07/23")
+    func test_toDateString_invalidYear() {
+        XCTAssertNotEqual(referenceDate.toDateString(), "01/07/23")
     }
     
-    func test_toString_invalidShortMonth() {
-        XCTAssertNotEqual(referenceDate.toString(), "01/Jul/2023")
+    func test_toDateString_invalidShortMonth() {
+        XCTAssertNotEqual(referenceDate.toDateString(), "01/Jul/2023")
     }
     
-    func test_toString_invalidLongMonth() {
-        XCTAssertNotEqual(referenceDate.toString(), "01/July/2023")
+    func test_toDateString_invalidLongMonth() {
+        XCTAssertNotEqual(referenceDate.toDateString(), "01/July/2023")
     }
     
-    func test_toString_invalidDay() {
-        XCTAssertNotEqual(referenceDate.toString(), "1/07/2023")
+    func test_toDateString_invalidDay() {
+        XCTAssertNotEqual(referenceDate.toDateString(), "1/07/2023")
+    }
     }
 }

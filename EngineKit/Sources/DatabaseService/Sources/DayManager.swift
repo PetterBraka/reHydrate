@@ -18,7 +18,7 @@ public final class DayManager: DayManagerType {
     
     public func createNewDay(date: Date, goal: Double) async throws -> DayModel {
         let newDay = DayModel(id: UUID().uuidString,
-                              date: date.toString(),
+                              date: date.toDateString(),
                               consumed: 0,
                               goal: goal)
         try await database.write(newDay)
@@ -36,7 +36,7 @@ public final class DayManager: DayManagerType {
     }
     
     public func deleteDay(at date: Date) async throws {
-        try await database.delete(matching: .like(\DayModel.$date, date.toString()))
+        try await database.delete(matching: .like(\DayModel.$date, date.toDateString()))
     }
     
     public func deleteDays(in range: Range<Date>) async throws {
@@ -44,7 +44,7 @@ public final class DayManager: DayManagerType {
         for date in stride(from: range.lowerBound,
                            to: range.upperBound - dayInSeconds,
                            by: dayInSeconds) {
-            try await database.delete(matching: .like(\DayModel.$date, date.toString()))
+            try await database.delete(matching: .like(\DayModel.$date, date.toDateString()))
         }
     }
     
@@ -53,12 +53,12 @@ public final class DayManager: DayManagerType {
         for date in stride(from: range.lowerBound,
                            to: range.upperBound,
                            by: dayInSeconds) {
-            try await database.delete(matching: .like(\DayModel.$date, date.toString()))
+            try await database.delete(matching: .like(\DayModel.$date, date.toDateString()))
         }
     }
     
     public func fetch(with date: Date) async throws -> DayModel {
-        let days = try await database.read(matching: .like(\DayModel.$date, date.toString()),
+        let days = try await database.read(matching: .like(\DayModel.$date, date.toDateString()),
                                            orderBy: .ascending(\.$date),
                                            limit: 1)
         guard let day = days.first
