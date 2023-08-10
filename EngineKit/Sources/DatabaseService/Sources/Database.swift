@@ -88,4 +88,10 @@ public class Database: DatabaseType {
         try await Element.delete(from: db, matching: matching)
         await close(db)
     }
+    
+    public func deleteAll<Element: BlackbirdModel>(_ element: Element) async throws {
+        let db = try openDb()
+        try await Element.delete(from: db, matching: .all)
+        await close(db)
+    }
 }

@@ -22,4 +22,5 @@ public protocol DatabaseType {
     
     func delete<Element: BlackbirdModel>(_ element: Element) async throws
     func delete<Element: BlackbirdModel>(matching: BlackbirdModelColumnExpression<Element>) async throws
+    func deleteAll<Element: BlackbirdModel>(_ element: Element) async throws
 }
