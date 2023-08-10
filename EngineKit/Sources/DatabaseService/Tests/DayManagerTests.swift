@@ -14,30 +14,28 @@ import DatabaseServiceMocks
 final class DayManagerTests: XCTestCase {
     let referenceDate = XCTest.referenceDate
     
-    let database = Database()
+    var database: Database!
+    var spy: DatabaseSpy<DayModel>!
     var sut: DayManagerType!
     
     override func setUp() {
-        self.sut = DayManager(database: database)
+        self.database = Database()
+        self.spy = DatabaseSpy(realObject: database)
+        self.sut = DayManager(database: spy)
     }
     
-    override func tearDown() async throws {
-        try assertDbIsClosed()
-    }
-
     func test_createNewDay_success() async throws {
         let day = try await sut.createNewDay(date: referenceDate, goal: 3)
         assert(givenDay: day, expectedConsumption: 0, expectedGoal: 3)
-        try assertDbIsClosed()
+        XCTAssertEqual(spy.methodLogNames, [.write])
     }
     
     func test_createNewDayAndFetchDay_success() async throws {
         let givenDay = try await sut.createNewDay(date: referenceDate, goal: 3)
         assert(givenDay: givenDay, expectedConsumption: 0, expectedGoal: 3)
-        try assertDbIsClosed()
         let foundDay = try await sut.fetch(with: referenceDate)
         assert(givenDay: givenDay, expectedDay: foundDay)
-        try assertDbIsClosed()
+        XCTAssertEqual(spy.methodLogNames, [.write, .readMatchingOrderByLimit])
     }
     
     func test_fetchAll_success() async throws {
@@ -46,7 +44,7 @@ final class DayManagerTests: XCTestCase {
         XCTAssertEqual(days.count, 4)
         XCTAssertEqual(days.map(\.date),
                        XCTest.referenceDates.map { $0.toDateString() })
-        try assertDbIsClosed()
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.readMatchingOrderByLimit])
     }
     
     func test_fetchLast_success() async throws {
@@ -58,30 +56,30 @@ final class DayManagerTests: XCTestCase {
         }
         let lastDay = try await sut.fetchLast()
         XCTAssertEqual(lastDay.date, lastDate.toDateString())
-        try assertDbIsClosed()
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
+                       [.readMatchingOrderByLimit])
     }
     
     func test_deleteDay_success() async throws {
         try await preLoad4Days()
         let dayToDelete = try await sut.fetchLast()
-        try assertDbIsClosed()
         try await sut.delete(dayToDelete)
-        try assertDbIsClosed()
         let days = try await sut.fetchAll()
-        try assertDbIsClosed()
         XCTAssertEqual(days.count, 3)
         XCTAssertFalse(days.contains(dayToDelete))
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
+                       [.readMatchingOrderByLimit, .delete, .readMatchingOrderByLimit])
     }
     
     func test_deleteDate_success() async throws {
         let dateToDelete = XCTest.referenceDates[2]
         try await preLoad4Days()
         try await sut.deleteDay(at: dateToDelete)
-        try assertDbIsClosed()
         let days = try await sut.fetchAll()
-        try assertDbIsClosed()
         XCTAssertEqual(days.count, 3)
         XCTAssertFalse(days.contains(where: { $0.date == dateToDelete.toDateString() }))
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
+                       [.deleteMatching, .readMatchingOrderByLimit])
     }
     
     func test_deleteDatesInRange_success() async throws {
@@ -93,12 +91,12 @@ final class DayManagerTests: XCTestCase {
         }
         try await preLoad4Days()
         try await sut.deleteDays(in: firstDate ..< lastDate)
-        try assertDbIsClosed()
         let days = try await sut.fetchAll()
-        try assertDbIsClosed()
         XCTAssertEqual(days.count, 1)
         let day = try XCTUnwrap(days.first)
         XCTAssertEqual(day.date, lastDate.toDateString())
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + .deleteMatching(times: 3) +
+                       [.deleteMatching, .readMatchingOrderByLimit])
     }
     
     func test_deleteDatesInClosedRange_success() async throws {
@@ -110,12 +108,12 @@ final class DayManagerTests: XCTestCase {
         }
         try await preLoad4Days()
         try await sut.deleteDays(in: firstDate ... lastDate)
-        try assertDbIsClosed()
         let days = try await sut.fetchAll()
-        try assertDbIsClosed()
         XCTAssertTrue(days.isEmpty)
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + .deleteMatching(times: 5) +
+                       [.readMatchingOrderByLimit])
     }
-
+    
     func testPerformance_createNewDay_success() async throws {
         self.measure {
             let expectation = expectation(description: "finished")
@@ -134,12 +132,6 @@ final class DayManagerTests: XCTestCase {
 }
 
 private extension DayManagerTests {
-    func assertDbIsClosed(file: StaticString = #file,
-                          line: UInt = #line) throws {
-        let db = try XCTUnwrap(database.db, file: file, line: line)
-        XCTAssertTrue(db.isClosed, file: file, line: line)
-    }
-    
     func assert(givenDay: DayModel,
                 expectedDay: DayModel,
                 file: StaticString = #file,
@@ -169,7 +161,20 @@ private extension DayManagerTests {
                       line: UInt = #line) async throws {
         for date in XCTest.referenceDates {
             let _ = try await sut.createNewDay(date: date, goal: 3)
-            try assertDbIsClosed(file: file, line: line)
         }
+    }
+}
+
+private extension Array where Element == DatabaseSpy<DayModel>.MethodName {
+    static func preLoaded4Days() -> [DatabaseSpy<DayModel>.MethodName] {
+        [.write, .write, .write, .write]
+    }
+    
+    static func delete(times number: Int) -> [DatabaseSpy<DayModel>.MethodName] {
+        .init(repeating: .delete, count: number)
+    }
+    
+    static func deleteMatching(times number: Int) -> [DatabaseSpy<DayModel>.MethodName] {
+        .init(repeating: .deleteMatching, count: number)
     }
 }
