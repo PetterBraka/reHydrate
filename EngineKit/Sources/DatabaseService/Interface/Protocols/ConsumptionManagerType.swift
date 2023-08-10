@@ -1,5 +1,5 @@
 //
-//  ConsumptionTimelineManagerType.swift
+//  ConsumptionManagerType.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 07/08/2023.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-public protocol ConsumptionTimelineManagerType {
-    typealias Entry = ConsumptionTimelineEntry
+public protocol ConsumptionManagerType {
+    typealias Entry = Consumption
     
     func createEntry(date: Date, consumed: Double) async throws -> Entry
     

@@ -1,5 +1,5 @@
 //
-//  ConsumptionTimelineManager.swift
+//  ConsumptionManager.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 07/08/2023.
@@ -9,7 +9,7 @@ import Blackbird
 import DatabaseServiceInterface
 import Foundation
 
-final class ConsumptionTimelineManager: ConsumptionTimelineManagerType {
+final class ConsumptionManager: ConsumptionManagerType {
     private let database: DatabaseType
 
     public init(database: DatabaseType) {
@@ -19,8 +19,8 @@ final class ConsumptionTimelineManager: ConsumptionTimelineManagerType {
     func createEntry(
         date: Date,
         consumed: Double
-    ) async throws -> ConsumptionTimelineEntry {
-        let newEntry = ConsumptionTimelineEntry(
+    ) async throws -> Consumption {
+        let newEntry = Consumption(
             id: UUID().uuidString,
             date: date.toDateString(),
             time: date.toTimeString(),
@@ -30,19 +30,19 @@ final class ConsumptionTimelineManager: ConsumptionTimelineManagerType {
         return newEntry
     }
 
-    func delete(_ entry: ConsumptionTimelineEntry) async throws {
+    func delete(_ entry: Consumption) async throws {
         try await database.delete(entry)
     }
 
-    func fetchAll(at date: Date) async throws -> [ConsumptionTimelineEntry] {
+    func fetchAll(at date: Date) async throws -> [Consumption] {
         try await database.read(matching: .like(\.$date, date.toDateString()),
                       orderBy: .ascending(\.$time),
                       limit: nil)
     }
     
-    func fetchAll() async throws -> [ConsumptionTimelineEntry] {
+    func fetchAll() async throws -> [Consumption] {
         try await database.read(matching: nil,
-                                orderBy: .ascending(\ConsumptionTimelineEntry.$date),
+                                orderBy: .ascending(\Consumption.$date),
                                 limit: nil)
         .sorted { lhs, rhs in
             if lhs.date == rhs.date {
