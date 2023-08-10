@@ -1,5 +1,5 @@
 //
-//  ConsumptionService.swift
+//  DayService.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 10/06/2023.
@@ -12,9 +12,10 @@ import DatabaseServiceInterface
 import DatabaseService
 import Foundation
 
-public final class ConsumptionService: ConsumptionServiceType {
+public final class DayService: DayServiceType {
     public typealias Engine = (
-        HasDayManagerService
+        HasDayManagerService &
+        HasConsumptionManagerService
     )
     
     private let engine: Engine
@@ -45,20 +46,24 @@ public final class ConsumptionService: ConsumptionServiceType {
     }
     
     public func add(drink: Drink) -> Double {
-        day.consumed += UnitHelper.drinkToLiters(drink)
+        let consumedAmount = UnitHelper.drinkToLiters(drink)
+        day.consumed += consumedAmount
         Task {
             try await engine.dayManager.update(consumed: day.consumed, forDayAt: day.date)
+            try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
         }
         return day.consumed
     }
     
     public func remove(drink: Drink) -> Double {
-        day.consumed -= UnitHelper.drinkToLiters(drink)
+        let consumedAmount = -UnitHelper.drinkToLiters(drink)
+        day.consumed += UnitHelper.drinkToLiters(drink)
         if day.consumed < 0 {
             day.consumed = 0
         }
         Task {
             try await engine.dayManager.update(consumed: day.consumed, forDayAt: day.date)
+            try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
         }
         return day.consumed
     }

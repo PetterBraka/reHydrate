@@ -12,7 +12,7 @@ import HomePresentationInterface
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
         public typealias Engine = (
-            HasConsumptionService
+            HasDayService
         )
         public typealias Router = (
             HomeRoutable &
@@ -36,7 +36,7 @@ extension Screen.Home {
             switch action {
             case .didAppear:
                 Task(priority: .high) {
-                    let today = await engine.consumptionService.getToday()
+                    let today = await engine.dayService.getToday()
                     scene?.perform(update: .setToday(consumption: today.consumed,
                                                      goal: today.goal,
                                                      date: today.date))
@@ -46,12 +46,12 @@ extension Screen.Home {
             case .didTapSettings:
                 router.showSettings()
             case let .didTapAddDrink(drink):
-                let consumption = engine.consumptionService.add(drink: .init(from: drink))
+                let consumption = engine.dayService.add(drink: .init(from: drink))
                 scene?.perform(update: .setConsumption(consumption))
             case let .didTapEditDrink(drink):
                 router.showEdit(drink: drink)
             case let .didTapRemoveDrink(drink):
-                let consumption = engine.consumptionService.remove(drink: .init(from: drink))
+                let consumption = engine.dayService.remove(drink: .init(from: drink))
                 scene?.perform(update: .setConsumption(consumption))
             }
         }

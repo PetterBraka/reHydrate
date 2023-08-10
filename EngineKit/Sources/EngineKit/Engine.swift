@@ -27,6 +27,7 @@ public final class Engine {
     public lazy var consumptionService: ConsumptionServiceType = ConsumptionService(engine: self)
     public lazy var drinksService: DrinkServiceType = DrinkService()
     public lazy var languageService: LanguageServiceType = LanguageService()
+    public lazy var dayService: DayServiceType = DayService(engine: self)
 }
 
 extension Engine: HasService {}
