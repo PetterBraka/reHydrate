@@ -11,9 +11,10 @@ import LanguageServiceInterface
 import DatabaseServiceInterface
 
 public protocol HasService:
-    HasDrinksService,
-    HasLanguageService,
     HasDatabaseService,
-    HasDayManagerService
+    HasDayManagerService,
+    HasConsumptionManagerService,
+    HasDrinksService,
     HasDayService,
+    HasLanguageService
 {}
