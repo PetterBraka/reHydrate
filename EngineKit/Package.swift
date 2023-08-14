@@ -6,6 +6,7 @@ import PackageDescription
 let package: Package = {
     // MARK: Packages
     let engineKit = "EngineKit"
+    let engineMocks = "EngineMocks"
 
     return Package(
         name: engineKit,
@@ -27,6 +28,14 @@ let package: Package = {
                         .source(.languageService),
                         .source(.databaseService)
                     ]),
+            .target(name: engineMocks,
+                    dependencies: [
+                        .mocks(.dayService),
+                        .mocks(.drinkService),
+                        .mocks(.languageService),
+                        .mocks(.databaseService),
+                    ]
+                   ),
             .testHelper
         ]
             .with(targetsFrom: .dayService,
@@ -60,6 +69,7 @@ enum Feature: String {
     case drinkService = "DrinkService"
     case languageService = "LanguageService"
     case databaseService = "DatabaseService"
+    case timelineService = "TimelineService"
 }
 
 extension Feature {
