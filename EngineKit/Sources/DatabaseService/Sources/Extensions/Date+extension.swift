@@ -33,7 +33,7 @@ private let dbToDateFormatter: DateFormatter = {
     return formatter
 }()
 
-extension Date {
+public extension Date {
     func toDateString() -> String {
         dbDateFormatter.string(from: self)
     }
@@ -42,12 +42,12 @@ extension Date {
         dbTimeFormatter.string(from: self)
     }
     
-    public func inSameDayAs(_ date: Date) -> Bool {
+    func inSameDayAs(_ date: Date) -> Bool {
         let calendar = Calendar.current
         return calendar.isDate(self, inSameDayAs: date)
     }
     
-    public init?(date: String, time: String) {
+    init?(date: String, time: String) {
         let dateAndTime = "\(date) \(time)"
         guard let date = dbToDateFormatter.date(from: dateAndTime)
         else { return nil }
