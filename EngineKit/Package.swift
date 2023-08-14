@@ -45,6 +45,11 @@ let package: Package = {
             .with(targetsFrom: .languageService)
             .with(targetsFrom: .databaseService,
                   interfaceDependancy: [.blackbird])
+            .with(targetsFrom: .timelineService,
+                  sourceDependancy: [.source(.databaseService)],
+                  testsDependancy: [
+                    .mocks(.databaseService)
+                  ])
     )
 }()
 
@@ -106,6 +111,15 @@ extension Target.Dependency {
     
     static func tests(_ feature: Feature) -> Target.Dependency {
         .byName(name: feature.tests)
+    }
+}
+
+extension Array where Element == Target.Dependency {
+    func sourceAndMocks(_ feature: Feature) -> [Target.Dependency] {
+        [
+            .byName(name: feature.source),
+            .byName(name: feature.mocks)
+        ]
     }
 }
 
