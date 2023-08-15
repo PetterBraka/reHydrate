@@ -8,7 +8,7 @@
 import DatabaseServiceInterface
 
 extension DayModel {
-    static let `default` = DayModel(id: "---", date: "---", consumed: -999, goal: -999)
+    static let `default` = DayModel(id: "---", date: "01/01/2022", consumed: 0, goal: 0)
 }
 
 extension Array where Element == DayModel {

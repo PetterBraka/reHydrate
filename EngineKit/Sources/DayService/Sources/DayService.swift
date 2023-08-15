@@ -57,7 +57,7 @@ public final class DayService: DayServiceType {
     
     public func remove(drink: Drink) -> Double {
         let consumedAmount = -UnitHelper.drinkToLiters(drink)
-        day.consumed += UnitHelper.drinkToLiters(drink)
+        day.consumed += consumedAmount
         if day.consumed < 0 {
             day.consumed = 0
         }
