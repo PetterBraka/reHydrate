@@ -1,6 +1,6 @@
 //
 //  TimelineServiceTests.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 12/08/2023.
 //
@@ -69,12 +69,38 @@ final class TimelineServiceTests: XCTestCase {
         let expectedTimelineDay1 = givenConsumptionDay1.map { Timeline(time: $0.time, consumed: $0.consumed) }
         let expectedTimelineDay2 = givenConsumptionDay2.map { Timeline(time: $0.time, consumed: $0.consumed) }
         let expectedTimelineCollection = [
+            TimelineCollection(dateString: givenConsumptionDay2[0].date,
+                               timeline: expectedTimelineDay2),
+            TimelineCollection(dateString: givenConsumptionDay1[0].date,
+                               timeline: expectedTimelineDay1)
+        ]
+        XCTAssertEqual(timeline, expectedTimelineCollection)
+    }
+    
+    func test_getTimelineCollection_failingOrder() async throws {
+        let givenConsumptionDay1 = [
+            Consumption(id: "1", date: "01/02/2023", time: "01:20:22", consumed: 0.3),
+            Consumption(id: "1", date: "01/02/2023", time: "02:00:01", consumed: 1),
+            Consumption(id: "1", date: "01/02/2023", time: "02:05:44", consumed: 0.5)
+        ]
+        let givenConsumptionDay2 = [
+            Consumption(id: "1", date: "02/02/2023", time: "08:32:01", consumed: 1),
+            Consumption(id: "1", date: "02/02/2023", time: "05:05:44", consumed: 0.5)
+        ]
+        
+        stub.fetchAll_returnValue = givenConsumptionDay1 + givenConsumptionDay2
+        
+        let timeline = await sut.getTimelineCollection()
+        
+        let expectedTimelineDay1 = givenConsumptionDay1.map { Timeline(time: $0.time, consumed: $0.consumed) }
+        let expectedTimelineDay2 = givenConsumptionDay2.map { Timeline(time: $0.time, consumed: $0.consumed) }
+        let expectedTimelineCollection = [
             TimelineCollection(dateString: givenConsumptionDay1[0].date,
                                timeline: expectedTimelineDay1),
             TimelineCollection(dateString: givenConsumptionDay2[0].date,
                                timeline: expectedTimelineDay2)
         ]
-        XCTAssertEqual(timeline, expectedTimelineCollection)
+        XCTAssertNotEqual(timeline, expectedTimelineCollection)
     }
     
     func test_getTimelineCollection_failing() async throws {

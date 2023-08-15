@@ -34,7 +34,8 @@ public final class TimelineService: TimelineServiceType {
         do {
             let result = try await engine.consumptionManager.fetchAll()
             
-            return .init(from: result)
+            let collection: [TimelineCollection] = .init(from: result)
+            return collection.sorted(by: { $0.date > $1.date })
         } catch {
             return []
         }
