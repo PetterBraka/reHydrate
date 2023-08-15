@@ -14,3 +14,5 @@ public struct Timeline {
         self.consumed = consumed
     }
 }
+
+extension Timeline: Equatable {}

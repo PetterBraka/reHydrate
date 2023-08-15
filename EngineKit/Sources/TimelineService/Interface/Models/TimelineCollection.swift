@@ -16,3 +16,5 @@ public struct TimelineCollection {
         self.timeline = timeline
     }
 }
+
+extension TimelineCollection: Equatable {}
