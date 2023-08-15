@@ -30,6 +30,7 @@ let package: Package = {
                     ]),
             .target(name: engineMocks,
                     dependencies: [
+                        .byName(name: engineKit),
                         .mocks(.dayService),
                         .mocks(.drinkService),
                         .mocks(.languageService),
@@ -66,6 +67,7 @@ extension Target {
 
 extension Target.Dependency {
     static let testHelper: Target.Dependency = .byName(name: "TestHelper")
+    static let engineMocks: Target.Dependency = .byName(name: "EngineMocks")
     static let blackbird: Target.Dependency = .product(name: "Blackbird", package: "Blackbird")
 }
 
@@ -154,6 +156,7 @@ extension Array where Element == Target {
                         dependencies: [
                             .byName(name: feature.source),
                             .byName(name: feature.mocks),
+                            .engineMocks,
                             .testHelper
                         ] + testsDependancy,
                         path: rootPath + "/Tests",

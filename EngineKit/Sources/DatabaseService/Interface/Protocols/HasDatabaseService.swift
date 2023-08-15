@@ -6,13 +6,13 @@
 //
 
 public protocol HasDatabaseService {
-    var database: DatabaseType { get }
+    var database: DatabaseType { get set }
 }
 
 public protocol HasDayManagerService {
-    var dayManager: DayManagerType { get }
+    var dayManager: DayManagerType { get set }
 }
 
 public protocol HasConsumptionManagerService {
-    var consumptionManager: ConsumptionManagerType { get }
+    var consumptionManager: ConsumptionManagerType { get set }
 }

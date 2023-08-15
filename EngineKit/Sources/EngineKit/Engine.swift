@@ -15,16 +15,15 @@ import DatabaseServiceInterface
 import DatabaseService
 
 public final class Engine {
-    
     public init() {
         database = Database()
         dayManager = DayManager(database: database)
         consumptionManager = ConsumptionManager(database: database)
     }
     
-    public let database: DatabaseType
-    public let dayManager: DayManagerType
-    public let consumptionManager: ConsumptionManagerType
+    public var database: DatabaseType
+    public var dayManager: DayManagerType
+    public var consumptionManager: ConsumptionManagerType
     
     public lazy var drinksService: DrinkServiceType = DrinkService()
     public lazy var languageService: LanguageServiceType = LanguageService()

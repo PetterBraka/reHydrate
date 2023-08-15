@@ -6,5 +6,5 @@
 //
 
 public protocol HasLanguageService {
-    var languageService: LanguageServiceType { get }
+    var languageService: LanguageServiceType { get set }
 }

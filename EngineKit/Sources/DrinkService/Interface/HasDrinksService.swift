@@ -6,5 +6,5 @@
 //
 
 public protocol HasDrinksService {
-    var drinksService: DrinkServiceType { get }
+    var drinksService: DrinkServiceType { get set }
 }

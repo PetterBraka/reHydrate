@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol HasTimelineService {
-    var timelineService: TimelineServiceType { get }
+    var timelineService: TimelineServiceType { get set }
 }

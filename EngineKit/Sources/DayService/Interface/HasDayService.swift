@@ -6,5 +6,5 @@
 //
 
 public protocol HasDayService {
-    var dayService: DayServiceType { get }
+    var dayService: DayServiceType { get set }
 }
