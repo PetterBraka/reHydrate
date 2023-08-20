@@ -16,3 +16,7 @@ public protocol HasDayManagerService {
 public protocol HasConsumptionManagerService {
     var consumptionManager: ConsumptionManagerType { get set }
 }
+
+public protocol HasContainerManagerService {
+    var containerManager: ContainerManagerType { get set }
+}
