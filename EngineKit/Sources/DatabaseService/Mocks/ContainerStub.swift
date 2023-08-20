@@ -34,14 +34,14 @@ public final class ContainerManagerStub: ContainerManagerStubbing {
 }
 
 extension ContainerManagerStub: ContainerManagerType {
-    public func createEntry(of size: Double) async throws -> ContainerModel {
+    public func createEntry(of size: Int) async throws -> ContainerModel {
         if let createEntry_returnError {
             throw createEntry_returnError
         }
         return createEntry_returnValue
     }
     
-    public func update(_ entry: ContainerModel, newSize: Double) async throws -> ContainerModel {
+    public func update(_ entry: ContainerModel, newSize: Int) async throws -> ContainerModel {
         if let update_returnError {
             throw update_returnError
         }

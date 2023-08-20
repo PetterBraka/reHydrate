@@ -17,7 +17,7 @@ public final class ContainerManager: ContainerManagerType {
     }
     
     @discardableResult
-    public func createEntry(of size: Double) async throws -> ContainerModel {
+    public func createEntry(of size: Int) async throws -> ContainerModel {
         let newEntry = ContainerModel(
             id: UUID().uuidString,
             size: size
@@ -26,7 +26,7 @@ public final class ContainerManager: ContainerManagerType {
         return newEntry
     }
     
-    public func update(_ entry: ContainerModel, newSize: Double) async throws -> ContainerModel {
+    public func update(_ entry: ContainerModel, newSize: Int) async throws -> ContainerModel {
         var entry = entry
         entry.size = newSize
         try await database.write(entry)

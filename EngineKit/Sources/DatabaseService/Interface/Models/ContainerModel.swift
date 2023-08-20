@@ -11,9 +11,9 @@ public struct ContainerModel: BlackbirdModel {
     public static var primaryKey: [BlackbirdColumnKeyPath] = [\.$size]
     
     @BlackbirdColumn public var id: String
-    @BlackbirdColumn public var size: Double
+    @BlackbirdColumn public var size: Int
     
-    public init(id: String, size: Double) {
+    public init(id: String, size: Int) {
         self.id = id
         self.size = size
     }
