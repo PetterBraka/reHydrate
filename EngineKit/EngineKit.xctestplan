@@ -1,0 +1,52 @@
+{
+  "configurations" : [
+    {
+      "id" : "7FD11C6B-7C91-409E-B419-EE976582A45F",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DatabaseServiceTests",
+        "name" : "DatabaseServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DayServiceTests",
+        "name" : "DayServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DrinkServiceTests",
+        "name" : "DrinkServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LanguageServiceTests",
+        "name" : "LanguageServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "TimelineServiceTests",
+        "name" : "TimelineServiceTests"
+      }
+    }
+  ],
+  "version" : 1
+}
