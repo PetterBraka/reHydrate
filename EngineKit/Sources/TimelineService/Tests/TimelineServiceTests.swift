@@ -31,9 +31,9 @@ final class TimelineServiceTests: XCTestCase {
     
     func test_getTimelineForDate_success() async throws {
         let givenConsumption = [
-            Consumption(id: "1", date: "01/02/2023", time: "01:20:22", consumed: 0.3),
-            Consumption(id: "1", date: "01/02/2023", time: "02:00:01", consumed: 1),
-            Consumption(id: "1", date: "01/02/2023", time: "02:05:44", consumed: 0.5)
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "01:20:22", consumed: 0.3),
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "02:00:01", consumed: 1),
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "02:05:44", consumed: 0.5)
         ]
         stub.fetchAllAtDate_returnValue = givenConsumption
         
@@ -53,13 +53,13 @@ final class TimelineServiceTests: XCTestCase {
     
     func test_getTimelineCollection_success() async throws {
         let givenConsumptionDay1 = [
-            Consumption(id: "1", date: "01/02/2023", time: "01:20:22", consumed: 0.3),
-            Consumption(id: "1", date: "01/02/2023", time: "02:00:01", consumed: 1),
-            Consumption(id: "1", date: "01/02/2023", time: "02:05:44", consumed: 0.5)
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "01:20:22", consumed: 0.3),
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "02:00:01", consumed: 1),
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "02:05:44", consumed: 0.5)
         ]
         let givenConsumptionDay2 = [
-            Consumption(id: "1", date: "02/02/2023", time: "08:32:01", consumed: 1),
-            Consumption(id: "1", date: "02/02/2023", time: "05:05:44", consumed: 0.5)
+            ConsumptionModel(id: "1", date: "02/02/2023", time: "08:32:01", consumed: 1),
+            ConsumptionModel(id: "1", date: "02/02/2023", time: "05:05:44", consumed: 0.5)
         ]
         
         stub.fetchAll_returnValue = givenConsumptionDay1 + givenConsumptionDay2
@@ -79,13 +79,13 @@ final class TimelineServiceTests: XCTestCase {
     
     func test_getTimelineCollection_failingOrder() async throws {
         let givenConsumptionDay1 = [
-            Consumption(id: "1", date: "01/02/2023", time: "01:20:22", consumed: 0.3),
-            Consumption(id: "1", date: "01/02/2023", time: "02:00:01", consumed: 1),
-            Consumption(id: "1", date: "01/02/2023", time: "02:05:44", consumed: 0.5)
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "01:20:22", consumed: 0.3),
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "02:00:01", consumed: 1),
+            ConsumptionModel(id: "1", date: "01/02/2023", time: "02:05:44", consumed: 0.5)
         ]
         let givenConsumptionDay2 = [
-            Consumption(id: "1", date: "02/02/2023", time: "08:32:01", consumed: 1),
-            Consumption(id: "1", date: "02/02/2023", time: "05:05:44", consumed: 0.5)
+            ConsumptionModel(id: "1", date: "02/02/2023", time: "08:32:01", consumed: 1),
+            ConsumptionModel(id: "1", date: "02/02/2023", time: "05:05:44", consumed: 0.5)
         ]
         
         stub.fetchAll_returnValue = givenConsumptionDay1 + givenConsumptionDay2

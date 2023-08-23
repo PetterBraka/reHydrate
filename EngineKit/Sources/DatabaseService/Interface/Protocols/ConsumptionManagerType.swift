@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol ConsumptionManagerType {
-    typealias Entry = Consumption
+    typealias Entry = ConsumptionModel
     
     @discardableResult
     func createEntry(date: Date, consumed: Double) async throws -> Entry

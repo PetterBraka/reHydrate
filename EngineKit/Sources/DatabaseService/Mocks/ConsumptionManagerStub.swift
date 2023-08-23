@@ -9,28 +9,28 @@ import DatabaseServiceInterface
 import Foundation
 
 public protocol ConsumptionManagerStubbing {
-    var createEntry_returnValue: Consumption { get set }
+    var createEntry_returnValue: ConsumptionModel { get set }
     var createEntry_returnError: Error? { get set }
     
-    var fetchAllAtDate_returnValue: [Consumption] { get set }
+    var fetchAllAtDate_returnValue: [ConsumptionModel] { get set }
     var fetchAllAtDate_returnError: Error? { get set }
-    var fetchAll_returnValue: [Consumption] { get set }
+    var fetchAll_returnValue: [ConsumptionModel] { get set }
     var fetchAll_returnError: Error? { get set }
 }
 
 public final class ConsumptionManagerStub: ConsumptionManagerStubbing {
     public init() {}
     
-    public var createEntry_returnValue: Consumption = .default
+    public var createEntry_returnValue: ConsumptionModel = .default
     public var createEntry_returnError: Error?
-    public var fetchAllAtDate_returnValue: [Consumption] = .default
+    public var fetchAllAtDate_returnValue: [ConsumptionModel] = .default
     public var fetchAllAtDate_returnError: Error?
-    public var fetchAll_returnValue: [Consumption] = .default
+    public var fetchAll_returnValue: [ConsumptionModel] = .default
     public var fetchAll_returnError: Error?
 }
 
 extension ConsumptionManagerStub: ConsumptionManagerType {
-    public func createEntry(date: Date, consumed: Double) async throws -> Consumption {
+    public func createEntry(date: Date, consumed: Double) async throws -> ConsumptionModel {
         if let createEntry_returnError {
             throw createEntry_returnError
         }
@@ -39,14 +39,14 @@ extension ConsumptionManagerStub: ConsumptionManagerType {
     
     public func delete(_ entry: Entry) async throws {}
     
-    public func fetchAll(at date: Date) async throws -> [Consumption] {
+    public func fetchAll(at date: Date) async throws -> [ConsumptionModel] {
         if let fetchAllAtDate_returnError {
             throw fetchAllAtDate_returnError
         }
         return fetchAllAtDate_returnValue
     }
     
-    public func fetchAll() async throws -> [Consumption] {
+    public func fetchAll() async throws -> [ConsumptionModel] {
         if let fetchAll_returnError {
             throw fetchAll_returnError
         }

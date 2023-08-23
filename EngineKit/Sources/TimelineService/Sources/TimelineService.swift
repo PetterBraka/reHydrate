@@ -43,7 +43,7 @@ public final class TimelineService: TimelineServiceType {
 }
  
 extension Timeline {
-    init(from consumption: Consumption) {
+    init(from consumption: ConsumptionModel) {
         self.init(time: consumption.time, consumed: consumption.consumed)
     }
 }
@@ -60,7 +60,7 @@ extension TimelineCollection {
 }
 
 extension Array where Element == TimelineCollection {
-    init(from consumption: [Consumption]) {
+    init(from consumption: [ConsumptionModel]) {
         self.init(
             Dictionary(grouping: consumption, by: { $0.date })
                 .compactMap { (dateString, consumptions) -> TimelineCollection? in

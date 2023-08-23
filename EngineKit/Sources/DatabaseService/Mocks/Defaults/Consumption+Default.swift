@@ -7,10 +7,10 @@
 
 import DatabaseServiceInterface
 
-extension Consumption {
-    static let `default` = Consumption(id: "---", date: "---", time: "---", consumed: -999)
+extension ConsumptionModel {
+    static let `default` = ConsumptionModel(id: "---", date: "---", time: "---", consumed: -999)
 }
 
-extension Array where Element == Consumption {
-    static let `default` = [Consumption.default]
+extension Array where Element == ConsumptionModel {
+    static let `default` = [ConsumptionModel.default]
 }

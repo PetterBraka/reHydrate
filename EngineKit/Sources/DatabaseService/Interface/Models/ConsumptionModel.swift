@@ -8,7 +8,7 @@
 import Blackbird
 import Foundation
 
-public struct Consumption: BlackbirdModel {
+public struct ConsumptionModel: BlackbirdModel {
     @BlackbirdColumn public var id: String
     @BlackbirdColumn public var date: String
     @BlackbirdColumn public var time: String

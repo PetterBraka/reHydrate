@@ -15,7 +15,7 @@ final class ConsumptionManagerTests: XCTestCase {
     let referenceDate = XCTest.referenceDate
     
     let database = Database()
-    var spy: DatabaseSpy<Consumption>!
+    var spy: DatabaseSpy<ConsumptionModel>!
     var sut: ConsumptionManagerType!
     
     override func setUp() {
@@ -24,7 +24,7 @@ final class ConsumptionManagerTests: XCTestCase {
     }
     
     override func tearDown() async throws {
-        try await spy.deleteAll(Consumption(id: "", date: "", time: "", consumed: 0))
+        try await spy.deleteAll(ConsumptionModel(id: "", date: "", time: "", consumed: 0))
         let db = try XCTUnwrap(database.db)
         XCTAssertTrue(db.isClosed)
     }
@@ -66,7 +66,7 @@ final class ConsumptionManagerTests: XCTestCase {
 }
 
 extension ConsumptionManagerTests {
-    func assert(_ entry: Consumption,
+    func assert(_ entry: ConsumptionModel,
                 expectedDate: Date,
                 expectedConsumption: Double,
                 file: StaticString = #file,
