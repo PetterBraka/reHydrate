@@ -23,7 +23,9 @@ struct HomeScreen: View {
             Spacer()
         }
         .onAppear {
-            observer.perform(action: .didAppear)
+            Task(priority: .high) {
+               await observer.perform(action: .didAppear)
+            }
         }
         .safeAreaInset(edge: .bottom) {
             navigationBar

@@ -7,5 +7,5 @@
 //
 
 public protocol HomePresenterType: AnyObject {
-    func perform(action: Home.Action)
+    func perform(action: Home.Action) async
 }

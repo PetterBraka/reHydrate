@@ -13,7 +13,7 @@ let package: Package = {
     
     return Package(
         name: presentationKit,
-        platforms: [.iOS(.v16)],
+        platforms: [.macOS(.v13), .iOS(.v16)],
         products: [
             .library(name: presentationKit, targets: [presentationKit]),
         ],

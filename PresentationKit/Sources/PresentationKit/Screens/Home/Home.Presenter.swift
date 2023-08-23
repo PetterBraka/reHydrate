@@ -32,27 +32,33 @@ extension Screen.Home {
         }
         
         @MainActor
-        public func perform(action: Home.Action) {
+        public func perform(action: Home.Action) async {
             switch action {
             case .didAppear:
-                Task(priority: .high) {
-                    let today = await engine.dayService.getToday()
-                    scene?.perform(update: .setToday(consumption: today.consumed,
-                                                     goal: today.goal,
-                                                     date: today.date))
-                }
+                let today = await engine.dayService.getToday()
+                scene?.perform(update: .setToday(consumption: today.consumed,
+                                                 goal: today.goal,
+                                                 date: today.date))
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
                 router.showSettings()
             case let .didTapAddDrink(drink):
-                let consumption = engine.dayService.add(drink: .init(from: drink))
-                scene?.perform(update: .setConsumption(consumption))
+                do {
+                    let consumption = try await engine.dayService.add(drink: .init(from: drink))
+                    scene?.perform(update: .setConsumption(consumption))
+                } catch {
+                    // TODO: log this
+                }
             case let .didTapEditDrink(drink):
                 router.showEdit(drink: drink)
             case let .didTapRemoveDrink(drink):
-                let consumption = engine.dayService.remove(drink: .init(from: drink))
-                scene?.perform(update: .setConsumption(consumption))
+                do {
+                    let consumption = try await engine.dayService.remove(drink: .init(from: drink))
+                    scene?.perform(update: .setConsumption(consumption))
+                } catch {
+                    // TODO: log this
+                }
             }
         }
     }
