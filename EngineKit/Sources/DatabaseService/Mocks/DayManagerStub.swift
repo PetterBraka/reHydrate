@@ -11,7 +11,13 @@ import Foundation
 public protocol DayManagerStubbing {
     var createNewDay_returnValue: DayModel { get set }
     var createNewDay_returnError: Error? { get set }
-    
+    var add_returnValue: DayModel { get set }
+    var add_returnError: Error? { get set }
+    var remove_returnValue: DayModel { get set }
+    var remove_returnError: Error? { get set }
+    var delete_returnError: Error? { get set }
+    var deleteDay_returnError: Error? { get set }
+    var deleteDays_returnError: Error? { get set }
     var fetchWithDate_returnValue: DayModel { get set }
     var fetchWithDate_returnError: Error? { get set }
     var fetchLast_returnValue: DayModel { get set }
@@ -25,6 +31,13 @@ public final class DayManagerStub: DayManagerStubbing {
     
     public var createNewDay_returnValue: DayModel = .default
     public var createNewDay_returnError: Error?
+    public var add_returnValue: DayModel = .default
+    public var add_returnError: Error?
+    public var remove_returnValue: DayModel = .default
+    public var remove_returnError: Error?
+    public var delete_returnError: Error?
+    public var deleteDay_returnError: Error?
+    public var deleteDays_returnError: Error?
     public var fetchWithDate_returnValue: DayModel = .default
     public var fetchWithDate_returnError: Error?
     public var fetchLast_returnValue: DayModel = .default
@@ -41,15 +54,43 @@ extension DayManagerStub: DayManagerType {
         return createNewDay_returnValue
     }
     
-    public func update(consumed: Double, forDayAt date: Date) async throws {}
+    public func add(_ consumed: Double, toDayAt date: Date) async throws -> DayModel {
+        if let add_returnError {
+            throw add_returnError
+        }
+        return add_returnValue
+    }
     
-    public func delete(_ day: DayModel) async throws {}
+    public func remove(_ consumed: Double, fromDayAt date: Date) async throws -> DayModel {
+        if let remove_returnError {
+            throw remove_returnError
+        }
+        return remove_returnValue
+    }
     
-    public func deleteDay(at date: Date) async throws {}
+    public func delete(_ day: DayModel) async throws {
+        if let delete_returnError {
+            throw delete_returnError
+        }
+    }
     
-    public func deleteDays(in range: Range<Date>) async throws {}
+    public func deleteDay(at date: Date) async throws {
+        if let deleteDay_returnError {
+            throw deleteDay_returnError
+        }
+    }
     
-    public func deleteDays(in range: ClosedRange<Date>) async throws {}
+    public func deleteDays(in range: Range<Date>) async throws {
+        if let deleteDays_returnError {
+            throw deleteDays_returnError
+        }
+    }
+    
+    public func deleteDays(in range: ClosedRange<Date>) async throws {
+        if let deleteDays_returnError {
+            throw deleteDays_returnError
+        }
+    }
     
     public func fetch(with date: Date) async throws -> DayModel {
         if let fetchWithDate_returnError {

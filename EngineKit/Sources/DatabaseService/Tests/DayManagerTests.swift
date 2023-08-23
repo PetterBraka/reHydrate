@@ -65,6 +65,40 @@ final class DayManagerTests: XCTestCase {
                        [.readMatchingOrderByLimit])
     }
     
+    func test_addToDay() async throws {
+        try await preLoad4Days()
+        let givenConsumption: Double = 2
+        guard let givenRandomDate = XCTest.referenceDates.randomElement()
+        else {
+            XCTFail("No day found")
+            return
+        }
+        let updatedDay = try await sut.add(givenConsumption, toDayAt: givenRandomDate)
+        
+        XCTAssertEqual(updatedDay.consumed, givenConsumption)
+        XCTAssertEqual(updatedDay.date, givenRandomDate.toDateString())
+        
+        let fetchedDay = try await sut.fetch(with: givenRandomDate)
+        assert(givenDay: updatedDay, expectedDay: fetchedDay)
+    }
+    
+    func test_removeToDay() async throws {
+        try await preLoad4Days()
+        let givenConsumption: Double = 2
+        guard let givenRandomDate = XCTest.referenceDates.randomElement()
+        else {
+            XCTFail("No day found")
+            return
+        }
+        let updatedDay = try await sut.remove(givenConsumption, fromDayAt: givenRandomDate)
+        
+        XCTAssertEqual(updatedDay.consumed, 0)
+        XCTAssertEqual(updatedDay.date, givenRandomDate.toDateString())
+        
+        let fetchedDay = try await sut.fetch(with: givenRandomDate)
+        assert(givenDay: updatedDay, expectedDay: fetchedDay)
+    }
+    
     func test_deleteDay_success() async throws {
         try await preLoad4Days()
         let dayToDelete = try await sut.fetchLast()

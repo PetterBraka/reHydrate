@@ -25,10 +25,21 @@ public final class DayManager: DayManagerType {
         return newDay
     }
     
-    public func update(consumed: Double, forDayAt date: Date) async throws {
+    public func add(_ consumed: Double, toDayAt date: Date) async throws -> DayModel {
         var dayToUpdate = try await fetch(with: date)
-        dayToUpdate.consumed = consumed
+        dayToUpdate.consumed += consumed
         try await database.write(dayToUpdate)
+        return dayToUpdate
+    }
+    
+    public func remove(_ consumed: Double, fromDayAt date: Date) async throws -> DayModel {
+        var dayToUpdate = try await fetch(with: date)
+        dayToUpdate.consumed -= consumed
+        if dayToUpdate.consumed < 0 {
+            dayToUpdate.consumed = 0
+        }
+        try await database.write(dayToUpdate)
+        return dayToUpdate
     }
     
     public func delete(_ day: DayModel) async throws {

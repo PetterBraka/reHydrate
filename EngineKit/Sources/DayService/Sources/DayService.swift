@@ -20,7 +20,7 @@ public final class DayService: DayServiceType {
     
     private let engine: Engine
     
-    private var day = Day(date: .now,
+    private var today = Day(date: .now,
                           consumed: 0,
                           goal: 3)
     
@@ -38,34 +38,33 @@ public final class DayService: DayServiceType {
             else {
                 fatalError("Unable to create a new day")
             }
-            self.day = day
+            self.today = day
             return day
         }
-        self.day = day
+        self.today = day
         return day
     }
     
-    public func add(drink: Drink) -> Double {
+    public func add(drink: Drink) async throws -> Double {
         let consumedAmount = UnitHelper.drinkToLiters(drink)
-        day.consumed += consumedAmount
-        Task {
-            try await engine.dayManager.update(consumed: day.consumed, forDayAt: day.date)
-            try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        let today = await getToday()
+        let updatedDay = try await engine.dayManager.add(consumedAmount, toDayAt: today.date)
+        try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        if let updatedDay = Day(with: updatedDay) {
+            self.today = updatedDay
         }
-        return day.consumed
+        return updatedDay.consumed
     }
     
-    public func remove(drink: Drink) -> Double {
-        let consumedAmount = -UnitHelper.drinkToLiters(drink)
-        day.consumed += consumedAmount
-        if day.consumed < 0 {
-            day.consumed = 0
+    public func remove(drink: Drink) async throws -> Double {
+        let consumedAmount = UnitHelper.drinkToLiters(drink)
+        let today = await getToday()
+        let updatedDay = try await engine.dayManager.remove(consumedAmount, fromDayAt: today.date)
+        try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        if let updatedDay = Day(with: updatedDay) {
+            self.today = updatedDay
         }
-        Task {
-            try await engine.dayManager.update(consumed: day.consumed, forDayAt: day.date)
-            try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
-        }
-        return day.consumed
+        return updatedDay.consumed
     }
 }
 
