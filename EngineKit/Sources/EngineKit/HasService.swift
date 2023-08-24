@@ -9,6 +9,7 @@ import DayServiceInterface
 import DrinkServiceInterface
 import LanguageServiceInterface
 import DatabaseServiceInterface
+import UnitServiceInterface
 
 public protocol HasService:
     HasDatabaseService,
@@ -16,5 +17,6 @@ public protocol HasService:
     HasConsumptionManagerService,
     HasDrinksService,
     HasDayService,
-    HasLanguageService
+    HasLanguageService,
+    HasUnitService
 {}

@@ -14,6 +14,8 @@ import LanguageServiceInterface
 import LanguageServiceMocks
 import DatabaseServiceInterface
 import DatabaseServiceMocks
+import UnitServiceInterface
+import UnitServiceMocks
 
 public final class EngineMocks {
     public init() {}
@@ -25,6 +27,7 @@ public final class EngineMocks {
     public var dayService: DayServiceType = DayServiceStub()
     public var drinksService: DrinkServiceType = DrinkServiceStub()
     public var languageService: LanguageServiceType = LanguageServiceStub()
+    public var unitService: UnitServiceType = UnitServiceStub()
 }
 
 extension EngineMocks: HasService {}

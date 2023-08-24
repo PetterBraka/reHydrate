@@ -26,7 +26,8 @@ let package: Package = {
                         .source(.dayService),
                         .source(.drinkService),
                         .source(.languageService),
-                        .source(.databaseService)
+                        .source(.databaseService),
+                        .source(.unitService)
                     ]),
             .target(name: engineMocks,
                     dependencies: [

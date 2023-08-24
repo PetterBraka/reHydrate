@@ -13,6 +13,8 @@ import LanguageServiceInterface
 import LanguageService
 import DatabaseServiceInterface
 import DatabaseService
+import UnitServiceInterface
+import UnitService
 
 public final class Engine {
     public init() {
@@ -28,6 +30,7 @@ public final class Engine {
     public lazy var drinksService: DrinkServiceType = DrinkService()
     public lazy var languageService: LanguageServiceType = LanguageService()
     public lazy var dayService: DayServiceType = DayService(engine: self)
+    public lazy var unitService: UnitServiceType = UnitService(engine: self)
 }
 
 extension Engine: HasService {}
