@@ -51,6 +51,7 @@ let package: Package = {
                   testsDependancy: [
                     .mocks(.databaseService)
                   ])
+            .with(targetsFrom: .unitService)
     )
 }()
 
@@ -77,6 +78,7 @@ enum Feature: String {
     case languageService = "LanguageService"
     case databaseService = "DatabaseService"
     case timelineService = "TimelineService"
+    case unitService = "UnitService"
 }
 
 extension Feature {
