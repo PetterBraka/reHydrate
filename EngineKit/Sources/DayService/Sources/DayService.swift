@@ -7,15 +7,15 @@
 
 import DayServiceInterface
 import DrinkServiceInterface
-import DrinkService
 import DatabaseServiceInterface
-import DatabaseService
+import UnitServiceInterface
 import Foundation
 
 public final class DayService: DayServiceType {
     public typealias Engine = (
         HasDayManagerService &
-        HasConsumptionManagerService
+        HasConsumptionManagerService &
+        HasUnitService
     )
     
     private let engine: Engine
@@ -46,7 +46,7 @@ public final class DayService: DayServiceType {
     }
     
     public func add(drink: Drink) async throws -> Double {
-        let consumedAmount = UnitHelper.drinkToLiters(drink)
+        let consumedAmount = engine.unitService.convert(drink.size, from: .millilitres, to: .litres)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.add(consumedAmount, toDayAt: today.date)
         try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
@@ -57,7 +57,7 @@ public final class DayService: DayServiceType {
     }
     
     public func remove(drink: Drink) async throws -> Double {
-        let consumedAmount = UnitHelper.drinkToLiters(drink)
+        let consumedAmount = engine.unitService.convert(drink.size, from: .millilitres, to: .litres)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(consumedAmount, fromDayAt: today.date)
         try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)

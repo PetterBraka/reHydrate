@@ -11,12 +11,14 @@ import TestHelper
 import DatabaseServiceInterface
 import DatabaseServiceMocks
 import DayServiceInterface
+import UnitServiceInterface
 @testable import DayService
 
 final class DayServiceTests: XCTestCase {
     typealias Engine = (
         HasDayManagerService &
-        HasConsumptionManagerService
+        HasConsumptionManagerService &
+        HasUnitService
     )
     
     var engine: Engine = EngineMocks()
