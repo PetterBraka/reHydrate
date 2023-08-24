@@ -7,27 +7,27 @@
 
 import Foundation
 import UnitServiceInterface
+import UserPreferenceServiceInterface
 
 public final class UnitService: UnitServiceType {
     public typealias Engine = (
-        AnyObject
+        HasUserPreferenceService
     )
     
     private let engine: Engine
     
-    private var currentUnitSystem: UnitSystem = .metric
+    private let preferenceKey = "UnitSystem"
     
     public init(engine: Engine) {
         self.engine = engine
     }
     
     public func set(unitSystem: UnitSystem) {
-        // TODO: write to UserDefaults
-        currentUnitSystem = unitSystem
+        try? engine.userPreferenceService.set(unitSystem, for: preferenceKey)
     }
     
     public func getUnitSystem() -> UnitSystem {
-        currentUnitSystem
+        engine.userPreferenceService.get(for: preferenceKey) ?? .metric
     }
     
     public func convert(_ value: Double,
@@ -52,3 +52,5 @@ extension UnitModel {
         }
     }
 }
+
+extension UnitSystem: Codable {}

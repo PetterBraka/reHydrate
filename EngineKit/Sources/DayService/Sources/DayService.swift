@@ -5,11 +5,11 @@
 //  Created by Petter vang Brakalsvålet on 10/06/2023.
 //
 
+import Foundation
 import DayServiceInterface
 import DrinkServiceInterface
 import DatabaseServiceInterface
 import UnitServiceInterface
-import Foundation
 
 public final class DayService: DayServiceType {
     public typealias Engine = (

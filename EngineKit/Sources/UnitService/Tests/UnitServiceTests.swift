@@ -7,15 +7,19 @@
 
 import XCTest
 import UnitServiceInterface
-import UnitServiceMocks
 import EngineMocks
+import UserPreferenceServiceMocks
 @testable import UnitService
 
 final class UnitServiceTests: XCTestCase {
     var sut: UnitServiceType!
+    var userPreferenceService: UserPreferenceServiceStub!
     
     override func setUp() {
-        self.sut = UnitService(engine: EngineMocks())
+        let engine = EngineMocks()
+        self.userPreferenceService = UserPreferenceServiceStub()
+        engine.userPreferenceService = userPreferenceService
+        self.sut = UnitService(engine: engine)
     }
     
     func test_convertSmallImperialToLargImperial() {
@@ -88,5 +92,24 @@ final class UnitServiceTests: XCTestCase {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .litres, to: .millilitres)
         XCTAssertEqual(result, 1000)
+    }
+    
+    func test_setAndGetUnitSystem() {
+        sut.set(unitSystem: .imperial)
+        let foundSystem: UnitSystem = sut.getUnitSystem()
+        XCTAssertEqual(foundSystem, .imperial)
+    }
+    
+    func test_setAndGetUnitSystem_failesSetting() {
+        userPreferenceService.set_returnError = DummyError.setting
+        sut.set(unitSystem: .imperial)
+        let foundSystem: UnitSystem = sut.getUnitSystem()
+        XCTAssertNotEqual(foundSystem, .imperial)
+    }
+}
+
+extension UnitServiceTests {
+    enum DummyError: Error {
+        case setting
     }
 }

@@ -63,7 +63,10 @@ let package: Package = {
                   testsDependancy: [
                     .mocks(.databaseService)
                   ])
-            .with(targetsFrom: .unitService)
+            .with(targetsFrom: .unitService,
+                  sourceDependancy: [
+                    .source(.userPreferenceService)
+                  ])
             .with(targetsFrom: .userPreferenceService)
     )
 }()
