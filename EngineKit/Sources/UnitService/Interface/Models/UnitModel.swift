@@ -8,13 +8,11 @@
 import Foundation
 
 public enum UnitModel {
-    public enum Imperial {
-        case ounces
-        case pint
-    }
+    // imperial
+    case ounces
+    case pint
     
-    public enum Metric {
-        case litres
-        case millilitres
-    }
+    // metric
+    case litres
+    case millilitres
 }

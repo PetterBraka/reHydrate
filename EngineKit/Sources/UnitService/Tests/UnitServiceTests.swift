@@ -8,13 +8,14 @@
 import XCTest
 import UnitServiceInterface
 import UnitServiceMocks
+import EngineMocks
 @testable import UnitService
 
 final class UnitServiceTests: XCTestCase {
     var sut: UnitServiceType!
     
     override func setUp() {
-        self.sut = UnitService()
+        self.sut = UnitService(engine: EngineMocks())
     }
     
     func test_convertSmallImperialToLargImperial() {
