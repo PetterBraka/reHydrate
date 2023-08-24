@@ -24,7 +24,7 @@ struct HomeScreen: View {
         }
         .onAppear {
             Task(priority: .high) {
-               await observer.perform(action: .didAppear)
+               observer.perform(action: .didAppear)
             }
         }
         .safeAreaInset(edge: .bottom) {
