@@ -27,7 +27,8 @@ let package: Package = {
                         .source(.drinkService),
                         .source(.languageService),
                         .source(.databaseService),
-                        .source(.unitService)
+                        .source(.unitService),
+                        .source(.userPreferenceService)
                     ]),
             .target(name: engineMocks,
                     dependencies: [
@@ -36,7 +37,8 @@ let package: Package = {
                         .mocks(.drinkService),
                         .mocks(.languageService),
                         .mocks(.databaseService),
-                        .mocks(.unitService)
+                        .mocks(.unitService),
+                        .mocks(.userPreferenceService)
                     ]
                    ),
             .testHelper
@@ -44,7 +46,8 @@ let package: Package = {
             .with(targetsFrom: .dayService,
                   sourceDependancy: [
                     .source(.databaseService),
-                    .source(.unitService)
+                    .source(.unitService),
+                    .source(.userPreferenceService)
                   ],
                   interfaceDependancy: [
                     .interface(.drinkService)
@@ -61,6 +64,7 @@ let package: Package = {
                     .mocks(.databaseService)
                   ])
             .with(targetsFrom: .unitService)
+            .with(targetsFrom: .userPreferenceService)
     )
 }()
 
@@ -88,6 +92,7 @@ enum Feature: String {
     case databaseService = "DatabaseService"
     case timelineService = "TimelineService"
     case unitService = "UnitService"
+    case userPreferenceService = "UserPreferenceService"
 }
 
 extension Feature {

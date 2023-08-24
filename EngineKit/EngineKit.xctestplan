@@ -53,6 +53,13 @@
         "identifier" : "UnitServiceTests",
         "name" : "UnitServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UserPreferenceServiceTests",
+        "name" : "UserPreferenceServiceTests"
+      }
     }
   ],
   "version" : 1
