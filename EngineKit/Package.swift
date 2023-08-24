@@ -36,19 +36,27 @@ let package: Package = {
                         .mocks(.drinkService),
                         .mocks(.languageService),
                         .mocks(.databaseService),
+                        .mocks(.unitService)
                     ]
                    ),
             .testHelper
         ]
             .with(targetsFrom: .dayService,
-                  sourceDependancy: [.source(.databaseService)],
-                  interfaceDependancy: [.interface(.drinkService)])
+                  sourceDependancy: [
+                    .source(.databaseService),
+                    .source(.unitService)
+                  ],
+                  interfaceDependancy: [
+                    .interface(.drinkService)
+                  ])
             .with(targetsFrom: .drinkService)
             .with(targetsFrom: .languageService)
             .with(targetsFrom: .databaseService,
                   interfaceDependancy: [.blackbird])
             .with(targetsFrom: .timelineService,
-                  sourceDependancy: [.source(.databaseService)],
+                  sourceDependancy: [
+                    .source(.databaseService)
+                  ],
                   testsDependancy: [
                     .mocks(.databaseService)
                   ])
