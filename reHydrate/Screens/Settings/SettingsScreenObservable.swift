@@ -10,9 +10,11 @@ import Foundation
 import LanguageServiceInterface
 import DrinkServiceInterface
 import SettingsPresentationInterface
+import PresentationKit
 
 final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
-    private let presenter: SettingsPresenterType
+    public typealias ViewModel = Settings.ViewModel
+    private let presenter: Screen.Settings.Presenter
     
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
@@ -21,7 +23,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     @Published var isDarkMode: Bool
     @Published var isMetric: Bool
     @Published var goal: Double
-    @Published var unit: UnitVolume
     @Published var isRemindersOn: Bool
     @Published var remindersStart: Date
     @Published var remindersStartRange: ClosedRange<Date>
@@ -31,8 +32,10 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     @Published var small: Drink
     @Published var medium: Drink
     @Published var large: Drink
+    @Published var viewModel: ViewModel
     
-    init(presenter: SettingsPresenterType,
+    init(presenter: Screen.Settings.Presenter, 
+         viewModel: ViewModel,
          language: Language,
          languageOptions: [Language],
          isDarkMode: Bool,
@@ -54,7 +57,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
         self.isDarkMode = isDarkMode
         self.isMetric = isMetric
         self.goal = goal
-        self.unit = unit
         self.isRemindersOn = isRemindersOn
         self.remindersStart = remindersStart
         self.remindersStartRange = remindersStartRange
@@ -64,9 +66,15 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
         self.small = small
         self.medium = medium
         self.large = large
+        self.viewModel = viewModel
     }
     
     func perform(update: Settings.Update) {
+        switch update {
+        case .viewModel:
+            self.viewModel = presenter.viewModel
+        }
+        self.objectWillChange.send()
     }
     
     func perform(action: Settings.Action) {

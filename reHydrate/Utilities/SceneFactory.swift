@@ -37,6 +37,7 @@ public final class SceneFactory: ObservableObject {
         let drinks = getDrinks()
         let observer = SettingsScreenObservable(
             presenter: presenter,
+            viewModel: presenter.viewModel,
             language: engine.languageService.getSelectedLanguage(),
             languageOptions: engine.languageService.getLanguageOptions(),
             isDarkMode: true, // TODO: Petter add dark mode

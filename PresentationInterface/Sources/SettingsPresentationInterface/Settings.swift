@@ -9,11 +9,13 @@ import Foundation
 
 public enum Settings {
     public enum Update {
+        case viewModel
     }
     
     public enum Action {
         case didTapBack
         case didTapDarkModeToggle
+        case didSetUnitSystem(ViewModel.UnitSystem)
         case didTapRemindersToggle
         case didTapEditAppIcon
         
@@ -27,5 +29,18 @@ public enum Settings {
         case didTapDeveloperInstagram
     }
     
-    public struct ViewModel {}
+    public struct ViewModel {
+        public var unitSystem: UnitSystem
+        
+        public init(unitSystem: UnitSystem) {
+            self.unitSystem = unitSystem
+        }
+    }
+}
+
+extension Settings.ViewModel {
+    public enum UnitSystem {
+        case imperial
+        case metric
+    }
 }

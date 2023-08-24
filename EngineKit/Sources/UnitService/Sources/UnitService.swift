@@ -27,7 +27,7 @@ public final class UnitService: UnitServiceType {
     }
     
     public func getUnitSystem() -> UnitSystem {
-        engine.userPreferenceService.get(for: preferenceKey) ?? .metric
+        return engine.userPreferenceService.get(for: preferenceKey) ?? .metric
     }
     
     public func convert(_ value: Double,

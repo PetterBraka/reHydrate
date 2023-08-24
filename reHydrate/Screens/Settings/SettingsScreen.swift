@@ -149,18 +149,21 @@ struct SettingsScreen: View {
                             defaultValue: "Units",
                             comment: ""))
                 Spacer()
-                Picker("", selection: $observer.unit) {
+                Picker("", selection: $observer.viewModel.unitSystem) {
                     Text(String(localized: "ui.settings.units.metric",
                                 defaultValue: "Metric",
                                 comment: ""))
-                        .tag("metric")
+                    .tag(SettingsScreenObservable.ViewModel.UnitSystem.metric)
                     Text(String(localized: "ui.settings.units.imperial",
                                 defaultValue: "Imperial",
                                 comment: ""))
-                        .tag("imperial")
+                    .tag(SettingsScreenObservable.ViewModel.UnitSystem.imperial)
                 }
                 .pickerStyle(.segmented)
                 .fixedSize()
+                .onChange(of: observer.viewModel.unitSystem) { oldValue, newValue in
+                    observer.perform(action: .didSetUnitSystem(newValue))
+                }
             }
         }
     }

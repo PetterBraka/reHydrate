@@ -25,6 +25,8 @@ struct AppView: View {
             Color.background
                 .ignoresSafeArea()
             TabView(selection: $observer.tab) {
+                sceneFactory.makeSettingsScreen()
+                    .tag(Tab.settings)
                 sceneFactory.makeHomeScreen()
                     .tag(Tab.home)
             }
