@@ -7,10 +7,12 @@
 
 import SettingsPresentationInterface
 import UnitServiceInterface
+import DayServiceInterface
 
 extension Screen.Settings {
     public final class Presenter: SettingsPresenterType {
         public typealias Engine = (
+            HasDayService &
             HasUnitService
         )
         public typealias Router = (
@@ -30,14 +32,32 @@ extension Screen.Settings {
                     router: Router) {
             self.engine = engine
             self.router = router
+            viewModel = .init(
+                unitSystem: .metric,
+                goal: 0
+            )
+            Task(priority: .high) {
+                await initRealViewModel()
+            }
+        }
+        
+        private func initRealViewModel() async {
             let currentSystem = engine.unitService.getUnitSystem()
-            viewModel = .init(unitSystem: .init(from: currentSystem))
+            let goal = await engine.dayService.getToday().goal
+            viewModel = .init(
+                unitSystem: .init(from: currentSystem),
+                goal: goal
+            )
         }
         
         public func perform(action: Settings.Action) {
             switch action {
             case .didTapBack:
                 router.showHome()
+            case .didTapIncrementGoal:
+                increaseGoal()
+            case .didTapDecrementGoal:
+                decreaseGoal()
             case let .didSetUnitSystem(system):
                 engine.unitService.set(unitSystem: system.toggled())
                 let updatedSystem = engine.unitService.getUnitSystem()
@@ -51,8 +71,42 @@ extension Screen.Settings {
 }
 
 extension Screen.Settings.Presenter {
-    private func updateViewModel(unitSystem: Settings.ViewModel.UnitSystem) {
-        viewModel = ViewModel(unitSystem: unitSystem)
+    private func updateViewModel(
+        unitSystem: Settings.ViewModel.UnitSystem,
+        goal: Double
+    ) {
+        viewModel = ViewModel(
+            unitSystem: unitSystem,
+            goal: goal
+        )
+    }
+    private func updateViewModel(
+        unitSystem: Settings.ViewModel.UnitSystem? = nil,
+        goal: Double? = nil
+    ) {
+        updateViewModel(
+            unitSystem: unitSystem ?? viewModel.unitSystem,
+            goal: goal ?? viewModel.goal
+        )
+    }
+}
+
+extension Screen.Settings.Presenter {
+    private func increaseGoal() {
+        Task {
+            do {
+                let newGoal = try await engine.dayService.increase(goal: 0.5)
+                updateViewModel(goal: newGoal)
+            }
+        }
+    }
+    private func decreaseGoal() {
+        Task {
+            do {
+                let newGoal = try await engine.dayService.decrease(goal: 0.5)
+                updateViewModel(goal: newGoal)
+            }
+        }
     }
 }
 

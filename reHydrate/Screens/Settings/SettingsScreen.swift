@@ -132,7 +132,7 @@ struct SettingsScreen: View {
                 Text(String(localized: "ui.settings.editGoal.setGoal",
                             defaultValue: "Set your goal"))
                 Spacer()
-                StepperView(value: observer.goal.clean) {
+                StepperView(value: observer.viewModel.goal.clean) {
                     observer.perform(action: .didTapIncrementGoal)
                 } onDecrement: {
                     observer.perform(action: .didTapDecrementGoal)

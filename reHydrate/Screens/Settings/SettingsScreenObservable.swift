@@ -22,7 +22,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     @Published var languageOptions: [Language]
     @Published var isDarkMode: Bool
     @Published var isMetric: Bool
-    @Published var goal: Double
     @Published var isRemindersOn: Bool
     @Published var remindersStart: Date
     @Published var remindersStartRange: ClosedRange<Date>
@@ -32,7 +31,7 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     @Published var small: Drink
     @Published var medium: Drink
     @Published var large: Drink
-    @Published var viewModel: ViewModel
+    var viewModel: ViewModel
     
     init(presenter: Screen.Settings.Presenter, 
          viewModel: ViewModel,
@@ -40,7 +39,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
          languageOptions: [Language],
          isDarkMode: Bool,
          isMetric: Bool,
-         goal: Double,
          unit: UnitVolume,
          isRemindersOn: Bool,
          remindersStart: Date,
@@ -56,7 +54,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
         self.languageOptions = languageOptions
         self.isDarkMode = isDarkMode
         self.isMetric = isMetric
-        self.goal = goal
         self.isRemindersOn = isRemindersOn
         self.remindersStart = remindersStart
         self.remindersStartRange = remindersStartRange
@@ -74,7 +71,9 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
         case .viewModel:
             self.viewModel = presenter.viewModel
         }
-        self.objectWillChange.send()
+        DispatchQueue.main.async { [weak self] in
+            self?.objectWillChange.send()
+        }
     }
     
     func perform(action: Settings.Action) {

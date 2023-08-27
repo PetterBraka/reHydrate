@@ -31,9 +31,11 @@ public enum Settings {
     
     public struct ViewModel {
         public var unitSystem: UnitSystem
+        public var goal: Double
         
-        public init(unitSystem: UnitSystem) {
+        public init(unitSystem: UnitSystem, goal: Double) {
             self.unitSystem = unitSystem
+            self.goal = goal
         }
     }
 }
