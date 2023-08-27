@@ -12,6 +12,7 @@ import DatabaseServiceInterface
 import DatabaseServiceMocks
 import DayServiceInterface
 import UnitServiceInterface
+import UnitServiceMocks
 @testable import DayService
 
 final class DayServiceTests: XCTestCase {
@@ -21,13 +22,18 @@ final class DayServiceTests: XCTestCase {
         HasUnitService
     )
     
-    var engine: Engine = EngineMocks()
+    var engine: Engine!
     
+    var unitService: UnitServiceStub!
     var dayManager: DayManagerStub!
     var consumptionManager: ConsumptionManagerStub!
+    
     var sut: DayServiceType!
     
     override func setUp() {
+        self.engine = EngineMocks()
+        self.unitService = UnitServiceStub()
+        self.engine.unitService = unitService
         self.dayManager = DayManagerStub()
         self.engine.dayManager = dayManager
         self.consumptionManager = ConsumptionManagerStub()
@@ -35,7 +41,7 @@ final class DayServiceTests: XCTestCase {
         self.sut = DayService(engine: engine)
     }
     
-    func test_getToday_success() async {
+    func test_getToday_success() async throws {
         let givenDate = dbDateFormatter.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
@@ -43,11 +49,11 @@ final class DayServiceTests: XCTestCase {
                                 goal: 3)
         dayManager.fetchWithDate_returnValue = givenDay
         
-        let foundDay = await sut.getToday()
+        let foundDay = try await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
     }
     
-    func test_getToday_failedFetchForDate() async {
+    func test_getToday_failedFetchForDate() async throws {
         let givenDate = dbDateFormatter.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
@@ -56,20 +62,48 @@ final class DayServiceTests: XCTestCase {
         dayManager.fetchWithDate_returnError = DatabaseError.noElementFound
         dayManager.createNewDay_returnValue = givenDay
         
-        let foundDay = await sut.getToday()
+        let foundDay = try await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
     }
     
+    func test_getToday_failedFetchForDateAndFetchPrevious() async throws {
+        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDay = DayModel(id: "1",
+                                date: givenDate,
+                                consumed: 0,
+                                goal: 3)
+        dayManager.fetchWithDate_returnError = DatabaseError.noElementFound
+        dayManager.fetchLast_returnError = DatabaseError.noElementFound
+        dayManager.createNewDay_returnValue = givenDay
+        
+        let foundDay = try await sut.getToday()
+        assert(day: foundDay, dayModel: givenDay)
+    }
+    
+    func test_getToday_failedFetch() async {
+        dayManager.fetchWithDate_returnError = DatabaseError.noElementFound
+        dayManager.fetchLast_returnError = DatabaseError.noElementFound
+        dayManager.createNewDay_returnError = DatabaseError.creatingElement
+        
+        do {
+            _ = try await sut.getToday()
+        } catch {
+            XCTAssertTrue(true)
+        }
+    }
+    
     func test_addDrink() async throws {
-        dayManager.add_returnValue = .init(id: "---", date: "---", consumed: 0.5, goal: 3)
+        unitService.convert_returnValue = 0.5
+        dayManager.addConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3)
         let result = try await sut.add(drink: .init(id: UUID(), size: 500, container: .medium))
         XCTAssertEqual(result, 0.5)
     }
     
     func test_addDrink_multiple() async throws {
+        unitService.convert_returnValue = 1.55
         let _ = try await sut.add(drink: .init(id: UUID(), size: 500, container: .medium))
         let _ = try await sut.add(drink: .init(id: UUID(), size: 750, container: .medium))
-        dayManager.add_returnValue = .init(id: "---", date: "---", consumed: 1.55, goal: 3)
+        dayManager.addConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 1.55, goal: 3)
         let result = try await sut.add(drink: .init(id: UUID(), size: 300, container: .medium))
         XCTAssertEqual(result, 1.55)
     }
@@ -80,10 +114,11 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_removeDrink_removeLessThenAdded() async throws {
+        unitService.convert_returnValue = 0.75
         let _ = try await sut.add(drink: .init(id: UUID(), size: 500, container: .medium))
         let _ = try await sut.add(drink: .init(id: UUID(), size: 750, container: .medium))
         
-        dayManager.remove_returnValue = .init(id: "---", date: "---", consumed: 0.75, goal: 3)
+        dayManager.removeConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 0.75, goal: 3)
         let result = try await sut.remove(drink: .init(id: UUID(), size: 500, container: .medium))
         XCTAssertEqual(result, 0.75)
     }

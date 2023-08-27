@@ -8,7 +8,7 @@
 import DrinkServiceInterface
 
 public protocol DayServiceType {
-    func getToday() async -> Day
+    func getToday() async throws -> Day
     func add(drink: Drink) async throws -> Double
     func remove(drink: Drink) async throws -> Double
 }

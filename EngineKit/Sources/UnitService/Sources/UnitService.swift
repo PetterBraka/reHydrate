@@ -31,8 +31,8 @@ public final class UnitService: UnitServiceType {
     }
     
     public func convert(_ value: Double,
-                       from fromUnit: UnitModel,
-                       to toUnit: UnitModel) -> Double {
+                        from fromUnit: UnitModel,
+                        to toUnit: UnitModel) -> Double {
         let value = Measurement(value: value, unit: fromUnit.toUnitVolume())
         return value.converted(to: toUnit.toUnitVolume()).value
     }
