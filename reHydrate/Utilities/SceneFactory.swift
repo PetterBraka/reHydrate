@@ -41,8 +41,6 @@ public final class SceneFactory: ObservableObject {
             language: engine.languageService.getSelectedLanguage(),
             languageOptions: engine.languageService.getLanguageOptions(),
             isDarkMode: true, // TODO: Petter add dark mode
-            isMetric: true, // TODO: Petter add different unit systems
-            unit: .liters,
             isRemindersOn: false, // TODO: Petter add Reminders
             remindersStart: .distantPast,
             remindersStartRange: Date.distantPast ... .distantFuture,

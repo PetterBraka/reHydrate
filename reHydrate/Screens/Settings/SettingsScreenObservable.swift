@@ -21,7 +21,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     @Published var language: Language
     @Published var languageOptions: [Language]
     @Published var isDarkMode: Bool
-    @Published var isMetric: Bool
     @Published var isRemindersOn: Bool
     @Published var remindersStart: Date
     @Published var remindersStartRange: ClosedRange<Date>
@@ -38,8 +37,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
          language: Language,
          languageOptions: [Language],
          isDarkMode: Bool,
-         isMetric: Bool,
-         unit: UnitVolume,
          isRemindersOn: Bool,
          remindersStart: Date,
          remindersStartRange: ClosedRange<Date>,
@@ -53,7 +50,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
         self.language = language
         self.languageOptions = languageOptions
         self.isDarkMode = isDarkMode
-        self.isMetric = isMetric
         self.isRemindersOn = isRemindersOn
         self.remindersStart = remindersStart
         self.remindersStartRange = remindersStartRange
