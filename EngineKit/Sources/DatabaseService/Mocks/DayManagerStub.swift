@@ -11,10 +11,14 @@ import Foundation
 public protocol DayManagerStubbing {
     var createNewDay_returnValue: DayModel { get set }
     var createNewDay_returnError: Error? { get set }
-    var add_returnValue: DayModel { get set }
-    var add_returnError: Error? { get set }
-    var remove_returnValue: DayModel { get set }
-    var remove_returnError: Error? { get set }
+    var addConsumed_returnValue: DayModel { get set }
+    var addConsumed_returnError: Error? { get set }
+    var removeConsumed_returnValue: DayModel { get set }
+    var removeConsumed_returnError: Error? { get set }
+    var addGoal_returnValue: DayModel { get set }
+    var addGoal_returnError: Error? { get set }
+    var removeGoal_returnValue: DayModel { get set }
+    var removeGoal_returnError: Error? { get set }
     var delete_returnError: Error? { get set }
     var deleteDay_returnError: Error? { get set }
     var deleteDays_returnError: Error? { get set }
@@ -31,10 +35,14 @@ public final class DayManagerStub: DayManagerStubbing {
     
     public var createNewDay_returnValue: DayModel = .default
     public var createNewDay_returnError: Error?
-    public var add_returnValue: DayModel = .default
-    public var add_returnError: Error?
-    public var remove_returnValue: DayModel = .default
-    public var remove_returnError: Error?
+    public var addConsumed_returnValue: DayModel = .default
+    public var addConsumed_returnError: Error?
+    public var removeConsumed_returnValue: DayModel = .default
+    public var removeConsumed_returnError: Error?
+    public var addGoal_returnValue: DayModel = .default
+    public var addGoal_returnError: Error?
+    public var removeGoal_returnValue: DayModel = .default
+    public var removeGoal_returnError: Error?
     public var delete_returnError: Error?
     public var deleteDay_returnError: Error?
     public var deleteDays_returnError: Error?
@@ -54,18 +62,32 @@ extension DayManagerStub: DayManagerType {
         return createNewDay_returnValue
     }
     
-    public func add(_ consumed: Double, toDayAt date: Date) async throws -> DayModel {
-        if let add_returnError {
-            throw add_returnError
+    public func add(consumed: Double, toDayAt date: Date) async throws -> DayModel {
+        if let addConsumed_returnError {
+            throw addConsumed_returnError
         }
-        return add_returnValue
+        return addConsumed_returnValue
     }
     
-    public func remove(_ consumed: Double, fromDayAt date: Date) async throws -> DayModel {
-        if let remove_returnError {
-            throw remove_returnError
+    public func remove(consumed: Double, fromDayAt date: Date) async throws -> DayModel {
+        if let removeConsumed_returnError {
+            throw removeConsumed_returnError
         }
-        return remove_returnValue
+        return removeConsumed_returnValue
+    }
+    
+    public func add(goal: Double, toDayAt date: Date) async throws -> DayModel {
+        if let addGoal_returnError {
+            throw addGoal_returnError
+        }
+        return addGoal_returnValue
+    }
+    
+    public func remove(goal: Double, fromDayAt date: Date) async throws -> DayModel {
+        if let removeGoal_returnError {
+            throw removeGoal_returnError
+        }
+        return removeGoal_returnValue
     }
     
     public func delete(_ day: DayModel) async throws {

@@ -11,4 +11,6 @@ public protocol DayServiceType {
     func getToday() async throws -> Day
     func add(drink: Drink) async throws -> Double
     func remove(drink: Drink) async throws -> Double
+    func increase(goal: Double) async throws -> Double
+    func decrease(goal: Double) async throws -> Double
 }

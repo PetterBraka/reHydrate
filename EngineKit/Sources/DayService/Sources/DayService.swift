@@ -79,6 +79,41 @@ public final class DayService: DayServiceType {
             to: unitSystem == .metric ? .millilitres : .ounces
         )
     }
+    
+    public func increase(goal: Double) async throws -> Double {
+        let goal = getGoal(from: goal)
+        let today = try await getToday()
+        let updatedDay = try await engine.dayManager.add(goal: goal, toDayAt: today.date)
+        let day = Day(with: updatedDay)
+        self.today = day
+        return getGoalTotal(from: day)
+    }
+    
+    public func decrease(goal: Double) async throws -> Double {
+        let goal = getGoal(from: goal)
+        let today = try await getToday()
+        let updatedDay = try await engine.dayManager.remove(goal: goal, fromDayAt: today.date)
+        let day = Day(with: updatedDay)
+        self.today = day
+        return getGoalTotal(from: day)
+    }
+    
+    private func getGoal(from goal: Double) -> Double {
+        let unitSystem = engine.unitService.getUnitSystem()
+        return engine.unitService.convert(
+            goal,
+            from: unitSystem == .metric ? .litres : .pint,
+            to: .litres
+        )
+    }
+    
+    private func getGoalTotal(from day: Day) -> Double {
+        let unitSystem = engine.unitService.getUnitSystem()
+        return engine.unitService.convert(
+            day.goal,
+            from: .litres,
+            to: unitSystem == .metric ? .litres : .pint
+        )
     }
 }
 

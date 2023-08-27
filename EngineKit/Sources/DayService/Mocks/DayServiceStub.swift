@@ -15,6 +15,10 @@ public protocol DayServiceStubbing {
     var addDrink_returnError: Error? { get set }
     var removeDrink_returnValue: Double { get set }
     var removeDrink_returnError: Error? { get set }
+    var increaseGoal_returnValue: Double { get set }
+    var increaseGoal_returnError: Error? { get set }
+    var decreaseGoal_returnValue: Double { get set }
+    var decreaseGoal_returnError: Error? { get set }
 }
 
 public final class DayServiceStub: DayServiceStubbing {
@@ -26,6 +30,10 @@ public final class DayServiceStub: DayServiceStubbing {
     public var addDrink_returnError: Error?
     public var removeDrink_returnValue: Double = .default
     public var removeDrink_returnError: Error?
+    public var increaseGoal_returnValue: Double = .default
+    public var increaseGoal_returnError: Error?
+    public var decreaseGoal_returnValue: Double = .default
+    public var decreaseGoal_returnError: Error?
 }
 
 extension DayServiceStub: DayServiceType {
@@ -49,4 +57,18 @@ extension DayServiceStub: DayServiceType {
         }
         return removeDrink_returnValue
     }
+    public func increase(goal: Double) async throws -> Double {
+        if let increaseGoal_returnError {
+            throw increaseGoal_returnError
+        }
+        return increaseGoal_returnValue
+    }
+    
+    public func decrease(goal: Double) async throws -> Double {
+        if let decreaseGoal_returnError {
+            throw decreaseGoal_returnError
+        }
+        return decreaseGoal_returnValue
+    }
+    
 }

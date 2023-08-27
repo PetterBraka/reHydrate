@@ -132,6 +132,22 @@ final class DayServiceTests: XCTestCase {
         let result = try await sut.remove(drink: .init(id: UUID(), size: 500, container: .medium))
         XCTAssertEqual(result, 0)
     }
+    
+    func test_increaseGoal() async throws {
+        unitService.convert_returnValue = 4
+        dayManager.addGoal_returnValue = .init(id: "---", date: "01/01/2023",
+                                               consumed: 0, goal: 4)
+        let result = try await sut.increase(goal: 1)
+        XCTAssertEqual(result, 4)
+    }
+    
+    func test_decreaseGoal() async throws {
+        unitService.convert_returnValue = 2
+        dayManager.addGoal_returnValue = .init(id: "---", date: "01/01/2023",
+                                               consumed: 0, goal: 2)
+        let result = try await sut.decrease(goal: 1)
+        XCTAssertEqual(result, 2)
+    }
 }
 
 extension DayServiceTests {
