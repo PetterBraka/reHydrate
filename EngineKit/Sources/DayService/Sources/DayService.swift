@@ -28,38 +28,51 @@ public final class DayService: DayServiceType {
         self.engine = engine
     }
     
-    public func getToday() async throws -> Day {
-        if let foundDay = try? await engine.dayManager.fetch(with: .now) {
-            let day = Day(with: foundDay)
+    public func getToday() async -> Day {
+        if let foundDay = try? await engine.dayManager.fetch(with: .now),
+           let day = Day(with: foundDay) {
             self.today = day
             return day
         } else {
             let lastDay = try? await engine.dayManager.fetchLast()
-            let newDay = try await engine.dayManager.createNewDay(date: .now, goal: lastDay?.goal ?? 3)
-            let day = Day(with: newDay)
-            self.today = day
-            return day
+            if let newDay = try? await engine.dayManager.createNewDay(date: .now, goal: lastDay?.goal ?? 3),
+               let day = Day(with: newDay) {
+                self.today = day
+                return day
+            } else {
+                let unitSystem = engine.unitService.getUnitSystem()
+                let goal = engine.unitService.convert(
+                    3, from: .litres,
+                    to: unitSystem == .metric ? .litres : .pint
+                )
+                let day = Day(date: .now, consumed: 0, goal: goal)
+                self.today = day
+                return day
+            }
         }
     }
     
     public func add(drink: Drink) async throws -> Double {
         let consumedAmount = getConsumption(from: drink)
-        let today = try await getToday()
+        let today = await getToday()
         let updatedDay = try await engine.dayManager.add(consumed: consumedAmount, toDayAt: today.date)
         try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
         let day = Day(with: updatedDay)
-        self.today = day
-        return getConsumptionTotal(from: day)
+        if let day = Day(with: updatedDay) {
+            self.today = day
+        }
+        return getConsumptionTotal(from: updatedDay)
     }
     
     public func remove(drink: Drink) async throws -> Double {
         let consumedAmount = getConsumption(from: drink)
-        let today = try await getToday()
+        let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(consumed: consumedAmount, fromDayAt: today.date)
         try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
-        let day = Day(with: updatedDay)
-        self.today = day
-        return getConsumptionTotal(from: day)
+        if let day = Day(with: updatedDay) {
+            self.today = day
+        }
+        return getConsumptionTotal(from: updatedDay)
     }
     
     private func getConsumption(from drink: Drink) -> Double {
@@ -71,7 +84,7 @@ public final class DayService: DayServiceType {
         )
     }
     
-    private func getConsumptionTotal(from day: Day) -> Double {
+    private func getConsumptionTotal(from day: DayModel) -> Double {
         let unitSystem = engine.unitService.getUnitSystem()
         return engine.unitService.convert(
             day.consumed,
@@ -82,20 +95,22 @@ public final class DayService: DayServiceType {
     
     public func increase(goal: Double) async throws -> Double {
         let goal = getGoal(from: goal)
-        let today = try await getToday()
+        let today = await getToday()
         let updatedDay = try await engine.dayManager.add(goal: goal, toDayAt: today.date)
-        let day = Day(with: updatedDay)
-        self.today = day
-        return getGoalTotal(from: day)
+        if let day = Day(with: updatedDay) {
+            self.today = day
+        }
+        return getGoalTotal(from: updatedDay)
     }
     
     public func decrease(goal: Double) async throws -> Double {
         let goal = getGoal(from: goal)
-        let today = try await getToday()
+        let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(goal: goal, fromDayAt: today.date)
-        let day = Day(with: updatedDay)
-        self.today = day
-        return getGoalTotal(from: day)
+        if let day = Day(with: updatedDay) {
+            self.today = day
+        }
+        return getGoalTotal(from: updatedDay)
     }
     
     private func getGoal(from goal: Double) -> Double {
@@ -107,7 +122,7 @@ public final class DayService: DayServiceType {
         )
     }
     
-    private func getGoalTotal(from day: Day) -> Double {
+    private func getGoalTotal(from day: DayModel) -> Double {
         let unitSystem = engine.unitService.getUnitSystem()
         return engine.unitService.convert(
             day.goal,
@@ -118,11 +133,9 @@ public final class DayService: DayServiceType {
 }
 
 extension Day {
-    init(with day: DayModel) {
+    init?(with day: DayModel) {
         guard let date = dbDateFormatter.date(from: day.date)
-        else {
-            fatalError("Invalid date format")
-        }
+        else { return nil }
         self.init(id: day.id,
                  date: date,
                  consumed: day.consumed,

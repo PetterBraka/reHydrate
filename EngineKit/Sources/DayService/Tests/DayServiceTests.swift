@@ -41,7 +41,7 @@ final class DayServiceTests: XCTestCase {
         self.sut = DayService(engine: engine)
     }
     
-    func test_getToday_success() async throws {
+    func test_getToday_success() async {
         let givenDate = dbDateFormatter.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
@@ -49,11 +49,11 @@ final class DayServiceTests: XCTestCase {
                                 goal: 3)
         dayManager.fetchWithDate_returnValue = givenDay
         
-        let foundDay = try await sut.getToday()
+        let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
     }
     
-    func test_getToday_failedFetchForDate() async throws {
+    func test_getToday_failedFetchForDate() async {
         let givenDate = dbDateFormatter.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
@@ -62,11 +62,11 @@ final class DayServiceTests: XCTestCase {
         dayManager.fetchWithDate_returnError = DatabaseError.noElementFound
         dayManager.createNewDay_returnValue = givenDay
         
-        let foundDay = try await sut.getToday()
+        let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
     }
     
-    func test_getToday_failedFetchForDateAndFetchPrevious() async throws {
+    func test_getToday_failedFetchForDateAndFetchPrevious() async {
         let givenDate = dbDateFormatter.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
@@ -76,20 +76,18 @@ final class DayServiceTests: XCTestCase {
         dayManager.fetchLast_returnError = DatabaseError.noElementFound
         dayManager.createNewDay_returnValue = givenDay
         
-        let foundDay = try await sut.getToday()
+        let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
     }
     
     func test_getToday_failedFetch() async {
         dayManager.fetchWithDate_returnError = DatabaseError.noElementFound
-        dayManager.fetchLast_returnError = DatabaseError.noElementFound
         dayManager.createNewDay_returnError = DatabaseError.creatingElement
+        unitService.convert_returnValue = 3
         
-        do {
-            _ = try await sut.getToday()
-        } catch {
-            XCTAssertTrue(true)
-        }
+        let day = await sut.getToday()
+        XCTAssertEqual(day.consumed, 0)
+        XCTAssertEqual(day.goal, 3)
     }
     
     func test_addDrink() async throws {
