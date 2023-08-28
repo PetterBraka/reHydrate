@@ -57,7 +57,6 @@ public final class DayService: DayServiceType {
         let today = await getToday()
         let updatedDay = try await engine.dayManager.add(consumed: consumedAmount, toDayAt: today.date)
         try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
-        let day = Day(with: updatedDay)
         if let day = Day(with: updatedDay) {
             self.today = day
         }
@@ -89,7 +88,7 @@ public final class DayService: DayServiceType {
         return engine.unitService.convert(
             day.consumed,
             from: .litres,
-            to: unitSystem == .metric ? .millilitres : .ounces
+            to: unitSystem == .metric ? .litres: .pint
         )
     }
     
