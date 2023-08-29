@@ -9,12 +9,7 @@ import Foundation
 
 public enum Home {
     public enum Update {
-        case setDate(Date)
-        case setToday(consumption: Double, goal: Double, date: Date)
-        case setConsumption(Double)
-        case setGoal(Double)
-        case setUnit(small: UnitVolume, large: UnitVolume)
-        case setDrink(newDrink: ViewModel.Drink)
+        case viewModel
     }
 
     public enum Action {
@@ -25,8 +20,31 @@ public enum Home {
         case didTapEditDrink(ViewModel.Drink)
         case didTapRemoveDrink(ViewModel.Drink)
     }
-
-    public struct ViewModel {}
+    
+    public struct ViewModel {
+        public var date: Date
+        public var consumption: Double
+        public var goal: Double
+        public var smallUnit: UnitVolume
+        public var largeUnit: UnitVolume
+        public var drinks: [ViewModel.Drink]
+        
+        public init(
+            date: Date,
+            consumption: Double,
+            goal: Double,
+            smallUnit: UnitVolume,
+            largeUnit: UnitVolume,
+            drinks: [ViewModel.Drink]
+        ) {
+            self.date = date
+            self.consumption = consumption
+            self.goal = goal
+            self.smallUnit = smallUnit
+            self.largeUnit = largeUnit
+            self.drinks = drinks
+        }
+    }
 }
 
 public extension Home.ViewModel {

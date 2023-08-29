@@ -21,11 +21,7 @@ public final class SceneFactory: ObservableObject {
     func makeHomeScreen() -> HomeScreen {
         let presenter = Screen.Home.Presenter(engine: engine,
                                               router: router)
-        let drinks = getDrinks()
-        let observer = HomeScreenObservable(presenter: presenter,
-                                            date: .now, consumed: 0, goal: 3,
-                                            drinks: drinks.map { .init(from: $0) },
-                                            unit: (small: .milliliters, large: .liters))
+        let observer = HomeScreenObservable(presenter: presenter)
         presenter.scene = observer
         
         return HomeScreen(observer: observer)

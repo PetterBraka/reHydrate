@@ -42,15 +42,15 @@ struct HomeScreen: View {
                         comment: "The name of the app"))
                 .font(.brandTitle3)
                 .bold()
-            Text(observer.date.localized)
+            Text(observer.viewModel.date.localized)
                 .lineLimit(nil)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .font(.brandTitle2)
-            Text("\(observer.consumed.clean)" +
+            Text("\(observer.viewModel.consumption.clean)" +
                  "/" +
-                 "\(observer.goal.clean)" +
-                 "\(observer.unit.large.symbol)")
+                 "\(observer.viewModel.goal.clean)" +
+                 "\(observer.viewModel.largeUnit.symbol)")
                 .font(.brandTitle3)
                 .bold()
                 .padding(.top, 16)
@@ -60,12 +60,12 @@ struct HomeScreen: View {
     @ViewBuilder
     private var drinksSection: some View {
         HStack(alignment: .bottom) {
-            ForEach(observer.drinks, id: \.id) { drink in
-                let index = observer.drinks.firstIndex(of: drink) ?? 0
+            ForEach(observer.viewModel.drinks, id: \.id) { drink in
+                let index = observer.viewModel.drinks.firstIndex(of: drink) ?? 0
                 DrinkView(
                     fill: drink.fill,
                     size: drink.size,
-                    unit: observer.unit.small,
+                    unit: observer.viewModel.smallUnit,
                     containerType: drink.container
                 ) {
                     observer.perform(action: .didTapAddDrink(drink))
@@ -84,7 +84,7 @@ struct HomeScreen: View {
                     }
                     Button(String(
                         localized: "ui.home.removeDrink.button",
-                        defaultValue: "Remove \(drink.size.clean)\(observer.unit.small.symbol)",
+                        defaultValue: "Remove \(drink.size.clean)\(observer.viewModel.smallUnit.symbol)",
                         comment: "An button to remove a drink of a given size and unit"
                     ),
                     role: .destructive) {
