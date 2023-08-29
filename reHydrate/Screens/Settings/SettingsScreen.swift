@@ -8,6 +8,7 @@
 
 import DrinkServiceInterface
 import SwiftUI
+import PresentationKit
 
 struct SettingsScreen: View {
     @ObservedObject var observer: SettingsScreenObservable
@@ -149,7 +150,10 @@ struct SettingsScreen: View {
                             defaultValue: "Units",
                             comment: ""))
                 Spacer()
-                Picker("", selection: $observer.viewModel.unitSystem) {
+                Picker("", selection: Binding(
+                    get: { observer.viewModel.unitSystem },
+                    set: { observer.perform(action: .didSetUnitSystem($0)) })
+                ) {
                     Text(String(localized: "ui.settings.units.metric",
                                 defaultValue: "Metric",
                                 comment: ""))
@@ -161,9 +165,6 @@ struct SettingsScreen: View {
                 }
                 .pickerStyle(.segmented)
                 .fixedSize()
-                .onChange(of: observer.viewModel.unitSystem) { oldValue, newValue in
-                    observer.perform(action: .didSetUnitSystem(newValue))
-                }
             }
         }
     }

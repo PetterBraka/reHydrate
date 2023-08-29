@@ -59,7 +59,7 @@ extension Screen.Settings {
             case .didTapDecrementGoal:
                 decreaseGoal()
             case let .didSetUnitSystem(system):
-                engine.unitService.set(unitSystem: system.toggled())
+                engine.unitService.set(unitSystem: .init(from: system))
                 let updatedSystem = engine.unitService.getUnitSystem()
                 updateViewModel(unitSystem: .init(from: updatedSystem))
             default:
@@ -119,13 +119,15 @@ extension Settings.ViewModel.UnitSystem {
             self = .metric
         }
     }
-    
-    func toggled() -> UnitSystem {
-        switch self {
+}
+
+extension UnitSystem {
+    init(from system: Settings.ViewModel.UnitSystem) {
+        switch system {
         case .imperial:
-            return .metric
+            self = .imperial
         case .metric:
-            return .imperial
+            self = .metric
         }
     }
 }
