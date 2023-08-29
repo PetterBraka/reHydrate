@@ -30,10 +30,8 @@ public final class SceneFactory: ObservableObject {
     func makeSettingsScreen() -> SettingsScreen {
         let presenter = Screen.Settings.Presenter(engine: engine,
                                                   router: router)
-        let drinks = getDrinks()
         let observer = SettingsScreenObservable(
             presenter: presenter,
-            viewModel: presenter.viewModel,
             language: engine.languageService.getSelectedLanguage(),
             languageOptions: engine.languageService.getLanguageOptions(),
             isDarkMode: true, // TODO: Petter add dark mode
@@ -42,24 +40,11 @@ public final class SceneFactory: ObservableObject {
             remindersStartRange: Date.distantPast ... .distantFuture,
             remindersEnd: .distantFuture,
             remindersEndRange: Date.distantPast ... .distantFuture,
-            reminderFrequency: 60,
-            small: drinks[0],
-            medium: drinks[1],
-            large: drinks[2])
+            reminderFrequency: 60
+        )
         presenter.scene = observer
 
         return SettingsScreen(observer: observer)
-    }
-}
-
-private extension SceneFactory {
-    func getDrinks() -> [Drink] {
-        let result = engine.drinksService.getSavedDrinks()
-        if case .success(let foundDrinks) = result, !foundDrinks.isEmpty {
-            return foundDrinks
-        } else {
-            return engine.drinksService.resetToDefault()
-        }
     }
 }
 

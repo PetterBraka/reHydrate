@@ -27,13 +27,9 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     @Published var remindersEnd: Date
     @Published var remindersEndRange: ClosedRange<Date>
     @Published var reminderFrequency: Int?
-    @Published var small: Drink
-    @Published var medium: Drink
-    @Published var large: Drink
     var viewModel: ViewModel
     
-    init(presenter: Screen.Settings.Presenter, 
-         viewModel: ViewModel,
+    init(presenter: Screen.Settings.Presenter,
          language: Language,
          languageOptions: [Language],
          isDarkMode: Bool,
@@ -42,11 +38,9 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
          remindersStartRange: ClosedRange<Date>,
          remindersEnd: Date,
          remindersEndRange: ClosedRange<Date>,
-         reminderFrequency: Int,
-         small: DrinkServiceInterface.Drink,
-         medium: DrinkServiceInterface.Drink,
-         large: DrinkServiceInterface.Drink) {
+         reminderFrequency: Int) {
         self.presenter = presenter
+        self.viewModel = presenter.viewModel
         self.language = language
         self.languageOptions = languageOptions
         self.isDarkMode = isDarkMode
@@ -56,10 +50,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
         self.remindersEnd = remindersEnd
         self.remindersEndRange = remindersEndRange
         self.reminderFrequency = reminderFrequency
-        self.small = small
-        self.medium = medium
-        self.large = large
-        self.viewModel = viewModel
     }
     
     func perform(update: Settings.Update) {

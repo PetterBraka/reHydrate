@@ -32,10 +32,12 @@ public enum Settings {
     public struct ViewModel {
         public var unitSystem: UnitSystem
         public var goal: Double
+        public var drinks: [ViewModel.Drink]
         
-        public init(unitSystem: UnitSystem, goal: Double) {
+        public init(unitSystem: UnitSystem, goal: Double, drinks: [ViewModel.Drink]) {
             self.unitSystem = unitSystem
             self.goal = goal
+            self.drinks = drinks
         }
     }
 }
@@ -44,5 +46,44 @@ extension Settings.ViewModel {
     public enum UnitSystem {
         case imperial
         case metric
+    }
+}
+
+extension Settings.ViewModel {
+    public struct Drink: Identifiable {
+        public let id: UUID
+        
+        public let container: Container
+        public var size: Double
+        
+        public init(id: UUID = UUID(),
+                    size: Double,
+                    container: Container) {
+            self.id = id
+            self.container = container
+            self.size = size
+        }
+    }
+    
+    public enum Container: Hashable {
+        case small
+        case medium
+        case large
+        
+        public var max: Int {
+            switch self {
+            case .small: return 400
+            case .medium: return 700
+            case .large: return 1200
+            }
+        }
+        
+        public var min: Int {
+            switch self {
+            case .small: return 100
+            case .medium: return 300
+            case .large: return 500
+            }
+        }
     }
 }

@@ -8,11 +8,13 @@
 import SettingsPresentationInterface
 import UnitServiceInterface
 import DayServiceInterface
+import DrinkServiceInterface
 
 extension Screen.Settings {
     public final class Presenter: SettingsPresenterType {
         public typealias Engine = (
             HasDayService &
+            HasDrinksService &
             HasUnitService
         )
         public typealias Router = (
@@ -34,7 +36,8 @@ extension Screen.Settings {
             self.router = router
             viewModel = .init(
                 unitSystem: .metric,
-                goal: 0
+                goal: 0,
+                drinks: []
             )
             Task(priority: .high) {
                 await initRealViewModel()
@@ -71,17 +74,40 @@ extension Screen.Settings {
 }
 
 extension Screen.Settings.Presenter {
+    private func getDrinks() -> [ViewModel.Drink] {
+        let result = engine.drinksService.getSavedDrinks()
+        if case .success(let foundDrinks) = result, !foundDrinks.isEmpty {
+            return foundDrinks.map { .init(from: $0) }
+        } else {
+            let foundDrinks = engine.drinksService.resetToDefault()
+            return foundDrinks.map { .init(from: $0) }
+        }
+    }
+}
+
+extension Screen.Settings.Presenter {
     private func updateViewModel(
         unitSystem: Settings.ViewModel.UnitSystem? = nil,
         goal: Double? = nil
     ) {
         let unitSystem = unitSystem ?? viewModel.unitSystem
+        let isMetric = unitSystem == .metric
         var goal = goal ?? viewModel.goal
         goal = engine.unitService.convert(goal, from: .litres,
-                                          to: unitSystem == .metric ? .litres : .pint)
+                                          to: isMetric ? .litres : .pint)
+        var drinks = getDrinks()
+        drinks = drinks.map { drink in
+            var drink = drink
+            drink.size = engine.unitService.convert(drink.size,
+                                                    from: .millilitres,
+                                                    to: isMetric ? .millilitres : .ounces)
+            return drink
+        }
+        
         viewModel = ViewModel(
             unitSystem: unitSystem,
-            goal: goal
+            goal: goal,
+            drinks: drinks
         )
     }
 }
@@ -133,3 +159,25 @@ extension UnitSystem {
         }
     }
 }
+
+extension Screen.Settings.Presenter.ViewModel.Drink {
+    init(from drink: Drink) {
+        self = .init(id: drink.id,
+                     size: drink.size,
+                     container: .init(from: drink.container))
+    }
+}
+
+extension Screen.Settings.Presenter.ViewModel.Container {
+    init(from container: Container) {
+        switch container {
+        case .small:
+            self = .small
+        case .medium:
+            self = .medium
+        case .large:
+            self = .large
+        }
+    }
+}
+
