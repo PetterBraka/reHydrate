@@ -44,7 +44,7 @@ extension Screen.Settings {
         private func initRealViewModel() async {
             let currentSystem = engine.unitService.getUnitSystem()
             let goal = await engine.dayService.getToday().goal
-            viewModel = .init(
+            updateViewModel(
                 unitSystem: .init(from: currentSystem),
                 goal: goal
             )
@@ -72,21 +72,16 @@ extension Screen.Settings {
 
 extension Screen.Settings.Presenter {
     private func updateViewModel(
-        unitSystem: Settings.ViewModel.UnitSystem,
-        goal: Double
-    ) {
-        viewModel = ViewModel(
-            unitSystem: unitSystem,
-            goal: goal
-        )
-    }
-    private func updateViewModel(
         unitSystem: Settings.ViewModel.UnitSystem? = nil,
         goal: Double? = nil
     ) {
-        updateViewModel(
-            unitSystem: unitSystem ?? viewModel.unitSystem,
-            goal: goal ?? viewModel.goal
+        let unitSystem = unitSystem ?? viewModel.unitSystem
+        var goal = goal ?? viewModel.goal
+        goal = engine.unitService.convert(goal, from: .litres,
+                                          to: unitSystem == .metric ? .litres : .pint)
+        viewModel = ViewModel(
+            unitSystem: unitSystem,
+            goal: goal
         )
     }
 }
@@ -95,15 +90,22 @@ extension Screen.Settings.Presenter {
     private func increaseGoal() {
         Task {
             do {
-                let newGoal = try await engine.dayService.increase(goal: 0.5)
+                let currentSystem = engine.unitService.getUnitSystem()
+                let newGoalRawValue = try await engine.dayService.increase(goal: 0.5)
+                let newGoal = engine.unitService.convert(newGoalRawValue, from: .litres,
+                                                         to: currentSystem == .metric ? .litres : .pint)
                 updateViewModel(goal: newGoal)
             }
         }
     }
+    
     private func decreaseGoal() {
         Task {
             do {
-                let newGoal = try await engine.dayService.decrease(goal: 0.5)
+                let currentSystem = engine.unitService.getUnitSystem()
+                let newGoalRawValue = try await engine.dayService.decrease(goal: 0.5)
+                let newGoal = engine.unitService.convert(newGoalRawValue, from: .litres,
+                                                         to: currentSystem == .metric ? .litres : .pint)
                 updateViewModel(goal: newGoal)
             }
         }
