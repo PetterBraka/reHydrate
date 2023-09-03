@@ -30,9 +30,9 @@ public enum Settings {
     }
     
     public struct ViewModel {
-        public var unitSystem: UnitSystem
-        public var goal: Double
-        public var drinks: [ViewModel.Drink]
+        public let unitSystem: UnitSystem
+        public let goal: Double
+        public let drinks: [ViewModel.Drink]
         
         public init(unitSystem: UnitSystem, goal: Double, drinks: [ViewModel.Drink]) {
             self.unitSystem = unitSystem
