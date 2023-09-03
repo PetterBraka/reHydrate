@@ -14,9 +14,9 @@ public enum Settings {
     
     public enum Action {
         case didTapBack
-        case didTapDarkModeToggle
+        case didSetDarkMode(Bool)
         case didSetUnitSystem(ViewModel.UnitSystem)
-        case didTapRemindersToggle
+        case didSetReminders(Bool)
         case didTapEditAppIcon
         
         case didTapIncrementGoal

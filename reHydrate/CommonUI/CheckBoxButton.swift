@@ -16,12 +16,10 @@ struct CheckBoxButton: View {
     @State var image: Image
     @State var highlightedImage: Image
     
-    var rowAction: () -> Void
-    
     var body: some View {
         Button {
             withAnimation {
-                rowAction()
+                isChecked.toggle()
             }
         } label: {
             HStack {
@@ -40,11 +38,6 @@ struct CheckBoxButton: View {
                 }
             }
             .contentShape(RoundedRectangle(cornerRadius: 10))
-            .onTapGesture {
-                withAnimation {
-                    rowAction()
-                }
-            }
         }
     }
 }

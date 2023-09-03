@@ -104,15 +104,18 @@ struct SettingsScreen: View {
     @ViewBuilder
     var appearance: some View {
         Section {
-            CheckBoxButton(isChecked: $observer.isDarkMode,
-                           text: String(localized: "ui.settings.appearance.lightMode",
-                                        defaultValue: "Light mode"),
-                           highlightedText: String(localized: "ui.settings.appearance.darkMode",
-                                                   defaultValue: "Dark mode"),
-                           image: .lightMode,
-                           highlightedImage: .darkMode) {
-                observer.perform(action: .didTapDarkModeToggle)
-            }
+            CheckBoxButton(
+                isChecked: Binding {
+                    observer.isDarkMode
+                } set: { newValue in
+                    observer.perform(action: .didSetDarkMode(newValue))
+                },
+                text: String(localized: "ui.settings.appearance.lightMode",
+                             defaultValue: "Light mode"),
+                highlightedText: String(localized: "ui.settings.appearance.darkMode",
+                                        defaultValue: "Dark mode"),
+                image: .lightMode,
+                highlightedImage: .darkMode)
             Button {
                 observer.perform(action: .didTapEditAppIcon)
             } label: {
@@ -172,15 +175,18 @@ struct SettingsScreen: View {
     @ViewBuilder
     var notifications: some View {
         Section {
-            CheckBoxButton(isChecked: $observer.isRemindersOn,
-                           text: String(localized: "ui.settings.notification.turnOn",
-                                        defaultValue: "Turn on reminders"),
-                           highlightedText: String(localized: "ui.settings.notification.turnOff",
-                                                   defaultValue: "Turn off reminders"),
-                           image: .remindersOff,
-                           highlightedImage: .remindersOn) {
-                observer.perform(action: .didTapRemindersToggle)
-            }
+            CheckBoxButton(
+                isChecked: Binding {
+                    observer.isRemindersOn
+                } set: { newValue in
+                    observer.perform(action: .didSetReminders(newValue))
+                },
+                text: String(localized: "ui.settings.notification.turnOn",
+                             defaultValue: "Turn on reminders"),
+                highlightedText: String(localized: "ui.settings.notification.turnOff",
+                                        defaultValue: "Turn off reminders"),
+                image: .remindersOff,
+                highlightedImage: .remindersOn)
             if observer.isRemindersOn {
                 HStack {
                     DatePicker(String(localized: "ui.settings.notification.startingTime",
