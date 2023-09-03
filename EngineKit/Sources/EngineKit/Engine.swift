@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LoggingService
 import DayServiceInterface
 import DayService
 import DrinkServiceInterface
@@ -21,17 +22,20 @@ import UserPreferenceService
 
 public final class Engine {
     public init() {
+        let project = "reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
         else {
             fatalError("Shared UserDefaults couldn't be setup")
         }
-        database = Database()
+        logger = LoggingService(subsystem: project)
+        database = Database(logger: logger)
         dayManager = DayManager(database: database)
         consumptionManager = ConsumptionManager(database: database)
         userPreferenceService = UserPreferenceService(defaults: sharedDefault)
     }
     
+    public var logger: LoggingService
     public var database: DatabaseType
     public var dayManager: DayManagerType
     public var consumptionManager: ConsumptionManagerType

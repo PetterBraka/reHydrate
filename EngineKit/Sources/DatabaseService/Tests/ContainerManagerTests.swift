@@ -12,7 +12,7 @@ import DatabaseServiceInterface
 import DatabaseServiceMocks
 
 final class ContainerManagerTests: XCTestCase {
-    let database = Database()
+    let database = Database(logger: .init(subsystem: "ContainerManagerTests"))
     var spy: DatabaseSpy<ContainerModel>!
     var sut: ContainerManagerType!
     

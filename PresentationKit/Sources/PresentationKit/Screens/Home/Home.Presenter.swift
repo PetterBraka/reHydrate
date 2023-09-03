@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LoggingService
 import HomePresentationInterface
 import DayServiceInterface
 import DrinkServiceInterface
@@ -15,6 +16,7 @@ extension Screen.Home {
     public final class Presenter: HomePresenterType {
         public typealias ViewModel = Home.ViewModel
         public typealias Engine = (
+            HasLoggingService &
             HasDayService &
             HasDrinksService &
             HasUnitService
@@ -64,7 +66,7 @@ extension Screen.Home {
                     let consumption = try await engine.dayService.add(drink: .init(from: drink))
                     updateViewModel(consumption: consumption)
                 } catch {
-                    // TODO: log this
+                    engine.logger.error("Could not add drink of size \(drink.size)", error: error)
                 }
             case let .didTapEditDrink(drink):
                 router.showEdit(drink: drink)
@@ -73,7 +75,7 @@ extension Screen.Home {
                     let consumption = try await engine.dayService.remove(drink: .init(from: drink))
                     updateViewModel(consumption: consumption)
                 } catch {
-                    // TODO: log this
+                    engine.logger.error("Could not remove drink of size \(drink.size)", error: error)
                 }
             }
         }

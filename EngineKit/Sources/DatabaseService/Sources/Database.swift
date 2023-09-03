@@ -5,19 +5,22 @@
 //  Created by Petter vang Brakalsvålet on 29/07/2023.
 //
 
+import Foundation
 import Blackbird
 import DatabaseServiceInterface
-import OSLog
+import LoggingService
 
 public class Database: DatabaseType {
-    private let logger = Logger(subsystem: "engine.databaseService", category: "database")
+    private let logger: LoggingService
+    
     private let path: String
     
     #if DEBUG
     public var db: Blackbird.Database?
     #endif
     
-    public init() {
+    public init(logger: LoggingService) {
+        self.logger = logger
         do {
             // Checks if tests are being ran and changes the DB path to be in a `temporaryDirectory`
             if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
@@ -38,7 +41,9 @@ public class Database: DatabaseType {
             }
             logger.debug("DB path - \(self.path)")
         } catch {
-            fatalError("Path to database couldn't be deffined - \(error)")
+            let message = "Path to database couldn't be defined"
+            logger.critical(message, error: error)
+            fatalError(message)
         }
     }
     
@@ -51,7 +56,7 @@ public class Database: DatabaseType {
             #endif
             return db
         } catch {
-            logger.error("DB couldn't be opened - \(error.localizedDescription, privacy: .sensitive)")
+            logger.error("DB couldn't be opened", error: error)
             throw error
         }
     }

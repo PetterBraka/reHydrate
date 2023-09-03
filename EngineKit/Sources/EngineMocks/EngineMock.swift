@@ -6,6 +6,7 @@
 //
 
 import EngineKit
+import LoggingService
 import DayServiceInterface
 import DayServiceMocks
 import DrinkServiceInterface
@@ -22,6 +23,7 @@ import UserPreferenceServiceMocks
 public final class EngineMocks {
     public init() {}
     
+    public var logger: LoggingService = LoggingService(subsystem: "EngineMock")
     public var database: DatabaseType = DatabaseStub()
     public var dayManager: DayManagerType = DayManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()

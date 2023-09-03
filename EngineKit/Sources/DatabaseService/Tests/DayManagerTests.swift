@@ -14,12 +14,11 @@ import DatabaseServiceMocks
 final class DayManagerTests: XCTestCase {
     let referenceDate = XCTest.referenceDate
     
-    var database: Database!
+    var database = Database(logger: .init(subsystem: "DayManagerTests"))
     var spy: DatabaseSpy<DayModel>!
     var sut: DayManagerType!
     
     override func setUp() {
-        self.database = Database()
         self.spy = DatabaseSpy(realObject: database)
         self.sut = DayManager(database: spy)
     }

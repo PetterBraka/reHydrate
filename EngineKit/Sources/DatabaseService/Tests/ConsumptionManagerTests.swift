@@ -14,7 +14,7 @@ import DatabaseServiceMocks
 final class ConsumptionManagerTests: XCTestCase {
     let referenceDate = XCTest.referenceDate
     
-    let database = Database()
+    let database =  Database(logger: .init(subsystem: "ConsumptionManagerTests"))
     var spy: DatabaseSpy<ConsumptionModel>!
     var sut: ConsumptionManagerType!
     

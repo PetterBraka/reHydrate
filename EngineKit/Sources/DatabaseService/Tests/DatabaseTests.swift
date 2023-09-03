@@ -14,7 +14,7 @@ import DatabaseServiceMocks
 final class DatabaseTests: XCTestCase {
     let referenceDate = XCTest.referenceDate
     
-    var spy = DatabaseSpy<DummyModel>(realObject: Database())
+    var spy = DatabaseSpy<DummyModel>(realObject: Database(logger: .init(subsystem: "DatabaseTests")))
     
     override func tearDown() async throws {
         try await spy.deleteAll(DummyModel(text: ""))
