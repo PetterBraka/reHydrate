@@ -42,7 +42,7 @@ public final class Engine {
     public var userPreferenceService: UserPreferenceServiceType
     
     public lazy var drinksService: DrinkServiceType = DrinkService()
-    public lazy var languageService: LanguageServiceType = LanguageService()
+    public lazy var languageService: LanguageServiceType = LanguageService(engine: self)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
 }

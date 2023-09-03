@@ -20,6 +20,10 @@ public final class LanguageServiceStub: LanguageServiceStubbing {
 }
 
 extension LanguageServiceStub: LanguageServiceType {
+    public func setLanguage(to language: LanguageServiceInterface.Language) {
+        getSelectedLanguage_returnValue = language
+    }
+    
     public func getSelectedLanguage() -> Language {
         getSelectedLanguage_returnValue
     }

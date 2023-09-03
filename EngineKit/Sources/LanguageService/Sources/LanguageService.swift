@@ -6,15 +6,47 @@
 //
 
 import LanguageServiceInterface
+import LoggingService
+import UserPreferenceServiceInterface
 
 public class LanguageService: LanguageServiceType {
-    public init() {}
+    public typealias Engine = (
+        HasLoggingService &
+        HasUserPreferenceService
+    )
     
-    public func getSelectedLanguage() -> LanguageServiceInterface.Language {
-        .english
+    private let engine: Engine
+    
+    private let preferenceKey = "LanguageService.Language"
+    
+    private(set) var currentLanguage: Language
+    
+    public init(engine: Engine) {
+        self.engine = engine
+        currentLanguage = .english
+        currentLanguage = getSelectedLanguage()
     }
     
-    public func getLanguageOptions() -> [LanguageServiceInterface.Language] {
+    public func setLanguage(to language: Language) {
+        defer { currentLanguage = language }
+        do {
+            try engine.userPreferenceService.set(language, for: preferenceKey)
+        } catch {
+            engine.logger.debug("Language couldn't be set", error: error)
+        }
+    }
+    
+    public func getSelectedLanguage() -> Language {
+        let language: Language? = engine.userPreferenceService.get(for: preferenceKey)
+        if let language, currentLanguage != language {
+            currentLanguage = language
+        }
+        return language ?? .english
+    }
+    
+    public func getLanguageOptions() -> [Language] {
         Language.allCases
     }
 }
+
+extension Language: Codable {}

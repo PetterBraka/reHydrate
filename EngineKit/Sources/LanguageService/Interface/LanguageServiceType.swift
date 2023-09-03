@@ -6,6 +6,7 @@
 //
 
 public protocol LanguageServiceType {
+    func setLanguage(to language: Language)
     func getSelectedLanguage() -> Language
     func getLanguageOptions() -> [Language]
 }
