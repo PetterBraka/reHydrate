@@ -37,9 +37,9 @@ struct HomeScreen: View {
     @ViewBuilder
     private var header: some View {
         VStack(spacing: 8) {
-            Text(String(localized: "ui.app,title.text",
-                        defaultValue: "reHydrate",
-                        comment: "The name of the app"))
+            Text(NSLocalizedString("ui.app,title.text",
+                                   value: "reHydrate",
+                                   comment: "The name of the app"))
                 .font(.brandTitle3)
                 .bold()
             Text(observer.viewModel.date.localized)

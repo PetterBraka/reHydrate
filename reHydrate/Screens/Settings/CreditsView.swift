@@ -62,8 +62,7 @@ struct CreditsView: View {
                     openLink(to: .helpTranslate)
                 } label: {
                     HStack {
-                        Text(String(localized: "ui.settings.credits.helpTranslate",
-                                    defaultValue: "Help translate the app"))
+                        Text(NSLocalizedString("ui.settings.credits.helpTranslate", value: "Help translate the app", comment: "Asks the user if they would like to help translate the app"))
                         Spacer()
                         Image.open
                     }
@@ -80,7 +79,8 @@ struct CreditsView: View {
             .padding(.horizontal, 16)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(String(localized: "ui.done", defaultValue: "Done"), role: .cancel) {
+                    Button(NSLocalizedString("ui.done.button", value: "Done", comment: "Done button"), 
+                           role: .cancel) {
                         dismiss()
                     }
                     .foregroundColor(.label)
