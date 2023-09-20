@@ -9,7 +9,7 @@
 import SwiftUI
 import HomePresentationInterface
 
-struct DrinkView: View {
+struct DrinkView<MenuItems: View>: View {
     typealias Container = Home.ViewModel.Container
     
     private let fill: Double
@@ -19,16 +19,20 @@ struct DrinkView: View {
 
     private let didTapAction: () -> Void
     
+    private let menuItems: () -> MenuItems
+    
     init(fill: Double,
          size: Double,
          unit: UnitVolume,
          containerType: Container,
-         didTapAction: @escaping () -> Void) {
+         didTapAction: @escaping () -> Void,
+         menuItems: @escaping () -> MenuItems) {
         self.fill = fill
         self.size = size
         self.unit = unit
         self.containerType = containerType
         self.didTapAction = didTapAction
+        self.menuItems = menuItems
     }
 
     var body: some View {
@@ -39,9 +43,19 @@ struct DrinkView: View {
                 getImage(fill: fill, type: containerType)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                Text("\(size.clean) \(unit.symbol)")
-                    .font(.brandBody)
-                    .foregroundColor(.label)
+                    .overlay(alignment: .topTrailing) {
+                    }
+                HStack {
+                    Text("\(size.clean) \(unit.symbol)")
+                        .font(.brandBody)
+                        .foregroundColor(.label)
+                    Menu {
+                        menuItems()
+                    } label: {
+                        Image(systemName: "ellipsis.circle.fill")
+                    }
+                    .tint(.button.opacity(0.75))
+                }
             }
         }
     }
@@ -61,11 +75,15 @@ struct DrinkView_Previews: PreviewProvider {
             DrinkView(fill: 0.5,
                       size: 500,
                       unit: .milliliters,
-                      containerType: .medium) {}
+                      containerType: .medium) {} menuItems: {
+                Text("")
+            }
             DrinkView(fill: 0.75,
                       size: 700,
                       unit: .milliliters,
-                      containerType: .medium) {}
+                      containerType: .medium) {} menuItems: {
+                Text("")
+            }
                 .disabled(true)
         }
     }

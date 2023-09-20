@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import HomePresentationInterface
 
 struct HomeScreen: View {
     @ObservedObject var observer: HomeScreenObservable
@@ -69,29 +70,36 @@ struct HomeScreen: View {
                     containerType: drink.container
                 ) {
                     observer.perform(action: .didTapAddDrink(drink))
+                } menuItems: {
+                    contextMenuContent(for: drink)
                 }
                 .frame(maxHeight: (100 * CGFloat(index + 1)),
                        alignment: .bottom)
                 .frame(maxWidth: .infinity)
                 .contextMenu {
-                    Button(String(
-                        localized:
-                        "ui.home.editDrink.button",
-                        defaultValue: "Edit drink",
-                        comment: "An button to edit the a drink."
-                    )) {
-                        observer.perform(action: .didTapEditDrink(drink))
-                    }
-                    Button(String(
-                        localized: "ui.home.removeDrink.button",
-                        defaultValue: "Remove \(drink.size.clean)\(observer.viewModel.smallUnit.symbol)",
-                        comment: "An button to remove a drink of a given size and unit"
-                    ),
-                    role: .destructive) {
-                        observer.perform(action: .didTapRemoveDrink(drink))
-                    }
+                    contextMenuContent(for: drink)
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func contextMenuContent(for drink: Home.ViewModel.Drink) -> some View {
+        Button(String(
+            localized:
+                "ui.home.editDrink.button",
+            defaultValue: "Edit drink",
+            comment: "An button to edit the a drink."
+        )) {
+            observer.perform(action: .didTapEditDrink(drink))
+        }
+        Button(String(
+            localized: "ui.home.removeDrink.button",
+            defaultValue: "Remove \(drink.size.clean)\(observer.viewModel.smallUnit.symbol)",
+            comment: "An button to remove a drink of a given size and unit"
+        ),
+               role: .destructive) {
+            observer.perform(action: .didTapRemoveDrink(drink))
         }
     }
     
