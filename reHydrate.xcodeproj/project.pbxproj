@@ -297,6 +297,8 @@
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		A111802F2AC36A86007E4585 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		A11180302AC36A86007E4585 /* Celebration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Celebration.swift; sourceTree = "<group>"; };
 		A11180322AC3768D007E4585 /* NotificationCenterPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterPort.swift; sourceTree = "<group>"; };
 		A114C6C02A63DAAE00F53770 /* PresentationKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationKit; sourceTree = "<group>"; };
 		A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenObservable.swift; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 		332315E8274273F20039EE23 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A111802E2AC36A86007E4585 /* Notifications */,
 				A183BCEF2A3126BE00D42033 /* LaunchScreen.storyboard */,
 				A183BCE72A3120C900D42033 /* Theme */,
 				A183BCE62A3120C900D42033 /* Assets.xcassets */,
@@ -549,6 +552,15 @@
 				33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */,
 			);
 			path = "reHydrate-watch Extension";
+			sourceTree = "<group>";
+		};
+		A111802E2AC36A86007E4585 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				A111802F2AC36A86007E4585 /* Reminder.swift */,
+				A11180302AC36A86007E4585 /* Celebration.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		A11180312AC3767F007E4585 /* Ports */ = {
