@@ -20,6 +20,11 @@ public final class NotificationService: NotificationServiceType {
     private let notificationCenter: NotificationCenterType
     private let notificationOptions: UNAuthorizationOptions
     
+    private let reminders: [NotificationMessage]
+    private let reminderCategory = "com.rehydrate.reminder"
+    private let celebrations: [NotificationMessage]
+    private let celebrationCategory = "com.rehydrate.celebration"
+    
     private let engine: Engine
     private let preferenceKeyIsOn = "notification-is-enabled"
     private let preferenceKeyFrequency = "notification-frequency"
@@ -52,6 +57,8 @@ public final class NotificationService: NotificationServiceType {
         } catch {
             return .failure(.unauthorized)
         }
+        
+        await addNotifications(startDate: start, stopDate: stop, frequency: frequency)
     }
     
     public func disable() {
@@ -114,3 +121,74 @@ private extension NotificationService {
     }
 }
 
+private extension NotificationService {
+    func getNextDate(from startDate: Date, using frequency: Int, stopDate: Date) -> Date? {
+        let calendar = Calendar.current
+        
+        let stopHour = calendar.component(.hour, from: stopDate)
+        let stopMinute = calendar.component(.minute, from: stopDate)
+        
+        guard var date = calendar.date(byAdding: .minute,
+                                       value: frequency,
+                                       to: startDate)
+        else { return nil }
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        
+        if hour > stopHour {
+            return nil
+        } else if hour == stopHour, minute > stopMinute {
+            return nil
+        } else {
+            return date
+        }
+    }
+    
+    func addNotifications(startDate: Date, stopDate: Date, frequency: Int) async {
+        var date = startDate
+        var shouldContinue = true
+        while shouldContinue {
+            guard let triggerDate = getNextDate(from: date,
+                                                using: frequency,
+                                                stopDate: stopDate)
+            else {
+                shouldContinue = false
+                return
+            }
+            do {
+                let triggerComponents = Calendar.current
+                    .dateComponents([.hour, .minute], from: triggerDate)
+                try await addNotification(for: triggerComponents)
+                date = triggerDate
+            } catch {
+                engine.logger.error("Couldn't set notifications", error: error)
+                date = triggerDate
+            }
+        }
+    }
+    
+    func addNotification(for dateComponents: DateComponents) async throws {
+        let id = UUID().uuidString
+        
+        guard let message = reminders.randomElement() ?? reminders.first
+        else {
+            throw NotificationError.missingReminders
+        }
+        
+        let content = UNMutableNotificationContent()
+        content.title = message.title
+        content.body = message.body
+        content.sound = .default
+        content.attachments = []
+        content.badge = nil
+        content.categoryIdentifier = reminderCategory
+        
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: dateComponents, repeats: true
+        )
+        
+        try await notificationCenter.add(.init(identifier: id,
+                                               content: content,
+                                               trigger: trigger))
+    }
+}
