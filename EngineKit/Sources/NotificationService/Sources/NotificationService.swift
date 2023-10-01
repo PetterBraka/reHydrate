@@ -31,6 +31,9 @@ public final class NotificationService: NotificationServiceType {
     private let preferenceKeyStart = "notification-start"
     private let preferenceKeyStop = "notification-stop"
     
+    internal let minAllowedFrequency = 10
+    private let calendarComponents: Set<Calendar.Component> = [.hour, .minute]
+    
     public private(set) var isAuthorized: Bool = false
     public private(set) var isOn: Bool = false
     
@@ -69,6 +72,9 @@ public final class NotificationService: NotificationServiceType {
         start: Date,
         stop: Date
     ) async -> Result<Void, NotificationError> {
+        guard frequency >= minAllowedFrequency
+        else { return .failure(.frequencyTooLow) }
+        
         storePreferences(enabled: true, frequency: frequency, start: start, stop: stop)
         
         do {
@@ -78,6 +84,7 @@ public final class NotificationService: NotificationServiceType {
         }
         
         await addNotifications(startDate: start, stopDate: stop, frequency: frequency)
+        return .success(Void())
     }
     
     public func disable() {
@@ -89,7 +96,8 @@ public final class NotificationService: NotificationServiceType {
 
 private extension NotificationService {
     func checkAuthorizationStatus() async throws {
-        guard !isAuthorized else { return }
+        guard !isAuthorized 
+        else { return }
         do {
             let granted = try await notificationCenter.requestAuthorization(options: notificationOptions)
             isAuthorized = granted
@@ -132,42 +140,66 @@ private extension NotificationService {
         let stopHour = calendar.component(.hour, from: stopDate)
         let stopMinute = calendar.component(.minute, from: stopDate)
         
-        guard var date = calendar.date(byAdding: .minute,
+        guard let date = calendar.date(byAdding: .minute,
                                        value: frequency,
                                        to: startDate)
         else { return nil }
         let hour = calendar.component(.hour, from: date)
         let minute = calendar.component(.minute, from: date)
         
+        let startDay = calendar.component(.day, from: startDate)
+        let day = calendar.component(.day, from: date)
+        
+        let startMonth = calendar.component(.month, from: startDate)
+        let month = calendar.component(.month, from: date)
+        
+        let startYear = calendar.component(.year, from: startDate)
+        let year = calendar.component(.year, from: date)
+        
         if hour > stopHour {
             return nil
-        } else if hour == stopHour, minute > stopMinute {
+        }
+        if hour == stopHour, minute > stopMinute {
             return nil
         } else {
-            return date
+            if startYear != year ||
+                startMonth != month ||
+                startDay != day {
+                return nil
+            } else {
+                return date
+            }
         }
     }
     
     func addNotifications(startDate: Date, stopDate: Date, frequency: Int) async {
         var date = startDate
         var shouldContinue = true
+        let pendingRequests = await notificationCenter.pendingNotificationRequests()
         while shouldContinue {
+            do {
+                let triggerComponents = Calendar.current
+                    .dateComponents(calendarComponents, from: date)
+                
+                guard !pendingRequests.containsRequest(
+                    at: triggerComponents,
+                    withAccuracy: minAllowedFrequency,
+                    using: calendarComponents
+                )
+                else { throw NotificationError.alreadySet(at: triggerComponents) }
+                
+                try await addNotification(for: triggerComponents)
+            } catch {
+                engine.logger.error("Couldn't set notifications", error: error)
+            }
             guard let triggerDate = getNextDate(from: date,
                                                 using: frequency,
                                                 stopDate: stopDate)
             else {
                 shouldContinue = false
-                return
+                continue
             }
-            do {
-                let triggerComponents = Calendar.current
-                    .dateComponents([.hour, .minute], from: triggerDate)
-                try await addNotification(for: triggerComponents)
-                date = triggerDate
-            } catch {
-                engine.logger.error("Couldn't set notifications", error: error)
-                date = triggerDate
-            }
+            date = triggerDate
         }
     }
     
@@ -175,9 +207,7 @@ private extension NotificationService {
         let id = UUID().uuidString
         
         guard let message = reminders.randomElement() ?? reminders.first
-        else {
-            throw NotificationError.missingReminders
-        }
+        else { throw NotificationError.missingReminders }
         
         let content = UNMutableNotificationContent()
         content.title = message.title

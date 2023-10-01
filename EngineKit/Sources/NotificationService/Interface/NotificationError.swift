@@ -13,4 +13,6 @@ public enum NotificationError: Error {
     case missingDateComponents
     case missingReminders
     case missingCongratulations
+    case frequencyTooLow
+    case alreadySet(at: DateComponents)
 }
