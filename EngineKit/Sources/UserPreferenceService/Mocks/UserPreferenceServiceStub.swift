@@ -10,12 +10,12 @@ import UserPreferenceServiceInterface
 
 public protocol UserPreferenceServiceStubbing {
     var set_returnError: Error? { get }
-    var get_returnValue: Codable? { get }
+    var get_returnValue: [String: any Codable] { get }
 }
 
 public final class UserPreferenceServiceStub: UserPreferenceServiceStubbing {
     public var set_returnError: Error?
-    public var get_returnValue: Codable?
+    public var get_returnValue = [String: any Codable]()
     
     public init() {}
 }
@@ -25,10 +25,10 @@ extension UserPreferenceServiceStub: UserPreferenceServiceType {
         if let set_returnError {
             throw set_returnError
         }
-        get_returnValue = value
+        get_returnValue[key] = value
     }
     
     public func get<T>(for key: String) -> T? where T : Decodable {
-        return get_returnValue as? T
+        return get_returnValue[key] as? T
     }
 }

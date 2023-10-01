@@ -39,7 +39,9 @@ final class LanguageServiceTests: XCTestCase {
     }
     
     func test_getSelectedLanguage_storedLanguage() {
-        userPreferenceService.get_returnValue = Language.norwegian
+        userPreferenceService.get_returnValue = [
+            "LanguageService.Language": Language.norwegian
+        ]
         let language = sut.getSelectedLanguage()
         XCTAssertEqual(language, .norwegian)
     }
