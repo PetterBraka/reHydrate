@@ -31,7 +31,7 @@ public final class NotificationService: NotificationServiceType {
     private let preferenceKeyStart = "notification-start"
     private let preferenceKeyStop = "notification-stop"
     
-    internal let minAllowedFrequency = 10
+    public let minimumAllowedFrequency = 10
     private let calendarComponents: Set<Calendar.Component> = [.hour, .minute]
     
     public private(set) var isAuthorized: Bool = false
@@ -72,7 +72,7 @@ public final class NotificationService: NotificationServiceType {
         start: Date,
         stop: Date
     ) async -> Result<Void, NotificationError> {
-        guard frequency >= minAllowedFrequency
+        guard frequency >= minimumAllowedFrequency
         else { return .failure(.frequencyTooLow) }
         
         storePreferences(enabled: true, frequency: frequency, start: start, stop: stop)
@@ -197,7 +197,7 @@ private extension NotificationService {
                 
                 guard !pendingRequests.containsRequest(
                     at: triggerComponents,
-                    withAccuracy: minAllowedFrequency,
+                    withAccuracy: minimumAllowedFrequency,
                     using: calendarComponents
                 )
                 else { throw NotificationError.alreadySet(at: triggerComponents) }

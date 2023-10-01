@@ -9,8 +9,9 @@ import Foundation
 import UserNotifications
 
 public protocol NotificationServiceType {
+    var minimumAllowedFrequency: Int { get }
+    
     func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError>
     func disable()
-    
     func getSettings() -> NotificationSettings
 }

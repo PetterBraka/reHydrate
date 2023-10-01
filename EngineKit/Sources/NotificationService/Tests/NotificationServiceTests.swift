@@ -225,7 +225,7 @@ final class NotificationServiceTests: XCTestCase {
     func test_enable_extremelyLowFrequency() async {
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
-        let result = await sut.enable(withFrequency: 1,
+        let result = await sut.enable(withFrequency: (0 ..< sut.minimumAllowedFrequency).randomElement() ?? 1,
                                       start: dates.start,
                                       stop: dates.stop)
         
@@ -251,7 +251,10 @@ final class NotificationServiceTests: XCTestCase {
         ]
         setUpSut()
         let settings = sut.getSettings()
-        XCTAssertEqual(settings, .init(isOn: true, start: "08:00:00", stop: "09:00:00", frequency: 30))
+        XCTAssertEqual(settings, .init(isOn: true, 
+                                       start: Date(date: "01/01/2023", time: "08:00:00"),
+                                       stop: Date(date: "01/01/2023", time: "09:00:00"),
+                                       frequency: 30))
     }
 }
 
@@ -351,7 +354,11 @@ extension NotificationCenterSpy.MethodName: CustomStringConvertible {
 
 extension NotificationSettings: CustomStringConvertible {
     public var description: String {
-        "isOn: \(isOn), start: \(start ?? "NA"), stop: \(stop ?? "NA"), frequency: \(frequency ?? 0)"
+        return if let start, let stop, let frequency {
+            "isOn: \(isOn), start: \(start), stop: \(stop), frequency: \(frequency)"
+        } else {
+            "isOn: \(isOn)"
+        }
     }
 }
 
