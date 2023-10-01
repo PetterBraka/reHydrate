@@ -39,7 +39,7 @@ public final class LoggingService {
         log(level: .fault, message: message, error: error, file: file)
     }
     
-    public func critical(_ message: String, error: Error, file: StaticString = #fileID) {
+    public func critical(_ message: String, error: Error? = nil, file: StaticString = #fileID) {
         log(level: .fault, message: message, error: error, file: file)
     }
     

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LoggingService
 import SettingsPresentationInterface
 import UnitServiceInterface
 import DayServiceInterface
@@ -16,6 +17,7 @@ import NotificationServiceInterface
 extension Screen.Settings {
     public final class Presenter: SettingsPresenterType {
         public typealias Engine = (
+            HasLoggingService &
             HasDayService &
             HasDrinksService &
             HasUnitService &
@@ -272,12 +274,19 @@ private extension Screen.Settings.Presenter {
     }
     
     func getRanges(start: Date, stop: Date) -> (start: ClosedRange<Date>, stop: ClosedRange<Date>) {
-        guard let startOfDay = Date(time: "00:00"),
-              let endOfDay = Date(time: "23:59")
+        let calendar = Calendar.current
+        let minimumAllowedFrequency = engine.notificationService.minimumAllowedFrequency
+        guard let startRangeStart = Date(time: "00:00"),
+              let startRangeEnd = calendar.date(byAdding: .minute, value: -minimumAllowedFrequency, to: stop),
+              let stopRangeStart = calendar.date(byAdding: .minute, value: minimumAllowedFrequency, to: start),
+              let stopRangeEnd = Date(time: "23:59")
         else {
-            return (start ... stop, stop ... start)
+            engine.logger.critical("Date formatter stoped working")
+            fatalError("Date formatter stoped working")
         }
-        return (startOfDay ... endOfDay, start ... endOfDay)
+        
+        return (startRangeStart ... startRangeEnd,
+                stopRangeStart ... stopRangeEnd)
     }
     
     func disableNotifications() {
