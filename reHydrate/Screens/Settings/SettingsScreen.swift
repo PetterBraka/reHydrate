@@ -73,7 +73,24 @@ struct SettingsScreen: View {
                     }
                 }
             })
+            if observer.viewModel.isLoading {
+                loading
+            }
         }
+        .animation(.easeInOut)
+    }
+    
+    @ViewBuilder
+    var loading: some View {
+        ProgressView {
+            Text(NSLocalizedString(
+                "ui.loading",
+                value: "Loading...",
+                comment: "Text displayed with a loading wheel when we are loading data"
+            ))
+        }
+        .padding(16)
+        .background(in: .rect(cornerRadius: 16))
     }
     
     @ViewBuilder
@@ -181,9 +198,9 @@ struct SettingsScreen: View {
         Section {
             CheckBoxButton(
                 isChecked: Binding {
-                    observer.isRemindersOn
-                } set: { newValue in
-                    observer.perform(action: .didSetReminders(newValue))
+                    observer.viewModel.notifications.isOn
+                } set: {
+                    observer.perform(action: .didSetReminders($0))
                 },
                 text: NSLocalizedString("ui.settings.notification.turnOn",
                                         value: "Turn on reminders",
@@ -193,29 +210,40 @@ struct SettingsScreen: View {
                                                    comment: "Allows the user to turn off reminders to drink water"),
                 image: .remindersOff,
                 highlightedImage: .remindersOn)
-            if observer.isRemindersOn {
+            if observer.viewModel.notifications.isOn {
                 HStack {
+                    let date: Binding<Date> = Binding {
+                        observer.viewModel.notifications.start
+                    } set: {
+                        observer.perform(action: .didSetRemindersStart($0))
+                    }
                     DatePicker(NSLocalizedString("ui.settings.notification.startingTime",
                                                  value: "Starting time",
                                                  comment: "The starting time of the reminders"),
-                               selection: $observer.remindersStart,
-                               in: observer.remindersStartRange,
+                               selection: date,
+                               in: observer.viewModel.notifications.startRange,
                                displayedComponents: .hourAndMinute)
                 }
                 HStack {
-                    DatePicker(NSLocalizedString("ui.settings.notification.endingTime",
-                                                 value: "Ending time",
-                                                 comment: "The ending time of the reminders"),
-                               selection: $observer.remindersEnd,
-                               in: observer.remindersEndRange,
-                               displayedComponents: .hourAndMinute)
+                    let date: Binding<Date> = Binding {
+                        observer.viewModel.notifications.stop
+                    } set: {
+                        observer.perform(action: .didSetRemindersStop($0))
+                    }
+                    DatePicker(
+                        NSLocalizedString("ui.settings.notification.endingTime",
+                                          value: "Ending time",
+                                          comment: "The ending time of the reminders"),
+                        selection: date,
+                        in: observer.viewModel.notifications.stopRange,
+                        displayedComponents: .hourAndMinute)
                 }
                 HStack {
                     Text(NSLocalizedString("ui.settings.notification.frequency",
                                            value: "Frequency",
                                            comment: "The frequency of the reminders in minutes"))
                     Spacer()
-                    StepperView(value: "\(observer.reminderFrequency)") {
+                    StepperView(value: "\(observer.viewModel.notifications.frequency)") {
                         observer.perform(action: .didTapIncrementFrequency)
                     } onDecrement: {
                         observer.perform(action: .didTapDecrementFrequency)

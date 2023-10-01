@@ -6,5 +6,5 @@
 //
 
 public protocol SettingsPresenterType: AnyObject {
-    func perform(action: Settings.Action)
+    func perform(action: Settings.Action) async
 }

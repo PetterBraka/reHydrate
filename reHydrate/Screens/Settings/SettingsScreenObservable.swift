@@ -21,35 +21,17 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     @Published var language: Language
     @Published var languageOptions: [Language]
     @Published var isDarkMode: Bool
-    @Published var isRemindersOn: Bool
-    @Published var remindersStart: Date
-    @Published var remindersStartRange: ClosedRange<Date>
-    @Published var remindersEnd: Date
-    @Published var remindersEndRange: ClosedRange<Date>
-    @Published var reminderFrequency: Int?
     var viewModel: ViewModel
     
     init(presenter: Screen.Settings.Presenter,
          language: Language,
          languageOptions: [Language],
-         isDarkMode: Bool,
-         isRemindersOn: Bool,
-         remindersStart: Date,
-         remindersStartRange: ClosedRange<Date>,
-         remindersEnd: Date,
-         remindersEndRange: ClosedRange<Date>,
-         reminderFrequency: Int) {
+         isDarkMode: Bool) {
         self.presenter = presenter
         self.viewModel = presenter.viewModel
         self.language = language
         self.languageOptions = languageOptions
         self.isDarkMode = isDarkMode
-        self.isRemindersOn = isRemindersOn
-        self.remindersStart = remindersStart
-        self.remindersStartRange = remindersStartRange
-        self.remindersEnd = remindersEnd
-        self.remindersEndRange = remindersEndRange
-        self.reminderFrequency = reminderFrequency
     }
     
     func perform(update: Settings.Update) {
@@ -63,6 +45,8 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     }
     
     func perform(action: Settings.Action) {
-        presenter.perform(action: action)
+        Task {
+            await presenter.perform(action: action)
+        }
     }
 }

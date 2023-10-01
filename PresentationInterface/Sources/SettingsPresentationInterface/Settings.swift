@@ -21,6 +21,8 @@ public enum Settings {
         
         case didTapIncrementGoal
         case didTapDecrementGoal
+        case didSetRemindersStart(Date)
+        case didSetRemindersStop(Date)
         case didTapIncrementFrequency
         case didTapDecrementFrequency
         case didTapCredits
@@ -30,14 +32,26 @@ public enum Settings {
     }
     
     public struct ViewModel {
+        public let isLoading: Bool
         public let unitSystem: UnitSystem
         public let goal: Double
         public let drinks: [ViewModel.Drink]
+        public let notifications: NotificationSettings
+        public let error: Error?
         
-        public init(unitSystem: UnitSystem, goal: Double, drinks: [ViewModel.Drink]) {
+        
+        public init(
+            isLoading: Bool,
+            unitSystem: UnitSystem, goal: Double, drinks: [ViewModel.Drink],
+            notifications: NotificationSettings,
+            error: Error?
+        ) {
+            self.isLoading = isLoading
             self.unitSystem = unitSystem
             self.goal = goal
             self.drinks = drinks
+            self.notifications = notifications
+            self.error = error
         }
     }
 }
@@ -85,5 +99,44 @@ extension Settings.ViewModel {
             case .large: return 500
             }
         }
+    }
+}
+    
+extension Settings.ViewModel {
+    public struct NotificationSettings {
+        public let isOn: Bool
+        public let frequency: Int
+        public let start: Date
+        public let startRange: ClosedRange<Date>
+        public let stop: Date
+        public let stopRange: ClosedRange<Date>
+        
+        public init(isOn: Bool,
+                    frequency: Int,
+                    start: Date,
+                    startRange: ClosedRange<Date>,
+                    stop: Date,
+                    stopRange: ClosedRange<Date>) {
+            self.isOn = isOn
+            self.frequency = frequency
+            self.start = start
+            self.startRange = startRange
+            self.stop = stop
+            self.stopRange = stopRange
+        }
+    }
+}
+
+extension Settings.ViewModel {
+    public enum Error {
+        // Generic
+        case somethingWentWrong
+        // Notification errors
+        case unauthorized
+        case invalidStart
+        case invalidStop
+        case invalidDates
+        case lowFrequency
+        case missingReminders
     }
 }

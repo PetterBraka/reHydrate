@@ -40,13 +40,7 @@ public final class SceneFactory: ObservableObject {
             presenter: presenter,
             language: engine.languageService.getSelectedLanguage(),
             languageOptions: engine.languageService.getLanguageOptions(),
-            isDarkMode: true, // TODO: Petter add dark mode
-            isRemindersOn: false, // TODO: Petter add Reminders
-            remindersStart: .distantPast,
-            remindersStartRange: Date.distantPast ... .distantFuture,
-            remindersEnd: .distantFuture,
-            remindersEndRange: Date.distantPast ... .distantFuture,
-            reminderFrequency: 60
+            isDarkMode: true // TODO: Petter add dark mode
         )
         presenter.scene = observer
 
