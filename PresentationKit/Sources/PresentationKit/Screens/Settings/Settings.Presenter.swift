@@ -171,6 +171,7 @@ extension Screen.Settings.Presenter {
     }
 }
 
+// MARK: - Goal
 extension Screen.Settings.Presenter {
     private func increaseGoal() {
         Task {
@@ -197,6 +198,7 @@ extension Screen.Settings.Presenter {
     }
 }
 
+// MARK: - Units
 extension Settings.ViewModel.UnitSystem {
     init(from system: UnitServiceInterface.UnitSystem) {
         switch system {
@@ -219,6 +221,7 @@ extension UnitSystem {
     }
 }
 
+// MARK: - Drink
 extension Screen.Settings.Presenter.ViewModel.Drink {
     init(from drink: Drink) {
         self = .init(id: drink.id,
@@ -239,7 +242,7 @@ extension Screen.Settings.Presenter.ViewModel.Container {
         }
     }
 }
-
+// MARK: - Notifications
 private extension Screen.Settings.Presenter {
     func enableNotifications() async {
         let result = await engine.notificationService.enable(
