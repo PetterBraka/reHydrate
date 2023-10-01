@@ -19,9 +19,15 @@ import UnitServiceInterface
 import UnitService
 import UserPreferenceServiceInterface
 import UserPreferenceService
+import NotificationServiceInterface
+import NotificationService
+import UserNotifications
 
 public final class Engine {
-    public init() {
+    public init(reminders: [NotificationMessage],
+                celebrations: [NotificationMessage],
+                notificationCenter: NotificationCenterType,
+                notificationOptions: UNAuthorizationOptions) {
         let project = "reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
@@ -33,13 +39,31 @@ public final class Engine {
         dayManager = DayManager(database: database)
         consumptionManager = ConsumptionManager(database: database)
         userPreferenceService = UserPreferenceService(defaults: sharedDefault)
+        
+        self.reminders = reminders
+        self.celebrations = celebrations
+        self.notificationCenter = notificationCenter
+        self.notificationOptions = notificationOptions
     }
+    
+    private let reminders: [NotificationMessage]
+    private let celebrations: [NotificationMessage]
+    private let notificationCenter: NotificationCenterType
+    private let notificationOptions: UNAuthorizationOptions
     
     public var logger: LoggingService
     public var database: DatabaseType
     public var dayManager: DayManagerType
     public var consumptionManager: ConsumptionManagerType
     public var userPreferenceService: UserPreferenceServiceType
+    public lazy var notificationService: NotificationServiceType = NotificationService(
+        engine: self,
+        reminders: reminders,
+        celebrations: celebrations,
+        notificationCenter: notificationCenter,
+        notificationOptions: notificationOptions, 
+        didComplete: nil
+    )
     
     public lazy var drinksService: DrinkServiceType = DrinkService()
     public lazy var languageService: LanguageServiceType = LanguageService(engine: self)

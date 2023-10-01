@@ -19,6 +19,8 @@ import UnitServiceInterface
 import UnitServiceMocks
 import UserPreferenceServiceInterface
 import UserPreferenceServiceMocks
+import NotificationServiceInterface
+import NotificationServiceMocks
 
 public final class EngineMocks {
     public init() {}
@@ -28,6 +30,7 @@ public final class EngineMocks {
     public var dayManager: DayManagerType = DayManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()
     public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceStub()
+    public var notificationService: NotificationServiceType = NotificationServiceStub()
     
     public var dayService: DayServiceType = DayServiceStub()
     public var drinksService: DrinkServiceType = DrinkServiceStub()

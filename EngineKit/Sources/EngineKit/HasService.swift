@@ -12,6 +12,7 @@ import LanguageServiceInterface
 import DatabaseServiceInterface
 import UnitServiceInterface
 import UserPreferenceServiceInterface
+import NotificationServiceInterface
 
 public protocol HasService:
     HasLoggingService,
@@ -22,5 +23,6 @@ public protocol HasService:
     HasDayService,
     HasLanguageService,
     HasUnitService,
-    HasUserPreferenceService
+    HasUserPreferenceService,
+    HasNotificationService
 {}
