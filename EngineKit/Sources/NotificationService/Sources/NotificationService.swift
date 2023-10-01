@@ -59,11 +59,7 @@ public final class NotificationService: NotificationServiceType {
                let frequency = settings.frequency,
                let start = settings.start,
                let stop = settings.stop {
-                await self?.enable(
-                    withFrequency: frequency,
-                    startTime: start,
-                    stopTime: stop
-                )
+                _ = await self?.enable(withFrequency: frequency, start: start, stop: stop)
             } else {
                 self?.disable()
             }
@@ -71,23 +67,15 @@ public final class NotificationService: NotificationServiceType {
         }
     }
     
-    @discardableResult
     public func enable(
         withFrequency frequency: Int,
-        startTime: String,
-        stopTime: String
+        start: Date,
+        stop: Date
     ) async -> Result<Void, NotificationError> {
         guard frequency >= minAllowedFrequency
         else { return .failure(.frequencyTooLow) }
         
-        guard let start = Date(time: startTime),
-              let stop = Date(time: stopTime)
-        else { return .failure(.invalidDate) }
-        
-        storePreferences(enabled: true,
-                         frequency: frequency,
-                         start: start,
-                         stop: stop)
+        storePreferences(enabled: true, frequency: frequency, start: start, stop: stop)
         
         do {
             try await checkAuthorizationStatus()
@@ -95,9 +83,7 @@ public final class NotificationService: NotificationServiceType {
             return .failure(.unauthorized)
         }
         
-        await addNotifications(startDate: start,
-                               stopDate: stop,
-                               frequency: frequency)
+        await addNotifications(startDate: start, stopDate: stop, frequency: frequency)
         return .success(Void())
     }
     
@@ -114,8 +100,8 @@ public final class NotificationService: NotificationServiceType {
         
         return NotificationSettings(
             isOn: enabled ?? false,
-            start: start?.toString(),
-            stop: stop?.toString(),
+            start: start,
+            stop: stop,
             frequency: frequency
         )
     }
@@ -162,9 +148,7 @@ private extension NotificationService {
 }
 
 private extension NotificationService {
-    func getNextDate(from startDate: Date, 
-                     using frequency: Int,
-                     stopDate: Date) -> Date? {
+    func getNextDate(from startDate: Date, using frequency: Int, stopDate: Date) -> Date? {
         let calendar = Calendar.current
         
         let stopHour = calendar.component(.hour, from: stopDate)

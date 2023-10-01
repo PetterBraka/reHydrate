@@ -4,14 +4,15 @@
 //
 //  Created by Petter vang Brakalsvålet on 01/10/2023.
 //
+import Foundation
 
 public struct NotificationSettings {
     public let isOn: Bool
-    public let start: String?
-    public let stop: String?
+    public let start: Date?
+    public let stop: Date?
     public let frequency: Int?
     
-    public init(isOn: Bool, start: String?, stop: String?, frequency: Int?) {
+    public init(isOn: Bool, start: Date?, stop: Date?, frequency: Int?) {
         self.isOn = isOn
         self.start = start
         self.stop = stop
