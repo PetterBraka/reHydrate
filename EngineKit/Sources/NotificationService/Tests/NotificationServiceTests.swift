@@ -264,7 +264,7 @@ private extension NotificationServiceTests {
         case (.success, .success):
             XCTAssertTrue(true, file: file, line: line)
         case (.failure(let givenError), .failure(let expectedError)):
-//            XCTAssertEqual(givenError, expectedError, file: file, line: line)
+            XCTAssertEqual(givenError, expectedError, file: file, line: line)
             break
         case (.failure, .success), (.success, .failure):
             XCTAssert(false, "Given result (\(given) expected (\(expected)",
