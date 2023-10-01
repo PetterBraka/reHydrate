@@ -95,7 +95,8 @@ extension Target.Dependency {
     static let loggingService: Target.Dependency = .byName(name: "LoggingService")
     static let testHelper: Target.Dependency = .byName(name: "TestHelper")
     static let engineMocks: Target.Dependency = .byName(name: "EngineMocks")
-    static let blackbird: Target.Dependency = .product(name: "Blackbird", package: "Blackbird")
+    static let blackbird: Target.Dependency = .product(name: "Blackbird",
+                                                       package: "Blackbird")
 }
 
 enum Feature: String {
@@ -190,7 +191,7 @@ extension Array where Element == Target {
                             .byName(name: feature.source),
                             .byName(name: feature.mocks),
                             .engineMocks,
-                            .testHelper
+                            .testHelper,
                         ] + testsDependancy,
                         path: rootPath + "/Tests",
                         resources: testsResources),
