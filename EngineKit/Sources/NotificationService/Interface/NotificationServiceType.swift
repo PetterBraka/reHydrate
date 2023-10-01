@@ -11,6 +11,6 @@ import UserNotifications
 public protocol NotificationServiceType {
     var isOn: Bool { get }
     
-    func enable(withFrequency: Int, start: Date, stop: Date) -> Result<Void, NotificationError>
+    func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError>
     func disable()
 }

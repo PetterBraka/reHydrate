@@ -9,8 +9,8 @@ import Foundation
 import UserNotifications
 import NotificationServiceInterface
 
-final class NotificationCenterSpy {
-    enum MethodName {
+public final class NotificationCenterSpy {
+    public enum MethodName {
         case requestAuthorization
         case setNotificationCategories
         case notificationCategories
@@ -24,66 +24,66 @@ final class NotificationCenterSpy {
         case setBadgeCount
     }
     
-    var methodLog: [MethodName] = []
-    let realObject: UNUserNotificationCenter
+    public var methodLog: [MethodName] = []
+    private let realObject: NotificationCenterType
     
-    init(realObject: UNUserNotificationCenter) {
+    public init(realObject: NotificationCenterType) {
         self.realObject = realObject
     }
 }
 
 extension NotificationCenterSpy: NotificationCenterType {
-    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
+    public func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
         methodLog.append(.requestAuthorization)
         return try await realObject.requestAuthorization(options: options)
     }
     
-    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+    public func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
         methodLog.append(.setNotificationCategories)
         realObject.setNotificationCategories(categories)
     }
     
-    func notificationCategories() async -> Set<UNNotificationCategory> {
+    public func notificationCategories() async -> Set<UNNotificationCategory> {
         methodLog.append(.notificationCategories)
         return await realObject.notificationCategories()
     }
     
-    func add(_ request: UNNotificationRequest) async throws {
+    public func add(_ request: UNNotificationRequest) async throws {
         methodLog.append(.add)
         try await realObject.add(request)
     }
     
-    func pendingNotificationRequests() async -> [UNNotificationRequest] {
+    public func pendingNotificationRequests() async -> [UNNotificationRequest] {
         methodLog.append(.pendingNotificationRequests)
         return await realObject.pendingNotificationRequests()
     }
     
-    func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
+    public func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
         methodLog.append(.removePendingNotificationRequests)
         realObject.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     
-    func removeAllPendingNotificationRequests() {
+    public func removeAllPendingNotificationRequests() {
         methodLog.append(.removeAllPendingNotificationRequests)
         realObject.removeAllPendingNotificationRequests()
     }
     
-    func deliveredNotifications() async -> [UNNotification] {
+    public func deliveredNotifications() async -> [UNNotification] {
         methodLog.append(.deliveredNotifications)
         return await realObject.deliveredNotifications()
     }
     
-    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+    public func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
         methodLog.append(.removeDeliveredNotifications)
         realObject.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
     
-    func removeAllDeliveredNotifications() {
+    public func removeAllDeliveredNotifications() {
         methodLog.append(.removeAllDeliveredNotifications)
         realObject.removeAllDeliveredNotifications()
     }
     
-    func setBadgeCount(_ newBadgeCount: Int) async throws {
+    public func setBadgeCount(_ newBadgeCount: Int) async throws {
         methodLog.append(.setBadgeCount)
         try await realObject.setBadgeCount(newBadgeCount)
     }

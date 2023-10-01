@@ -12,12 +12,12 @@ import UserPreferenceServiceInterface
 import LoggingService
 
 public final class NotificationService: NotificationServiceType {
-    typealias Engine = (
+    public typealias Engine = (
         HasLoggingService &
         HasUserPreferenceService
     )
     
-    private let notificationCenter: NotificationCenterType
+    public private(set) var notificationCenter: NotificationCenterType
     private let notificationOptions: UNAuthorizationOptions
     
     private let reminders: [NotificationMessage]
@@ -34,15 +34,34 @@ public final class NotificationService: NotificationServiceType {
     public private(set) var isAuthorized: Bool = false
     public private(set) var isOn: Bool = false
     
-    init(engine: Engine,
-         notificationCenter: NotificationCenterType,
-         reminders: [NotificationMessage],
-         celebrations: [NotificationMessage]) {
+    public init(engine: Engine,
+                reminders: [NotificationMessage],
+                celebrations: [NotificationMessage],
+                notificationCenter: NotificationCenterType,
+                notificationOptions: UNAuthorizationOptions,
+                didComplete: (() -> Void)?) {
         self.engine = engine
-        self.notificationCenter = notificationCenter
         self.reminders = reminders
         self.celebrations = celebrations
-        checkUserPreference()
+        self.notificationCenter = notificationCenter
+        self.notificationOptions = notificationOptions
+        checkUserPreference(complete: didComplete)
+    }
+    
+    func checkUserPreference(complete: (() -> Void)?) {
+        let enabled: Bool? = engine.userPreferenceService.get(for: preferenceKeyIsOn)
+        let frequency: Int? = engine.userPreferenceService.get(for: preferenceKeyFrequency)
+        let start: Date? = engine.userPreferenceService.get(for: preferenceKeyStart)
+        let stop: Date? = engine.userPreferenceService.get(for: preferenceKeyStop)
+        
+        Task { [weak self] in
+            if let enabled, enabled == true, let frequency, let start, let stop {
+                _ = await self?.enable(withFrequency: frequency, start: start, stop: stop)
+            } else {
+                self?.disable()
+            }
+            complete?()
+        }
     }
     
     public func enable(
@@ -69,21 +88,6 @@ public final class NotificationService: NotificationServiceType {
 
 
 private extension NotificationService {
-    func checkUserPreference() {
-        let enabled: Bool? = engine.userPreferenceService.get(for: preferenceKeyIsOn)
-        let frequency: Int? = engine.userPreferenceService.get(for: preferenceKeyFrequency)
-        let start: Date? = engine.userPreferenceService.get(for: preferenceKeyStart)
-        let stop: Date? = engine.userPreferenceService.get(for: preferenceKeyStop)
-        
-        Task { [weak self] in
-            if let enabled, enabled == true, let frequency, let start, let stop {
-                _ = await self?.enable(withFrequency: frequency, start: start, stop: stop)
-            } else {
-                self?.disable()
-            }
-        }
-    }
-    
     func checkAuthorizationStatus() async throws {
         guard !isAuthorized else { return }
         do {

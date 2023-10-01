@@ -9,26 +9,27 @@ import Foundation
 import UserNotifications
 import NotificationServiceInterface
 
-protocol NotificationCenterStubbing {
+public protocol NotificationCenterStubbing {
     var requestAuthorization: Result<Bool, Error> { get }
     var notificationCategories: Set<UNNotificationCategory> { get }
     var pendingRequests: [UNNotificationRequest] { get }
     var addRequest: Result<Void, Error> { get }
     var deliveredNotifications: [UNNotification] { get}
-    var pendingNotificationRequests: [UNNotificationRequest] { get }
     var badgeCount: Int { get }
 }
 
-final class NotificationCenterStub: NotificationCenterStubbing {
-    var requestAuthorization: Result<Bool, Error> = .success(true)
-    var notificationCategories: Set<UNNotificationCategory> = .init()
-    var pendingRequests: [UNNotificationRequest] = []
-    var addRequest: Result<Void, Error> = .success(Void())
-    var deliveredNotifications: [UNNotification] = []
-    var pendingNotificationRequests: [UNNotificationRequest] = []
-    var badgeCount: Int = 0
+public final class NotificationCenterStub: NotificationCenterStubbing {
+    public var requestAuthorization: Result<Bool, Error> = .success(true)
+    public var notificationCategories: Set<UNNotificationCategory> = .init()
+    public var pendingRequests: [UNNotificationRequest] = []
+    public var addRequest: Result<Void, Error> = .success(Void())
+    public var deliveredNotifications: [UNNotification] = []
+    public var badgeCount: Int = 0
     
-    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
+    public init() {}
+}
+extension NotificationCenterStub: NotificationCenterType {
+    public func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
         switch requestAuthorization {
         case .success(let success):
             return success
@@ -37,17 +38,17 @@ final class NotificationCenterStub: NotificationCenterStubbing {
         }
     }
     
-    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+    public func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
         for category in categories {
             notificationCategories.insert(category)
         }
     }
     
-    func notificationCategories() async -> Set<UNNotificationCategory> {
+    public func notificationCategories() async -> Set<UNNotificationCategory> {
         notificationCategories
     }
     
-    func add(_ request: UNNotificationRequest) async throws {
+    public func add(_ request: UNNotificationRequest) async throws {
         switch addRequest {
         case .success:
             break
@@ -57,35 +58,35 @@ final class NotificationCenterStub: NotificationCenterStubbing {
         pendingRequests.append(request)
     }
     
-    func pendingNotificationRequests() async -> [UNNotificationRequest] {
-        pendingNotificationRequests
+    public func pendingNotificationRequests() async -> [UNNotificationRequest] {
+        pendingRequests
     }
     
-    func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
+    public func removePendingNotificationRequests(withIdentifiers identifiers: [String]) {
         for identifier in identifiers {
             pendingRequests.removeAll(where: { $0.identifier == identifier })
         }
     }
     
-    func removeAllPendingNotificationRequests() {
+    public func removeAllPendingNotificationRequests() {
         pendingRequests.removeAll()
     }
     
-    func deliveredNotifications() async -> [UNNotification] {
+    public func deliveredNotifications() async -> [UNNotification] {
         deliveredNotifications
     }
     
-    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+    public func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
         for identifier in identifiers {
             deliveredNotifications.removeAll(where: { $0.request.identifier == identifier})
         }
     }
     
-    func removeAllDeliveredNotifications() {
+    public func removeAllDeliveredNotifications() {
         deliveredNotifications.removeAll()
     }
     
-    func setBadgeCount(_ newBadgeCount: Int) async throws {
+    public func setBadgeCount(_ newBadgeCount: Int) async throws {
         badgeCount = newBadgeCount
     }
 }
