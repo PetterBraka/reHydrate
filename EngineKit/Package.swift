@@ -72,7 +72,10 @@ let package: Package = {
                     .source(.userPreferenceService)
                   ])
             .with(targetsFrom: .userPreferenceService)
-            .with(targetsFrom: .notificationService)
+            .with(targetsFrom: .notificationService,
+                  sourceDependancy: [
+                    .source(.userPreferenceService)
+                  ])
     )
 }()
 
@@ -168,7 +171,10 @@ extension Array where Element == Target {
 
         let newTargets: [Target] = [
             .target(name: feature.source,
-                    dependencies: [.byName(name: feature.interface)] + sourceDependancy,
+                    dependencies: [
+                        .byName(name: feature.interface),
+                        .loggingService
+                    ] + sourceDependancy,
                     path: rootPath + "/Sources",
                     resources: sourceResources),
             .target(name: feature.interface,
