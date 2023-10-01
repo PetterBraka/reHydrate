@@ -235,6 +235,24 @@ final class NotificationServiceTests: XCTestCase {
         let notifications = await notificationCenter.stub.pendingNotificationRequests()
         assertNotificationTimes(givenRequests: notifications,expectedTimes: [])
     }
+    
+    func test_getSettings() {
+        setUpSut()
+        let settings = sut.getSettings()
+        XCTAssertEqual(settings, .init(isOn: false, start: nil, stop: nil, frequency: nil))
+    }
+    
+    func test_getSettings_withOldSettings() {
+        userPreferenceService.get_returnValue = [
+            "notification-is-enabled": true,
+            "notification-frequency": 30,
+            "notification-start": Date(date: "01/01/2023", time: "08:00:00")!,
+            "notification-stop": Date(date: "01/01/2023", time: "09:00:00")!
+        ]
+        setUpSut()
+        let settings = sut.getSettings()
+        XCTAssertEqual(settings, .init(isOn: true, start: "08:00:00", stop: "09:00:00", frequency: 30))
+    }
 }
 
 enum TestingError: Error {
@@ -314,5 +332,20 @@ extension NotificationCenterSpy.MethodName: CustomStringConvertible {
         case .setBadgeCount:
             "setBadgeCount"
         }
+    }
+}
+
+extension NotificationSettings: CustomStringConvertible {
+    public var description: String {
+        "isOn: \(isOn), start: \(start ?? "NA"), stop: \(stop ?? "NA"), frequency: \(frequency ?? 0)"
+    }
+}
+
+extension NotificationSettings: Equatable {
+    public static func == (lhs: NotificationSettings, rhs: NotificationSettings) -> Bool {
+        lhs.isOn == rhs.isOn &&
+        lhs.start == rhs.start &&
+        lhs.stop == rhs.stop &&
+        lhs.frequency == rhs.frequency
     }
 }

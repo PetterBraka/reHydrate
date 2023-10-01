@@ -9,27 +9,25 @@ import Foundation
 import NotificationServiceInterface
 
 public protocol NotificationServiceStubbing {
-    var isOn_returnValue: Bool { get set }
     var enable_returnValue: Result<Void, NotificationError> { get set }
+    var getSettings_returnValue: NotificationSettings { get set }
 }
 
 public final class NotificationServiceStub: NotificationServiceStubbing {
     public init() {}
     
-    public var isOn_returnValue: Bool = false
     public var enable_returnValue: Result<Void, NotificationError> = .success(Void())
+    public var getSettings_returnValue: NotificationSettings = .init(isOn: false, start: nil, stop: nil, frequency: nil)
 }
 
 extension NotificationServiceStub: NotificationServiceType {
-    public var isOn: Bool {
-        isOn_returnValue
     public func enable(withFrequency: Int, startTime: String, stopTime: String) async -> Result<Void, NotificationError> {
         enable_returnValue
     }
     
+    public func disable() {}
     
-    public func disable() {
-        isOn_returnValue = false
+    public func getSettings() -> NotificationSettings {
+        getSettings_returnValue
     }
-    
 }

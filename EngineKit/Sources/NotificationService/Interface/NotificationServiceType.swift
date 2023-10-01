@@ -9,7 +9,6 @@ import Foundation
 import UserNotifications
 
 public protocol NotificationServiceType {
-    var isOn: Bool { get }
     func enable(
         withFrequency: Int,
         startTime: String,
@@ -17,4 +16,6 @@ public protocol NotificationServiceType {
     ) async -> Result<Void, NotificationError>
     
     func disable()
+    
+    func getSettings() -> NotificationSettings
 }

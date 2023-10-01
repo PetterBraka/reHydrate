@@ -52,13 +52,13 @@ public final class NotificationService: NotificationServiceType {
     }
     
     func checkUserPreference(complete: (() -> Void)?) {
-        let enabled: Bool? = engine.userPreferenceService.get(for: preferenceKeyIsOn)
-        let frequency: Int? = engine.userPreferenceService.get(for: preferenceKeyFrequency)
-        let start: Date? = engine.userPreferenceService.get(for: preferenceKeyStart)
-        let stop: Date? = engine.userPreferenceService.get(for: preferenceKeyStop)
+        let settings = getSettings()
         
         Task { [weak self] in
-            if let enabled, enabled == true, let frequency, let start, let stop {
+            if settings.isOn == true,
+               let frequency = settings.frequency,
+               let start = settings.start,
+               let stop = settings.stop {
                 await self?.enable(
                     withFrequency: frequency,
                     startTime: start,
@@ -104,6 +104,20 @@ public final class NotificationService: NotificationServiceType {
     public func disable() {
         notificationCenter.removeAllPendingNotificationRequests()
         storePreferences(enabled: false)
+    }
+    
+    public func getSettings() -> NotificationSettings {
+        let enabled: Bool? = engine.userPreferenceService.get(for: preferenceKeyIsOn)
+        let frequency: Int? = engine.userPreferenceService.get(for: preferenceKeyFrequency)
+        let start: Date? = engine.userPreferenceService.get(for: preferenceKeyStart)
+        let stop: Date? = engine.userPreferenceService.get(for: preferenceKeyStop)
+        
+        return NotificationSettings(
+            isOn: enabled ?? false,
+            start: start?.toString(),
+            stop: stop?.toString(),
+            frequency: frequency
+        )
     }
 }
 
