@@ -23,14 +23,10 @@ public final class NotificationServiceStub: NotificationServiceStubbing {
 extension NotificationServiceStub: NotificationServiceType {
     public var isOn: Bool {
         isOn_returnValue
+    public func enable(withFrequency: Int, startTime: String, stopTime: String) async -> Result<Void, NotificationError> {
+        enable_returnValue
     }
     
-    public func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError> {
-        if case .success = enable_returnValue {
-            isOn_returnValue = true
-        }
-        return enable_returnValue
-    }
     
     public func disable() {
         isOn_returnValue = false

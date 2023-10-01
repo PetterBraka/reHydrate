@@ -59,7 +59,11 @@ public final class NotificationService: NotificationServiceType {
         
         Task { [weak self] in
             if let enabled, enabled == true, let frequency, let start, let stop {
-                _ = await self?.enable(withFrequency: frequency, start: start, stop: stop)
+                await self?.enable(
+                    withFrequency: frequency,
+                    startTime: start,
+                    stopTime: stop
+                )
             } else {
                 self?.disable()
             }
@@ -67,15 +71,23 @@ public final class NotificationService: NotificationServiceType {
         }
     }
     
+    @discardableResult
     public func enable(
         withFrequency frequency: Int,
-        start: Date,
-        stop: Date
+        startTime: String,
+        stopTime: String
     ) async -> Result<Void, NotificationError> {
         guard frequency >= minAllowedFrequency
         else { return .failure(.frequencyTooLow) }
         
-        storePreferences(enabled: true, frequency: frequency, start: start, stop: stop)
+        guard let start = Date(time: startTime),
+              let stop = Date(time: stopTime)
+        else { return .failure(.invalidDate) }
+        
+        storePreferences(enabled: true,
+                         frequency: frequency,
+                         start: start,
+                         stop: stop)
         
         do {
             try await checkAuthorizationStatus()
@@ -83,7 +95,9 @@ public final class NotificationService: NotificationServiceType {
             return .failure(.unauthorized)
         }
         
-        await addNotifications(startDate: start, stopDate: stop, frequency: frequency)
+        await addNotifications(startDate: start,
+                               stopDate: stop,
+                               frequency: frequency)
         return .success(Void())
     }
     
@@ -134,7 +148,9 @@ private extension NotificationService {
 }
 
 private extension NotificationService {
-    func getNextDate(from startDate: Date, using frequency: Int, stopDate: Date) -> Date? {
+    func getNextDate(from startDate: Date, 
+                     using frequency: Int,
+                     stopDate: Date) -> Date? {
         let calendar = Calendar.current
         
         let stopHour = calendar.component(.hour, from: stopDate)
