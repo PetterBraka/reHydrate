@@ -60,6 +60,13 @@
         "identifier" : "UserPreferenceServiceTests",
         "name" : "UserPreferenceServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NotificationServiceTests",
+        "name" : "NotificationServiceTests"
+      }
     }
   ],
   "version" : 1
