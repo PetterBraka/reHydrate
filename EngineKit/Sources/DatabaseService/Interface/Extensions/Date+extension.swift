@@ -47,6 +47,9 @@ public extension Date {
         return calendar.isDate(self, inSameDayAs: date)
     }
     
+    /// - Parameters:
+    ///   - date: "dd/MM/yyyy"
+    ///   - time: "HH:mm:ss"
     init?(date: String, time: String) {
         let dateAndTime = "\(date) \(time)"
         guard let date = dbToDateFormatter.date(from: dateAndTime)
