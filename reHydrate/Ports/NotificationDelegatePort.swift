@@ -9,7 +9,7 @@
 import NotificationServiceInterface
 import UserNotifications
 
-final class NotificationDelegatePort: NSObject, UNUserNotificationCenterDelegate {
+final class NotificationDelegatePort: NSObject {
     public typealias Engine = (
         HasNotificationService
     )
@@ -19,7 +19,9 @@ final class NotificationDelegatePort: NSObject, UNUserNotificationCenterDelegate
     init(engine: Engine) {
         self.engine = engine
     }
-    
+}
+
+extension NotificationDelegatePort: UNUserNotificationCenterDelegate {
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
