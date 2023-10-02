@@ -147,6 +147,8 @@
 		A19F28BC2A80D44E0005717A /* Blackbird in Frameworks */ = {isa = PBXBuildFile; productRef = A19F28BB2A80D44E0005717A /* Blackbird */; };
 		A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111802F2AC36A86007E4585 /* Reminder.swift */; };
 		A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180302AC36A86007E4585 /* Celebration.swift */; };
+		A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */; };
+		A1EABF252ACB63BC00591981 /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -321,6 +323,8 @@
 		A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconSelectionView.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
 		A1AF32D32A346D6F00FD0C7C /* PresentationInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationInterface; sourceTree = "<group>"; };
+		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
+		A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -568,7 +572,9 @@
 		A11180312AC3767F007E4585 /* Ports */ = {
 			isa = PBXGroup;
 			children = (
+				A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */,
 				A11180322AC3768D007E4585 /* NotificationCenterPort.swift */,
+				A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */,
 			);
 			path = Ports;
 			sourceTree = "<group>";
@@ -859,12 +865,14 @@
 				A183BCED2A3122D100D42033 /* Color.swift in Sources */,
 				A183BCEB2A3122CB00D42033 /* Images.swift in Sources */,
 				A126D2552A76684E00A296BA /* StepperView.swift in Sources */,
+				A1EABF252ACB63BC00591981 /* Notification+Extensions.swift in Sources */,
 				A18503002986BC0300C878DE /* AppIconSelectionView.swift in Sources */,
 				A13258BB2A6433EB00B3D5F5 /* IconHelper.swift in Sources */,
 				332315F42742B3430039EE23 /* AppView.swift in Sources */,
 				A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */,
 				330C23D627665D4C00293092 /* AppDelegate.swift in Sources */,
 				A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */,
+				A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */,
 				33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
 				A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */,
