@@ -6,14 +6,16 @@
 //
 
 import Foundation
-import NotificationServiceInterface
-import UserPreferenceServiceInterface
 import LoggingService
+import UserPreferenceServiceInterface
+import DrinkServiceInterface
+import NotificationServiceInterface
 
 public final class NotificationService: NotificationServiceType {
     public typealias Engine = (
         HasLoggingService &
-        HasUserPreferenceService
+        HasUserPreferenceService &
+        HasDrinksService
     )
     
     public private(set) var notificationCenter: NotificationCenterType
@@ -79,6 +81,8 @@ public final class NotificationService: NotificationServiceType {
             return .failure(.unauthorized)
         }
         
+        setNotificationActions()
+        
         await addNotifications(startDate: start, stopDate: stop, frequency: frequency)
         return .success(Void())
     }
@@ -102,7 +106,6 @@ public final class NotificationService: NotificationServiceType {
         )
     }
 }
-
 
 private extension NotificationService {
     func checkAuthorizationStatus() async throws {
@@ -186,6 +189,7 @@ private extension NotificationService {
         var date = startDate
         var shouldContinue = true
         let pendingRequests = await notificationCenter.pendingNotificationRequests()
+        
         while shouldContinue {
             do {
                 let triggerComponents = Calendar.current
@@ -235,5 +239,26 @@ private extension NotificationService {
         try await notificationCenter.add(.init(identifier: id,
                                                content: content,
                                                trigger: trigger))
+    }
+    
+    func setNotificationActions() {
+        do {
+            let drinks = try engine.drinksService.getSavedDrinks()
+            let remindersActions = drinks.map {
+                NotificationAction(
+                    identifier: $0.container.rawValue,
+                    title: "\($0.container.rawValue) (\($0.size.formatted(.number))"
+                )
+            }
+            let remindersCategory = NotificationCategory(
+                identifier: reminderCategory,
+                actions: remindersActions,
+                intentIdentifiers: remindersActions.map(\.identifier)
+            )
+            
+            notificationCenter.setNotificationCategories([remindersCategory])
+        } catch {
+            engine.logger.error("Couldn't set notification categories", error: error)
+        }
     }
 }

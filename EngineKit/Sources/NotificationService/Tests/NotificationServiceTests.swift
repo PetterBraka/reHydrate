@@ -10,6 +10,7 @@ import EngineMocks
 import LoggingService
 import UserPreferenceServiceMocks
 import UserPreferenceServiceInterface
+import DrinkServiceInterface
 import NotificationServiceMocks
 import NotificationServiceInterface
 @testable import NotificationService
@@ -17,7 +18,8 @@ import NotificationServiceInterface
 final class NotificationServiceTests: XCTestCase {
     typealias Engine = (
         HasLoggingService &
-        HasUserPreferenceService
+        HasUserPreferenceService &
+        HasDrinksService
     )
     
     var engine: Engine = EngineMocks()
@@ -71,7 +73,8 @@ final class NotificationServiceTests: XCTestCase {
         
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .requestAuthorization,
-            .pendingNotificationRequests, 
+            .setNotificationCategories,
+            .pendingNotificationRequests,
             .add,
             .add,
             .add
@@ -92,6 +95,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .requestAuthorization,
+            .setNotificationCategories,
             .pendingNotificationRequests,
             .add, .add, .add
         ])
@@ -113,6 +117,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .requestAuthorization,
+            .setNotificationCategories,
             .pendingNotificationRequests
         ])
         
@@ -170,10 +175,12 @@ final class NotificationServiceTests: XCTestCase {
         
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .requestAuthorization,
-            .pendingNotificationRequests, 
+            .setNotificationCategories,
+            .pendingNotificationRequests,
             .add,
             .add,
             .add,
+            .setNotificationCategories,
             .pendingNotificationRequests
         ])
         
@@ -192,7 +199,8 @@ final class NotificationServiceTests: XCTestCase {
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
-            .pendingNotificationRequests, 
+            .setNotificationCategories,
+            .pendingNotificationRequests,
             .add,
             .add,
             .add
@@ -213,6 +221,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .requestAuthorization,
+            .setNotificationCategories,
             .pendingNotificationRequests, .add
         ])
         
