@@ -45,7 +45,7 @@ public final class Engine {
     
     private let reminders: [NotificationMessage]
     private let celebrations: [NotificationMessage]
-    private let notificationCenter: NotificationCenterType
+    public let notificationCenter: NotificationCenterType
     
     public var logger: LoggingService
     public var database: DatabaseType
