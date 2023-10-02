@@ -7,4 +7,5 @@
 
 public protocol HasNotificationService {
     var notificationService: NotificationServiceType { get set }
+    var notificationDelegate: NotificationDelegate { get set }
 }

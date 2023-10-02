@@ -52,6 +52,7 @@ public final class Engine {
     public var dayManager: DayManagerType
     public var consumptionManager: ConsumptionManagerType
     public var userPreferenceService: UserPreferenceServiceType
+    
     public lazy var notificationService: NotificationServiceType = NotificationService(
         engine: self,
         reminders: reminders,
@@ -59,7 +60,7 @@ public final class Engine {
         notificationCenter: notificationCenter,
         didComplete: nil
     )
-    
+    public lazy var notificationDelegate: NotificationDelegate = NotificationDelegateService(engine: self)
     public lazy var drinksService: DrinkServiceType = DrinkService()
     public lazy var languageService: LanguageServiceType = LanguageService(engine: self)
     public lazy var dayService: DayServiceType = DayService(engine: self)
