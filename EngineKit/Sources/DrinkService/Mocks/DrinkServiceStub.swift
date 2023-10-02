@@ -27,20 +27,37 @@ public final class DrinkServiceStub: DrinkServiceStubbing {
 }
 
 extension DrinkServiceStub: DrinkServiceType {
-    public func addDrink(size: Double, container: Container) -> Result<Drink, DrinkDBError> {
-        addDrink_returnValue
+    public func addDrink(size: Double, container: Container) throws -> Drink {
+        switch addDrink_returnValue {
+        case let .success(drink):
+            return drink
+        case let .failure(error):
+            throw error
+        }
     }
     
-    public func editDrink(editedDrink newDrink: Drink) -> Result<Drink, DrinkDBError> {
-        editDrink_returnValue
+    public func editDrink(editedDrink newDrink: Drink) throws -> Drink {
+        switch editDrink_returnValue {
+        case let .success(drink):
+            return drink
+        case let .failure(error):
+            throw error
+        }
     }
     
-    public func removeDrink(withId id: UUID) -> Result<Void, DrinkDBError> {
-        removeDrink_returnValue
+    public func removeDrink(withId id: UUID) throws {
+        if case .failure(let error) = removeDrink_returnValue {
+            throw error
+        }
     }
     
-    public func getSavedDrinks() -> Result<[Drink], DrinkDBError> {
-        getSavedDrink_returnValue
+    public func getSavedDrinks() throws -> [Drink] {
+        switch getSavedDrink_returnValue  {
+        case let .success(drink):
+            return drink
+        case let .failure(error):
+            throw error
+        }
     }
     
     public func resetToDefault() -> [Drink] {

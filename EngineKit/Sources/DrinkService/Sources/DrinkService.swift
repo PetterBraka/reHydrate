@@ -13,32 +13,31 @@ public final class DrinkService: DrinkServiceType {
     
     public init() {}
     
-    public func addDrink(size: Double, container: Container) -> Result<Drink, DrinkDBError> {
+    public func addDrink(size: Double, container: Container) -> Drink {
         let newDrink = Drink(id: UUID(), size: size, container: container)
         db.append(newDrink)
-        return .success(newDrink)
+        return newDrink
     }
     
-    public func editDrink(editedDrink newDrink: Drink) -> Result<Drink, DrinkDBError> {
+    public func editDrink(editedDrink newDrink: Drink) throws -> Drink {
         if let index = db.firstIndex(where: { $0.id == newDrink.id }) {
             db[index] = newDrink
-            return .success(db[index])
+            return db[index]
         } else {
-            return .failure(.itemNotFound)
+            throw DrinkDBError.itemNotFound
         }
     }
     
-    public func removeDrink(withId id: UUID) -> Result<Void, DrinkDBError> {
+    public func removeDrink(withId id: UUID) throws {
         if let index = db.firstIndex(where: { $0.id == id }) {
             db.remove(at: index)
-            return .success(Void())
         } else {
-            return .failure(.itemNotFound)
+            throw DrinkDBError.itemNotFound
         }
     }
     
-    public func getSavedDrinks() -> Result<[Drink], DrinkDBError> {
-        .success(db)
+    public func getSavedDrinks() -> [Drink] {
+        db
     }
     
     public func resetToDefault() -> [Drink] {

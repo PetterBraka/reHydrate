@@ -130,12 +130,12 @@ extension Screen.Settings {
 
 extension Screen.Settings.Presenter {
     private func getDrinks() -> [ViewModel.Drink] {
-        let result = engine.drinksService.getSavedDrinks()
-        if case .success(let foundDrinks) = result, !foundDrinks.isEmpty {
-            return foundDrinks.map { .init(from: $0) }
+        if let drinks = try? engine.drinksService.getSavedDrinks(),
+            !drinks.isEmpty {
+            return drinks.map { .init(from: $0) }
         } else {
-            let foundDrinks = engine.drinksService.resetToDefault()
-            return foundDrinks.map { .init(from: $0) }
+            let drinks = engine.drinksService.resetToDefault()
+            return drinks.map { .init(from: $0) }
         }
     }
     

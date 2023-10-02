@@ -122,10 +122,10 @@ extension Screen.Home.Presenter {
 
 extension Screen.Home.Presenter {
     private func getDrinks() -> [Drink] {
-        let result = engine.drinksService.getSavedDrinks()
-        if case .success(let foundDrinks) = result, !foundDrinks.isEmpty {
-            return foundDrinks
-        } else {
+        if let drinks = try? engine.drinksService.getSavedDrinks(),
+           !drinks.isEmpty {
+            return drinks
+        } else  {
             return engine.drinksService.resetToDefault()
         }
     }
