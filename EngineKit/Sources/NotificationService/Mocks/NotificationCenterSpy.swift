@@ -1,12 +1,11 @@
 //
-//  File.swift
+//  NotificationCenterSpy.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 26/09/2023.
 //
 
 import Foundation
-import UserNotifications
 import NotificationServiceInterface
 
 public final class NotificationCenterSpy {
@@ -33,27 +32,27 @@ public final class NotificationCenterSpy {
 }
 
 extension NotificationCenterSpy: NotificationCenterType {
-    public func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
+    public func requestAuthorization() async throws -> Bool {
         methodLog.append(.requestAuthorization)
-        return try await realObject.requestAuthorization(options: options)
+        return try await realObject.requestAuthorization()
     }
     
-    public func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+    public func setNotificationCategories(_ categories: Set<NotificationCategory>) {
         methodLog.append(.setNotificationCategories)
         realObject.setNotificationCategories(categories)
     }
     
-    public func notificationCategories() async -> Set<UNNotificationCategory> {
+    public func notificationCategories() async -> Set<NotificationCategory> {
         methodLog.append(.notificationCategories)
         return await realObject.notificationCategories()
     }
     
-    public func add(_ request: UNNotificationRequest) async throws {
+    public func add(_ request: NotificationRequest) async throws {
         methodLog.append(.add)
         try await realObject.add(request)
     }
     
-    public func pendingNotificationRequests() async -> [UNNotificationRequest] {
+    public func pendingNotificationRequests() async -> [NotificationRequest] {
         methodLog.append(.pendingNotificationRequests)
         return await realObject.pendingNotificationRequests()
     }
@@ -68,7 +67,7 @@ extension NotificationCenterSpy: NotificationCenterType {
         realObject.removeAllPendingNotificationRequests()
     }
     
-    public func deliveredNotifications() async -> [UNNotification] {
+    public func deliveredNotifications() async -> [DeliveredNotification] {
         methodLog.append(.deliveredNotifications)
         return await realObject.deliveredNotifications()
     }

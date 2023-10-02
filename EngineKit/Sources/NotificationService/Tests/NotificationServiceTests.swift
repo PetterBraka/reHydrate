@@ -13,7 +13,6 @@ import UserPreferenceServiceInterface
 import NotificationServiceMocks
 import NotificationServiceInterface
 @testable import NotificationService
-import UserNotifications
 
 final class NotificationServiceTests: XCTestCase {
     typealias Engine = (
@@ -46,8 +45,7 @@ final class NotificationServiceTests: XCTestCase {
             engine: engine,
             reminders: reminders,
             celebrations: celebrations,
-            notificationCenter: notificationCenter.spy,
-            notificationOptions: .alert
+            notificationCenter: notificationCenter.spy
         ) {
             completionExpectation.fulfill()
         }
@@ -293,7 +291,7 @@ private extension NotificationServiceTests {
         }
     }
     
-    func assertNotificationTimes(givenRequests: [UNNotificationRequest],
+    func assertNotificationTimes(givenRequests: [NotificationRequest],
                                  expectedTimes: [String],
                                  file: StaticString = #file,
                                  line: UInt = #line) {

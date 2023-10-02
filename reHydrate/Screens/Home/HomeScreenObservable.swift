@@ -7,10 +7,10 @@
 //
 
 import Foundation
+import UserNotifications
 import HomePresentationInterface
 import PresentationKit
 import EngineKit
-import UserNotifications
 
 final class HomeScreenObservable: ObservableObject, HomeSceneType {
     private let presenter: HomePresenterType
@@ -43,8 +43,7 @@ extension HomeScreenObservable {
     static let mock = HomeScreenObservable(
         presenter: Screen.Home.Presenter(
             engine: Engine(reminders: [], celebrations: [],
-                           notificationCenter: UNUserNotificationCenter.current(),
-                           notificationOptions: .alert),
+                           notificationCenter: UNUserNotificationCenter.current()),
             router: Router())
     )
 }

@@ -5,9 +5,10 @@
 //  Created by Petter vang Brakalsvålet on 01/10/2023.
 //
 
-import UserNotifications
+import Foundation
+import NotificationServiceInterface
 
-public extension Array where Element == UNNotificationRequest {
+public extension Array where Element == NotificationRequest {
     func containsRequest(
         at dateComponents: DateComponents,
         withAccuracy minutes: Int,

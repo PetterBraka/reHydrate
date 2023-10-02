@@ -1,12 +1,11 @@
 //
-//  File.swift
+//  NotificationService.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 21/09/2023.
 //
 
 import Foundation
-import UserNotifications
 import NotificationServiceInterface
 import UserPreferenceServiceInterface
 import LoggingService
@@ -18,7 +17,6 @@ public final class NotificationService: NotificationServiceType {
     )
     
     public private(set) var notificationCenter: NotificationCenterType
-    private let notificationOptions: UNAuthorizationOptions
     
     private let reminders: [NotificationMessage]
     private let reminderCategory = "com.rehydrate.reminder"
@@ -41,13 +39,11 @@ public final class NotificationService: NotificationServiceType {
                 reminders: [NotificationMessage],
                 celebrations: [NotificationMessage],
                 notificationCenter: NotificationCenterType,
-                notificationOptions: UNAuthorizationOptions,
                 didComplete: (() -> Void)?) {
         self.engine = engine
         self.reminders = reminders
         self.celebrations = celebrations
         self.notificationCenter = notificationCenter
-        self.notificationOptions = notificationOptions
         checkUserPreference(complete: didComplete)
     }
     
@@ -113,7 +109,7 @@ private extension NotificationService {
         guard !isAuthorized 
         else { return }
         do {
-            let granted = try await notificationCenter.requestAuthorization(options: notificationOptions)
+            let granted = try await notificationCenter.requestAuthorization()
             isAuthorized = granted
             
             if granted == false {
@@ -223,16 +219,17 @@ private extension NotificationService {
         guard let message = reminders.randomElement() ?? reminders.first
         else { throw NotificationError.missingReminders }
         
-        let content = UNMutableNotificationContent()
-        content.title = message.title
-        content.body = message.body
-        content.sound = .default
-        content.attachments = []
-        content.badge = nil
-        content.categoryIdentifier = reminderCategory
+        let content = NotificationContent(
+            title: message.title,
+            subtitle: "",
+            body: message.body,
+            categoryIdentifier: reminderCategory,
+            userInfo: [:]
+        )
         
-        let trigger = UNCalendarNotificationTrigger(
-            dateMatching: dateComponents, repeats: true
+        let trigger = NotificationTrigger(
+            repeats: true,
+            dateComponents: dateComponents
         )
         
         try await notificationCenter.add(.init(identifier: id,

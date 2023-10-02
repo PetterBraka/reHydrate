@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UserNotifications
 
 public protocol NotificationServiceType {
     var minimumAllowedFrequency: Int { get }

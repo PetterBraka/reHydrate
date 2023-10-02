@@ -17,8 +17,7 @@ public final class SceneFactory: ObservableObject {
     public let engine = Engine(
         reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
         celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
-        notificationCenter: UNUserNotificationCenter.current(),
-        notificationOptions: [.alert, .sound]
+        notificationCenter: UNUserNotificationCenter.current()
     )
     public let router = Router()
     

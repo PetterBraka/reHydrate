@@ -6,30 +6,29 @@
 //
 
 import Foundation
-import UserNotifications
 import NotificationServiceInterface
 
 public protocol NotificationCenterStubbing {
     var requestAuthorization: Result<Bool, Error> { get }
-    var notificationCategories: Set<UNNotificationCategory> { get }
-    var pendingRequests: [UNNotificationRequest] { get }
+    var notificationCategories: Set<NotificationCategory> { get }
+    var pendingRequests: [NotificationRequest] { get }
     var addRequest: Result<Void, Error> { get }
-    var deliveredNotifications: [UNNotification] { get}
+    var deliveredNotifications: [DeliveredNotification] { get}
     var badgeCount: Int { get }
 }
 
 public final class NotificationCenterStub: NotificationCenterStubbing {
     public var requestAuthorization: Result<Bool, Error> = .success(true)
-    public var notificationCategories: Set<UNNotificationCategory> = .init()
-    public var pendingRequests: [UNNotificationRequest] = []
+    public var notificationCategories: Set<NotificationCategory> = .init()
+    public var pendingRequests: [NotificationRequest] = []
     public var addRequest: Result<Void, Error> = .success(Void())
-    public var deliveredNotifications: [UNNotification] = []
+    public var deliveredNotifications: [DeliveredNotification] = []
     public var badgeCount: Int = 0
     
     public init() {}
 }
 extension NotificationCenterStub: NotificationCenterType {
-    public func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
+    public func requestAuthorization() async throws -> Bool {
         switch requestAuthorization {
         case .success(let success):
             return success
@@ -38,17 +37,17 @@ extension NotificationCenterStub: NotificationCenterType {
         }
     }
     
-    public func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+    public func setNotificationCategories(_ categories: Set<NotificationCategory>) {
         for category in categories {
             notificationCategories.insert(category)
         }
     }
     
-    public func notificationCategories() async -> Set<UNNotificationCategory> {
+    public func notificationCategories() async -> Set<NotificationCategory> {
         notificationCategories
     }
     
-    public func add(_ request: UNNotificationRequest) async throws {
+    public func add(_ request: NotificationRequest) async throws {
         switch addRequest {
         case .success:
             break
@@ -58,7 +57,7 @@ extension NotificationCenterStub: NotificationCenterType {
         pendingRequests.append(request)
     }
     
-    public func pendingNotificationRequests() async -> [UNNotificationRequest] {
+    public func pendingNotificationRequests() async -> [NotificationRequest] {
         pendingRequests
     }
     
@@ -72,7 +71,7 @@ extension NotificationCenterStub: NotificationCenterType {
         pendingRequests.removeAll()
     }
     
-    public func deliveredNotifications() async -> [UNNotification] {
+    public func deliveredNotifications() async -> [DeliveredNotification] {
         deliveredNotifications
     }
     
