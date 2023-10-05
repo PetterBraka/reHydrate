@@ -180,7 +180,6 @@ final class NotificationServiceTests: XCTestCase {
             .add,
             .add,
             .add,
-            .setNotificationCategories,
             .pendingNotificationRequests
         ])
         
