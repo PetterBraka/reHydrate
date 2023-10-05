@@ -11,7 +11,7 @@ import UserNotifications
 
 extension UNUserNotificationCenter: NotificationCenterType {
     public func requestAuthorization() async throws -> Bool {
-        try await requestAuthorization(options: [UNAuthorizationOptions.badge, .sound])
+        try await requestAuthorization(options: [UNAuthorizationOptions.badge, .sound, .alert])
     }
     
     public func setNotificationCategories(_ categories: Set<NotificationCategory>) {

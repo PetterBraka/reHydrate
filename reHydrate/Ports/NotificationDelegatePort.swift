@@ -22,6 +22,7 @@ final class NotificationDelegatePort: NSObject {
 }
 
 extension NotificationDelegatePort: UNUserNotificationCenterDelegate {
+    @MainActor
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
@@ -31,6 +32,7 @@ extension NotificationDelegatePort: UNUserNotificationCenterDelegate {
         )
     }
     
+    @MainActor
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
@@ -41,6 +43,7 @@ extension NotificationDelegatePort: UNUserNotificationCenterDelegate {
         return [.banner, .list, .sound]
     }
     
+    @MainActor
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         openSettingsFor notification: UNNotification?

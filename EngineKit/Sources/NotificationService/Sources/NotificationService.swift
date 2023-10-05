@@ -81,8 +81,6 @@ public final class NotificationService: NotificationServiceType {
             return .failure(.unauthorized)
         }
         
-        setNotificationActions()
-        
         await addNotifications(startDate: start, stopDate: stop, frequency: frequency)
         return .success(Void())
     }
@@ -118,6 +116,8 @@ private extension NotificationService {
             if granted == false {
                 throw NotificationError.unauthorized
             }
+            
+            setNotificationActions()
         } catch {
             throw NotificationError.unauthorized
         }
@@ -191,10 +191,10 @@ private extension NotificationService {
         let pendingRequests = await notificationCenter.pendingNotificationRequests()
         
         while shouldContinue {
+            let triggerComponents = Calendar.current
+                .dateComponents(calendarComponents, from: date)
+            
             do {
-                let triggerComponents = Calendar.current
-                    .dateComponents(calendarComponents, from: date)
-                
                 guard !pendingRequests.containsRequest(
                     at: triggerComponents,
                     withAccuracy: minimumAllowedFrequency,
@@ -204,7 +204,10 @@ private extension NotificationService {
                 
                 try await addNotification(for: triggerComponents)
             } catch {
-                engine.logger.error("Couldn't set notifications", error: error)
+                if let notificationError = error as? NotificationError,
+                   notificationError == .alreadySet(at: triggerComponents) {} else {
+                    engine.logger.error("Couldn't set notifications", error: error)
+                }
             }
             guard let triggerDate = getNextDate(from: date,
                                                 using: frequency,
@@ -247,7 +250,7 @@ private extension NotificationService {
             let remindersActions = drinks.map {
                 NotificationAction(
                     identifier: $0.container.rawValue,
-                    title: "\($0.container.rawValue) (\($0.size.formatted(.number))"
+                    title: "\($0.container.rawValue) (\($0.size.formatted(.number)))"
                 )
             }
             let remindersCategory = NotificationCategory(
