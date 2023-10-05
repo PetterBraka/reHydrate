@@ -17,7 +17,7 @@ public final class ContainerManager: ContainerManagerType {
     }
     
     @discardableResult
-    public func createEntry(of size: Int) async throws -> ContainerModel {
+    public func create(size: Int) async throws -> ContainerModel {
         let newEntry = ContainerModel(
             id: UUID().uuidString,
             size: size
@@ -26,15 +26,21 @@ public final class ContainerManager: ContainerManagerType {
         return newEntry
     }
     
-    public func update(_ entry: ContainerModel, newSize: Int) async throws -> ContainerModel {
-        var entry = entry
-        entry.size = newSize
-        try await database.write(entry)
-        return entry
+    public func update(oldSize: Int, newSize: Int) async throws -> ContainerModel {
+        guard var container = try await database.read(
+            matching: .like(\ContainerModel.$size, "\(oldSize)"),
+            orderBy: .ascending(\.$size),
+            limit: 1
+        ).first else {
+            throw DatabaseError.noElementFound
+        }
+        container.size = newSize
+        try await database.write(container)
+        return container
     }
     
-    public func delete(_ entry: ContainerModel) async throws {
-        try await database.delete(entry)
+    public func delete(size: Int) async throws {
+        try await database.delete(matching: .like(\ContainerModel.$size, "\(size)"))
     }
     
     public func fetchAll() async throws -> [ContainerModel] {

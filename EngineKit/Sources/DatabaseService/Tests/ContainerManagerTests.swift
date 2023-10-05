@@ -30,21 +30,37 @@ final class ContainerManagerTests: XCTestCase {
     func test_createContainer() async throws {
         let givenSize = 300
         
-        let newEntry = try await sut.createEntry(of: givenSize)
+        let newEntry = try await sut.create(size: givenSize)
         
         XCTAssertEqual(newEntry.size, givenSize)
         XCTAssertEqual(spy.methodLogNames, [.write])
     }
     
+    func test_updateContainer_withMissingData() async throws {
+        let givenSize = 500
+        do {
+            let container = try await sut.update(oldSize: givenSize, newSize: 800)
+            XCTFail("Didn't expect to find container \(container)")
+        } catch {
+            guard let dbError = error as? DatabaseError else {
+                XCTFail("Expected database error not \(error)")
+                return
+            }
+            XCTAssertEqual(dbError, .noElementFound)
+        }
+        
+        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
+    }
+    
     func test_updateContainer() async throws {
-        let givenContainer = ContainerModel(id: UUID().uuidString, size: 500)
+        let givenSize = 500
+        _ = try await sut.create(size: givenSize)
         
-        let updatedContainer = try await sut.update(givenContainer, newSize: 800)
+        let updatedContainer = try await sut.update(oldSize: givenSize, newSize: 800)
         
-        XCTAssertEqual(givenContainer.id, updatedContainer.id)
-        XCTAssertNotEqual(givenContainer.size, updatedContainer.size)
+        XCTAssertNotEqual(updatedContainer.size, givenSize)
         XCTAssertEqual(updatedContainer.size, 800)
-        XCTAssertEqual(spy.methodLogNames, [.write])
+        XCTAssertEqual(spy.methodLogNames, [.write, .readMatchingOrderByLimit, .write])
     }
     
     func test_fetchAll() async throws {
@@ -67,7 +83,7 @@ final class ContainerManagerTests: XCTestCase {
     func test_delete() async throws {
         let preLoadedEntries = try await preLoadXEntries(3)
         let randomEntry = try XCTUnwrap(preLoadedEntries.randomElement())
-        try await sut.delete(randomEntry)
+        try await sut.delete(size: randomEntry.size)
         let foundEntries = try await sut.fetchAll()
         
         XCTAssertTrue(preLoadedEntries.contains(randomEntry))
@@ -88,7 +104,7 @@ extension ContainerManagerTests {
         var preLoadedEntries = [ContainerModel]()
         for _ in min ... number {
             let givenSize = Int.random(in: 300 ... 1000)
-            let newEntry = try await sut.createEntry(of: givenSize)
+            let newEntry = try await sut.create(size: givenSize)
             preLoadedEntries.append(newEntry)
             XCTAssertEqual(newEntry.size, givenSize, file: file, line: line)
         }

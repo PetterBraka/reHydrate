@@ -27,6 +27,7 @@ public final class ContainerManagerStub: ContainerManagerStubbing {
     public var createEntry_returnError: Error?
     public var update_returnValue: ContainerModel = .default
     public var update_returnError: Error?
+    public var delete_returnError: Error?
     public var fetchAllAtDate_returnValue: [ContainerModel] = .default
     public var fetchAllAtDate_returnError: Error?
     public var fetchAll_returnValue: [ContainerModel] = .default
@@ -34,21 +35,25 @@ public final class ContainerManagerStub: ContainerManagerStubbing {
 }
 
 extension ContainerManagerStub: ContainerManagerType {
-    public func createEntry(of size: Int) async throws -> ContainerModel {
+    public func create(size: Int) async throws -> ContainerModel {
         if let createEntry_returnError {
             throw createEntry_returnError
         }
         return createEntry_returnValue
     }
     
-    public func update(_ entry: ContainerModel, newSize: Int) async throws -> ContainerModel {
+    public func update(oldSize: Int, newSize: Int) async throws -> ContainerModel {
         if let update_returnError {
             throw update_returnError
         }
         return update_returnValue
     }
-    
-    public func delete(_ entry: Entry) async throws {}
+
+    public func delete(size: Int) async throws {
+        if let delete_returnError {
+            throw delete_returnError
+        }
+    }
     
     public func fetchAll() async throws -> [ContainerModel] {
         if let fetchAll_returnError {

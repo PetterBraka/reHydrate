@@ -20,7 +20,3 @@ public protocol HasConsumptionManagerService {
 public protocol HasContainerManagerService {
     var containerManager: ContainerManagerType { get set }
 }
-
-public protocol HasDrinkManagerService {
-    var drinkManager: DrinkManagerType { get set }
-}

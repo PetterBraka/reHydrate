@@ -36,7 +36,7 @@ extension DrinkServiceStub: DrinkServiceType {
         }
     }
     
-    public func editDrink(editedDrink newDrink: Drink) throws -> Drink {
+    public func editDrink(oldDrink: Drink, newDrink: Drink) throws -> Drink {
         switch editDrink_returnValue {
         case let .success(drink):
             return drink
@@ -45,12 +45,11 @@ extension DrinkServiceStub: DrinkServiceType {
         }
     }
     
-    public func remove(container: String) async throws {
+    public func remove(_ drink: Drink) async throws {
         if case .failure(let error) = removeDrink_returnValue {
             throw error
         }
     }
-    
     
     public func getSavedDrinks() throws -> [Drink] {
         switch getSavedDrink_returnValue  {
@@ -64,6 +63,4 @@ extension DrinkServiceStub: DrinkServiceType {
     public func resetToDefault() -> [Drink] {
         resetToDefault_returnValue
     }
-    
-    
 }

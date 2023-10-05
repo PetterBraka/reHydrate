@@ -18,7 +18,7 @@ public protocol HasService:
     HasLoggingService,
     HasDatabaseService,
     HasDayManagerService,
-    HasDrinkManagerService,
+    HasContainerManagerService,
     HasConsumptionManagerService,
     HasDrinksService,
     HasDayService,

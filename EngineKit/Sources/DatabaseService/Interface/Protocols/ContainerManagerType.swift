@@ -6,13 +6,10 @@
 //
 
 public protocol ContainerManagerType {
-    typealias Entry = ContainerModel
+    func create(size: Int) async throws -> ContainerModel
     
-    @discardableResult
-    func createEntry(of size: Int) async throws -> Entry
+    func update(oldSize: Int, newSize: Int) async throws -> ContainerModel
+    func delete(size: Int) async throws
     
-    func update(_ entry: Entry, newSize: Int) async throws -> Entry
-    func delete(_ entry: Entry) async throws
-    
-    func fetchAll() async throws -> [Entry]
+    func fetchAll() async throws -> [ContainerModel]
 }

@@ -14,7 +14,7 @@ import UnitServiceInterface
 public final class DrinkService: DrinkServiceType {
     public typealias Engine = (
         HasLoggingService &
-        HasDrinkManagerService &
+        HasContainerManagerService &
         HasUnitService
     )
     
@@ -25,37 +25,42 @@ public final class DrinkService: DrinkServiceType {
     }
     
     public func addDrink(size: Double, container: Container) async throws -> Drink {
-        let newDrink = try await engine.drinkManager.createNewDrink(
-            size: size, container: container.rawValue
-        )
-        guard let newDrink = Drink(from: newDrink) else {
-            let error = DrinkDBError.creatingDrink
-            engine.logger.error("Couldn't map new drink \(newDrink)",error: error)
-            throw error
-        }
-        return newDrink
+        let size: Int = Int(size)
+        let newDrink = try await engine.containerManager.create(size: size)
+        return Drink(from: newDrink, container: container)
     }
     
-    public func editDrink(editedDrink newDrink: Drink) async throws -> Drink {
-        let updatedDrink = try await engine.drinkManager.edit(
-            size: newDrink.size,
-            of: newDrink.container.rawValue
+    public func editDrink(oldDrink: Drink, newDrink: Drink) async throws -> Drink {
+        let oldSize = Int(oldDrink.size)
+        let newSize = Int(newDrink.size)
+        let updatedDrink = try await engine.containerManager.update(
+            oldSize: oldSize,
+            newSize: newSize
         )
-        guard let updatedDrink = Drink(from: updatedDrink) else {
-            let error = DrinkDBError.notFound
-            engine.logger.error("Couldn't map edited drink \(newDrink)",error: error)
-            throw error
-        }
-        return updatedDrink
+        return Drink(from: updatedDrink, container: newDrink.container)
     }
     
-    public func remove(container: String) async throws {
-        try await engine.drinkManager.deleteDrink(container: container)
+    public func remove(_ drink: Drink) async throws {
+        let size = Int(drink.size)
+        try await engine.containerManager.delete(size: size)
     }
     
     public func getSavedDrinks() async throws -> [Drink] {
-        let drinks = try await engine.drinkManager.fetchAll()
-        return drinks.compactMap { .init(from: $0) }
+        let foundDrinks = try await engine.containerManager.fetchAll()
+        var drinks: [Drink] = []
+        for drink in foundDrinks {
+            let index = foundDrinks.firstIndex(where: { $0.size == drink.size })
+            let container: Container
+            if index == 0 {
+                container = .small
+            } else if index == 1 {
+                container = .medium
+            } else {
+                container = .large
+            }
+            drinks.append(.init(from: drink, container: container))
+        }
+        return drinks
     }
     
     public func resetToDefault() async -> [Drink] {
@@ -68,11 +73,11 @@ public final class DrinkService: DrinkServiceType {
         
         for drink in defaultDrinks {
             do {
-                _ = try await engine.drinkManager.createNewDrink(
-                    size: drink.size, container: drink.container.rawValue
-                )
+                let size = Int(drink.size)
+                _ = try await engine.containerManager.create(size: size)
             } catch {
-                engine.logger.error("Couldn't store default drink \(drink)", error: error)
+                engine.logger.error("Couldn't store default drink \(drink)", 
+                                    error: error)
                 continue
             }
         }
@@ -81,13 +86,10 @@ public final class DrinkService: DrinkServiceType {
 }
 
 extension Drink {
-    init?(from drink: DrinkModel) {
-        guard let container = Container(rawValue: drink.container) else {
-            return nil
-        }
+    init(from drink: ContainerModel, container: Container) {
         self.init(
             id: drink.id,
-            size: drink.size,
+            size: Double(drink.size),
             container: container
         )
     }

@@ -35,7 +35,7 @@ public final class Engine {
         logger = LoggingService(subsystem: project)
         database = Database(logger: logger)
         dayManager = DayManager(database: database)
-        drinkManager = DrinkManager(database: database)
+        containerManager = ContainerManager(database: database)
         consumptionManager = ConsumptionManager(database: database)
         userPreferenceService = UserPreferenceService(defaults: sharedDefault)
         
@@ -51,7 +51,7 @@ public final class Engine {
     public var logger: LoggingService
     public var database: DatabaseType
     public var dayManager: DayManagerType
-    public var drinkManager: DrinkManagerType
+    public var containerManager: ContainerManagerType
     public var consumptionManager: ConsumptionManagerType
     public var userPreferenceService: UserPreferenceServiceType
     
