@@ -13,7 +13,7 @@ public final class NotificationDelegateStub: NotificationDelegateStubbing {
     public init() {}
 }
 
-extension NotificationDelegateStub: NotificationDelegate {
+extension NotificationDelegateStub: NotificationDelegateType {
     public func userNotificationCenter(_ center: NotificationCenterType, didReceive response: NotificationResponse) async {}
     
     public func userNotificationCenter(_ center: NotificationCenterType, willPresent: DeliveredNotification) async {}

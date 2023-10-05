@@ -1,12 +1,12 @@
 //
-//  File.swift
+//  NotificationDelegateType.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 02/10/2023.
 //
 
 import Foundation
-public protocol NotificationDelegate: AnyObject {
+public protocol NotificationDelegateType: AnyObject {
     func userNotificationCenter(
         _ center: NotificationCenterType,
         didReceive response: NotificationResponse

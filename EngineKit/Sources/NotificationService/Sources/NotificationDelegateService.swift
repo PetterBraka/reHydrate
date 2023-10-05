@@ -10,7 +10,7 @@ import DayServiceInterface
 import DrinkServiceInterface
 import NotificationServiceInterface
 
-public final class NotificationDelegateService: NotificationDelegate {
+public final class NotificationDelegateService: NotificationDelegateType {
     public typealias Engine = (
         HasLoggingService &
         HasDayService &
