@@ -21,8 +21,8 @@ public final class DayService: DayServiceType {
     private let engine: Engine
     
     private var today = Day(date: .now,
-                          consumed: 0,
-                          goal: 3)
+                            consumed: 0,
+                            goal: 3)
     
     public init(engine: Engine) {
         self.engine = engine

@@ -42,14 +42,14 @@ public final class NotificationDelegateService: NotificationDelegateType {
             let drinks = try engine.drinksService.getSavedDrinks()
             guard let drink = drinks.first(where: { $0.container.rawValue == actionId })
             else {
-                engine.logger.debug("No drink matching selected action")
+                engine.logger.debug("Unexpected action selected - \(actionId)")
                 return
             }
-            
+
             do {
                 _ = try await engine.dayService.add(drink: drink)
             } catch {
-                engine.logger.error("Couldn't add drink(\(drink) from notification", error: error)
+                engine.logger.error("Couldn't add drink(\(drink)) from notification", error: error)
             }
         } catch {
             engine.logger.critical("No drinks found", error: error)
