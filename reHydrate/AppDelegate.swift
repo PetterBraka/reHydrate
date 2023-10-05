@@ -12,13 +12,12 @@ import EngineKit
 class AppDelegate: NSObject, UIApplicationDelegate {
     public let sceneFactory = SceneFactory()
     var engine: Engine { sceneFactory.engine }
-    private lazy var notificationDelegate = NotificationDelegatePort(engine: engine)
     
     func application(
         _: UIApplication,
         didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil)
     -> Bool {
-        UNUserNotificationCenter.current().delegate = notificationDelegate
+        UNUserNotificationCenter.current().delegate = sceneFactory.notificationDelegate
         return true
     }
 }

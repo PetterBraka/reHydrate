@@ -14,14 +14,19 @@ import DrinkServiceInterface
 import UserNotifications
 
 public final class SceneFactory: ObservableObject {
-    public let engine = Engine(
-        reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
-        celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
-        notificationCenter: UNUserNotificationCenter.current()
-    )
+    public let engine: Engine
+    let notificationDelegate: NotificationDelegatePort
+    
     public let router = Router()
     
-    init() {}
+    init() {
+        engine = Engine(
+            reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
+            celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
+            notificationCenter: UNUserNotificationCenter.current()
+        )
+        notificationDelegate = NotificationDelegatePort(engine: engine)
+    }
     
     func makeHomeScreen() -> HomeScreen {
         let presenter = Screen.Home.Presenter(engine: engine,
