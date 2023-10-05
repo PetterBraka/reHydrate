@@ -117,7 +117,7 @@ private extension NotificationService {
                 throw NotificationError.unauthorized
             }
             
-            setNotificationActions()
+            await setNotificationActions()
         } catch {
             throw NotificationError.unauthorized
         }
@@ -244,9 +244,9 @@ private extension NotificationService {
                                                trigger: trigger))
     }
     
-    func setNotificationActions() {
+    func setNotificationActions() async {
         do {
-            let drinks = try engine.drinksService.getSavedDrinks()
+            let drinks = try await engine.drinksService.getSavedDrinks()
             let remindersActions = drinks.map {
                 NotificationAction(
                     identifier: $0.container.rawValue,

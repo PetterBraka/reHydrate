@@ -6,5 +6,6 @@
 //
 
 public enum DrinkDBError: Error {
-    case itemNotFound
+    case notFound
+    case creatingDrink
 }

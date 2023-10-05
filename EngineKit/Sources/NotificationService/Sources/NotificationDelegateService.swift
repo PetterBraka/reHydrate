@@ -39,7 +39,7 @@ public final class NotificationDelegateService: NotificationDelegateType {
     ) async {
         let actionId = response.actionIdentifier
         do {
-            let drinks = try engine.drinksService.getSavedDrinks()
+            let drinks = try await engine.drinksService.getSavedDrinks()
             guard let drink = drinks.first(where: { $0.container.rawValue == actionId })
             else {
                 engine.logger.debug("Unexpected action selected - \(actionId)")

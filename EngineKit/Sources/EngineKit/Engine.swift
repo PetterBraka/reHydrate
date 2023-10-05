@@ -63,7 +63,7 @@ public final class Engine {
         didComplete: nil
     )
     public lazy var notificationDelegate: NotificationDelegateType = NotificationDelegateService(engine: self)
-    public lazy var drinksService: DrinkServiceType = DrinkService()
+    public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)
     public lazy var languageService: LanguageServiceType = LanguageService(engine: self)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)

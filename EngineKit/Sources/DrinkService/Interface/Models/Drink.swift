@@ -8,12 +8,12 @@
 import Foundation
 
 public struct Drink: Identifiable {
-    public let id: UUID
+    public let id: String
     
     public let container: Container
     public var size: Double
     
-    public init(id: UUID,
+    public init(id: String,
                 size: Double,
                 container: Container) {
         self.id = id

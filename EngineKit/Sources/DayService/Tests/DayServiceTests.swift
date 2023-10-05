@@ -93,41 +93,41 @@ final class DayServiceTests: XCTestCase {
     func test_addDrink() async throws {
         unitService.convert_returnValue = 0.5
         dayManager.addConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3)
-        let result = try await sut.add(drink: .init(id: UUID(), size: 500, container: .medium))
+        let result = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
         XCTAssertEqual(result, 0.5)
     }
     
     func test_addDrink_multiple() async throws {
         unitService.convert_returnValue = 1.55
-        let _ = try await sut.add(drink: .init(id: UUID(), size: 500, container: .medium))
-        let _ = try await sut.add(drink: .init(id: UUID(), size: 750, container: .medium))
+        let _ = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
+        let _ = try await sut.add(drink: .init(id: "", size: 750, container: .medium))
         dayManager.addConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 1.55, goal: 3)
-        let result = try await sut.add(drink: .init(id: UUID(), size: 300, container: .medium))
+        let result = try await sut.add(drink: .init(id: "", size: 300, container: .medium))
         XCTAssertEqual(result, 1.55)
     }
     
     func test_removeDrink() async throws {
-        let result = try await sut.remove(drink: .init(id: UUID(), size: 500, container: .medium))
+        let result = try await sut.remove(drink: .init(id: "", size: 500, container: .medium))
         XCTAssertEqual(result, 0)
     }
     
     func test_removeDrink_removeLessThenAdded() async throws {
         unitService.convert_returnValue = 0.75
-        let _ = try await sut.add(drink: .init(id: UUID(), size: 500, container: .medium))
-        let _ = try await sut.add(drink: .init(id: UUID(), size: 750, container: .medium))
+        let _ = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
+        let _ = try await sut.add(drink: .init(id: "", size: 750, container: .medium))
         
         dayManager.removeConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 0.75, goal: 3)
-        let result = try await sut.remove(drink: .init(id: UUID(), size: 500, container: .medium))
+        let result = try await sut.remove(drink: .init(id: "", size: 500, container: .medium))
         XCTAssertEqual(result, 0.75)
     }
     
     func test_removeDrink_removeMoreThenAdded() async throws {
-        let _ = try await sut.add(drink: .init(id: UUID(), size: 500, container: .medium))
-        let _ = try await sut.add(drink: .init(id: UUID(), size: 750, container: .medium))
+        let _ = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
+        let _ = try await sut.add(drink: .init(id: "", size: 750, container: .medium))
         
-        let _ = try await sut.remove(drink: .init(id: UUID(), size: 500, container: .medium))
-        let _ = try await sut.remove(drink: .init(id: UUID(), size: 500, container: .medium))
-        let result = try await sut.remove(drink: .init(id: UUID(), size: 500, container: .medium))
+        let _ = try await sut.remove(drink: .init(id: "", size: 500, container: .medium))
+        let _ = try await sut.remove(drink: .init(id: "", size: 500, container: .medium))
+        let result = try await sut.remove(drink: .init(id: "", size: 500, container: .medium))
         XCTAssertEqual(result, 0)
     }
     

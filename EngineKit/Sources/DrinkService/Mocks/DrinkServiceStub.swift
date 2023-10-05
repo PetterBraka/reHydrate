@@ -45,11 +45,12 @@ extension DrinkServiceStub: DrinkServiceType {
         }
     }
     
-    public func removeDrink(withId id: UUID) throws {
+    public func remove(container: String) async throws {
         if case .failure(let error) = removeDrink_returnValue {
             throw error
         }
     }
+    
     
     public func getSavedDrinks() throws -> [Drink] {
         switch getSavedDrink_returnValue  {

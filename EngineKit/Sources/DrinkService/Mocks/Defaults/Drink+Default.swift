@@ -9,7 +9,7 @@ import Foundation
 import DrinkServiceInterface
 
 extension Drink {
-    static let `default` = Drink(id: UUID(), size: -999, container: .small)
+    static let `default` = Drink(id: UUID().uuidString, size: -999, container: .small)
 }
 
 extension Array where Element == Drink {

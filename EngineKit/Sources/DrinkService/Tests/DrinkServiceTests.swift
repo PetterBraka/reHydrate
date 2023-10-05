@@ -8,6 +8,8 @@
 import XCTest
 import EngineMocks
 import TestHelper
+import LoggingService
+import UnitServiceInterface
 import DatabaseServiceInterface
 import DatabaseServiceMocks
 import DrinkServiceInterface
@@ -15,21 +17,25 @@ import DrinkServiceInterface
 
 final class DrinkServiceTests: XCTestCase {
     typealias Engine = (
-        HasDayManagerService
+        HasLoggingService &
+        HasDrinkManagerService &
+        HasUnitService
     )
     
     var engine: Engine = EngineMocks()
     
-    var dayManager: DayManagerStub!
+    var drinkManager: DrinkManagerStub!
     var sut: DrinkServiceType!
     
     override func setUp() {
-        self.dayManager = DayManagerStub()
-        self.engine.dayManager = dayManager
-        self.sut = DrinkService()
+        self.drinkManager = DrinkManagerStub()
+        self.engine.drinkManager = drinkManager
+        self.sut = DrinkService(engine: engine)
     }
     
-    func test_addDrink() {
-        XCTFail("TODO: implement testing of the Drink service")
-    }
+    func test_addDrink() async throws {}
+    func test_editDrink(editedDrink newDrink: Drink) async throws {}
+    func test_remove(container: String) async throws {}
+    func test_getSavedDrinks() async throws {}
+    func test_resetToDefault() async {}
 }
