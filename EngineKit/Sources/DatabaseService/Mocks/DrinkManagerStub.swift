@@ -8,8 +8,9 @@
 import DatabaseServiceInterface
 
 public protocol DrinkManagerStubbing {
+    var createNewDrink_returnValue: DrinkModel? { get set }
     var createNewDrink_returnError: Error? { get set }
-    var edit_returnError: Error? { get set }
+    var edit_returnValue: Result<DrinkModel, Error> { get set }
     var delete_returnError: Error? { get set }
     var deleteDrink_returnError: Error? { get set }
     var deleteAll_returnError: Error? { get set }
@@ -20,8 +21,9 @@ public protocol DrinkManagerStubbing {
 public final class DrinkManagerStub: DrinkManagerStubbing {
     public init() {}
     
+    public var createNewDrink_returnValue: DrinkModel? = nil
     public var createNewDrink_returnError: Error? = nil
-    public var edit_returnError: Error? = nil
+    public var edit_returnValue: Result<DrinkModel, Error> = .success(.init(id: "", size: 300, container: "small"))
     public var delete_returnError: Error? = nil
     public var deleteDrink_returnError: Error? = nil
     public var deleteAll_returnError: Error? = nil
@@ -38,14 +40,20 @@ extension DrinkManagerStub: DrinkManagerType {
         if let createNewDrink_returnError {
             throw createNewDrink_returnError
         }
-        return .init(id: "", size: size, container: container)
+        if let createNewDrink_returnValue {
+            return createNewDrink_returnValue
+        } else {
+            return .init(id: "", size: size, container: container)
+        }
     }
     
     public func edit(size: Double, of container: String) async throws -> DrinkModel {
-        if let edit_returnError {
-            throw edit_returnError
+        switch edit_returnValue {
+        case let .success(drink):
+            return drink
+        case let .failure(error):
+            throw error
         }
-        return .init(id: "", size: size, container: container)
     }
     
     public func delete(_ drink: DrinkModel) async throws {
