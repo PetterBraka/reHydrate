@@ -9,19 +9,17 @@ import Blackbird
 import DatabaseServiceInterface
 
 public protocol DatabaseStubbing {
-    var db_returnValue: Blackbird.Database? { get }
     var readMatchingOrderByLimit_returnValue: [any BlackbirdModel] { get }
 }
 
 public final class DatabaseStub: DatabaseStubbing {
-    public var db_returnValue: Blackbird.Database? = nil
     public var readMatchingOrderByLimit_returnValue: [any BlackbirdModel] = []
     public init() {}
 }
 
 extension DatabaseStub: DatabaseType {
     public var db: Blackbird.Database? {
-        return db_returnValue
+        try! .inMemoryDatabase()
     }
     
     public func write<Element>(
