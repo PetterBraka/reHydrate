@@ -49,7 +49,7 @@ public enum Home {
 
 public extension Home.ViewModel {
     struct Drink: Identifiable {
-        public let id: UUID
+        public let id: String
 
         public let container: Container
         public var size: Double
@@ -58,7 +58,7 @@ public extension Home.ViewModel {
             size / Double(container.max)
         }
 
-        public init(id: UUID = UUID(),
+        public init(id: String = UUID().uuidString,
                     size: Double,
                     container: Container) {
             self.id = id

@@ -70,7 +70,7 @@ extension Screen.Settings {
             let currentSystem = engine.unitService.getUnitSystem()
             let goal = await engine.dayService.getToday().goal
             let notificationServiceSettings = engine.notificationService.getSettings()
-            updateViewModel(
+            await updateViewModel(
                 isLoading: false,
                 unitSystem: .init(from: currentSystem),
                 goal: goal,
@@ -96,29 +96,29 @@ extension Screen.Settings {
             case let .didSetUnitSystem(system):
                 engine.unitService.set(unitSystem: .init(from: system))
                 let updatedSystem = engine.unitService.getUnitSystem()
-                updateViewModel(isLoading: false, unitSystem: .init(from: updatedSystem))
+                await updateViewModel(isLoading: false, unitSystem: .init(from: updatedSystem))
             case .didSetReminders(let shouldEnable):
-                updateViewModel(isLoading: true)
+                await updateViewModel(isLoading: true)
                 if shouldEnable {
                    await enableNotifications()
                 } else {
-                    disableNotifications()
+                    await disableNotifications()
                 }
             case let .didSetRemindersStart(start):
-                updateViewModel(isLoading: true)
+                await updateViewModel(isLoading: true)
                 await enableNotifications()
-                updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(start: start))
+                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(start: start))
             case let .didSetRemindersStop(stop):
-                updateViewModel(isLoading: true)
+                await updateViewModel(isLoading: true)
                 await enableNotifications()
-                updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(stop: stop))
+                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(stop: stop))
             case .didTapIncrementFrequency:
                 let frequency = viewModel.notifications.frequency + engine.notificationService.minimumAllowedFrequency
-                updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
+                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
                 await enableNotifications()
             case .didTapDecrementFrequency:
                 let frequency = viewModel.notifications.frequency - engine.notificationService.minimumAllowedFrequency
-                updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
+                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
                 await enableNotifications()
             default:
                 // TODO: Fix this Petter
@@ -129,12 +129,12 @@ extension Screen.Settings {
 }
 
 extension Screen.Settings.Presenter {
-    private func getDrinks() -> [ViewModel.Drink] {
-        if let drinks = try? engine.drinksService.getSavedDrinks(),
+    private func getDrinks() async -> [ViewModel.Drink] {
+        if let drinks = try? await engine.drinksService.getSaved(),
             !drinks.isEmpty {
             return drinks.map { .init(from: $0) }
         } else {
-            let drinks = engine.drinksService.resetToDefault()
+            let drinks = await engine.drinksService.resetToDefault()
             return drinks.map { .init(from: $0) }
         }
     }
@@ -145,13 +145,13 @@ extension Screen.Settings.Presenter {
         goal: Double? = nil,
         notifications: Settings.ViewModel.NotificationSettings? = nil,
         error: Settings.ViewModel.Error? = nil
-    ) {
+    ) async {
         let unitSystem = unitSystem ?? viewModel.unitSystem
         let isMetric = unitSystem == .metric
         var goal = goal ?? viewModel.goal
         goal = engine.unitService.convert(goal, from: .litres,
                                           to: isMetric ? .litres : .pint)
-        var drinks = getDrinks()
+        var drinks = await getDrinks()
         drinks = drinks.map { drink in
             var drink = drink
             drink.size = engine.unitService.convert(drink.size,
@@ -182,7 +182,7 @@ extension Screen.Settings.Presenter {
                 let newGoalRawValue = try await engine.dayService.increase(goal: 0.5)
                 let newGoal = engine.unitService.convert(newGoalRawValue, from: .litres,
                                                          to: currentSystem == .metric ? .litres : .pint)
-                updateViewModel(isLoading: false, goal: newGoal)
+                await updateViewModel(isLoading: false, goal: newGoal)
             }
         }
     }
@@ -194,7 +194,7 @@ extension Screen.Settings.Presenter {
                 let newGoalRawValue = try await engine.dayService.decrease(goal: 0.5)
                 let newGoal = engine.unitService.convert(newGoalRawValue, from: .litres,
                                                          to: currentSystem == .metric ? .litres : .pint)
-                updateViewModel(isLoading: false, goal: newGoal)
+                await updateViewModel(isLoading: false, goal: newGoal)
             }
         }
     }
@@ -255,17 +255,17 @@ private extension Screen.Settings.Presenter {
         
         switch result {
         case .success:
-            updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(isOn: true))
+            await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(isOn: true))
         case .failure(let error):
             switch error {
             case .unauthorized:
-                updateViewModel(isLoading: false, error: .unauthorized)
+                await updateViewModel(isLoading: false, error: .unauthorized)
             case .invalidDate, .missingDateComponents:
-                updateViewModel(isLoading: false, error: .invalidDates)
+                await updateViewModel(isLoading: false, error: .invalidDates)
             case .missingReminders, .missingCongratulations:
-                updateViewModel(isLoading: false, error: .missingReminders)
+                await updateViewModel(isLoading: false, error: .missingReminders)
             case .frequencyTooLow:
-                updateViewModel(isLoading: false, error: .lowFrequency)
+                await updateViewModel(isLoading: false, error: .lowFrequency)
             case .alreadySet:
                 // If the notifications are already set we don't need to do it again
                 break
@@ -289,9 +289,9 @@ private extension Screen.Settings.Presenter {
                 stopRangeStart ... stopRangeEnd)
     }
     
-    func disableNotifications() {
+    func disableNotifications() async {
         engine.notificationService.disable()
-        updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(isOn: false))
+        await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(isOn: false))
     }
     
     func updatedNotificationsSettings(

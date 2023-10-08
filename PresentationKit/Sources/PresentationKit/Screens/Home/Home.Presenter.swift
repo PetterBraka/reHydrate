@@ -52,7 +52,7 @@ extension Screen.Home {
             switch action {
             case .didAppear:
                 let today = await engine.dayService.getToday()
-                updateViewModel(
+                await updateViewModel(
                     date: today.date,
                     consumption: today.consumed,
                     goal: today.goal
@@ -64,7 +64,7 @@ extension Screen.Home {
             case let .didTapAddDrink(drink):
                 do {
                     let consumption = try await engine.dayService.add(drink: .init(from: drink))
-                    updateViewModel(consumption: consumption)
+                    await updateViewModel(consumption: consumption)
                 } catch {
                     engine.logger.error("Could not add drink of size \(drink.size)", error: error)
                 }
@@ -73,7 +73,7 @@ extension Screen.Home {
             case let .didTapRemoveDrink(drink):
                 do {
                     let consumption = try await engine.dayService.remove(drink: .init(from: drink))
-                    updateViewModel(consumption: consumption)
+                    await updateViewModel(consumption: consumption)
                 } catch {
                     engine.logger.error("Could not remove drink of size \(drink.size)", error: error)
                 }
@@ -87,13 +87,13 @@ extension Screen.Home.Presenter {
         date: Date? = nil,
         consumption: Double? = nil,
         goal: Double? = nil
-    ) {
+    ) async {
         let currentSystem = engine.unitService.getUnitSystem()
         let isMetric = currentSystem == .metric
         let date = date ?? viewModel.date
         var consumption = consumption ?? viewModel.consumption
         var goal = goal ?? viewModel.goal
-        var drinks: [ViewModel.Drink] = getDrinks().map { .init(from: $0) }
+        var drinks: [ViewModel.Drink] = await getDrinks().map { .init(from: $0) }
         
         consumption = engine.unitService.convert(consumption,
                                                  from: .litres,
@@ -121,12 +121,12 @@ extension Screen.Home.Presenter {
 }
 
 extension Screen.Home.Presenter {
-    private func getDrinks() -> [Drink] {
-        if let drinks = try? engine.drinksService.getSavedDrinks(),
+    private func getDrinks() async -> [Drink] {
+        if let drinks = try? await engine.drinksService.getSaved(),
            !drinks.isEmpty {
             return drinks
-        } else  {
-            return engine.drinksService.resetToDefault()
+        } else {
+            return await engine.drinksService.resetToDefault()
         }
     }
 }

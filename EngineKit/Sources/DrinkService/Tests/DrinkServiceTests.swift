@@ -57,14 +57,14 @@ final class DrinkServiceTests: XCTestCase {
     }
     
     func test_addDrink() async throws {
-        let newDrink = try await sut.addDrink(size: 200, container: .small)
+        let newDrink = try await sut.add(size: 200, container: .small)
         assert(newDrink, .init(id: "", size: 200, container: .small))
     }
     
     func test_addDrink_givenMappingError() async throws {
         drinkManager.createNewDrink_returnValue = .init(id: "", size: 0, container: "mid")
         do {
-            _ = try await sut.addDrink(size: 200, container: .small)
+            _ = try await sut.add(size: 200, container: .small)
             XCTFail("Should fail")
         } catch {
             // Then
@@ -81,7 +81,7 @@ final class DrinkServiceTests: XCTestCase {
         drinkManager.createNewDrink_returnError = DrinkDBError.creatingDrink
         // When
         do {
-            _ = try await sut.addDrink(size: 200, container: .small)
+            _ = try await sut.add(size: 200, container: .small)
             XCTFail("Should fail")
         } catch {
             // Then
@@ -97,8 +97,8 @@ final class DrinkServiceTests: XCTestCase {
         let givenDrink = DrinkModel(id: "", size: 500, container: "medium")
         drinkManager.edit_returnValue = .success(givenDrink)
         let unwrappedDrink = try XCTUnwrap(Drink(from: givenDrink))
-        let editedDrink = try await sut.editDrink(editedDrink: unwrappedDrink)
-        assert(editedDrink, givenDrink)
+        let editedDrink = try await sut.edit(size: 600, of: unwrappedDrink)
+        assert(editedDrink, .init(id: "", size: 600, container: .medium))
     }
     
     func test_editDrink_mapping() async throws {
@@ -106,9 +106,8 @@ final class DrinkServiceTests: XCTestCase {
         drinkManager.edit_returnValue = .success(givenDrink)
         
         do {
-            let editedDrink = try await sut.editDrink(editedDrink:
-                    .init(id: "", size: 500, container: .medium)
-            )
+            let unwrappedDrink = try XCTUnwrap(Drink(from: givenDrink))
+            let editedDrink = try await sut.edit(size: 600, of: unwrappedDrink)
             XCTFail("Should fail")
         } catch {
             // Then
@@ -146,7 +145,7 @@ final class DrinkServiceTests: XCTestCase {
             DrinkModel(id: "", size: 300, container: "large")
         ]
         drinkManager.fetchAll_returnValue = .success(givenDrinks)
-        let drinks = try await sut.getSavedDrinks()
+        let drinks = try await sut.getSaved()
         assert(drinks, givenDrinks)
     }
     

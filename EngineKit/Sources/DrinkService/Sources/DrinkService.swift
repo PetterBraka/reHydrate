@@ -24,7 +24,7 @@ public final class DrinkService: DrinkServiceType {
         self.engine = engine
     }
     
-    public func addDrink(size: Double, container: Container) async throws -> Drink {
+    public func add(size: Double, container: Container) async throws -> Drink {
         let newDrink = try await engine.drinkManager.createNewDrink(
             size: size, container: container.rawValue
         )
@@ -36,14 +36,14 @@ public final class DrinkService: DrinkServiceType {
         return newDrink
     }
     
-    public func editDrink(editedDrink newDrink: Drink) async throws -> Drink {
+    public func edit(size: Double, of drink: Drink) async throws -> Drink {
         let updatedDrink = try await engine.drinkManager.edit(
-            size: newDrink.size,
-            of: newDrink.container.rawValue
+            size: size,
+            of: drink.container.rawValue
         )
         guard let updatedDrink = Drink(from: updatedDrink) else {
             let error = DrinkDBError.notFound
-            engine.logger.error("Couldn't map edited drink \(newDrink)",error: error)
+            engine.logger.error("Couldn't map edited drink \(updatedDrink)",error: error)
             throw error
         }
         return updatedDrink
@@ -53,7 +53,7 @@ public final class DrinkService: DrinkServiceType {
         try await engine.drinkManager.deleteDrink(container: container)
     }
     
-    public func getSavedDrinks() async throws -> [Drink] {
+    public func getSaved() async throws -> [Drink] {
         let drinks = try await engine.drinkManager.fetchAll()
         return drinks.compactMap { .init(from: $0) }
     }

@@ -246,7 +246,7 @@ private extension NotificationService {
     
     func setNotificationActions() async {
         do {
-            let drinks = try await engine.drinksService.getSavedDrinks()
+            let drinks = try await engine.drinksService.getSaved()
             let remindersActions = drinks.map {
                 NotificationAction(
                     identifier: $0.container.rawValue,

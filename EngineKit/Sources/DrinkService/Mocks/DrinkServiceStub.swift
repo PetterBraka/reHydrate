@@ -27,7 +27,7 @@ public final class DrinkServiceStub: DrinkServiceStubbing {
 }
 
 extension DrinkServiceStub: DrinkServiceType {
-    public func addDrink(size: Double, container: Container) throws -> Drink {
+    public func add(size: Double, container: Container) throws -> Drink {
         switch addDrink_returnValue {
         case let .success(drink):
             return drink
@@ -36,7 +36,7 @@ extension DrinkServiceStub: DrinkServiceType {
         }
     }
     
-    public func editDrink(editedDrink newDrink: Drink) throws -> Drink {
+    public func edit(size: Double, of drink: Drink) throws -> Drink {
         switch editDrink_returnValue {
         case let .success(drink):
             return drink
@@ -52,7 +52,7 @@ extension DrinkServiceStub: DrinkServiceType {
     }
     
     
-    public func getSavedDrinks() throws -> [Drink] {
+    public func getSaved() throws -> [Drink] {
         switch getSavedDrink_returnValue  {
         case let .success(drink):
             return drink
