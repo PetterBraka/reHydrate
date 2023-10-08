@@ -8,7 +8,6 @@
 import Foundation
 import TimelineServiceInterface
 import DatabaseServiceInterface
-import DatabaseService
 
 public final class TimelineService: TimelineServiceType {
     public typealias Engine = (

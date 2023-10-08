@@ -49,32 +49,38 @@ let package: Package = {
         ]
             .with(targetsFrom: .dayService,
                   sourceDependancy: [
-                    .source(.databaseService),
-                    .source(.unitService),
-                    .source(.userPreferenceService)
+                    .interface(.databaseService),
+                    .interface(.unitService),
+                    .interface(.userPreferenceService)
                   ],
                   interfaceDependancy: [
                     .interface(.drinkService)
                   ])
-            .with(targetsFrom: .drinkService)
+            .with(targetsFrom: .drinkService,
+                  sourceDependancy: [
+                    .interface(.databaseService),
+                    .interface(.unitService),
+                    .interface(.userPreferenceService)
+                  ])
             .with(targetsFrom: .languageService)
             .with(targetsFrom: .databaseService,
                   interfaceDependancy: [.blackbird])
             .with(targetsFrom: .timelineService,
                   sourceDependancy: [
-                    .source(.databaseService)
+                    .interface(.databaseService)
                   ],
                   testsDependancy: [
                     .mocks(.databaseService)
                   ])
             .with(targetsFrom: .unitService,
                   sourceDependancy: [
-                    .source(.userPreferenceService)
+                    .interface(.userPreferenceService)
                   ])
             .with(targetsFrom: .userPreferenceService)
             .with(targetsFrom: .notificationService,
                   sourceDependancy: [
-                    .source(.userPreferenceService)
+                    .interface(.dayService),
+                    .interface(.userPreferenceService)
                   ])
     )
 }()

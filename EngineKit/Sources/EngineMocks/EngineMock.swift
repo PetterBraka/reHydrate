@@ -28,7 +28,7 @@ public final class EngineMocks {
     public var logger: LoggingService = LoggingService(subsystem: "EngineMock")
     public var database: DatabaseType = DatabaseStub()
     public var dayManager: DayManagerType = DayManagerStub()
-    public var containerManager: ContainerManagerType = ContainerManagerStub()
+    public var drinkManager: DrinkManagerType = DrinkManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()
     public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceStub()
     public var notificationService: NotificationServiceType = NotificationServiceStub()

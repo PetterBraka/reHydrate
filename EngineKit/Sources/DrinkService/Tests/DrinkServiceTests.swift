@@ -18,28 +18,24 @@ import DrinkServiceInterface
 final class DrinkServiceTests: XCTestCase {
     typealias Engine = (
         HasLoggingService &
-        HasContainerManagerService &
+        HasDrinkManagerService &
         HasUnitService
     )
     
     var engine: Engine = EngineMocks()
     
-    var containerManager: ContainerManagerType!
+    var drinkManager: DrinkManagerStub!
     var sut: DrinkServiceType!
     
     override func setUp() {
-        self.containerManager = ContainerManagerStub()
-        self.engine.containerManager = containerManager
+        self.drinkManager = DrinkManagerStub()
+        self.engine.drinkManager = drinkManager
         self.sut = DrinkService(engine: engine)
     }
     
     func test_addDrink() async throws {}
-    
     func test_editDrink(editedDrink newDrink: Drink) async throws {}
-    
     func test_remove(container: String) async throws {}
-    
     func test_getSavedDrinks() async throws {}
-    
     func test_resetToDefault() async {}
 }
