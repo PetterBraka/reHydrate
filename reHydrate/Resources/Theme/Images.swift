@@ -11,7 +11,7 @@ import SwiftUI
 extension Image {
     static let glass = Image("glass.fill.0")
     static let bottle = Image("bottle.fill.0")
-    static let largeBottle = Image("reusable.bottle.fill.0")
+    static let reusableBottle = Image("reusable.bottle.fill.0")
 
     static func getGlass(with fill: Double) -> Image {
         switch fill {
