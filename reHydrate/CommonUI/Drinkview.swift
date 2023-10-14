@@ -36,26 +36,26 @@ struct DrinkView<MenuItems: View>: View {
     }
 
     var body: some View {
-        Button {
-            didTapAction()
-        } label: {
-            VStack {
+        VStack {
+            Button {
+                didTapAction()
+            } label: {
                 getImage(fill: fill, type: containerType)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .overlay(alignment: .topTrailing) {
                     }
-                HStack {
-                    Text("\(size.clean) \(unit.symbol)")
-                        .font(.brandBody)
-                        .foregroundColor(.label)
-                    Menu {
-                        menuItems()
-                    } label: {
-                        Image(systemName: "ellipsis.circle.fill")
-                    }
-                    .tint(.button.opacity(0.75))
+            }
+            HStack {
+                Text("\(size.clean) \(unit.symbol)")
+                    .font(.brandBody)
+                    .foregroundColor(.label)
+                Menu {
+                    menuItems()
+                } label: {
+                    Image(systemName: "ellipsis.circle.fill")
                 }
+                .tint(.button.opacity(0.75))
             }
         }
     }
