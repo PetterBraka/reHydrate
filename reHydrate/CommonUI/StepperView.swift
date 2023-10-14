@@ -48,8 +48,10 @@ struct StepperView: View {
     }
 }
 
-struct StepperView_Previews: PreviewProvider {
-    static var previews: some View {
-        StepperView(value: "2") {} onDecrement: {}
+#Preview {
+    StepperView(value: "2") {
+        print("increment")
+    } onDecrement: {
+        print("decrement")
     }
 }

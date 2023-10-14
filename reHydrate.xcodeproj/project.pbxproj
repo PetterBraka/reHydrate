@@ -367,7 +367,7 @@
 		3323160927430A060039EE23 /* CommonUI */ = {
 			isa = PBXGroup;
 			children = (
-				332315E62742724D0039EE23 /* Drinkview.swift */,
+				A1EABF262ADA840600591981 /* ContainerViews */,
 				A126D2502A7667C200A296BA /* CheckBoxButton.swift */,
 				A126D2542A76684E00A296BA /* StepperView.swift */,
 			);
@@ -635,6 +635,14 @@
 				A183BCF82A33B78400D42033 /* HomeScreen.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		A1EABF262ADA840600591981 /* ContainerViews */ = {
+			isa = PBXGroup;
+			children = (
+				332315E62742724D0039EE23 /* Drinkview.swift */,
+			);
+			path = ContainerViews;
 			sourceTree = "<group>";
 		};
 		F887073E19DFDDCFF694E7E8 /* Frameworks */ = {

@@ -69,22 +69,10 @@ struct DrinkView<MenuItems: View>: View {
     }
 }
 
-struct DrinkView_Previews: PreviewProvider {
-    static var previews: some View {
-        HStack {
-            DrinkView(fill: 0.5,
-                      size: 500,
-                      unit: .milliliters,
-                      containerType: .medium) {} menuItems: {
-                Text("")
-            }
-            DrinkView(fill: 0.75,
-                      size: 700,
-                      unit: .milliliters,
-                      containerType: .medium) {} menuItems: {
-                Text("")
-            }
-                .disabled(true)
-        }
+#Preview {
+    DrinkView(fill: 0.5, size: 500, unit: .milliliters, containerType: .medium) {
+        print("Did tap button")
+    } menuItems: {
+        Text("Menu item")
     }
 }
