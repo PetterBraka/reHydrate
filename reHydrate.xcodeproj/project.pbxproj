@@ -325,6 +325,7 @@
 		A1AF32D32A346D6F00FD0C7C /* PresentationInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationInterface; sourceTree = "<group>"; };
 		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
 		A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
+		A1EABF2B2ADA936F00591981 /* FilledContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -641,6 +642,7 @@
 			isa = PBXGroup;
 			children = (
 				332315E62742724D0039EE23 /* Drinkview.swift */,
+				A1EABF2B2ADA936F00591981 /* FilledContainer.swift */,
 			);
 			path = ContainerViews;
 			sourceTree = "<group>";
@@ -871,6 +873,7 @@
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
 				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,
 				A183BCED2A3122D100D42033 /* Color.swift in Sources */,
+				A1EABF2C2ADA936F00591981 /* FilledContainer.swift in Sources */,
 				A183BCEB2A3122CB00D42033 /* Images.swift in Sources */,
 				A126D2552A76684E00A296BA /* StepperView.swift in Sources */,
 				A1EABF252ACB63BC00591981 /* Notification+Extensions.swift in Sources */,
