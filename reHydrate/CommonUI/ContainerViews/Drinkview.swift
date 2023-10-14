@@ -43,8 +43,6 @@ struct DrinkView<MenuItems: View>: View {
                 getImage(fill: fill, type: containerType)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .overlay(alignment: .topTrailing) {
-                    }
             }
             HStack {
                 Text("\(size.clean) \(unit.symbol)")
