@@ -47,15 +47,15 @@ struct SettingsScreen: View {
 //                }
 //            }
 //            TODO: Alert needs to be moved
-//            .alert(NSLocalizedString("ui.settings.notifications.alert",
+//            .alert(LocalizedString("ui.settings.notifications.alert",
 //                                     value: "Not allowed to send notifications",
 //                                     comment: "An alert message displayed when the app isn't allowed to send notifications."),
 //                   isPresented: $observer.showNotificationAlert) {
-//                Button(NSLocalizedString("ui.settings.cancel.button",
+//                Button(LocalizedString("ui.settings.cancel.button",
 //                                         value: "Cancel",
 //                                         comment: "An button to dismiss a alert."),
 //                       role: .cancel) {}
-//                Button(NSLocalizedString("ui.settings.openSettings.button",
+//                Button(LocalizedString("ui.settings.openSettings.button",
 //                                         value: "Open settings",
 //                                         comment: "A button to got to the settings app.")) {
 //                    observer.perform(action: .didTapOpenSettings)
@@ -65,7 +65,7 @@ struct SettingsScreen: View {
                 ToolbarItemGroup(placement: .keyboard) {
                     HStack {
                         Spacer()
-                        Button(NSLocalizedString("ui.done.button",
+                        Button(LocalizedString("ui.done.button",
                                                  value: "done",
                                                  comment: "An button to dismiss a the keyboard.")) {
                             focusedField = nil
@@ -83,7 +83,7 @@ struct SettingsScreen: View {
     @ViewBuilder
     var loading: some View {
         ProgressView {
-            Text(NSLocalizedString(
+            Text(LocalizedString(
                 "ui.loading",
                 value: "Loading...",
                 comment: "Text displayed with a loading wheel when we are loading data"
@@ -127,10 +127,10 @@ struct SettingsScreen: View {
                 } set: { newValue in
                     observer.perform(action: .didSetDarkMode(newValue))
                 },
-                text: NSLocalizedString("ui.settings.appearance.lightMode",
+                text: LocalizedString("ui.settings.appearance.lightMode",
                                         value: "Light mode",
                                         comment: "The light them of the app"),
-                highlightedText: NSLocalizedString("ui.settings.appearance.darkMode",
+                highlightedText: LocalizedString("ui.settings.appearance.darkMode",
                                                    value: "Dark mode",
                                                    comment: "The dark theme of the app"),
                 image: .lightMode,
@@ -139,7 +139,7 @@ struct SettingsScreen: View {
                 observer.perform(action: .didTapEditAppIcon)
             } label: {
                 HStack {
-                    Text(NSLocalizedString("ui.settings.appearance.changeAppIcon",
+                    Text(LocalizedString("ui.settings.appearance.changeAppIcon",
                                            value: "Change app icon",
                                            comment: "Allows the user to change the apps icon on their device"))
                     Spacer()
@@ -153,7 +153,7 @@ struct SettingsScreen: View {
     var editGoal: some View {
         Section {
             HStack {
-                Text(NSLocalizedString("ui.settings.editGoal.setGoal",
+                Text(LocalizedString("ui.settings.editGoal.setGoal",
                                        value: "Set your goal",
                                        comment: "Set the users consumption goal"))
                 Spacer()
@@ -170,7 +170,7 @@ struct SettingsScreen: View {
     var units: some View {
         Section {
             HStack {
-                Text(NSLocalizedString("ui.settings.units.title",
+                Text(LocalizedString("ui.settings.units.title",
                                        value: "Units",
                                        comment: "The unit system used in the app"))
                 Spacer()
@@ -178,11 +178,11 @@ struct SettingsScreen: View {
                     get: { observer.viewModel.unitSystem },
                     set: { observer.perform(action: .didSetUnitSystem($0)) })
                 ) {
-                    Text(NSLocalizedString("ui.settings.units.metric",
+                    Text(LocalizedString("ui.settings.units.metric",
                                            value: "Metric",
                                            comment: "The metric unit system"))
                     .tag(SettingsScreenObservable.ViewModel.UnitSystem.metric)
-                    Text(NSLocalizedString("ui.settings.units.imperial",
+                    Text(LocalizedString("ui.settings.units.imperial",
                                            value: "Imperial",
                                            comment: "The imperial/british unit system"))
                     .tag(SettingsScreenObservable.ViewModel.UnitSystem.imperial)
@@ -202,10 +202,10 @@ struct SettingsScreen: View {
                 } set: {
                     observer.perform(action: .didSetReminders($0))
                 },
-                text: NSLocalizedString("ui.settings.notification.turnOn",
+                text: LocalizedString("ui.settings.notification.turnOn",
                                         value: "Turn on reminders",
                                         comment: "Allows the user to turn on reminders to drink water"),
-                highlightedText: NSLocalizedString("ui.settings.notification.turnOff",
+                highlightedText: LocalizedString("ui.settings.notification.turnOff",
                                                    value: "Turn off reminders",
                                                    comment: "Allows the user to turn off reminders to drink water"),
                 image: .remindersOff,
@@ -217,7 +217,7 @@ struct SettingsScreen: View {
                     } set: {
                         observer.perform(action: .didSetRemindersStart($0))
                     }
-                    DatePicker(NSLocalizedString("ui.settings.notification.startingTime",
+                    DatePicker(LocalizedString("ui.settings.notification.startingTime",
                                                  value: "Starting time",
                                                  comment: "The starting time of the reminders"),
                                selection: date,
@@ -231,7 +231,7 @@ struct SettingsScreen: View {
                         observer.perform(action: .didSetRemindersStop($0))
                     }
                     DatePicker(
-                        NSLocalizedString("ui.settings.notification.endingTime",
+                        LocalizedString("ui.settings.notification.endingTime",
                                           value: "Ending time",
                                           comment: "The ending time of the reminders"),
                         selection: date,
@@ -239,7 +239,7 @@ struct SettingsScreen: View {
                         displayedComponents: .hourAndMinute)
                 }
                 HStack {
-                    Text(NSLocalizedString("ui.settings.notification.frequency",
+                    Text(LocalizedString("ui.settings.notification.frequency",
                                            value: "Frequency",
                                            comment: "The frequency of the reminders in minutes"))
                     Spacer()
@@ -260,7 +260,7 @@ struct SettingsScreen: View {
                 observer.perform(action: .didTapCredits)
             } label: {
                 HStack {
-                    Text(NSLocalizedString("ui.settings.credits",
+                    Text(LocalizedString("ui.settings.credits",
                                            value: "Credits",
                                            comment: "Who has help with the creation and translation of the app"))
                     Spacer()
@@ -277,8 +277,8 @@ struct SettingsScreen: View {
                 observer.perform(action: .didTapContactMe)
             } label: {
                 HStack {
-                    Text(NSLocalizedString("ui.settings.aboutApp.contactUs",
-                                           value: "Contact us",
+                    Text(LocalizedString("ui.settings.aboutApp.contactUs",
+                                           value: "Contact me",
                                            comment: "Our contact options"))
                     Spacer()
                     Image.open
@@ -289,7 +289,7 @@ struct SettingsScreen: View {
                 observer.perform(action: .didTapPrivacy)
             } label: {
                 HStack {
-                    Text(NSLocalizedString("ui.settings.aboutApp.privacyPolicy",
+                    Text(LocalizedString("ui.settings.aboutApp.privacyPolicy",
                                            value: "Privacy policy",
                                            comment: "Our privacy policy"))
                     Spacer()
@@ -301,7 +301,7 @@ struct SettingsScreen: View {
                 observer.perform(action: .didTapDeveloperInstagram)
             } label: {
                 HStack {
-                    Text(NSLocalizedString("ui.settings.aboutApp.developerInstagram",
+                    Text(LocalizedString("ui.settings.aboutApp.developerInstagram",
                                            value: "Developer Instagram",
                                            comment: "The developers instagram"))
                     Spacer()
@@ -319,7 +319,7 @@ struct SettingsScreen: View {
                 openLink(to: .merch)
             } label: {
                 HStack {
-                    Text(NSLocalizedString("ui.settings.aboutApp.metch",
+                    Text(LocalizedString("ui.settings.aboutApp.metch",
                                            value: "Interested in merch?",
                                            comment: "Asks the user if they are interested in buying app merchandise"))
                     Spacer()
@@ -337,7 +337,7 @@ struct SettingsScreen: View {
                 Spacer()
                 VStack {
                     Text("reHydrate")
-                    Text(NSLocalizedString("ui.settings.aboutApp.appInfo",
+                    Text(LocalizedString("ui.settings.aboutApp.appInfo",
                                            value: "Version:",
                                            comment: "The version of the app") 
                          + "\(observer.appVersion ?? "1.0.0")")

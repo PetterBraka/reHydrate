@@ -57,7 +57,7 @@ struct AppIconSelectionView: View {
             .padding(.horizontal, 16)
             .toolbar {
                 ToolbarItem(id: "done button", placement: .navigationBarTrailing) {
-                    Button(NSLocalizedString("ui.done.button",value: "Done", comment: "Done button"),
+                    Button(LocalizedString("ui.done.button",value: "Done", comment: "Done button"),
                            role: .cancel) {
                         dismiss()
                     }
@@ -65,7 +65,7 @@ struct AppIconSelectionView: View {
                     .font(.brandTitle)
                 }
                 ToolbarItem(placement: .principal) {
-                    Text(NSLocalizedString("ui.settings.appIcon.title", value: "Change app icon", comment: "Button which shows the user the different App icon options"))
+                    Text(LocalizedString("ui.settings.appIcon.title", value: "Change app icon", comment: "Button which shows the user the different App icon options"))
                         .font(.brandTitle)
                 }
             }
