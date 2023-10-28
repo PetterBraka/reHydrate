@@ -8,4 +8,5 @@
 public enum Screen {
     public enum Home {}
     public enum Settings {}
+    public enum EditContainer {}
 }
