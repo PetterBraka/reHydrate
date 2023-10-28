@@ -23,15 +23,16 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
     }
 
     func perform(update: Home.Update) {
-        switch update {
-        case .viewModel:
-            self.viewModel = presenter.viewModel
-        }
         DispatchQueue.main.async { [weak self] in
-            self?.objectWillChange.send()
+            guard let self else { return }
+            switch update {
+            case .viewModel:
+                self.viewModel = presenter.viewModel
+            }
+            self.objectWillChange.send()
         }
     }
-
+    
     func perform(action: Home.Action) {
         Task {
             await presenter.perform(action: action)
