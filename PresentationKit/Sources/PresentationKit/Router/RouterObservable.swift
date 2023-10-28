@@ -9,6 +9,7 @@ import Foundation
 
 public protocol RouterObservableType: AnyObject {
     func setTab(to tab: Tab)
+    func setPopUp(to popUp: PopUp?)
 }
 
 public final class RouterObservable: RouterObservableType, ObservableObject {
@@ -22,14 +23,16 @@ public final class RouterObservable: RouterObservableType, ObservableObject {
     }
     
     public func setTab(to tab: Tab) {
-        self.tab = tab
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.tab = tab
+        }
     }
     
-    public func setPopUp(to popUp: PopUp) {
-        self.popUp = popUp
-    }
-    
-    public func dismissPopUp() {
-        self.popUp = nil
+    public func setPopUp(to popUp: PopUp?) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.popUp = popUp
+        }
     }
 }

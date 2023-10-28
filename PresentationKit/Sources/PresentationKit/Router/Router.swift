@@ -19,8 +19,7 @@ extension Router: HomeRoutable {
     }
     
     public func showEdit(drink: Home.ViewModel.Drink) {
-        // TODO: Show Edit
-        print("Show edit - \(String(describing: drink))")
+        sceneObserver?.setPopUp(to: .edit(drink))
     }
 }
 
@@ -33,5 +32,11 @@ extension Router: SettingsRoutable {
 extension Router: HistoryRoutable {
     public func showHistory() {
         sceneObserver?.setTab(to: .history)
+    }
+}
+
+extension Router: EditContainerRoutable {
+    public func close() {
+        sceneObserver?.setPopUp(to: .none)
     }
 }

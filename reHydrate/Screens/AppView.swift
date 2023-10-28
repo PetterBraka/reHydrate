@@ -36,7 +36,7 @@ struct AppView: View {
                     .opacity(0.5)
                     .ignoresSafeArea()
                     .onTapGesture {
-                        observer.dismissPopUp()
+                        observer.setPopUp(to: nil)
                     }
             }
         }
