@@ -50,6 +50,26 @@ public final class SceneFactory: ObservableObject {
 
         return SettingsScreen(observer: observer)
     }
+    
+    func makeEditScreen(with drink: Home.ViewModel.Drink) -> EditContainerScreen {
+        let container: Container = switch drink.container {
+        case .large: .large
+        case .medium: .medium
+        case .small: .small
+        }
+        let drink = Drink(
+            id: drink.id,
+            size: drink.size,
+            container: container
+        )
+        let presenter = Screen.EditContainer.Presenter(engine: engine,
+                                                       router: router,
+                                                       selectedDrink: drink)
+        let observer = EditContainerScreenObservable(presenter: presenter)
+        presenter.scene = observer
+        
+        return EditContainerScreen(observer: observer)
+    }
 }
 
 extension Home.ViewModel.Drink {

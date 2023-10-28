@@ -40,6 +40,17 @@ struct AppView: View {
                     }
             }
         }
+        .sheet(item: $observer.popUp) { popup in
+            sheets(for: popup)
+        }
+    }
+    
+    @ViewBuilder
+    func sheets(for popup: PopUp) -> some View {
+        switch popup {
+        case let .edit(drink):
+            sceneFactory.makeEditScreen(with: drink)
+        }
     }
 }
 
