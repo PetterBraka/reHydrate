@@ -29,10 +29,10 @@ struct EditContainerScreen: View {
             .scrollContentBackground(.hidden)
         }
         .overlay {
-//            if observer.viewModel.isLoading {
-            Color.black.opacity(0.25)
+            if observer.viewModel.isLoading {
+                Color.black.opacity(0.25)
                 loading
-//            }
+            }
         }
     }
     
