@@ -90,13 +90,12 @@ extension Screen.Settings {
             case .didTapBack:
                 router.showHome()
             case .didTapIncrementGoal:
-                increaseGoal()
+                await increaseGoal()
             case .didTapDecrementGoal:
-                decreaseGoal()
+                await decreaseGoal()
             case let .didSetUnitSystem(system):
                 engine.unitService.set(unitSystem: .init(from: system))
-                let updatedSystem = engine.unitService.getUnitSystem()
-                await updateViewModel(isLoading: false, unitSystem: .init(from: updatedSystem))
+                await updateViewModel(isLoading: false, unitSystem: system)
             case .didSetReminders(let shouldEnable):
                 await updateViewModel(isLoading: true)
                 if shouldEnable {
@@ -117,9 +116,10 @@ extension Screen.Settings {
                 await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
                 await enableNotifications()
             case .didTapDecrementFrequency:
+                await updateViewModel(isLoading: true)
                 let frequency = viewModel.notifications.frequency - engine.notificationService.minimumAllowedFrequency
-                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
                 await enableNotifications()
+                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
             default:
                 // TODO: Fix this Petter
                 break
@@ -148,9 +148,14 @@ extension Screen.Settings.Presenter {
     ) async {
         let unitSystem = unitSystem ?? viewModel.unitSystem
         let isMetric = unitSystem == .metric
-        var goal = goal ?? viewModel.goal
-        goal = engine.unitService.convert(goal, from: .litres,
-                                          to: isMetric ? .litres : .pint)
+        var newGoal: Double
+        if let goal {
+            newGoal = goal
+        } else {
+            newGoal = await engine.dayService.getToday().goal
+        }
+        newGoal = engine.unitService.convert(newGoal, from: .litres,
+                                             to: isMetric ? .litres : .pint)
         var drinks = await getDrinks()
         drinks = drinks.map { [weak self] drink in
             guard let self else { return drink }
@@ -166,7 +171,7 @@ extension Screen.Settings.Presenter {
         viewModel = ViewModel(
             isLoading: isLoading,
             unitSystem: unitSystem,
-            goal: goal,
+            goal: newGoal,
             drinks: drinks,
             notifications: notifications, 
             error: error
@@ -176,27 +181,37 @@ extension Screen.Settings.Presenter {
 
 // MARK: - Goal
 extension Screen.Settings.Presenter {
-    private func increaseGoal() {
-        Task {
-            do {
-                let currentSystem = engine.unitService.getUnitSystem()
-                let newGoalRawValue = try await engine.dayService.increase(goal: 0.5)
-                let newGoal = engine.unitService.convert(newGoalRawValue, from: .litres,
-                                                         to: currentSystem == .metric ? .litres : .pint)
-                await updateViewModel(isLoading: false, goal: newGoal)
+    private func increaseGoal() async {
+        do {
+            let increment = 0.5
+            let oldGoal = viewModel.goal
+            let diffToNextHalf = oldGoal.roundToHalf(.up) - oldGoal
+            let newGoal: Double
+            if (0 ... increment).contains(diffToNextHalf) {
+                newGoal = try await engine.dayService.increase(goal: diffToNextHalf)
+            } else {
+                newGoal = try await engine.dayService.increase(goal: 0.5)
             }
+            await updateViewModel(isLoading: false, goal: newGoal.roundToHalf(.up))
+        } catch {
+            engine.logger.error("Couldn't increase the goal", error: error)
         }
     }
     
-    private func decreaseGoal() {
-        Task {
-            do {
-                let currentSystem = engine.unitService.getUnitSystem()
-                let newGoalRawValue = try await engine.dayService.decrease(goal: 0.5)
-                let newGoal = engine.unitService.convert(newGoalRawValue, from: .litres,
-                                                         to: currentSystem == .metric ? .litres : .pint)
-                await updateViewModel(isLoading: false, goal: newGoal)
+    private func decreaseGoal() async {
+        do {
+            let decrement = 0.5
+            let oldGoal = viewModel.goal
+            let diffToNextHalf = oldGoal - oldGoal.roundToHalf(.down)
+            let newGoal: Double
+            if (0 ... decrement).contains(diffToNextHalf) {
+                newGoal = try await engine.dayService.decrease(goal: diffToNextHalf)
+            } else {
+                newGoal = try await engine.dayService.decrease(goal: decrement)
             }
+            await updateViewModel(isLoading: false, goal: newGoal.roundToHalf(.down))
+        } catch {
+            engine.logger.error("Couldn't decrease the goal", error: error)
         }
     }
 }
@@ -329,5 +344,15 @@ public extension Date {
         guard let date = formatter.date(from: dateAndTime)
         else { return nil }
         self = date
+    }
+}
+
+extension Double {
+    mutating func roundedToHalf(_ rule: FloatingPointRoundingRule = .toNearestOrEven) {
+        self = self.roundToHalf(rule)
+    }
+    
+    func roundToHalf(_ rule: FloatingPointRoundingRule = .toNearestOrEven) -> Double {
+        (self * 2).rounded(rule) / 2
     }
 }
