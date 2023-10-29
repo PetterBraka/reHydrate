@@ -14,14 +14,6 @@ import EngineKit
 
 
 final class EditContainerScreenObservable: ObservableObject, EditContainerSceneType {
-    static let mock = EditContainerScreenObservable(
-        presenter: Screen.EditContainer.Presenter(
-            engine: Engine.mock,
-            router: Router(),
-            selectedDrink: .init(id: "test", size: 300, container: .medium)
-        )
-    )
-    
     private let presenter: EditContainerPresenterType
     
     var viewModel: EditContainer.ViewModel

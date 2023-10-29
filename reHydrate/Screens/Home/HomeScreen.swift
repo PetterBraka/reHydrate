@@ -8,11 +8,14 @@
 
 import SwiftUI
 import HomePresentationInterface
+import PresentationKit
+import EngineKit
 
 struct HomeScreen: View {
     @ObservedObject var observer: HomeScreenObservable
 
     var body: some View {
+        let _ = Self._printChanges()
         VStack(spacing: 16) {
             header
 
@@ -134,8 +137,11 @@ struct HomeScreen: View {
     }
 }
 
-struct HomeScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeScreen(observer: .mock)
-    }
+#Preview {
+    HomeScreen(observer: HomeScreenObservable(
+        presenter: Screen.Home.Presenter(
+            engine: Engine(reminders: [], celebrations: [],
+                           notificationCenter: UNUserNotificationCenter.current()),
+            router: Router())
+    ))
 }

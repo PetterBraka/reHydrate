@@ -39,12 +39,3 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
         }
     }
 }
-
-extension HomeScreenObservable {
-    static let mock = HomeScreenObservable(
-        presenter: Screen.Home.Presenter(
-            engine: Engine(reminders: [], celebrations: [],
-                           notificationCenter: UNUserNotificationCenter.current()),
-            router: Router())
-    )
-}

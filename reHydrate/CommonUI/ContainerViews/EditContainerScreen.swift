@@ -8,6 +8,8 @@
 
 import SwiftUI
 import EditContainerPresentationInterface
+import PresentationKit
+import EngineKit
 
 struct EditContainerScreen: View {
     @ObservedObject var observer: EditContainerScreenObservable
@@ -163,6 +165,12 @@ private extension EditContainerScreen {
 #Preview {
     Text("")
         .sheet(isPresented: .constant(true)) {
-            EditContainerScreen(observer: .mock)
+            EditContainerScreen(observer: EditContainerScreenObservable(
+                presenter: Screen.EditContainer.Presenter(
+                    engine: Engine.mock,
+                    router: Router(),
+                    selectedDrink: .init(id: "test", size: 300, container: .medium)
+                )
+            ))
         }
 }
