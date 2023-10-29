@@ -45,11 +45,12 @@ extension Screen.Home {
                                   smallUnit: .milliliters,
                                   largeUnit: .liters,
                                   drinks: [])
-            sync(didComplete: nil)
         }
         
         public func perform(action: Home.Action) async {
             switch action {
+            case .didAppear:
+                await sync(didComplete: nil)
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
@@ -73,15 +74,19 @@ extension Screen.Home {
             }
         }
         
+        private func sync(didComplete: (() -> Void)?) async {
+            let today = await engine.dayService.getToday()
+            await updateViewModel(
+                date: today.date,
+                consumption: today.consumed,
+                goal: today.goal
+            )
+            didComplete?()
+        }
+        
         public func sync(didComplete: (() -> Void)?) {
             Task {
-                let today = await engine.dayService.getToday()
-                await updateViewModel(
-                    date: today.date,
-                    consumption: today.consumed,
-                    goal: today.goal
-                )
-                didComplete?()
+                await sync(didComplete: didComplete)
             }
         }
     }

@@ -18,6 +18,9 @@ struct HomeScreen: View {
         let _ = Self._printChanges()
         VStack(spacing: 16) {
             header
+                .task {
+                    observer.perform(action: .didAppear)
+                }
 
             Spacer()
 
