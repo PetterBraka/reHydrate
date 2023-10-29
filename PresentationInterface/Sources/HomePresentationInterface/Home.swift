@@ -13,7 +13,6 @@ public enum Home {
     }
 
     public enum Action {
-        case didAppear
         case didTapHistory
         case didTapSettings
         case didTapAddDrink(ViewModel.Drink)

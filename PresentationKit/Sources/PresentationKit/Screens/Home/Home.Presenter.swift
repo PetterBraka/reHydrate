@@ -45,18 +45,18 @@ extension Screen.Home {
                                   smallUnit: .milliliters,
                                   largeUnit: .liters,
                                   drinks: [])
-        }
-        
-        @MainActor
-        public func perform(action: Home.Action) async {
-            switch action {
-            case .didAppear:
+            Task(priority: .high) {
                 let today = await engine.dayService.getToday()
                 await updateViewModel(
                     date: today.date,
                     consumption: today.consumed,
                     goal: today.goal
                 )
+            }
+        }
+        
+        public func perform(action: Home.Action) async {
+            switch action {
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
