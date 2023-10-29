@@ -187,7 +187,7 @@ extension Screen.Settings.Presenter {
             let oldGoal = viewModel.goal
             let diffToNextHalf = oldGoal.roundToHalf(.up) - oldGoal
             let newGoal: Double
-            if (0 ... increment).contains(diffToNextHalf) {
+            if  diffToNextHalf > 0 && diffToNextHalf < increment {
                 newGoal = try await engine.dayService.increase(goal: diffToNextHalf)
             } else {
                 newGoal = try await engine.dayService.increase(goal: 0.5)
@@ -204,7 +204,7 @@ extension Screen.Settings.Presenter {
             let oldGoal = viewModel.goal
             let diffToNextHalf = oldGoal - oldGoal.roundToHalf(.down)
             let newGoal: Double
-            if (0 ... decrement).contains(diffToNextHalf) {
+            if diffToNextHalf > 0 && diffToNextHalf < decrement {
                 newGoal = try await engine.dayService.decrease(goal: diffToNextHalf)
             } else {
                 newGoal = try await engine.dayService.decrease(goal: decrement)
