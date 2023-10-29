@@ -31,14 +31,6 @@ struct AppView: View {
                     .tag(Tab.home)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            if case .some = observer.popUp {
-                Color.gray
-                    .opacity(0.5)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        observer.setPopUp(to: nil)
-                    }
-            }
         }
         .sheet(item: $observer.popUp) { popup in
             sheets(for: popup)
