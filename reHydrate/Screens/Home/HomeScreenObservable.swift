@@ -33,9 +33,13 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
         }
     }
     
+    func perform(action: Home.Action) async {
+        await presenter.perform(action: action)
+    }
+    
     func perform(action: Home.Action) {
         Task {
-            await presenter.perform(action: action)
+            await perform(action: action)
         }
     }
 }

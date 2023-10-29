@@ -19,7 +19,7 @@ struct HomeScreen: View {
         VStack(spacing: 16) {
             header
                 .task {
-                    observer.perform(action: .didAppear)
+                    await observer.perform(action: .didAppear)
                 }
 
             Spacer()
