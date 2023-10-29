@@ -152,7 +152,8 @@ extension Screen.Settings.Presenter {
         goal = engine.unitService.convert(goal, from: .litres,
                                           to: isMetric ? .litres : .pint)
         var drinks = await getDrinks()
-        drinks = drinks.map { drink in
+        drinks = drinks.map { [weak self] drink in
+            guard let self else { return drink }
             var drink = drink
             drink.size = engine.unitService.convert(drink.size,
                                                     from: .millilitres,
