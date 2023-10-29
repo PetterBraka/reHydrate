@@ -45,14 +45,7 @@ extension Screen.Home {
                                   smallUnit: .milliliters,
                                   largeUnit: .liters,
                                   drinks: [])
-            Task(priority: .high) {
-                let today = await engine.dayService.getToday()
-                await updateViewModel(
-                    date: today.date,
-                    consumption: today.consumed,
-                    goal: today.goal
-                )
-            }
+            sync(didComplete: nil)
         }
         
         public func perform(action: Home.Action) async {
@@ -77,6 +70,18 @@ extension Screen.Home {
                 } catch {
                     engine.logger.error("Could not remove drink of size \(drink.size)", error: error)
                 }
+            }
+        }
+        
+        public func sync(didComplete: (() -> Void)?) {
+            Task {
+                let today = await engine.dayService.getToday()
+                await updateViewModel(
+                    date: today.date,
+                    consumption: today.consumed,
+                    goal: today.goal
+                )
+                didComplete?()
             }
         }
     }

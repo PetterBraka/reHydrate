@@ -49,6 +49,7 @@ public final class Engine {
     private let reminders: [NotificationMessage]
     private let celebrations: [NotificationMessage]
     public let notificationCenter: NotificationCenterType
+    public var didCompleteNotificationAction: (() -> Void)?
     
     public var logger: LoggingService
     public var database: DatabaseType
@@ -64,7 +65,7 @@ public final class Engine {
         notificationCenter: notificationCenter,
         didComplete: nil
     )
-    public lazy var notificationDelegate: NotificationDelegateType = NotificationDelegateService(engine: self)
+    public lazy var notificationDelegate: NotificationDelegateType = NotificationDelegateService(engine: self, didCompleteAction: didCompleteNotificationAction)
     public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)
     public lazy var languageService: LanguageServiceType = LanguageService(engine: self)
     public lazy var dayService: DayServiceType = DayService(engine: self)

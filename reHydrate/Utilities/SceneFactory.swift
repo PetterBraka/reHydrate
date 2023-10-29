@@ -31,6 +31,9 @@ public final class SceneFactory: ObservableObject {
             notificationCenter: UNUserNotificationCenter.current()
         )
         notificationDelegate = NotificationDelegatePort(engine: engine)
+        engine.didCompleteNotificationAction = { [weak self] in
+            self?.homePresenter.sync(didComplete: nil)
+        }
     }
     
     func makeHomeScreen() -> HomeScreen {

@@ -134,8 +134,7 @@ struct HomeScreen: View {
 #Preview {
     HomeScreen(observer: HomeScreenObservable(
         presenter: Screen.Home.Presenter(
-            engine: Engine(reminders: [], celebrations: [],
-                           notificationCenter: UNUserNotificationCenter.current()),
+            engine: Engine.mock,
             router: Router())
     ))
 }
