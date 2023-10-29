@@ -15,9 +15,14 @@ import UserNotifications
 
 public final class SceneFactory: ObservableObject {
     public let engine: Engine
-    let notificationDelegate: NotificationDelegatePort
-    
     public let router = Router()
+    
+    // Root presenters
+    private lazy var homePresenter = Screen.Home.Presenter(engine: engine, router: router)
+    private lazy var settingsPresenter = Screen.Settings.Presenter(engine: engine, router: router)
+    
+    // Port
+    let notificationDelegate: NotificationDelegatePort
     
     init() {
         engine = Engine(
@@ -29,42 +34,28 @@ public final class SceneFactory: ObservableObject {
     }
     
     func makeHomeScreen() -> HomeScreen {
-        let presenter = Screen.Home.Presenter(engine: engine,
-                                              router: router)
-        let observer = HomeScreenObservable(presenter: presenter)
-        presenter.scene = observer
+        let observer = HomeScreenObservable(presenter: homePresenter)
+        homePresenter.scene = observer
         
         return HomeScreen(observer: observer)
     }
     
     func makeSettingsScreen() -> SettingsScreen {
-        let presenter = Screen.Settings.Presenter(engine: engine,
-                                                  router: router)
         let observer = SettingsScreenObservable(
-            presenter: presenter,
+            presenter: settingsPresenter,
             language: engine.languageService.getSelectedLanguage(),
             languageOptions: engine.languageService.getLanguageOptions(),
             isDarkMode: true // TODO: Petter add dark mode
         )
-        presenter.scene = observer
+        settingsPresenter.scene = observer
 
         return SettingsScreen(observer: observer)
     }
     
     func makeEditScreen(with drink: Home.ViewModel.Drink) -> EditContainerScreen {
-        let container: Container = switch drink.container {
-        case .large: .large
-        case .medium: .medium
-        case .small: .small
-        }
-        let drink = Drink(
-            id: drink.id,
-            size: drink.size,
-            container: container
-        )
         let presenter = Screen.EditContainer.Presenter(engine: engine,
                                                        router: router,
-                                                       selectedDrink: drink)
+                                                       selectedDrink: .init(from: drink))
         let observer = EditContainerScreenObservable(presenter: presenter)
         presenter.scene = observer
         
@@ -74,21 +65,30 @@ public final class SceneFactory: ObservableObject {
 
 extension Home.ViewModel.Drink {
     init(from drink: DrinkServiceInterface.Drink) {
+        let container: Home.ViewModel.Container = switch drink.container {
+        case .large: .large
+        case .medium: .medium
+        case .small: .small
+        }
+
         self = .init(id: drink.id,
                      size: drink.size,
-                     container: .init(from: drink.container))
+                     container: container)
     }
 }
 
-extension Home.ViewModel.Container {
-    init(from container: DrinkServiceInterface.Container) {
-        switch container {
-        case .large:
-            self = .large
-        case .medium:
-            self = .medium
-        case .small:
-            self = .small
+extension Drink {
+    init(from drink: Home.ViewModel.Drink) {
+        let container: Container = switch drink.container {
+        case .large: .large
+        case .medium: .medium
+        case .small: .small
         }
+
+        self = .init(
+            id: drink.id,
+            size: drink.size,
+            container: container
+        )
     }
 }
