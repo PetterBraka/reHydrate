@@ -110,10 +110,11 @@ struct SettingsScreen: View {
                 aboutApp
                 // - MARK: Support dev
                 supportDev
-                // - MARK: App info
-                appInfo
             }
             .listRowBackground(Color.tableViewBackground)
+                // - MARK: App info
+            appInfo
+                .listRowBackground(Color.clear)
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
