@@ -116,6 +116,7 @@ struct SettingsScreen: View {
             .listRowBackground(Color.tableViewBackground)
         }
         .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
     }
     
     @ViewBuilder
