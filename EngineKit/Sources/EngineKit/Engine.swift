@@ -23,9 +23,11 @@ import NotificationServiceInterface
 import NotificationService
 
 public final class Engine {
-    public init(reminders: [NotificationMessage],
-                celebrations: [NotificationMessage],
-                notificationCenter: NotificationCenterType) {
+    public init(
+        reminders: [NotificationMessage],
+        celebrations: [NotificationMessage],
+        notificationCenter: NotificationCenterType
+    ) {
         let project = "reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
