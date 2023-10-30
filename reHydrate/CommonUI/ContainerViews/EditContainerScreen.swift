@@ -21,16 +21,19 @@ struct EditContainerScreen: View {
             toolBar
                 .buttonStyle(.borderless)
             filledContainer
-            List {
+            VStack {
                 slider
-                    .listRowBackground(Color.gray.opacity(0.1))
+                Divider()
                 textfieldInput
-                    .listRowBackground(Color.gray.opacity(0.1))
             }
-            .listStyle(.insetGrouped)
-            .listRowSeparator(.visible)
-            .scrollContentBackground(.hidden)
+            .padding(8)
+            .background {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(.gray.opacity(0.2))
+            }
+            .padding(16)
         }
+        .animation(.none)
         .overlay {
             if observer.viewModel.isSaving {
                 Color.black.opacity(0.25)
@@ -38,6 +41,7 @@ struct EditContainerScreen: View {
                 saving
             }
         }
+        .presentationDetents([.medium])
     }
     
     var toolBar: some View {
@@ -86,7 +90,7 @@ struct EditContainerScreen: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: screenWidth)
+                    .frame(width: screenWidth / 4)
             }
             Spacer()
         }
@@ -142,7 +146,7 @@ struct EditContainerScreen: View {
             .padding(32)
             .background {
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(.white)
+                    .fill(.background)
             }
     }
 }
