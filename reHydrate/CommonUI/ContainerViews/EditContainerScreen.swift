@@ -94,7 +94,7 @@ struct EditContainerScreen: View {
     
     var textfieldInput: some View {
         HStack {
-            Text(LocalizedString("ui.edit.container.size.textfiled", value: "Size", comment: "An input field for the user to edit the size of the container"))
+            Text(textFieldTip)
             Spacer()
             TextField(
                 "\(observer.size)",
@@ -163,8 +163,16 @@ private extension EditContainerScreen {
         LocalizedString("ui.edit.container.title", value: "Edit %@", arguments: containerText, comment: "The title of the screen where you edit your container")
     }
     
+    var textFieldTip: String {
+        LocalizedString("ui.edit.container.size.textfiled", value: "Size", comment: "An input field for the user to edit the size of the container")
+    }
+    
     var savingText: String {
         LocalizedString("ui.edit.container.saving", value: "Saving", comment: "A loading wheel showed when something is being saved")
+    }
+    
+    var doneText: String {
+        LocalizedString("ui.keyboard.done", value: "Done", comment: "The done button above the keyboard")
     }
 }
 
