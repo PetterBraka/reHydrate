@@ -13,6 +13,7 @@ import EngineKit
 
 struct EditContainerScreen: View {
     @ObservedObject var observer: EditContainerScreenObservable
+    @FocusState var isEditing: Bool
     let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
@@ -102,8 +103,8 @@ struct EditContainerScreen: View {
                 prompt: Text("\(observer.viewModel.selectedDrink.size)")
             )
             .keyboardType(.decimalPad)
-            .textContentType(.none)
             .textCase(.lowercase)
+            .focused($isEditing)
             .multilineTextAlignment(.center)
             .fixedSize()
             .padding(8)
@@ -112,8 +113,12 @@ struct EditContainerScreen: View {
                     .fill(.gray)
                     .opacity(0.25)
             )
-            .onSubmit {
-                observer.perform(action: .didChangeSize(size: observer.size))
+            if isEditing {
+                Button(doneText) {
+                    observer.perform(action: .didChangeSize(size: observer.size))
+                    isEditing = false
+                }
+                .buttonStyle(.borderedProminent)
             }
         }
     }
