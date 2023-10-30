@@ -31,9 +31,10 @@ struct EditContainerScreen: View {
             .scrollContentBackground(.hidden)
         }
         .overlay {
-            if observer.viewModel.isLoading {
+            if observer.viewModel.isSaving {
                 Color.black.opacity(0.25)
-                loading
+                    .ignoresSafeArea()
+                saving
             }
         }
     }
@@ -121,15 +122,15 @@ struct EditContainerScreen: View {
         Slider(
             value: $observer.fill,
             in: observer.range,
-            step: 0.025
+            step: 0.001
         )
         .onChange(of: observer.fill) { oldValue, newValue in
             observer.perform(action: .didChangeFill(fill: newValue))
         }
     }
     
-    var loading: some View {
-        ProgressView(loadingText)
+    var saving: some View {
+        ProgressView(savingText)
             .controlSize(.large)
             .bold()
             .progressViewStyle(.circular)
@@ -157,8 +158,8 @@ private extension EditContainerScreen {
         LocalizedString("ui.edit.container.title", value: "Edit %@", arguments: containerText, comment: "The title of the screen where you edit your container")
     }
     
-    var loadingText: String {
-        LocalizedString("ui.edit.container.loading", value: "Loading", comment: "A loading wheel showed when something is being processed")
+    var savingText: String {
+        LocalizedString("ui.edit.container.saving", value: "Saving", comment: "A loading wheel showed when something is being saved")
     }
 }
 

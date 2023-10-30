@@ -50,7 +50,7 @@ extension Screen.EditContainer {
             }
             
             self.viewModel = .init(
-                isLoading: false,
+                isSaving: false,
                 unit: .metric,
                 selectedDrink: .init(from: selectedDrink),
                 editedSize: selectedDrink.size,
@@ -59,18 +59,18 @@ extension Screen.EditContainer {
                 error: nil
             )
             updateViewModel(
-                isLoading: false,
+                isSaving: false,
                 unit: .init(from: engine.unitService.getUnitSystem()),
                 editedFill: getFill(from: selectedDrink.size)
             )
         }
         
         public func perform(action: EditContainer.Action) async {
-            updateViewModel(isLoading: true)
             switch action {
             case .didAppear:
                 break
             case .didTapSave(let newSize):
+                updateViewModel(isSaving: true)
                 do {
                     let unit = engine.unitService.getUnitSystem()
                     let newSize = engine.unitService.convert(
@@ -79,25 +79,25 @@ extension Screen.EditContainer {
                         to: .millilitres
                     )
                     _ = try await engine.drinksService.edit(size: newSize, of: selectedDrink)
-                    updateViewModel(isLoading: false)
                     try? await Task.sleep(for: .seconds(1))
+                    updateViewModel(isSaving: false)
                     router.close()
                 } catch {
-                    updateViewModel(isLoading: false, error: .failedSaving)
+                    updateViewModel(isSaving: false, error: .failedSaving)
                 }
             case .didTapCancel:
                 router.close()
             case let .didChangeSize(size):
                 let fill = getFill(from: size)
-                updateViewModel(isLoading: false, editedSize: size, editedFill: fill)
+                updateViewModel(editedSize: size, editedFill: fill)
             case let .didChangeFill(fill):
                 let size = getSize(from: fill)
-                updateViewModel(isLoading: false, editedSize: size, editedFill: fill)
+                updateViewModel(editedSize: size, editedFill: fill)
             }
         }
         
         func updateViewModel(
-            isLoading: Bool,
+            isSaving: Bool? = nil,
             unit: EditContainer.ViewModel.UnitSystem? = nil,
             selectedDrink: ViewModel.Drink? = nil,
             editedSize: Double? = nil,
@@ -105,7 +105,7 @@ extension Screen.EditContainer {
             error: ViewModel.EditContainerError? = nil
         ) {
             viewModel = .init(
-                isLoading: isLoading,
+                isSaving: isSaving ?? viewModel.isSaving,
                 unit: unit ?? viewModel.unit,
                 selectedDrink: selectedDrink ?? viewModel.selectedDrink,
                 editedSize: editedSize ?? viewModel.editedSize,

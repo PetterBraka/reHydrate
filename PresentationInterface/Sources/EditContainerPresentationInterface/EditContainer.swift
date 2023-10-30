@@ -21,7 +21,7 @@ public enum EditContainer {
     }
     
     public struct ViewModel {
-        public let isLoading: Bool
+        public let isSaving: Bool
         public let unit: UnitSystem
         public let selectedDrink: Drink
         public let editedSize: Double
@@ -29,8 +29,8 @@ public enum EditContainer {
         public let containerRange: ClosedRange<Double>
         public let error: EditContainerError?
         
-        public init(isLoading: Bool, unit: UnitSystem, selectedDrink: Drink, editedSize: Double, editedFill: Double, containerRange: ClosedRange<Double>, error: EditContainerError?) {
-            self.isLoading = isLoading
+        public init(isSaving: Bool, unit: UnitSystem, selectedDrink: Drink, editedSize: Double, editedFill: Double, containerRange: ClosedRange<Double>, error: EditContainerError?) {
+            self.isSaving = isSaving
             self.unit = unit
             self.selectedDrink = selectedDrink
             self.editedSize = editedSize
