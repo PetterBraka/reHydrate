@@ -33,7 +33,7 @@ struct EditContainerScreen: View {
             }
             .padding(16)
         }
-        .animation(.none)
+        .transaction { $0.animation = nil }
         .overlay {
             if observer.viewModel.isSaving {
                 Color.black.opacity(0.25)

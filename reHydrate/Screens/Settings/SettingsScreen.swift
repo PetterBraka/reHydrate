@@ -77,7 +77,7 @@ struct SettingsScreen: View {
                 loading
             }
         }
-        .animation(.easeInOut)
+        .transaction { $0.animation = .easeInOut }
     }
     
     @ViewBuilder
