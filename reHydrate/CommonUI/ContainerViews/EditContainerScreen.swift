@@ -166,12 +166,13 @@ private extension EditContainerScreen {
 #Preview {
     Text("")
         .sheet(isPresented: .constant(true)) {
-            EditContainerScreen(observer: EditContainerScreenObservable(
-                presenter: Screen.EditContainer.Presenter(
-                    engine: Engine.mock,
-                    router: Router(),
-                    selectedDrink: .init(id: "test", size: 300, container: .medium)
-                )
-            ))
+            let presenter = Screen.EditContainer.Presenter(
+                engine: Engine.mock,
+                router: Router(),
+                selectedDrink: .init(id: "test", size: 300, container: .medium),
+                didSavingChanges: nil
+            )
+            let observer = EditContainerScreenObservable(presenter: presenter)
+            EditContainerScreen(observer: observer)
         }
 }

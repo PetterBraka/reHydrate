@@ -35,10 +35,12 @@ extension Screen.EditContainer {
         private let selectedDrink: Drink
         
         private let containerRanger: (min: Int, max: Int)
+        private let didSavingChanges: (() -> Void)?
         
         public init(engine: Engine,
                     router: Router,
-                    selectedDrink: Drink) {
+                    selectedDrink: Drink,
+                    didSavingChanges: (() -> Void)?) {
             self.engine = engine
             self.router = router
             self.selectedDrink = selectedDrink
@@ -48,6 +50,7 @@ extension Screen.EditContainer {
             case .medium: (300, 700)
             case .large: (500, 1200)
             }
+            self.didSavingChanges = didSavingChanges
             
             self.viewModel = .init(
                 isSaving: false,
@@ -82,6 +85,7 @@ extension Screen.EditContainer {
                     try? await Task.sleep(for: .seconds(1))
                     updateViewModel(isSaving: false)
                     router.close()
+                    didSavingChanges?()
                 } catch {
                     updateViewModel(isSaving: false, error: .failedSaving)
                 }

@@ -58,7 +58,9 @@ public final class SceneFactory: ObservableObject {
     func makeEditScreen(with drink: Home.ViewModel.Drink) -> EditContainerScreen {
         let presenter = Screen.EditContainer.Presenter(engine: engine,
                                                        router: router,
-                                                       selectedDrink: .init(from: drink))
+                                                       selectedDrink: .init(from: drink)) { [weak self] in
+            self?.homePresenter.sync(didComplete: nil)
+        }
         let observer = EditContainerScreenObservable(presenter: presenter)
         presenter.scene = observer
         
