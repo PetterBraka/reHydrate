@@ -15,7 +15,6 @@ struct HomeScreen: View {
     @ObservedObject var observer: HomeScreenObservable
 
     var body: some View {
-        let _ = Self._printChanges()
         VStack(spacing: 16) {
             header
                 .task {
