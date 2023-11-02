@@ -11,32 +11,36 @@ public final class Router {
     public weak var sceneObserver: RouterObservableType?
     
     public init() {}
-}
-
-extension Router: HomeRoutable {
+    
     public func showHome() {
         sceneObserver?.setTab(to: .home)
+    }
+    
+    public func showHistory() {
+        sceneObserver?.setTab(to: .history)
+    }
+    
+    public func showSettings() {
+        sceneObserver?.setTab(to: .settings)
+    }
+    
+    public func close() {
+        sceneObserver?.setPopUp(to: .none)
     }
     
     public func showEdit(drink: Home.ViewModel.Drink) {
         sceneObserver?.setPopUp(to: .edit(drink))
     }
-}
-
-extension Router: SettingsRoutable {
-    public func showSettings() {
-        sceneObserver?.setTab(to: .settings)
+    
+    public func showCredits() {
+        sceneObserver?.setPopUp(to: .credits)
     }
 }
 
-extension Router: HistoryRoutable {
-    public func showHistory() {
-        sceneObserver?.setTab(to: .history)
-    }
-}
+extension Router: HomeRoutable {}
 
-extension Router: EditContainerRoutable {
-    public func close() {
-        sceneObserver?.setPopUp(to: .none)
-    }
-}
+extension Router: SettingsRoutable {}
+
+extension Router: HistoryRoutable {}
+
+extension Router: EditContainerRoutable, CreditsRoutable {}

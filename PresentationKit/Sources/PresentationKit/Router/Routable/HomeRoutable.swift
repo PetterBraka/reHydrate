@@ -8,6 +8,6 @@
 import HomePresentationInterface
 
 public protocol HomeRoutable {
-    func showHome()
+    func showSettings()
     func showEdit(drink: Home.ViewModel.Drink)
 }

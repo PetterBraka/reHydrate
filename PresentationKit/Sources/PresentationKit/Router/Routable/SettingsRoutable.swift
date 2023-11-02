@@ -6,5 +6,6 @@
 //
 
 public protocol SettingsRoutable {
-    func showSettings()
+    func showHome()
+    func showCredits()
 }
