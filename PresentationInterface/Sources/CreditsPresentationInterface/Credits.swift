@@ -13,6 +13,7 @@ public enum Credits {
     }
     
     public enum Action {
+        case didTapClose
         case didTapPerson(ViewModel.CreditedPerson)
         case didTapHelpTranslate
     }

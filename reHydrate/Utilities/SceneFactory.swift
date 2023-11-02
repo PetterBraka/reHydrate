@@ -69,6 +69,15 @@ public final class SceneFactory: ObservableObject {
         
         return EditContainerScreen(observer: observer)
     }
+    
+    func makeCreditsScreen() -> CreditsScreen {
+        let presenter = Screen.Settings.Credits.Presenter(engine: engine,
+                                                       router: router)
+        let observer = CreditsScreenObservable(presenter: presenter)
+        presenter.scene = observer
+        
+        return CreditsScreen(observer: observer)
+    }
 }
 
 extension Home.ViewModel.Drink {

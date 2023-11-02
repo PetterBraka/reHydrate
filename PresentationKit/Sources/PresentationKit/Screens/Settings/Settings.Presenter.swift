@@ -27,7 +27,7 @@ extension Screen.Settings {
             HasAppInfo
         )
         public typealias Router = (
-            HomeRoutable
+            SettingsRoutable
         )
         
         public typealias ViewModel = Settings.ViewModel
@@ -142,7 +142,9 @@ extension Screen.Settings {
                     subject: "reHydrate query - v\(engine.appVersion)",
                     body: nil
                 )
-            case .didSetDarkMode(_), .didTapEditAppIcon, .didTapCredits:
+            case .didTapCredits:
+                router.showCredits()
+            case .didSetDarkMode(_), .didTapEditAppIcon:
                 // TODO: Handle this properly
                 await updateViewModel(isLoading: false, error: nil)
             }

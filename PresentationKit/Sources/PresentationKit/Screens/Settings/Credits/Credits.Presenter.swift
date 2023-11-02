@@ -17,7 +17,7 @@ extension Screen.Settings.Credits {
             HasOpenUrlService
         )
         public typealias Router = (
-            Any
+            CreditsRoutable
         )
         
         public typealias ViewModel = Credits.ViewModel
@@ -65,6 +65,8 @@ extension Screen.Settings.Credits {
         
         public func perform(action: Credits.Action) async {
             switch action {
+            case .didTapClose:
+                router.close()
             case let .didTapPerson(person):
                 do {
                     guard let url = person.url else { return }

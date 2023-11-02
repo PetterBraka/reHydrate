@@ -42,6 +42,8 @@ struct AppView: View {
         switch popup {
         case let .edit(drink):
             sceneFactory.makeEditScreen(with: drink)
+        case .credits:
+            sceneFactory.makeCreditsScreen()
         }
     }
 }
