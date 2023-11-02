@@ -29,6 +29,9 @@ public enum Settings {
         case didTapContactMe
         case didTapPrivacy
         case didTapDeveloperInstagram
+        
+        case didOpenSettings
+        case dismissAlert
     }
     
     public struct ViewModel {
@@ -38,7 +41,6 @@ public enum Settings {
         public let drinks: [ViewModel.Drink]
         public let notifications: NotificationSettings
         public let error: Error?
-        
         
         public init(
             isLoading: Bool,

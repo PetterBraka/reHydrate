@@ -13,6 +13,7 @@ import DayServiceInterface
 import DrinkServiceInterface
 import DatabaseServiceInterface
 import NotificationServiceInterface
+import PortsInterface
 
 extension Screen.Settings {
     public final class Presenter: SettingsPresenterType {
@@ -21,7 +22,8 @@ extension Screen.Settings {
             HasDayService &
             HasDrinksService &
             HasUnitService &
-            HasNotificationService
+            HasNotificationService &
+            HasOpenUrlService
         )
         public typealias Router = (
             HomeRoutable
@@ -120,9 +122,18 @@ extension Screen.Settings {
                 let frequency = viewModel.notifications.frequency - engine.notificationService.minimumAllowedFrequency
                 await enableNotifications()
                 await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
-            default:
-                // TODO: Fix this Petter
-                break
+            case .dismissAlert:
+                await updateViewModel(isLoading: false, error: nil)
+            case .didOpenSettings:
+                if let url = engine.openUrlService.settingsUrl {
+                    await updateViewModel(isLoading: true, error: nil)
+                    await engine.openUrlService.open(url: url)
+                }
+                await updateViewModel(isLoading: false, error: nil)
+            case .didSetDarkMode(_), .didTapEditAppIcon, .didTapCredits,
+                    .didTapContactMe, .didTapPrivacy, .didTapDeveloperInstagram: 
+                // TODO: Handle this properly
+                await updateViewModel(isLoading: false, error: nil)
             }
         }
     }

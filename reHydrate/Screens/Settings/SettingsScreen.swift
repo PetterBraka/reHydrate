@@ -78,6 +78,37 @@ struct SettingsScreen: View {
             }
         }
         .transaction { $0.animation = .easeInOut }
+        .alert(isPresented: Binding { observer.alert != nil } set: { _ in },
+               error: observer.alert) { error in
+            switch error {
+            case .somethingWentWrong, .invalidFrequency:
+                Button(LocalizedString(
+                    "ui.generic.alert.action.done",
+                    value: "Done",
+                    comment: ""
+                )) {
+                    observer.perform(action: .dismissAlert)
+                }
+            case .unauthorizedAccessOfNotifications:
+                Button(LocalizedString(
+                    "ui.settings.alert.action.openSettings",
+                    value: "Open settings",
+                    comment: "An button which opens the app settings"
+                )) {
+                    observer.perform(action: .didOpenSettings)
+                }
+                Button(LocalizedString(
+                    "ui.generic.alert.action.close",
+                    value: "Close",
+                    comment: ""
+                ), role: .cancel) {
+                    observer.perform(action: .dismissAlert)
+                }
+            }
+        } message: { error in
+            Text(error.message)
+        }
+
     }
     
     @ViewBuilder
