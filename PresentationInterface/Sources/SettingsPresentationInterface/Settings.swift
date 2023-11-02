@@ -145,5 +145,7 @@ extension Settings.ViewModel {
         case invalidDates
         case lowFrequency
         case missingReminders
+        // Open URL erros
+        case cantOpenUrl
     }
 }

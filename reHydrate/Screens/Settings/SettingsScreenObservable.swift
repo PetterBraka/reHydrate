@@ -55,6 +55,7 @@ extension SettingsScreenObservable {
         case unauthorizedAccessOfNotifications
         case somethingWentWrong
         case invalidFrequency
+        case cantOpenUrl
         
         public var errorDescription: String? {
             switch self {
@@ -74,6 +75,11 @@ extension SettingsScreenObservable {
                     "ui.settings.alert.invalidFrequency.title",
                     value: "Frequency is too low",
                     comment: "An alert displayed when the user sets and invalid reminders frequency")
+            case .cantOpenUrl:
+                LocalizedString(
+                    "ui.settings.alert.cantOpenUrl.title",
+                    value: "Unable to open",
+                    comment: "An alert displayed when we are unable to open a url")
             }
         }
         
@@ -97,6 +103,12 @@ extension SettingsScreenObservable {
                     value: "Please increase it",
                     comment: "An alert displayed when the user sets and invalid reminders frequency"
                 )
+            case .cantOpenUrl:
+                LocalizedString(
+                    "ui.settings.alert.cantOpenUrl.message",
+                    value: "Please try again later",
+                    comment: "An alert displayed when we are unable to open a url"
+                )
             }
         }
         
@@ -108,6 +120,8 @@ extension SettingsScreenObservable {
                 self = .unauthorizedAccessOfNotifications
             case .lowFrequency:
                 self = .invalidFrequency
+            case .cantOpenUrl:
+                self = .cantOpenUrl
             case .none, .invalidDates,
                     .invalidStart, .invalidStop,
                     .missingReminders:

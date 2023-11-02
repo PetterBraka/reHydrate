@@ -10,9 +10,6 @@ import Foundation
 public protocol OpenUrlServiceInterface {
     var settingsUrl: URL? { get }
     
-    func open(url: URL) async
-}
-
-public protocol HasOpenUrlService {
-    var openUrlService: OpenUrlServiceInterface { get set }
+    func open(url: URL) async throws
+    func email(to email: String, cc: String?, bcc: String?, subject: String, body: String?) async throws
 }

@@ -81,7 +81,7 @@ struct SettingsScreen: View {
         .alert(isPresented: Binding { observer.alert != nil } set: { _ in },
                error: observer.alert) { error in
             switch error {
-            case .somethingWentWrong, .invalidFrequency:
+            case .somethingWentWrong, .invalidFrequency, .cantOpenUrl:
                 Button(LocalizedString(
                     "ui.generic.alert.action.done",
                     value: "Done",

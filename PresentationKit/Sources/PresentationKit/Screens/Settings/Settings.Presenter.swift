@@ -127,13 +127,20 @@ extension Screen.Settings {
             case .dismissAlert:
                 await updateViewModel(isLoading: false, error: nil)
             case .didOpenSettings:
-                if let url = engine.openUrlService.settingsUrl {
-                    await updateViewModel(isLoading: true, error: nil)
-                    await engine.openUrlService.open(url: url)
-                }
-                await updateViewModel(isLoading: false, error: nil)
-            case .didSetDarkMode(_), .didTapEditAppIcon, .didTapCredits,
-                    .didTapContactMe, .didTapPrivacy, .didTapDeveloperInstagram: 
+                await open(url: engine.openUrlService.settingsUrl)
+            case .didTapPrivacy:
+                await open(url: TrustedUrl.privacy.url)
+            case .didTapDeveloperInstagram:
+                await open(url: TrustedUrl.developerInstagram.url)
+            case .didTapContactMe:
+                await email(
+                    to: "Petter.braka+reHydrate@gmail.com",
+                    cc: nil,
+                    bcc: nil,
+                    subject: "reHydrate query - v\(engine.appVersion)",
+                    body: nil
+                )
+            case .didSetDarkMode(_), .didTapEditAppIcon, .didTapCredits:
                 // TODO: Handle this properly
                 await updateViewModel(isLoading: false, error: nil)
             }
@@ -368,5 +375,52 @@ extension Double {
     
     func roundToHalf(_ rule: FloatingPointRoundingRule = .toNearestOrEven) -> Double {
         (self * 2).rounded(rule) / 2
+    }
+}
+
+extension Screen.Settings.Presenter {
+    func open(url: URL?) async {
+        await updateViewModel(isLoading: true, error: nil)
+        do {
+            guard let url else {
+                throw OpenUrlError.invalidUrl("Missing")
+            }
+            try await engine.openUrlService.open(url: url)
+            await updateViewModel(isLoading: false, error: nil)
+        } catch {
+            engine.logger.error("Couldn't open url", error: error)
+            await updateViewModel(isLoading: false, error: .init(from: error as? OpenUrlError))
+        }
+    }
+    
+    func email(to email: String, cc: String?, bcc: String?,
+               subject: String, body: String?) async {
+        await updateViewModel(isLoading: true, error: nil)
+        do {
+            try await engine.openUrlService.email(
+                to: email,
+                cc: cc,
+                bcc: bcc,
+                subject: subject,
+                body: body
+            )
+            await updateViewModel(isLoading: false, error: nil)
+        } catch {
+            engine.logger.error("Couldn't open url", error: error)
+            await updateViewModel(isLoading: false, error: .init(from: error as? OpenUrlError))
+        }
+    }
+}
+
+extension Screen.Settings.Presenter.ViewModel.Error {
+    init(from error: OpenUrlError?) {
+        switch error {
+        case .invalidUrl:
+            self = .cantOpenUrl
+        case .urlCantBeOpened:
+            self = .cantOpenUrl
+        case .none:
+            self = .somethingWentWrong
+        }
     }
 }
