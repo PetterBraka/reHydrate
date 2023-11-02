@@ -349,7 +349,7 @@ struct SettingsScreen: View {
     var supportDev: some View {
         Section {
             Button {
-                openLink(to: .merch)
+                observer.perform(action: .didTapMerchandise)
             } label: {
                 HStack {
                     Text(LocalizedString("ui.settings.aboutApp.metch",

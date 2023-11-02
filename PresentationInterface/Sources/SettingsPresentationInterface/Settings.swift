@@ -29,6 +29,7 @@ public enum Settings {
         case didTapContactMe
         case didTapPrivacy
         case didTapDeveloperInstagram
+        case didTapMerchandise
         
         case didOpenSettings
         case dismissAlert

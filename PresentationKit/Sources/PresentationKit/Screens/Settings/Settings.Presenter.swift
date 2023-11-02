@@ -132,6 +132,8 @@ extension Screen.Settings {
                 await open(url: TrustedUrl.privacy.url)
             case .didTapDeveloperInstagram:
                 await open(url: TrustedUrl.developerInstagram.url)
+            case .didTapMerchandise:
+                await open(url: TrustedUrl.merchandise.url)
             case .didTapContactMe:
                 await email(
                     to: "Petter.braka+reHydrate@gmail.com",
