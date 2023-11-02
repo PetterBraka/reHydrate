@@ -104,7 +104,7 @@
 		335DA340276017EC002266D2 /* whiteGreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2EF276017EC002266D2 /* whiteGreen@2x.png */; };
 		335DA341276017EC002266D2 /* blackYellow@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2F0276017EC002266D2 /* blackYellow@1x.png */; };
 		33600BD42764B3800061A771 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33600BD32764B3800061A771 /* Image.swift */; };
-		33694FF3277CBADA00D2FE66 /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33694FF2277CBADA00D2FE66 /* CreditsView.swift */; };
+		33694FF3277CBADA00D2FE66 /* CreditsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33694FF2277CBADA00D2FE66 /* CreditsScreen.swift */; };
 		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */; };
 		33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */; };
@@ -281,7 +281,7 @@
 		335DA2EF276017EC002266D2 /* whiteGreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteGreen@2x.png"; sourceTree = "<group>"; };
 		335DA2F0276017EC002266D2 /* blackYellow@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackYellow@1x.png"; sourceTree = "<group>"; };
 		33600BD32764B3800061A771 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
-		33694FF2277CBADA00D2FE66 /* CreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsView.swift; sourceTree = "<group>"; };
+		33694FF2277CBADA00D2FE66 /* CreditsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsScreen.swift; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
 		33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
@@ -598,7 +598,7 @@
 			isa = PBXGroup;
 			children = (
 				A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */,
-				33694FF2277CBADA00D2FE66 /* CreditsView.swift */,
+				33694FF2277CBADA00D2FE66 /* CreditsScreen.swift */,
 				A1EABF392AF3F7C800591981 /* CreditsScreenObservable.swift */,
 				33EC3A7A274D06070049E414 /* SettingsScreen.swift */,
 				A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */,
@@ -912,7 +912,7 @@
 				A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				A1EABF342AF37E5B00591981 /* OpenUrlPort.swift in Sources */,
-				33694FF3277CBADA00D2FE66 /* CreditsView.swift in Sources */,
+				33694FF3277CBADA00D2FE66 /* CreditsScreen.swift in Sources */,
 				A183BCEC2A3122CE00D42033 /* Font.swift in Sources */,
 				A1EABF282ADA842100591981 /* EditContainerScreen.swift in Sources */,
 				A183BD002A33C52E00D42033 /* Date+localized.swift in Sources */,

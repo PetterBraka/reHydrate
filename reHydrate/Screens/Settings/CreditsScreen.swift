@@ -1,5 +1,5 @@
 //
-//  CreditsView.swift
+//  CreditsScreen.swift
 //  reHydrate
 //
 //  Created by Petter vang Brakalsvålet on 29/12/2021.
@@ -11,7 +11,7 @@ import CreditsPresentationInterface
 import PresentationKit
 import EngineKit
 
-struct CreditsView: View {
+struct CreditsScreen: View {
     @ObservedObject var observer: CreditsScreenObservable
     
     var body: some View {
@@ -81,8 +81,7 @@ struct CreditsView: View {
 }
 
 #Preview {
-    let presenter = Screen.Settings.Credits.Presenter(
-        engine: Engine.mock, router: "")
+    let presenter = Screen.Settings.Credits.Presenter(engine: Engine.mock, router: Router())
     let observer = CreditsScreenObservable(presenter: presenter)
-    return CreditsView(observer: observer)
+    return CreditsScreen(observer: observer)
 }
