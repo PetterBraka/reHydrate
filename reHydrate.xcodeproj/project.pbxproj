@@ -156,6 +156,7 @@
 		A1EABF322ADBCC3C00591981 /* Preview+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */; };
 		A1EABF342AF37E5B00591981 /* OpenUrlPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */; };
 		A1EABF382AF3924100591981 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF372AF3924100591981 /* UIApplication+Extensions.swift */; };
+		A1EABF3A2AF3F7C800591981 /* CreditsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF392AF3F7C800591981 /* CreditsScreenObservable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -339,6 +340,7 @@
 		A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Preview+Helpers.swift"; sourceTree = "<group>"; };
 		A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenUrlPort.swift; sourceTree = "<group>"; };
 		A1EABF372AF3924100591981 /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
+		A1EABF392AF3F7C800591981 /* CreditsScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsScreenObservable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -600,6 +602,7 @@
 			children = (
 				A18502FF2986BC0300C878DE /* AppIconSelectionView.swift */,
 				33694FF2277CBADA00D2FE66 /* CreditsView.swift */,
+				A1EABF392AF3F7C800591981 /* CreditsScreenObservable.swift */,
 				33EC3A7A274D06070049E414 /* SettingsScreen.swift */,
 				A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */,
 			);
@@ -892,6 +895,7 @@
 				33694FEF277CAA8E00D2FE66 /* View+Extensions.swift in Sources */,
 				A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
+				A1EABF3A2AF3F7C800591981 /* CreditsScreenObservable.swift in Sources */,
 				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,
 				A183BCED2A3122D100D42033 /* Color.swift in Sources */,
 				A1EABF2C2ADA936F00591981 /* FilledContainer.swift in Sources */,

@@ -9,6 +9,7 @@ let package: Package = {
     let home = "HomePresentationInterface"
     let settings = "SettingsPresentationInterface"
     let editContainer = "EditContainerPresentationInterface"
+    let credits = "CreditsPresentationInterface"
 
     return Package(
         name: rootPackage,
@@ -28,12 +29,14 @@ let package: Package = {
                 dependencies: [
                     .byName(name: home),
                     .byName(name: settings),
-                    .byName(name: editContainer)
+                    .byName(name: editContainer),
+                    .byName(name: credits),
                 ]
             ),
             .target(name: home),
             .target(name: settings),
             .target(name: editContainer),
+            .target(name: credits),
         ]
     )
 }()

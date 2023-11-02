@@ -8,9 +8,16 @@
 
 import UserNotifications
 import EngineKit
+import PortsInterface
 
 extension Engine {
-    static let mock: HasService = Engine(
+    typealias EngineType = (
+        HasService &
+        HasAppInfo &
+        HasPorts
+    )
+    
+    static let mock: EngineType = Engine(
         appVersion: "1.0.0",
         reminders: [.init(title: "Test", body: "Test")],
         celebrations: [.init(title: "Test", body: "Test")],

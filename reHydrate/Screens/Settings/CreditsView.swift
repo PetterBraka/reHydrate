@@ -7,92 +7,82 @@
 //
 
 import SwiftUI
+import CreditsPresentationInterface
+import PresentationKit
+import EngineKit
 
 struct CreditsView: View {
-    struct Credit: Hashable {
-        var name, webSite, icons: String
-    }
-
-    @State var credits: [Credit] =
-        [
-            Credit(name: "Petter Vang Braklsvålet",
-                   webSite: "https://petterbraka.github.io/LinkTree/",
-                   icons: "🌎 🇳🇴"),
-            Credit(name: "Alexandra Murphy",
-                   webSite: "https://beacons.page/alexsmurphy",
-                   icons: "🌎 🇬🇧"),
-            Credit(name: "Leo Mehing",
-                   webSite: "https://structured.today",
-                   icons: "🌎 🇩🇪"),
-            Credit(name: "Sævar Ingi Siggason",
-                   webSite: "",
-                   icons: "🇮🇸")
-        ]
-    var dismiss: () -> Void
-
+    @ObservedObject var observer: CreditsScreenObservable
+    
     var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(credits, id: \.self) { credit in
-                        Button {
-                            openLink(to: credit.webSite)
-                        } label: {
-                            HStack {
-                                Text(credit.name)
-                                Spacer()
-                                Text(credit.icons)
-                            }
-                            .contentShape(Rectangle())
-                        }
-                        .font(.brandBody)
-                        .foregroundColor(.label)
-                        if credit != credits.last {
-                            Divider()
-                        }
-                    }
-                }
+        ScrollView {
+            list
                 .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: 5)
+                .background {
+                    RoundedRectangle(cornerRadius: 8)
                         .foregroundColor(.tableViewBackground)
-                )
+                }
                 .padding(.bottom, 8)
+            helpTranslateButton
+                .padding(16)
+                .background {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundColor(.tableViewBackground)
+                }
+        }
+        .padding(.horizontal, 16)
+    }
+    
+    var list: some View {
+        VStack(spacing: 16) {
+            ForEach(observer.viewModel.creditedPeople, id: \.self) { person in
                 Button {
-                    openLink(to: .helpTranslate)
+                    observer.perform(action: .didTapPerson(person))
                 } label: {
-                    HStack {
-                        Text(LocalizedString("ui.settings.credits.helpTranslate", value: "Help translate the app", comment: "Asks the user if they would like to help translate the app"))
+                    HStack(spacing: 8) {
+                        Text(person.name)
+                            .lineLimit(nil)
+                            .multilineTextAlignment(.leading)
+                            .underline(person.url != nil)
                         Spacer()
-                        Image.open
+                        Text(person.emoji)
                     }
                     .contentShape(Rectangle())
-                    .font(.brandBody)
-                    .foregroundColor(.label)
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(.tableViewBackground)
-                )
-            }
-            .padding(.horizontal, 16)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(LocalizedString("ui.done.button", value: "Done", comment: "Done button"), 
-                           role: .cancel) {
-                        dismiss()
-                    }
-                    .foregroundColor(.label)
-                    .font(.brandTitle)
+                .font(.brandBody)
+                .foregroundColor(.label)
+                .disabled(person.url == nil)
+                if person != observer.viewModel.creditedPeople.last {
+                    Divider()
                 }
             }
         }
     }
+    
+    var helpTranslateButton: some View {
+        Button {
+            observer.perform(action: .didTapHelpTranslate)
+        } label: {
+            HStack {
+                Text(LocalizedString(
+                    "ui.settings.credits.helpTranslate",
+                    value: "Help translate the app",
+                    comment: "Asks the user if they would like to help translate the app"
+                ))
+                Spacer()
+                Image.open
+            }
+            .contentShape(Rectangle())
+            .font(.brandBody)
+            .foregroundColor(.label)
+            .multilineTextAlignment(.leading)
+        }
+    }
 }
 
-struct CreditsView_Previews: PreviewProvider {
-    static var previews: some View {
-        CreditsView {}
-    }
+#Preview {
+    let presenter = Screen.Settings.Credits.Presenter(
+        engine: Engine.mock, router: "")
+    let observer = CreditsScreenObservable(presenter: presenter)
+    return CreditsView(observer: observer)
 }
