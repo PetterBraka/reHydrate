@@ -13,6 +13,7 @@ extension Engine {
     static let mock: HasService = Engine(
         reminders: [.init(title: "Test", body: "Test")],
         celebrations: [.init(title: "Test", body: "Test")],
-        notificationCenter: UNUserNotificationCenter.current()
+        notificationCenter: UNUserNotificationCenter.current(), 
+        openUrlService: OpenUrlPort()
     )
 }

@@ -154,6 +154,7 @@
 		A1EABF2E2ADAC80000591981 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF2D2ADAC80000591981 /* LocalizedString.swift */; };
 		A1EABF302ADAD57600591981 /* EditContainerScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF2F2ADAD57600591981 /* EditContainerScreenObservable.swift */; };
 		A1EABF322ADBCC3C00591981 /* Preview+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */; };
+		A1EABF342AF37E5B00591981 /* OpenUrlPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -335,6 +336,7 @@
 		A1EABF2D2ADAC80000591981 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		A1EABF2F2ADAD57600591981 /* EditContainerScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContainerScreenObservable.swift; sourceTree = "<group>"; };
 		A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Preview+Helpers.swift"; sourceTree = "<group>"; };
+		A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenUrlPort.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -585,6 +587,7 @@
 				A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */,
 				A11180322AC3768D007E4585 /* NotificationCenterPort.swift */,
 				A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */,
+				A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */,
 			);
 			path = Ports;
 			sourceTree = "<group>";
@@ -904,6 +907,7 @@
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
 				A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
+				A1EABF342AF37E5B00591981 /* OpenUrlPort.swift in Sources */,
 				33694FF3277CBADA00D2FE66 /* CreditsView.swift in Sources */,
 				A183BCEC2A3122CE00D42033 /* Font.swift in Sources */,
 				A1EABF282ADA842100591981 /* EditContainerScreen.swift in Sources */,

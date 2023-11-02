@@ -28,7 +28,8 @@ public final class SceneFactory: ObservableObject {
         engine = Engine(
             reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
             celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
-            notificationCenter: UNUserNotificationCenter.current()
+            notificationCenter: UNUserNotificationCenter.current(),
+            openUrlService: OpenUrlPort()
         )
         notificationDelegate = NotificationDelegatePort(engine: engine)
         engine.didCompleteNotificationAction = { [weak self] in

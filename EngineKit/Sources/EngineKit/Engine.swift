@@ -21,12 +21,14 @@ import UserPreferenceServiceInterface
 import UserPreferenceService
 import NotificationServiceInterface
 import NotificationService
+import PortsInterface
 
 public final class Engine {
     public init(
         reminders: [NotificationMessage],
         celebrations: [NotificationMessage],
-        notificationCenter: NotificationCenterType
+        notificationCenter: NotificationCenterType,
+        openUrlService: OpenUrlServiceInterface
     ) {
         let project = "reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
@@ -44,6 +46,7 @@ public final class Engine {
         self.reminders = reminders
         self.celebrations = celebrations
         self.notificationCenter = notificationCenter
+        self.openUrlService = openUrlService
     }
     
     private let reminders: [NotificationMessage]
@@ -58,6 +61,9 @@ public final class Engine {
     public var consumptionManager: ConsumptionManagerType
     public var userPreferenceService: UserPreferenceServiceType
     
+    // MARK: Ports
+    public var openUrlService: OpenUrlServiceInterface
+    
     public lazy var notificationService: NotificationServiceType = NotificationService(
         engine: self,
         reminders: reminders,
@@ -66,6 +72,8 @@ public final class Engine {
         didComplete: nil
     )
     public lazy var notificationDelegate: NotificationDelegateType = NotificationDelegateService(engine: self, didCompleteAction: didCompleteNotificationAction)
+    
+    // MARK: Service
     public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)
     public lazy var languageService: LanguageServiceType = LanguageService(engine: self)
     public lazy var dayService: DayServiceType = DayService(engine: self)
@@ -73,3 +81,4 @@ public final class Engine {
 }
 
 extension Engine: HasService {}
+extension Engine: HasPorts {}
