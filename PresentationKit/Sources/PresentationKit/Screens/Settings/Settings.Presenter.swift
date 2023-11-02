@@ -23,7 +23,8 @@ extension Screen.Settings {
             HasDrinksService &
             HasUnitService &
             HasNotificationService &
-            HasOpenUrlService
+            HasOpenUrlService &
+            HasAppInfo
         )
         public typealias Router = (
             HomeRoutable
@@ -61,6 +62,7 @@ extension Screen.Settings {
                     stop: Date(time: "20:00")!,
                     stopRange: start ... endOfDay
                 ),
+                appVersion: engine.appVersion,
                 error: nil
             )
             Task(priority: .high) {
@@ -184,7 +186,8 @@ extension Screen.Settings.Presenter {
             unitSystem: unitSystem,
             goal: newGoal,
             drinks: drinks,
-            notifications: notifications, 
+            notifications: notifications,
+            appVersion: engine.appVersion,
             error: error
         )
     }

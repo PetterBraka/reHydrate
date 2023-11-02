@@ -373,7 +373,7 @@ struct SettingsScreen: View {
                     Text(LocalizedString("ui.settings.aboutApp.appInfo",
                                            value: "Version:",
                                            comment: "The version of the app") 
-                         + "\(observer.appVersion ?? "1.0.0")")
+                         + "\(observer.viewModel.appVersion)")
                 }
                 .font(.brandBody)
                 .foregroundColor(Color.labelFaded)

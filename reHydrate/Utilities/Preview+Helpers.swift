@@ -11,6 +11,7 @@ import EngineKit
 
 extension Engine {
     static let mock: HasService = Engine(
+        appVersion: "1.0.0",
         reminders: [.init(title: "Test", body: "Test")],
         celebrations: [.init(title: "Test", body: "Test")],
         notificationCenter: UNUserNotificationCenter.current(), 

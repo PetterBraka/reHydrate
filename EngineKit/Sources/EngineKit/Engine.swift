@@ -25,6 +25,7 @@ import PortsInterface
 
 public final class Engine {
     public init(
+        appVersion: String,
         reminders: [NotificationMessage],
         celebrations: [NotificationMessage],
         notificationCenter: NotificationCenterType,
@@ -43,12 +44,14 @@ public final class Engine {
         consumptionManager = ConsumptionManager(database: database)
         userPreferenceService = UserPreferenceService(defaults: sharedDefault)
         
+        self.appVersion = appVersion
         self.reminders = reminders
         self.celebrations = celebrations
         self.notificationCenter = notificationCenter
         self.openUrlService = openUrlService
     }
     
+    public var appVersion: String
     private let reminders: [NotificationMessage]
     private let celebrations: [NotificationMessage]
     public let notificationCenter: NotificationCenterType
@@ -82,3 +85,4 @@ public final class Engine {
 
 extension Engine: HasService {}
 extension Engine: HasPorts {}
+extension Engine: HasAppInfo {}

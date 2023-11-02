@@ -12,6 +12,7 @@ import PresentationKit
 import HomePresentationInterface
 import DrinkServiceInterface
 import UserNotifications
+import UIKit
 
 public final class SceneFactory: ObservableObject {
     public let engine: Engine
@@ -26,6 +27,7 @@ public final class SceneFactory: ObservableObject {
     
     init() {
         engine = Engine(
+            appVersion: UIApplication.shared.appVersion,
             reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
             celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
             notificationCenter: UNUserNotificationCenter.current(),

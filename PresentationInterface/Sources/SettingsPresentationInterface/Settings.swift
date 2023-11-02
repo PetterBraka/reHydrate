@@ -41,11 +41,15 @@ public enum Settings {
         public let drinks: [ViewModel.Drink]
         public let notifications: NotificationSettings
         public let error: Error?
+        public let appVersion: String
         
         public init(
             isLoading: Bool,
-            unitSystem: UnitSystem, goal: Double, drinks: [ViewModel.Drink],
+            unitSystem: UnitSystem,
+            goal: Double,
+            drinks: [ViewModel.Drink],
             notifications: NotificationSettings,
+            appVersion: String,
             error: Error?
         ) {
             self.isLoading = isLoading
@@ -53,6 +57,7 @@ public enum Settings {
             self.goal = goal
             self.drinks = drinks
             self.notifications = notifications
+            self.appVersion = appVersion
             self.error = error
         }
     }

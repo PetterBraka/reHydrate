@@ -16,8 +16,6 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     public typealias ViewModel = Settings.ViewModel
     private let presenter: Screen.Settings.Presenter
     
-    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    
     @Published var language: Language
     @Published var languageOptions: [Language]
     @Published var isDarkMode: Bool
