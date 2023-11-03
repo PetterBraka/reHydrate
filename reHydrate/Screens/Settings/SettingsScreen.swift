@@ -40,25 +40,6 @@ struct SettingsScreen: View {
 //                    AppIconSelectionView {
 //                        showSheet = nil
 //                    }
-//                case .credits:
-//                    CreditsView {
-//                        showSheet = nil
-//                    }
-//                }
-//            }
-//            TODO: Alert needs to be moved
-//            .alert(LocalizedString("ui.settings.notifications.alert",
-//                                     value: "Not allowed to send notifications",
-//                                     comment: "An alert message displayed when the app isn't allowed to send notifications."),
-//                   isPresented: $observer.showNotificationAlert) {
-//                Button(LocalizedString("ui.settings.cancel.button",
-//                                         value: "Cancel",
-//                                         comment: "An button to dismiss a alert."),
-//                       role: .cancel) {}
-//                Button(LocalizedString("ui.settings.openSettings.button",
-//                                         value: "Open settings",
-//                                         comment: "A button to got to the settings app.")) {
-//                    observer.perform(action: .didTapOpenSettings)
 //                }
 //            }
             .toolbar(content: {
