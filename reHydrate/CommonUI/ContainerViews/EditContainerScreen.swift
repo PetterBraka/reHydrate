@@ -45,31 +45,30 @@ struct EditContainerScreen: View {
     }
     
     var toolBar: some View {
-        Grid {
-            GridRow {
-                Button(
-                    LocalizedString(
-                        "ui.edit.container.navigation.cancel",
-                        value: "Cancel",
-                        comment: "The button which will cancel your edits and go back")
-                ) {
-                    observer.perform(action: .didTapCancel)
-                }
-                Text(title)
-                    .frame(maxWidth: .infinity)
-                Button(
-                    LocalizedString(
-                        "ui.edit.container.navigation.save",
-                        value: "Save",
-                        comment: "The button which will save your edits and go back")
-                ) {
-                    observer.perform(action: .didTapSave(observer.size))
-                }
-                .bold()
+        CustomToolbar {
+            Text(title)
+        } leadingButton: {
+            Button(
+                LocalizedString(
+                    "ui.edit.container.navigation.cancel",
+                    value: "Cancel",
+                    comment: "The button which will cancel your edits and go back")
+            ) {
+                observer.perform(action: .didTapCancel)
             }
+            .tint(.red)
+            .buttonStyle(.bordered)
+        } trailingButton: {
+            Button(
+                LocalizedString(
+                    "ui.edit.container.navigation.save",
+                    value: "Save",
+                    comment: "The button which will save your edits and go back")
+            ) {
+                observer.perform(action: .didTapSave(observer.size))
+            }
+            .buttonStyle(.borderedProminent)
         }
-        .padding(.vertical, 16)
-        .padding(.horizontal, 16)
     }
     
     var image: Image {
