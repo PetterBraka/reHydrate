@@ -15,22 +15,37 @@ struct CreditsScreen: View {
     @ObservedObject var observer: CreditsScreenObservable
     
     var body: some View {
-        ScrollView {
-            list
-                .padding(16)
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundColor(.tableViewBackground)
+        VStack {
+            toolbar
+            ScrollView {
+                VStack(spacing: 8) {
+                    list
+                        .padding(16)
+                        .background {
+                            RoundedRectangle(cornerRadius: 8)
+                                .foregroundColor(.tableViewBackground)
+                        }
+                    helpTranslateButton
+                        .padding(16)
+                        .background {
+                            RoundedRectangle(cornerRadius: 8)
+                                .foregroundColor(.tableViewBackground)
+                        }
                 }
-                .padding(.bottom, 8)
-            helpTranslateButton
-                .padding(16)
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundColor(.tableViewBackground)
-                }
+            }
+            .padding(16)
         }
-        .padding(.horizontal, 16)
+    }
+    
+    var toolbar: some View {
+        CustomToolbar {
+            Text(toolbarTitle)
+                .bold()
+        } trailingButton: {
+            Button(closeButtonTitle) {
+                observer.perform(action: .didTapClose)
+            }
+        }
     }
     
     var list: some View {
@@ -80,8 +95,29 @@ struct CreditsScreen: View {
     }
 }
 
+extension CreditsScreen {
+    var toolbarTitle: String {
+        LocalizedString(
+            "ui.settings.credits.navigation.title",
+            value: "Credits",
+            comment: "A navigation bar title"
+        )
+    }
+    
+    var closeButtonTitle: String {
+        LocalizedString(
+            "ui.settings.credits.navigation.close",
+            value: "Close",
+            comment: "A navigation bar button"
+        )
+    }
+}
+
 #Preview {
-    let presenter = Screen.Settings.Credits.Presenter(engine: Engine.mock, router: Router())
-    let observer = CreditsScreenObservable(presenter: presenter)
-    return CreditsScreen(observer: observer)
+    Text("")
+        .sheet(isPresented: .constant(true)) {
+            let presenter = Screen.Settings.Credits.Presenter(engine: Engine.mock, router: Router())
+            let observer = CreditsScreenObservable(presenter: presenter)
+            CreditsScreen(observer: observer)
+        }
 }
