@@ -80,7 +80,6 @@ struct SettingsScreen: View {
         } message: { error in
             Text(error.message)
         }
-
     }
     
     @ViewBuilder
