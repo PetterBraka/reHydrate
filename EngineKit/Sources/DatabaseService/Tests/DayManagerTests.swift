@@ -24,6 +24,7 @@ final class DayManagerTests: XCTestCase {
     }
     
     override func tearDown() async throws {
+        try await database.deleteAll(DayModel(id: "", date: "", consumed: 0, goal: 0))
         let db = try XCTUnwrap(database.db)
         XCTAssertTrue(db.isClosed)
     }
@@ -40,6 +41,21 @@ final class DayManagerTests: XCTestCase {
         let foundDay = try await sut.fetch(with: referenceDate)
         assert(givenDay: givenDay, expectedDay: foundDay)
         XCTAssertEqual(spy.methodLogNames, [.write, .readMatchingOrderByLimit])
+    }
+    
+    func test_fetchDay_noDay() async throws {
+        guard let lastDate = XCTest.referenceDates.last
+        else {
+            XCTFail("No day found")
+            return
+        }
+        do {
+            _ = try await sut.fetch(with: lastDate)
+            XCTFail("Should fail")
+        } catch {
+            XCTAssertNotNil(error)
+        }
+        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
     }
     
     func test_fetchAll_success() async throws {
@@ -62,6 +78,16 @@ final class DayManagerTests: XCTestCase {
         XCTAssertEqual(lastDay.date, lastDate.toDateString())
         XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
                        [.readMatchingOrderByLimit])
+    }
+    
+    func test_fetchLast_noDays() async throws {
+        do {
+            _ = try await sut.fetchLast()
+            XCTFail("Should fail")
+        } catch {
+            XCTAssertNotNil(error)
+        }
+        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
     }
     
     func test_addConsumed() async throws {
@@ -124,6 +150,22 @@ final class DayManagerTests: XCTestCase {
         let updatedDay = try await sut.remove(goal: 2, fromDayAt: givenRandomDate)
         
         XCTAssertEqual(updatedDay.goal, 1)
+        XCTAssertEqual(updatedDay.date, givenRandomDate.toDateString())
+        
+        let fetchedDay = try await sut.fetch(with: givenRandomDate)
+        assert(givenDay: updatedDay, expectedDay: fetchedDay)
+    }
+    
+    func test_removeGoal_tooMuch() async throws {
+        try await preLoad4Days()
+        guard let givenRandomDate = XCTest.referenceDates.randomElement()
+        else {
+            XCTFail("No day found")
+            return
+        }
+        let updatedDay = try await sut.remove(goal: 5, fromDayAt: givenRandomDate)
+        
+        XCTAssertEqual(updatedDay.goal, 0)
         XCTAssertEqual(updatedDay.date, givenRandomDate.toDateString())
         
         let fetchedDay = try await sut.fetch(with: givenRandomDate)

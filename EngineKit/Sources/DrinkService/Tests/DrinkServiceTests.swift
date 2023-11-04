@@ -105,7 +105,24 @@ final class DrinkServiceTests: XCTestCase {
         let givenDrink = DrinkModel(id: "", size: 500, container: "mid")
         drinkManager.edit_returnValue = .success(givenDrink)
         
-        XCTAssertNil(Drink(from: givenDrink))
+        do {
+            _ = try await sut.edit(size: 600, of: .init(id: "", size: 500, container: .medium))
+            XCTFail("Should have failed")
+        } catch {
+            XCTAssertNotNil(error)
+        }
+    }
+    
+    func test_editDrink_fails() async throws {
+        let givenDrink = DrinkModel(id: "", size: 500, container: "medium")
+        drinkManager.edit_returnValue = .failure(MockError.some)
+        let unwrappedDrink = try XCTUnwrap(Drink(from: givenDrink))
+        do {
+            _ = try await sut.edit(size: 600, of: unwrappedDrink)
+            XCTFail("Should have failed")
+        } catch {
+            XCTAssertNotNil(error)
+        }
     }
     
     func test_remove() async throws {
@@ -202,5 +219,11 @@ private extension DrinkServiceTests {
                        file: file, line: line)
         XCTAssertEqual(givenContainers, expectedContainers,
                        file: file, line: line)
+    }
+}
+
+private extension DrinkServiceTests {
+    enum MockError: Error {
+        case some
     }
 }

@@ -76,6 +76,12 @@ final class DrinkManagerTests: XCTestCase {
             XCTAssertEqual(dbError, .noElementFound)
         }
     }
+    func test_editDrink() async throws {
+        let drinks = try await preloadDefaults()
+        let drink = try XCTUnwrap(drinks.first)
+        let editedDrink = try await sut.edit(size: 400, of: drink.container)
+        XCTAssertEqual(editedDrink.size, 400)
+    }
     
     func test_deleteAll_whenEmpty() async throws {
         try await sut.deleteAll()
