@@ -525,14 +525,14 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				330C23D527665D4C00293092 /* AppDelegate.swift */,
+				3323160927430A060039EE23 /* CommonUI */,
 				A11180312AC3767F007E4585 /* Ports */,
 				33231623274A75530039EE23 /* reHydrateApp.swift */,
 				A183BCF62A33B75000D42033 /* Screens */,
-				3323160927430A060039EE23 /* CommonUI */,
 				A1614D512A362E7300235D02 /* Utilities */,
-				33B28F6926BC7F6800DECA9F /* Extensions */,
 				332315E8274273F20039EE23 /* Resources */,
-				330C23D527665D4C00293092 /* AppDelegate.swift */,
+				33B28F6926BC7F6800DECA9F /* Extensions */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
 				A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */,
