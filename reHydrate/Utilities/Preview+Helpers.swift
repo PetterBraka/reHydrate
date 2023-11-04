@@ -23,6 +23,7 @@ extension Engine {
         celebrations: [.init(title: "Test", body: "Test")],
         notificationCenter: UNUserNotificationCenter.current(), 
         openUrlService: OpenUrlPort(),
-        alternateIconsService: AlternateIconsServicePort()
+        alternateIconsService: AlternateIconsServicePort(),
+        appearancePort: AppearanceServicePort()
     )
 }

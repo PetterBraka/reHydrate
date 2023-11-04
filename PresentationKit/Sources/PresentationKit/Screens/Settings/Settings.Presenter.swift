@@ -14,6 +14,7 @@ import DrinkServiceInterface
 import DatabaseServiceInterface
 import NotificationServiceInterface
 import PortsInterface
+import AppearanceServiceInterface
 
 extension Screen.Settings {
     public final class Presenter: SettingsPresenterType {
@@ -24,7 +25,8 @@ extension Screen.Settings {
             HasUnitService &
             HasNotificationService &
             HasOpenUrlService &
-            HasAppInfo
+            HasAppInfo &
+            HasAppearanceService
         )
         public typealias Router = (
             SettingsRoutable
@@ -51,6 +53,7 @@ extension Screen.Settings {
             let endOfDay = Date(time:"23:59")!
             viewModel = .init(
                 isLoading: false,
+                isDarkModeOn: engine.appearanceService.getAppearance() == .dark,
                 unitSystem: .metric,
                 goal: 0,
                 drinks: [],
@@ -146,9 +149,9 @@ extension Screen.Settings {
                     subject: "reHydrate query - v\(engine.appVersion)",
                     body: nil
                 )
-            case .didSetDarkMode(_):
-                // TODO: Handle this properly
-                await updateViewModel(isLoading: false, error: nil)
+            case let .didSetDarkMode(isDarkModeOn):
+                engine.appearanceService.setAppearance(isDarkModeOn ? .dark : .light)
+                await updateViewModel(isLoading: false, isDarkModeOn: isDarkModeOn, error: nil)
             }
         }
     }
@@ -167,6 +170,7 @@ extension Screen.Settings.Presenter {
     
     private func updateViewModel(
         isLoading: Bool,
+        isDarkModeOn: Bool? = nil,
         unitSystem: Settings.ViewModel.UnitSystem? = nil,
         goal: Double? = nil,
         notifications: Settings.ViewModel.NotificationSettings? = nil,
@@ -196,6 +200,7 @@ extension Screen.Settings.Presenter {
         
         viewModel = ViewModel(
             isLoading: isLoading,
+            isDarkModeOn: isDarkModeOn ?? viewModel.isDarkModeOn,
             unitSystem: unitSystem,
             goal: newGoal,
             drinks: drinks,

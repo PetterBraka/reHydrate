@@ -144,6 +144,7 @@
 		A1AA8DDA2AF634C500D12E74 /* AppIconScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD82AF634C500D12E74 /* AppIconScreen.swift */; };
 		A1AA8DDB2AF634C500D12E74 /* AppIconScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */; };
 		A1AA8DDD2AF6386C00D12E74 /* AlternateIconsServicePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */; };
+		A1AA8DDF2AF6466400D12E74 /* AppearanceServicePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */; };
 		A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111802F2AC36A86007E4585 /* Reminder.swift */; };
 		A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180302AC36A86007E4585 /* Celebration.swift */; };
 		A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */; };
@@ -329,6 +330,7 @@
 		A1AA8DD82AF634C500D12E74 /* AppIconScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreen.swift; sourceTree = "<group>"; };
 		A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreenObservable.swift; sourceTree = "<group>"; };
 		A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlternateIconsServicePort.swift; sourceTree = "<group>"; };
+		A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceServicePort.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
 		A1AF32D32A346D6F00FD0C7C /* PresentationInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationInterface; sourceTree = "<group>"; };
 		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
@@ -595,6 +597,7 @@
 				A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */,
 				A11180322AC3768D007E4585 /* NotificationCenterPort.swift */,
 				A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */,
+				A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */,
 				A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */,
 			);
 			path = Ports;
@@ -920,6 +923,7 @@
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
 				33EC3A882754BA420049E414 /* Localizable.swift in Sources */,
 				A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */,
+				A1AA8DDF2AF6466400D12E74 /* AppearanceServicePort.swift in Sources */,
 				A126D2512A7667C200A296BA /* CheckBoxButton.swift in Sources */,
 				A183BCF92A33B78400D42033 /* HomeScreen.swift in Sources */,
 				33B28F6D26BC7FCD00DECA9F /* Double+Extensions.swift in Sources */,

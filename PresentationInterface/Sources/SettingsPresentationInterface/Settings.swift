@@ -37,6 +37,7 @@ public enum Settings {
     
     public struct ViewModel {
         public let isLoading: Bool
+        public let isDarkModeOn: Bool
         public let unitSystem: UnitSystem
         public let goal: Double
         public let drinks: [ViewModel.Drink]
@@ -46,6 +47,7 @@ public enum Settings {
         
         public init(
             isLoading: Bool,
+            isDarkModeOn: Bool,
             unitSystem: UnitSystem,
             goal: Double,
             drinks: [ViewModel.Drink],
@@ -54,6 +56,7 @@ public enum Settings {
             error: Error?
         ) {
             self.isLoading = isLoading
+            self.isDarkModeOn = isDarkModeOn
             self.unitSystem = unitSystem
             self.goal = goal
             self.drinks = drinks

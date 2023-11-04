@@ -24,6 +24,7 @@ let package: Package = {
             .target(name: engineKit,
                     dependencies: [
                         .loggingService,
+                        .portsInterface,
                         .source(.dayService),
                         .source(.drinkService),
                         .source(.languageService),
@@ -31,11 +32,12 @@ let package: Package = {
                         .source(.unitService),
                         .source(.userPreferenceService),
                         .source(.notificationService),
-                        .portsInterface,
+                        .source(.appearanceService),
                     ]),
             .target(name: engineMocks,
                     dependencies: [
                         .byName(name: engineKit),
+                        .portsInterface,
                         .mocks(.dayService),
                         .mocks(.drinkService),
                         .mocks(.languageService),
@@ -43,7 +45,7 @@ let package: Package = {
                         .mocks(.unitService),
                         .mocks(.userPreferenceService),
                         .mocks(.notificationService),
-                        .portsInterface,
+                        .mocks(.appearanceService),
                     ]
                    ),
             .loggingService,
@@ -65,7 +67,9 @@ let package: Package = {
                     .interface(.unitService),
                     .interface(.userPreferenceService)
                   ])
-            .with(targetsFrom: .languageService)
+            .with(targetsFrom: .languageService, sourceDependancy: [
+                .interface(.userPreferenceService)
+            ])
             .with(targetsFrom: .databaseService,
                   interfaceDependancy: [.blackbird])
             .with(targetsFrom: .timelineService,
@@ -84,6 +88,11 @@ let package: Package = {
                   sourceDependancy: [
                     .interface(.dayService),
                     .interface(.userPreferenceService)
+                  ])
+            .with(targetsFrom: .appearanceService,
+                  sourceDependancy: [
+                    .interface(.userPreferenceService),
+                    .portsInterface
                   ])
     )
 }()
@@ -120,6 +129,7 @@ enum Feature: String {
     case unitService = "UnitService"
     case userPreferenceService = "UserPreferenceService"
     case notificationService = "NotificationService"
+    case appearanceService = "AppearanceService"
 }
 
 extension Feature {

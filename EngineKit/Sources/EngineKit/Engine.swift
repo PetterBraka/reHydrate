@@ -22,6 +22,8 @@ import UserPreferenceService
 import NotificationServiceInterface
 import NotificationService
 import PortsInterface
+import AppearanceServiceInterface
+import AppearanceService
 
 public final class Engine {
     public init(
@@ -30,7 +32,8 @@ public final class Engine {
         celebrations: [NotificationMessage],
         notificationCenter: NotificationCenterType,
         openUrlService: OpenUrlServiceInterface,
-        alternateIconsService: AlternateIconsServiceType
+        alternateIconsService: AlternateIconsServiceType,
+        appearancePort: AppearancePortType
     ) {
         let project = "reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
@@ -51,6 +54,7 @@ public final class Engine {
         self.notificationCenter = notificationCenter
         self.openUrlService = openUrlService
         self.alternateIconsService = alternateIconsService
+        self.appearancePort = appearancePort
     }
     
     public var appVersion: String
@@ -69,6 +73,7 @@ public final class Engine {
     // MARK: Ports
     public var openUrlService: OpenUrlServiceInterface
     public var alternateIconsService: AlternateIconsServiceType
+    public var appearancePort: AppearancePortType
     
     public lazy var notificationService: NotificationServiceType = NotificationService(
         engine: self,
@@ -84,6 +89,7 @@ public final class Engine {
     public lazy var languageService: LanguageServiceType = LanguageService(engine: self)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
+    public lazy var appearanceService: AppearanceServiceType = AppearanceService(engine: self)
 }
 
 extension Engine: HasService {}

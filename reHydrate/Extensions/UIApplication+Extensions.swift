@@ -12,4 +12,13 @@ extension UIApplication {
     var appVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1"
     }
+    
+    /// All the windows in foreground
+    var keyWindows: LazySequence<[UIWindow]> {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
+            .compactMap { $0.keyWindow }
+            .lazy
+    }
 }

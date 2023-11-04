@@ -32,7 +32,8 @@ public final class SceneFactory: ObservableObject {
             celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
             notificationCenter: UNUserNotificationCenter.current(),
             openUrlService: OpenUrlPort(),
-            alternateIconsService: AlternateIconsServicePort()
+            alternateIconsService: AlternateIconsServicePort(), 
+            appearancePort: AppearanceServicePort()
         )
         notificationDelegate = NotificationDelegatePort(engine: engine)
         engine.didCompleteNotificationAction = { [weak self] in
@@ -48,12 +49,7 @@ public final class SceneFactory: ObservableObject {
     }
     
     func makeSettingsScreen() -> SettingsScreen {
-        let observer = SettingsScreenObservable(
-            presenter: settingsPresenter,
-            language: engine.languageService.getSelectedLanguage(),
-            languageOptions: engine.languageService.getLanguageOptions(),
-            isDarkMode: true // TODO: Petter add dark mode
-        )
+        let observer = SettingsScreenObservable(presenter: settingsPresenter)
         settingsPresenter.scene = observer
 
         return SettingsScreen(observer: observer)

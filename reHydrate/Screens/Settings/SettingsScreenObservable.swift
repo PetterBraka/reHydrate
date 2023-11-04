@@ -16,21 +16,12 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
     public typealias ViewModel = Settings.ViewModel
     private let presenter: Screen.Settings.Presenter
     
-    @Published var language: Language
-    @Published var languageOptions: [Language]
-    @Published var isDarkMode: Bool
     var viewModel: ViewModel
     var alert: Alert? { .init(from: viewModel.error) }
     
-    init(presenter: Screen.Settings.Presenter,
-         language: Language,
-         languageOptions: [Language],
-         isDarkMode: Bool) {
+    init(presenter: Screen.Settings.Presenter) {
         self.presenter = presenter
         self.viewModel = presenter.viewModel
-        self.language = language
-        self.languageOptions = languageOptions
-        self.isDarkMode = isDarkMode
     }
     
     func perform(update: Settings.Update) {

@@ -127,7 +127,7 @@ struct SettingsScreen: View {
         Section {
             CheckBoxButton(
                 isChecked: Binding {
-                    observer.isDarkMode
+                    observer.viewModel.isDarkModeOn
                 } set: { newValue in
                     observer.perform(action: .didSetDarkMode(newValue))
                 },

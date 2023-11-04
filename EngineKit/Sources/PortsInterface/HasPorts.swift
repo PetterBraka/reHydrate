@@ -9,5 +9,6 @@ import Foundation
 
 public protocol HasPorts:
     HasOpenUrlService &
-    HasAlternateIconsService
+    HasAlternateIconsService &
+    HasAppearancePort
 {}

@@ -13,6 +13,7 @@ import DatabaseServiceInterface
 import UnitServiceInterface
 import UserPreferenceServiceInterface
 import NotificationServiceInterface
+import AppearanceServiceInterface
 
 public protocol HasService:
     HasLoggingService,
@@ -25,5 +26,6 @@ public protocol HasService:
     HasLanguageService,
     HasUnitService,
     HasUserPreferenceService,
-    HasNotificationService
+    HasNotificationService,
+    HasAppearanceService
 {}

@@ -95,7 +95,7 @@ final class DrinkServiceTests: XCTestCase {
     
     func test_editDrink() async throws {
         let givenDrink = DrinkModel(id: "", size: 500, container: "medium")
-        drinkManager.edit_returnValue = .success(givenDrink)
+        drinkManager.edit_returnValue = .success(.init(id: "", size: 600, container: "medium"))
         let unwrappedDrink = try XCTUnwrap(Drink(from: givenDrink))
         let editedDrink = try await sut.edit(size: 600, of: unwrappedDrink)
         assert(editedDrink, .init(id: "", size: 600, container: .medium))
@@ -105,18 +105,7 @@ final class DrinkServiceTests: XCTestCase {
         let givenDrink = DrinkModel(id: "", size: 500, container: "mid")
         drinkManager.edit_returnValue = .success(givenDrink)
         
-        do {
-            let unwrappedDrink = try XCTUnwrap(Drink(from: givenDrink))
-            let editedDrink = try await sut.edit(size: 600, of: unwrappedDrink)
-            XCTFail("Should fail")
-        } catch {
-            // Then
-            if let dbError = error as? DrinkDBError {
-                XCTAssertEqual(dbError, .notFound)
-            } else {
-                XCTFail("Unexpected error thrown")
-            }
-        }
+        XCTAssertNil(Drink(from: givenDrink))
     }
     
     func test_remove() async throws {
