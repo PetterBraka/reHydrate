@@ -50,6 +50,8 @@ extension Screen.Settings.AppIcon {
                 router.close()
             case let .didSelectIcon(icon):
                 await set(icon)
+            case .didDismissAlert:
+                updateViewModel(isLoading: false, error: nil)
             }
         }
     }

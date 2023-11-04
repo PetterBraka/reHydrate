@@ -21,7 +21,20 @@ struct AppIconScreen: View {
                 appIconGrid
                     .padding(16)
             }
-         }
+        }
+        .alert(
+            isPresented: Binding { observer.alert != nil } set: { _ in },
+            error: observer.alert) { error in
+                switch error {
+                case .doesNotSupportAlternateIcon, .failedSettingNewIcon:
+                    Button(alertButton) {
+                        observer.perform(action: .didDismissAlert)
+                    }
+                }
+            } message: { error in
+                Text(error.message)
+            }
+
     }
     
     @ViewBuilder
@@ -82,6 +95,14 @@ extension AppIconScreen {
             "ui.appIcon.done.button",
             value: "Done",
             comment: "Done button"
+        )
+    }
+    
+    var alertButton: String {
+        LocalizedString(
+            "ui.appIcon.alert.button",
+            value: "Close",
+            comment: "Button to close the alert"
         )
     }
 }

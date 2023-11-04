@@ -15,6 +15,7 @@ public enum AppIcon {
     public enum Action {
         case didTapClose
         case didSelectIcon(AppIcon.ViewModel.Icon)
+        case didDismissAlert
     }
     
     public struct ViewModel {

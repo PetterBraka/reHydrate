@@ -33,15 +33,6 @@ struct SettingsScreen: View {
                 .font(.brandBody)
             }
             .foregroundColor(.label)
-//            TODO: Sheets needs to be moved
-//            .sheet(item: $showSheet) { sheet in
-//                switch sheet {
-//                case .editIcon:
-//                    AppIconSelectionView {
-//                        showSheet = nil
-//                    }
-//                }
-//            }
             .toolbar(content: {
                 ToolbarItemGroup(placement: .keyboard) {
                     HStack {
