@@ -29,7 +29,8 @@ public final class Engine {
         reminders: [NotificationMessage],
         celebrations: [NotificationMessage],
         notificationCenter: NotificationCenterType,
-        openUrlService: OpenUrlServiceInterface
+        openUrlService: OpenUrlServiceInterface,
+        alternateIconsService: AlternateIconsServiceType
     ) {
         let project = "reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
@@ -49,6 +50,7 @@ public final class Engine {
         self.celebrations = celebrations
         self.notificationCenter = notificationCenter
         self.openUrlService = openUrlService
+        self.alternateIconsService = alternateIconsService
     }
     
     public var appVersion: String
@@ -66,6 +68,7 @@ public final class Engine {
     
     // MARK: Ports
     public var openUrlService: OpenUrlServiceInterface
+    public var alternateIconsService: AlternateIconsServiceType
     
     public lazy var notificationService: NotificationServiceType = NotificationService(
         engine: self,

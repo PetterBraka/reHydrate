@@ -10,6 +10,7 @@ import HomePresentationInterface
 public enum PopUp {
     case edit(Home.ViewModel.Drink)
     case credits
+    case appIcon
 }
 
 extension PopUp: Identifiable {
@@ -19,6 +20,8 @@ extension PopUp: Identifiable {
             "edit-" + String(describing: drink)
         case .credits:
             "credits"
+        case .appIcon:
+            "appIcon"
         }
     }
     

@@ -9,6 +9,7 @@ public enum Screen {
     public enum Home {}
     public enum Settings {
         public enum Credits {}
+        public enum AppIcon {}
     }
     public enum EditContainer {}
 }

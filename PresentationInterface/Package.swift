@@ -10,6 +10,7 @@ let package: Package = {
     let settings = "SettingsPresentationInterface"
     let editContainer = "EditContainerPresentationInterface"
     let credits = "CreditsPresentationInterface"
+    let appIcon = "AppIconPresentationInterface"
 
     return Package(
         name: rootPackage,
@@ -31,12 +32,14 @@ let package: Package = {
                     .byName(name: settings),
                     .byName(name: editContainer),
                     .byName(name: credits),
+                    .byName(name: appIcon),
                 ]
             ),
             .target(name: home),
             .target(name: settings),
             .target(name: editContainer),
             .target(name: credits),
+            .target(name: appIcon),
         ]
     )
 }()

@@ -22,6 +22,7 @@ extension Engine {
         reminders: [.init(title: "Test", body: "Test")],
         celebrations: [.init(title: "Test", body: "Test")],
         notificationCenter: UNUserNotificationCenter.current(), 
-        openUrlService: OpenUrlPort()
+        openUrlService: OpenUrlPort(),
+        alternateIconsService: AlternateIconsServicePort()
     )
 }

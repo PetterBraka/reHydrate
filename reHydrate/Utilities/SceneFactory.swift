@@ -31,7 +31,8 @@ public final class SceneFactory: ObservableObject {
             reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
             celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
             notificationCenter: UNUserNotificationCenter.current(),
-            openUrlService: OpenUrlPort()
+            openUrlService: OpenUrlPort(),
+            alternateIconsService: AlternateIconsServicePort()
         )
         notificationDelegate = NotificationDelegatePort(engine: engine)
         engine.didCompleteNotificationAction = { [weak self] in
@@ -77,6 +78,15 @@ public final class SceneFactory: ObservableObject {
         presenter.scene = observer
         
         return CreditsScreen(observer: observer)
+    }
+    
+    func makeAppIconScreen() -> AppIconScreen {
+        let presenter = Screen.Settings.AppIcon.Presenter(engine: engine,
+                                                          router: router)
+        let observer = AppIconScreenObservable(presenter: presenter)
+        presenter.scene = observer
+        
+        return AppIconScreen(observer: observer)
     }
 }
 

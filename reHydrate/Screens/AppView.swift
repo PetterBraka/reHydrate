@@ -44,6 +44,8 @@ struct AppView: View {
             sceneFactory.makeEditScreen(with: drink)
         case .credits:
             sceneFactory.makeCreditsScreen()
+        case .appIcon:
+            sceneFactory.makeAppIconScreen()
         }
     }
 }

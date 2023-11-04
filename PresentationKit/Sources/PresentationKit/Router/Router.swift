@@ -35,12 +35,15 @@ public final class Router {
     public func showCredits() {
         sceneObserver?.setPopUp(to: .credits)
     }
+    
+    public func showAppIcon() {
+        sceneObserver?.setPopUp(to: .appIcon)
+    }
 }
 
 extension Router: HomeRoutable {}
-
 extension Router: SettingsRoutable {}
-
 extension Router: HistoryRoutable {}
-
-extension Router: EditContainerRoutable, CreditsRoutable {}
+extension Router: EditContainerRoutable {}
+extension Router: CreditsRoutable {}
+extension Router: AppIconRoutable {}

@@ -8,4 +8,5 @@
 public protocol SettingsRoutable {
     func showHome()
     func showCredits()
+    func showAppIcon()
 }

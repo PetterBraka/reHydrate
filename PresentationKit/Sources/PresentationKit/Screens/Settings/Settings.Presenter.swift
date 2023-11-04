@@ -65,8 +65,8 @@ extension Screen.Settings {
                 appVersion: engine.appVersion,
                 error: nil
             )
-            Task(priority: .high) {
-                await initRealViewModel()
+            Task(priority: .high) { [weak self] in
+                await self?.initRealViewModel()
             }
         }
         
@@ -93,6 +93,10 @@ extension Screen.Settings {
             switch action {
             case .didTapBack:
                 router.showHome()
+            case .didTapCredits:
+                router.showCredits()
+            case .didTapEditAppIcon:
+                router.showAppIcon()
             case .didTapIncrementGoal:
                 await increaseGoal()
             case .didTapDecrementGoal:
@@ -142,9 +146,7 @@ extension Screen.Settings {
                     subject: "reHydrate query - v\(engine.appVersion)",
                     body: nil
                 )
-            case .didTapCredits:
-                router.showCredits()
-            case .didSetDarkMode(_), .didTapEditAppIcon:
+            case .didSetDarkMode(_):
                 // TODO: Handle this properly
                 await updateViewModel(isLoading: false, error: nil)
             }
