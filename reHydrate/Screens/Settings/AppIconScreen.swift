@@ -58,6 +58,10 @@ struct AppIconScreen: View {
                     }
                     .shadow(radius: 4)
                     .padding(8)
+                } else {
+                    #if DEBUG
+                    Text("Failed getting **\(icon.rawValue)**")
+                    #endif
                 }
             }
         }
