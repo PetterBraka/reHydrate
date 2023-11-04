@@ -37,7 +37,7 @@ let package: Package = {
             .target(name: engineMocks,
                     dependencies: [
                         .byName(name: engineKit),
-                        .portsInterface,
+                        .portsMocks,
                         .mocks(.dayService),
                         .mocks(.drinkService),
                         .mocks(.languageService),
@@ -50,7 +50,8 @@ let package: Package = {
                    ),
             .loggingService,
             .testHelper,
-            .portsInterface
+            .portsInterface,
+            .portsMocks,
         ]
             .with(targetsFrom: .dayService,
                   sourceDependancy: [
@@ -107,13 +108,15 @@ extension Package.Dependency {
 extension Target {
     static let loggingService: Target = .target(name: "LoggingService")
     static let testHelper: Target = .target(name: "TestHelper")
-    static let portsInterface: Target = .target(name: "PortsInterface")
+    static let portsInterface: Target = .target(name: "PortsInterface", path: "Sources/Ports/Interface")
+    static let portsMocks: Target = .target(name: "PortsMocks", dependencies: [.portsInterface], path: "Sources/Ports/Mocks")
 }
 
 extension Target.Dependency {
     static let loggingService: Target.Dependency = .byName(name: "LoggingService")
     static let testHelper: Target.Dependency = .byName(name: "TestHelper")
     static let portsInterface: Target.Dependency = .byName(name: "PortsInterface")
+    static let portsMocks: Target.Dependency = .byName(name: "PortsMocks")
     
     static let engineMocks: Target.Dependency = .byName(name: "EngineMocks")
     static let blackbird: Target.Dependency = .product(name: "Blackbird",

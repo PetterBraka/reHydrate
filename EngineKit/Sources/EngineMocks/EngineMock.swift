@@ -21,6 +21,10 @@ import UserPreferenceServiceInterface
 import UserPreferenceServiceMocks
 import NotificationServiceInterface
 import NotificationServiceMocks
+import AppearanceServiceInterface
+import AppearanceServiceMocks
+import PortsInterface
+import PortsMocks
 
 public final class EngineMocks {
     public init() {}
@@ -34,10 +38,18 @@ public final class EngineMocks {
     public var notificationService: NotificationServiceType = NotificationServiceStub()
     public var notificationDelegate: NotificationDelegateType = NotificationDelegateStub()
     
+    //MARK: Ports
+    public var appearancePort: AppearancePortType = AppearancePortStub()
+    public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceStub()
+    public var openUrlService: OpenUrlServiceInterface = OpenUrlServiceStub()
+    
     public var dayService: DayServiceType = DayServiceStub()
     public var drinksService: DrinkServiceType = DrinkServiceStub()
     public var languageService: LanguageServiceType = LanguageServiceStub()
     public var unitService: UnitServiceType = UnitServiceStub()
+    
+    public var appearanceService: AppearanceServiceType = AppearanceServiceStub()
 }
 
 extension EngineMocks: HasService {}
+extension EngineMocks: HasPorts {}
