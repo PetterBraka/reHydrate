@@ -593,10 +593,8 @@
 		A11180312AC3767F007E4585 /* Ports */ = {
 			isa = PBXGroup;
 			children = (
+				A1AA8DE12AF7825B00D12E74 /* Notification */,
 				A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */,
-				A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */,
-				A11180322AC3768D007E4585 /* NotificationCenterPort.swift */,
-				A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */,
 				A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */,
 				A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */,
 			);
@@ -653,6 +651,16 @@
 				A183BCF82A33B78400D42033 /* HomeScreen.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		A1AA8DE12AF7825B00D12E74 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */,
+				A11180322AC3768D007E4585 /* NotificationCenterPort.swift */,
+				A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */,
+			);
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		A1EABF262ADA840600591981 /* ContainerViews */ = {
