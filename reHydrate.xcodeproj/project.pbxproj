@@ -145,6 +145,7 @@
 		A1AA8DDB2AF634C500D12E74 /* AppIconScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */; };
 		A1AA8DDD2AF6386C00D12E74 /* AlternateIconsServicePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */; };
 		A1AA8DDF2AF6466400D12E74 /* AppearanceServicePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */; };
+		A1AA8DE32AF7828500D12E74 /* HealthKitPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */; };
 		A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111802F2AC36A86007E4585 /* Reminder.swift */; };
 		A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180302AC36A86007E4585 /* Celebration.swift */; };
 		A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */; };
@@ -331,6 +332,7 @@
 		A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreenObservable.swift; sourceTree = "<group>"; };
 		A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlternateIconsServicePort.swift; sourceTree = "<group>"; };
 		A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceServicePort.swift; sourceTree = "<group>"; };
+		A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPort.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
 		A1AF32D32A346D6F00FD0C7C /* PresentationInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationInterface; sourceTree = "<group>"; };
 		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
@@ -597,6 +599,7 @@
 				A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */,
 				A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */,
 				A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */,
+				A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */,
 			);
 			path = Ports;
 			sourceTree = "<group>";
@@ -904,6 +907,7 @@
 				A1EABF3F2AF4E0E300591981 /* View+getSize.swift in Sources */,
 				A1EABF3A2AF3F7C800591981 /* CreditsScreenObservable.swift in Sources */,
 				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,
+				A1AA8DE32AF7828500D12E74 /* HealthKitPort.swift in Sources */,
 				A183BCED2A3122D100D42033 /* Color.swift in Sources */,
 				A1EABF2C2ADA936F00591981 /* FilledContainer.swift in Sources */,
 				A1AA8DDB2AF634C500D12E74 /* AppIconScreenObservable.swift in Sources */,
