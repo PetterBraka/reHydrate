@@ -1,5 +1,5 @@
 //
-//  OpenUrlServiceInterface.swift
+//  OpenUrlInterface.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 02/11/2023.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol OpenUrlServiceInterface {
+public protocol OpenUrlInterface {
     var settingsUrl: URL? { get }
     
     func open(url: URL) async throws

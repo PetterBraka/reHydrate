@@ -9,7 +9,7 @@
 import UIKit
 import PortsInterface
 
-final class OpenUrlPort: NSObject, OpenUrlServiceInterface {
+final class OpenUrlPort: NSObject, OpenUrlInterface {
     public private(set) var settingsUrl = URL(string: UIApplication.openSettingsURLString)
     
     @MainActor

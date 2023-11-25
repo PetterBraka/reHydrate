@@ -6,5 +6,5 @@
 //
 
 public protocol HasOpenUrlService {
-    var openUrlService: OpenUrlServiceInterface { get set }
+    var openUrlService: OpenUrlInterface { get set }
 }

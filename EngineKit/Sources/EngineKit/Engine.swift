@@ -31,7 +31,7 @@ public final class Engine {
         reminders: [NotificationMessage],
         celebrations: [NotificationMessage],
         notificationCenter: NotificationCenterType,
-        openUrlService: OpenUrlServiceInterface,
+        openUrlService: OpenUrlInterface,
         alternateIconsService: AlternateIconsServiceType,
         appearancePort: AppearancePortType
     ) {
@@ -71,7 +71,7 @@ public final class Engine {
     public var userPreferenceService: UserPreferenceServiceType
     
     // MARK: Ports
-    public var openUrlService: OpenUrlServiceInterface
+    public var openUrlService: OpenUrlInterface
     public var alternateIconsService: AlternateIconsServiceType
     public var appearancePort: AppearancePortType
     
