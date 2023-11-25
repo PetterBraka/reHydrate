@@ -6,18 +6,19 @@
 //  Copyright © 2023 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import PortsInterface
 import HealthKit
 
 final class HealthKitPort {
-    let store = HKHealthStore()
+    private let store = HKHealthStore()
     
     var isSupported: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
     
-    func shouldRequestAccess() async -> Bool{
+    func shouldRequestAccess(for healthDataType: [HealthDataType]) async -> Bool {
         await withCheckedContinuation { [weak self] continuation in
-            let healthData = HealthDataType.allCases.map {
+            let healthData = healthDataType.map {
                 HKQuantityType($0.identifier.toHKQuantityTypeIdentifier())
             }
             self?.store.getRequestStatusForAuthorization(
@@ -51,33 +52,27 @@ final class HealthKitPort {
         try await store.requestAuthorization(toShare: Set(dataToRead), read: Set(dataToRead))
     }
     
-    func read(_ data: HealthDataType, for date: Date,
-              completion: @escaping (Result<Double, Error>) -> Void) {
-        let query = getQuery(.water, type: .sum(start: date, end: nil, completion: completion))
+    func read(_ data: HealthDataType, queryType: HealthQuery) {
+        let query = getQuery(data, queryType: queryType)
         store.execute(query)
     }
     
-    func getQuery(_ data: HealthDataType, type: HealthQuery) -> HKQuery {
-        switch type {
-        case let .sum(startDate, endDate, completion):
+    func getQuery(_ data: HealthDataType, queryType: HealthQuery) -> HKQuery {
+        switch queryType {
+        case let .sum(startDate, endDate, intervalComponents, completion):
             let query = HKStatisticsCollectionQuery(
                 quantityType: .init(data.identifier.toHKQuantityTypeIdentifier()),
                 quantitySamplePredicate: nil,
                 options: .cumulativeSum,
                 anchorDate: startDate,
-                intervalComponents: DateComponents(day: 1))
+                intervalComponents: intervalComponents)
             query.initialResultsHandler = { query, result, error in
                 if let error {
                     completion(.failure(error))
+                    return
                 }
                 guard let result else {
                     completion(.failure(HealthError.missingResult))
-                    return
-                }
-                let calendar = Calendar.current
-                let startDate = calendar.startOfDay(for: startDate)
-                guard let endDate = endDate ?? calendar.date(bySettingHour: 23, minute: 59, second: 59, of: startDate) else {
-                    completion(.failure(HealthError.missingEndDate))
                     return
                 }
                 result.enumerateStatistics(from: startDate, to: endDate) { statistics, pointer in
@@ -93,69 +88,17 @@ final class HealthKitPort {
         }
     }
     
-    func export(quantity: Quantity, id: QuantityTypeIdentifier, _ date: Date) async throws {
+    func export(quantity: Quantity, 
+                id: QuantityTypeIdentifier,
+                date: Date) async throws {
         let quantity = quantity.toHKQuantity()
         let type = HKQuantityType(id.toHKQuantityTypeIdentifier())
-        let sample = HKQuantitySample(type: type,
-                                      quantity: quantity,
-                                      start: date, end: date)
+        let sample = HKQuantitySample(type: type, quantity: quantity, start: date, end: date)
         try await store.save(sample)
     }
 }
 
-extension HealthKitPort {
-    enum HealthDataType: CaseIterable {
-        case water
-        
-        var identifier: QuantityTypeIdentifier {
-            switch self {
-            case .water:
-                .dietaryWater
-            }
-        }
-    }
-    
-    enum HealthQuery {
-        case sum(start: Date, end: Date?, completion: ((Result<Double, Error>) -> Void))
-    }
-}
-
-extension HealthKitPort {
-    enum HealthError: Error {
-        case missingResult
-        case missingEndDate
-        case noQuantity
-    }
-}
-
-extension HealthKitPort {
-    struct QuantitySample {
-        let quantityTypeID: QuantityTypeIdentifier
-        let quantity: Quantity
-    }
-    
-    struct Quantity {
-        let unit: HealthUnit
-        let value: Double
-    }
-    
-    enum QuantityTypeIdentifier {
-        case bodyMass // kg, Discrete (Arithmetic)
-        case height // m, Discrete (Arithmetic)
-        
-        // Nutrition
-        case dietaryCaffeine // g, Cumulative
-        case dietaryWater // mL, Cumulative
-    }
-    
-    enum HealthUnit {
-        case gram
-        case meter
-        case litre
-    }
-}
-
-extension HealthKitPort.Quantity {
+extension Quantity {
     init?(from quantity: HKQuantity) {
         if quantity.is(compatibleWith: .gram()) {
             self = .init(unit: .gram, value: quantity.doubleValue(for: .gram()))
@@ -173,7 +116,7 @@ extension HealthKitPort.Quantity {
     }
 }
 
-extension HealthKitPort.QuantityTypeIdentifier {
+extension QuantityTypeIdentifier {
     init?(from identifier: HKQuantityTypeIdentifier) {
         switch identifier {
         case .bodyMass:
@@ -203,7 +146,7 @@ extension HealthKitPort.QuantityTypeIdentifier {
     }
 }
 
-extension HealthKitPort.HealthUnit {
+extension HealthUnit {
     init?(from unit: HKUnit) {
         switch unit {
         case .gram():

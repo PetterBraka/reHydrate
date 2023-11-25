@@ -595,11 +595,11 @@
 		A11180312AC3767F007E4585 /* Ports */ = {
 			isa = PBXGroup;
 			children = (
+				A182E8BD2B11F7B20001443B /* HealthPorts */,
 				A1AA8DE12AF7825B00D12E74 /* Notification */,
 				A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */,
 				A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */,
 				A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */,
-				A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */,
 			);
 			path = Ports;
 			sourceTree = "<group>";
@@ -625,6 +625,14 @@
 				A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A182E8BD2B11F7B20001443B /* HealthPorts */ = {
+			isa = PBXGroup;
+			children = (
+				A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */,
+			);
+			path = HealthPorts;
 			sourceTree = "<group>";
 		};
 		A183BCE72A3120C900D42033 /* Theme */ = {

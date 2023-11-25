@@ -20,17 +20,25 @@ struct reHydrateApp: App {
                     let date = Date(timeIntervalSince1970: 1_699_258_440)
                     do {
                         let health = HealthKitPort()
-                        if await health.shouldRequestAccess() {
+                        if await health.shouldRequestAccess(for: [.water]) {
                             try await health.requestAuth(toReadAndWrite: [.water])
                         }
-                        health.read(.water, for: date) { result in
-                            switch result {
-                            case let .success(liter):
-                                print(liter)
-                            case let .failure(error):
-                                print(error)
-                            }
-                        }
+                        let calendar = Calendar.current
+                        let start = calendar.startOfDay(for: date)
+                        let end = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: start)!
+                        health.read(.water, queryType: .sum(
+                            start: start,
+                            end: end,
+                            intervalComponents: .init(day: 1),
+                            completion: { result in
+                                switch result {
+                                case let .success(liter):
+                                    print(liter)
+                                case let .failure(error):
+                                    print(error)
+                                }
+                            })
+                        )
                     } catch {
                         print(error.localizedDescription)
                     }
