@@ -25,7 +25,7 @@ struct reHydrateApp: App {
                         }
                         let calendar = Calendar.current
                         let start = calendar.startOfDay(for: date)
-                        let end = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: start)!
+                        let end = calendar.endOfDay(for: date)!
                         health.read(.water, queryType: .sum(
                             start: start,
                             end: end,

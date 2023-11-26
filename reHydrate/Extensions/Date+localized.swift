@@ -15,3 +15,9 @@ extension Date {
         return formatter.string(from: self)
     }
 }
+
+extension Calendar {
+    func endOfDay(for date: Date) -> Date? {
+        self.date(bySettingHour: 23, minute: 59, second: 59, of: date)
+    }
+}
