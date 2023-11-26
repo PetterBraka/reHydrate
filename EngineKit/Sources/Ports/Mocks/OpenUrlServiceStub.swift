@@ -22,7 +22,7 @@ public final class OpenUrlServiceStub: OpenUrlServiceStubbing {
     public var email_returnValue: Error?
 }
 
-extension OpenUrlServiceStub: OpenUrlServiceInterface {
+extension OpenUrlServiceStub: OpenUrlInterface {
     public var settingsUrl: URL? {
         settingsUrl_returnValue
     }

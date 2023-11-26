@@ -41,7 +41,7 @@ public final class EngineMocks {
     //MARK: Ports
     public var appearancePort: AppearancePortType = AppearancePortStub()
     public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceStub()
-    public var openUrlService: OpenUrlServiceInterface = OpenUrlServiceStub()
+    public var openUrlService: OpenUrlInterface = OpenUrlServiceStub()
     
     public var dayService: DayServiceType = DayServiceStub()
     public var drinksService: DrinkServiceType = DrinkServiceStub()
