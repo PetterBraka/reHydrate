@@ -20,25 +20,30 @@ struct reHydrateApp: App {
                     let date = Date(timeIntervalSince1970: 1_699_258_440)
                     do {
                         let health = HealthKitPort()
-                        if await health.shouldRequestAccess(for: [.water]) {
-                            try await health.requestAuth(toReadAndWrite: [.water])
+                        if await health.shouldRequestAccess(for: [.water(.litre)]) {
+                            try await health.requestAuth(toReadAndWrite: [.water(.litre)])
                         }
                         let calendar = Calendar.current
                         let start = calendar.startOfDay(for: date)
                         let end = calendar.endOfDay(for: date)!
-                        health.read(.water, queryType: .sum(
+                        health.read(.water(.litre), queryType: .sum(
                             start: start,
                             end: end,
                             intervalComponents: .init(day: 1),
                             completion: { result in
-                                switch result {
-                                case let .success(liter):
-                                    print(liter)
-                                case let .failure(error):
-                                    print(error)
-                                }
+                                print("=== SUM ===")
+                                print(result)
+                                print("=== End ===")
                             })
                         )
+                        health.read(.water(.litre), queryType: .sample(
+                            start: start,
+                            end: end,
+                            completion: { result in
+                                print("=== SAMPLES ===")
+                                print(result)
+                                print("=== End ===")
+                            }))
                     } catch {
                         print(error.localizedDescription)
                     }

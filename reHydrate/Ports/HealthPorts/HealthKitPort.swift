@@ -57,11 +57,11 @@ final class HealthKitPort: HealthInterface {
         store.execute(query)
     }
     
-    func getQuery(_ data: HealthDataType, queryType: HealthQuery) -> HKQuery {
+    func getQuery(_ healthData: HealthDataType, queryType: HealthQuery) -> HKQuery {
         switch queryType {
         case let .sum(startDate, endDate, intervalComponents, completion):
             let query = HKStatisticsCollectionQuery(
-                quantityType: .init(data.identifier.toHK()),
+                quantityType: .init(healthData.identifier.toHK()),
                 quantitySamplePredicate: nil,
                 options: .cumulativeSum,
                 anchorDate: startDate,
@@ -80,10 +80,31 @@ final class HealthKitPort: HealthInterface {
                         completion(.failure(HealthError.noQuantity))
                         return
                     }
-                    let value = quantity.doubleValue(for: .liter())
+                    let value = quantity.doubleValue(for: healthData.unit.toHK())
                     completion(.success(value))
                 }
             }
+            return query
+        case let .sample(start, end, completion):
+            let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
+            let query = HKSampleQuery(
+                sampleType: HKQuantityType(healthData.identifier.toHK()),
+                predicate: predicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: [.init(key: HKSampleSortIdentifierStartDate, ascending: false)]) { sampleQuery, samples, error in
+                    if let error {
+                        completion(.failure(error))
+                        return
+                    }
+                    guard let quantitySamples = samples as? [HKQuantitySample] else {
+                        completion(.failure(HealthError.missingResult))
+                        return
+                    }
+                    let values = quantitySamples.map {
+                        $0.quantity.doubleValue(for: healthData.unit.toHK())
+                    }
+                    completion(.success(values))
+                }
             return query
         }
     }
@@ -118,7 +139,7 @@ extension Quantity {
     }
     
     func toHKQuantity() -> HKQuantity {
-        .init(unit: unit.toHKUnit(), doubleValue: value)
+        .init(unit: unit.toHK(), doubleValue: value)
     }
 }
 
@@ -166,7 +187,7 @@ extension HealthUnit {
         }
     }
 
-    func toHKUnit() -> HKUnit {
+    func toHK() -> HKUnit {
         switch self {
         case .gram:
             HKUnit.gram()
