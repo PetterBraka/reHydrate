@@ -33,7 +33,8 @@ public final class SceneFactory: ObservableObject {
             notificationCenter: UNUserNotificationCenter.current(),
             openUrlService: OpenUrlPort(),
             alternateIconsService: AlternateIconsServicePort(), 
-            appearancePort: AppearanceServicePort()
+            appearancePort: AppearanceServicePort(),
+            healthService: HealthKitPort()
         )
         notificationDelegate = NotificationDelegatePort(engine: engine)
         engine.didCompleteNotificationAction = { [weak self] in

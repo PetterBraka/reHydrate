@@ -24,6 +24,7 @@ extension Engine {
         notificationCenter: UNUserNotificationCenter.current(), 
         openUrlService: OpenUrlPort(),
         alternateIconsService: AlternateIconsServicePort(),
-        appearancePort: AppearanceServicePort()
+        appearancePort: AppearanceServicePort(),
+        healthService: HealthKitPort()
     )
 }

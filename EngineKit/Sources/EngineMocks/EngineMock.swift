@@ -42,6 +42,7 @@ public final class EngineMocks {
     public var appearancePort: AppearancePortType = AppearancePortStub()
     public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceStub()
     public var openUrlService: OpenUrlInterface = OpenUrlServiceStub()
+    public var healthService: HealthInterface = HealthServiceStub()
     
     public var dayService: DayServiceType = DayServiceStub()
     public var drinksService: DrinkServiceType = DrinkServiceStub()
