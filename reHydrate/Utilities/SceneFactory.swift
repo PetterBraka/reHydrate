@@ -15,6 +15,8 @@ import UserNotifications
 import UIKit
 
 public final class SceneFactory: ObservableObject {
+    static let shared = SceneFactory()
+    
     public let engine: Engine
     public let router = Router()
     
@@ -25,7 +27,7 @@ public final class SceneFactory: ObservableObject {
     // Port
     let notificationDelegate: NotificationDelegatePort
     
-    init() {
+    private init() {
         engine = Engine(
             appVersion: UIApplication.shared.appVersion,
             reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },

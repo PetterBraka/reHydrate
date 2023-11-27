@@ -14,12 +14,12 @@ struct reHydrateApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppView(appDelegate.sceneFactory)
+            AppView()
                 .task { // TEMP Testing of HealthKit Reading
                     // date = 06/11/2023
                     let date = Date(timeIntervalSince1970: 1_699_258_440)
                     do {
-                        let health = HealthKitPort()
+                        let health = appDelegate.sceneFactory.engine.healthService
                         if await health.shouldRequestAccess(for: [.water(.litre)]) {
                             try await health.requestAuth(toReadAndWrite: [.water(.litre)])
                         }

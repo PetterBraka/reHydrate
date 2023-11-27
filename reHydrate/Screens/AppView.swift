@@ -11,10 +11,9 @@ import PresentationKit
 
 struct AppView: View {
     @ObservedObject var observer: RouterObservable
-    let sceneFactory: SceneFactory
+    let sceneFactory = SceneFactory.shared
     
-    init(_ sceneFactory: SceneFactory) {
-        self.sceneFactory = sceneFactory
+    init() {
         let router = sceneFactory.router
         observer = RouterObservable(router: router, tab: .home)
         router.sceneObserver = observer
@@ -52,6 +51,6 @@ struct AppView: View {
 
 struct AppView_Previews: PreviewProvider {
     static var previews: some View {
-        AppView(SceneFactory())
+        AppView()
     }
 }

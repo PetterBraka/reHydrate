@@ -10,7 +10,7 @@ import UIKit
 import EngineKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    public let sceneFactory = SceneFactory()
+    public let sceneFactory = SceneFactory.shared
     var engine: Engine { sceneFactory.engine }
     
     func application(
