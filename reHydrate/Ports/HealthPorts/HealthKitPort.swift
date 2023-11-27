@@ -9,14 +9,14 @@
 import PortsInterface
 import HealthKit
 
-final class HealthKitPort: HealthInterface {
+public final class HealthKitPort: HealthInterface {
     private let store = HKHealthStore()
     
-    var isSupported: Bool {
+    public var isSupported: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
     
-    func shouldRequestAccess(for healthDataType: [HealthDataType]) async -> Bool {
+    public func shouldRequestAccess(for healthDataType: [HealthDataType]) async -> Bool {
         await withCheckedContinuation { [weak self] continuation in
             let healthData = healthDataType.map {
                 HKQuantityType($0.identifier.toHK())
@@ -40,24 +40,41 @@ final class HealthKitPort: HealthInterface {
         }
     }
     
-    func canWrite(_ dataType: HealthDataType) -> Bool {
+    public func canWrite(_ dataType: HealthDataType) -> Bool {
         let id = dataType.identifier.toHK()
         return store.authorizationStatus(for: HKQuantityType(id)) == .sharingAuthorized
     }
     
-    func requestAuth(toReadAndWrite readAndWrite: Set<HealthDataType>) async throws {
+    public func requestAuth(toReadAndWrite readAndWrite: Set<HealthDataType>) async throws {
         let dataToRead = readAndWrite.map {
             HKQuantityType($0.identifier.toHK())
         }
         try await store.requestAuthorization(toShare: Set(dataToRead), read: Set(dataToRead))
     }
     
-    func read(_ data: HealthDataType, queryType: HealthQuery) {
-        let query = getQuery(data, queryType: queryType)
+    public func read(_ data: HealthDataType, queryType: HealthQuery) {
+        let query = createQuery(data, queryType: queryType)
         store.execute(query)
     }
     
-    func getQuery(_ healthData: HealthDataType, queryType: HealthQuery) -> HKQuery {
+    public func export(quantity: Quantity,
+                id: QuantityTypeIdentifier,
+                date: Date) async throws {
+        let quantity = quantity.toHKQuantity()
+        let type = HKQuantityType(id.toHK())
+        let sample = HKQuantitySample(type: type, quantity: quantity, start: date, end: date)
+        try await store.save(sample)
+    }
+    
+    public func enableBackgroundDelivery(healthData: HealthDataType,
+                                  frequency: HealthFrequency) async throws {
+        let object = HKQuantityType(healthData.identifier.toHK())
+        try await store.enableBackgroundDelivery(for: object, frequency: frequency.toHK())
+    }
+}
+
+private extension HealthKitPort {
+    func createQuery(_ healthData: HealthDataType, queryType: HealthQuery) -> HKQuery {
         switch queryType {
         case let .sum(startDate, endDate, intervalComponents, completion):
             let query = HKStatisticsCollectionQuery(
@@ -107,21 +124,6 @@ final class HealthKitPort: HealthInterface {
                 }
             return query
         }
-    }
-    
-    func export(quantity: Quantity, 
-                id: QuantityTypeIdentifier,
-                date: Date) async throws {
-        let quantity = quantity.toHKQuantity()
-        let type = HKQuantityType(id.toHK())
-        let sample = HKQuantitySample(type: type, quantity: quantity, start: date, end: date)
-        try await store.save(sample)
-    }
-    
-    func enableBackgroundDelivery(healthData: HealthDataType,
-                                  frequency: HealthFrequency) async throws {
-        let object = HKQuantityType(healthData.identifier.toHK())
-        try await store.enableBackgroundDelivery(for: object, frequency: frequency.toHK())
     }
 }
 
