@@ -13,8 +13,8 @@ public protocol HealthServiceStubbing {
     var shouldRequestAccess_returnValue: Bool { get set }
     var canWrite_returnValue: Bool { get set }
     var requestAuth_returnValue: Error? { get set }
-    var read_sum_returnValue: Result<Double, HealthError> { get set }
-    var read_sample_returnValue: Result<[Double], HealthError> { get set }
+    var read_sum_returnValue: Result<Double, Error> { get set }
+    var read_sample_returnValue: Result<[Double], Error> { get set }
     var export_returnValue: Error? { get set }
     var enableBackgroundDelivery_returnValue: Error? { get set }
 }
@@ -26,8 +26,8 @@ public final class HealthServiceStub: HealthServiceStubbing {
     public var shouldRequestAccess_returnValue: Bool = true
     public var canWrite_returnValue: Bool = true
     public var requestAuth_returnValue: Error?
-    public var read_sum_returnValue: Result<Double, HealthError> = .success(0)
-    public var read_sample_returnValue: Result<[Double], HealthError> = .success([0])
+    public var read_sum_returnValue: Result<Double, Error> = .success(0)
+    public var read_sample_returnValue: Result<[Double], Error> = .success([0])
     public var export_returnValue: Error?
     public var enableBackgroundDelivery_returnValue: Error?
 }

@@ -84,7 +84,7 @@ final class DayServiceTests: XCTestCase {
                                 goal: 3)
         dayManager.fetchWithDate_returnError = DatabaseError.noElementFound
         dayManager.createNewDay_returnValue = givenDay
-        healthService.read_sum_returnValue = .failure(.missingResult)
+        healthService.read_sum_returnValue = .failure(HealthError.missingResult)
         
         let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
