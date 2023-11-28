@@ -34,6 +34,7 @@ public final class DayService: DayServiceType {
     
     public func getToday() async -> Day {
         var day: Day
+        await requestHealthAccessIfNeeded()
         let healthTotal = await getHealthTotal()
         if let foundDay = try? await engine.dayManager.fetch(with: .now),
            let oldDay = Day(with: foundDay) {
@@ -99,11 +100,10 @@ public final class DayService: DayServiceType {
 extension Day {
     init?(with day: DayModel?) {
         guard let id = day?.id,
-              let date = day?.date,
+              let dateString = day?.date,
+              let date = dbDateFormatter.date(from: dateString),
               let consumed = day?.consumed,
               let goal = day?.goal
-        else { return nil }
-        guard let date = dbDateFormatter.date(from: date)
         else { return nil }
         self.init(id: id, date: date, consumed: consumed, goal: goal)
     }

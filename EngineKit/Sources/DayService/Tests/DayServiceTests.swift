@@ -13,13 +13,18 @@ import DatabaseServiceMocks
 import DayServiceInterface
 import UnitServiceInterface
 import UnitServiceMocks
+import LoggingService
+import PortsInterface
+import PortsMocks
 @testable import DayService
 
 final class DayServiceTests: XCTestCase {
     typealias Engine = (
         HasDayManagerService &
         HasConsumptionManagerService &
-        HasUnitService
+        HasUnitService &
+        HasLoggingService &
+        HasPorts
     )
     
     var engine: Engine!
@@ -27,6 +32,7 @@ final class DayServiceTests: XCTestCase {
     var unitService: UnitServiceStub!
     var dayManager: DayManagerStub!
     var consumptionManager: ConsumptionManagerStub!
+    var healthService: HealthServiceStub!
     
     var sut: DayServiceType!
     
@@ -38,6 +44,8 @@ final class DayServiceTests: XCTestCase {
         self.engine.dayManager = dayManager
         self.consumptionManager = ConsumptionManagerStub()
         self.engine.consumptionManager = consumptionManager
+        self.healthService = HealthServiceStub()
+        self.engine.healthService = healthService
         self.sut = DayService(engine: engine)
     }
     
@@ -53,6 +61,21 @@ final class DayServiceTests: XCTestCase {
         assert(day: foundDay, dayModel: givenDay)
     }
     
+    func test_getToday_withHealthDiff_success() async {
+        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDay = DayModel(id: "1",
+                                date: givenDate,
+                                consumed: 0,
+                                goal: 3)
+        dayManager.fetchWithDate_returnValue = givenDay
+        dayManager.addConsumed_returnValue = .init(id: "", date: givenDate, consumed: 1, goal: 3)
+        healthService.read_sum_returnValue = .success(1)
+        
+        let foundDay = await sut.getToday()
+        assert(day: foundDay,
+               dayModel: .init(id: "", date: givenDate, consumed: 1, goal: 3))
+    }
+    
     func test_getToday_failedFetchForDate() async {
         let givenDate = dbDateFormatter.string(from: .now)
         let givenDay = DayModel(id: "1",
@@ -61,9 +84,25 @@ final class DayServiceTests: XCTestCase {
                                 goal: 3)
         dayManager.fetchWithDate_returnError = DatabaseError.noElementFound
         dayManager.createNewDay_returnValue = givenDay
+        healthService.read_sum_returnValue = .failure(.missingResult)
         
         let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
+    }
+    
+    func test_getToday_withHealthFailed_failed() async {
+        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDay = DayModel(id: "1",
+                                date: givenDate,
+                                consumed: 0,
+                                goal: 3)
+        dayManager.fetchWithDate_returnValue = givenDay
+        dayManager.addConsumed_returnValue = .init(id: "", date: givenDate, consumed: 1, goal: 3)
+        healthService.read_sum_returnValue = .success(1)
+        
+        let foundDay = await sut.getToday()
+        assert(day: foundDay,
+               dayModel: .init(id: "", date: givenDate, consumed: 1, goal: 3))
     }
     
     func test_getToday_failedFetchForDateAndFetchPrevious() async {
@@ -90,9 +129,63 @@ final class DayServiceTests: XCTestCase {
         XCTAssertEqual(day.goal, 3)
     }
     
+    func test_getToday_failedFetch_unitSystemImperial() async {
+        unitService.currentUnitSystem_returnValue = .imperial
+        dayManager.fetchWithDate_returnError = DatabaseError.noElementFound
+        dayManager.createNewDay_returnError = DatabaseError.creatingElement
+        unitService.convert_returnValue = 3
+        
+        let day = await sut.getToday()
+        XCTAssertEqual(day.consumed, 0)
+        XCTAssertEqual(day.goal, 3)
+    }
+    
+    func test_getToday_requestHealthAccessFailed() async {
+        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDay = DayModel(id: "1",
+                                date: givenDate,
+                                consumed: 0,
+                                goal: 3)
+        healthService.requestAuth_returnValue = Error.mock
+        dayManager.fetchWithDate_returnValue = givenDay
+        
+        let foundDay = await sut.getToday()
+        assert(day: foundDay, dayModel: givenDay)
+    }
+    
+    func test_getToday_requestHealthAccessNotSupported() async {
+        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDay = DayModel(id: "1",
+                                date: givenDate,
+                                consumed: 0,
+                                goal: 3)
+        healthService.isSupported_returnValue = false
+        dayManager.fetchWithDate_returnValue = givenDay
+        
+        let foundDay = await sut.getToday()
+        assert(day: foundDay, dayModel: givenDay)
+    }
+    
     func test_addDrink() async throws {
         unitService.convert_returnValue = 0.5
         dayManager.addConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3)
+        let result = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
+        XCTAssertEqual(result, 0.5)
+    }
+    
+    func test_addDrink_unitSystemImperial() async throws {
+        unitService.currentUnitSystem_returnValue = .imperial
+        unitService.convert_returnValue = 0.5
+        dayManager.addConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3)
+        let result = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
+        XCTAssertEqual(result, 0.5)
+    }
+    
+    func test_addDrink_healthExportFails() async throws {
+        unitService.convert_returnValue = 0.5
+        dayManager.addConsumed_returnValue = .init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3)
+        healthService.export_returnValue = Error.mock
+        
         let result = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
         XCTAssertEqual(result, 0.5)
     }
@@ -139,6 +232,15 @@ final class DayServiceTests: XCTestCase {
         XCTAssertEqual(result, 4)
     }
     
+    func test_increaseGoal_unitSystemImperial() async throws {
+        unitService.currentUnitSystem_returnValue = .imperial
+        unitService.convert_returnValue = 4
+        dayManager.addGoal_returnValue = .init(id: "---", date: "01/01/2023",
+                                               consumed: 0, goal: 4)
+        let result = try await sut.increase(goal: 1)
+        XCTAssertEqual(result, 4)
+    }
+    
     func test_decreaseGoal() async throws {
         unitService.convert_returnValue = 2
         dayManager.addGoal_returnValue = .init(id: "---", date: "01/01/2023",
@@ -146,14 +248,24 @@ final class DayServiceTests: XCTestCase {
         let result = try await sut.decrease(goal: 1)
         XCTAssertEqual(result, 2)
     }
+    
+    func test_dayFrom_withNil() {
+        XCTAssertNil(Day(with: nil))
+    }
 }
 
 extension DayServiceTests {
     func assert(day: Day, dayModel: DayModel,
                 file: StaticString = #file,
                 line: UInt = #line) {
-        XCTAssertEqual(day.date.toDateString(), dayModel.date)
-        XCTAssertEqual(day.consumed, dayModel.consumed)
-        XCTAssertEqual(day.goal, dayModel.goal)
+        XCTAssertEqual(day.date.toDateString(), dayModel.date, file: file, line: line)
+        XCTAssertEqual(day.consumed, dayModel.consumed, file: file, line: line)
+        XCTAssertEqual(day.goal, dayModel.goal, file: file, line: line)
+    }
+}
+
+extension DayServiceTests {
+    enum Error: Swift.Error {
+        case mock
     }
 }

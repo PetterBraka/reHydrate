@@ -57,7 +57,8 @@ let package: Package = {
                   sourceDependancy: [
                     .interface(.databaseService),
                     .interface(.unitService),
-                    .interface(.userPreferenceService)
+                    .interface(.userPreferenceService),
+                    .portsInterface
                   ],
                   interfaceDependancy: [
                     .interface(.drinkService)
