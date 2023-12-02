@@ -28,6 +28,8 @@ struct AppView: View {
                     .tag(Tab.settings)
                 sceneFactory.makeHomeScreen()
                     .tag(Tab.home)
+                sceneFactory.makeHistoryScreen()
+                    .tag(Tab.history)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
         }

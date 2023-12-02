@@ -14,19 +14,24 @@ public enum History {
     
     public enum Action {
         case didTapBack
+        case didAppear
         case didSelectRange(ViewModel.ChartRange)
         case didSelectChart(ViewModel.ChartType)
     }
     
     public struct ViewModel {
-        public let data: [ChartData]
+        public let isLoading: Bool
+        public let days: [ViewModel.Day]
+        public let dates: [Date]
         public let chart: ChartType
         public let chartOption: [ChartType]
         public let range: ChartRange
         public let rangeOptions: [ChartRange]
         
-        public init(data: [ChartData], chart: ChartType, chartOption: [ChartType], range: ChartRange, rangeOptions: [ChartRange]) {
-            self.data = data
+        public init(isLoading: Bool, days: [ViewModel.Day], dates: [Date], chart: ChartType, chartOption: [ChartType], range: ChartRange, rangeOptions: [ChartRange]) {
+            self.isLoading = isLoading
+            self.days = days
+            self.dates = dates
             self.chart = chart
             self.chartOption = chartOption
             self.range = range
@@ -47,20 +52,19 @@ extension History.ViewModel {
     public enum ChartRange: String, Identifiable, CaseIterable {
         public var id: String { rawValue }
         
-        case day
+        case week
         case month
         case quarter
         case year
-        case all
         
         public var formatter: DateFormatter {
             let formatter = DateFormatter()
             switch self {
-            case .day:
+            case .week:
                 formatter.dateFormat = "EEE"
-            case .month, .quarter, .year:
-                formatter.dateFormat = "MMM"
-            case .all:
+            case .month:
+                formatter.dateFormat = "DD/MM/YY"
+            case .quarter, .year:
                 formatter.dateFormat = "MM/YY"
             }
             return formatter
@@ -69,13 +73,15 @@ extension History.ViewModel {
 }
 
 extension History.ViewModel {
-    public struct ChartData {
+    public struct Day {
         public let date: Date
-        public let value: Double
+        public let consumed: Double
+        public let goal: Double
         
-        public init(date: Date, value: Double) {
+        public init(date: Date, consumed: Double, goal: Double) {
             self.date = date
-            self.value = value
+            self.consumed = consumed
+            self.goal = goal
         }
     }
 }

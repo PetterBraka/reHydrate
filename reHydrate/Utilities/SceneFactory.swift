@@ -23,6 +23,7 @@ public final class SceneFactory: ObservableObject {
     // Root presenters
     private lazy var homePresenter = Screen.Home.Presenter(engine: engine, router: router)
     private lazy var settingsPresenter = Screen.Settings.Presenter(engine: engine, router: router)
+    private lazy var historyPresenter = Screen.History.Presenter(engine: engine, router: router)
     
     // Port
     let notificationDelegate: NotificationDelegatePort
@@ -86,6 +87,13 @@ public final class SceneFactory: ObservableObject {
         presenter.scene = observer
         
         return AppIconScreen(observer: observer)
+    }
+    
+    func makeHistoryScreen() -> HistoryScreen {
+        let observer = HistoryScreenObservable(presenter: historyPresenter)
+        historyPresenter.scene = observer
+        
+        return HistoryScreen(observer: observer)
     }
 }
 

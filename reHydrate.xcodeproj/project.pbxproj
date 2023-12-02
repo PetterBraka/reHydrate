@@ -131,6 +131,8 @@
 		A126D2512A7667C200A296BA /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A126D2502A7667C200A296BA /* CheckBoxButton.swift */; };
 		A126D2552A76684E00A296BA /* StepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A126D2542A76684E00A296BA /* StepperView.swift */; };
 		A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */; };
+		A13BFF5E2B16971B00E47671 /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */; };
+		A13BFF602B16A29600E47671 /* HistoryScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */; };
 		A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1614D522A362E8C00235D02 /* SceneFactory.swift */; };
 		A183BCEB2A3122CB00D42033 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE82A3120C900D42033 /* Images.swift */; };
 		A183BCEC2A3122CE00D42033 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE92A3120C900D42033 /* Font.swift */; };
@@ -319,6 +321,8 @@
 		A126D2502A7667C200A296BA /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
 		A126D2542A76684E00A296BA /* StepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperView.swift; sourceTree = "<group>"; };
 		A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
+		A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
+		A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreenObservable.swift; sourceTree = "<group>"; };
 		A1614D522A362E8C00235D02 /* SceneFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneFactory.swift; sourceTree = "<group>"; };
 		A183BCE62A3120C900D42033 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A183BCE82A3120C900D42033 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
@@ -617,6 +621,15 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		A13BFF5C2B1696F500E47671 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */,
+				A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
 		A1614D512A362E7300235D02 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -648,6 +661,7 @@
 		A183BCF62A33B75000D42033 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				A13BFF5C2B1696F500E47671 /* History */,
 				332315F32742B3430039EE23 /* AppView.swift */,
 				A11D4CD72A3C34A500A70B9B /* Settings */,
 				A183BCF72A33B75A00D42033 /* Home */,
@@ -909,6 +923,7 @@
 				33B28F6F26BC802800DECA9F /* UITextField+Extensions.swift in Sources */,
 				A1EABF3D2AF40B5000591981 /* CustomToolbar.swift in Sources */,
 				A1EABF302ADAD57600591981 /* EditContainerScreenObservable.swift in Sources */,
+				A13BFF602B16A29600E47671 /* HistoryScreenObservable.swift in Sources */,
 				A1EABF382AF3924100591981 /* UIApplication+Extensions.swift in Sources */,
 				A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
@@ -917,6 +932,7 @@
 				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,
 				A1AA8DE32AF7828500D12E74 /* HealthKitPort.swift in Sources */,
 				A183BCED2A3122D100D42033 /* Color.swift in Sources */,
+				A13BFF5E2B16971B00E47671 /* HistoryScreen.swift in Sources */,
 				A1EABF2C2ADA936F00591981 /* FilledContainer.swift in Sources */,
 				A1AA8DDB2AF634C500D12E74 /* AppIconScreenObservable.swift in Sources */,
 				A1EABF322ADBCC3C00591981 /* Preview+Helpers.swift in Sources */,
