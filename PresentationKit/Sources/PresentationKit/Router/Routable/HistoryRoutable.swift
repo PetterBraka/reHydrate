@@ -6,5 +6,5 @@
 //
 
 public protocol HistoryRoutable {
-    func showHistory()
+    func showHome()
 }

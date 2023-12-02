@@ -11,5 +11,6 @@ public enum Screen {
         public enum Credits {}
         public enum AppIcon {}
     }
+    public enum History {}
     public enum EditContainer {}
 }

@@ -11,6 +11,7 @@ let package: Package = {
     let editContainer = "EditContainerPresentationInterface"
     let credits = "CreditsPresentationInterface"
     let appIcon = "AppIconPresentationInterface"
+    let history = "HistoryPresentationInterface"
 
     return Package(
         name: rootPackage,
@@ -33,6 +34,7 @@ let package: Package = {
                     .byName(name: editContainer),
                     .byName(name: credits),
                     .byName(name: appIcon),
+                    .byName(name: history)
                 ]
             ),
             .target(name: home),
@@ -40,6 +42,7 @@ let package: Package = {
             .target(name: editContainer),
             .target(name: credits),
             .target(name: appIcon),
+            .target(name: history)
         ]
     )
 }()
