@@ -9,6 +9,7 @@
 import DrinkServiceInterface
 import SwiftUI
 import PresentationKit
+import EngineKit
 
 struct SettingsScreen: View {
     @ObservedObject var observer: SettingsScreenObservable
@@ -19,16 +20,7 @@ struct SettingsScreen: View {
             Color.background
                 .ignoresSafeArea()
             VStack(alignment: .leading, spacing: 0) {
-                Button {
-                    observer.perform(action: .didTapBack)
-                } label: {
-                    Image.back
-                        .resizable()
-                        .frame(width: 36, height: 36)
-                        .foregroundColor(.button)
-                }
-                .padding([.leading, .top], 24)
-                .padding(.bottom, 16)
+                toolbar
                 list
                 .font(.brandBody)
             }
@@ -79,6 +71,24 @@ struct SettingsScreen: View {
             }
         } message: { error in
             Text(error.message)
+        }
+    }
+    
+    @ViewBuilder
+    var toolbar: some View {
+        CustomToolbar {
+            Text("")
+        } leadingButton: {
+            Button {
+                observer.perform(action: .didTapBack)
+            } label: {
+                HStack {
+                    Image.back
+                    Text("Back")
+                }
+            }
+            .foregroundColor(.button)
+            .padding(.leading, 24)
         }
     }
     
@@ -352,4 +362,8 @@ struct SettingsScreen: View {
             }
         }
     }
+}
+
+#Preview {
+    SceneFactory.shared.makeSettingsScreen()
 }

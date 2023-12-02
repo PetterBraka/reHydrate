@@ -74,7 +74,7 @@ extension Image {
     static let waterDrop = Image("sf.water.drop")
 
     // SF images
-    static let back = Image(systemName: "chevron.left.circle")
+    static let back = Image(systemName: "chevron.left")
     static let open = Image(systemName: "chevron.forward")
     static let settings = Image(systemName: "gear.circle")
     static let calendar = Image(systemName: "calendar.circle")
