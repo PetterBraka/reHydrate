@@ -57,19 +57,6 @@ struct HistoryScreen: View {
     @ViewBuilder
     var content: some View {
         VStack(alignment: .center, spacing: 8) {
-            let rangeBinding = Binding {
-                observer.viewModel.range
-            } set: { newRange in
-                observer.perform(action: .didSelectRange(newRange))
-            }
-            Picker("", selection: rangeBinding) {
-                ForEach(observer.viewModel.rangeOptions) {
-                    Text($0.rawValue)
-                        .tag($0)
-                        .foregroundStyle(Color.label)
-                }
-            }
-            .pickerStyle(.segmented)
             chart
                 .frame(height: contentHeight / 3)
                 .border(.black)
@@ -79,33 +66,24 @@ struct HistoryScreen: View {
     
     @ViewBuilder
     var chart: some View {
-        Chart(observer.viewModel.dates, id: \.self) { date in
-            let xString = "Goal"
-            let vString = "Consumed"
-            let dateString = observer.viewModel.range.formatter.string(from: date)
-            let xPoint: PlottableValue = .value("Date", dateString)
-            if let day = observer.viewModel.days.first(where: {
-                dateString == observer.viewModel.range.formatter.string(from: $0.date)
-            }) {
-                LineMark(x: xPoint, y: .value(xString, day.goal))
+        Text(observer.viewModel.startDate + " - " + observer.viewModel.endDate)
+        Chart(observer.viewModel.data, id: \.date) { day in
+            let xPoint: PlottableValue = .value(chartDatePoint, day.date)
+            if let goal = day.goal {
+                LineMark(x: xPoint, y: .value(chartGoalPoint, goal))
                     .foregroundStyle(.green.opacity(0.5))
-                switch observer.viewModel.chart {
-                case .bar:
-                    BarMark(x: xPoint, y: .value(vString, day.consumed))
-                case .line:
-                    LineMark(x: xPoint, y: .value(vString, day.consumed))
-                case .plot:
-                    PointMark(x: xPoint, y: .value(vString, day.consumed))
-                }
-            } else {
-                switch observer.viewModel.chart {
-                case .bar:
-                    BarMark(x: xPoint, y: .value(vString, 0))
-                case .line:
-                    LineMark(x: xPoint, y: .value(vString, 0))
-                case .plot:
-                    PointMark(x: xPoint, y: .value(vString, 0))
-                }
+            }
+            let consumed = day.consumed ?? 0
+            switch observer.viewModel.chart {
+            case .bar:
+                BarMark(x: xPoint,
+                        y: .value(chartConsumedPoint, consumed))
+            case .line:
+                LineMark(x: xPoint,
+                         y: .value(chartConsumedPoint, consumed))
+            case .plot:
+                PointMark(x: xPoint,
+                          y: .value(chartConsumedPoint, consumed))
             }
         }
     }
@@ -114,11 +92,33 @@ struct HistoryScreen: View {
 // MARK: - Strings
 extension HistoryScreen {
     var historyTitle: String {
-        LocalizedString("ui.history.title", value: "History", comment: "The title of the history screen.")
+        LocalizedString("ui.history.title", 
+                        value: "History",
+                        comment: "The title of the history screen.")
     }
     
     var backButtonTitle: String {
-        LocalizedString("ui.history.back", value: "Back", comment: "The back button in the history screen")
+        LocalizedString("ui.history.back", 
+                        value: "Back",
+                        comment: "The back button in the history screen")
+    }
+    
+    var chartDatePoint: String {
+        LocalizedString("ui.history.chart.date", 
+                        value: "Date",
+                        comment: "")
+    }
+    
+    var chartGoalPoint: String {
+        LocalizedString("ui.history.chart.goal", 
+                        value: "Goal",
+                        comment: "")
+    }
+    
+    var chartConsumedPoint: String {
+        LocalizedString("ui.history.chart.consumed", 
+                        value: "Consumed",
+                        comment: "")
     }
 }
 

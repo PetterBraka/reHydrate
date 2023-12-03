@@ -32,17 +32,25 @@ extension Screen.History {
             didSet { scene?.perform(update: .viewModel) }
         }
         
+        private let formatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "DD/MM/YY"
+            return formatter
+        }()
+        
         public init(engine: Engine,
                     router: Router) {
             self.engine = engine
             self.router = router
-            viewModel = .init(isLoading: true, days: [], dates: [], chart: .bar, chartOption: ViewModel.ChartType.allCases,
-                              range: .week, rangeOptions: ViewModel.ChartRange.allCases)
-            Task {
-                let dates = getDates(from: viewModel.range)
-                let days = await fetchDays(for: dates)
-                updateViewModel(isLoading: false, days: days, dates: dates)
-            }
+            viewModel = .init(
+                isLoading: false,
+                startDate: "",
+                endDate: "",
+                data: [], 
+                chart: .bar,
+                chartOption: ViewModel.ChartType.allCases,
+                error: nil
+            )
         }
         
         public func perform(action: History.Action) async {
@@ -51,14 +59,22 @@ extension Screen.History {
                 router.showHome()
             case .didAppear:
                 updateViewModel(isLoading: true)
-                let dates = getDates(from: viewModel.range)
-                let days = await fetchDays(for: dates)
-                updateViewModel(isLoading: false, days: days, dates: dates)
-            case .didSelectRange(let range):
-                updateViewModel(isLoading: true, range: range)
-                let dates = getDates(from: range)
-                let days = await fetchDays(for: dates)
-                updateViewModel(isLoading: false, days: days, dates: dates)
+                if let start = formatter.date(from: viewModel.startDate),
+                   let end = formatter.date(from: viewModel.endDate) {
+                    let days = await fetchDays(startDate: start, endDate: end)
+                    updateViewModel(isLoading: false, data: days)
+                } else {
+                    
+                }
+            case let .didSetStart(start):
+                break
+            case let .didSetEnd(end):
+                break
+//            case .didSelectRange(let range):
+//                updateViewModel(isLoading: true, range: range)
+//                let dates = getDates(from: range)
+//                let days = await fetchDays(for: dates)
+//                updateViewModel(isLoading: false, days: days, dates: dates)
             case .didSelectChart(let chart):
                 updateViewModel(isLoading: false, chart: chart)
             }
@@ -68,58 +84,56 @@ extension Screen.History {
 
 private extension Screen.History.Presenter {
     func updateViewModel(isLoading: Bool,
-                         days: [History.ViewModel.Day]? = nil,
-                         dates: [Date]? = nil,
-                         chart: History.ViewModel.ChartType? = nil,
-                         chartOption: [History.ViewModel.ChartType]? = nil,
-                         range: History.ViewModel.ChartRange? = nil,
-                         rangeOptions: [History.ViewModel.ChartRange]? = nil) {
+                         startDate: Date? = nil,
+                         endDate: Date? = nil,
+                         data: [ViewModel.ChartData]? = nil,
+                         chart: ViewModel.ChartType? = nil,
+                         chartOption: [ViewModel.ChartType]? = nil,
+                         error: ViewModel.HistoryError? = nil) {
+        let startDateString: String
+        if let startDate {
+            startDateString = formatter.string(from: startDate)
+        } else {
+            startDateString = viewModel.startDate
+        }
+        let endDateString: String
+        if let endDate{
+            endDateString = formatter.string(from: endDate)
+        } else {
+            endDateString = viewModel.startDate
+        }
         viewModel = .init(
             isLoading: isLoading,
-            days: days ?? viewModel.days,
-            dates: dates ?? viewModel.dates,
+            startDate: startDateString,
+            endDate: endDateString,
+            data: data ?? viewModel.data,
             chart: chart ?? viewModel.chart,
             chartOption: chartOption ?? viewModel.chartOption,
-            range: range ?? viewModel.range,
-            rangeOptions: rangeOptions ?? viewModel.rangeOptions
+            error: error
         )
     }
 }
 
 private extension Screen.History.Presenter {
-    func fetchDays(for dates: [Date]) async -> [ViewModel.Day] {
+    func fetchDays(startDate: Date, endDate: Date) async -> [ViewModel.ChartData] {
+        let dates = getDates(startDate: startDate, endDate: endDate)
         let daysFound = await engine.dayService.getDays(for: dates)
-            .map { ViewModel.Day(from: $0) }
-        return daysFound
-    }
-    
-    func getDates(from range: ViewModel.ChartRange) -> [Date] {
-        guard let startEnd = getRange(for: .now, selectedRange: range)
-        else { return [] }
-        var currentDate = startEnd.start
-        var dates: [Date] = []
-        
-        while currentDate <= startEnd.end {
-            dates.append(currentDate)
-            guard let newDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)
-            else { break }
-            currentDate = newDate
-        }
         
         return dates
-    }
-    
-    func getRange(for date: Date, selectedRange: ViewModel.ChartRange) -> (start: Date, end: Date)? {
-        switch selectedRange {
-        case .week:
-            return getWeekRange(for: date)
-        case .month:
-            return getMonthRange(for: date)
-        case .quarter:
-            return getQuarterRange(for: date)
-        case .year:
-            return getYearRange(for: date)
-        }
+            .map { [weak self] date in
+                guard let self else {
+                    return ViewModel.ChartData(date: "", consumed: nil, goal: nil)
+                }
+                let dateString = self.formatter.string(from: date)
+                let day = daysFound.first(where: {
+                    self.formatter.string(from: $0.date) == dateString
+                })
+                return if let day {
+                    ViewModel.ChartData(date: dateString, consumed: day.consumed, goal: day.goal)
+                } else {
+                    ViewModel.ChartData(date: dateString, consumed: nil, goal: nil)
+                }
+            }
     }
     
     func getWeekRange(for date: Date) -> (start: Date, end: Date)? {
@@ -138,54 +152,17 @@ private extension Screen.History.Presenter {
         return (start: startDate, end: endDate)
     }
     
-    func getMonthRange(for date: Date) -> (start: Date, end: Date)? {
-        let calendar = Calendar.current
+    func getDates(startDate: Date, endDate: Date) -> [Date] {
+        var currentDate = startDate
+        var dates: [Date] = []
         
-        var components = calendar.dateComponents([.day, .month, .year], from: date)
-        components.day = 1
-        
-        guard let startDate = calendar.date(from: components),
-              let endDate = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startDate)
-        else {
-            return nil
+        while currentDate <= endDate {
+            dates.append(currentDate)
+            guard let newDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)
+            else { break }
+            currentDate = newDate
         }
-        return (start: startDate, end: endDate)
-    }
-    
-    func getQuarterRange(for date: Date) -> (start: Date, end: Date)? {
-        let calendar = Calendar.current
         
-        var components = calendar.dateComponents([.day, .month, .year], from: date)
-        components.day = 1
-        
-        guard let startDate = calendar.date(from: components),
-              let endDate = calendar.date(byAdding: DateComponents(month: 3, day: -1), to: startDate)
-        else {
-            return nil
-        }
-        return (start: startDate, end: endDate)
-    }
-    
-    func getYearRange(for date: Date) -> (start: Date, end: Date)? {
-        let calendar = Calendar.current
-        
-        var components = calendar.dateComponents([.day, .month, .year], from: date)
-        components.day = 1
-        components.month = 1
-        
-        guard let startDate = calendar.date(from: components),
-              let endDate = calendar.date(byAdding: DateComponents(year: 1, day: -1), to: startDate)
-        else {
-            return nil
-        }
-        return (start: startDate, end: endDate)
-    }
-}
-
-fileprivate extension History.ViewModel.Day {
-    init(from day: Day) {
-        self.init(date: day.date,
-                  consumed: day.consumed,
-                  goal: day.goal)
+        return dates
     }
 }
