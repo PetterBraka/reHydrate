@@ -162,6 +162,7 @@
 		A1EABF3A2AF3F7C800591981 /* CreditsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF392AF3F7C800591981 /* CreditsScreenObservable.swift */; };
 		A1EABF3D2AF40B5000591981 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF3C2AF40B5000591981 /* CustomToolbar.swift */; };
 		A1EABF3F2AF4E0E300591981 /* View+getSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF3E2AF4E0E300591981 /* View+getSize.swift */; };
+		A1F280DE2B1FDC6200733E1F /* CalendarUI in Frameworks */ = {isa = PBXBuildFile; productRef = A1F280DD2B1FDC6200733E1F /* CalendarUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -324,6 +325,7 @@
 		A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
 		A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreenObservable.swift; sourceTree = "<group>"; };
 		A1614D522A362E8C00235D02 /* SceneFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneFactory.swift; sourceTree = "<group>"; };
+		A17A96C52B1FDB5000DBF975 /* CalendarUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CalendarUI; sourceTree = "<group>"; };
 		A183BCE62A3120C900D42033 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A183BCE82A3120C900D42033 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		A183BCE92A3120C900D42033 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -358,6 +360,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1F280DE2B1FDC6200733E1F /* CalendarUI in Frameworks */,
 				A19F28BC2A80D44E0005717A /* Blackbird in Frameworks */,
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				A126D24D2A76665800A296BA /* PresentationInterface in Frameworks */,
@@ -508,6 +511,7 @@
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
+				A17A96C52B1FDB5000DBF975 /* CalendarUI */,
 				A1AF32D22A346CA200FD0C7C /* EngineKit */,
 				A114C6C02A63DAAE00F53770 /* PresentationKit */,
 				A1AF32D32A346D6F00FD0C7C /* PresentationInterface */,
@@ -732,6 +736,7 @@
 				A126D24C2A76665800A296BA /* PresentationInterface */,
 				A126D24E2A76665900A296BA /* PresentationKit */,
 				A19F28BB2A80D44E0005717A /* Blackbird */,
+				A1F280DD2B1FDC6200733E1F /* CalendarUI */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -1302,6 +1307,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A19F28BA2A80D44E0005717A /* XCRemoteSwiftPackageReference "Blackbird" */;
 			productName = Blackbird;
+		};
+		A1F280DD2B1FDC6200733E1F /* CalendarUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CalendarUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 

@@ -11,6 +11,7 @@ import Charts
 import HistoryPresentationInterface
 import PresentationKit
 import EngineKit
+import CalendarUI
 
 struct HistoryScreen: View {
     @ObservedObject var observer: HistoryScreenObservable
@@ -60,7 +61,7 @@ struct HistoryScreen: View {
             chart
                 .frame(height: contentHeight / 3)
                 .border(.black)
-            Spacer()
+            calendar
         }
     }
     
@@ -86,6 +87,11 @@ struct HistoryScreen: View {
                           y: .value(chartConsumedPoint, consumed))
             }
         }
+    }
+    
+    @ViewBuilder
+    var calendar: some View {
+        CalendarView()
     }
 }
 
