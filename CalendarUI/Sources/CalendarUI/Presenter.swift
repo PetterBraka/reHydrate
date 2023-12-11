@@ -8,49 +8,14 @@
 import Foundation
 
 final class Presenter: PresenterType {
-    private let month: Int
-    private let year: Int
-    
     public weak var scene: SceneType?
     private(set) var viewModel: ViewModel {
-        didSet {
-            scene?.perform(update: .viewModel)
-        }
+        didSet { scene?.perform(update: .viewModel) }
     }
     
     init(month: Int, year: Int) {
-        self.month = month
-        self.year = year
         self.viewModel = ViewModel(dates: [])
-        
-        let calendar = Calendar.current
-        let startOfMonth = getStartOfMonth(month: month, year: year)
-        let endOfMonth = getEndOfMonth(from: startOfMonth)
-        
-        let daysToAddBefore = getDaysToAddBefore(startOfMonth)
-        let daysToAddAfter = getDaysToAddAfter(endOfMonth)
-        let firstDate = calendar.date(byAdding: .day, value: -daysToAddBefore, to: startOfMonth)!
-        let lastDate = calendar.date(byAdding: .day, value: daysToAddAfter, to: endOfMonth)!
-        let dates = generateDates(from: firstDate, to: lastDate)
-            .compactMap { [weak self] date -> ViewModel.CalendarDate in
-                let isToday = Calendar.current.isDateInToday(date)
-                guard let self
-                else {
-                    return ViewModel.CalendarDate(
-                        date: date,
-                        isWeekday: false,
-                        isThisMonth: false,
-                        isToday: isToday
-                    )
-                }
-                return ViewModel.CalendarDate(
-                    date: date,
-                    isWeekday: isWeekday(date),
-                    isThisMonth: isDateInCurrentMonth(date),
-                    isToday: isToday
-                )
-            }
-        viewModel = ViewModel(dates: dates)
+        updateViewModel(month: year, year: month)
     }
     
     func perform(action: Action) {
@@ -64,6 +29,27 @@ final class Presenter: PresenterType {
 }
 
 private extension Presenter {
+    func updateViewModel(month: Int, year: Int) {
+        let calendar = Calendar.current
+        let startOfMonth = getStartOfMonth(month: month, year: year)
+        let endOfMonth = getEndOfMonth(from: startOfMonth)
+        
+        let daysToAddBefore = getDaysToAddBefore(startOfMonth)
+        let daysToAddAfter = getDaysToAddAfter(endOfMonth)
+        let firstDate = calendar.date(byAdding: .day, value: -daysToAddBefore, to: startOfMonth)!
+        let lastDate = calendar.date(byAdding: .day, value: daysToAddAfter, to: endOfMonth)!
+        let dates = generateDates(from: firstDate, to: lastDate)
+            .map { [weak self] date -> ViewModel.CalendarDate in
+                ViewModel.CalendarDate(
+                    date: date,
+                    isWeekday: self?.isWeekday(date) ?? false ,
+                    isThisMonth: self?.isDate(inMonth: month, date) ?? false,
+                    isToday: Calendar.current.isDateInToday(date)
+                )
+            }
+        viewModel = ViewModel(dates: dates)
+    }
+    
     // Helper function to get the start of the month
     func getStartOfMonth(month: Int, year: Int) -> Date {
         let calendar = Calendar.current
@@ -104,7 +90,7 @@ private extension Presenter {
     }
     
     // Helper function to check if a date is in the same month as the displayed month
-    func isDateInCurrentMonth(_ date: Date) -> Bool {
+    func isDate(inMonth month: Int, _ date: Date) -> Bool {
         let calendar = Calendar.current
         return calendar.component(.month, from: date) == month
     }
