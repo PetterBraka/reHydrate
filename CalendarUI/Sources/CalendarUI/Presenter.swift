@@ -34,7 +34,6 @@ final class Presenter: PresenterType {
 
 private extension Presenter {
     func updateViewModel(month: Int, year: Int) {
-        let calendar = Calendar.current
         let startOfMonth = getStartOfMonth(month: month, year: year)
         let endOfMonth = getEndOfMonth(from: startOfMonth)
         
@@ -63,23 +62,20 @@ private extension Presenter {
     }
     
     func getStartOfMonth(month: Int, year: Int) -> Date {
-        let calendar = Calendar.current
         let components = DateComponents(year: year, month: month, day: 1)
         return calendar.date(from: components) ?? Date()
     }
     
     func getEndOfMonth(from date: Date) -> Date {
-        Calendar.current.date(byAdding: .init(month: 1, day: -1), to: date)!
+        calendar.date(byAdding: .init(month: 1, day: -1), to: date)!
     }
     
     func getDaysToAddBefore(_ startOfMonth: Date) -> Int {
-        let calendar = Calendar.current
         let startWeekday = calendar.component(.weekday, from: startOfMonth)
         return (startWeekday - calendar.firstWeekday + 7) % 7
     }
     
     func getDaysToAddAfter(_ endOfMonth: Date) -> Int {
-        let calendar = Calendar.current
         let daysToAddAfter = calendar.component(.weekday, from: endOfMonth)
         return (daysToAddAfter == 7) ? 6 : (7 - daysToAddAfter)
     }
@@ -90,19 +86,17 @@ private extension Presenter {
         
         while currentDate <= end {
             resultDates.append(currentDate)
-            currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
+            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
         }
         
         return resultDates
     }
     
     func isDate(inMonth month: Int, _ date: Date) -> Bool {
-        let calendar = Calendar.current
-        return calendar.component(.month, from: date) == month
+        calendar.component(.month, from: date) == month
     }
     
     func isWeekday(_ date: Date) -> Bool {
-        let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: date)
         
         switch weekday {
