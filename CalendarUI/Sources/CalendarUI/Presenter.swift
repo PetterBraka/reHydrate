@@ -19,10 +19,17 @@ final class Presenter: PresenterType {
     private var month: Int
     private var year: Int
     
+    private let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = .current
+        formatter.dateFormat = "MMMM YYYY"
+        return formatter
+    }()
+    
     init(month: Int, year: Int, startOfWeek: Weekday) {
         self.month = month
         self.year = year
-        self.viewModel = ViewModel(month: month, weekdays: [], dates: [], swipeDirection: nil)
+        self.viewModel = ViewModel(month: "", weekdays: [], dates: [], swipeDirection: nil)
         self.startOfWeek = startOfWeek
         
         updateViewModel(month: month, year: year, direction: nil)
@@ -69,7 +76,7 @@ private extension Presenter {
         else { return }
         
         viewModel = ViewModel(
-            month: month,
+            month: formatter.string(from: startOfMonth),
             weekdays: getWeekdayLabels(),
             dates: generateDates(from: firstDate, to: lastDate)
                 .map { [weak self] date -> ViewModel.CalendarDate in

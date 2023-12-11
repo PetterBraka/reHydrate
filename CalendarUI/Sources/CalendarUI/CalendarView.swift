@@ -7,6 +7,10 @@ public struct CalendarView<TodayView: View,
     @ObservedObject var observer: Observer
     var viewModel: ViewModel { presenter.viewModel }
     
+    let titleFont: Font
+    let labelFont: Font
+    let dayFont: Font
+    
     let todayView: (() -> TodayView)?
     let weekdayLabelsBackground: (() -> WeekdayLabelsBackground)?
     let weekendBackground: (() -> WeekendBackground)?
@@ -35,12 +39,19 @@ public struct CalendarView<TodayView: View,
         month: Int,
         year: Int,
         startOfWeek: Weekday,
+        titleFont: Font,
+        labelFont: Font,
+        dayFont: Font,
         todayView: (() -> TodayView)?,
         weekdayLabelsBackground: (() -> WeekdayLabelsBackground)?,
         weekendBackground: (() -> WeekendBackground)?
     ) {
         self.presenter = Presenter(month: month, year: year, startOfWeek: startOfWeek)
         self.observer = Observer(presenter: presenter)
+        self.titleFont = titleFont
+        self.labelFont = labelFont
+        self.dayFont = dayFont
+        
         self.todayView = todayView
         self.weekdayLabelsBackground = weekdayLabelsBackground
         self.weekendBackground = weekendBackground
@@ -49,10 +60,17 @@ public struct CalendarView<TodayView: View,
     }
     
     public var body: some View {
-        Grid(alignment: .center, horizontalSpacing: 0, verticalSpacing: 0) {
-            weekdayLabels
-            monthCells
+        VStack(alignment: .center, spacing: 0) {
+            Text(viewModel.month)
+                .font(titleFont)
+            Grid(alignment: .center, horizontalSpacing: 0, verticalSpacing: 0) {
+                weekdayLabels
+                    .font(labelFont)
+                monthCells
+                    .font(dayFont)
+            }
         }
+        .contentShape(Rectangle())
         .id(viewModel.month)
         .transition(transition)
         .animation(.spring, value: viewModel.month)
@@ -138,6 +156,6 @@ public struct CalendarView<TodayView: View,
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView(month: 12, year: 2023, startOfWeek: .sunday)
+        CalendarView(month: 12, year: 2023, startOfWeek: .sunday, titleFont: .title3, labelFont: .body, dayFont: .caption)
     }
 }

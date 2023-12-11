@@ -91,7 +91,7 @@ struct HistoryScreen: View {
     
     @ViewBuilder
     var calendar: some View {
-        CalendarView(startOfWeek: .monday)
+        CalendarView(startOfWeek: .monday, titleFont: .brandTitle, labelFont: .brandBody, dayFont: .brandBody)
     }
 }
 
