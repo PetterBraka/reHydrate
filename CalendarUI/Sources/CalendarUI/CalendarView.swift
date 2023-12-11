@@ -1,14 +1,16 @@
 import SwiftUI
 
-public struct CalendarView: View {
+public struct CalendarView<TodayView: View,
+                           WeekdayLabelsBackground: View,
+                           WeekendBackground: View>: View {
     let presenter: Presenter
     @ObservedObject var observer: Observer
     var viewModel: ViewModel { presenter.viewModel }
     
-    public init(
-        month: Int = Calendar.current.component(.month, from: .now),
-        year: Int = Calendar.current.component(.year, from: .now),
-        startOfWeek: Weekday
+    let todayView: (() -> TodayView)?
+    let weekdayLabelsBackground: (() -> WeekdayLabelsBackground)?
+    let weekendBackground: (() -> WeekendBackground)?
+    
     var transition: AsymmetricTransition<MoveTransition, MoveTransition> {
         switch viewModel.swipeDirection {
         case .left:
@@ -28,9 +30,21 @@ public struct CalendarView: View {
             )
         }
     }
+    
+    init(
+        month: Int,
+        year: Int,
+        startOfWeek: Weekday,
+        todayView: (() -> TodayView)?,
+        weekdayLabelsBackground: (() -> WeekdayLabelsBackground)?,
+        weekendBackground: (() -> WeekendBackground)?
     ) {
         self.presenter = Presenter(month: month, year: year, startOfWeek: startOfWeek)
         self.observer = Observer(presenter: presenter)
+        self.todayView = todayView
+        self.weekdayLabelsBackground = weekdayLabelsBackground
+        self.weekendBackground = weekendBackground
+        
         presenter.scene = observer
     }
     
@@ -95,13 +109,24 @@ public struct CalendarView: View {
             .background {
                 ZStack {
                     if !date.isWeekday {
-                        Color.accentColor.opacity(0.5)
+                        if let weekendBackground {
+                            weekendBackground()
+                        } else {
+                            Color.accentColor
+                                .opacity(0.25)
+                        }
+                    } else {
+                        Color.white
                     }
                     
                     if date.isToday {
-                        Circle()
-                            .fill(.red)
-                            .opacity(0.5)
+                        if let todayView {
+                            todayView()
+                        } else {
+                            Circle()
+                                .fill(.red)
+                                .opacity(0.2)
+                        }
                     }
                 }
             }
