@@ -8,6 +8,7 @@
 import Foundation
 
 struct ViewModel {
+    let weekdays: [String]
     let dates: [CalendarDate]
 }
 

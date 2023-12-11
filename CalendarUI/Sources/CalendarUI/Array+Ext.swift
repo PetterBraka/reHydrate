@@ -12,3 +12,10 @@ extension Array {
         }
     }
 }
+
+extension Array where Element: Equatable {
+    func rotate(toStartAt index: Index) -> [Element] {
+        let index = self.index(startIndex, offsetBy: index, limitedBy: endIndex) ?? startIndex
+        return Array(self[index ..< endIndex] + self[startIndex ..< index])
+    }
+}

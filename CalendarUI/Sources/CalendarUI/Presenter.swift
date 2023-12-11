@@ -13,8 +13,12 @@ final class Presenter: PresenterType {
         didSet { scene?.perform(update: .viewModel) }
     }
     
-    init(month: Int, year: Int) {
-        self.viewModel = ViewModel(dates: [])
+    private var startOfWeek: Weekday
+    private let calendar: Calendar = Calendar.current
+    
+    init(month: Int, year: Int, startOfWeek: Weekday) {
+        self.viewModel = ViewModel(weekdays: [], dates: [])
+        self.startOfWeek = startOfWeek
         updateViewModel(month: year, year: month)
     }
     
@@ -47,7 +51,15 @@ private extension Presenter {
                     isToday: Calendar.current.isDateInToday(date)
                 )
             }
-        viewModel = ViewModel(dates: dates)
+        
+        let weekdays = getWeekdayLabels()
+        
+        viewModel = ViewModel(weekdays: weekdays, dates: dates)
+    }
+    
+    func getWeekdayLabels() -> [String] {
+        calendar.shortWeekdaySymbols
+            .rotate(toStartAt: startOfWeek.number - 1)
     }
     
     // Helper function to get the start of the month

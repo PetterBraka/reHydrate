@@ -7,9 +7,10 @@ public struct CalendarView: View {
     
     public init(
         month: Int = Calendar.current.component(.month, from: .now),
-        year: Int = Calendar.current.component(.year, from: .now)
+        year: Int = Calendar.current.component(.year, from: .now),
+        startOfWeek: Weekday
     ) {
-        self.presenter = Presenter(month: month, year: year)
+        self.presenter = Presenter(month: month, year: year, startOfWeek: startOfWeek)
         self.observer = Observer(presenter: presenter)
         presenter.scene = observer
     }
@@ -18,7 +19,7 @@ public struct CalendarView: View {
         VStack(spacing: 0) {
             Grid(alignment: .center, horizontalSpacing: 0, verticalSpacing: 0) {
                 GridRow {
-                    ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { day in
+                    ForEach(viewModel.weekdays, id: \.self) { day in
                         Text(day)
                             .frame(maxWidth: .infinity)
                     }
@@ -62,6 +63,6 @@ public struct CalendarView: View {
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView(month: 12, year: 2023)
+        CalendarView(month: 12, year: 2023, startOfWeek: .sunday)
     }
 }

@@ -91,7 +91,7 @@ struct HistoryScreen: View {
     
     @ViewBuilder
     var calendar: some View {
-        CalendarView()
+        CalendarView(startOfWeek: .monday)
     }
 }
 
