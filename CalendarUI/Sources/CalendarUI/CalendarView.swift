@@ -60,9 +60,12 @@ public struct CalendarView<TodayView: View,
     }
     
     public var body: some View {
-        VStack(alignment: .center, spacing: 0) {
+        VStack(alignment: .center, spacing: 8) {
             Text(viewModel.month)
                 .font(titleFont)
+                .onTapGesture {
+                    presenter.perform(action: .didTapToday)
+                }
             Grid(alignment: .center, horizontalSpacing: 0, verticalSpacing: 0) {
                 weekdayLabels
                     .font(labelFont)

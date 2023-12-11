@@ -41,6 +41,12 @@ final class Presenter: PresenterType {
             break
         case let .didTap(date):
             print(date)
+        case .didTapToday:
+            updateViewModel(
+                month: calendar.component(.month, from: .now),
+                year: calendar.component(.year, from: .now),
+                direction: nil
+            )
         case .didSwipeLeft:
             let components = DateComponents(year: year, month: month, day: 1)
             guard let dateFromComponents = calendar.date(from: components),
