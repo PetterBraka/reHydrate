@@ -44,7 +44,7 @@ final class Presenter: PresenterType {
         case .didSwipeLeft:
             let components = DateComponents(year: year, month: month, day: 1)
             guard let dateFromComponents = calendar.date(from: components),
-                  let date = calendar.date(byAdding: .init(month: -1),
+                  let date = calendar.date(byAdding: .init(month: 1),
                                            to: dateFromComponents)
             else { return }
             year = calendar.component(.year, from: date)
@@ -53,7 +53,7 @@ final class Presenter: PresenterType {
         case .didSwipeRight:
             let components = DateComponents(year: year, month: month, day: 1)
             guard let dateFromComponents = calendar.date(from: components),
-                  let date = calendar.date(byAdding: .init(month: 1),
+                  let date = calendar.date(byAdding: .init(month: -1),
                                            to: dateFromComponents)
             else { return }
             year = calendar.component(.year, from: date)
