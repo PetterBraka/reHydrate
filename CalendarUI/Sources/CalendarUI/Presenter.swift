@@ -62,33 +62,28 @@ private extension Presenter {
             .rotate(toStartAt: startOfWeek.number - 1)
     }
     
-    // Helper function to get the start of the month
     func getStartOfMonth(month: Int, year: Int) -> Date {
         let calendar = Calendar.current
         let components = DateComponents(year: year, month: month, day: 1)
         return calendar.date(from: components) ?? Date()
     }
     
-    // Helper function to get the end of the month
     func getEndOfMonth(from date: Date) -> Date {
         Calendar.current.date(byAdding: .init(month: 1, day: -1), to: date)!
     }
     
-    // Helper function to get the number of days to add before the first day of the month
     func getDaysToAddBefore(_ startOfMonth: Date) -> Int {
         let calendar = Calendar.current
         let startWeekday = calendar.component(.weekday, from: startOfMonth)
         return (startWeekday - calendar.firstWeekday + 7) % 7
     }
     
-    // Helper function to get the number of days to add after the last day of the month
     func getDaysToAddAfter(_ endOfMonth: Date) -> Int {
         let calendar = Calendar.current
         let daysToAddAfter = calendar.component(.weekday, from: endOfMonth)
         return (daysToAddAfter == 7) ? 6 : (7 - daysToAddAfter)
     }
     
-    // Helper function to generate an array of dates within the current month
     func generateDates(from start: Date, to end: Date) -> [Date] {
         var currentDate = start
         var resultDates: [Date] = []
@@ -101,7 +96,6 @@ private extension Presenter {
         return resultDates
     }
     
-    // Helper function to check if a date is in the same month as the displayed month
     func isDate(inMonth month: Int, _ date: Date) -> Bool {
         let calendar = Calendar.current
         return calendar.component(.month, from: date) == month
