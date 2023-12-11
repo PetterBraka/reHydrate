@@ -8,8 +8,10 @@
 import Foundation
 
 struct ViewModel {
+    let month: Int
     let weekdays: [String]
     let dates: [CalendarDate]
+    let swipeDirection: SwipeDirection?
 }
 
 extension ViewModel {

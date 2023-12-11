@@ -8,4 +8,6 @@
 enum Action {
     case didAppear
     case didTap(ViewModel.CalendarDate)
+    case didSwipeLeft
+    case didSwipeRight
 }

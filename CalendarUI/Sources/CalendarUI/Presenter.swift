@@ -16,10 +16,16 @@ final class Presenter: PresenterType {
     private var startOfWeek: Weekday
     private let calendar: Calendar = Calendar.current
     
+    private var month: Int
+    private var year: Int
+    
     init(month: Int, year: Int, startOfWeek: Weekday) {
-        self.viewModel = ViewModel(weekdays: [], dates: [])
+        self.month = month
+        self.year = year
+        self.viewModel = ViewModel(month: month, weekdays: [], dates: [], swipeDirection: nil)
         self.startOfWeek = startOfWeek
-        updateViewModel(month: month, year: year)
+        
+        updateViewModel(month: month, year: year, direction: nil)
     }
     
     func perform(action: Action) {
@@ -28,32 +34,54 @@ final class Presenter: PresenterType {
             break
         case let .didTap(date):
             print(date)
+        case .didSwipeLeft:
+            let components = DateComponents(year: year, month: month, day: 1)
+            guard let dateFromComponents = calendar.date(from: components),
+                  let date = calendar.date(byAdding: .init(month: -1),
+                                           to: dateFromComponents)
+            else { return }
+            year = calendar.component(.year, from: date)
+            month = calendar.component(.month, from: date)
+            updateViewModel(month: month, year: year, direction: .left)
+        case .didSwipeRight:
+            let components = DateComponents(year: year, month: month, day: 1)
+            guard let dateFromComponents = calendar.date(from: components),
+                  let date = calendar.date(byAdding: .init(month: 1),
+                                           to: dateFromComponents)
+            else { return }
+            year = calendar.component(.year, from: date)
+            month = calendar.component(.month, from: date)
+            updateViewModel(month: month, year: year, direction: .right)
         }
     }
 }
 
 private extension Presenter {
-    func updateViewModel(month: Int, year: Int) {
+    func updateViewModel(month: Int, year: Int, direction: SwipeDirection?) {
         let startOfMonth = getStartOfMonth(month: month, year: year)
-        let endOfMonth = getEndOfMonth(from: startOfMonth)
+        guard let endOfMonth = getEndOfMonth(from: startOfMonth)
+        else { return }
         
         let daysToAddBefore = getDaysToAddBefore(startOfMonth)
         let daysToAddAfter = getDaysToAddAfter(endOfMonth)
-        let firstDate = calendar.date(byAdding: .day, value: -daysToAddBefore, to: startOfMonth)!
-        let lastDate = calendar.date(byAdding: .day, value: daysToAddAfter, to: endOfMonth)!
-        let dates = generateDates(from: firstDate, to: lastDate)
-            .map { [weak self] date -> ViewModel.CalendarDate in
-                ViewModel.CalendarDate(
-                    date: date,
-                    isWeekday: self?.isWeekday(date) ?? false ,
-                    isThisMonth: self?.isDate(inMonth: month, date) ?? false,
-                    isToday: Calendar.current.isDateInToday(date)
-                )
-            }
+        guard let firstDate = calendar.date(byAdding: .day, value: -daysToAddBefore, to: startOfMonth),
+        let lastDate = calendar.date(byAdding: .day, value: daysToAddAfter, to: endOfMonth)
+        else { return }
         
-        let weekdays = getWeekdayLabels()
-        
-        viewModel = ViewModel(weekdays: weekdays, dates: dates)
+        viewModel = ViewModel(
+            month: month,
+            weekdays: getWeekdayLabels(),
+            dates: generateDates(from: firstDate, to: lastDate)
+                .map { [weak self] date -> ViewModel.CalendarDate in
+                    ViewModel.CalendarDate(
+                        date: date,
+                        isWeekday: self?.isWeekday(date) ?? false ,
+                        isThisMonth: self?.isDate(inMonth: month, date) ?? false,
+                        isToday: Calendar.current.isDateInToday(date)
+                    )
+                },
+            swipeDirection: direction
+        )
     }
     
     func getWeekdayLabels() -> [String] {
@@ -66,8 +94,8 @@ private extension Presenter {
         return calendar.date(from: components) ?? Date()
     }
     
-    func getEndOfMonth(from date: Date) -> Date {
-        calendar.date(byAdding: .init(month: 1, day: -1), to: date)!
+    func getEndOfMonth(from date: Date) -> Date? {
+        calendar.date(byAdding: .init(month: 1, day: -1), to: date)
     }
     
     func getDaysToAddBefore(_ startOfMonth: Date) -> Int {
