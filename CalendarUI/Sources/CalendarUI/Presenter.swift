@@ -19,7 +19,7 @@ final class Presenter: PresenterType {
     init(month: Int, year: Int, startOfWeek: Weekday) {
         self.viewModel = ViewModel(weekdays: [], dates: [])
         self.startOfWeek = startOfWeek
-        updateViewModel(month: year, year: month)
+        updateViewModel(month: month, year: year)
     }
     
     func perform(action: Action) {
@@ -72,12 +72,18 @@ private extension Presenter {
     
     func getDaysToAddBefore(_ startOfMonth: Date) -> Int {
         let startWeekday = calendar.component(.weekday, from: startOfMonth)
-        return (startWeekday - calendar.firstWeekday + 7) % 7
+        
+        return (startWeekday - startOfWeek.number + 7) % 7
     }
     
     func getDaysToAddAfter(_ endOfMonth: Date) -> Int {
         let daysToAddAfter = calendar.component(.weekday, from: endOfMonth)
-        return (daysToAddAfter == 7) ? 6 : (7 - daysToAddAfter)
+        let weekdayIndex = startOfWeek.number - 1
+        if daysToAddAfter == 7 {
+            return (6 + weekdayIndex) % 7
+        } else {
+            return (7 - daysToAddAfter + weekdayIndex) % 7
+        }
     }
     
     func generateDates(from start: Date, to end: Date) -> [Date] {
@@ -100,7 +106,8 @@ private extension Presenter {
         let weekday = calendar.component(.weekday, from: date)
         
         switch weekday {
-        case 1, 7: // 1 is Sunday, 7 is Saturday
+        case Weekday.saturday.number,
+             Weekday.sunday.number:
             return false
         default:
             return true
