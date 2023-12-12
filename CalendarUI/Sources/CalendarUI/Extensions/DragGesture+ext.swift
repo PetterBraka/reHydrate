@@ -9,16 +9,16 @@ import SwiftUI
 
 extension DragGesture.Value {
     var direction: SwipeDirection? {
-        if startLocation.x < location.x - 24 {
+        if startLocation.x < location.x - 5 {
             return .right
         }
-        if startLocation.x > location.x + 24 {
+        if startLocation.x > location.x + 5 {
             return .left
         }
-        if startLocation.y < location.y - 24 {
+        if startLocation.y < location.y - 5 {
             return .down
         }
-        if startLocation.y > location.y + 24 {
+        if startLocation.y > location.y + 5 {
             return .up
         }
         return nil
