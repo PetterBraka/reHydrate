@@ -8,17 +8,15 @@
 import SwiftUI
 
 struct CardAnimation: ViewModifier {
-    @State var xOffset: CGFloat = .zero
-    @State var yOffset: CGFloat = .zero
-    @State var viewSize: CGSize = .zero
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    var swipeHTrigger: CGFloat { viewSize.width }
-    var swipeVTrigger: CGFloat { viewSize.height }
-    
-    let onEnd: (SwipeDirection) -> Void
-    let minimumDistance: CGFloat
-    let coordinateSpace: CoordinateSpace
+    @State private var xOffset: CGFloat = .zero
+    @State private var yOffset: CGFloat = .zero
+    @State private var view: CGSize = .zero
+    private let screen = UIScreen.main.bounds
+
+    private let minimumDistance: CGFloat
+    private let coordinateSpace: CoordinateSpace
+
+    private let onEnd: (SwipeDirection) -> Void
     
     init(minimumDistance: CGFloat,
          coordinateSpace: CoordinateSpace,
@@ -42,46 +40,29 @@ struct CardAnimation: ViewModifier {
                     yOffset = value.translation.height
                 }
                 .onEnded { value in
-                    switch value.direction {
-                    case .right:
-                        if xOffset > swipeHTrigger {
-                            xOffset = screenWidth
-                            onEnd(.right)
-                        } else {
-                            xOffset = 0
-                        }
-                    case .left:
-                        if xOffset < -swipeHTrigger {
-                            xOffset = -screenWidth
-                            onEnd(.left)
-                        } else {
-                            xOffset = 0
-                        }
-                    case .down:
-                        if yOffset > swipeVTrigger {
-                            yOffset = screenHeight
-                            onEnd(.down)
-                        } else {
-                            yOffset = 0
-                        }
-                    case .up:
-                        if yOffset < -swipeVTrigger {
-                            yOffset = -screenHeight
-                            onEnd(.up)
-                        } else {
-                            yOffset = 0
-                        }
-                    case .none:
-                        break
+                    if xOffset > view.width {
+                        xOffset = screen.width
+                    } else if xOffset < -view.width {
+                        xOffset = -screen.width
+                    } else {
+                        xOffset = 0
+                    }
+                    if yOffset > view.height {
+                        yOffset = screen.height
+                    } else if yOffset < -view.height {
+                        yOffset = -screen.height
+                    } else {
+                        yOffset = 0
+                    }
+                    if let direction = value.direction {
+                        onEnd(direction)
                     }
                 }
             )
             .background {
                 GeometryReader { proxy in
                     Color.clear
-                        .onAppear {
-                            viewSize = proxy.size
-                        }
+                        .onAppear { view = proxy.size }
                 }
             }
     }
@@ -98,7 +79,7 @@ extension View {
     }
 }
 
-#Preview(body: {
+#Preview {
     ZStack {
         ForEach(0 ..< 10, id: \.self) { _ in
             Rectangle()
@@ -110,4 +91,4 @@ extension View {
                 }
         }
     }
-})
+}
