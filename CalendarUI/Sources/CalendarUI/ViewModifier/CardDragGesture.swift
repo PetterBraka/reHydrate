@@ -1,5 +1,5 @@
 //
-//  CardAnimation.swift
+//  CardDragGesture.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 12/12/2023.
