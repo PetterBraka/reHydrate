@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CardAnimation: ViewModifier {
+struct CardDragGesture: ViewModifier {
     @State private var xOffset: CGFloat = .zero
     @State private var view: CGSize = .zero
     private let screen = UIScreen.main.bounds
@@ -37,6 +37,7 @@ struct CardAnimation: ViewModifier {
             .contentShape(Rectangle())
             .offset(x: xOffset)
             .animation(.default, value: xOffset)
+            .onAppear(update: $view)
             .simultaneousGesture(
                 DragGesture(minimumDistance: minimumDistance,
                             coordinateSpace: coordinateSpace)
@@ -66,21 +67,17 @@ struct CardAnimation: ViewModifier {
                     }
                 }
             )
-            .background {
-                GeometryReader { proxy in
-                    Color.clear
-                        .onAppear { view = proxy.size }
-                }
-            }
     }
 }
 
 extension View {
-    func cardAnimation(minimumDistance: CGFloat = 10,
-                       coordinateSpace: CoordinateSpace = .global,
-                       onChange: @escaping (SwipeDirection) -> Void,
-                       onEnd: @escaping (SwipeDirection) -> Void) -> some View {
-        modifier(CardAnimation(
+    func cardDragGesture(
+        minimumDistance: CGFloat = 10,
+        coordinateSpace: CoordinateSpace = .global,
+        onChange: @escaping (SwipeDirection) -> Void,
+        onEnd: @escaping (SwipeDirection) -> Void
+    ) -> some View {
+        modifier(CardDragGesture(
             minimumDistance: minimumDistance,
             coordinateSpace: coordinateSpace,
             onChange: onChange,
@@ -96,7 +93,7 @@ extension View {
                 .shadow(radius: 5)
                 .aspectRatio(1, contentMode: .fit)
                 .frame(width: 200)
-                .cardAnimation { direction in
+                .cardDragGesture { direction in
                     print("\(direction) swipe")
                 } onEnd: { direction in
                     print("Ended \(direction) swipe")
