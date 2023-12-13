@@ -9,18 +9,16 @@ import SwiftUI
 
 struct CardAnimation: ViewModifier {
     @State private var xOffset: CGFloat = .zero
-    @State private var yOffset: CGFloat = .zero
     @State private var view: CGSize = .zero
     private let screen = UIScreen.main.bounds
     
-    private var vChangeTrigger: CGFloat { view.height / 2 }
-    private var hChangeTrigger: CGFloat { view.width / 2 }
-    private var vEndTrigger: CGFloat { view.height / 2 }
+    private var hChangeTrigger: CGFloat { 10 }
     private var hEndTrigger: CGFloat { view.width / 2 }
 
     private let minimumDistance: CGFloat
     private let coordinateSpace: CoordinateSpace
 
+    @State private var lastChange: SwipeDirection?
     private let onChange: (SwipeDirection) -> Void
     private let onEnd: (SwipeDirection) -> Void
     
@@ -37,27 +35,26 @@ struct CardAnimation: ViewModifier {
     func body(content: Content) -> some View {
         content
             .contentShape(Rectangle())
-            .offset(x: xOffset, y: yOffset)
+            .offset(x: xOffset)
             .animation(.default, value: xOffset)
-            .animation(.default, value: yOffset)
             .simultaneousGesture(
                 DragGesture(minimumDistance: minimumDistance,
                             coordinateSpace: coordinateSpace)
                 .onChanged { value in
                     xOffset = value.translation.width
-                    yOffset = value.translation.height
-                    if value.translation.width > hChangeTrigger {
-                        onChange(.right)
-                    } else if value.translation.width < -hChangeTrigger {
-                        onChange(.left)
+                    var direction: SwipeDirection? = nil
+                    if xOffset > hChangeTrigger {
+                        direction = .right
+                    } else if xOffset < -hChangeTrigger {
+                        direction = .left
                     }
-                    if value.translation.height > vChangeTrigger {
-                        onChange(.down)
-                    } else if value.translation.height < -vChangeTrigger {
-                        onChange(.up)
+                    if let direction, lastChange != direction {
+                        lastChange = direction
+                        onChange(direction)
                     }
                 }
                 .onEnded { value in
+                    lastChange = nil
                     if xOffset > hEndTrigger {
                         xOffset = screen.width
                         onEnd(.right)
@@ -66,15 +63,6 @@ struct CardAnimation: ViewModifier {
                         onEnd(.left)
                     } else {
                         xOffset = 0
-                    }
-                    if yOffset > vEndTrigger {
-                        yOffset = screen.height
-                        onEnd(.down)
-                    } else if yOffset < -vEndTrigger {
-                        yOffset = -screen.height
-                        onEnd(.up)
-                    } else {
-                        yOffset = 0
                     }
                 }
             )
@@ -109,9 +97,9 @@ extension View {
                 .aspectRatio(1, contentMode: .fit)
                 .frame(width: 200)
                 .cardAnimation { direction in
-                    print("Dragging to \(direction)")
+                    print("\(direction) swipe")
                 } onEnd: { direction in
-                    print("Ended with drag to \(direction)")
+                    print("Ended \(direction) swipe")
                 }
         }
     }
