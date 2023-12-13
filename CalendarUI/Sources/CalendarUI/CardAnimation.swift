@@ -12,6 +12,9 @@ struct CardAnimation: ViewModifier {
     @State private var yOffset: CGFloat = .zero
     @State private var view: CGSize = .zero
     private let screen = UIScreen.main.bounds
+    
+    private var vTrigger: CGFloat { view.height / 2 }
+    private var hTrigger: CGFloat { view.width / 2 }
 
     private let minimumDistance: CGFloat
     private let coordinateSpace: CoordinateSpace
@@ -40,16 +43,16 @@ struct CardAnimation: ViewModifier {
                     yOffset = value.translation.height
                 }
                 .onEnded { value in
-                    if xOffset > view.width {
+                    if xOffset > hTrigger {
                         xOffset = screen.width
-                    } else if xOffset < -view.width {
+                    } else if xOffset < -hTrigger {
                         xOffset = -screen.width
                     } else {
                         xOffset = 0
                     }
-                    if yOffset > view.height {
+                    if yOffset > vTrigger {
                         yOffset = screen.height
-                    } else if yOffset < -view.height {
+                    } else if yOffset < -vTrigger {
                         yOffset = -screen.height
                     } else {
                         yOffset = 0
@@ -82,10 +85,11 @@ extension View {
 #Preview {
     ZStack {
         ForEach(0 ..< 10, id: \.self) { _ in
-            Rectangle()
+            RoundedRectangle(cornerRadius: 25)
                 .fill(.orange)
                 .shadow(radius: 5)
-                .frame(width: 100, height: 100)
+                .aspectRatio(1, contentMode: .fit)
+                .frame(width: 200)
                 .cardAnimation { direction in
                     print(direction)
                 }
