@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension DragGesture.Value {
-    var direction: SwipeDirection? {
+    var direction: Direction? {
         if startLocation.x < location.x - 5 {
             return .right
         }

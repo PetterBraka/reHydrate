@@ -9,6 +9,6 @@ enum Action {
     case didAppear
     case didTap(ViewModel.CalendarDate)
     case didTapToday
-    case didSwipeLeft
-    case didSwipeRight
+    case didLast
+    case didNext
 }

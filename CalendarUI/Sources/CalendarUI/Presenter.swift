@@ -29,10 +29,10 @@ final class Presenter: PresenterType {
     init(month: Int, year: Int, startOfWeek: Weekday) {
         self.month = month
         self.year = year
-        self.viewModel = ViewModel(month: "", weekdays: [], dates: [], swipeDirection: nil)
+        self.viewModel = ViewModel(month: "", weekdays: [], dates: [])
         self.startOfWeek = startOfWeek
         
-        updateViewModel(month: month, year: year, direction: nil)
+        updateViewModel(month: month, year: year)
     }
     
     func perform(action: Action) {
@@ -44,10 +44,9 @@ final class Presenter: PresenterType {
         case .didTapToday:
             updateViewModel(
                 month: calendar.component(.month, from: .now),
-                year: calendar.component(.year, from: .now),
-                direction: nil
+                year: calendar.component(.year, from: .now)
             )
-        case .didSwipeLeft:
+        case .didNext:
             let components = DateComponents(year: year, month: month, day: 1)
             guard let dateFromComponents = calendar.date(from: components),
                   let date = calendar.date(byAdding: .init(month: 1),
@@ -55,8 +54,8 @@ final class Presenter: PresenterType {
             else { return }
             year = calendar.component(.year, from: date)
             month = calendar.component(.month, from: date)
-            updateViewModel(month: month, year: year, direction: .left)
-        case .didSwipeRight:
+            updateViewModel(month: month, year: year)
+        case .didLast:
             let components = DateComponents(year: year, month: month, day: 1)
             guard let dateFromComponents = calendar.date(from: components),
                   let date = calendar.date(byAdding: .init(month: -1),
@@ -64,13 +63,13 @@ final class Presenter: PresenterType {
             else { return }
             year = calendar.component(.year, from: date)
             month = calendar.component(.month, from: date)
-            updateViewModel(month: month, year: year, direction: .right)
+            updateViewModel(month: month, year: year)
         }
     }
 }
 
 private extension Presenter {
-    func updateViewModel(month: Int, year: Int, direction: SwipeDirection?) {
+    func updateViewModel(month: Int, year: Int) {
         let startOfMonth = getStartOfMonth(month: month, year: year)
         guard let endOfMonth = getEndOfMonth(from: startOfMonth)
         else { return }
@@ -92,8 +91,7 @@ private extension Presenter {
                         isThisMonth: self?.isDate(inMonth: month, date) ?? false,
                         isToday: Calendar.current.isDateInToday(date)
                     )
-                },
-            swipeDirection: direction
+                }
         )
     }
     

@@ -11,7 +11,6 @@ struct ViewModel {
     let month: String
     let weekdays: [String]
     let dates: [CalendarDate]
-    let swipeDirection: SwipeDirection?
 }
 
 extension ViewModel {

@@ -1,5 +1,5 @@
 //
-//  onAppearUpdateSize.swift
+//  OnAppearUpdateSize.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 13/12/2023.
