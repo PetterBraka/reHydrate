@@ -9,6 +9,7 @@
 import Foundation
 import HistoryPresentationInterface
 import PresentationKit
+import CalendarKit
 
 final class HistoryScreenObservable: ObservableObject, HistorySceneType {
     public typealias ViewModel = History.ViewModel
@@ -34,6 +35,27 @@ final class HistoryScreenObservable: ObservableObject, HistorySceneType {
     func perform(action: History.Action) {
         Task {
             await presenter.perform(action: action)
+        }
+    }
+}
+
+extension CalendarKit.Weekday {
+    init(from weekday: History.ViewModel.Weekday) {
+        self = switch weekday {
+        case .monday:
+            .monday
+        case .tuesday:
+            .tuesday
+        case .wednesday:
+            .wednesday
+        case .thursday:
+            .thursday
+        case .friday:
+            .friday
+        case .saturday:
+            .saturday
+        case .sunday:
+            .sunday
         }
     }
 }

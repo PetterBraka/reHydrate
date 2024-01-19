@@ -15,9 +15,9 @@ public enum History {
     public enum Action {
         case didTapBack
         case didAppear
-        case didSetStart(Date)
-        case didSetEnd(Date)
         case didSelectChart(ViewModel.ChartType)
+        case didChangeHighlightedMonthTo(Date)
+        case didTap(Date)
     }
     
     public struct ViewModel {
@@ -27,15 +27,25 @@ public enum History {
         public let data: [ViewModel.ChartData]
         public let chart: ChartType
         public let chartOption: [ChartType]
+        
+        public let dateRange: ClosedRange<Date>
+        public let highlightedDates: [Date]
+        public let weekdayStart: Weekday
+        public let highlightedMonth: Date
+        
         public let error: HistoryError?
         
-        public init(isLoading: Bool, startDate: String, endDate: String, data: [ChartData], chart: ChartType, chartOption: [ChartType], error: HistoryError?) {
+        public init(isLoading: Bool, startDate: String, endDate: String, data: [ViewModel.ChartData], chart: ChartType, chartOption: [ChartType], dateRange: ClosedRange<Date>, highlightedDates: [Date], weekdayStart: Weekday, highlightedMonth: Date, error: HistoryError?) {
             self.isLoading = isLoading
             self.startDate = startDate
             self.endDate = endDate
             self.data = data
             self.chart = chart
             self.chartOption = chartOption
+            self.dateRange = dateRange
+            self.highlightedDates = highlightedDates
+            self.weekdayStart = weekdayStart
+            self.highlightedMonth = highlightedMonth
             self.error = error
         }
     }
@@ -60,6 +70,18 @@ extension History.ViewModel {
             self.consumed = consumed
             self.goal = goal
         }
+    }
+}
+
+extension History.ViewModel {
+    public enum Weekday {
+        case monday
+        case tuesday
+        case wednesday
+        case thursday
+        case friday
+        case saturday
+        case sunday
     }
 }
 

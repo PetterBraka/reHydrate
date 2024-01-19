@@ -8,6 +8,15 @@
         "revision" : "e2bf935089cd7620031ea342eaf96bf4ba3a22dc",
         "version" : "0.5.0"
       }
+    },
+    {
+      "identity" : "calendarkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PetterBraka/CalendarKit",
+      "state" : {
+        "branch" : "master",
+        "revision" : "53d13976e04463e1a4f45f4469ced169e66150f4"
+      }
     }
   ],
   "version" : 2

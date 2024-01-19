@@ -11,27 +11,23 @@ import Charts
 import HistoryPresentationInterface
 import PresentationKit
 import EngineKit
-import CalendarUI
+import CalendarKit
 
 struct HistoryScreen: View {
     @ObservedObject var observer: HistoryScreenObservable
     @State var contentHeight: CGFloat = 0
     
     var body: some View {
-        ZStack {
-            Color.background
-                .ignoresSafeArea()
-            VStack(alignment: .leading, spacing: 0) {
-                toolbar
-                content
-                    .getHeight($contentHeight)
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 16)
-                Spacer()
-            }
-            .onAppear {
-                observer.perform(action: .didAppear)
-            }
+        VStack(alignment: .leading, spacing: 0) {
+            toolbar
+            content
+                .getHeight($contentHeight)
+                .padding(.vertical, 16)
+                .padding(.horizontal, 16)
+        }
+        .background(Color.background, ignoresSafeAreaEdges: .all)
+        .onAppear {
+            observer.perform(action: .didAppear)
         }
         .font(.brandBody)
     }
@@ -59,39 +55,52 @@ struct HistoryScreen: View {
     var content: some View {
         VStack(alignment: .center, spacing: 8) {
             chart
+                .border(.red)
                 .frame(height: contentHeight / 3)
-                .border(.black)
+            Spacer()
             calendar
         }
     }
     
     @ViewBuilder
     var chart: some View {
-        Text(observer.viewModel.startDate + " - " + observer.viewModel.endDate)
-        Chart(observer.viewModel.data, id: \.date) { day in
-            let xPoint: PlottableValue = .value(chartDatePoint, day.date)
-            if let goal = day.goal {
-                LineMark(x: xPoint, y: .value(chartGoalPoint, goal))
-                    .foregroundStyle(.green.opacity(0.5))
-            }
-            let consumed = day.consumed ?? 0
-            switch observer.viewModel.chart {
-            case .bar:
-                BarMark(x: xPoint,
-                        y: .value(chartConsumedPoint, consumed))
-            case .line:
-                LineMark(x: xPoint,
-                         y: .value(chartConsumedPoint, consumed))
-            case .plot:
-                PointMark(x: xPoint,
-                          y: .value(chartConsumedPoint, consumed))
+        VStack(spacing: 0) {
+            Text(observer.viewModel.startDate + " - " + observer.viewModel.endDate)
+            Chart(observer.viewModel.data, id: \.date) { day in
+                let xPoint: PlottableValue = .value(chartDatePoint, day.date)
+                if let goal = day.goal {
+                    LineMark(x: xPoint, y: .value(chartGoalPoint, goal))
+                        .foregroundStyle(.green.opacity(0.5))
+                }
+                let consumed = day.consumed ?? 0
+                switch observer.viewModel.chart {
+                case .bar:
+                    BarMark(x: xPoint,
+                            y: .value(chartConsumedPoint, consumed))
+                case .line:
+                    LineMark(x: xPoint,
+                             y: .value(chartConsumedPoint, consumed))
+                case .plot:
+                    PointMark(x: xPoint,
+                              y: .value(chartConsumedPoint, consumed))
+                }
             }
         }
     }
     
     @ViewBuilder
     var calendar: some View {
-        CalendarView(startOfWeek: .monday, titleFont: .brandTitle, labelFont: .brandBody, dayFont: .brandBody)
+        let dateBinding = Binding {
+            observer.viewModel.highlightedMonth
+        } set: { date in
+            observer.perform(action: .didChangeHighlightedMonthTo(date))
+        }
+        CalendarView(
+            selectedDate: dateBinding,
+            range: observer.viewModel.dateRange,
+            startOfWeek: .init(from: observer.viewModel.weekdayStart)) { day in
+                observer.perform(action: .didTap(day.date))
+            }
     }
 }
 

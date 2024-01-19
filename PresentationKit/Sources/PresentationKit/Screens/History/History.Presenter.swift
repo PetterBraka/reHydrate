@@ -42,6 +42,8 @@ extension Screen.History {
                     router: Router) {
             self.engine = engine
             self.router = router
+            let start = Calendar.current.date(byAdding: .year, value: -2, to: .now)!
+            let end = Calendar.current.date(byAdding: .month, value: 1, to: .now)!
             viewModel = .init(
                 isLoading: false,
                 startDate: "",
@@ -49,6 +51,10 @@ extension Screen.History {
                 data: [], 
                 chart: .bar,
                 chartOption: ViewModel.ChartType.allCases,
+                dateRange: start ... end,
+                highlightedDates: [],
+                weekdayStart: .monday, 
+                highlightedMonth: .now,
                 error: nil
             )
         }
@@ -66,10 +72,6 @@ extension Screen.History {
                 } else {
                     
                 }
-            case let .didSetStart(start):
-                break
-            case let .didSetEnd(end):
-                break
 //            case .didSelectRange(let range):
 //                updateViewModel(isLoading: true, range: range)
 //                let dates = getDates(from: range)
@@ -77,19 +79,29 @@ extension Screen.History {
 //                updateViewModel(isLoading: false, days: days, dates: dates)
             case .didSelectChart(let chart):
                 updateViewModel(isLoading: false, chart: chart)
+            case let .didChangeHighlightedMonthTo(date):
+                break
+            case let .didTap(date):
+                break
             }
         }
     }
 }
 
 private extension Screen.History.Presenter {
-    func updateViewModel(isLoading: Bool,
-                         startDate: Date? = nil,
-                         endDate: Date? = nil,
-                         data: [ViewModel.ChartData]? = nil,
-                         chart: ViewModel.ChartType? = nil,
-                         chartOption: [ViewModel.ChartType]? = nil,
-                         error: ViewModel.HistoryError? = nil) {
+    func updateViewModel(
+        isLoading: Bool,
+        startDate: Date? = nil,
+        endDate: Date? = nil,
+        data: [ViewModel.ChartData]? = nil,
+        chart: ViewModel.ChartType? = nil,
+        chartOption: [ViewModel.ChartType]? = nil,
+        dateRange: ClosedRange<Date>? = nil,
+        highlightedDates: [Date]? = nil,
+        weekdayStart: ViewModel.Weekday? = nil,
+        highlightedMonth: Date? = nil,
+        error: ViewModel.HistoryError? = nil
+    ) {
         let startDateString: String
         if let startDate {
             startDateString = formatter.string(from: startDate)
@@ -109,6 +121,10 @@ private extension Screen.History.Presenter {
             data: data ?? viewModel.data,
             chart: chart ?? viewModel.chart,
             chartOption: chartOption ?? viewModel.chartOption,
+            dateRange: dateRange ?? viewModel.dateRange,
+            highlightedDates: highlightedDates ?? viewModel.highlightedDates,
+            weekdayStart: weekdayStart ?? viewModel.weekdayStart,
+            highlightedMonth: highlightedMonth ?? viewModel.highlightedMonth,
             error: error
         )
     }
