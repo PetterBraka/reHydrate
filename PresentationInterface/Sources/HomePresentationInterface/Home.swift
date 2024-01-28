@@ -22,7 +22,7 @@ public enum Home {
     }
     
     public struct ViewModel {
-        public var date: Date
+        public var dateTitle: String
         public var consumption: Double
         public var goal: Double
         public var smallUnit: UnitVolume
@@ -30,14 +30,14 @@ public enum Home {
         public var drinks: [ViewModel.Drink]
         
         public init(
-            date: Date,
+            dateTitle: String,
             consumption: Double,
             goal: Double,
             smallUnit: UnitVolume,
             largeUnit: UnitVolume,
             drinks: [ViewModel.Drink]
         ) {
-            self.date = date
+            self.dateTitle = dateTitle
             self.consumption = consumption
             self.goal = goal
             self.smallUnit = smallUnit

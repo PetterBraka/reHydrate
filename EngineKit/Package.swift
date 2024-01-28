@@ -33,6 +33,7 @@ let package: Package = {
                         .source(.userPreferenceService),
                         .source(.notificationService),
                         .source(.appearanceService),
+                        .source(.dateService),
                     ]),
             .target(name: engineMocks,
                     dependencies: [
@@ -46,6 +47,7 @@ let package: Package = {
                         .mocks(.userPreferenceService),
                         .mocks(.notificationService),
                         .mocks(.appearanceService),
+                        .mocks(.dateService),
                     ]
                    ),
             .loggingService,
@@ -96,6 +98,7 @@ let package: Package = {
                     .interface(.userPreferenceService),
                     .portsInterface
                   ])
+            .with(targetsFrom: .dateService)
     )
 }()
 
@@ -126,6 +129,7 @@ extension Target.Dependency {
 
 enum Feature: String {
     case dayService = "DayService"
+    case dateService = "DateService"
     case drinkService = "DrinkService"
     case languageService = "LanguageService"
     case databaseService = "DatabaseService"

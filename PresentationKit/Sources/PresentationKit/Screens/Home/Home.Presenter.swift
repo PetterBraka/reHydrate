@@ -35,11 +35,17 @@ extension Screen.Home {
             didSet { scene?.perform(update: .viewModel) }
         }
         
+        let formatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE - dd MMM"
+            return formatter
+        }()
+        
         public init(engine: Engine,
                     router: Router) {
             self.engine = engine
             self.router = router
-            viewModel = ViewModel(date: .now,
+            viewModel = ViewModel(dateTitle: formatter.string(from: .now),
                                   consumption: 0,
                                   goal: 0,
                                   smallUnit: .milliliters,
@@ -100,7 +106,11 @@ extension Screen.Home.Presenter {
     ) async {
         let currentSystem = engine.unitService.getUnitSystem()
         let isMetric = currentSystem == .metric
-        let date = date ?? viewModel.date
+        let title = if let date {
+            formatter.string(from: date)
+        } else {
+            viewModel.dateTitle
+        }
         var consumption = consumption ?? viewModel.consumption
         var goal = goal ?? viewModel.goal
         var drinks: [ViewModel.Drink] = await getDrinks().map { .init(from: $0) }
@@ -120,7 +130,7 @@ extension Screen.Home.Presenter {
         }
         
         viewModel = ViewModel(
-            date: date,
+            dateTitle: title,
             consumption: consumption,
             goal: goal,
             smallUnit: isMetric ? .milliliters : .imperialFluidOunces,

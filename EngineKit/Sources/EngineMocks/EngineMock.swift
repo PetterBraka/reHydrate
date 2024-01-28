@@ -25,6 +25,8 @@ import AppearanceServiceInterface
 import AppearanceServiceMocks
 import PortsInterface
 import PortsMocks
+import DateServiceInterface
+import DateServiceMocks
 
 public final class EngineMocks {
     public init() {}
@@ -50,6 +52,7 @@ public final class EngineMocks {
     public var unitService: UnitServiceType = UnitServiceStub()
     
     public var appearanceService: AppearanceServiceType = AppearanceServiceStub()
+    public var dateService: DateServiceType = DateServiceStub()
 }
 
 extension EngineMocks: HasService {}

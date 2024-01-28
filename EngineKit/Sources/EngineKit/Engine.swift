@@ -24,6 +24,8 @@ import NotificationService
 import PortsInterface
 import AppearanceServiceInterface
 import AppearanceService
+import DateServiceInterface
+import DateService
 
 public final class Engine {
     public init(
@@ -93,6 +95,7 @@ public final class Engine {
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
     public lazy var appearanceService: AppearanceServiceType = AppearanceService(engine: self)
+    public lazy var dateService: DateServiceType = DateService(calendar: .current)
 }
 
 extension Engine: HasService {}

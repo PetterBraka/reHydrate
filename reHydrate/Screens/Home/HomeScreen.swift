@@ -43,7 +43,7 @@ struct HomeScreen: View {
                                    comment: "The name of the app"))
                 .font(.brandTitle3)
                 .bold()
-            Text(observer.viewModel.date.localized)
+            Text(observer.viewModel.dateTitle)
                 .lineLimit(nil)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
