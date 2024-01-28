@@ -74,6 +74,13 @@
         "identifier" : "AppearanceServiceTests",
         "name" : "AppearanceServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DateServiceTests",
+        "name" : "DateServiceTests"
+      }
     }
   ],
   "version" : 1
