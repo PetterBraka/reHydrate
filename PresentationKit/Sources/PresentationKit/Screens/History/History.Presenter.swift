@@ -45,13 +45,9 @@ extension Screen.History {
         
         public init(engine: Engine,
                     router: Router) {
-            let calendar = Calendar.current
-            let defaultRange = calendar.date(byAdding: .day, value: -6, to: .now)! ... .now
-            let calendarRange = calendar.date(byAdding: .year, value: -2, to: .now)! ... .now
-            
             self.engine = engine
             self.router = router
-            self.selectedRange = defaultRange
+            let calendarRange = engine.dateService.getDate(byAddingDays: -(365 * 2), to: .now)! ... .now
             self.viewModel = .init(
                 isLoading: false,
                 details: .init(averageConsumed: "", averageGoal: "",
@@ -61,10 +57,9 @@ extension Screen.History {
                              selectedOption: .line),
                 calendar: .init(highlightedMonth: .now,
                                 weekdayStart: .monday,
-                                range: calendarRange,
-                                highlightedDates: []),
-                selectedRange: defaultRange,
-                selectedDays: 7,
+                                range: calendarRange),
+                selectedRange: nil,
+                selectedDays: 0,
                 error: nil
             )
         }
@@ -78,31 +73,30 @@ extension Screen.History {
                 guard let start = selectedRange?.lowerBound,
                       let end = selectedRange?.upperBound
                 else { return }
-                let days = await fetchDays(startDate: start, endDate: end)
-                var totalGoal = 0.0
-                var totalConsumed = 0.0
-                
-                days.forEach { day in
-                    totalGoal += day.goal ?? 0
-                    totalConsumed += day.consumed ?? 0
-                }
-                let averageGoal = totalGoal / Double(days.count)
-                let averageConsumed = totalConsumed / Double(days.count)
-                updateViewModel(
-                    isLoading: false,
-                    averageConsumed: averageConsumed, averageGoal: averageGoal,
-                    totalConsumed: totalConsumed, totalGoal: totalGoal,
-                    data: days
-                )
+                await getDataBetween(start: start, end: end)
             case .didTapClear:
                 selectedRange = nil
                 updateViewModel(isLoading: false)
             case .didSelectChart(let chart):
                 updateViewModel(isLoading: false, chartOption: chart)
             case let .didChangeHighlightedMonthTo(date):
-                break
+                updateViewModel(isLoading: false, highlightedMonth: date)
             case let .didTap(date):
-                break
+                updateViewModel(isLoading: true, highlightedMonth: date)
+                let newRange: ClosedRange<Date>
+                if let range = selectedRange {
+                    let startToDate = engine.dateService.daysBetween(range.lowerBound, end: date)
+                    let endToDate = engine.dateService.daysBetween(date, end: range.upperBound)
+                    if date > range.upperBound || startToDate > endToDate {
+                        newRange = range.lowerBound ... date
+                    } else {
+                        newRange = date ... range.upperBound
+                    }
+                } else {
+                    newRange = date ... engine.dateService.getDate(byAddingDays: 1, to: date)!
+                }
+                selectedRange = newRange
+                await getDataBetween(start: newRange.lowerBound, end: newRange.upperBound)
             }
         }
     }
@@ -118,7 +112,6 @@ private extension Screen.History.Presenter {
         data: [ViewModel.ChartData.Point]? = nil,
         chartOption: ViewModel.ChartData.Option? = nil,
         calendarRange: ClosedRange<Date>? = nil,
-        highlightedDates: [Date]? = nil,
         weekdayStart: ViewModel.CalendarData.Weekday? = nil,
         highlightedMonth: Date? = nil,
         error: ViewModel.HistoryError? = nil
@@ -153,8 +146,7 @@ private extension Screen.History.Presenter {
             calendar: .init(
                 highlightedMonth: highlightedMonth ?? viewModel.calendar.highlightedMonth,
                 weekdayStart: weekdayStart ?? viewModel.calendar.weekdayStart,
-                range: calendarRange ?? viewModel.calendar.range,
-                highlightedDates: highlightedDates ?? viewModel.calendar.highlightedDates
+                range: calendarRange ?? viewModel.calendar.range
             ),
             selectedRange: selectedRange,
             selectedDays: days,
@@ -186,6 +178,26 @@ private extension Screen.History.Presenter {
                     )
                 }
             }
+    }
+    
+    func getDataBetween(start: Date, end: Date) async {
+        let days = await fetchDays(startDate: start, endDate: end)
+        var totalGoal = 0.0
+        var totalConsumed = 0.0
+        
+        days.forEach { day in
+            totalGoal += day.goal ?? 0
+            totalConsumed += day.consumed ?? 0
+        }
+        let averageGoal = totalGoal / Double(days.count)
+        let averageConsumed = totalConsumed / Double(days.count)
+        
+        updateViewModel(
+            isLoading: false,
+            averageConsumed: averageConsumed, averageGoal: averageGoal,
+            totalConsumed: totalConsumed, totalGoal: totalGoal,
+            data: days
+        )
     }
     
     func getWeekRange(for date: Date) -> (start: Date, end: Date)? {

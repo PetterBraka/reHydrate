@@ -9,5 +9,6 @@ import Foundation
 
 public protocol DateServiceType {
     func daysBetween(_ start: Date, end: Date) -> Int
+    func getDate(byAddingDays days: Int, to date: Date) -> Date?
     func getEnd(of date: Date) -> Date?
 }

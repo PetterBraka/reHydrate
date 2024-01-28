@@ -19,6 +19,10 @@ public final class DateService: DateServiceType {
         calendar.dateComponents([.day], from: start, to: end).day ?? 0
     }
     
+    public func getDate(byAddingDays days: Int, to date: Date) -> Date? {
+        calendar.date(byAdding: .day, value: days, to: date)
+    }
+    
     public func getEnd(of date: Date) -> Date? {
         calendar.date(bySettingHour: 23, minute: 59, second: 59, of: date)
     }

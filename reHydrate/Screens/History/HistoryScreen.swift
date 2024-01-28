@@ -139,6 +139,9 @@ struct HistoryScreen: View {
                     .background {
                         getImageForSelected(day.date)
                     }
+                    .onTapGesture {
+                        observer.perform(action: .didTap(day.date))
+                    }
             }
             .frame(maxHeight: contentHeight / 2)
         }
@@ -148,7 +151,7 @@ struct HistoryScreen: View {
     func getImageForSelected(_ date: Date) -> some View {
         if let range = observer.viewModel.selectedRange {
             Group {
-                if observer.viewModel.selectedDays == 1,
+                if observer.viewModel.selectedDays == 0,
                    range.lowerBound.inSameDayAs(date) ||
                     range.contains(date) {
                     Image.circle

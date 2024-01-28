@@ -93,13 +93,11 @@ extension History.ViewModel {
         public let highlightedMonth: Date
         public let weekdayStart: Weekday
         public let range: ClosedRange<Date>
-        public let highlightedDates: [Date]
         
-        public init(highlightedMonth: Date, weekdayStart: Weekday, range: ClosedRange<Date>, highlightedDates: [Date]) {
+        public init(highlightedMonth: Date, weekdayStart: Weekday, range: ClosedRange<Date>) {
             self.highlightedMonth = highlightedMonth
             self.weekdayStart = weekdayStart
             self.range = range
-            self.highlightedDates = highlightedDates
         }
     }
 }
