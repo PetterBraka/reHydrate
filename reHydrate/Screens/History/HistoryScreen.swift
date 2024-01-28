@@ -46,7 +46,6 @@ struct HistoryScreen: View {
                 }
             }
             .foregroundColor(.button)
-            .padding(.leading, 24)
         }
     }
     

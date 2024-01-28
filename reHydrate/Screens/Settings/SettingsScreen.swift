@@ -88,7 +88,6 @@ struct SettingsScreen: View {
                 }
             }
             .foregroundColor(.button)
-            .padding(.leading, 24)
         }
     }
     
