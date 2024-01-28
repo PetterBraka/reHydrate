@@ -137,7 +137,10 @@ struct HistoryScreen: View {
                     .font(.caption)
                     .background {
                         getImageForSelected(day.date)
+                            .padding(.vertical, 2)
                     }
+                    .tag(day.date)
+                    .id(day.date)
                     .onTapGesture {
                         observer.perform(action: .didTap(day.date))
                     }
@@ -154,20 +157,18 @@ struct HistoryScreen: View {
                    range.lowerBound.inSameDayAs(date) ||
                     range.contains(date) {
                     Image.circle
-                        .resizable()
+                        .resizable(resizingMode: .stretch)
                 } else if range.lowerBound.inSameDayAs(date) {
                     Image.leftSelected
-                        .resizable()
+                        .resizable(resizingMode: .stretch)
                 } else if range.upperBound.inSameDayAs(date) {
                     Image.rightSelected
-                        .resizable()
+                        .resizable(resizingMode: .stretch)
                 } else if range.contains(date) {
                     Image.midSelected
-                        .resizable()
+                        .resizable(resizingMode: .stretch)
                 }
             }
-            .aspectRatio(contentMode: .fill)
-            .padding(.vertical, 4)
         }
     }
 }
