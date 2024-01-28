@@ -124,6 +124,7 @@
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		A11180332AC3768D007E4585 /* NotificationCenterPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180322AC3768D007E4585 /* NotificationCenterPort.swift */; };
+		A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C12A72B65B02D00FB1B8C /* View+expand.swift */; };
 		A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */; };
 		A126D24B2A76665800A296BA /* EngineKit in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24A2A76665800A296BA /* EngineKit */; };
 		A126D24D2A76665800A296BA /* PresentationInterface in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24C2A76665800A296BA /* PresentationInterface */; };
@@ -318,6 +319,7 @@
 		A11180302AC36A86007E4585 /* Celebration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Celebration.swift; sourceTree = "<group>"; };
 		A11180322AC3768D007E4585 /* NotificationCenterPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterPort.swift; sourceTree = "<group>"; };
 		A114C6C02A63DAAE00F53770 /* PresentationKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationKit; sourceTree = "<group>"; };
+		A11C12A72B65B02D00FB1B8C /* View+expand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+expand.swift"; sourceTree = "<group>"; };
 		A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenObservable.swift; sourceTree = "<group>"; };
 		A126D2502A7667C200A296BA /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
 		A126D2542A76684E00A296BA /* StepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperView.swift; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 				33B28F6C26BC7FCD00DECA9F /* Double+Extensions.swift */,
 				33B28F6E26BC802800DECA9F /* UITextField+Extensions.swift */,
 				A1EABF3E2AF4E0E300591981 /* View+getSize.swift */,
+				A11C12A72B65B02D00FB1B8C /* View+expand.swift */,
 				A183BCFF2A33C52E00D42033 /* Date+localized.swift */,
 				A1EABF372AF3924100591981 /* UIApplication+Extensions.swift */,
 			);
@@ -953,6 +956,7 @@
 				33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */,
 				A1AA8DDA2AF634C500D12E74 /* AppIconScreen.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
+				A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */,
 				A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				A1EABF342AF37E5B00591981 /* OpenUrlPort.swift in Sources */,
@@ -1291,8 +1295,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PetterBraka/CalendarKit";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = revision;
+				revision = c8c54b9220ea47ccc5651be39a6b8827c0dbeaea;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -40,7 +40,7 @@ final class HistoryScreenObservable: ObservableObject, HistorySceneType {
 }
 
 extension CalendarKit.Weekday {
-    init(from weekday: History.ViewModel.Weekday) {
+    init(from weekday: History.ViewModel.CalendarData.Weekday) {
         self = switch weekday {
         case .monday:
             .monday

@@ -14,8 +14,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PetterBraka/CalendarKit",
       "state" : {
-        "branch" : "master",
-        "revision" : "53d13976e04463e1a4f45f4469ced169e66150f4"
+        "revision" : "c8c54b9220ea47ccc5651be39a6b8827c0dbeaea"
       }
     }
   ],
