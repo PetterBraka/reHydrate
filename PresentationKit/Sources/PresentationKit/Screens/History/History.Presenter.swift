@@ -10,6 +10,7 @@ import LoggingService
 import HistoryPresentationInterface
 import DayServiceInterface
 import UnitServiceInterface
+import DateServiceInterface
 
 extension Screen.History {
     public final class Presenter: HistoryPresenterType {
@@ -18,7 +19,8 @@ extension Screen.History {
         public typealias Engine = (
             HasLoggingService &
             HasUnitService &
-            HasDayService
+            HasDayService &
+            HasDateService
         )
         public typealias Router = (
             HistoryRoutable
@@ -56,13 +58,13 @@ extension Screen.History {
                                totalConsumed: "", totalGoal: ""),
                 chart: .init(title: " - ",
                              data: [],
-                             range: defaultRange,
                              selectedOption: .line),
                 calendar: .init(highlightedMonth: .now,
                                 weekdayStart: .monday,
                                 range: calendarRange,
-                                selectedRange: defaultRange,
                                 highlightedDates: []),
+                selectedRange: defaultRange,
+                selectedDays: 7,
                 error: nil
             )
         }
@@ -121,12 +123,18 @@ private extension Screen.History.Presenter {
         highlightedMonth: Date? = nil,
         error: ViewModel.HistoryError? = nil
     ) {
-        let title = if let startDate = selectedRange?.lowerBound ?? viewModel.calendar.selectedRange?.lowerBound,
-           let endDate = selectedRange?.upperBound ?? viewModel.calendar.selectedRange?.upperBound {
+        let title = if let startDate = selectedRange?.lowerBound ?? viewModel.selectedRange?.lowerBound,
+            let endDate = selectedRange?.upperBound ?? viewModel.selectedRange?.upperBound {
             formatter.string(from: startDate) + " - " +
             formatter.string(from: endDate)
         } else {
             ""
+        }
+        
+        let days = if let selectedRange {
+            engine.dateService.daysBetween(selectedRange.lowerBound, end: selectedRange.upperBound)
+        } else {
+            0
         }
         
         viewModel = .init(
@@ -140,16 +148,16 @@ private extension Screen.History.Presenter {
             chart: .init(
                 title: title,
                 data: data ?? viewModel.chart.data,
-                range: selectedRange,
                 selectedOption: chartOption ?? viewModel.chart.selectedOption
             ),
             calendar: .init(
                 highlightedMonth: highlightedMonth ?? viewModel.calendar.highlightedMonth,
                 weekdayStart: weekdayStart ?? viewModel.calendar.weekdayStart,
                 range: calendarRange ?? viewModel.calendar.range,
-                selectedRange: selectedRange ?? viewModel.calendar.selectedRange,
                 highlightedDates: highlightedDates ?? viewModel.calendar.highlightedDates
             ),
+            selectedRange: selectedRange,
+            selectedDays: days,
             error: error
         )
     }

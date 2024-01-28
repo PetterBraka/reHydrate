@@ -59,6 +59,7 @@ struct HistoryScreen: View {
             Spacer()
             calendar
         }
+        .animation(.default, value: observer.viewModel.selectedRange)
     }
     
 //    @ViewBuilder
@@ -145,9 +146,14 @@ struct HistoryScreen: View {
     
     @ViewBuilder
     func getImageForSelected(_ date: Date) -> some View {
-        if let range = observer.viewModel.chart.range {
+        if let range = observer.viewModel.selectedRange {
             Group {
-                if range.lowerBound.inSameDayAs(date) {
+                if observer.viewModel.selectedDays == 1,
+                   range.lowerBound.inSameDayAs(date) ||
+                    range.contains(date) {
+                    Image.circle
+                        .resizable()
+                } else if range.lowerBound.inSameDayAs(date) {
                     Image.leftSelected
                         .resizable()
                 } else if range.upperBound.inSameDayAs(date) {

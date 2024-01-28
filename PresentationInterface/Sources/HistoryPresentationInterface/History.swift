@@ -26,14 +26,18 @@ public enum History {
         public let details: Details
         public let chart: ChartData
         public let calendar: CalendarData
+        public let selectedRange: ClosedRange<Date>?
+        public let selectedDays: Int
         
         public let error: HistoryError?
         
-        public init(isLoading: Bool, details: Details, chart: ChartData, calendar: CalendarData, error: HistoryError?) {
+        public init(isLoading: Bool, details: Details, chart: ChartData, calendar: CalendarData, selectedRange: ClosedRange<Date>?, selectedDays: Int, error: HistoryError?) {
             self.isLoading = isLoading
             self.details = details
             self.chart = chart
             self.calendar = calendar
+            self.selectedRange = selectedRange
+            self.selectedDays = selectedDays
             self.error = error
         }
     }
@@ -63,14 +67,12 @@ extension History.ViewModel {
         
         public let title: String
         public let data: [Point]
-        public let range: ClosedRange<Date>?
         public let selectedOption: Option
         public let options = Option.allCases
         
-        public init(title: String, data: [Point], range: ClosedRange<Date>?, selectedOption: Option) {
+        public init(title: String, data: [Point], selectedOption: Option) {
             self.title = title
             self.data = data
-            self.range = range
             self.selectedOption = selectedOption
         }
     }
@@ -91,14 +93,12 @@ extension History.ViewModel {
         public let highlightedMonth: Date
         public let weekdayStart: Weekday
         public let range: ClosedRange<Date>
-        public let selectedRange: ClosedRange<Date>?
         public let highlightedDates: [Date]
         
-        public init(highlightedMonth: Date, weekdayStart: Weekday, range: ClosedRange<Date>, selectedRange: ClosedRange<Date>?, highlightedDates: [Date]) {
+        public init(highlightedMonth: Date, weekdayStart: Weekday, range: ClosedRange<Date>, highlightedDates: [Date]) {
             self.highlightedMonth = highlightedMonth
             self.weekdayStart = weekdayStart
             self.range = range
-            self.selectedRange = selectedRange
             self.highlightedDates = highlightedDates
         }
     }
