@@ -48,6 +48,9 @@ extension Screen.History {
             self.engine = engine
             self.router = router
             let calendarRange = engine.dateService.getDate(byAddingDays: -(365 * 2), to: .now)! ... .now
+            if let past = engine.dateService.getDate(byAddingDays: -6, to: .now) {
+                selectedRange =  past ... .now
+            }
             self.viewModel = .init(
                 isLoading: false,
                 details: .init(averageConsumed: "", averageGoal: "",
@@ -62,6 +65,12 @@ extension Screen.History {
                 selectedDays: 0,
                 error: nil
             )
+            Task(priority: .low) {
+                guard let start = selectedRange?.lowerBound,
+                      let end = selectedRange?.upperBound
+                else { return }
+                await getDataBetween(start: start, end: end)
+            }
         }
         
         public func perform(action: History.Action) async {
@@ -69,11 +78,7 @@ extension Screen.History {
             case .didTapBack:
                 router.showHome()
             case .didAppear:
-                updateViewModel(isLoading: true)
-                guard let start = selectedRange?.lowerBound,
-                      let end = selectedRange?.upperBound
-                else { return }
-                await getDataBetween(start: start, end: end)
+                break
             case .didTapClear:
                 selectedRange = nil
                 updateViewModel(isLoading: false)
