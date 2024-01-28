@@ -133,17 +133,34 @@ struct HistoryScreen: View {
                 observer.perform(action: .didTap(day.date))
             } customDayView: { day in
                 Text("\(day.day)")
-                    .expandVH()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .font(.caption)
                     .background {
                         getImageForSelected(day.date)
-                            .padding(.vertical, 2)
+                            .padding(.vertical, 4)
+                    }
+                    .overlay {
+                        if day.isToday {
+                            Image.circle
+                                .resizable()
+                                .padding(-6)
+                        }
                     }
                     .tag(day.date)
                     .id(day.date)
+                    .border(.black, width: 0.25)
                     .onTapGesture {
                         observer.perform(action: .didTap(day.date))
                     }
+            } customWeekdayLabel: { weekday in
+                Text(weekday)
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background {
+                        Color.accentColor.opacity(0.2)
+                    }
+                    .border(.black, width: 0.25)
             }
             .frame(maxHeight: contentHeight / 2)
         }
@@ -153,12 +170,7 @@ struct HistoryScreen: View {
     func getImageForSelected(_ date: Date) -> some View {
         if let range = observer.viewModel.selectedRange {
             Group {
-                if observer.viewModel.selectedDays == 0,
-                   range.lowerBound.inSameDayAs(date) ||
-                    range.contains(date) {
-                    Image.circle
-                        .resizable(resizingMode: .stretch)
-                } else if range.lowerBound.inSameDayAs(date) {
+                if range.lowerBound.inSameDayAs(date) {
                     Image.leftSelected
                         .resizable(resizingMode: .stretch)
                 } else if range.upperBound.inSameDayAs(date) {
