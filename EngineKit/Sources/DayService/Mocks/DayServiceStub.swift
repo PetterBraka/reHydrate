@@ -5,11 +5,13 @@
 //  Created by Petter vang Brakalsvålet on 14/08/2023.
 //
 
+import Foundation
 import DayServiceInterface
 import DrinkServiceInterface
 
 public protocol DayServiceStubbing {
     var getToday_returnValue: Day { get set }
+    var getDays_returnValue: [Day] { get set }
     var addDrink_returnValue: Double { get set }
     var addDrink_returnError: Error? { get set }
     var removeDrink_returnValue: Double { get set }
@@ -24,6 +26,7 @@ public final class DayServiceStub: DayServiceStubbing {
     public init() {}
     
     public var getToday_returnValue: Day = .default
+    public var getDays_returnValue: [Day] = []
     public var addDrink_returnValue: Double = .default
     public var addDrink_returnError: Error?
     public var removeDrink_returnValue: Double = .default
@@ -37,6 +40,10 @@ public final class DayServiceStub: DayServiceStubbing {
 extension DayServiceStub: DayServiceType {
     public func getToday() async -> Day {
         getToday_returnValue
+    }
+    
+    public func getDays(for dates: [Date]) async -> [Day] {
+        getDays_returnValue
     }
     
     public func add(drink: Drink) async throws -> Double {
