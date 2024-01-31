@@ -8,9 +8,9 @@
 import XCTest
 import EngineMocks
 import TestHelper
-import DatabaseServiceInterface
-import DatabaseServiceMocks
 import TimelineServiceInterface
+import PortsInterface
+import PortsMocks
 @testable import TimelineService
 
 final class TimelineServiceTests: XCTestCase {

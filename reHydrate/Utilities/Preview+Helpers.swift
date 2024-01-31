@@ -8,6 +8,7 @@
 
 import UserNotifications
 import EngineKit
+import LoggingService
 import PortsInterface
 
 extension Engine {
@@ -18,7 +19,12 @@ extension Engine {
     )
     
     static let mock: EngineType = Engine(
+        appGroup: "com.mock",
         appVersion: "1.0.0",
+        logger: LoggingService(subsystem: "com.mock"),
+        dayManager: DayManager(database: DatabaseStub()),
+        drinkManager: DrinkManager(database: DatabaseStub()),
+        consumptionManager: ConsumptionManager(database: DatabaseStub()),
         reminders: [.init(title: "Test", body: "Test")],
         celebrations: [.init(title: "Test", body: "Test")],
         notificationCenter: UNUserNotificationCenter.current(), 

@@ -6,7 +6,7 @@
 //
 
 import Blackbird
-import DatabaseServiceInterface
+import PortsInterface
 import Foundation
 
 public protocol DatabaseSpying {

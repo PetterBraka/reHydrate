@@ -15,13 +15,6 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "DatabaseServiceTests",
-        "name" : "DatabaseServiceTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "DayServiceTests",
         "name" : "DayServiceTests"
       }

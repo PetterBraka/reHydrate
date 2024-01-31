@@ -10,14 +10,13 @@ import EngineMocks
 import TestHelper
 import LoggingService
 import UnitServiceInterface
-import DatabaseServiceInterface
-import DatabaseServiceMocks
+import PortsInterface
+import PortsMocks
 import DrinkServiceInterface
 @testable import DrinkService
 
 final class DrinkServiceTests: XCTestCase {
     typealias Engine = (
-        HasDatabaseService &
         HasLoggingService &
         HasDrinkManagerService &
         HasUnitService

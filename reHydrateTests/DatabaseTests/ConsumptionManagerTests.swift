@@ -6,16 +6,15 @@
 //
 
 import XCTest
-import TestHelper
-@testable import DatabaseService
-import DatabaseServiceInterface
-import DatabaseServiceMocks
+@testable import reHydrate
+import PortsInterface
 
 final class ConsumptionManagerTests: XCTestCase {
-    let referenceDate = XCTest.referenceDate
+    let referenceDate = Date(timeIntervalSince1970: 1688227143)
+    let secondReferenceDate = Date(timeIntervalSince1970: 1688324062)
     
     let database =  Database(logger: .init(subsystem: "ConsumptionManagerTests"))
-    var spy: DatabaseSpy<ConsumptionModel>!
+    var spy: DatabaseSpy<ConsumptionManager.ConsumptionModel>!
     var sut: ConsumptionManagerType!
     
     override func setUp() {
@@ -24,7 +23,7 @@ final class ConsumptionManagerTests: XCTestCase {
     }
     
     override func tearDown() async throws {
-        try await spy.deleteAll(ConsumptionModel(id: "", date: "", time: "", consumed: 0))
+        try await spy.deleteAll(ConsumptionManager.ConsumptionModel(id: "", date: "", time: "", consumed: 0))
         let db = try XCTUnwrap(database.db)
         XCTAssertTrue(db.isClosed)
     }
@@ -37,27 +36,27 @@ final class ConsumptionManagerTests: XCTestCase {
     }
     
     func test_add_multiple() async throws {
-        try await preLoadXEntries(15, startDate: XCTest.referenceDate)
+        try await preLoadXEntries(15, startDate: referenceDate)
         XCTAssertEqual(spy.methodLogNames, .init(repeating: .write, count: 15))
     }
     
     func test_fetch() async throws {
-        try await preLoadXEntries(10, startDate: XCTest.referenceDate)
-        try await preLoadXEntries(10, startDate: XCTest.referenceDates[2])
-        let result = try await sut.fetchAll(at: XCTest.referenceDate)
+        try await preLoadXEntries(10, startDate: referenceDate)
+        try await preLoadXEntries(10, startDate: secondReferenceDate)
+        let result = try await sut.fetchAll(at: referenceDate)
         XCTAssertEqual(result.count, 10)
         XCTAssertEqual(spy.methodLogNames, .init(repeating: .write, count: 20) + [.readMatchingOrderByLimit])
     }
     
     func test_fetchAll() async throws {
-        try await preLoadXEntries(10, startDate: XCTest.referenceDate)
+        try await preLoadXEntries(10, startDate: referenceDate)
         let result = try await sut.fetchAll()
         XCTAssertEqual(result.count, 10)
         XCTAssertEqual(spy.methodLogNames, .init(repeating: .write, count: 10) + [.readMatchingOrderByLimit])
     }
     
     func test_delete() async throws {
-        try await preLoadXEntries(2, startDate: XCTest.referenceDate)
+        try await preLoadXEntries(2, startDate: referenceDate)
         let optionalEntry = try await sut.fetchAll().first
         let entry = try XCTUnwrap(optionalEntry)
         try await sut.delete(entry)
@@ -88,5 +87,15 @@ extension ConsumptionManagerTests {
                                                      consumed: givenConsumption)
             assert(newEntry, expectedDate: givenDate, expectedConsumption: givenConsumption, file: file, line: line)
         }
+    }
+}
+
+private extension Date {
+    func toDateString() -> String {
+        DatabaseFormatter.date.string(from: self)
+    }
+    
+    func toTimeString() -> String {
+        DatabaseFormatter.time.string(from: self)
     }
 }

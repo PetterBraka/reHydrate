@@ -9,7 +9,7 @@ import LoggingService
 import DayServiceInterface
 import DrinkServiceInterface
 import LanguageServiceInterface
-import DatabaseServiceInterface
+import PortsInterface
 import UnitServiceInterface
 import UserPreferenceServiceInterface
 import NotificationServiceInterface
@@ -18,10 +18,6 @@ import DateServiceInterface
 
 public protocol HasService:
     HasLoggingService,
-    HasDatabaseService,
-    HasDayManagerService,
-    HasDrinkManagerService,
-    HasConsumptionManagerService,
     HasDrinksService,
     HasDayService,
     HasLanguageService,

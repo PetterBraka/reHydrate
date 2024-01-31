@@ -13,8 +13,6 @@ import DrinkServiceInterface
 import DrinkServiceMocks
 import LanguageServiceInterface
 import LanguageServiceMocks
-import DatabaseServiceInterface
-import DatabaseServiceMocks
 import UnitServiceInterface
 import UnitServiceMocks
 import UserPreferenceServiceInterface
@@ -32,7 +30,6 @@ public final class EngineMocks {
     public init() {}
     
     public var logger: LoggingService = LoggingService(subsystem: "EngineMock")
-    public var database: DatabaseType = DatabaseStub()
     public var dayManager: DayManagerType = DayManagerStub()
     public var drinkManager: DrinkManagerType = DrinkManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()

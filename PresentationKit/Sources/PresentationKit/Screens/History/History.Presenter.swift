@@ -166,11 +166,12 @@ private extension Screen.History.Presenter {
         let daysFound = await engine.dayService.getDays(for: dates)
         
         let formatter = formatter
+        let dateService = engine.dateService
         
         return dates
-            .map { date in
+            .map { [daysFound, formatter, dateService] date in
                 let dateString = formatter.string(from: date)
-                let day = daysFound.first(where: { $0.date.inSameDayAs(date) })
+                let day = daysFound.first(where: { dateService.isDate($0.date, inSameDayAs: date) })
                 return if let day {
                     ViewModel.ChartData.Point(
                         date: date, dateString: dateString,

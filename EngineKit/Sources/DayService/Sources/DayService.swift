@@ -8,7 +8,6 @@
 import Foundation
 import DayServiceInterface
 import DrinkServiceInterface
-import DatabaseServiceInterface
 import UnitServiceInterface
 import LoggingService
 import PortsInterface
@@ -112,7 +111,7 @@ extension Day {
     init?(with day: DayModel?) {
         guard let id = day?.id,
               let dateString = day?.date,
-              let date = dbDateFormatter.date(from: dateString),
+              let date = DatabaseFormatter.date.date(from: dateString),
               let consumed = day?.consumed,
               let goal = day?.goal
         else { return nil }

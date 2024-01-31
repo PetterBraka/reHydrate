@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 14/08/2023.
 //
 
-import DatabaseServiceInterface
+import PortsInterface
 
 extension ConsumptionModel {
     static let `default` = ConsumptionModel(id: "---", date: "---", time: "---", consumed: -999)

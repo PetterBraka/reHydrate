@@ -6,16 +6,21 @@
 //
 
 import XCTest
-import TestHelper
-@testable import DatabaseService
-import DatabaseServiceInterface
-import DatabaseServiceMocks
+@testable import reHydrate
+import PortsInterface
 
 final class DayManagerTests: XCTestCase {
-    let referenceDate = XCTest.referenceDate
+    let referenceDate = Date(timeIntervalSince1970: 1688227143)
+    /// [1/07/2023, 2/07/2023, 3/07/2023, 5/07/2023]
+    let referenceDates = [
+        Date(timeIntervalSince1970: 1688227143),
+        Date(timeIntervalSince1970: 1688324062),
+        Date(timeIntervalSince1970: 1688410462),
+        Date(timeIntervalSince1970: 1688583262)
+    ]
     
     var database = Database(logger: .init(subsystem: "DayManagerTests"))
-    var spy: DatabaseSpy<DayModel>!
+    var spy: DatabaseSpy<DayManager.DayModel>!
     var sut: DayManagerType!
     
     override func setUp() {
@@ -24,7 +29,7 @@ final class DayManagerTests: XCTestCase {
     }
     
     override func tearDown() async throws {
-        try await database.deleteAll(DayModel(id: "", date: "", consumed: 0, goal: 0))
+        try await database.deleteAll(DayManager.DayModel(id: "", date: "", consumed: 0, goal: 0))
         let db = try XCTUnwrap(database.db)
         XCTAssertTrue(db.isClosed)
     }
@@ -44,7 +49,7 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_fetchDay_noDay() async throws {
-        guard let lastDate = XCTest.referenceDates.last
+        guard let lastDate = referenceDates.last
         else {
             XCTFail("No day found")
             return
@@ -63,13 +68,13 @@ final class DayManagerTests: XCTestCase {
         let days = try await sut.fetchAll()
         XCTAssertEqual(days.count, 4)
         XCTAssertEqual(days.map(\.date),
-                       XCTest.referenceDates.map { $0.toDateString() })
+                       referenceDates.map { $0.toDateString() })
         XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.readMatchingOrderByLimit])
     }
     
     func test_fetchLast_success() async throws {
         try await preLoad4Days()
-        guard let lastDate = XCTest.referenceDates.last
+        guard let lastDate = referenceDates.last
         else {
             XCTFail("No day found")
             return
@@ -93,7 +98,7 @@ final class DayManagerTests: XCTestCase {
     func test_addConsumed() async throws {
         try await preLoad4Days()
         let givenConsumption: Double = 2
-        guard let givenRandomDate = XCTest.referenceDates.randomElement()
+        guard let givenRandomDate = referenceDates.randomElement()
         else {
             XCTFail("No day found")
             return
@@ -110,7 +115,7 @@ final class DayManagerTests: XCTestCase {
     func test_removeConsumed() async throws {
         try await preLoad4Days()
         let givenConsumption: Double = 2
-        guard let givenRandomDate = XCTest.referenceDates.randomElement()
+        guard let givenRandomDate = referenceDates.randomElement()
         else {
             XCTFail("No day found")
             return
@@ -126,7 +131,7 @@ final class DayManagerTests: XCTestCase {
     
     func test_addGoal() async throws {
         try await preLoad4Days()
-        guard let givenRandomDate = XCTest.referenceDates.randomElement()
+        guard let givenRandomDate = referenceDates.randomElement()
         else {
             XCTFail("No day found")
             return
@@ -142,7 +147,7 @@ final class DayManagerTests: XCTestCase {
     
     func test_removeGoal() async throws {
         try await preLoad4Days()
-        guard let givenRandomDate = XCTest.referenceDates.randomElement()
+        guard let givenRandomDate = referenceDates.randomElement()
         else {
             XCTFail("No day found")
             return
@@ -158,7 +163,7 @@ final class DayManagerTests: XCTestCase {
     
     func test_removeGoal_tooMuch() async throws {
         try await preLoad4Days()
-        guard let givenRandomDate = XCTest.referenceDates.randomElement()
+        guard let givenRandomDate = referenceDates.randomElement()
         else {
             XCTFail("No day found")
             return
@@ -184,7 +189,7 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_deleteDate_success() async throws {
-        let dateToDelete = XCTest.referenceDates[2]
+        let dateToDelete = referenceDates[2]
         try await preLoad4Days()
         try await sut.deleteDay(at: dateToDelete)
         let days = try await sut.fetchAll()
@@ -195,8 +200,8 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_deleteDatesInRange_success() async throws {
-        guard let firstDate = XCTest.referenceDates.first,
-              let lastDate = XCTest.referenceDates.last
+        guard let firstDate = referenceDates.first,
+              let lastDate = referenceDates.last
         else {
             XCTFail("Failed getting reference dates")
             return
@@ -212,8 +217,8 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_deleteDatesInClosedRange_success() async throws {
-        guard let firstDate = XCTest.referenceDates.first,
-              let lastDate = XCTest.referenceDates.last
+        guard let firstDate = referenceDates.first,
+              let lastDate = referenceDates.last
         else {
             XCTFail("Failed getting reference dates")
             return
@@ -244,8 +249,8 @@ final class DayManagerTests: XCTestCase {
 }
 
 private extension DayManagerTests {
-    func assert(givenDay: DayModel,
-                expectedDay: DayModel,
+    func assert(givenDay: PortsInterface.DayModel,
+                expectedDay: PortsInterface.DayModel,
                 file: StaticString = #file,
                 line: UInt = #line) {
         XCTAssertEqual(givenDay.date, expectedDay.date,
@@ -256,7 +261,7 @@ private extension DayManagerTests {
                        file: file, line: line)
     }
     
-    func assert(givenDay: DayModel,
+    func assert(givenDay: PortsInterface.DayModel,
                 expectedConsumption: Double,
                 expectedGoal: Double,
                 file: StaticString = #file,
@@ -271,22 +276,28 @@ private extension DayManagerTests {
     
     func preLoad4Days(file: StaticString = #file,
                       line: UInt = #line) async throws {
-        for date in XCTest.referenceDates {
+        for date in referenceDates {
             let _ = try await sut.createNewDay(date: date, goal: 3)
         }
     }
 }
 
-private extension Array where Element == DatabaseSpy<DayModel>.MethodName {
-    static func preLoaded4Days() -> [DatabaseSpy<DayModel>.MethodName] {
+private extension Array where Element == DatabaseSpy<DayManager.DayModel>.MethodName {
+    static func preLoaded4Days() -> [DatabaseSpy<DayManager.DayModel>.MethodName] {
         [.write, .write, .write, .write]
     }
     
-    static func delete(times number: Int) -> [DatabaseSpy<DayModel>.MethodName] {
+    static func delete(times number: Int) -> [DatabaseSpy<DayManager.DayModel>.MethodName] {
         .init(repeating: .delete, count: number)
     }
     
-    static func deleteMatching(times number: Int) -> [DatabaseSpy<DayModel>.MethodName] {
+    static func deleteMatching(times number: Int) -> [DatabaseSpy<DayManager.DayModel>.MethodName] {
         .init(repeating: .deleteMatching, count: number)
+    }
+}
+
+private extension Date {
+    func toDateString() -> String {
+        DatabaseFormatter.date.string(from: self)
     }
 }

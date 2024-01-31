@@ -6,14 +6,12 @@
 //
 
 import XCTest
-import TestHelper
-@testable import DatabaseService
-import DatabaseServiceInterface
-import DatabaseServiceMocks
+@testable import reHydrate
+import PortsInterface
 
 final class DrinkManagerTests: XCTestCase {
     var database = Database(logger: .init(subsystem: "DrinkManagerTests"))
-    var spy: DatabaseSpy<DrinkModel>!
+    var spy: DatabaseSpy<DrinkManager.DrinkModel>!
     var sut: DrinkManagerType!
     
     override func setUp() {
@@ -133,14 +131,14 @@ final class DrinkManagerTests: XCTestCase {
 }
 
 extension DrinkManagerTests {
-    func assert(_ givenDrink: DrinkModel,
+    func assert(_ givenDrink: PortsInterface.DrinkModel,
                 expectedSize: Double, expectedContainer: String,
                 file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(givenDrink.size, expectedSize, file: file, line: line)
         XCTAssertEqual(givenDrink.container, expectedContainer, file: file, line: line)
     }
     
-    func assert(_ givenDrink: DrinkModel, _ expectedDrink: DrinkModel,
+    func assert(_ givenDrink: PortsInterface.DrinkModel, _ expectedDrink: PortsInterface.DrinkModel,
                 file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(givenDrink.size, expectedDrink.size, file: file, line: line)
         XCTAssertEqual(givenDrink.container, expectedDrink.container, file: file, line: line)
@@ -149,7 +147,7 @@ extension DrinkManagerTests {
 
 extension DrinkManagerTests {
     @discardableResult
-    func preloadDefaults(file: StaticString = #file, line: UInt = #line) async throws -> [DrinkModel] {
+    func preloadDefaults(file: StaticString = #file, line: UInt = #line) async throws -> [PortsInterface.DrinkModel] {
         try await [
             sut.createNewDrink(size: 300, container: "small"),
             sut.createNewDrink(size: 500, container: "medium"),

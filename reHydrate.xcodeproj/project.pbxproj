@@ -134,6 +134,15 @@
 		A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */; };
 		A13BFF5E2B16971B00E47671 /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */; };
 		A13BFF602B16A29600E47671 /* HistoryScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */; };
+		A149F28A2B69B0EF00710609 /* ConsumptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2862B69B0EF00710609 /* ConsumptionManager.swift */; };
+		A149F28B2B69B0EF00710609 /* DrinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2872B69B0EF00710609 /* DrinkManager.swift */; };
+		A149F28C2B69B0EF00710609 /* DayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2882B69B0EF00710609 /* DayManager.swift */; };
+		A149F28D2B69B0EF00710609 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2892B69B0EF00710609 /* Database.swift */; };
+		A149F28F2B69B85900710609 /* DatabaseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F28E2B69B85900710609 /* DatabaseType.swift */; };
+		A149F2992B69B93F00710609 /* DatabaseStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2982B69B93F00710609 /* DatabaseStub.swift */; };
+		A149F29A2B69B93F00710609 /* DatabaseSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2972B69B93F00710609 /* DatabaseSpy.swift */; };
+		A149F29C2B69B95600710609 /* DumyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F29B2B69B95600710609 /* DumyModel.swift */; };
+		A149F2A42B69B9DD00710609 /* reHydrateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2A32B69B9DD00710609 /* reHydrateTests.swift */; };
 		A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1614D522A362E8C00235D02 /* SceneFactory.swift */; };
 		A183BCEB2A3122CB00D42033 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE82A3120C900D42033 /* Images.swift */; };
 		A183BCEC2A3122CE00D42033 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE92A3120C900D42033 /* Font.swift */; };
@@ -149,6 +158,11 @@
 		A1AA8DDF2AF6466400D12E74 /* AppearanceServicePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */; };
 		A1AA8DE32AF7828500D12E74 /* HealthKitPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */; };
 		A1CA3A1E2B5A5DD5009907EA /* CalendarKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1CA3A1D2B5A5DD5009907EA /* CalendarKit */; };
+		A1E0A81A2B69BB1E007A0957 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E0A8192B69BB1E007A0957 /* Date+Extensions.swift */; };
+		A1E0A8202B6AE30D007A0957 /* DrinkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2AB2B69B9F600710609 /* DrinkManagerTests.swift */; };
+		A1E0A8212B6AE313007A0957 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2AC2B69B9F600710609 /* DatabaseTests.swift */; };
+		A1E0A8222B6AE313007A0957 /* ConsumptionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2AF2B69B9F600710609 /* ConsumptionManagerTests.swift */; };
+		A1E0A8242B6AE313007A0957 /* DayManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2AD2B69B9F600710609 /* DayManagerTests.swift */; };
 		A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111802F2AC36A86007E4585 /* Reminder.swift */; };
 		A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180302AC36A86007E4585 /* Celebration.swift */; };
 		A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */; };
@@ -172,6 +186,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 33DF9BD924B47D0900699B1A;
 			remoteInfo = "reHydrate-watch";
+		};
+		A149F2A52B69B9DD00710609 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3378767224378A9400F5A732;
+			remoteInfo = reHydrate;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -325,6 +346,20 @@
 		A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
 		A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
 		A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreenObservable.swift; sourceTree = "<group>"; };
+		A149F2862B69B0EF00710609 /* ConsumptionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsumptionManager.swift; sourceTree = "<group>"; };
+		A149F2872B69B0EF00710609 /* DrinkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrinkManager.swift; sourceTree = "<group>"; };
+		A149F2882B69B0EF00710609 /* DayManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayManager.swift; sourceTree = "<group>"; };
+		A149F2892B69B0EF00710609 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		A149F28E2B69B85900710609 /* DatabaseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseType.swift; sourceTree = "<group>"; };
+		A149F2972B69B93F00710609 /* DatabaseSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseSpy.swift; sourceTree = "<group>"; };
+		A149F2982B69B93F00710609 /* DatabaseStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseStub.swift; sourceTree = "<group>"; };
+		A149F29B2B69B95600710609 /* DumyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DumyModel.swift; sourceTree = "<group>"; };
+		A149F2A12B69B9DD00710609 /* reHydrateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = reHydrateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A149F2A32B69B9DD00710609 /* reHydrateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reHydrateTests.swift; sourceTree = "<group>"; };
+		A149F2AB2B69B9F600710609 /* DrinkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkManagerTests.swift; sourceTree = "<group>"; };
+		A149F2AC2B69B9F600710609 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
+		A149F2AD2B69B9F600710609 /* DayManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayManagerTests.swift; sourceTree = "<group>"; };
+		A149F2AF2B69B9F600710609 /* ConsumptionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumptionManagerTests.swift; sourceTree = "<group>"; };
 		A1614D522A362E8C00235D02 /* SceneFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneFactory.swift; sourceTree = "<group>"; };
 		A183BCE62A3120C900D42033 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A183BCE82A3120C900D42033 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
@@ -340,6 +375,7 @@
 		A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPort.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
 		A1AF32D32A346D6F00FD0C7C /* PresentationInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationInterface; sourceTree = "<group>"; };
+		A1E0A8192B69BB1E007A0957 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
 		A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		A1EABF272ADA842100591981 /* EditContainerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContainerScreen.swift; sourceTree = "<group>"; };
@@ -365,6 +401,13 @@
 				A126D24D2A76665800A296BA /* PresentationInterface in Frameworks */,
 				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
 				A126D24F2A76665900A296BA /* PresentationKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A149F29E2B69B9DD00710609 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +559,7 @@
 				3378767524378A9400F5A732 /* reHydrate */,
 				33DF9BDB24B47D0900699B1A /* reHydrate-watch */,
 				33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */,
+				A149F2A22B69B9DD00710609 /* reHydrateTests */,
 				3378767424378A9400F5A732 /* Products */,
 				F887073E19DFDDCFF694E7E8 /* Frameworks */,
 			);
@@ -526,6 +570,7 @@
 			children = (
 				3378767324378A9400F5A732 /* reHydrate.app */,
 				33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */,
+				A149F2A12B69B9DD00710609 /* reHydrateTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -558,6 +603,7 @@
 				A1EABF3E2AF4E0E300591981 /* View+getSize.swift */,
 				A11C12A72B65B02D00FB1B8C /* View+expand.swift */,
 				A1EABF372AF3924100591981 /* UIApplication+Extensions.swift */,
+				A1E0A8192B69BB1E007A0957 /* Date+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -601,6 +647,7 @@
 		A11180312AC3767F007E4585 /* Ports */ = {
 			isa = PBXGroup;
 			children = (
+				A149F2852B69B0EF00710609 /* DatabaseService */,
 				A182E8BD2B11F7B20001443B /* HealthPorts */,
 				A1AA8DE12AF7825B00D12E74 /* Notification */,
 				A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */,
@@ -630,6 +677,49 @@
 				A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */,
 			);
 			path = History;
+			sourceTree = "<group>";
+		};
+		A149F2852B69B0EF00710609 /* DatabaseService */ = {
+			isa = PBXGroup;
+			children = (
+				A149F2972B69B93F00710609 /* DatabaseSpy.swift */,
+				A149F2982B69B93F00710609 /* DatabaseStub.swift */,
+				A149F2962B69B8B300710609 /* Models */,
+				A149F28E2B69B85900710609 /* DatabaseType.swift */,
+				A149F2862B69B0EF00710609 /* ConsumptionManager.swift */,
+				A149F2872B69B0EF00710609 /* DrinkManager.swift */,
+				A149F2882B69B0EF00710609 /* DayManager.swift */,
+				A149F2892B69B0EF00710609 /* Database.swift */,
+			);
+			path = DatabaseService;
+			sourceTree = "<group>";
+		};
+		A149F2962B69B8B300710609 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A149F29B2B69B95600710609 /* DumyModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A149F2A22B69B9DD00710609 /* reHydrateTests */ = {
+			isa = PBXGroup;
+			children = (
+				A149F2AA2B69B9F600710609 /* DatabaseTests */,
+				A149F2A32B69B9DD00710609 /* reHydrateTests.swift */,
+			);
+			path = reHydrateTests;
+			sourceTree = "<group>";
+		};
+		A149F2AA2B69B9F600710609 /* DatabaseTests */ = {
+			isa = PBXGroup;
+			children = (
+				A149F2AB2B69B9F600710609 /* DrinkManagerTests.swift */,
+				A149F2AC2B69B9F600710609 /* DatabaseTests.swift */,
+				A149F2AD2B69B9F600710609 /* DayManagerTests.swift */,
+				A149F2AF2B69B9F600710609 /* ConsumptionManagerTests.swift */,
+			);
+			path = DatabaseTests;
 			sourceTree = "<group>";
 		};
 		A1614D512A362E7300235D02 /* Utilities */ = {
@@ -757,6 +847,24 @@
 			productReference = 33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A149F2A02B69B9DD00710609 /* reHydrateTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A149F2A72B69B9DD00710609 /* Build configuration list for PBXNativeTarget "reHydrateTests" */;
+			buildPhases = (
+				A149F29D2B69B9DD00710609 /* Sources */,
+				A149F29E2B69B9DD00710609 /* Frameworks */,
+				A149F29F2B69B9DD00710609 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A149F2A62B69B9DD00710609 /* PBXTargetDependency */,
+			);
+			name = reHydrateTests;
+			productName = reHydrateTests;
+			productReference = A149F2A12B69B9DD00710609 /* reHydrateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -767,7 +875,7 @@
 				KnownAssetTags = (
 					watchComplicationsTemplate,
 				);
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1520;
 				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Petter vang Brakalsvålet";
 				TargetAttributes = {
@@ -776,6 +884,10 @@
 					};
 					33DF9BD924B47D0900699B1A = {
 						CreatedOnToolsVersion = 11.5;
+					};
+					A149F2A02B69B9DD00710609 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = 3378767224378A9400F5A732;
 					};
 				};
 			};
@@ -801,6 +913,7 @@
 			targets = (
 				3378767224378A9400F5A732 /* reHydrate */,
 				33DF9BD924B47D0900699B1A /* reHydrate-watch */,
+				A149F2A02B69B9DD00710609 /* reHydrateTests */,
 			);
 		};
 /* End PBXProject section */
@@ -917,6 +1030,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A149F29F2B69B9DD00710609 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -929,8 +1049,10 @@
 				A1EABF302ADAD57600591981 /* EditContainerScreenObservable.swift in Sources */,
 				A13BFF602B16A29600E47671 /* HistoryScreenObservable.swift in Sources */,
 				A1EABF382AF3924100591981 /* UIApplication+Extensions.swift in Sources */,
+				A149F29A2B69B93F00710609 /* DatabaseSpy.swift in Sources */,
 				A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
+				A1E0A81A2B69BB1E007A0957 /* Date+Extensions.swift in Sources */,
 				A1EABF3F2AF4E0E300591981 /* View+getSize.swift in Sources */,
 				A1EABF3A2AF3F7C800591981 /* CreditsScreenObservable.swift in Sources */,
 				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,
@@ -946,14 +1068,20 @@
 				332315F42742B3430039EE23 /* AppView.swift in Sources */,
 				A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */,
 				330C23D627665D4C00293092 /* AppDelegate.swift in Sources */,
+				A149F28B2B69B0EF00710609 /* DrinkManager.swift in Sources */,
+				A149F28C2B69B0EF00710609 /* DayManager.swift in Sources */,
 				A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */,
 				A1AA8DDD2AF6386C00D12E74 /* AlternateIconsServicePort.swift in Sources */,
+				A149F28F2B69B85900710609 /* DatabaseType.swift in Sources */,
 				A1EABF2E2ADAC80000591981 /* LocalizedString.swift in Sources */,
 				A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */,
 				33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */,
 				A1AA8DDA2AF634C500D12E74 /* AppIconScreen.swift in Sources */,
+				A149F28D2B69B0EF00710609 /* Database.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
+				A149F29C2B69B95600710609 /* DumyModel.swift in Sources */,
 				A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */,
+				A149F2992B69B93F00710609 /* DatabaseStub.swift in Sources */,
 				A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */,
 				332315E72742724D0039EE23 /* Drinkview.swift in Sources */,
 				A1EABF342AF37E5B00591981 /* OpenUrlPort.swift in Sources */,
@@ -961,6 +1089,7 @@
 				A183BCEC2A3122CE00D42033 /* Font.swift in Sources */,
 				A1EABF282ADA842100591981 /* EditContainerScreen.swift in Sources */,
 				33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */,
+				A149F28A2B69B0EF00710609 /* ConsumptionManager.swift in Sources */,
 				33EC3A882754BA420049E414 /* Localizable.swift in Sources */,
 				A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */,
 				A1AA8DDF2AF6466400D12E74 /* AppearanceServicePort.swift in Sources */,
@@ -986,6 +1115,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A149F29D2B69B9DD00710609 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1E0A8242B6AE313007A0957 /* DayManagerTests.swift in Sources */,
+				A1E0A8212B6AE313007A0957 /* DatabaseTests.swift in Sources */,
+				A1E0A8222B6AE313007A0957 /* ConsumptionManagerTests.swift in Sources */,
+				A1E0A8202B6AE30D007A0957 /* DrinkManagerTests.swift in Sources */,
+				A149F2A42B69B9DD00710609 /* reHydrateTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -993,6 +1134,11 @@
 			isa = PBXTargetDependency;
 			target = 33DF9BD924B47D0900699B1A /* reHydrate-watch */;
 			targetProxy = 33DF9BF424B47D0A00699B1A /* PBXContainerItemProxy */;
+		};
+		A149F2A62B69B9DD00710609 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3378767224378A9400F5A732 /* reHydrate */;
+			targetProxy = A149F2A52B69B9DD00710609 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1246,6 +1392,53 @@
 			};
 			name = Release;
 		};
+		A149F2A82B69B9DD00710609 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DCQ3V8BLU5;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.petter.braka.reHydrateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/reHydrate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/reHydrate";
+			};
+			name = Debug;
+		};
+		A149F2A92B69B9DD00710609 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DCQ3V8BLU5;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.petter.braka.reHydrateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/reHydrate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/reHydrate";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1272,6 +1465,15 @@
 			buildConfigurations = (
 				33DF9BF724B47D0A00699B1A /* Debug */,
 				33DF9BF824B47D0A00699B1A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A149F2A72B69B9DD00710609 /* Build configuration list for PBXNativeTarget "reHydrateTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A149F2A82B69B9DD00710609 /* Debug */,
+				A149F2A92B69B9DD00710609 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

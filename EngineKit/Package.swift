@@ -17,9 +17,6 @@ let package: Package = {
         products: [
             .library(name: engineKit, targets: [engineKit]),
         ],
-        dependencies: [
-            .blackbird
-        ],
         targets: [
             .target(name: engineKit,
                     dependencies: [
@@ -28,7 +25,6 @@ let package: Package = {
                         .source(.dayService),
                         .source(.drinkService),
                         .source(.languageService),
-                        .source(.databaseService),
                         .source(.unitService),
                         .source(.userPreferenceService),
                         .source(.notificationService),
@@ -42,7 +38,6 @@ let package: Package = {
                         .mocks(.dayService),
                         .mocks(.drinkService),
                         .mocks(.languageService),
-                        .mocks(.databaseService),
                         .mocks(.unitService),
                         .mocks(.userPreferenceService),
                         .mocks(.notificationService),
@@ -57,7 +52,6 @@ let package: Package = {
         ]
             .with(targetsFrom: .dayService,
                   sourceDependancy: [
-                    .interface(.databaseService),
                     .interface(.unitService),
                     .interface(.userPreferenceService),
                     .portsInterface
@@ -67,21 +61,19 @@ let package: Package = {
                   ])
             .with(targetsFrom: .drinkService,
                   sourceDependancy: [
-                    .interface(.databaseService),
+                    .portsInterface,
                     .interface(.unitService),
                     .interface(.userPreferenceService)
                   ])
             .with(targetsFrom: .languageService, sourceDependancy: [
                 .interface(.userPreferenceService)
             ])
-            .with(targetsFrom: .databaseService,
-                  interfaceDependancy: [.blackbird])
             .with(targetsFrom: .timelineService,
                   sourceDependancy: [
-                    .interface(.databaseService)
+                    .portsInterface
                   ],
                   testsDependancy: [
-                    .mocks(.databaseService)
+                    .portsMocks
                   ])
             .with(targetsFrom: .unitService,
                   sourceDependancy: [
@@ -101,13 +93,6 @@ let package: Package = {
             .with(targetsFrom: .dateService)
     )
 }()
-
-extension Package.Dependency {
-    static let blackbird: Package.Dependency = .package(
-        url: "https://github.com/marcoarment/Blackbird.git",
-        .upToNextMajor(from: .init(0, 5, 0))
-    )
-}
 
 extension Target {
     static let loggingService: Target = .target(name: "LoggingService")
@@ -132,7 +117,6 @@ enum Feature: String {
     case dateService = "DateService"
     case drinkService = "DrinkService"
     case languageService = "LanguageService"
-    case databaseService = "DatabaseService"
     case timelineService = "TimelineService"
     case unitService = "UnitService"
     case userPreferenceService = "UserPreferenceService"

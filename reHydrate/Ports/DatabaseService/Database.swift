@@ -7,7 +7,7 @@
 
 import Foundation
 import Blackbird
-import DatabaseServiceInterface
+import PortsInterface
 import LoggingService
 
 public class Database: DatabaseType {

@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 05/10/2023.
 //
 
-import DatabaseServiceInterface
+import PortsInterface
 
 public protocol DrinkManagerStubbing {
     var createNewDrink_returnValue: DrinkModel? { get set }

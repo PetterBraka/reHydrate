@@ -13,8 +13,6 @@ import DrinkServiceInterface
 import DrinkService
 import LanguageServiceInterface
 import LanguageService
-import DatabaseServiceInterface
-import DatabaseService
 import UnitServiceInterface
 import UnitService
 import UserPreferenceServiceInterface
@@ -29,7 +27,12 @@ import DateService
 
 public final class Engine {
     public init(
+        appGroup: String,
         appVersion: String,
+        logger: LoggingService,
+        dayManager: DayManagerType,
+        drinkManager: DrinkManagerType,
+        consumptionManager: ConsumptionManagerType,
         reminders: [NotificationMessage],
         celebrations: [NotificationMessage],
         notificationCenter: NotificationCenterType,
@@ -38,18 +41,15 @@ public final class Engine {
         appearancePort: AppearancePortType,
         healthService: HealthInterface
     ) {
-        let project = "reHydrate"
-        let appGroup = "group.com.braka.reHydrate.shared"
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
         else {
             fatalError("Shared UserDefaults couldn't be setup")
         }
-        logger = LoggingService(subsystem: project)
-        database = Database(logger: logger)
-        dayManager = DayManager(database: database)
-        drinkManager = DrinkManager(database: database)
-        consumptionManager = ConsumptionManager(database: database)
-        userPreferenceService = UserPreferenceService(defaults: sharedDefault)
+        self.logger = logger
+        self.dayManager = dayManager
+        self.drinkManager = drinkManager
+        self.consumptionManager = consumptionManager
+        self.userPreferenceService = UserPreferenceService(defaults: sharedDefault)
         
         self.appVersion = appVersion
         self.reminders = reminders
@@ -68,7 +68,6 @@ public final class Engine {
     public var didCompleteNotificationAction: (() -> Void)?
     
     public var logger: LoggingService
-    public var database: DatabaseType
     public var dayManager: DayManagerType
     public var drinkManager: DrinkManagerType
     public var consumptionManager: ConsumptionManagerType

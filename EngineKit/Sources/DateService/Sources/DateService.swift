@@ -26,4 +26,9 @@ public final class DateService: DateServiceType {
     public func getEnd(of date: Date) -> Date? {
         calendar.date(bySettingHour: 23, minute: 59, second: 59, of: date)
     }
+    
+    public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(date, inSameDayAs: inSameDayAs)
+    }
 }

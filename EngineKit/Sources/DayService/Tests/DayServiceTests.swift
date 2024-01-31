@@ -8,8 +8,6 @@
 import XCTest
 import EngineMocks
 import TestHelper
-import DatabaseServiceInterface
-import DatabaseServiceMocks
 import DayServiceInterface
 import UnitServiceInterface
 import UnitServiceMocks
@@ -50,7 +48,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_getToday_success() async {
-        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDate = DatabaseFormatter.date.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
                                 consumed: 0,
@@ -62,7 +60,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_getToday_withHealthDiff_success() async {
-        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDate = DatabaseFormatter.date.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
                                 consumed: 0,
@@ -77,7 +75,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_getToday_failedFetchForDate() async {
-        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDate = DatabaseFormatter.date.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
                                 consumed: 0,
@@ -91,7 +89,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_getToday_withHealthFailed_failed() async {
-        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDate = DatabaseFormatter.date.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
                                 consumed: 0,
@@ -106,7 +104,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_getToday_failedFetchForDateAndFetchPrevious() async {
-        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDate = DatabaseFormatter.date.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
                                 consumed: 0,
@@ -141,7 +139,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_getToday_requestHealthAccessFailed() async {
-        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDate = DatabaseFormatter.date.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
                                 consumed: 0,
@@ -154,7 +152,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_getToday_requestHealthAccessNotSupported() async {
-        let givenDate = dbDateFormatter.string(from: .now)
+        let givenDate = DatabaseFormatter.date.string(from: .now)
         let givenDay = DayModel(id: "1",
                                 date: givenDate,
                                 consumed: 0,
@@ -258,7 +256,8 @@ extension DayServiceTests {
     func assert(day: Day, dayModel: DayModel,
                 file: StaticString = #file,
                 line: UInt = #line) {
-        XCTAssertEqual(day.date.toDateString(), dayModel.date, file: file, line: line)
+        XCTAssertEqual(DatabaseFormatter.date.string(from: day.date),
+                       dayModel.date, file: file, line: line)
         XCTAssertEqual(day.consumed, dayModel.consumed, file: file, line: line)
         XCTAssertEqual(day.goal, dayModel.goal, file: file, line: line)
     }

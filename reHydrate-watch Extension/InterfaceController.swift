@@ -21,9 +21,9 @@ class InterfaceController: WKInterfaceController {
     var largeDrink: Double = 750
     var today: Day?
     let formatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE - dd MMM yyyy"
-        return dateFormatter
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE - dd MMM yyyy"
+        return formatter
     }()
 
     @IBOutlet var summaryLable: WKInterfaceLabel!

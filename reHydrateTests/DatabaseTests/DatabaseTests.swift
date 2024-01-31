@@ -6,13 +6,11 @@
 //
 
 import XCTest
-import TestHelper
-@testable import DatabaseService
-import DatabaseServiceInterface
-import DatabaseServiceMocks
+@testable import reHydrate
+import PortsInterface
 
 final class DatabaseTests: XCTestCase {
-    let referenceDate = XCTest.referenceDate
+    let referenceDate = Date(timeIntervalSince1970: 1688227143)
     
     var spy = DatabaseSpy<DummyModel>(realObject: Database(logger: .init(subsystem: "DatabaseTests")))
     

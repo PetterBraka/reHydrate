@@ -7,7 +7,7 @@
 
 import Foundation
 import TimelineServiceInterface
-import DatabaseServiceInterface
+import PortsInterface
 
 public final class TimelineService: TimelineServiceType {
     public typealias Engine = (
@@ -49,7 +49,7 @@ extension Timeline {
 
 extension TimelineCollection {
     init?(dateString: String, timeline: [Timeline]) {
-        guard let date = dbDateFormatter.date(from: dateString) else { return nil }
+        guard let date = DatabaseFormatter.date.date(from: dateString) else { return nil }
         
         self.init(
             date: date,

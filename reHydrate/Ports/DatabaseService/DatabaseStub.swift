@@ -6,7 +6,7 @@
 //
 
 import Blackbird
-import DatabaseServiceInterface
+import PortsInterface
 
 public protocol DatabaseStubbing {
     var readMatchingOrderByLimit_returnValue: [any BlackbirdModel] { get }
