@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import CreditsPresentationInterface
+import PresentationInterface
 import PresentationKit
 import EngineKit
 

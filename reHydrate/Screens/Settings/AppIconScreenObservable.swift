@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AppIconPresentationInterface
+import PresentationInterface
 import PresentationKit
 
 final class AppIconScreenObservable: ObservableObject, AppIconSceneType {

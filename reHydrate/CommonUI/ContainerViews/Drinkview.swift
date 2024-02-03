@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import HomePresentationInterface
+import PresentationInterface
 
 struct DrinkView<MenuItems: View>: View {
     typealias Container = Home.ViewModel.Container

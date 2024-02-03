@@ -4,30 +4,28 @@
 import PackageDescription
 
 let package: Package = {
-    // MARK: External dependencies
-    let presentationInterface = "PresentationInterface"
-    let engineKit = "EngineKit"
-    
-    // MARK: Packages
-    let presentationKit = "PresentationKit"
-    
-    return Package(
-        name: presentationKit,
+    Package(
+        name: "PresentationKit",
         platforms: [.macOS(.v13), .iOS(.v17)],
         products: [
-            .library(name: presentationKit, targets: [presentationKit]),
+            .library(
+                name: "PresentationKit",
+                targets: ["PresentationKit", "PresentationInterface"]
+            ),
         ],
         dependencies: [
-            .package(path: "../\(engineKit)"),
-            .package(path: "../\(presentationInterface)")
+            .package(path: "../EngineKit"),
         ],
         targets: [
             .target(
-                name: presentationKit,
+                name: "PresentationKit",
                 dependencies: [
-                    .byName(name: engineKit),
-                    .byName(name: presentationInterface)
+                    "EngineKit",
+                    "PresentationInterface"
                 ]
+            ),
+            .target(
+                name: "PresentationInterface"
             ),
         ]
     )

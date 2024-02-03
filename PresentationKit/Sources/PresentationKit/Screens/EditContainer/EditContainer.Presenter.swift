@@ -7,7 +7,7 @@
 
 import Foundation
 import LoggingService
-import EditContainerPresentationInterface
+import PresentationInterface
 import DrinkServiceInterface
 import UnitServiceInterface
 

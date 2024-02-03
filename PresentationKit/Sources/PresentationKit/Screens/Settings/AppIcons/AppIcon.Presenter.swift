@@ -6,7 +6,7 @@
 //
 
 import LoggingService
-import AppIconPresentationInterface
+import PresentationInterface
 import PortsInterface
 
 extension Screen.Settings.AppIcon {

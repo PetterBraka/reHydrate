@@ -7,7 +7,7 @@
 
 import Foundation
 import LoggingService
-import CreditsPresentationInterface
+import PresentationInterface
 import PortsInterface
 
 extension Screen.Settings.Credits {

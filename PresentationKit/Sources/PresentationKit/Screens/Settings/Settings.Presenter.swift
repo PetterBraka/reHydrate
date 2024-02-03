@@ -7,7 +7,7 @@
 
 import Foundation
 import LoggingService
-import SettingsPresentationInterface
+import PresentationInterface
 import UnitServiceInterface
 import DayServiceInterface
 import DrinkServiceInterface

@@ -8,7 +8,7 @@
 
 import Foundation
 import UserNotifications
-import EditContainerPresentationInterface
+import PresentationInterface
 import PresentationKit
 import EngineKit
 

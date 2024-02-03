@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import EditContainerPresentationInterface
+import PresentationInterface
 import PresentationKit
 import EngineKit
 

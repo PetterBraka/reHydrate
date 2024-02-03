@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 16/07/2023.
 //
 
-import HomePresentationInterface
+import PresentationInterface
 
 public enum PopUp {
     case edit(Home.ViewModel.Drink)

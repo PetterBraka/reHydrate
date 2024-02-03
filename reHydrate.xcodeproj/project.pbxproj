@@ -127,7 +127,6 @@
 		A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C12A72B65B02D00FB1B8C /* View+expand.swift */; };
 		A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */; };
 		A126D24B2A76665800A296BA /* EngineKit in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24A2A76665800A296BA /* EngineKit */; };
-		A126D24D2A76665800A296BA /* PresentationInterface in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24C2A76665800A296BA /* PresentationInterface */; };
 		A126D24F2A76665900A296BA /* PresentationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24E2A76665900A296BA /* PresentationKit */; };
 		A126D2512A7667C200A296BA /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A126D2502A7667C200A296BA /* CheckBoxButton.swift */; };
 		A126D2552A76684E00A296BA /* StepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A126D2542A76684E00A296BA /* StepperView.swift */; };
@@ -374,7 +373,6 @@
 		A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceServicePort.swift; sourceTree = "<group>"; };
 		A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPort.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
-		A1AF32D32A346D6F00FD0C7C /* PresentationInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationInterface; sourceTree = "<group>"; };
 		A1E0A8192B69BB1E007A0957 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
 		A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
@@ -398,7 +396,6 @@
 				A1CA3A1E2B5A5DD5009907EA /* CalendarKit in Frameworks */,
 				A19F28BC2A80D44E0005717A /* Blackbird in Frameworks */,
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
-				A126D24D2A76665800A296BA /* PresentationInterface in Frameworks */,
 				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
 				A126D24F2A76665900A296BA /* PresentationKit in Frameworks */,
 			);
@@ -555,7 +552,6 @@
 			children = (
 				A1AF32D22A346CA200FD0C7C /* EngineKit */,
 				A114C6C02A63DAAE00F53770 /* PresentationKit */,
-				A1AF32D32A346D6F00FD0C7C /* PresentationInterface */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				33DF9BDB24B47D0900699B1A /* reHydrate-watch */,
 				33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */,
@@ -821,7 +817,6 @@
 			name = reHydrate;
 			packageProductDependencies = (
 				A126D24A2A76665800A296BA /* EngineKit */,
-				A126D24C2A76665800A296BA /* PresentationInterface */,
 				A126D24E2A76665900A296BA /* PresentationKit */,
 				A19F28BB2A80D44E0005717A /* Blackbird */,
 				A1CA3A1D2B5A5DD5009907EA /* CalendarKit */,
@@ -1503,10 +1498,6 @@
 		A126D24A2A76665800A296BA /* EngineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EngineKit;
-		};
-		A126D24C2A76665800A296BA /* PresentationInterface */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PresentationInterface;
 		};
 		A126D24E2A76665900A296BA /* PresentationKit */ = {
 			isa = XCSwiftPackageProductDependency;

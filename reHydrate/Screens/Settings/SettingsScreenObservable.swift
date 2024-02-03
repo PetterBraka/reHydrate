@@ -9,7 +9,7 @@
 import Foundation
 import LanguageServiceInterface
 import DrinkServiceInterface
-import SettingsPresentationInterface
+import PresentationInterface
 import PresentationKit
 
 final class SettingsScreenObservable: ObservableObject, SettingsSceneType {

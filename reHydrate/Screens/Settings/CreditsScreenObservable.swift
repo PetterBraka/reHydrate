@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import CreditsPresentationInterface
+import PresentationInterface
 import PresentationKit
 
 final class CreditsScreenObservable: ObservableObject, CreditsSceneType {

@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 11/06/2023.
 //
 
-import HomePresentationInterface
+import PresentationInterface
 
 public final class Router {
     public weak var sceneObserver: RouterObservableType?
