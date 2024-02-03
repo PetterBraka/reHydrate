@@ -27,8 +27,8 @@ final class HistoryScreenObservable: ObservableObject, HistorySceneType {
         case .viewModel:
             viewModel = presenter.viewModel
         }
-        DispatchQueue.main.async { [weak self] in
-            self?.objectWillChange.send()
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
         }
     }
     

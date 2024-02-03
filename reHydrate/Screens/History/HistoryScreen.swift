@@ -132,26 +132,28 @@ struct HistoryScreen: View {
             ) { day in
                 observer.perform(action: .didTap(day.date))
             } customDayView: { day in
-                Text("\(day.day)")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .font(.caption)
-                    .background {
-                        getImageForSelected(day.date)
-                            .padding(.vertical, 4)
-                    }
-                    .overlay {
+                VStack(alignment: .center, spacing: 0) {
+                    Text("\(day.day)")
+                        .font(.caption)
+                    getIndicatorImage(for: day.date)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxHeight: 20)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay {
+                    ZStack {
                         if day.isToday {
                             Image.circle
                                 .resizable()
-                                .padding(-6)
                         }
+                        getSelectionIndicator(for: day.date)
                     }
-                    .tag(day.date)
-                    .id(day.date)
-                    .border(.black, width: 0.25)
-                    .onTapGesture {
-                        observer.perform(action: .didTap(day.date))
-                    }
+                }
+                .border(.black, width: 0.25)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    observer.perform(action: .didTap(day.date))
+                }
             } customWeekdayLabel: { weekday in
                 Text(weekday)
                     .font(.caption)
@@ -167,20 +169,47 @@ struct HistoryScreen: View {
     }
     
     @ViewBuilder
-    func getImageForSelected(_ date: Date) -> some View {
+    func getSelectionIndicator(for date: Date) -> some View {
         if let range = observer.viewModel.selectedRange {
-            Group {
-                if range.lowerBound.inSameDayAs(date) {
-                    Image.leftSelected
-                        .resizable(resizingMode: .stretch)
-                } else if range.upperBound.inSameDayAs(date) {
-                    Image.rightSelected
-                        .resizable(resizingMode: .stretch)
-                } else if range.contains(date) {
-                    Image.midSelected
-                        .resizable(resizingMode: .stretch)
-                }
+            if range.lowerBound.inSameDayAs(date) {
+                Image.leftSelected
+                    .resizable(resizingMode: .stretch)
+            } else if range.upperBound.inSameDayAs(date) {
+                Image.rightSelected
+                    .resizable(resizingMode: .stretch)
+            } else if range.contains(date) {
+                Image.midSelected
+                    .resizable(resizingMode: .stretch)
             }
+        }
+    }
+    
+    @ViewBuilder
+    func getIndicatorImage(for date: Date) -> some View {
+        let days = observer.viewModel.calendar.days
+        if let day = days.first(where: { $0.date.inSameDayAs(date) }) {
+            let goal = day.goal
+            let consumed = day.consumed
+            let fill = consumed / goal
+            switch fill {
+            case 0.9 ..< 1 :
+                Image.waterDrop100
+                    .resizable()
+            case 0.6 ... 0.9:
+                Image.waterDrop75
+                    .resizable()
+            case 0.3 ... 0.6:
+                Image.waterDrop50
+                    .resizable()
+            case 0.1 ... 0.3:
+                Image.waterDrop25
+                    .resizable()
+            default:
+                Image.waterDrop0
+                    .resizable()
+            }
+        } else {
+            Color.clear
         }
     }
 }

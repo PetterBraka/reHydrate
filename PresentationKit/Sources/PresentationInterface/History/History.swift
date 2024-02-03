@@ -66,13 +66,13 @@ extension History.ViewModel {
         }
         
         public let title: String
-        public let data: [Point]
+        public let points: [Point]
         public let selectedOption: Option
         public let options = Option.allCases
         
-        public init(title: String, data: [Point], selectedOption: Option) {
+        public init(title: String, points: [Point], selectedOption: Option) {
             self.title = title
-            self.data = data
+            self.points = points
             self.selectedOption = selectedOption
         }
     }
@@ -90,14 +90,28 @@ extension History.ViewModel {
             case sunday
         }
         
+        public struct Day {
+            public let date: Date
+            public let consumed: Double
+            public let goal: Double
+            
+            public init(date: Date, consumed: Double, goal: Double) {
+                self.date = date
+                self.consumed = consumed
+                self.goal = goal
+            }
+        }
+        
         public let highlightedMonth: Date
         public let weekdayStart: Weekday
         public let range: ClosedRange<Date>
+        public let days: [Day]
         
-        public init(highlightedMonth: Date, weekdayStart: Weekday, range: ClosedRange<Date>) {
+        public init(highlightedMonth: Date, weekdayStart: Weekday, range: ClosedRange<Date>, days: [Day]) {
             self.highlightedMonth = highlightedMonth
             self.weekdayStart = weekdayStart
             self.range = range
+            self.days = days
         }
     }
 }

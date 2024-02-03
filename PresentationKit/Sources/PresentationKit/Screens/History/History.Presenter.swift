@@ -47,7 +47,7 @@ extension Screen.History {
                     router: Router) {
             self.engine = engine
             self.router = router
-            let calendarRange = engine.dateService.getDate(byAddingDays: -(365 * 2), to: .now)! ... .now
+            let calendarRange = engine.dateService.getDate(byAddingDays: -(365 * 5), to: .now)! ... .now
             if let past = engine.dateService.getDate(byAddingDays: -6, to: .now) {
                 selectedRange =  past ... .now
             }
@@ -56,11 +56,12 @@ extension Screen.History {
                 details: .init(averageConsumed: "", averageGoal: "",
                                totalConsumed: "", totalGoal: ""),
                 chart: .init(title: " - ",
-                             data: [],
+                             points: [],
                              selectedOption: .line),
                 calendar: .init(highlightedMonth: .now,
                                 weekdayStart: .monday,
-                                range: calendarRange),
+                                range: calendarRange,
+                                days: []),
                 selectedRange: nil,
                 selectedDays: 0,
                 error: nil
@@ -69,7 +70,10 @@ extension Screen.History {
                 guard let start = selectedRange?.lowerBound,
                       let end = selectedRange?.upperBound
                 else { return }
-                await getDataBetween(start: start, end: end)
+                let days = await fetchDays(startDate: calendarRange.lowerBound,
+                                           endDate: calendarRange.upperBound)
+                updateViewModel(isLoading: true, daysFound: days.mapToViewModel())
+                await updateViewModelWithDataBetween(start: start, end: end)
             }
         }
         
@@ -101,7 +105,8 @@ extension Screen.History {
                     newRange = date ... engine.dateService.getDate(byAddingDays: 1, to: date)!
                 }
                 selectedRange = newRange
-                await getDataBetween(start: newRange.lowerBound, end: newRange.upperBound)
+                await updateViewModelWithDataBetween(start: newRange.lowerBound,
+                                                     end: newRange.upperBound)
             }
         }
     }
@@ -114,9 +119,11 @@ private extension Screen.History.Presenter {
         averageGoal: Double? = nil,
         totalConsumed: Double? = nil,
         totalGoal: Double? = nil,
-        data: [ViewModel.ChartData.Point]? = nil,
+        chartPoints: [ViewModel.ChartData.Point]? = nil,
         chartOption: ViewModel.ChartData.Option? = nil,
         calendarRange: ClosedRange<Date>? = nil,
+        daysFound: [ViewModel.CalendarData.Day]? = nil,
+        daysSelected: Int? = nil,
         weekdayStart: ViewModel.CalendarData.Weekday? = nil,
         highlightedMonth: Date? = nil,
         error: ViewModel.HistoryError? = nil
@@ -129,12 +136,6 @@ private extension Screen.History.Presenter {
             ""
         }
         
-        let days = if let selectedRange {
-            engine.dateService.daysBetween(selectedRange.lowerBound, end: selectedRange.upperBound)
-        } else {
-            0
-        }
-        
         viewModel = .init(
             isLoading: isLoading,
             details: .init(
@@ -145,64 +146,72 @@ private extension Screen.History.Presenter {
             ),
             chart: .init(
                 title: title,
-                data: data ?? viewModel.chart.data,
+                points: chartPoints ?? viewModel.chart.points,
                 selectedOption: chartOption ?? viewModel.chart.selectedOption
             ),
             calendar: .init(
                 highlightedMonth: highlightedMonth ?? viewModel.calendar.highlightedMonth,
                 weekdayStart: weekdayStart ?? viewModel.calendar.weekdayStart,
-                range: calendarRange ?? viewModel.calendar.range
+                range: calendarRange ?? viewModel.calendar.range,
+                days: daysFound ?? viewModel.calendar.days
             ),
             selectedRange: selectedRange,
-            selectedDays: days,
+            selectedDays: daysSelected ?? viewModel.selectedDays,
             error: error
         )
     }
 }
 
 private extension Screen.History.Presenter {
-    func fetchDays(startDate: Date, endDate: Date) async -> [ViewModel.ChartData.Point] {
+    func fetchDays(startDate: Date, endDate: Date) async -> [Day] {
         let dates = getDates(startDate: startDate, endDate: endDate)
-        let daysFound = await engine.dayService.getDays(for: dates)
+        return await engine.dayService.getDays(for: dates)
+    }
         
+    func getChartData(from days: [Day]) async -> [ViewModel.ChartData.Point] {
         let formatter = formatter
         let dateService = engine.dateService
         
-        return dates
-            .map { [daysFound, formatter, dateService] date in
-                let dateString = formatter.string(from: date)
-                let day = daysFound.first(where: { dateService.isDate($0.date, inSameDayAs: date) })
-                return if let day {
-                    ViewModel.ChartData.Point(
-                        date: date, dateString: dateString,
+        return days
+            .map { [formatter, dateService] day in
+                let dateString = formatter.string(from: day.date)
+                if let day = days.first(where: {
+                    dateService.isDate($0.date, inSameDayAs: day.date)
+                }) {
+                    return ViewModel.ChartData.Point(
+                        date: day.date, dateString: dateString,
                         consumed: day.consumed, goal: day.goal
                     )
                 } else {
-                    ViewModel.ChartData.Point(
-                        date: date, dateString: dateString,
+                    return ViewModel.ChartData.Point(
+                        date: day.date, dateString: dateString,
                         consumed: 0, goal: nil
                     )
                 }
             }
     }
     
-    func getDataBetween(start: Date, end: Date) async {
+    func updateViewModelWithDataBetween(start: Date, end: Date) async {
         let days = await fetchDays(startDate: start, endDate: end)
+        let points = await getChartData(from: days)
+        let daysSelected = engine.dateService.daysBetween(start, end: end)
+        
         var totalGoal = 0.0
         var totalConsumed = 0.0
         
-        days.forEach { day in
+        points.forEach { day in
             totalGoal += day.goal ?? 0
             totalConsumed += day.consumed ?? 0
         }
-        let averageGoal = totalGoal / Double(days.count)
-        let averageConsumed = totalConsumed / Double(days.count)
+        let averageGoal = totalGoal / Double(daysSelected)
+        let averageConsumed = totalConsumed / Double(daysSelected)
         
         updateViewModel(
             isLoading: false,
             averageConsumed: averageConsumed, averageGoal: averageGoal,
             totalConsumed: totalConsumed, totalGoal: totalGoal,
-            data: days
+            chartPoints: points,
+            daysSelected: daysSelected
         )
     }
     
@@ -251,6 +260,18 @@ private extension Screen.History.Presenter {
             "\(title) \(symbol)"
         } else {
             "0 \(symbol)"
+        }
+    }
+}
+
+private extension Array where Element == Day {
+    func mapToViewModel() -> [History.ViewModel.CalendarData.Day] {
+        map {
+            History.ViewModel.CalendarData.Day(
+                date: $0.date,
+                consumed: $0.consumed,
+                goal: $0.goal
+            )
         }
     }
 }
