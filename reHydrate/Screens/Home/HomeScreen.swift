@@ -31,7 +31,6 @@ struct HomeScreen: View {
         .safeAreaInset(edge: .bottom) {
             navigationBar
         }
-        .background(Color.background)
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 
@@ -113,7 +112,6 @@ struct HomeScreen: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 64)
                     .font(.brandLargeHeader)
-                    .foregroundColor(.button)
             }
             
             Spacer()
@@ -126,7 +124,6 @@ struct HomeScreen: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 64)
                     .font(.brandLargeHeader)
-                    .foregroundColor(.button)
             }
         }
         .padding(.horizontal, 24)

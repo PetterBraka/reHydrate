@@ -17,14 +17,14 @@ struct SettingsScreen: View {
 
     var body: some View {
         ZStack {
-            Color.background
-                .ignoresSafeArea()
+//            Color.background
+//                .ignoresSafeArea()
             VStack(alignment: .leading, spacing: 0) {
                 toolbar
                 list
                 .font(.brandBody)
+                .foregroundColor(.primary)
             }
-            .foregroundColor(.label)
             .toolbar(content: {
                 ToolbarItemGroup(placement: .keyboard) {
                     HStack {
@@ -87,7 +87,6 @@ struct SettingsScreen: View {
                     Text("Back")
                 }
             }
-            .foregroundColor(.button)
         }
     }
     
@@ -122,7 +121,10 @@ struct SettingsScreen: View {
                 // - MARK: Support dev
                 supportDev
             }
-            .listRowBackground(Color.tableViewBackground)
+            .listRowBackground(
+                Rectangle()
+                    .fill(.quinary)
+            )
                 // - MARK: App info
             appInfo
                 .listRowBackground(Color.clear)
@@ -356,7 +358,7 @@ struct SettingsScreen: View {
                          + "\(observer.viewModel.appVersion)")
                 }
                 .font(.brandBody)
-                .foregroundColor(Color.labelFaded)
+                .opacity(0.5)
                 Spacer()
             }
         }

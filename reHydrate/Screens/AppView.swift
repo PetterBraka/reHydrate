@@ -21,8 +21,8 @@ struct AppView: View {
 
     var body: some View {
         ZStack {
-            Color.background
-                .ignoresSafeArea()
+//            Color.secondary
+//                .ignoresSafeArea()
             TabView(selection: $observer.tab) {
                 sceneFactory.makeSettingsScreen()
                     .tag(Tab.settings)

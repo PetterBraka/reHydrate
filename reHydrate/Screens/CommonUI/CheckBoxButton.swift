@@ -25,16 +25,15 @@ struct CheckBoxButton: View {
             HStack {
                 Text(isChecked ? highlightedText : text)
                     .font(.brandBody)
-                    .foregroundColor(.label)
                 Spacer()
                 if isChecked {
                     highlightedImage
                         .font(.brandTitle2)
-                        .foregroundColor(.button)
+                        .foregroundStyle(.secondary)
                 } else {
                     image
                         .font(.brandTitle2)
-                        .foregroundColor(.button)
+                        .foregroundStyle(.tertiary)
                 }
             }
             .contentShape(RoundedRectangle(cornerRadius: 10))

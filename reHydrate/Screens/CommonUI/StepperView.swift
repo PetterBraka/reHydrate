@@ -22,19 +22,16 @@ struct StepperView: View {
                     .frame(width: 16, height: 16)
             }
             .buttonStyle(.bordered)
-            .foregroundColor(.label)
+            .foregroundStyle(.primary)
             
             Button {} label: {
                 Text(value)
                     .font(.brandBody)
                     .fixedSize(horizontal: true, vertical: false)
-                    .frame(height: 16)
+                    .frame(width: 16, height: 16)
             }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.roundedRectangle)
-            .foregroundColor(.label)
-            .tint(.buttonHighlighted)
-            .shadow(radius: 1)
+            .buttonStyle(.bordered)
+            .shadow(radius: 2)
             
             Button {
                 onIncrement()
@@ -43,7 +40,7 @@ struct StepperView: View {
                     .frame(width: 16, height: 16)
             }
             .buttonStyle(.bordered)
-            .foregroundColor(.label)
+            .foregroundStyle(.primary)
         }
     }
 }

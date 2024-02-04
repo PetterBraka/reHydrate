@@ -24,7 +24,7 @@ struct HistoryScreen: View {
                 .getHeight($contentHeight)
                 .padding(.horizontal, 16)
         }
-        .background(Color.background, ignoresSafeAreaEdges: .all)
+//        .background(Color.background, ignoresSafeAreaEdges: .all)
         .onAppear {
             observer.perform(action: .didAppear)
         }
@@ -35,7 +35,7 @@ struct HistoryScreen: View {
     var toolbar: some View {
         CustomToolbar {
             Text(Localized.historyTitle)
-                .foregroundStyle(Color.label)
+//                .foregroundStyle(.primary)
         } leadingButton: {
             Button {
                 observer.perform(action: .didTapBack)
@@ -45,7 +45,6 @@ struct HistoryScreen: View {
                     Text("Back")
                 }
             }
-            .foregroundColor(.button)
         }
     }
     

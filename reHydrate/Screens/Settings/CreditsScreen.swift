@@ -23,13 +23,13 @@ struct CreditsScreen: View {
                         .padding(16)
                         .background {
                             RoundedRectangle(cornerRadius: 8)
-                                .foregroundColor(.tableViewBackground)
+//                                .foregroundColor(.tableViewBackground)
                         }
                     helpTranslateButton
                         .padding(16)
                         .background {
                             RoundedRectangle(cornerRadius: 8)
-                                .foregroundColor(.tableViewBackground)
+//                                .foregroundColor(.tableViewBackground)
                         }
                 }
             }
@@ -65,7 +65,6 @@ struct CreditsScreen: View {
                     .contentShape(Rectangle())
                 }
                 .font(.brandBody)
-                .foregroundColor(.label)
                 .disabled(person.url == nil)
                 if person != observer.viewModel.creditedPeople.last {
                     Divider()
@@ -89,7 +88,6 @@ struct CreditsScreen: View {
             }
             .contentShape(Rectangle())
             .font(.brandBody)
-            .foregroundColor(.label)
             .multilineTextAlignment(.leading)
         }
     }

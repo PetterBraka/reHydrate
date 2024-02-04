@@ -16,8 +16,6 @@ struct CustomToolbar<LeadingButton: View, TrailingButton: View>: View {
     @State private var leadingPadding: CGFloat = 0
     @State private var trailingPadding: CGFloat = 0
     
-    let background: Color
-    
     var body: some View {
         ZStack {
             buttonsView
@@ -54,54 +52,46 @@ struct CustomToolbar<LeadingButton: View, TrailingButton: View>: View {
     @ViewBuilder
     var backgroundView: some View {
         Rectangle()
-            .fill(background)
+            .fill(.background)
             .shadow(color: .black.opacity(0.25), radius: 2, y: 1)
             .ignoresSafeArea(.container, edges: .top)
     }
 }
 
 extension CustomToolbar {
-    init(background: Color = .background,
-         title: () -> Text,
+    init(title: () -> Text,
          leadingButton: (() -> LeadingButton)? = nil,
          trailingButton: (() -> TrailingButton)? = nil) {
         self.title = title()
         self.leadingButton = leadingButton?()
         self.trailingButton = trailingButton?()
-        self.background = background
     }
 }
 
 extension CustomToolbar where LeadingButton == EmptyView {
-    init(background: Color = .background,
-         title: () -> Text,
+    init(title: () -> Text,
          trailingButton: () -> TrailingButton) {
         self.title = title()
         self.leadingButton = nil
         self.trailingButton = trailingButton()
-        self.background = background
     }
 }
 
 extension CustomToolbar where TrailingButton == EmptyView {
-    init(background: Color = .background,
-         title: () -> Text,
+    init(title: () -> Text,
          leadingButton: () -> LeadingButton) {
         self.title = title()
         self.leadingButton = leadingButton()
         self.trailingButton = nil
-        self.background = background
     }
 }
 
 extension CustomToolbar where LeadingButton == EmptyView, 
                                 TrailingButton == EmptyView {
-    init(background: Color = .background,
-         title: () -> Text) {
+    init(title: () -> Text) {
         self.title = title()
         self.leadingButton = nil
         self.trailingButton = nil
-        self.background = background
     }
 }
 
