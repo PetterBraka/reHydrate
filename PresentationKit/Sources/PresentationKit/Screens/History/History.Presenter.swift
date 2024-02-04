@@ -82,7 +82,9 @@ extension Screen.History {
             case .didTapBack:
                 router.showHome()
             case .didAppear:
-                break
+                guard let selectedRange else { return }
+                await updateViewModelWithDataBetween(start: selectedRange.lowerBound,
+                                                     end: selectedRange.upperBound)
             case .didTapClear:
                 selectedRange = nil
                 updateViewModel(isLoading: false)
