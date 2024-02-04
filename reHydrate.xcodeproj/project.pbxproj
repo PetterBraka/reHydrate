@@ -574,17 +574,16 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
-				330C23D527665D4C00293092 /* AppDelegate.swift */,
-				3323160927430A060039EE23 /* CommonUI */,
 				A11180312AC3767F007E4585 /* Ports */,
-				33231623274A75530039EE23 /* reHydrateApp.swift */,
-				A183BCF62A33B75000D42033 /* Screens */,
-				A1614D512A362E7300235D02 /* Utilities */,
 				332315E8274273F20039EE23 /* Resources */,
-				33B28F6926BC7F6800DECA9F /* Extensions */,
-				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
+				A183BCF62A33B75000D42033 /* Screens */,
+				A185DAB52B6F7FF400B9318B /* Stubs */,
+				A1614D512A362E7300235D02 /* Utilities */,
+				330C23D527665D4C00293092 /* AppDelegate.swift */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
+				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */,
+				33231623274A75530039EE23 /* reHydrateApp.swift */,
 			);
 			path = reHydrate;
 			sourceTree = "<group>";
@@ -678,9 +677,6 @@
 		A149F2852B69B0EF00710609 /* DatabaseService */ = {
 			isa = PBXGroup;
 			children = (
-				A149F2972B69B93F00710609 /* DatabaseSpy.swift */,
-				A149F2982B69B93F00710609 /* DatabaseStub.swift */,
-				A149F2962B69B8B300710609 /* Models */,
 				A149F28E2B69B85900710609 /* DatabaseType.swift */,
 				A149F2862B69B0EF00710609 /* ConsumptionManager.swift */,
 				A149F2872B69B0EF00710609 /* DrinkManager.swift */,
@@ -688,14 +684,6 @@
 				A149F2892B69B0EF00710609 /* Database.swift */,
 			);
 			path = DatabaseService;
-			sourceTree = "<group>";
-		};
-		A149F2962B69B8B300710609 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				A149F29B2B69B95600710609 /* DumyModel.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		A149F2A22B69B9DD00710609 /* reHydrateTests */ = {
@@ -721,6 +709,7 @@
 		A1614D512A362E7300235D02 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				33B28F6926BC7F6800DECA9F /* Extensions */,
 				A1614D522A362E8C00235D02 /* SceneFactory.swift */,
 				A1EABF2D2ADAC80000591981 /* LocalizedString.swift */,
 				A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */,
@@ -749,10 +738,11 @@
 		A183BCF62A33B75000D42033 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				A13BFF5C2B1696F500E47671 /* History */,
 				332315F32742B3430039EE23 /* AppView.swift */,
-				A11D4CD72A3C34A500A70B9B /* Settings */,
+				3323160927430A060039EE23 /* CommonUI */,
+				A13BFF5C2B1696F500E47671 /* History */,
 				A183BCF72A33B75A00D42033 /* Home */,
+				A11D4CD72A3C34A500A70B9B /* Settings */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -764,6 +754,16 @@
 				A183BCF82A33B78400D42033 /* HomeScreen.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		A185DAB52B6F7FF400B9318B /* Stubs */ = {
+			isa = PBXGroup;
+			children = (
+				A149F29B2B69B95600710609 /* DumyModel.swift */,
+				A149F2972B69B93F00710609 /* DatabaseSpy.swift */,
+				A149F2982B69B93F00710609 /* DatabaseStub.swift */,
+			);
+			path = Stubs;
 			sourceTree = "<group>";
 		};
 		A1AA8DE12AF7825B00D12E74 /* Notification */ = {
@@ -1532,7 +1532,8 @@
 				A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */,
 			);
 			currentVersion = A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */;
-			path = reHydrate.xcdatamodeld;
+			name = reHydrate.xcdatamodeld;
+			path = reHydrate/reHydrate.xcdatamodeld;
 			sourceTree = SOURCE_ROOT;
 			versionGroupType = wrapper.xcdatamodel;
 		};
