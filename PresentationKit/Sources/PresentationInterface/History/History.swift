@@ -16,7 +16,6 @@ public enum History {
         case didTapBack
         case didAppear
         case didSelectChart(ViewModel.ChartData.Option)
-        case didChangeHighlightedMonthTo(Date)
         case didTapClear
         case didTap(Date)
     }

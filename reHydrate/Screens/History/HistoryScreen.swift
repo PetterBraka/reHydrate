@@ -122,9 +122,7 @@ struct HistoryScreen: View {
             }
             let dateBinding = Binding {
                 observer.viewModel.calendar.highlightedMonth
-            } set: { date in
-                observer.perform(action: .didChangeHighlightedMonthTo(date))
-            }
+            } set: { _ in }
             CalendarView(
                 selectedDate: dateBinding,
                 range: observer.viewModel.calendar.range,

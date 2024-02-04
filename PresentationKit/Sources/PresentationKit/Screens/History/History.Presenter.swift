@@ -88,8 +88,6 @@ extension Screen.History {
                 updateViewModel(isLoading: false)
             case .didSelectChart(let chart):
                 updateViewModel(isLoading: false, chartOption: chart)
-            case let .didChangeHighlightedMonthTo(date):
-                updateViewModel(isLoading: false, highlightedMonth: date)
             case let .didTap(date):
                 updateViewModel(isLoading: true, highlightedMonth: date)
                 let newRange: ClosedRange<Date>
@@ -136,25 +134,28 @@ private extension Screen.History.Presenter {
             ""
         }
         
+        let details = ViewModel.Details(
+            averageConsumed: getCleanTitle(averageConsumed),
+            averageGoal: getCleanTitle(averageGoal),
+            totalConsumed: getCleanTitle(totalConsumed),
+            totalGoal: getCleanTitle(totalGoal)
+        )
+        let chart = ViewModel.ChartData(
+            title: title,
+            points: chartPoints ?? viewModel.chart.points,
+            selectedOption: chartOption ?? viewModel.chart.selectedOption
+        )
+        let calendar = ViewModel.CalendarData(
+            highlightedMonth: highlightedMonth ?? viewModel.calendar.highlightedMonth,
+            weekdayStart: weekdayStart ?? viewModel.calendar.weekdayStart,
+            range: calendarRange ?? viewModel.calendar.range,
+            days: daysFound ?? viewModel.calendar.days
+        )
         viewModel = .init(
             isLoading: isLoading,
-            details: .init(
-                averageConsumed: getCleanTitle(averageConsumed),
-                averageGoal: getCleanTitle(averageGoal),
-                totalConsumed: getCleanTitle(totalConsumed),
-                totalGoal: getCleanTitle(totalGoal)
-            ),
-            chart: .init(
-                title: title,
-                points: chartPoints ?? viewModel.chart.points,
-                selectedOption: chartOption ?? viewModel.chart.selectedOption
-            ),
-            calendar: .init(
-                highlightedMonth: highlightedMonth ?? viewModel.calendar.highlightedMonth,
-                weekdayStart: weekdayStart ?? viewModel.calendar.weekdayStart,
-                range: calendarRange ?? viewModel.calendar.range,
-                days: daysFound ?? viewModel.calendar.days
-            ),
+            details: details,
+            chart: chart,
+            calendar: calendar,
             selectedRange: selectedRange,
             selectedDays: daysSelected ?? viewModel.selectedDays,
             error: error
@@ -194,7 +195,7 @@ private extension Screen.History.Presenter {
     func updateViewModelWithDataBetween(start: Date, end: Date) async {
         let days = await fetchDays(startDate: start, endDate: end)
         let points = await getChartData(from: days)
-        let daysSelected = engine.dateService.daysBetween(start, end: end)
+        let daysSelected = engine.dateService.daysBetween(start, end: end) + 1
         
         var totalGoal = 0.0
         var totalConsumed = 0.0
