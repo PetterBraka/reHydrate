@@ -12,7 +12,7 @@ extension Font {
     private static let font = "AmericanTypewriter"
     static let brandLargeHeader = Font.custom(font,
                                               size: 50,
-                                              relativeTo: .headline)
+                                              relativeTo: .largeTitle)
     static let brandTitle3 = Font.custom(font,
                                          size: 30,
                                          relativeTo: .title3)
@@ -28,4 +28,16 @@ extension Font {
     static let brandCaption = Font.custom(font,
                                           size: 10,
                                           relativeTo: .caption)
+    
+    static let extraLargeTitle2 = Font.custom(
+        UIFont.preferredFont(forTextStyle: .extraLargeTitle2).fontName,
+        size: 50,
+        relativeTo: .largeTitle
+    )
+    
+    static let extraLargeTitle = Font.custom(
+        UIFont.preferredFont(forTextStyle: .extraLargeTitle).fontName,
+        size: 40,
+        relativeTo: .largeTitle
+    )
 }

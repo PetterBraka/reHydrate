@@ -12,6 +12,7 @@ import PresentationKit
 import EngineKit
 
 struct HomeScreen: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var observer: HomeScreenObservable
 
     var body: some View {
@@ -108,25 +109,19 @@ struct HomeScreen: View {
                 observer.perform(action: .didTapSettings)
             } label: {
                 Image.settings
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 64)
-                    .font(.brandLargeHeader)
             }
-            
             Spacer()
-            
             Button {
                 observer.perform(action: .didTapHistory)
             } label: {
                 Image.calendar
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 64)
-                    .font(.brandLargeHeader)
             }
         }
+        .font(.extraLargeTitle2)
+        .tint(.secondary)
         .padding(.horizontal, 24)
+        .padding(.vertical, 16)
+        .zIndex(2)
     }
 }
 
