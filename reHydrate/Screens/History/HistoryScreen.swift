@@ -23,12 +23,13 @@ struct HistoryScreen: View {
             content
                 .getHeight($contentHeight)
                 .padding(.horizontal, 16)
+                .font(.Theme.body)
         }
 //        .background(Color.background, ignoresSafeAreaEdges: .all)
         .onAppear {
             observer.perform(action: .didAppear)
         }
-        .font(.brandBody)
+        .font(.Theme.body)
     }
     
     @ViewBuilder
@@ -131,7 +132,7 @@ struct HistoryScreen: View {
             } customDayView: { day in
                 VStack(alignment: .center, spacing: 0) {
                     Text("\(day.day)")
-                        .font(.caption)
+                        .font(.Theme.caption)
                     getIndicatorImage(for: day.date)
                         .aspectRatio(contentMode: .fit)
                         .frame(maxHeight: 20)
@@ -153,7 +154,7 @@ struct HistoryScreen: View {
                 }
             } customWeekdayLabel: { weekday in
                 Text(weekday)
-                    .font(.caption)
+                    .font(.Theme.caption)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
                     .background {

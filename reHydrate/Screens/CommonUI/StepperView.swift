@@ -14,34 +14,47 @@ struct StepperView: View {
     var onDecrement: () -> Void
     
     var body: some View {
-        HStack(spacing: 4) {
+        HStack {
             Button {
                 onDecrement()
             } label: {
                 Image.minus
-                    .frame(width: 16, height: 16)
+                    .aspectRatio(contentMode: .fill)
             }
-            .buttonStyle(.bordered)
+            .padding(4)
             .foregroundStyle(.primary)
-            
-            Button {} label: {
-                Text(value)
-                    .font(.brandBody)
-                    .fixedSize(horizontal: true, vertical: false)
-                    .frame(width: 16, height: 16)
+            .background {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(.quaternary)
+                    .aspectRatio(contentMode: .fill)
             }
-            .buttonStyle(.bordered)
-            .shadow(radius: 2)
+            
+            Text(value)
+                .aspectRatio(contentMode: .fill)
+                .padding(4)
+                .foregroundStyle(.primary)
+                .background {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(.tertiary)
+                        .aspectRatio(contentMode: .fill)
+                }
+                .padding(.horizontal, 4)
             
             Button {
                 onIncrement()
             } label: {
                 Image.plus
-                    .frame(width: 16, height: 16)
+                    .aspectRatio(contentMode: .fill)
             }
-            .buttonStyle(.bordered)
             .foregroundStyle(.primary)
+            .padding(4)
+            .background {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(.quaternary)
+                    .aspectRatio(contentMode: .fill)
+            }
         }
+        .font(.Theme.callout)
     }
 }
 

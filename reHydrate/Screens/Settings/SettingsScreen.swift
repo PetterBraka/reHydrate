@@ -14,24 +14,28 @@ import EngineKit
 struct SettingsScreen: View {
     @ObservedObject var observer: SettingsScreenObservable
     @FocusState private var focusedField: Container?
-
+    
+    init(observer: SettingsScreenObservable) {
+        self.observer = observer
+        UISegmentedControl.appearance().setTitleTextAttributes([.font: UIFont.Theme.callout],
+                                                               for: .normal)
+    }
+    
     var body: some View {
         ZStack {
-//            Color.background
-//                .ignoresSafeArea()
             VStack(alignment: .leading, spacing: 0) {
                 toolbar
                 list
-                .font(.brandBody)
-                .foregroundColor(.primary)
+                    .font(.Theme.callout)
+                    .foregroundColor(.primary)
             }
             .toolbar(content: {
                 ToolbarItemGroup(placement: .keyboard) {
                     HStack {
                         Spacer()
                         Button(LocalizedString("ui.done.button",
-                                                 value: "done",
-                                                 comment: "An button to dismiss a the keyboard.")) {
+                                               value: "done",
+                                               comment: "An button to dismiss a the keyboard.")) {
                             focusedField = nil
                         }
                     }
@@ -125,7 +129,7 @@ struct SettingsScreen: View {
                 Rectangle()
                     .fill(.quinary)
             )
-                // - MARK: App info
+            // - MARK: App info
             appInfo
                 .listRowBackground(Color.clear)
         }
@@ -143,11 +147,11 @@ struct SettingsScreen: View {
                     observer.perform(action: .didSetDarkMode(newValue))
                 },
                 text: LocalizedString("ui.settings.appearance.lightMode",
-                                        value: "Light mode",
-                                        comment: "The light them of the app"),
+                                      value: "Light mode",
+                                      comment: "The light them of the app"),
                 highlightedText: LocalizedString("ui.settings.appearance.darkMode",
-                                                   value: "Dark mode",
-                                                   comment: "The dark theme of the app"),
+                                                 value: "Dark mode",
+                                                 comment: "The dark theme of the app"),
                 image: .lightMode,
                 highlightedImage: .darkMode)
             Button {
@@ -155,8 +159,8 @@ struct SettingsScreen: View {
             } label: {
                 HStack {
                     Text(LocalizedString("ui.settings.appearance.changeAppIcon",
-                                           value: "Change app icon",
-                                           comment: "Allows the user to change the apps icon on their device"))
+                                         value: "Change app icon",
+                                         comment: "Allows the user to change the apps icon on their device"))
                     Spacer()
                     Image.open
                 }
@@ -169,8 +173,8 @@ struct SettingsScreen: View {
         Section {
             HStack {
                 Text(LocalizedString("ui.settings.editGoal.setGoal",
-                                       value: "Set your goal",
-                                       comment: "Set the users consumption goal"))
+                                     value: "Set your goal",
+                                     comment: "Set the users consumption goal"))
                 Spacer()
                 StepperView(value: observer.viewModel.goal.clean) {
                     observer.perform(action: .didTapIncrementGoal)
@@ -186,20 +190,20 @@ struct SettingsScreen: View {
         Section {
             HStack {
                 Text(LocalizedString("ui.settings.units.title",
-                                       value: "Units",
-                                       comment: "The unit system used in the app"))
+                                     value: "Units",
+                                     comment: "The unit system used in the app"))
                 Spacer()
                 Picker("", selection: Binding(
                     get: { observer.viewModel.unitSystem },
                     set: { observer.perform(action: .didSetUnitSystem($0)) })
                 ) {
                     Text(LocalizedString("ui.settings.units.metric",
-                                           value: "Metric",
-                                           comment: "The metric unit system"))
+                                         value: "Metric",
+                                         comment: "The metric unit system"))
                     .tag(SettingsScreenObservable.ViewModel.UnitSystem.metric)
                     Text(LocalizedString("ui.settings.units.imperial",
-                                           value: "Imperial",
-                                           comment: "The imperial/british unit system"))
+                                         value: "Imperial",
+                                         comment: "The imperial/british unit system"))
                     .tag(SettingsScreenObservable.ViewModel.UnitSystem.imperial)
                 }
                 .pickerStyle(.segmented)
@@ -218,11 +222,11 @@ struct SettingsScreen: View {
                     observer.perform(action: .didSetReminders($0))
                 },
                 text: LocalizedString("ui.settings.notification.turnOn",
-                                        value: "Turn on reminders",
-                                        comment: "Allows the user to turn on reminders to drink water"),
+                                      value: "Turn on reminders",
+                                      comment: "Allows the user to turn on reminders to drink water"),
                 highlightedText: LocalizedString("ui.settings.notification.turnOff",
-                                                   value: "Turn off reminders",
-                                                   comment: "Allows the user to turn off reminders to drink water"),
+                                                 value: "Turn off reminders",
+                                                 comment: "Allows the user to turn off reminders to drink water"),
                 image: .remindersOff,
                 highlightedImage: .remindersOn)
             if observer.viewModel.notifications.isOn {
@@ -233,8 +237,8 @@ struct SettingsScreen: View {
                         observer.perform(action: .didSetRemindersStart($0))
                     }
                     DatePicker(LocalizedString("ui.settings.notification.startingTime",
-                                                 value: "Starting time",
-                                                 comment: "The starting time of the reminders"),
+                                               value: "Starting time",
+                                               comment: "The starting time of the reminders"),
                                selection: date,
                                in: observer.viewModel.notifications.startRange,
                                displayedComponents: .hourAndMinute)
@@ -247,16 +251,16 @@ struct SettingsScreen: View {
                     }
                     DatePicker(
                         LocalizedString("ui.settings.notification.endingTime",
-                                          value: "Ending time",
-                                          comment: "The ending time of the reminders"),
+                                        value: "Ending time",
+                                        comment: "The ending time of the reminders"),
                         selection: date,
                         in: observer.viewModel.notifications.stopRange,
                         displayedComponents: .hourAndMinute)
                 }
                 HStack {
                     Text(LocalizedString("ui.settings.notification.frequency",
-                                           value: "Frequency",
-                                           comment: "The frequency of the reminders in minutes"))
+                                         value: "Frequency",
+                                         comment: "The frequency of the reminders in minutes"))
                     Spacer()
                     StepperView(value: "\(observer.viewModel.notifications.frequency)") {
                         observer.perform(action: .didTapIncrementFrequency)
@@ -276,8 +280,8 @@ struct SettingsScreen: View {
             } label: {
                 HStack {
                     Text(LocalizedString("ui.settings.credits",
-                                           value: "Credits",
-                                           comment: "Who has help with the creation and translation of the app"))
+                                         value: "Credits",
+                                         comment: "Who has help with the creation and translation of the app"))
                     Spacer()
                     Image.open
                 }
@@ -293,8 +297,8 @@ struct SettingsScreen: View {
             } label: {
                 HStack {
                     Text(LocalizedString("ui.settings.aboutApp.contactUs",
-                                           value: "Contact me",
-                                           comment: "Our contact options"))
+                                         value: "Contact me",
+                                         comment: "Our contact options"))
                     Spacer()
                     Image.open
                 }
@@ -305,8 +309,8 @@ struct SettingsScreen: View {
             } label: {
                 HStack {
                     Text(LocalizedString("ui.settings.aboutApp.privacyPolicy",
-                                           value: "Privacy policy",
-                                           comment: "Our privacy policy"))
+                                         value: "Privacy policy",
+                                         comment: "Our privacy policy"))
                     Spacer()
                     Image.open
                 }
@@ -317,8 +321,8 @@ struct SettingsScreen: View {
             } label: {
                 HStack {
                     Text(LocalizedString("ui.settings.aboutApp.developerInstagram",
-                                           value: "Developer Instagram",
-                                           comment: "The developers instagram"))
+                                         value: "Developer Instagram",
+                                         comment: "The developers instagram"))
                     Spacer()
                     Image.open
                 }
@@ -335,8 +339,8 @@ struct SettingsScreen: View {
             } label: {
                 HStack {
                     Text(LocalizedString("ui.settings.aboutApp.metch",
-                                           value: "Interested in merch?",
-                                           comment: "Asks the user if they are interested in buying app merchandise"))
+                                         value: "Interested in merch?",
+                                         comment: "Asks the user if they are interested in buying app merchandise"))
                     Spacer()
                     Image.open
                 }
@@ -353,11 +357,10 @@ struct SettingsScreen: View {
                 VStack {
                     Text("reHydrate")
                     Text(LocalizedString("ui.settings.aboutApp.appInfo",
-                                           value: "Version:",
-                                           comment: "The version of the app") 
+                                         value: "Version:",
+                                         comment: "The version of the app")
                          + "\(observer.viewModel.appVersion)")
                 }
-                .font(.brandBody)
                 .opacity(0.5)
                 Spacer()
             }

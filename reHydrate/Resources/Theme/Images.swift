@@ -87,4 +87,5 @@ extension Image {
 
     static let remindersOn = Image(systemName: "bell.circle.fill")
     static let remindersOff = Image(systemName: "bell.slash.circle")
+    static let ellipsis = Image(systemName: "ellipsis.circle.fill")
 }

@@ -435,6 +435,7 @@
 			children = (
 				A1EABF262ADA840600591981 /* ContainerViews */,
 				A126D2502A7667C200A296BA /* CheckBoxButton.swift */,
+				A1EABF3C2AF40B5000591981 /* CustomToolbar.swift */,
 				A126D2542A76684E00A296BA /* StepperView.swift */,
 			);
 			path = CommonUI;
@@ -780,7 +781,6 @@
 				A1EABF272ADA842100591981 /* EditContainerScreen.swift */,
 				A1EABF2F2ADAD57600591981 /* EditContainerScreenObservable.swift */,
 				A1EABF2B2ADA936F00591981 /* FilledContainer.swift */,
-				A1EABF3C2AF40B5000591981 /* CustomToolbar.swift */,
 			);
 			path = ContainerViews;
 			sourceTree = "<group>";

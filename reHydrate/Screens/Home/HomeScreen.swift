@@ -39,25 +39,25 @@ struct HomeScreen: View {
     private var header: some View {
         VStack(spacing: 8) {
             Text(LocalizedString("ui.app,title.text",
-                                   value: "reHydrate",
-                                   comment: "The name of the app"))
-                .font(.brandTitle3)
-                .bold()
+                                 value: "reHydrate",
+                                 comment: "The name of the app"))
+            .font(.Theme.extraLargeTitle)
+            .bold()
             Text(observer.viewModel.dateTitle)
                 .lineLimit(nil)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-                .font(.brandTitle2)
+                .font(.Theme.title2)
             Text("\(observer.viewModel.consumption.clean)" +
                  "/" +
                  "\(observer.viewModel.goal.clean)" +
                  "\(observer.viewModel.largeUnit.symbol)")
-                .font(.brandTitle3)
-                .bold()
-                .padding(.top, 16)
+            .font(.Theme.title2)
+            .bold()
+            .padding(.top, 16)
         }
     }
-
+    
     @ViewBuilder
     private var drinksSection: some View {
         HStack(alignment: .bottom) {
@@ -117,7 +117,7 @@ struct HomeScreen: View {
                 Image.calendar
             }
         }
-        .font(.extraLargeTitle2)
+        .font(.Theme.extraLargeTitle2)
         .tint(.secondary)
         .padding(.horizontal, 24)
         .padding(.vertical, 16)

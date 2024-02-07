@@ -46,12 +46,13 @@ struct DrinkView<MenuItems: View>: View {
             }
             HStack {
                 Text("\(size.clean) \(unit.symbol)")
-                    .font(.brandBody)
+                    .font(.Theme.callout)
                 Menu {
                     menuItems()
                 } label: {
-                    Image(systemName: "ellipsis.circle.fill")
+                    Image.ellipsis
                 }
+                .font(.caption2)
                 .foregroundStyle(.tertiary)
             }
         }

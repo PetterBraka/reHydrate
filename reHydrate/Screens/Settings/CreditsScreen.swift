@@ -64,7 +64,7 @@ struct CreditsScreen: View {
                     }
                     .contentShape(Rectangle())
                 }
-                .font(.brandBody)
+                .font(.Theme.body)
                 .disabled(person.url == nil)
                 if person != observer.viewModel.creditedPeople.last {
                     Divider()
@@ -87,7 +87,7 @@ struct CreditsScreen: View {
                 Image.open
             }
             .contentShape(Rectangle())
-            .font(.brandBody)
+            .font(.Theme.body)
             .multilineTextAlignment(.leading)
         }
     }
