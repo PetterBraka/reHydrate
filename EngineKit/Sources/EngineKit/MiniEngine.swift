@@ -13,6 +13,8 @@ import UserPreferenceServiceInterface
 import UserPreferenceService
 import DateServiceInterface
 import DateService
+import DrinkServiceInterface
+import DrinkService
 
 // The Mini engine is intended for app extensions (Watch & Widgets)
 public final class MiniEngine {
@@ -35,7 +37,7 @@ public final class MiniEngine {
     public lazy var logger: LoggingService = LoggingService(subsystem: subsystem)
     public lazy var userPreferenceService: UserPreferenceServiceType = UserPreferenceService(defaults: sharedDefaults)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
-    public lazy var dateService: DateServiceType = DateService(calendar: .current)
+    public lazy var dateService: DateServiceType = DateService()
 }
 
 extension MiniEngine: 

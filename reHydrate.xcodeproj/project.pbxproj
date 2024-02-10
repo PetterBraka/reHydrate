@@ -21,7 +21,6 @@
 		332315E72742724D0039EE23 /* Drinkview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315E62742724D0039EE23 /* Drinkview.swift */; };
 		332315F42742B3430039EE23 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332315F32742B3430039EE23 /* AppView.swift */; };
 		33231624274A75530039EE23 /* reHydrateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33231623274A75530039EE23 /* reHydrateApp.swift */; };
-		332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332E5A4524CCBF5000EF4D79 /* Extensions.swift */; };
 		335DA2F1276017EC002266D2 /* blueWhite@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2A0276017E8002266D2 /* blueWhite@1x.png */; };
 		335DA2F2276017EC002266D2 /* pinkWhite@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2A1276017E8002266D2 /* pinkWhite@3x.png */; };
 		335DA2F3276017EC002266D2 /* blackWhite@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2A2276017E8002266D2 /* blackWhite@1x.png */; };
@@ -103,23 +102,11 @@
 		335DA33F276017EC002266D2 /* whiteBlue@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2EE276017EC002266D2 /* whiteBlue@3x.png */; };
 		335DA340276017EC002266D2 /* whiteGreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2EF276017EC002266D2 /* whiteGreen@2x.png */; };
 		335DA341276017EC002266D2 /* blackYellow@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA2F0276017EC002266D2 /* blackYellow@1x.png */; };
-		33600BD42764B3800061A771 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33600BD32764B3800061A771 /* Image.swift */; };
 		33694FF3277CBADA00D2FE66 /* CreditsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33694FF2277CBADA00D2FE66 /* CreditsScreen.swift */; };
-		3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
-		339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */; };
 		33B28F5A26B6ED2B00DECA9F /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */; };
 		33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6A26BC7FAB00DECA9F /* UIImage+Extensions.swift */; };
 		33B28F6D26BC7FCD00DECA9F /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6C26BC7FCD00DECA9F /* Double+Extensions.swift */; };
 		33B28F6F26BC802800DECA9F /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6E26BC802800DECA9F /* UITextField+Extensions.swift */; };
-		33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58825123A1900658867 /* Day+CoreDataClass.swift */; };
-		33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */; };
-		33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BDC24B47D0900699B1A /* Interface.storyboard */; };
-		33DF9BE024B47D0A00699B1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BDF24B47D0A00699B1A /* Assets.xcassets */; };
-		33DF9BEC24B47D0A00699B1A /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */; };
-		33DF9BEE24B47D0A00699B1A /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BED24B47D0A00699B1A /* ExtensionDelegate.swift */; };
-		33DF9BF024B47D0A00699B1A /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */; };
-		33DF9BF224B47D0A00699B1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33DF9BF124B47D0A00699B1A /* Assets.xcassets */; };
-		33DF9BF624B47D0A00699B1A /* reHydrate-watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7A274D06070049E414 /* SettingsScreen.swift */; };
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
@@ -166,13 +153,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		33DF9BF424B47D0A00699B1A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 33DF9BD924B47D0900699B1A;
-			remoteInfo = "reHydrate-watch";
-		};
 		A149F2A52B69B9DD00710609 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
@@ -189,7 +169,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				33DF9BF624B47D0A00699B1A /* reHydrate-watch.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,7 +190,6 @@
 		332315E62742724D0039EE23 /* Drinkview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drinkview.swift; sourceTree = "<group>"; };
 		332315F32742B3430039EE23 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		33231623274A75530039EE23 /* reHydrateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reHydrateApp.swift; sourceTree = "<group>"; };
-		332E5A4524CCBF5000EF4D79 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		333B1326258D00F100340FB2 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		335DA2A0276017E8002266D2 /* blueWhite@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueWhite@1x.png"; sourceTree = "<group>"; };
 		335DA2A1276017E8002266D2 /* pinkWhite@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pinkWhite@3x.png"; sourceTree = "<group>"; };
@@ -294,27 +272,14 @@
 		335DA2EE276017EC002266D2 /* whiteBlue@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteBlue@3x.png"; sourceTree = "<group>"; };
 		335DA2EF276017EC002266D2 /* whiteGreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteGreen@2x.png"; sourceTree = "<group>"; };
 		335DA2F0276017EC002266D2 /* blackYellow@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackYellow@1x.png"; sourceTree = "<group>"; };
-		33600BD32764B3800061A771 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		33694FF2277CBADA00D2FE66 /* CreditsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsScreen.swift; sourceTree = "<group>"; };
 		3378767324378A9400F5A732 /* reHydrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reHydrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "watchOS-CoreData.xcdatamodel"; sourceTree = "<group>"; };
 		33B28F5926B6ED2B00DECA9F /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		33B28F6A26BC7FAB00DECA9F /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		33B28F6C26BC7FCD00DECA9F /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		33B28F6E26BC802800DECA9F /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
-		33BEA58825123A1900658867 /* Day+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataClass.swift"; sourceTree = "<group>"; };
-		33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Day+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33C1288A256267D100C6FA8B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33CD6D58243BE53B00EF0335 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "reHydrate-watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		33DF9BDD24B47D0900699B1A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		33DF9BDF24B47D0A00699B1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		33DF9BE124B47D0A00699B1A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
-		33DF9BED24B47D0A00699B1A /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
-		33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
-		33DF9BF124B47D0A00699B1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		33DF9BF324B47D0A00699B1A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33EC3A7A274D06070049E414 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		33EC3A872754BA420049E414 /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
 		33EFF3FD2470449A00D0A003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -342,6 +307,7 @@
 		A183BCF82A33B78400D42033 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		A183BD012A33C70300D42033 /* HomeScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenObservable.swift; sourceTree = "<group>"; };
 		A1A825E62B7903BE00EA98EC /* DBKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DBKit; sourceTree = "<group>"; };
+		A185DB272B77BAA900B9318B /* PresentationWatchKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationWatchKit; sourceTree = "<group>"; };
 		A1AA8DD82AF634C500D12E74 /* AppIconScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreen.swift; sourceTree = "<group>"; };
 		A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreenObservable.swift; sourceTree = "<group>"; };
 		A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlternateIconsServicePort.swift; sourceTree = "<group>"; };
@@ -377,13 +343,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A149F29E2B69B9DD00710609 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A34F8E3F57DD5DEC8477CA29 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -515,23 +474,14 @@
 			path = AppIcons;
 			sourceTree = "<group>";
 		};
-		33600BD22764B3740061A771 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				33600BD32764B3800061A771 /* Image.swift */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
 				A1A825E62B7903BE00EA98EC /* DBKit */,
+				A185DB272B77BAA900B9318B /* PresentationWatchKit */,
 				A1AF32D22A346CA200FD0C7C /* EngineKit */,
 				A114C6C02A63DAAE00F53770 /* PresentationKit */,
 				3378767524378A9400F5A732 /* reHydrate */,
-				33DF9BDB24B47D0900699B1A /* reHydrate-watch */,
-				33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */,
 				A149F2A22B69B9DD00710609 /* reHydrateTests */,
 				3378767424378A9400F5A732 /* Products */,
 				F887073E19DFDDCFF694E7E8 /* Frameworks */,
@@ -542,7 +492,6 @@
 			isa = PBXGroup;
 			children = (
 				3378767324378A9400F5A732 /* reHydrate.app */,
-				33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */,
 				A149F2A12B69B9DD00710609 /* reHydrateTests.xctest */,
 			);
 			name = Products;
@@ -577,33 +526,6 @@
 				A1E0A8192B69BB1E007A0957 /* Date+Extensions.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		33DF9BDB24B47D0900699B1A /* reHydrate-watch */ = {
-			isa = PBXGroup;
-			children = (
-				33DF9BDC24B47D0900699B1A /* Interface.storyboard */,
-				33DF9BDF24B47D0A00699B1A /* Assets.xcassets */,
-				33DF9BE124B47D0A00699B1A /* Info.plist */,
-			);
-			path = "reHydrate-watch";
-			sourceTree = "<group>";
-		};
-		33DF9BEA24B47D0A00699B1A /* reHydrate-watch Extension */ = {
-			isa = PBXGroup;
-			children = (
-				33600BD22764B3740061A771 /* Resources */,
-				33DF9BEB24B47D0A00699B1A /* InterfaceController.swift */,
-				33DF9BED24B47D0A00699B1A /* ExtensionDelegate.swift */,
-				332E5A4524CCBF5000EF4D79 /* Extensions.swift */,
-				33DF9BEF24B47D0A00699B1A /* ComplicationController.swift */,
-				33DF9BF124B47D0A00699B1A /* Assets.xcassets */,
-				33DF9BF324B47D0A00699B1A /* Info.plist */,
-				339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */,
-				33BEA58825123A1900658867 /* Day+CoreDataClass.swift */,
-				33BEA58C25123A6A00658867 /* Day+CoreDataProperties.swift */,
-			);
-			path = "reHydrate-watch Extension";
 			sourceTree = "<group>";
 		};
 		A111802E2AC36A86007E4585 /* Notifications */ = {
@@ -751,7 +673,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				33DF9BF524B47D0A00699B1A /* PBXTargetDependency */,
 			);
 			name = reHydrate;
 			packageProductDependencies = (
@@ -762,23 +683,6 @@
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
-			productType = "com.apple.product-type.application";
-		};
-		33DF9BD924B47D0900699B1A /* reHydrate-watch */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 33DF9BFD24B47D0A00699B1A /* Build configuration list for PBXNativeTarget "reHydrate-watch" */;
-			buildPhases = (
-				33DF9BD824B47D0900699B1A /* Resources */,
-				A34F8E3F57DD5DEC8477CA29 /* Frameworks */,
-				33DF9BE224B47D0A00699B1A /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "reHydrate-watch";
-			productName = "reHydrate-watch";
-			productReference = 33DF9BDA24B47D0900699B1A /* reHydrate-watch.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A149F2A02B69B9DD00710609 /* reHydrateTests */ = {
@@ -816,9 +720,6 @@
 					3378767224378A9400F5A732 = {
 						CreatedOnToolsVersion = 11.4;
 					};
-					33DF9BD924B47D0900699B1A = {
-						CreatedOnToolsVersion = 11.5;
-					};
 					A149F2A02B69B9DD00710609 = {
 						CreatedOnToolsVersion = 15.2;
 						TestTargetID = 3378767224378A9400F5A732;
@@ -845,7 +746,6 @@
 			projectRoot = "";
 			targets = (
 				3378767224378A9400F5A732 /* reHydrate */,
-				33DF9BD924B47D0900699B1A /* reHydrate-watch */,
 				A149F2A02B69B9DD00710609 /* reHydrateTests */,
 			);
 		};
@@ -952,17 +852,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		33DF9BD824B47D0900699B1A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3390F51624C8DF8E00B7D350 /* Localizable.strings in Resources */,
-				33DF9BE024B47D0A00699B1A /* Assets.xcassets in Resources */,
-				33DF9BF224B47D0A00699B1A /* Assets.xcassets in Resources */,
-				33DF9BDE24B47D0900699B1A /* Interface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A149F29F2B69B9DD00710609 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1024,21 +913,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		33DF9BE224B47D0A00699B1A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				339491E6250A356B0069BACC /* watchOS-CoreData.xcdatamodeld in Sources */,
-				33600BD42764B3800061A771 /* Image.swift in Sources */,
-				33DF9BEE24B47D0A00699B1A /* ExtensionDelegate.swift in Sources */,
-				332E5A4624CCBF5000EF4D79 /* Extensions.swift in Sources */,
-				33BEA58D25123A6A00658867 /* Day+CoreDataProperties.swift in Sources */,
-				33DF9BEC24B47D0A00699B1A /* InterfaceController.swift in Sources */,
-				33DF9BF024B47D0A00699B1A /* ComplicationController.swift in Sources */,
-				33BEA58925123A1900658867 /* Day+CoreDataClass.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A149F29D2B69B9DD00710609 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1050,11 +924,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		33DF9BF524B47D0A00699B1A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 33DF9BD924B47D0900699B1A /* reHydrate-watch */;
-			targetProxy = 33DF9BF424B47D0A00699B1A /* PBXContainerItemProxy */;
-		};
 		A149F2A62B69B9DD00710609 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3378767224378A9400F5A732 /* reHydrate */;
@@ -1063,14 +932,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		33DF9BDC24B47D0900699B1A /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				33DF9BDD24B47D0900699B1A /* Base */,
-			);
-			name = Interface.storyboard;
-			sourceTree = "<group>";
-		};
 		33EFF3FE2470449A00D0A003 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1216,6 +1077,7 @@
 		3378768824378A9800F5A732 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -1241,6 +1103,7 @@
 		3378768924378A9800F5A732 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = reHydrate/reHydrate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -1259,56 +1122,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		33DF9BF724B47D0A00699B1A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = DCQ3V8BLU5;
-				INFOPLIST_FILE = "reHydrate-watch/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 5.2.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
-			};
-			name = Debug;
-		};
-		33DF9BF824B47D0A00699B1A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = DCQ3V8BLU5;
-				INFOPLIST_FILE = "reHydrate-watch/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 5.2.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Release;
 		};
@@ -1380,15 +1193,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		33DF9BFD24B47D0A00699B1A /* Build configuration list for PBXNativeTarget "reHydrate-watch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				33DF9BF724B47D0A00699B1A /* Debug */,
-				33DF9BF824B47D0A00699B1A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		A149F2A72B69B9DD00710609 /* Build configuration list for PBXNativeTarget "reHydrateTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1432,16 +1236,6 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		339491E4250A356B0069BACC /* watchOS-CoreData.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */,
-			);
-			currentVersion = 339491E5250A356B0069BACC /* watchOS-CoreData.xcdatamodel */;
-			path = "watchOS-CoreData.xcdatamodeld";
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
 		A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (

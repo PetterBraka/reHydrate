@@ -12,7 +12,8 @@ let package: Package = {
         name: engineKit,
         platforms: [
             .iOS(.v16),
-            .macOS(.v13)
+            .macOS(.v13),
+            .watchOS(.v10)
         ],
         products: [
             .library(name: engineKit, targets: [engineKit]),
