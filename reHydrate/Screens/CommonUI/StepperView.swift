@@ -18,13 +18,13 @@ struct StepperView: View {
             Button(action: onDecrement) {
                 Image.minus
                     .aspectRatio(contentMode: .fill)
-            }
-            .padding(4)
-            .foregroundStyle(.primary)
-            .background {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(.quaternary)
-                    .aspectRatio(contentMode: .fill)
+                    .padding(4)
+                    .foregroundStyle(.primary)
+                    .background {
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(.quaternary)
+                            .aspectRatio(contentMode: .fill)
+                    }
             }
             
             Text(value)
@@ -41,13 +41,13 @@ struct StepperView: View {
             Button(action: onIncrement){
                 Image.plus
                     .aspectRatio(contentMode: .fill)
-            }
-            .foregroundStyle(.primary)
-            .padding(4)
-            .background {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(.quaternary)
-                    .aspectRatio(contentMode: .fill)
+                    .foregroundStyle(.primary)
+                    .padding(4)
+                    .background {
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(.quaternary)
+                            .aspectRatio(contentMode: .fill)
+                    }
             }
         }
         .font(.Theme.callout)
