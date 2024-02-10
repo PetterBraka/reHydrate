@@ -15,9 +15,7 @@ struct StepperView: View {
     
     var body: some View {
         HStack {
-            Button {
-                onDecrement()
-            } label: {
+            Button(action: onDecrement) {
                 Image.minus
                     .aspectRatio(contentMode: .fill)
             }
@@ -31,18 +29,16 @@ struct StepperView: View {
             
             Text(value)
                 .aspectRatio(contentMode: .fill)
-                .padding(4)
+                .padding(.vertical, 4)
+                .padding(.horizontal, 8)
                 .foregroundStyle(.primary)
                 .background {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(.tertiary)
-                        .aspectRatio(contentMode: .fill)
                 }
                 .padding(.horizontal, 4)
             
-            Button {
-                onIncrement()
-            } label: {
+            Button(action: onIncrement){
                 Image.plus
                     .aspectRatio(contentMode: .fill)
             }
