@@ -118,7 +118,9 @@ struct SettingsScreen: View {
                 isChecked: Binding {
                     observer.viewModel.isDarkModeOn
                 } set: { newValue in
-                    observer.perform(action: .didSetDarkMode(newValue))
+                    withAnimation {
+                        observer.perform(action: .didSetDarkMode(newValue))
+                    }
                 },
                 text: Localized.lightModeTitle,
                 highlightedText: Localized.darkModeTitle,
@@ -174,13 +176,16 @@ struct SettingsScreen: View {
             CheckBoxButton(
                 isChecked: Binding {
                     observer.viewModel.notifications.isOn
-                } set: {
-                    observer.perform(action: .didSetReminders($0))
+                } set: { value in
+                    withAnimation {
+                        observer.perform(action: .didSetReminders(value))
+                    }
                 },
                 text: Localized.remindersOnTitle,
                 highlightedText: Localized.remindersOffTitle,
                 image: .remindersOff,
-                highlightedImage: .remindersOn)
+                highlightedImage: .remindersOn
+            )
             if observer.viewModel.notifications.isOn {
                 DatePicker(
                     Localized.startingTimeTitle,
@@ -192,6 +197,7 @@ struct SettingsScreen: View {
                     in: observer.viewModel.notifications.startRange,
                     displayedComponents: .hourAndMinute
                 )
+                .transition(.move(edge: .top))
                 DatePicker(
                     Localized.endingTimeTitle,
                     selection: Binding {
@@ -202,6 +208,7 @@ struct SettingsScreen: View {
                     in: observer.viewModel.notifications.stopRange,
                     displayedComponents: .hourAndMinute
                 )
+                .transition(.move(edge: .top))
                 HStack {
                     Text(Localized.frequencyTitle)
                     Spacer()
@@ -211,6 +218,7 @@ struct SettingsScreen: View {
                         observer.perform(action: .didTapDecrementFrequency)
                     }
                 }
+                .transition(.move(edge: .top))
             }
         }
     }
