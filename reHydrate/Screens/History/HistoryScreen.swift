@@ -141,7 +141,7 @@ struct HistoryScreen: View {
                 .overlay {
                     ZStack {
                         if day.isToday {
-                            Image.circle
+                            Image(.circle)
                                 .resizable()
                         }
                         getSelectionIndicator(for: day.date)
@@ -170,13 +170,13 @@ struct HistoryScreen: View {
     func getSelectionIndicator(for date: Date) -> some View {
         if let range = observer.viewModel.selectedRange {
             if range.lowerBound.inSameDayAs(date) {
-                Image.leftSelected
+                Image(.leftSelected)
                     .resizable(resizingMode: .stretch)
             } else if range.upperBound.inSameDayAs(date) {
-                Image.rightSelected
+                Image(.rightSelected)
                     .resizable(resizingMode: .stretch)
             } else if range.contains(date) {
-                Image.midSelected
+                Image(.midSelected)
                     .resizable(resizingMode: .stretch)
             }
         }
@@ -191,19 +191,19 @@ struct HistoryScreen: View {
             let fill = consumed / goal
             switch fill {
             case 0.9 ..< 1 :
-                Image.waterDrop100
+                Image(.waterDrop100)
                     .resizable()
             case 0.6 ... 0.9:
-                Image.waterDrop75
+                Image(.waterDrop75)
                     .resizable()
             case 0.3 ... 0.6:
-                Image.waterDrop50
+                Image(.waterDrop50)
                     .resizable()
             case 0.1 ... 0.3:
-                Image.waterDrop25
+                Image(.waterDrop25)
                     .resizable()
             default:
-                Image.waterDrop0
+                Image(.waterDrop0)
                     .resizable()
             }
         } else {

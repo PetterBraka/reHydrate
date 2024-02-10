@@ -60,13 +60,13 @@ struct FilledContainer<Content: View>: View {
     }
 }
 
-#Preview {
-    FilledContainer(
-        fill: 0.8,
-        waveHeight: 5
-    ) {
-        Image.bottle
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-    }
-}
+//#Preview {
+//    FilledContainer(
+//        fill: 0.8,
+//        waveHeight: 5
+//    ) {
+//        Image.bottle
+//            .resizable()
+//            .aspectRatio(contentMode: .fit)
+//    }
+//}
