@@ -1,6 +1,6 @@
 //
-//  ContentView.swift
-//  reHydrateWatch App
+//  HomeView.swift
+//  reHydrate Watch App
 //
 //  Created by Petter vang Brakalsvålet on 10/02/2024.
 //  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
@@ -13,12 +13,10 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            header
+            Divider()
+            Spacer()
         }
-        .padding()
     }
     
     @ViewBuilder

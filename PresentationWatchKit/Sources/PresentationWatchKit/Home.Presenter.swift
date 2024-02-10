@@ -34,8 +34,7 @@ extension Screen.Home {
         
         public init(engine: Engine) {
             self.engine = engine
-            viewModel = ViewModel(dateTitle: formatter.string(from: Date()),
-                                  consumption: 0,
+            viewModel = ViewModel(consumption: 0,
                                   goal: 0,
                                   smallUnit: .milliliters,
                                   largeUnit: .liters,

@@ -18,7 +18,7 @@ import UIKit
 public final class SceneFactory: ObservableObject {
     static let shared = SceneFactory()
     
-    public let engine: MiniEngine
+    private let engine: MiniEngine
     
     // Root presenters
     private lazy var homePresenter = Screen.Home.Presenter(engine: engine)
