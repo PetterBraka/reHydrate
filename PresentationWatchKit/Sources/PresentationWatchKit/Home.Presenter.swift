@@ -32,13 +32,12 @@ extension Screen.Home {
             return formatter
         }()
         
-        public init(engine: Engine) {
+        public init(engine: Engine, preFilledDrinks: [ViewModel.Drink] = []) {
             self.engine = engine
             viewModel = ViewModel(consumption: 0,
                                   goal: 0,
-                                  smallUnit: .milliliters,
-                                  largeUnit: .liters,
-                                  drinks: [])
+                                  unit: .liters,
+                                  drinks: preFilledDrinks)
         }
         
         public func perform(action: Home.Action) async {

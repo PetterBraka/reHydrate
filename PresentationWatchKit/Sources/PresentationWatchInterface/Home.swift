@@ -21,21 +21,18 @@ public enum Home {
     public struct ViewModel {
         public let consumption: Double
         public let goal: Double
-        public let smallUnit: UnitVolume
-        public let largeUnit: UnitVolume
+        public let unit: UnitVolume
         public let drinks: [ViewModel.Drink]
         
         public init(
             consumption: Double,
             goal: Double,
-            smallUnit: UnitVolume,
-            largeUnit: UnitVolume,
+            unit: UnitVolume,
             drinks: [ViewModel.Drink]
         ) {
             self.consumption = consumption
             self.goal = goal
-            self.smallUnit = smallUnit
-            self.largeUnit = largeUnit
+            self.unit = unit
             self.drinks = drinks
         }
     }

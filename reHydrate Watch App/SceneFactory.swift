@@ -21,8 +21,6 @@ public final class SceneFactory: ObservableObject {
     private let engine: MiniEngine
     
     // Root presenters
-    private lazy var homePresenter = Screen.Home.Presenter(engine: engine)
-//    private lazy var settingsPresenter = Screen.Settings.Presenter(engine: engine, router: router)
     
     private init() {
         let subsystem = "com.braka.reHydrate"
@@ -30,9 +28,14 @@ public final class SceneFactory: ObservableObject {
         engine = MiniEngine(appGroup: appGroup, subsystem: subsystem)
     }
     
-    func makeHomeView() -> HomeView {
-        let observer = HomeScreenObservable(presenter: homePresenter)
-        homePresenter.scene = observer
+    func makeHomeView(isPreviews: Bool = false) -> HomeView {
+        let presenter = Screen.Home.Presenter(engine: engine, preFilledDrinks: [
+            .init(size: 300, container: .small),
+            .init(size: 500, container: .medium),
+            .init(size: 750, container: .large)
+        ])
+        let observer = HomeScreenObservable(presenter: presenter)
+        presenter.scene = observer
         
         return HomeView(observer: observer)
     }
