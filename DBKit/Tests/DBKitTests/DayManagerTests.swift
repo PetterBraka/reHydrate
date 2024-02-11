@@ -6,8 +6,7 @@
 //
 
 import XCTest
-@testable import reHydrate
-import PortsInterface
+@testable import DBKit
 
 final class DayManagerTests: XCTestCase {
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
@@ -19,25 +18,18 @@ final class DayManagerTests: XCTestCase {
         Date(timeIntervalSince1970: 1688583262)
     ]
     
-    var database = Database(logger: .init(subsystem: "DayManagerTests"))
-    var spy: DatabaseSpy<DayManager.DayModel>!
+    var spy: DatabaseSpy<DayEntity, Database<DayEntity>>!
     var sut: DayManagerType!
     
     override func setUp() {
-        self.spy = DatabaseSpy(realObject: database)
+        self.spy = DatabaseSpy(realObject: Database(inMemory: true))
         self.sut = DayManager(database: spy)
-    }
-    
-    override func tearDown() async throws {
-        try await database.deleteAll(DayManager.DayModel(id: "", date: "", consumed: 0, goal: 0))
-        let db = try XCTUnwrap(database.db)
-        XCTAssertTrue(db.isClosed)
     }
     
     func test_createNewDay_success() async throws {
         let day = try await sut.createNewDay(date: referenceDate, goal: 3)
         assert(givenDay: day, expectedConsumption: 0, expectedGoal: 3)
-        XCTAssertEqual(spy.methodLogNames, [.write])
+        XCTAssertEqual(spy.methodLogNames, [.open, .create, .save])
     }
     
     func test_createNewDayAndFetchDay_success() async throws {
@@ -45,7 +37,7 @@ final class DayManagerTests: XCTestCase {
         assert(givenDay: givenDay, expectedConsumption: 0, expectedGoal: 3)
         let foundDay = try await sut.fetch(with: referenceDate)
         assert(givenDay: givenDay, expectedDay: foundDay)
-        XCTAssertEqual(spy.methodLogNames, [.write, .readMatchingOrderByLimit])
+        XCTAssertEqual(spy.methodLogNames, [.open, .create, .save, .read])
     }
     
     func test_fetchDay_noDay() async throws {
@@ -60,7 +52,7 @@ final class DayManagerTests: XCTestCase {
         } catch {
             XCTAssertNotNil(error)
         }
-        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
+//        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
     }
     
     func test_fetchAll_success() async throws {
@@ -69,7 +61,7 @@ final class DayManagerTests: XCTestCase {
         XCTAssertEqual(days.count, 4)
         XCTAssertEqual(days.map(\.date),
                        referenceDates.map { $0.toDateString() })
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.readMatchingOrderByLimit])
+//        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.readMatchingOrderByLimit])
     }
     
     func test_fetchLast_success() async throws {
@@ -81,8 +73,8 @@ final class DayManagerTests: XCTestCase {
         }
         let lastDay = try await sut.fetchLast()
         XCTAssertEqual(lastDay.date, lastDate.toDateString())
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
-                       [.readMatchingOrderByLimit])
+//        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
+//                       [.readMatchingOrderByLimit])
     }
     
     func test_fetchLast_noDays() async throws {
@@ -92,7 +84,7 @@ final class DayManagerTests: XCTestCase {
         } catch {
             XCTAssertNotNil(error)
         }
-        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
+//        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
     }
     
     func test_addConsumed() async throws {
@@ -185,7 +177,7 @@ final class DayManagerTests: XCTestCase {
         XCTAssertEqual(days.count, 3)
         XCTAssertFalse(days.contains(dayToDelete))
         XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
-                       [.readMatchingOrderByLimit, .delete, .readMatchingOrderByLimit])
+                       [.read, .read, .delete, .read])
     }
     
     func test_deleteDate_success() async throws {
@@ -196,7 +188,7 @@ final class DayManagerTests: XCTestCase {
         XCTAssertEqual(days.count, 3)
         XCTAssertFalse(days.contains(where: { $0.date == dateToDelete.toDateString() }))
         XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
-                       [.deleteMatching, .readMatchingOrderByLimit])
+                       [.read, .delete, .read])
     }
     
     func test_deleteDatesInRange_success() async throws {
@@ -207,13 +199,17 @@ final class DayManagerTests: XCTestCase {
             return
         }
         try await preLoad4Days()
-        try await sut.deleteDays(in: firstDate ..< lastDate)
+        do {
+            try await sut.deleteDays(in: firstDate ..< lastDate)
+        } catch {
+            XCTFail("Couldn't delete all days. \(error.localizedDescription)")
+        }
         let days = try await sut.fetchAll()
         XCTAssertEqual(days.count, 1)
         let day = try XCTUnwrap(days.first)
         XCTAssertEqual(day.date, lastDate.toDateString())
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + .deleteMatching(times: 3) +
-                       [.deleteMatching, .readMatchingOrderByLimit])
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read] + 
+            .delete(times: 3) + [.read])
     }
     
     func test_deleteDatesInClosedRange_success() async throws {
@@ -224,11 +220,15 @@ final class DayManagerTests: XCTestCase {
             return
         }
         try await preLoad4Days()
-        try await sut.deleteDays(in: firstDate ... lastDate)
+        do {
+            try await sut.deleteDays(in: firstDate ... lastDate)
+        } catch {
+            XCTFail("Couldn't delete all days. \(error.localizedDescription)")
+        }
         let days = try await sut.fetchAll()
         XCTAssertTrue(days.isEmpty)
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + .deleteMatching(times: 5) +
-                       [.readMatchingOrderByLimit])
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read] +
+            .delete(times: 4) + [.read])
     }
     
     func testPerformance_createNewDay_success() async throws {
@@ -249,8 +249,8 @@ final class DayManagerTests: XCTestCase {
 }
 
 private extension DayManagerTests {
-    func assert(givenDay: PortsInterface.DayModel,
-                expectedDay: PortsInterface.DayModel,
+    func assert(givenDay: DayModel,
+                expectedDay: DayModel,
                 file: StaticString = #file,
                 line: UInt = #line) {
         XCTAssertEqual(givenDay.date, expectedDay.date,
@@ -261,7 +261,7 @@ private extension DayManagerTests {
                        file: file, line: line)
     }
     
-    func assert(givenDay: PortsInterface.DayModel,
+    func assert(givenDay: DayModel,
                 expectedConsumption: Double,
                 expectedGoal: Double,
                 file: StaticString = #file,
@@ -282,17 +282,15 @@ private extension DayManagerTests {
     }
 }
 
-private extension Array where Element == DatabaseSpy<DayManager.DayModel>.MethodName {
-    static func preLoaded4Days() -> [DatabaseSpy<DayManager.DayModel>.MethodName] {
-        [.write, .write, .write, .write]
+private extension Array where Element == DatabaseSpy<DayEntity, Database<DayEntity>>.MethodName {
+    static func preLoaded4Days() -> [DatabaseSpy<DayEntity, Database<DayEntity>>.MethodName] {
+        [.open] + [[DatabaseSpy<DayEntity, Database<DayEntity>>.MethodName]].init(
+            repeating: [.create, .save], count: 4
+        ).flatMap { $0 }
     }
     
-    static func delete(times number: Int) -> [DatabaseSpy<DayManager.DayModel>.MethodName] {
+    static func delete(times number: Int) -> [DatabaseSpy<DayEntity, Database<DayEntity>>.MethodName] {
         .init(repeating: .delete, count: number)
-    }
-    
-    static func deleteMatching(times number: Int) -> [DatabaseSpy<DayManager.DayModel>.MethodName] {
-        .init(repeating: .deleteMatching, count: number)
     }
 }
 

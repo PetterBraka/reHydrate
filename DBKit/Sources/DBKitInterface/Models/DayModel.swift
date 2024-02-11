@@ -6,10 +6,10 @@
 //
 
 public struct DayModel: Equatable {
-    public var id: String
-    public var date: String
-    public var consumed: Double
-    public var goal: Double
+    public let id: String
+    public let date: String
+    public let consumed: Double
+    public let goal: Double
     
     public init(id: String, date: String,
                 consumed: Double,

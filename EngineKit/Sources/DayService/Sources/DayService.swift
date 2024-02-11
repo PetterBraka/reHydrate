@@ -11,6 +11,7 @@ import DrinkServiceInterface
 import UnitServiceInterface
 import LoggingService
 import PortsInterface
+import DBKitInterface
 
 public final class DayService: DayServiceType {
     public typealias Engine = (

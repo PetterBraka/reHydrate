@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DatabaseFormatter.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 30/01/2024.

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DrinkManagerType.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 05/10/2023.

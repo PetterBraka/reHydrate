@@ -1,0 +1,228 @@
+//
+//  DayDbManager.swift
+//  
+//
+//  Created by Petter vang Brakalsvålet on 29/07/2023.
+//
+
+import Foundation
+import CoreData
+import DBKitInterface
+
+public final class DayManager<DayDatabase: DatabaseType<DayEntity>> {
+    private let database: DayDatabase
+    private let context: NSManagedObjectContext
+    private let defaultSort: NSSortDescriptor
+    
+    public init(
+        database: DayDatabase,
+        defaultSort: NSSortDescriptor = NSSortDescriptor(keyPath: \DayEntity.date, ascending: false)
+    ) {
+        self.database = database
+        self.context = database.open()
+        self.defaultSort = defaultSort
+    }
+}
+ 
+extension DayManager: DayManagerType {
+    public func createNewDay(date: Date, goal: Double) async throws -> DayModel {
+        let newDay = try database.create(context)
+        newDay.id = UUID().uuidString
+        newDay.date = DatabaseFormatter.date.string(from: date)
+        newDay.consumed = 0
+        newDay.goal = goal
+        database.save(context)
+        
+        guard let newDay = DayModel(from: newDay)
+        else {
+            throw DatabaseError.creatingElement
+        }
+        return newDay
+    }
+    
+    public func add(consumed: Double, toDayAt date: Date) async throws -> DayModel {
+        let dayToUpdate = try await fetchEntity(with: date)
+        dayToUpdate.consumed += consumed
+        database.save(context)
+        guard let day = DayModel(from: dayToUpdate)
+        else {
+            throw DatabaseError.couldNotMapElement
+        }
+        return day
+    }
+    
+    public func remove(consumed: Double, fromDayAt date: Date) async throws -> DayModel {
+        let dayToUpdate = try await fetchEntity(with: date)
+        dayToUpdate.consumed -= consumed
+        if dayToUpdate.consumed < 0 {
+            dayToUpdate.consumed = 0
+        }
+        database.save(context)
+        guard let day = DayModel(from: dayToUpdate)
+        else {
+            throw DatabaseError.couldNotMapElement
+        }
+        return day
+    }
+    
+    public func add(goal: Double, toDayAt date: Date) async throws -> DayModel {
+        let dayToUpdate = try await fetchEntity(with: date)
+        dayToUpdate.goal += goal
+        database.save(context)
+        guard let day = DayModel(from: dayToUpdate)
+        else {
+            throw DatabaseError.couldNotMapElement
+        }
+        return day
+    }
+    
+    public func remove(goal: Double, fromDayAt date: Date) async throws -> DayModel {
+        let dayToUpdate = try await fetchEntity(with: date)
+        dayToUpdate.goal -= goal
+        if dayToUpdate.goal < 0 {
+            dayToUpdate.goal = 0
+        }
+        database.save(context)
+        guard let day = DayModel(from: dayToUpdate)
+        else {
+            throw DatabaseError.couldNotMapElement
+        }
+        return day
+    }
+    
+    private func delete(_ day: DayEntity) throws {
+        try database.delete(day, context)
+    }
+    
+    public func delete(_ day: DayModel) async throws {
+        guard let date = DatabaseFormatter.date.date(from: day.date)
+        else {
+            throw DatabaseError.deletingElement
+        }
+        let dayToDelete = try await fetchEntity(with: date)
+        try delete(dayToDelete)
+    }
+    
+    public func deleteDay(at date: Date) async throws {
+        do {
+            let dayToDelete = try await fetchEntity(with: date)
+            try database.delete(dayToDelete, context)
+        } catch {
+            throw error
+        }
+    }
+
+    public func deleteDays(in range: Range<Date>) async throws {
+        let days = try await fetchAllEntities()
+        let filteredDays = days.filter { day in
+            guard let dateString = day.date,
+                  let date = DatabaseFormatter.date.date(from: dateString)
+            else { return false }
+            let lowerString = DatabaseFormatter.date.string(from: range.lowerBound)
+            let upperString = DatabaseFormatter.date.string(from: range.upperBound)
+            return lowerString == dateString ||
+            range.contains(date) && upperString != dateString
+        }
+        for day in filteredDays {
+            try delete(day)
+        }
+    }
+    
+    public func deleteDays(in range: ClosedRange<Date>) async throws {
+        let days = try await fetchAllEntities()
+            .filter { day in
+                guard let dateString = day.date,
+                      let date = DatabaseFormatter.date.date(from: dateString)
+                else { return false }
+                let lowerString = DatabaseFormatter.date.string(from: range.lowerBound)
+                return lowerString == dateString ||
+                range.contains(date)
+            }
+        for day in days {
+            try delete(day)
+        }
+    }
+    
+    private func fetchEntity(with date: Date) async throws -> DayEntity {
+        // Get day's beginning & tomorrows beginning time
+        let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
+        
+        let days: [DayEntity] = try await database.read(
+            matching: predicate,
+            sortBy: [.init(keyPath: \DayEntity.date, ascending: true)],
+            limit: nil,
+            context)
+        guard let day = days.first
+        else {
+            throw DatabaseError.noElementFound
+        }
+        return day
+    }
+    
+    public func fetchLastEntity() async throws -> DayEntity {
+        let days: [DayEntity] = try await database.read(
+            matching: nil,
+            sortBy: [.init(keyPath: \DayEntity.date, ascending: false)],
+            limit: 1,
+            context)
+        guard let day = days.first
+        else {
+            throw DatabaseError.noElementFound
+        }
+        return day
+    }
+    
+    private func fetchAllEntities() async throws -> [DayEntity] {
+        try await database.read(
+            matching: nil,
+            sortBy: [.init(keyPath: \DayEntity.date, ascending: true)],
+            limit: nil,
+            context
+        )
+    }
+    
+    public func fetch(with date: Date) async throws -> DayModel {
+        let day = try await fetchEntity(with: date)
+        guard let day = DayModel(from: day)
+        else {
+            throw DatabaseError.couldNotMapElement
+        }
+        return day
+    }
+    
+    public func fetchLast() async throws -> DayModel {
+        let day = try await fetchLastEntity()
+        guard let day = DayModel(from: day)
+        else {
+            throw DatabaseError.noElementFound
+        }
+        return day
+    }
+    
+    public func fetchAll() async throws -> [DayModel] {
+        try await fetchAllEntities().compactMap { .init(from: $0) }
+    }
+}
+
+extension DayEntity {
+    fileprivate convenience init(from model: DayModel) {
+        self.init()
+        id = model.id
+        date = model.date
+        consumed = model.consumed
+        goal = model.goal
+    }
+}
+
+private extension DayModel {
+    init?(from model: DayEntity) {
+        guard let date = model.date
+        else { return nil }
+        self.init(
+            id: model.id ?? UUID().uuidString,
+            date: date,
+            consumed: model.consumed,
+            goal: model.goal
+        )
+    }
+}

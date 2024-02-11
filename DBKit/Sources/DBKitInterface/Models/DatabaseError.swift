@@ -13,6 +13,8 @@ public enum DatabaseError: Error {
     case creatingElement
     case updatingElement
     case deletingElement
+    case couldNotMapElement
+    case predicateCouldNotBeCreated
 }
 
 
@@ -20,15 +22,19 @@ extension DatabaseError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .openDB:
-            return "Unable to open the database"
+            "Unable to open the database"
         case .noElementFound:
-            return "No element found in the database"
+            "No element found in the database"
         case .creatingElement:
-            return "Can't create new element"
+            "Can't create new element"
         case .updatingElement:
-            return "Couldn't write updated element"
+            "Couldn't write updated element"
         case .deletingElement:
-            return "Couldn't delete element"
+            "Couldn't delete element"
+        case .couldNotMapElement:
+            "Couldn't map to element"
+        case .predicateCouldNotBeCreated:
+            "Predicate couldn't be created"
         }
     }
 }

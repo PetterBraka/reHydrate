@@ -6,9 +6,9 @@
 //
 
 public struct DrinkModel: Equatable {
-    public var id: String
-    public var container: String
-    public var size: Double
+    public let id: String
+    public let container: String
+    public let size: Double
     
     public init(id: String,
                 size: Double,

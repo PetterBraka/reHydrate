@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version: 5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -17,11 +17,15 @@ let package: Package = {
         products: [
             .library(name: engineKit, targets: [engineKit]),
         ],
+        dependencies: [
+            .package(name: "DBKit", path: "../DBKit")
+        ],
         targets: [
             .target(name: engineKit,
                     dependencies: [
                         .loggingService,
                         .portsInterface,
+                        .dbKit,
                         .source(.dayService),
                         .source(.drinkService),
                         .source(.languageService),
@@ -34,6 +38,7 @@ let package: Package = {
             .target(name: engineMocks,
                     dependencies: [
                         .byName(name: engineKit),
+                        .dbKit,
                         .portsMocks,
                         .mocks(.dayService),
                         .mocks(.drinkService),
@@ -54,7 +59,8 @@ let package: Package = {
                   sourceDependancy: [
                     .interface(.unitService),
                     .interface(.userPreferenceService),
-                    .portsInterface
+                    .portsInterface,
+                    .dbKit
                   ],
                   interfaceDependancy: [
                     .interface(.drinkService)
@@ -62,6 +68,7 @@ let package: Package = {
             .with(targetsFrom: .drinkService,
                   sourceDependancy: [
                     .portsInterface,
+                    .dbKit,
                     .interface(.unitService),
                     .interface(.userPreferenceService)
                   ])
@@ -70,7 +77,8 @@ let package: Package = {
             ])
             .with(targetsFrom: .timelineService,
                   sourceDependancy: [
-                    .portsInterface
+                    .portsInterface,
+                    .dbKit
                   ],
                   testsDependancy: [
                     .portsMocks
@@ -102,6 +110,7 @@ extension Target {
 }
 
 extension Target.Dependency {
+    static let dbKit: Target.Dependency = .byName(name: "DBKit")
     static let loggingService: Target.Dependency = .byName(name: "LoggingService")
     static let testHelper: Target.Dependency = .byName(name: "TestHelper")
     static let portsInterface: Target.Dependency = .byName(name: "PortsInterface")
@@ -205,6 +214,7 @@ extension Array where Element == Target {
                             .byName(name: feature.source),
                             .byName(name: feature.mocks),
                             .engineMocks,
+                            .dbKit,
                             .testHelper,
                         ] + testsDependancy,
                         path: rootPath + "/Tests",

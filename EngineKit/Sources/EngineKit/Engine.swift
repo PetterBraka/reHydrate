@@ -24,6 +24,7 @@ import AppearanceServiceInterface
 import AppearanceService
 import DateServiceInterface
 import DateService
+import DBKitInterface
 
 public final class Engine {
     public init(
@@ -97,6 +98,9 @@ public final class Engine {
     public lazy var dateService: DateServiceType = DateService(calendar: .current)
 }
 
-extension Engine: HasService {}
-extension Engine: HasPorts {}
-extension Engine: HasAppInfo {}
+extension Engine: HasDayManagerService &
+HasConsumptionManagerService &
+HasDrinkManagerService &
+HasService &
+HasPorts &
+HasAppInfo {}
