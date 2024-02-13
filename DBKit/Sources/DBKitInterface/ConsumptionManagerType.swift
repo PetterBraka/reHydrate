@@ -8,13 +8,11 @@
 import Foundation
 
 public protocol ConsumptionManagerType {
-    typealias Entry = ConsumptionModel
-    
     @discardableResult
-    func createEntry(date: Date, consumed: Double) async throws -> Entry
+    func createEntry(date: Date, consumed: Double) async throws -> ConsumptionModel
     
-    func delete(_ entry: Entry) async throws
+    func delete(_ entry: ConsumptionModel) async throws
     
-    func fetchAll(at date: Date) async throws -> [Entry]
-    func fetchAll() async throws -> [Entry]
+    func fetchAll(at date: Date) async throws -> [ConsumptionModel]
+    func fetchAll() async throws -> [ConsumptionModel]
 }
