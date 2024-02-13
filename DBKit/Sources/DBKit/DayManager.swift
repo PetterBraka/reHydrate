@@ -5,22 +5,16 @@
 //  Created by Petter vang Brakalsvålet on 29/07/2023.
 //
 
-import Foundation
 import CoreData
 import DBKitInterface
 
-public final class DayManager<DayDatabase: DatabaseType<DayEntity>> {
-    private let database: DayDatabase
+public final class DayManager {
+    private let database: any DatabaseType<DayEntity>
     private let context: NSManagedObjectContext
-    private let defaultSort: NSSortDescriptor
     
-    public init(
-        database: DayDatabase,
-        defaultSort: NSSortDescriptor = NSSortDescriptor(keyPath: \DayEntity.date, ascending: false)
-    ) {
+    public init(database: any DatabaseType<DayEntity>) {
         self.database = database
         self.context = database.open()
-        self.defaultSort = defaultSort
     }
 }
  
@@ -31,7 +25,7 @@ extension DayManager: DayManagerType {
         newDay.date = DatabaseFormatter.date.string(from: date)
         newDay.consumed = 0
         newDay.goal = goal
-        database.save(context)
+        try database.save(context)
         
         guard let newDay = DayModel(from: newDay)
         else {
@@ -43,7 +37,7 @@ extension DayManager: DayManagerType {
     public func add(consumed: Double, toDayAt date: Date) async throws -> DayModel {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed += consumed
-        database.save(context)
+        try database.save(context)
         guard let day = DayModel(from: dayToUpdate)
         else {
             throw DatabaseError.couldNotMapElement
@@ -57,7 +51,7 @@ extension DayManager: DayManagerType {
         if dayToUpdate.consumed < 0 {
             dayToUpdate.consumed = 0
         }
-        database.save(context)
+        try database.save(context)
         guard let day = DayModel(from: dayToUpdate)
         else {
             throw DatabaseError.couldNotMapElement
@@ -68,7 +62,7 @@ extension DayManager: DayManagerType {
     public func add(goal: Double, toDayAt date: Date) async throws -> DayModel {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal += goal
-        database.save(context)
+        try database.save(context)
         guard let day = DayModel(from: dayToUpdate)
         else {
             throw DatabaseError.couldNotMapElement
@@ -82,7 +76,7 @@ extension DayManager: DayManagerType {
         if dayToUpdate.goal < 0 {
             dayToUpdate.goal = 0
         }
-        database.save(context)
+        try database.save(context)
         guard let day = DayModel(from: dayToUpdate)
         else {
             throw DatabaseError.couldNotMapElement

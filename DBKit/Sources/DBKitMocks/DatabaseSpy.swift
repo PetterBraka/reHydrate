@@ -111,9 +111,9 @@ extension DatabaseSpy: DatabaseType {
         return realObject.open()
     }
     
-    public func save(_ context: NSManagedObjectContext) {
+    public func save(_ context: NSManagedObjectContext) throws {
         methodLog.append(.save(context))
-        realObject.save(context)
+        try realObject.save(context)
     }
     
     public func create(_ context: NSManagedObjectContext) throws -> DbModel {

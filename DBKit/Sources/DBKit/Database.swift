@@ -42,29 +42,32 @@ public class Database<Element: NSManagedObject>: DatabaseType {
         persistentContainer.viewContext
     }
     
-    public func save(_ context: NSManagedObjectContext) {
+    public func save(_ context: NSManagedObjectContext) throws {
         // Verify that the context has uncommitted changes.
         guard context.hasChanges else { return }
         
-        context.performAndWait {
+        try context.performAndWait {
             do {
                 try context.save()
             } catch {
                 logger.debug("Failed to save the context: \(error.localizedDescription, privacy: .private)")
+                throw error
             }
         }
     }
     
     public func create(_ context: NSManagedObjectContext) throws -> Element {
-        let className = String(describing: Element.self)
-        guard let managedObject = NSEntityDescription.insertNewObject(
+        try context.performAndWait {
+            let className = String(describing: Element.self)
+            guard let managedObject = NSEntityDescription.insertNewObject(
                 forEntityName: className,
                 into: context
-              ) as? Element
-        else {
-            throw DatabaseError.couldNotMapElement
+            ) as? Element
+            else {
+                throw DatabaseError.couldNotMapElement
+            }
+            return managedObject
         }
-        return managedObject
     }
 
     public func read(

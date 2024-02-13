@@ -11,7 +11,7 @@ public protocol DatabaseType<Element> {
     associatedtype Element: NSManagedObject
     
     func open() -> NSManagedObjectContext
-    func save(_ context: NSManagedObjectContext)
+    func save(_ context: NSManagedObjectContext) throws
     func create(_ context: NSManagedObjectContext) throws -> Element
     func read(matching: NSPredicate?, sortBy: [NSSortDescriptor]?, limit: Int?,
               _ context: NSManagedObjectContext) async throws -> [Element]
