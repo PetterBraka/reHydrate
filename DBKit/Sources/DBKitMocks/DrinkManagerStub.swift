@@ -1,15 +1,16 @@
 //
-//  File.swift
+//  DrinkManagerStub.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 05/10/2023.
 //
 
-import PortsInterface
+import Foundation
+import CoreData
+import DBKitInterface
 
 public protocol DrinkManagerStubbing {
-    var createNewDrink_returnValue: DrinkModel? { get set }
-    var createNewDrink_returnError: Error? { get set }
+    var createNewDrink_returnValue: Result<DrinkModel, Error> { get set }
     var edit_returnValue: Result<DrinkModel, Error> { get set }
     var delete_returnError: Error? { get set }
     var deleteDrink_returnError: Error? { get set }
@@ -21,29 +22,22 @@ public protocol DrinkManagerStubbing {
 public final class DrinkManagerStub: DrinkManagerStubbing {
     public init() {}
     
-    public var createNewDrink_returnValue: DrinkModel? = nil
-    public var createNewDrink_returnError: Error? = nil
-    public var edit_returnValue: Result<DrinkModel, Error> = .success(.init(id: "", size: 300, container: "small"))
+    public var createNewDrink_returnValue: Result<DrinkModel, Error> = .default
+    public var edit_returnValue: Result<DrinkModel, Error> = .default
     public var delete_returnError: Error? = nil
     public var deleteDrink_returnError: Error? = nil
     public var deleteAll_returnError: Error? = nil
-    public var fetch_returnValue: Result<DrinkModel, Error> = .success(.init(id: "", size: 300, container: "small"))
-    public var fetchAll_returnValue: Result<[DrinkModel], Error> = .success([
-        .init(id: "", size: 300, container: "small"),
-        .init(id: "", size: 500, container: "medium"),
-        .init(id: "", size: 750, container: "large")
-    ])
+    public var fetch_returnValue: Result<DrinkModel, Error> = .default
+    public var fetchAll_returnValue: Result<[DrinkModel], Error> = .default
 }
 
 extension DrinkManagerStub: DrinkManagerType {
     public func createNewDrink(size: Double, container: String) async throws -> DrinkModel {
-        if let createNewDrink_returnError {
-            throw createNewDrink_returnError
-        }
-        if let createNewDrink_returnValue {
-            return createNewDrink_returnValue
-        } else {
-            return .init(id: "", size: size, container: container)
+        switch createNewDrink_returnValue {
+        case let .success(drink):
+            return drink
+        case let .failure(error):
+            throw error
         }
     }
     
