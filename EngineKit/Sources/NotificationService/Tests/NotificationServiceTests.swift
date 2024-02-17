@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import TestHelper
 import EngineMocks
 import LoggingService
 import UserPreferenceServiceMocks
@@ -374,5 +375,21 @@ extension NotificationSettings: Equatable {
         lhs.start == rhs.start &&
         lhs.stop == rhs.stop &&
         lhs.frequency == rhs.frequency
+    }
+}
+
+extension Date {
+    init?(date: String, time: String) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+        guard let date = formatter.date(from: "\(date) \(time)")
+        else { return nil }
+        self = date
+    }
+    
+    func toTimeString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "hh:mm:ss"
+        return formatter.string(from: self)
     }
 }
