@@ -8,6 +8,7 @@
 import Foundation
 import TimelineServiceInterface
 import PortsInterface
+import DBKitInterface
 
 public final class TimelineService: TimelineServiceType {
     public typealias Engine = (

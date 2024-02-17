@@ -9,8 +9,8 @@ import XCTest
 import EngineMocks
 import TestHelper
 import TimelineServiceInterface
-import PortsInterface
-import PortsMocks
+import DBKitInterface
+import DBKitMocks
 @testable import TimelineService
 
 final class TimelineServiceTests: XCTestCase {
@@ -35,7 +35,7 @@ final class TimelineServiceTests: XCTestCase {
             ConsumptionModel(id: "1", date: "01/02/2023", time: "02:00:01", consumed: 1),
             ConsumptionModel(id: "1", date: "01/02/2023", time: "02:05:44", consumed: 0.5)
         ]
-        stub.fetchAllAtDate_returnValue = givenConsumption
+        stub.fetchAllAtDate_returnValue = .success(givenConsumption)
         
         let timeline = await sut.getTimeline(for: XCTest.referenceDate)
         
@@ -44,7 +44,7 @@ final class TimelineServiceTests: XCTestCase {
     }
     
     func test_getTimelineForDate_failing() async throws {
-        stub.fetchAllAtDate_returnError = DatabaseError.noElementFound
+        stub.fetchAllAtDate_returnValue = .failure(DatabaseError.noElementFound)
         
         let timeline = await sut.getTimeline(for: XCTest.referenceDate)
         
@@ -62,7 +62,7 @@ final class TimelineServiceTests: XCTestCase {
             ConsumptionModel(id: "1", date: "02/02/2023", time: "05:05:44", consumed: 0.5)
         ]
         
-        stub.fetchAll_returnValue = givenConsumptionDay1 + givenConsumptionDay2
+        stub.fetchAll_returnValue = .success(givenConsumptionDay1 + givenConsumptionDay2)
         
         let timeline = await sut.getTimelineCollection()
         
@@ -88,7 +88,7 @@ final class TimelineServiceTests: XCTestCase {
             ConsumptionModel(id: "1", date: "02/02/2023", time: "05:05:44", consumed: 0.5)
         ]
         
-        stub.fetchAll_returnValue = givenConsumptionDay1 + givenConsumptionDay2
+        stub.fetchAll_returnValue = .success(givenConsumptionDay1 + givenConsumptionDay2)
         
         let timeline = await sut.getTimelineCollection()
         
@@ -104,7 +104,7 @@ final class TimelineServiceTests: XCTestCase {
     }
     
     func test_getTimelineCollection_failing() async throws {
-        stub.fetchAll_returnError = DatabaseError.noElementFound
+        stub.fetchAll_returnValue = .failure(DatabaseError.noElementFound)
         
         let timeline = await sut.getTimelineCollection()
         
