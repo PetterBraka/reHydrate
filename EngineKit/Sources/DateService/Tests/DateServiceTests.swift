@@ -11,10 +11,14 @@ import XCTest
 import TestHelper
 
 final class DateServiceTests: XCTestCase {
-    let calendar = Calendar(identifier: .gregorian)
+    var calendar: Calendar!
     var sut: DateService!
     
     override func setUp() {
+        calendar = Calendar(identifier: .gregorian)
+        calendar.locale = .init(languageComponents: .init(languageCode: .english,
+                                                          script: .georgian,
+                                                          region: .unitedKingdom))
         sut = DateService(calendar: calendar)
     }
 }

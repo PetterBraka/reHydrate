@@ -67,7 +67,7 @@ public final class DayService: DayServiceType {
         let consumedAmount = getConsumption(from: drink)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.add(consumed: consumedAmount, toDayAt: today.date)
-        try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        try engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
         await export(litres: consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
@@ -79,7 +79,7 @@ public final class DayService: DayServiceType {
         let consumedAmount = getConsumption(from: drink)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(consumed: consumedAmount, fromDayAt: today.date)
-        try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        try engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
         await export(litres: -consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
@@ -124,7 +124,7 @@ extension Day {
 private extension DayService {
     func createNewDay() async -> Day {
         let lastDay = try? await engine.dayManager.fetchLast()
-        if let createdDay = try? await engine.dayManager.createNewDay(
+        if let createdDay = try? engine.dayManager.createNewDay(
             date: .now, goal: lastDay?.goal ?? 3),
            let newDay = Day(with: createdDay) {
             return newDay
