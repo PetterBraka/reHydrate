@@ -6,90 +6,125 @@
 //
 
 import Foundation
+import DBKitInterface
+import CoreData
 
-//
-//public final class DrinkManager: DrinkManagerType {
-//    public struct DrinkModel: BlackbirdModel {
-//        public static var primaryKey: [BlackbirdColumnKeyPath] = [\.$container]
-//        
-//        @BlackbirdColumn public var id: String
-//        @BlackbirdColumn public var container: String
-//        @BlackbirdColumn public var size: Double
-//        
-//        public init(id: String,
-//                    size: Double,
-//                    container: String) {
-//            self.id = id
-//            self.container = container
-//            self.size = size
-//        }
-//    }
-//    
-//    public typealias PortModel = PortsInterface.DrinkModel
-//    private let database: DatabaseType
-//    
-//    public init(database: DatabaseType) {
-//        self.database = database
-//    }
-//}
-//
-//extension DrinkManager {
-//    public func createNewDrink(size: Double, container: String) async throws -> PortModel {
-//        let newDrink = DrinkModel(id: UUID().uuidString,
-//                                  size: size,
-//                                  container: container)
-//        try await database.write(newDrink)
-//        return PortModel(from: newDrink)
-//    }
-//    
-//    public func edit(size: Double, of container: String) async throws -> PortModel {
-//        var drink = try await fetch(container)
-//        drink.size = size
-//        try await database.write(DrinkModel(from: drink))
-//        return drink
-//    }
-//    
-//    public func delete(_ drink: PortModel) async throws {
-//        try await database.delete(DrinkModel(from: drink))
-//    }
-//    
-//    public func deleteDrink(container: String) async throws {
-//        try await database.delete(matching: .like(\DrinkModel.$container, container))
-//    }
-//    
-//    public func deleteAll() async throws {
-//        try await database.deleteAll(DrinkModel(id: "", size: 0, container: ""))
-//    }
-//    
-//    public func fetch(_ container: String) async throws -> PortModel {
-//        let drinks = try await database.read(matching: .like(\DrinkModel.$container, container),
-//                                             orderBy: .ascending(\.$size),
-//                                             limit: 1)
-//        guard let drink = drinks.first
-//        else {
-//            throw DatabaseError.noElementFound
-//        }
-//        return PortModel(from: drink)
-//    }
-//    
-//    public func fetchAll() async throws -> [PortModel] {
-//        let drinks = try await database.read(matching: nil,
-//                                             orderBy: .ascending(\DrinkModel.$size),
-//                                             limit: nil)
-//        return drinks.map { PortModel(from: $0)}
-//    }
-//}
-//
-//extension DrinkManager.DrinkModel {
-//    fileprivate init(from model: PortsInterface.DrinkModel) throws {
-//        id = model.id
-//        container = model.container
-//        size = model.size
-//    }
-//}
-//
-//private extension PortsInterface.DrinkModel {
-//    init(from model: DrinkManager.DrinkModel) {
-//        self.init(id: model.id, size: model.size, container: model.container)
-//    }
-//}
+public final class DrinkManager {
+    private let database: any DatabaseType<DrinkEntity>
+    private let context: NSManagedObjectContext
+    
+    public init(database: any DatabaseType<DrinkEntity>) {
+        self.database = database
+        self.context = database.open()
+    }
+}
+
+private extension DrinkManager {
+    func fetchEntity(_ container: String) async throws -> DrinkEntity {
+        let drinks = try await database.read(
+            matching: .init(format: "container == %@", container),
+            sortBy: [NSSortDescriptor(keyPath: \DrinkModel.size, ascending: true)],
+            limit: 1,
+            context)
+        guard let drink = drinks.first
+        else {
+            throw DatabaseError.noElementFound
+        }
+        return drink
+    }
+    
+    func fetchAllEntity() async throws -> [DrinkEntity] {
+        try await database.read(
+            matching: nil,
+            sortBy: [.init(keyPath: \DrinkModel.size, ascending: true)],
+            limit: nil,
+            context)
+    }
+}
+
+extension DrinkManager: DrinkManagerType {
+    public func createNewDrink(size: Double, container: String) async throws -> DrinkModel {
+        let newDrink = try database.create(context)
+        newDrink.id = UUID().uuidString
+        newDrink.size = size
+        newDrink.container = container
+        try database.save(context)
+        guard let newDrink = DrinkModel(from: newDrink)
+        else {
+            throw DatabaseError.creatingElement
+        }
+        return newDrink
+    }
+    
+    public func edit(size: Double, of container: String) async throws -> DrinkModel {
+        let drink = try await fetchEntity(container)
+        drink.size = size
+        try database.save(context)
+        guard let drink = DrinkModel(from: drink)
+        else {
+            throw DatabaseError.creatingElement
+        }
+        return drink
+    }
+    
+    private func delete(_ drink: DrinkEntity) throws {
+        try database.delete(drink, context)
+    }
+    
+    public func delete(_ drink: DrinkModel) async throws {
+        let containerPredicate = NSPredicate(format: "container == %@", drink.container)
+        let sizePredicate = NSPredicate(format: "size == %@", drink.size)
+        let predicate = NSCompoundPredicate(type: .and, subpredicates: [containerPredicate, sizePredicate])
+        let drinks = try await database.read(
+            matching: predicate,
+            sortBy: nil,
+            limit: 1,
+            context
+        )
+        for drink in drinks {
+            try database.delete(drink, context)
+        }
+    }
+    
+    public func deleteDrink(container: String) async throws {
+        let drink = try await fetchEntity(container)
+        try database.delete(drink, context)
+    }
+    
+    public func deleteAll() async throws {
+        let drinks = try await fetchAllEntity()
+        for drink in drinks {
+            try database.delete(drink, context)
+        }
+    }
+    
+    public func fetch(_ container: String) async throws -> DrinkModel {
+        guard let drink = try await DrinkModel(from: fetchEntity(container))
+        else {
+            throw DatabaseError.couldNotMapElement
+        }
+        return drink
+    }
+    
+    public func fetchAll() async throws -> [DrinkModel] {
+        try await fetchAllEntity()
+        .compactMap { .init(from: $0) }
+    }
+}
+
+extension DrinkEntity {
+    fileprivate convenience init(from model: DrinkModel) throws {
+        self.init()
+        self.id = model.id
+        self.container = model.container
+        self.size = model.size
+    }
+}
+
+private extension DrinkModel {
+    init?(from model: DrinkEntity) {
+        guard let id = model.id, let container = model.container
+        else { return nil }
+        self.init(id: id, size: model.size, container: container)
+    }
+}
