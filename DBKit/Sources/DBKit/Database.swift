@@ -12,6 +12,8 @@ import DBKitInterface
 public class Database: DatabaseType {
     private let logger: Logger
     private let inMemory: Bool
+    private var backgroundContext: NSManagedObjectContext?
+    
     private lazy var persistentContainer: NSPersistentContainer = {
         guard let objectModelURL = Bundle.module.url(forResource: "reHydrate", withExtension: "momd"),
               let objectModel = NSManagedObjectModel(contentsOf: objectModelURL)
@@ -22,7 +24,6 @@ public class Database: DatabaseType {
         if inMemory {
             persistentContainer.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
-        
         persistentContainer.loadPersistentStores { [logger] description, error in
             if let error {
                 fatalError("Failed to load persistent stores: \(error.localizedDescription)")
@@ -39,7 +40,13 @@ public class Database: DatabaseType {
     }
     
     public func open() -> NSManagedObjectContext {
-        persistentContainer.viewContext
+        if let backgroundContext {
+            return backgroundContext
+        } else {
+            let context = persistentContainer.newBackgroundContext()
+            backgroundContext = context
+            return context
+        }
     }
     
     public func save(_ context: NSManagedObjectContext) throws {
