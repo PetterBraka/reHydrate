@@ -7,94 +7,115 @@
 
 import XCTest
 @testable import DBKit
+import DBKitInterface
+import DBKitMocks
 
-//final class ConsumptionManagerTests: XCTestCase {
-//    let referenceDate = Date(timeIntervalSince1970: 1688227143)
-//    let secondReferenceDate = Date(timeIntervalSince1970: 1688324062)
-//    
-//    let database =  Database(logger: .init(subsystem: "ConsumptionManagerTests"))
-//    var spy: DatabaseSpy<ConsumptionManager.ConsumptionModel>!
-//    var sut: ConsumptionManagerType!
-//    
-//    override func setUp() {
-//        self.spy = DatabaseSpy(realObject: database)
-//        self.sut = ConsumptionManager(database: spy)
-//    }
-//    
-//    override func tearDown() async throws {
-//        try await spy.deleteAll(ConsumptionManager.ConsumptionModel(id: "", date: "", time: "", consumed: 0))
-//        let db = try XCTUnwrap(database.db)
-//        XCTAssertTrue(db.isClosed)
-//    }
-//    
-//    func test_add_one() async throws {
-//        let givenConsumption = Double.random(in: 300 ... 750)
-//        let newEntry = try await sut.createEntry(date: referenceDate, consumed: givenConsumption)
-//        assert(newEntry, expectedDate: referenceDate, expectedConsumption: givenConsumption)
-//        XCTAssertEqual(spy.methodLogNames, [.write])
-//    }
-//    
-//    func test_add_multiple() async throws {
-//        try await preLoadXEntries(15, startDate: referenceDate)
-//        XCTAssertEqual(spy.methodLogNames, .init(repeating: .write, count: 15))
-//    }
-//    
-//    func test_fetch() async throws {
-//        try await preLoadXEntries(10, startDate: referenceDate)
-//        try await preLoadXEntries(10, startDate: secondReferenceDate)
-//        let result = try await sut.fetchAll(at: referenceDate)
-//        XCTAssertEqual(result.count, 10)
-//        XCTAssertEqual(spy.methodLogNames, .init(repeating: .write, count: 20) + [.readMatchingOrderByLimit])
-//    }
-//    
-//    func test_fetchAll() async throws {
-//        try await preLoadXEntries(10, startDate: referenceDate)
-//        let result = try await sut.fetchAll()
-//        XCTAssertEqual(result.count, 10)
-//        XCTAssertEqual(spy.methodLogNames, .init(repeating: .write, count: 10) + [.readMatchingOrderByLimit])
-//    }
-//    
-//    func test_delete() async throws {
-//        try await preLoadXEntries(2, startDate: referenceDate)
-//        let optionalEntry = try await sut.fetchAll().first
-//        let entry = try XCTUnwrap(optionalEntry)
-//        try await sut.delete(entry)
-//        XCTAssertEqual(spy.methodLogNames, [.write, .write, .readMatchingOrderByLimit, .delete])
-//    }
-//}
-//
-//extension ConsumptionManagerTests {
-//    func assert(_ entry: ConsumptionModel,
-//                expectedDate: Date,
-//                expectedConsumption: Double,
-//                file: StaticString = #file,
-//                line: UInt = #line) {
-//        XCTAssertEqual(entry.date, expectedDate.toDateString(), file: file, line: line)
-//        XCTAssertEqual(entry.time, expectedDate.toTimeString(), file: file, line: line)
-//        XCTAssertEqual(entry.consumed, expectedConsumption, file: file, line: line)
-//    }
-//    
-//    func preLoadXEntries(_ number: Int, startDate: Date,
-//                         file: StaticString = #file,
-//                         line: UInt = #line) async throws {
-//        let min = 1
-//        XCTAssertTrue(number > min)
-//        for index in min ... number {
-//            let givenConsumption = Double.random(in: 300 ... 750)
-//            let givenDate = startDate.addingTimeInterval(TimeInterval(60 * index))
-//            let newEntry = try await sut.createEntry(date: givenDate,
-//                                                     consumed: givenConsumption)
-//            assert(newEntry, expectedDate: givenDate, expectedConsumption: givenConsumption, file: file, line: line)
-//        }
-//    }
-//}
-//
-//private extension Date {
-//    func toDateString() -> String {
-//        DatabaseFormatter.date.string(from: self)
-//    }
-//    
-//    func toTimeString() -> String {
-//        DatabaseFormatter.time.string(from: self)
-//    }
-//}
+final class ConsumptionManagerTests: XCTestCase {
+    let referenceDate = Date(timeIntervalSince1970: 1688227143)
+    let secondReferenceDate = Date(timeIntervalSince1970: 1688324062)
+    
+    var spy: DatabaseSpy<ConsumptionEntity, Database<ConsumptionEntity>>!
+    var sut: ConsumptionManagerType!
+    
+    override func setUp() {
+        let db: Database<ConsumptionEntity> = Database(inMemory: true)
+        self.spy = DatabaseSpy(realObject: db)
+        self.sut = ConsumptionManager(database: spy)
+    }
+    
+    func test_add_one() async throws {
+        let givenConsumption = Double.random(in: 300 ... 750)
+        let newEntry = try sut.createEntry(date: referenceDate, consumed: givenConsumption)
+        assert(newEntry, expectedDate: referenceDate, expectedConsumption: givenConsumption)
+        XCTAssertEqual(spy.methodLogNames, [.open, .create, .save])
+    }
+    
+    func test_add_multiple() async throws {
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        XCTAssertEqual(spy.methodLogNames, [
+            .open, .create, .save, .create, .save, .create, .save, .create, .save
+        ])
+    }
+    
+    func test_fetch() async throws {
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        try createEntry(date: secondReferenceDate)
+        try createEntry(date: secondReferenceDate)
+        try createEntry(date: secondReferenceDate)
+        try createEntry(date: secondReferenceDate)
+        let result = try await sut.fetchAll(at: referenceDate)
+        let secondResult = try await sut.fetchAll(at: secondReferenceDate)
+        XCTAssertEqual(result.count, 3)
+        XCTAssertEqual(secondResult.count, 4)
+        XCTAssertEqual(spy.methodLogNames, [
+            .open,
+            .create, .save, .create, .save, .create, .save,
+            .create, .save, .create, .save, .create, .save, .create, .save,
+            .read, .read
+        ])
+    }
+    
+    func test_fetchAll() async throws {
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        
+        let result = try await sut.fetchAll()
+        XCTAssertEqual(result.count, 4)
+        XCTAssertEqual(spy.methodLogNames, [
+            .open,
+            .create, .save, .create, .save, .create, .save, .create, .save,
+            .read
+        ])
+    }
+    
+    func test_delete() async throws {
+        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDate)
+        let optionalEntry = try await sut.fetchAll().first
+        let entry = try XCTUnwrap(optionalEntry)
+        try await sut.delete(entry)
+        XCTAssertEqual(spy.methodLogNames, [
+            .open,
+            .create, .save, .create, .save,
+            .read, .read, .delete
+        ])
+    }
+}
+
+extension ConsumptionManagerTests {
+    func assert(_ entry: ConsumptionModel,
+                expectedDate: Date,
+                expectedConsumption: Double,
+                file: StaticString = #file,
+                line: UInt = #line) {
+        XCTAssertEqual(entry.date, expectedDate.toDateString(), file: file, line: line)
+        XCTAssertEqual(entry.time, expectedDate.toTimeString(), file: file, line: line)
+        XCTAssertEqual(entry.consumed, expectedConsumption, file: file, line: line)
+    }
+    
+    func createEntry(date: Date,
+                      file: StaticString = #file,
+                      line: UInt = #line) throws {
+        let givenConsumption = Double.random(in: 300 ... 750)
+        let newEntry = try sut.createEntry(date: date, consumed: givenConsumption)
+        assert(newEntry, expectedDate: date, expectedConsumption: givenConsumption,
+               file: file, line: line)
+    }
+}
+
+private extension Date {
+    func toDateString() -> String {
+        DatabaseFormatter.date.string(from: self)
+    }
+    
+    func toTimeString() -> String {
+        DatabaseFormatter.time.string(from: self)
+    }
+}

@@ -24,7 +24,7 @@ extension ConsumptionManager: ConsumptionManagerType {
     public func createEntry(
         date: Date,
         consumed: Double
-    ) async throws -> ConsumptionModel {
+    ) throws -> ConsumptionModel {
         let newEntry = try database.create(context)
         newEntry.id = UUID().uuidString
         newEntry.date = DatabaseFormatter.date.string(from: date)
