@@ -64,7 +64,7 @@ public class Database: DatabaseType {
         limit: Int?,
         _ context: NSManagedObjectContext
     ) async throws -> [Element] {
-        try await withCheckedThrowingContinuation { [self] continuation in
+        try await withCheckedThrowingContinuation { continuation in
             let fetchRequest = Element.fetchRequest()
             fetchRequest.predicate = matching
             fetchRequest.sortDescriptors = sortBy
