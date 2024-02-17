@@ -31,6 +31,7 @@ extension ConsumptionManager: ConsumptionManagerType {
         newEntry.time = DatabaseFormatter.time.string(from: date)
         newEntry.consumed = consumed
         try database.save(context)
+        LoggingService.log(level: .debug, "Created consumption \(newEntry)")
         
         guard let newEntry = ConsumptionModel(from: newEntry)
         else {
@@ -39,9 +40,10 @@ extension ConsumptionManager: ConsumptionManagerType {
         return newEntry
     }
     
-    private func delete(_ day: ConsumptionEntity) throws {
-        context.delete(day)
+    private func delete(_ entity: ConsumptionEntity) throws {
+        context.delete(entity)
         try database.save(context)
+        LoggingService.log(level: .debug, "Deleted consumption \(entity)")
     }
     
     public func delete(_ entry: ConsumptionModel) async throws {
@@ -53,6 +55,7 @@ extension ConsumptionManager: ConsumptionManagerType {
             sortBy: nil,
             limit: 1,
             context)
+        LoggingService.log(level: .debug, "Found consumption \(entries)")
         guard let entry = entries.first else { return }
         try delete(entry)
     }
@@ -64,11 +67,12 @@ extension ConsumptionManager: ConsumptionManagerType {
             sortBy: [NSSortDescriptor(key: "time", ascending: true)],
             limit: nil,
             context)
+        LoggingService.log(level: .debug, "Found consumption \(entries)")
         return entries.compactMap { .init(from: $0) }
     }
     
     public func fetchAll() async throws -> [ConsumptionModel] {
-        try await database.read(
+        let entries: [ConsumptionEntity] = try await database.read(
             matching: nil,
             sortBy: [NSSortDescriptor(key: "date", ascending: true)],
             limit: nil,
@@ -83,7 +87,8 @@ extension ConsumptionManager: ConsumptionManagerType {
                 return lhsDate > rhsDate
             }
         }
-        .compactMap { .init(from: $0) }
+        LoggingService.log(level: .debug, "Found consumption \(entries)")
+        return entries.compactMap { .init(from: $0) }
     }
 }
 
@@ -102,5 +107,15 @@ private extension ConsumptionModel {
         guard let id = model.id, let date = model.date, let time = model.time
         else { return nil }
         self.init(id: id, date: date, time: time, consumed: model.consumed)
+    }
+}
+
+extension ConsumptionEntity {
+    public override var description: String {
+        "Consumption: \n\t" +
+        "id:\(id ?? "No id")\n\t" +
+        "date:\(date ?? "No date")\n\t" +
+        "time:\(time ?? "No time")\n\t" +
+        "container:\(consumed)\n"
     }
 }

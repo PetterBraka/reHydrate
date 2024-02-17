@@ -20,7 +20,6 @@ public final class DayManager {
 
 private extension DayManager {
     func fetchEntity(with date: Date) async throws -> DayEntity {
-        // Get day's beginning & tomorrows beginning time
         let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
         
         let days: [DayEntity] = try await database.read(
@@ -28,6 +27,7 @@ private extension DayManager {
             sortBy: [.init(key: "date", ascending: true)],
             limit: nil,
             context)
+        LoggingService.log(level: .debug, "Found \(days)")
         guard let day = days.first
         else {
             throw DatabaseError.noElementFound
@@ -41,6 +41,7 @@ private extension DayManager {
             sortBy: [.init(key: "date", ascending: false)],
             limit: 1,
             context)
+        LoggingService.log(level: .debug, "Found \(days)")
         guard let day = days.first
         else {
             throw DatabaseError.noElementFound
@@ -49,12 +50,14 @@ private extension DayManager {
     }
     
     func fetchAllEntities() async throws -> [DayEntity] {
-        try await database.read(
+        let days: [DayEntity] = try await database.read(
             matching: nil,
             sortBy: [.init(key: "date", ascending: true)],
             limit: nil,
             context
         )
+        LoggingService.log(level: .debug, "Found \(days)")
+        return days
     }
 }
  
@@ -66,6 +69,7 @@ extension DayManager: DayManagerType {
         newDay.consumed = 0
         newDay.goal = goal
         try database.save(context)
+        LoggingService.log(level: .debug, "Created \(newDay)")
         
         guard let newDay = DayModel(from: newDay)
         else {
@@ -78,6 +82,7 @@ extension DayManager: DayManagerType {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed += consumed
         try database.save(context)
+        LoggingService.log(level: .debug, "Edited \(dayToUpdate)")
         guard let day = DayModel(from: dayToUpdate)
         else {
             throw DatabaseError.couldNotMapElement
@@ -92,6 +97,7 @@ extension DayManager: DayManagerType {
             dayToUpdate.consumed = 0
         }
         try database.save(context)
+        LoggingService.log(level: .debug, "Edited \(dayToUpdate)")
         guard let day = DayModel(from: dayToUpdate)
         else {
             throw DatabaseError.couldNotMapElement
@@ -103,6 +109,7 @@ extension DayManager: DayManagerType {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal += goal
         try database.save(context)
+        LoggingService.log(level: .debug, "Edited \(dayToUpdate)")
         guard let day = DayModel(from: dayToUpdate)
         else {
             throw DatabaseError.couldNotMapElement
@@ -117,6 +124,7 @@ extension DayManager: DayManagerType {
             dayToUpdate.goal = 0
         }
         try database.save(context)
+        LoggingService.log(level: .debug, "Edited \(dayToUpdate)")
         guard let day = DayModel(from: dayToUpdate)
         else {
             throw DatabaseError.couldNotMapElement
@@ -127,6 +135,7 @@ extension DayManager: DayManagerType {
     private func delete(_ day: DayEntity) throws {
         context.delete(day)
         try database.save(context)
+        LoggingService.log(level: .debug, "Deleted \(day)")
     }
     
     public func delete(_ day: DayModel) async throws {
@@ -221,5 +230,15 @@ private extension DayModel {
             consumed: model.consumed,
             goal: model.goal
         )
+    }
+}
+
+extension DayEntity {
+    public override var description: String {
+        "Day: \n\t" +
+        "id:\(id ?? "No id")\n\t" +
+        "date:\(date ?? "No date")\n\t" +
+        "consumed:\(consumed)\n\t" +
+        "goal:\(goal)\n"
     }
 }

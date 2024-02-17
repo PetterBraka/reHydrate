@@ -26,6 +26,7 @@ private extension DrinkManager {
             sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: 1,
             context)
+        LoggingService.log(level: .debug, "Found drink \(drinks)")
         guard let drink = drinks.first
         else {
             throw DatabaseError.noElementFound
@@ -34,11 +35,13 @@ private extension DrinkManager {
     }
     
     func fetchAllEntity() async throws -> [DrinkEntity] {
-        try await database.read(
+        let drinks: [DrinkEntity] = try await database.read(
             matching: nil,
             sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: nil,
             context)
+        LoggingService.log(level: .debug, "Found drink \(drinks)")
+        return drinks
     }
 }
 
@@ -49,6 +52,7 @@ extension DrinkManager: DrinkManagerType {
         newDrink.amount = size
         newDrink.container = container
         try database.save(context)
+        LoggingService.log(level: .debug, "Created drink \(newDrink)")
         guard let newDrink = DrinkModel(from: newDrink)
         else {
             throw DatabaseError.creatingElement
@@ -60,6 +64,7 @@ extension DrinkManager: DrinkManagerType {
         let drink = try await fetchEntity(container)
         drink.amount = size
         try database.save(context)
+        LoggingService.log(level: .debug, "Edited drink \(drink)")
         guard let drink = DrinkModel(from: drink)
         else {
             throw DatabaseError.creatingElement
@@ -70,6 +75,7 @@ extension DrinkManager: DrinkManagerType {
     private func delete(_ drink: DrinkEntity) throws {
         context.delete(drink)
         try database.save(context)
+        LoggingService.log(level: .debug, "Deleted drink \(drink)")
     }
     
     public func delete(_ drink: DrinkModel) async throws {
@@ -128,5 +134,14 @@ private extension DrinkModel {
         guard let id = model.id, let container = model.container
         else { return nil }
         self.init(id: id, size: model.amount, container: container)
+    }
+}
+
+extension DrinkEntity {
+    public override var description: String {
+        "Drink: \n\t" +
+        "id:\(id ?? "No id")\n\t" +
+        "amount:\(amount)\n\t" +
+        "container:\(container ?? "No container")\n"
     }
 }

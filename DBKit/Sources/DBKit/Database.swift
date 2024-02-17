@@ -10,7 +10,6 @@ import CoreData
 import DBKitInterface
 
 public class Database: DatabaseType {
-    private let logger: Logger
     private let inMemory: Bool
     private var backgroundContext: NSManagedObjectContext?
     
@@ -24,18 +23,16 @@ public class Database: DatabaseType {
         if inMemory {
             persistentContainer.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
-        persistentContainer.loadPersistentStores { [logger] description, error in
+        persistentContainer.loadPersistentStores { description, error in
             if let error {
                 fatalError("Failed to load persistent stores: \(error.localizedDescription)")
             }
-            logger.debug("Loaded persistent store: \(description, privacy: .sensitive)")
+            LoggingService.log(level: .debug, "Loaded persistent store: \(description)")
         }
         return persistentContainer
     }()
     
     public init(inMemory: Bool = false) {
-        let logger = Logger(subsystem: "reHydrate", category: "DataBase")
-        self.logger = logger
         self.inMemory = inMemory
     }
     
@@ -56,7 +53,7 @@ public class Database: DatabaseType {
         do {
             try context.save()
         } catch {
-            logger.debug("Failed to save the context: \(error.localizedDescription, privacy: .private)")
+            LoggingService.log(level: .debug, "Failed to save the context: \(error.localizedDescription)")
             throw error
         }
     }
@@ -81,7 +78,7 @@ public class Database: DatabaseType {
                     continuation.resume(throwing: DatabaseError.couldNotMapElement)
                 }
             } catch {
-                self.logger.error("Couldn't fetch items: \(error, privacy: .private)")
+                LoggingService.log(level: .error, "Couldn't fetch items: \(error)")
                 continuation.resume(throwing: error)
             }
         }
@@ -91,12 +88,12 @@ public class Database: DatabaseType {
         _ element: Element,
         _ context: NSManagedObjectContext
     ) throws {
-        logger.info("Deleting element: \(String(describing: element))")
+        LoggingService.log(level: .info, "Deleting element: \(String(describing: element))")
         context.delete(element)
         do {
             try context.save()
         } catch {
-            logger.error("Couldn't delete element \(error.localizedDescription)")
+            LoggingService.log(level: .error, "Couldn't delete element \(error.localizedDescription)")
             context.rollback()
             throw error
         }
