@@ -116,6 +116,6 @@ extension ConsumptionEntity {
         "id:\(id ?? "No id")\n\t" +
         "date:\(date ?? "No date")\n\t" +
         "time:\(time ?? "No time")\n\t" +
-        "container:\(consumed)\n"
+        "consumed:\(consumed)\n"
     }
 }
