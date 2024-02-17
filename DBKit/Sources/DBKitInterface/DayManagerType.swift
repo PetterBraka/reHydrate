@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol DayManagerType {
-    func createNewDay(date: Date, goal: Double) async throws -> DayModel
+    func createNewDay(date: Date, goal: Double) throws -> DayModel
     func add(consumed: Double, toDayAt date: Date) async throws -> DayModel
     func remove(consumed: Double, fromDayAt date: Date) async throws -> DayModel
     func add(goal: Double, toDayAt date: Date) async throws -> DayModel

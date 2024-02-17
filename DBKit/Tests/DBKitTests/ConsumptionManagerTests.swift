@@ -14,12 +14,11 @@ final class ConsumptionManagerTests: XCTestCase {
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
     let secondReferenceDate = Date(timeIntervalSince1970: 1688324062)
     
-    var spy: DatabaseSpy<ConsumptionEntity, Database<ConsumptionEntity>>!
+    var spy: DatabaseSpy<ConsumptionEntity, Database>!
     var sut: ConsumptionManagerType!
     
     override func setUp() {
-        let db: Database<ConsumptionEntity> = Database(inMemory: true)
-        self.spy = DatabaseSpy(realObject: db)
+        self.spy = DatabaseSpy(realObject: Database(inMemory: true))
         self.sut = ConsumptionManager(database: spy)
     }
     
@@ -27,7 +26,7 @@ final class ConsumptionManagerTests: XCTestCase {
         let givenConsumption = Double.random(in: 300 ... 750)
         let newEntry = try sut.createEntry(date: referenceDate, consumed: givenConsumption)
         assert(newEntry, expectedDate: referenceDate, expectedConsumption: givenConsumption)
-        XCTAssertEqual(spy.methodLogNames, [.open, .create, .save])
+        XCTAssertEqual(spy.methodLogNames, [.open, .save])
     }
     
     func test_add_multiple() async throws {
@@ -36,7 +35,7 @@ final class ConsumptionManagerTests: XCTestCase {
         try createEntry(date: referenceDate)
         try createEntry(date: referenceDate)
         XCTAssertEqual(spy.methodLogNames, [
-            .open, .create, .save, .create, .save, .create, .save, .create, .save
+            .open, .save, .save, .save, .save
         ])
     }
     
@@ -54,8 +53,8 @@ final class ConsumptionManagerTests: XCTestCase {
         XCTAssertEqual(secondResult.count, 4)
         XCTAssertEqual(spy.methodLogNames, [
             .open,
-            .create, .save, .create, .save, .create, .save,
-            .create, .save, .create, .save, .create, .save, .create, .save,
+            .save, .save, .save,
+            .save, .save, .save, .save,
             .read, .read
         ])
     }
@@ -70,7 +69,7 @@ final class ConsumptionManagerTests: XCTestCase {
         XCTAssertEqual(result.count, 4)
         XCTAssertEqual(spy.methodLogNames, [
             .open,
-            .create, .save, .create, .save, .create, .save, .create, .save,
+            .save, .save, .save, .save,
             .read
         ])
     }
@@ -83,8 +82,9 @@ final class ConsumptionManagerTests: XCTestCase {
         try await sut.delete(entry)
         XCTAssertEqual(spy.methodLogNames, [
             .open,
-            .create, .save, .create, .save,
-            .read, .read, .delete
+            .save, .save,
+            .read, .read,
+            .save
         ])
     }
 }

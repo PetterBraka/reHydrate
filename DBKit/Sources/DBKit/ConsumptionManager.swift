@@ -9,10 +9,10 @@ import CoreData
 import DBKitInterface
 
 public final class ConsumptionManager {
-    private let database: any DatabaseType<ConsumptionEntity>
+    private let database: DatabaseType
     private let context: NSManagedObjectContext
     
-    public init(database: any DatabaseType<ConsumptionEntity>) {
+    public init(database: DatabaseType) {
         self.database = database
         self.context = database.open()
     }
@@ -25,7 +25,7 @@ extension ConsumptionManager: ConsumptionManagerType {
         date: Date,
         consumed: Double
     ) throws -> ConsumptionModel {
-        let newEntry = try database.create(context)
+        let newEntry = ConsumptionEntity(context: context)
         newEntry.id = UUID().uuidString
         newEntry.date = DatabaseFormatter.date.string(from: date)
         newEntry.time = DatabaseFormatter.time.string(from: date)
@@ -40,14 +40,15 @@ extension ConsumptionManager: ConsumptionManagerType {
     }
     
     private func delete(_ day: ConsumptionEntity) throws {
-        try database.delete(day, context)
+        context.delete(day)
+        try database.save(context)
     }
     
     public func delete(_ entry: ConsumptionModel) async throws {
         let datePredicate = NSPredicate(format: "date == %@", entry.date)
         let timePredicate = NSPredicate(format: "time == %@", entry.time)
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, timePredicate])
-        let entries = try await database.read(
+        let entries: [ConsumptionEntity] = try await database.read(
             matching: predicate,
             sortBy: nil,
             limit: 1,
@@ -58,7 +59,7 @@ extension ConsumptionManager: ConsumptionManagerType {
 
     public func fetchAll(at date: Date) async throws -> [ConsumptionModel] {
         let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
-        let entries = try await database.read(
+        let entries: [ConsumptionEntity] = try await database.read(
             matching: predicate,
             sortBy: [NSSortDescriptor(keyPath: \ConsumptionEntity.time, ascending: true)],
             limit: nil,
@@ -72,7 +73,7 @@ extension ConsumptionManager: ConsumptionManagerType {
             sortBy: [NSSortDescriptor(keyPath: \ConsumptionEntity.date, ascending: true)],
             limit: nil,
             context)
-        .sorted { lhs, rhs in
+        .sorted { (lhs: ConsumptionEntity , rhs: ConsumptionEntity) in
             guard let lhsTime = lhs.time, let rhsTime = rhs.time,
                   let lhsDate = lhs.date, let rhsDate = rhs.date
             else { return false }

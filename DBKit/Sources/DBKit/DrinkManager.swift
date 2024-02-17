@@ -10,10 +10,10 @@ import DBKitInterface
 import CoreData
 
 public final class DrinkManager {
-    private let database: any DatabaseType<DrinkEntity>
+    private let database: DatabaseType
     private let context: NSManagedObjectContext
     
-    public init(database: any DatabaseType<DrinkEntity>) {
+    public init(database: DatabaseType) {
         self.database = database
         self.context = database.open()
     }
@@ -21,7 +21,7 @@ public final class DrinkManager {
 
 private extension DrinkManager {
     func fetchEntity(_ container: String) async throws -> DrinkEntity {
-        let drinks = try await database.read(
+        let drinks: [DrinkEntity] = try await database.read(
             matching: .init(format: "container == %@", container),
             sortBy: [NSSortDescriptor(keyPath: \DrinkModel.size, ascending: true)],
             limit: 1,
@@ -44,7 +44,7 @@ private extension DrinkManager {
 
 extension DrinkManager: DrinkManagerType {
     public func createNewDrink(size: Double, container: String) async throws -> DrinkModel {
-        let newDrink = try database.create(context)
+        let newDrink = DrinkEntity(context: context)
         newDrink.id = UUID().uuidString
         newDrink.size = size
         newDrink.container = container
@@ -68,33 +68,34 @@ extension DrinkManager: DrinkManagerType {
     }
     
     private func delete(_ drink: DrinkEntity) throws {
-        try database.delete(drink, context)
+        context.delete(drink)
+        try database.save(context)
     }
     
     public func delete(_ drink: DrinkModel) async throws {
         let containerPredicate = NSPredicate(format: "container == %@", drink.container)
         let sizePredicate = NSPredicate(format: "size == %@", drink.size)
         let predicate = NSCompoundPredicate(type: .and, subpredicates: [containerPredicate, sizePredicate])
-        let drinks = try await database.read(
+        let drinks: [DrinkEntity] = try await database.read(
             matching: predicate,
             sortBy: nil,
             limit: 1,
             context
         )
         for drink in drinks {
-            try database.delete(drink, context)
+            try delete(drink)
         }
     }
     
     public func deleteDrink(container: String) async throws {
         let drink = try await fetchEntity(container)
-        try database.delete(drink, context)
+        try delete(drink)
     }
     
     public func deleteAll() async throws {
         let drinks = try await fetchAllEntity()
         for drink in drinks {
-            try database.delete(drink, context)
+            try delete(drink)
         }
     }
     

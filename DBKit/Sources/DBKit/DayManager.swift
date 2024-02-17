@@ -9,10 +9,10 @@ import CoreData
 import DBKitInterface
 
 public final class DayManager {
-    private let database: any DatabaseType<DayEntity>
+    private let database: DatabaseType
     private let context: NSManagedObjectContext
     
-    public init(database: any DatabaseType<DayEntity>) {
+    public init(database: DatabaseType) {
         self.database = database
         self.context = database.open()
     }
@@ -59,8 +59,8 @@ private extension DayManager {
 }
  
 extension DayManager: DayManagerType {
-    public func createNewDay(date: Date, goal: Double) async throws -> DayModel {
-        let newDay = try database.create(context)
+    public func createNewDay(date: Date, goal: Double) throws -> DayModel {
+        let newDay = DayEntity(context: context)
         newDay.id = UUID().uuidString
         newDay.date = DatabaseFormatter.date.string(from: date)
         newDay.consumed = 0
@@ -125,7 +125,8 @@ extension DayManager: DayManagerType {
     }
     
     private func delete(_ day: DayEntity) throws {
-        try database.delete(day, context)
+        context.delete(day)
+        try database.save(context)
     }
     
     public func delete(_ day: DayModel) async throws {
@@ -140,7 +141,7 @@ extension DayManager: DayManagerType {
     public func deleteDay(at date: Date) async throws {
         do {
             let dayToDelete = try await fetchEntity(with: date)
-            try database.delete(dayToDelete, context)
+            try delete(dayToDelete)
         } catch {
             throw error
         }

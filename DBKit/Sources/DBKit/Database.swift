@@ -9,7 +9,7 @@ import OSLog
 import CoreData
 import DBKitInterface
 
-public class Database<Element: NSManagedObject>: DatabaseType {
+public class Database: DatabaseType {
     private let logger: Logger
     private let inMemory: Bool
     private lazy var persistentContainer: NSPersistentContainer = {
@@ -54,19 +54,7 @@ public class Database<Element: NSManagedObject>: DatabaseType {
         }
     }
     
-    public func create(_ context: NSManagedObjectContext) throws -> Element {
-        let className = String(describing: Element.self)
-        guard let managedObject = NSEntityDescription.insertNewObject(
-            forEntityName: className,
-            into: context
-        ) as? Element
-        else {
-            throw DatabaseError.couldNotMapElement
-        }
-        return managedObject
-    }
-    
-    public func read(
+    public func read<Element: NSManagedObject>(
         matching: NSPredicate?,
         sortBy: [NSSortDescriptor]?,
         limit: Int?,
@@ -92,7 +80,7 @@ public class Database<Element: NSManagedObject>: DatabaseType {
         }
     }
     
-    public func delete(
+    public func delete<Element: NSManagedObject>(
         _ element: Element,
         _ context: NSManagedObjectContext
     ) throws {

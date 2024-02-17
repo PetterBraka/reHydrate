@@ -20,27 +20,26 @@ final class DayManagerTests: XCTestCase {
         Date(timeIntervalSince1970: 1688583262)
     ]
     
-    var spy: DatabaseSpy<DayEntity, Database<DayEntity>>!
+    var spy: DatabaseSpy<DayEntity, Database>!
     var sut: DayManagerType!
     
     override func setUp() {
-        let db: Database<DayEntity> = Database(inMemory: true)
-        self.spy = DatabaseSpy(realObject: db)
+        self.spy = DatabaseSpy(realObject: Database(inMemory: true))
         self.sut = DayManager(database: spy)
     }
     
     func test_createNewDay_success() async throws {
-        let day = try await sut.createNewDay(date: referenceDate, goal: 3)
+        let day = try sut.createNewDay(date: referenceDate, goal: 3)
         assert(givenDay: day, expectedConsumption: 0, expectedGoal: 3)
-        XCTAssertEqual(spy.methodLogNames, [.open, .create, .save])
+        XCTAssertEqual(spy.methodLogNames, [.open, .save])
     }
     
     func test_createNewDayAndFetchDay_success() async throws {
-        let givenDay = try await sut.createNewDay(date: referenceDate, goal: 3)
+        let givenDay = try sut.createNewDay(date: referenceDate, goal: 3)
         assert(givenDay: givenDay, expectedConsumption: 0, expectedGoal: 3)
         let foundDay = try await sut.fetch(with: referenceDate)
         assert(givenDay: givenDay, expectedDay: foundDay)
-        XCTAssertEqual(spy.methodLogNames, [.open, .create, .save, .read])
+        XCTAssertEqual(spy.methodLogNames, [.open, .save, .read])
     }
     
     func test_fetchDay_noDay() async throws {
@@ -59,16 +58,16 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_fetchAll_success() async throws {
-        try await preLoad4Days()
+        try preLoad4Days()
         let days = try await sut.fetchAll()
         XCTAssertEqual(days.count, 4)
         XCTAssertEqual(days.map(\.date),
                        referenceDates.map { $0.toDateString() })
-//        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.readMatchingOrderByLimit])
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
     }
     
     func test_fetchLast_success() async throws {
-        try await preLoad4Days()
+        try preLoad4Days()
         guard let lastDate = referenceDates.last
         else {
             XCTFail("No day found")
@@ -76,8 +75,8 @@ final class DayManagerTests: XCTestCase {
         }
         let lastDay = try await sut.fetchLast()
         XCTAssertEqual(lastDay.date, lastDate.toDateString())
-//        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
-//                       [.readMatchingOrderByLimit])
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
+                       [.read])
     }
     
     func test_fetchLast_noDays() async throws {
@@ -87,11 +86,11 @@ final class DayManagerTests: XCTestCase {
         } catch {
             XCTAssertNotNil(error)
         }
-//        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
+        XCTAssertEqual(spy.methodLogNames, [.open, .read])
     }
     
     func test_addConsumed() async throws {
-        try await preLoad4Days()
+        try preLoad4Days()
         let givenConsumption: Double = 2
         guard let givenRandomDate = referenceDates.randomElement()
         else {
@@ -108,7 +107,7 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_removeConsumed() async throws {
-        try await preLoad4Days()
+        try preLoad4Days()
         let givenConsumption: Double = 2
         guard let givenRandomDate = referenceDates.randomElement()
         else {
@@ -125,7 +124,7 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_addGoal() async throws {
-        try await preLoad4Days()
+        try preLoad4Days()
         guard let givenRandomDate = referenceDates.randomElement()
         else {
             XCTFail("No day found")
@@ -141,7 +140,7 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_removeGoal() async throws {
-        try await preLoad4Days()
+        try preLoad4Days()
         guard let givenRandomDate = referenceDates.randomElement()
         else {
             XCTFail("No day found")
@@ -157,7 +156,7 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_removeGoal_tooMuch() async throws {
-        try await preLoad4Days()
+        try preLoad4Days()
         guard let givenRandomDate = referenceDates.randomElement()
         else {
             XCTFail("No day found")
@@ -173,25 +172,25 @@ final class DayManagerTests: XCTestCase {
     }
     
     func test_deleteDay_success() async throws {
-        try await preLoad4Days()
+        try preLoad4Days()
         let dayToDelete = try await sut.fetchLast()
         try await sut.delete(dayToDelete)
         let days = try await sut.fetchAll()
         XCTAssertEqual(days.count, 3)
         XCTAssertFalse(days.contains(dayToDelete))
         XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
-                       [.read, .read, .delete, .read])
+                       [.read, .read, .save, .read])
     }
     
     func test_deleteDate_success() async throws {
         let dateToDelete = referenceDates[2]
-        try await preLoad4Days()
+        try preLoad4Days()
         try await sut.deleteDay(at: dateToDelete)
         let days = try await sut.fetchAll()
         XCTAssertEqual(days.count, 3)
         XCTAssertFalse(days.contains(where: { $0.date == dateToDelete.toDateString() }))
         XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
-                       [.read, .delete, .read])
+                       [.read, .save, .read])
     }
     
     func test_deleteDatesInRange_success() async throws {
@@ -201,7 +200,7 @@ final class DayManagerTests: XCTestCase {
             XCTFail("Failed getting reference dates")
             return
         }
-        try await preLoad4Days()
+        try preLoad4Days()
         do {
             try await sut.deleteDays(in: firstDate ..< lastDate)
         } catch {
@@ -222,7 +221,7 @@ final class DayManagerTests: XCTestCase {
             XCTFail("Failed getting reference dates")
             return
         }
-        try await preLoad4Days()
+        try preLoad4Days()
         do {
             try await sut.deleteDays(in: firstDate ... lastDate)
         } catch {
@@ -230,23 +229,16 @@ final class DayManagerTests: XCTestCase {
         }
         let days = try await sut.fetchAll()
         XCTAssertTrue(days.isEmpty)
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read] +
-            .delete(times: 4) + [.read])
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read] + .delete(times: 4) + [.read])
     }
     
     func testPerformance_createNewDay_success() {
         measure {
-            let expectation = expectation(description: "finished")
-            Task { @MainActor in
-                do {
-                    let _ = try await self.sut.createNewDay(date: self.referenceDate, goal: 3)
-                    expectation.fulfill()
-                } catch {
-                    XCTFail(error.localizedDescription)
-                    expectation.fulfill()
-                }
+            do {
+                let _ = try self.sut.createNewDay(date: self.referenceDate, goal: 3)
+            } catch {
+                XCTFail(error.localizedDescription)
             }
-            wait(for: [expectation], timeout: 5)
         }
     }
 }
@@ -278,23 +270,21 @@ private extension DayManagerTests {
     }
     
     func preLoad4Days(file: StaticString = #file,
-                      line: UInt = #line) async throws {
-        let _ = try await sut.createNewDay(date: referenceDates[0], goal: 3)
-        let _ = try await sut.createNewDay(date: referenceDates[1], goal: 3)
-        let _ = try await sut.createNewDay(date: referenceDates[2], goal: 3)
-        let _ = try await sut.createNewDay(date: referenceDates[3], goal: 3)
+                      line: UInt = #line) throws {
+        let _ = try sut.createNewDay(date: referenceDates[0], goal: 3)
+        let _ = try sut.createNewDay(date: referenceDates[1], goal: 3)
+        let _ = try sut.createNewDay(date: referenceDates[2], goal: 3)
+        let _ = try sut.createNewDay(date: referenceDates[3], goal: 3)
     }
 }
 
-private extension Array where Element == DatabaseSpy<DayEntity, Database<DayEntity>>.MethodName {
-    static func preLoaded4Days() -> [DatabaseSpy<DayEntity, Database<DayEntity>>.MethodName] {
-        [.open] + [[DatabaseSpy<DayEntity, Database<DayEntity>>.MethodName]].init(
-            repeating: [.create, .save], count: 4
-        ).flatMap { $0 }
+private extension Array where Element == DatabaseSpy<DayEntity, Database>.MethodName {
+    static func preLoaded4Days() -> [Element] {
+        [.open] + .init(repeating: .save, count: 4)
     }
     
-    static func delete(times number: Int) -> [DatabaseSpy<DayEntity, Database<DayEntity>>.MethodName] {
-        .init(repeating: .delete, count: number)
+    static func delete(times number: Int) -> [Element] {
+        .init(repeating: .save, count: number)
     }
 }
 
