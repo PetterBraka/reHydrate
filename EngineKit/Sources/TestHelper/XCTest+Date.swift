@@ -41,8 +41,13 @@ public extension Date {
         calendar: Calendar = .init(identifier: .gregorian),
         file: StaticString = #file, line: UInt = #line
     ) throws {
+        let components = DateComponents(
+            calendar: calendar, timeZone: .gmt,
+            year: year, month: month, day: day,
+            hour: 07, minute: 30
+        )
         self = try XCTUnwrap(
-            calendar.date(from: .init(year: year, month: month, day: day)),
+            calendar.date(from: components),
             file: file, line: line
         )
     }

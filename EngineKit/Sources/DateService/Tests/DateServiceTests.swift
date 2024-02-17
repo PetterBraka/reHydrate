@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 28/01/2024.
 //
@@ -70,7 +70,7 @@ extension DateServiceTests {
     
     func test_daysBetween_february_2_1998() throws {
         let days = try sut.daysBetween(.init(year: 1998, month: 2, day: 2),
-                                   end: .february_1_2024_Thursday)
+                                       end: .february_1_2024_Thursday)
         XCTAssertEqual(days, 9_495)
     }
     
