@@ -25,7 +25,7 @@ private extension DayManager {
         
         let days: [DayEntity] = try await database.read(
             matching: predicate,
-            sortBy: [.init(keyPath: \DayEntity.date, ascending: true)],
+            sortBy: [.init(key: "date", ascending: true)],
             limit: nil,
             context)
         guard let day = days.first
@@ -38,7 +38,7 @@ private extension DayManager {
     func fetchLastEntity() async throws -> DayEntity {
         let days: [DayEntity] = try await database.read(
             matching: nil,
-            sortBy: [.init(keyPath: \DayEntity.date, ascending: false)],
+            sortBy: [.init(key: "date", ascending: false)],
             limit: 1,
             context)
         guard let day = days.first
@@ -51,7 +51,7 @@ private extension DayManager {
     func fetchAllEntities() async throws -> [DayEntity] {
         try await database.read(
             matching: nil,
-            sortBy: [.init(keyPath: \DayEntity.date, ascending: true)],
+            sortBy: [.init(key: "date", ascending: true)],
             limit: nil,
             context
         )

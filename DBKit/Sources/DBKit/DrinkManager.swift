@@ -23,7 +23,7 @@ private extension DrinkManager {
     func fetchEntity(_ container: String) async throws -> DrinkEntity {
         let drinks: [DrinkEntity] = try await database.read(
             matching: .init(format: "container == %@", container),
-            sortBy: [NSSortDescriptor(keyPath: \DrinkModel.size, ascending: true)],
+            sortBy: [NSSortDescriptor(key: "size", ascending: true)],
             limit: 1,
             context)
         guard let drink = drinks.first
@@ -36,7 +36,7 @@ private extension DrinkManager {
     func fetchAllEntity() async throws -> [DrinkEntity] {
         try await database.read(
             matching: nil,
-            sortBy: [.init(keyPath: \DrinkModel.size, ascending: true)],
+            sortBy: [NSSortDescriptor(key: "size", ascending: true)],
             limit: nil,
             context)
     }

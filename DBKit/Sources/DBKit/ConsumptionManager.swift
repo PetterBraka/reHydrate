@@ -61,7 +61,7 @@ extension ConsumptionManager: ConsumptionManagerType {
         let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
         let entries: [ConsumptionEntity] = try await database.read(
             matching: predicate,
-            sortBy: [NSSortDescriptor(keyPath: \ConsumptionEntity.time, ascending: true)],
+            sortBy: [NSSortDescriptor(key: "time", ascending: true)],
             limit: nil,
             context)
         return entries.compactMap { .init(from: $0) }
@@ -70,7 +70,7 @@ extension ConsumptionManager: ConsumptionManagerType {
     public func fetchAll() async throws -> [ConsumptionModel] {
         try await database.read(
             matching: nil,
-            sortBy: [NSSortDescriptor(keyPath: \ConsumptionEntity.date, ascending: true)],
+            sortBy: [NSSortDescriptor(key: "date", ascending: true)],
             limit: nil,
             context)
         .sorted { (lhs: ConsumptionEntity , rhs: ConsumptionEntity) in
