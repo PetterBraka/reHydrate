@@ -32,7 +32,7 @@ public final class DrinkManagerStub: DrinkManagerStubbing {
 }
 
 extension DrinkManagerStub: DrinkManagerType {
-    public func createNewDrink(size: Double, container: String) async throws -> DrinkModel {
+    public func createNewDrink(size: Double, container: String) throws -> DrinkModel {
         switch createNewDrink_returnValue {
         case let .success(drink):
             return drink

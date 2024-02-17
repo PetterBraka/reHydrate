@@ -6,7 +6,7 @@
 //
 
 public protocol DrinkManagerType {
-    func createNewDrink(size: Double, container: String) async throws -> DrinkModel
+    func createNewDrink(size: Double, container: String) throws -> DrinkModel
     func edit(size: Double, of container: String) async throws -> DrinkModel
     
     func delete(_ drink: DrinkModel) async throws

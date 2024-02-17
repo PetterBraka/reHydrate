@@ -23,7 +23,7 @@ private extension DrinkManager {
     func fetchEntity(_ container: String) async throws -> DrinkEntity {
         let drinks: [DrinkEntity] = try await database.read(
             matching: .init(format: "container == %@", container),
-            sortBy: [NSSortDescriptor(key: "size", ascending: true)],
+            sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: 1,
             context)
         guard let drink = drinks.first
@@ -36,17 +36,17 @@ private extension DrinkManager {
     func fetchAllEntity() async throws -> [DrinkEntity] {
         try await database.read(
             matching: nil,
-            sortBy: [NSSortDescriptor(key: "size", ascending: true)],
+            sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: nil,
             context)
     }
 }
 
 extension DrinkManager: DrinkManagerType {
-    public func createNewDrink(size: Double, container: String) async throws -> DrinkModel {
+    public func createNewDrink(size: Double, container: String) throws -> DrinkModel {
         let newDrink = DrinkEntity(context: context)
         newDrink.id = UUID().uuidString
-        newDrink.size = size
+        newDrink.amount = size
         newDrink.container = container
         try database.save(context)
         guard let newDrink = DrinkModel(from: newDrink)
@@ -58,7 +58,7 @@ extension DrinkManager: DrinkManagerType {
     
     public func edit(size: Double, of container: String) async throws -> DrinkModel {
         let drink = try await fetchEntity(container)
-        drink.size = size
+        drink.amount = size
         try database.save(context)
         guard let drink = DrinkModel(from: drink)
         else {
@@ -73,9 +73,10 @@ extension DrinkManager: DrinkManagerType {
     }
     
     public func delete(_ drink: DrinkModel) async throws {
-        let containerPredicate = NSPredicate(format: "container == %@", drink.container)
-        let sizePredicate = NSPredicate(format: "size == %@", drink.size)
-        let predicate = NSCompoundPredicate(type: .and, subpredicates: [containerPredicate, sizePredicate])
+        let predicate = NSCompoundPredicate(type: .and, subpredicates: [
+            NSPredicate(format: "container == %@", drink.container),
+            NSPredicate(format: "amount == %f", drink.size)
+        ])
         let drinks: [DrinkEntity] = try await database.read(
             matching: predicate,
             sortBy: nil,
@@ -118,7 +119,7 @@ extension DrinkEntity {
         self.init()
         self.id = model.id
         self.container = model.container
-        self.size = model.size
+        self.amount = model.size
     }
 }
 
@@ -126,6 +127,6 @@ private extension DrinkModel {
     init?(from model: DrinkEntity) {
         guard let id = model.id, let container = model.container
         else { return nil }
-        self.init(id: id, size: model.size, container: container)
+        self.init(id: id, size: model.amount, container: container)
     }
 }
