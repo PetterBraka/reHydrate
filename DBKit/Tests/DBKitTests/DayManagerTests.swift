@@ -54,7 +54,7 @@ final class DayManagerTests: XCTestCase {
         } catch {
             XCTAssertNotNil(error)
         }
-//        XCTAssertEqual(spy.methodLogNames, [.readMatchingOrderByLimit])
+        XCTAssertEqual(spy.methodLogNames, [.read])
     }
     
     func test_fetchAll_success() async throws {
