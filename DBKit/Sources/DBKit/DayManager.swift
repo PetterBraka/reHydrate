@@ -17,6 +17,46 @@ public final class DayManager {
         self.context = database.open()
     }
 }
+
+private extension DayManager {
+    func fetchEntity(with date: Date) async throws -> DayEntity {
+        // Get day's beginning & tomorrows beginning time
+        let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
+        
+        let days: [DayEntity] = try await database.read(
+            matching: predicate,
+            sortBy: [.init(keyPath: \DayEntity.date, ascending: true)],
+            limit: nil,
+            context)
+        guard let day = days.first
+        else {
+            throw DatabaseError.noElementFound
+        }
+        return day
+    }
+    
+    func fetchLastEntity() async throws -> DayEntity {
+        let days: [DayEntity] = try await database.read(
+            matching: nil,
+            sortBy: [.init(keyPath: \DayEntity.date, ascending: false)],
+            limit: 1,
+            context)
+        guard let day = days.first
+        else {
+            throw DatabaseError.noElementFound
+        }
+        return day
+    }
+    
+    func fetchAllEntities() async throws -> [DayEntity] {
+        try await database.read(
+            matching: nil,
+            sortBy: [.init(keyPath: \DayEntity.date, ascending: true)],
+            limit: nil,
+            context
+        )
+    }
+}
  
 extension DayManager: DayManagerType {
     public func createNewDay(date: Date, goal: Double) async throws -> DayModel {
@@ -135,44 +175,6 @@ extension DayManager: DayManagerType {
         for day in days {
             try delete(day)
         }
-    }
-    
-    private func fetchEntity(with date: Date) async throws -> DayEntity {
-        // Get day's beginning & tomorrows beginning time
-        let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
-        
-        let days: [DayEntity] = try await database.read(
-            matching: predicate,
-            sortBy: [.init(keyPath: \DayEntity.date, ascending: true)],
-            limit: nil,
-            context)
-        guard let day = days.first
-        else {
-            throw DatabaseError.noElementFound
-        }
-        return day
-    }
-    
-    public func fetchLastEntity() async throws -> DayEntity {
-        let days: [DayEntity] = try await database.read(
-            matching: nil,
-            sortBy: [.init(keyPath: \DayEntity.date, ascending: false)],
-            limit: 1,
-            context)
-        guard let day = days.first
-        else {
-            throw DatabaseError.noElementFound
-        }
-        return day
-    }
-    
-    private func fetchAllEntities() async throws -> [DayEntity] {
-        try await database.read(
-            matching: nil,
-            sortBy: [.init(keyPath: \DayEntity.date, ascending: true)],
-            limit: nil,
-            context
-        )
     }
     
     public func fetch(with date: Date) async throws -> DayModel {
