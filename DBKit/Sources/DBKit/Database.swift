@@ -46,30 +46,26 @@ public class Database<Element: NSManagedObject>: DatabaseType {
         // Verify that the context has uncommitted changes.
         guard context.hasChanges else { return }
         
-        try context.performAndWait {
-            do {
-                try context.save()
-            } catch {
-                logger.debug("Failed to save the context: \(error.localizedDescription, privacy: .private)")
-                throw error
-            }
+        do {
+            try context.save()
+        } catch {
+            logger.debug("Failed to save the context: \(error.localizedDescription, privacy: .private)")
+            throw error
         }
     }
     
     public func create(_ context: NSManagedObjectContext) throws -> Element {
-        try context.performAndWait {
-            let className = String(describing: Element.self)
-            guard let managedObject = NSEntityDescription.insertNewObject(
-                forEntityName: className,
-                into: context
-            ) as? Element
-            else {
-                throw DatabaseError.couldNotMapElement
-            }
-            return managedObject
+        let className = String(describing: Element.self)
+        guard let managedObject = NSEntityDescription.insertNewObject(
+            forEntityName: className,
+            into: context
+        ) as? Element
+        else {
+            throw DatabaseError.couldNotMapElement
         }
+        return managedObject
     }
-
+    
     public func read(
         matching: NSPredicate?,
         sortBy: [NSSortDescriptor]?,
@@ -83,17 +79,15 @@ public class Database<Element: NSManagedObject>: DatabaseType {
             if let limit {
                 fetchRequest.fetchLimit = limit
             }
-            context.performAndWait { [self] in
-                do {
-                    if let result = try context.fetch(fetchRequest) as? [Element] {
-                        continuation.resume(returning: result)
-                    } else {
-                        continuation.resume(throwing: DatabaseError.couldNotMapElement)
-                    }
-                } catch {
-                    self.logger.error("Couldn't fetch items: \(error, privacy: .private)")
-                    continuation.resume(throwing: error)
+            do {
+                if let result = try context.fetch(fetchRequest) as? [Element] {
+                    continuation.resume(returning: result)
+                } else {
+                    continuation.resume(throwing: DatabaseError.couldNotMapElement)
                 }
+            } catch {
+                self.logger.error("Couldn't fetch items: \(error, privacy: .private)")
+                continuation.resume(throwing: error)
             }
         }
     }
@@ -103,15 +97,13 @@ public class Database<Element: NSManagedObject>: DatabaseType {
         _ context: NSManagedObjectContext
     ) throws {
         logger.info("Deleting element: \(String(describing: element))")
-        try context.performAndWait {
-            context.delete(element)
-            do {
-                try context.save()
-            } catch {
-                logger.error("Couldn't delete element \(error.localizedDescription)")
-                context.rollback()
-                throw error
-            }
+        context.delete(element)
+        do {
+            try context.save()
+        } catch {
+            logger.error("Couldn't delete element \(error.localizedDescription)")
+            context.rollback()
+            throw error
         }
     }
 }
