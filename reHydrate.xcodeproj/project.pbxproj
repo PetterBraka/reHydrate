@@ -361,6 +361,7 @@
 		A1EABF392AF3F7C800591981 /* CreditsScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsScreenObservable.swift; sourceTree = "<group>"; };
 		A1EABF3C2AF40B5000591981 /* CustomToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
 		A1EABF3E2AF4E0E300591981 /* View+getSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+getSize.swift"; sourceTree = "<group>"; };
+		A1FB6F5F2B7C1E4300749D26 /* DBKit.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = DBKit.xctestplan; path = DBKit/DBKit.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -526,6 +527,7 @@
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
+				A1FB6F5F2B7C1E4300749D26 /* DBKit.xctestplan */,
 				A1A825E62B7903BE00EA98EC /* DBKit */,
 				A1AF32D22A346CA200FD0C7C /* EngineKit */,
 				A114C6C02A63DAAE00F53770 /* PresentationKit */,

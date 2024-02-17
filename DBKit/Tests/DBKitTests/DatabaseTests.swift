@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import DatabaseService
+@testable import DBKitInterface
 
 //final class DatabaseTests: XCTestCase {
 //    let referenceDate = Date(timeIntervalSince1970: 1688227143)

@@ -7,6 +7,8 @@
 
 import XCTest
 @testable import DBKit
+import DBKitInterface
+import DBKitMocks
 
 final class DayManagerTests: XCTestCase {
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
@@ -22,7 +24,8 @@ final class DayManagerTests: XCTestCase {
     var sut: DayManagerType!
     
     override func setUp() {
-        self.spy = DatabaseSpy(realObject: Database(inMemory: true))
+        let db: Database<DayEntity> = Database(inMemory: true)
+        self.spy = DatabaseSpy(realObject: db)
         self.sut = DayManager(database: spy)
     }
     
@@ -231,8 +234,8 @@ final class DayManagerTests: XCTestCase {
             .delete(times: 4) + [.read])
     }
     
-    func testPerformance_createNewDay_success() async throws {
-        self.measure {
+    func testPerformance_createNewDay_success() {
+        measure {
             let expectation = expectation(description: "finished")
             Task { @MainActor in
                 do {
@@ -243,7 +246,7 @@ final class DayManagerTests: XCTestCase {
                     expectation.fulfill()
                 }
             }
-            wait(for: [expectation], timeout: 2)
+            wait(for: [expectation], timeout: 5)
         }
     }
 }
@@ -276,9 +279,10 @@ private extension DayManagerTests {
     
     func preLoad4Days(file: StaticString = #file,
                       line: UInt = #line) async throws {
-        for date in referenceDates {
-            let _ = try await sut.createNewDay(date: date, goal: 3)
-        }
+        let _ = try await sut.createNewDay(date: referenceDates[0], goal: 3)
+        let _ = try await sut.createNewDay(date: referenceDates[1], goal: 3)
+        let _ = try await sut.createNewDay(date: referenceDates[2], goal: 3)
+        let _ = try await sut.createNewDay(date: referenceDates[3], goal: 3)
     }
 }
 

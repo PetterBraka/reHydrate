@@ -30,6 +30,6 @@ let package = Package(
         ),
         .testTarget(
             name: "DBKitTests",
-            dependencies: ["DBKit"]),
+            dependencies: ["DBKit", "DBKitMocks"]),
     ]
 )
