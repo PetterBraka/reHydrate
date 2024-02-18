@@ -12,7 +12,13 @@ import DBKitMocks
 
 final class ConsumptionManagerTests: XCTestCase {
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
-    let secondReferenceDate = Date(timeIntervalSince1970: 1688324062)
+    /// [1/07/2023, 2/07/2023, 3/07/2023, 5/07/2023]
+    let referenceDates = [
+        Date(timeIntervalSince1970: 1688227143),
+        Date(timeIntervalSince1970: 1688324062),
+        Date(timeIntervalSince1970: 1688410462),
+        Date(timeIntervalSince1970: 1688583262)
+    ]
     
     var spy: DatabaseSpy<ConsumptionEntity, Database>!
     var sut: ConsumptionManagerType!
@@ -43,12 +49,12 @@ final class ConsumptionManagerTests: XCTestCase {
         try createEntry(date: referenceDate)
         try createEntry(date: referenceDate)
         try createEntry(date: referenceDate)
-        try createEntry(date: secondReferenceDate)
-        try createEntry(date: secondReferenceDate)
-        try createEntry(date: secondReferenceDate)
-        try createEntry(date: secondReferenceDate)
+        try createEntry(date: referenceDates[1])
+        try createEntry(date: referenceDates[1])
+        try createEntry(date: referenceDates[1])
+        try createEntry(date: referenceDates[1])
         let result = try await sut.fetchAll(at: referenceDate)
-        let secondResult = try await sut.fetchAll(at: secondReferenceDate)
+        let secondResult = try await sut.fetchAll(at: referenceDates[1])
         XCTAssertEqual(result.count, 3)
         XCTAssertEqual(secondResult.count, 4)
         XCTAssertEqual(spy.methodLogNames, [
@@ -60,10 +66,10 @@ final class ConsumptionManagerTests: XCTestCase {
     }
     
     func test_fetchAll() async throws {
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
+        try createEntry(date: referenceDates[0])
+        try createEntry(date: referenceDates[3])
+        try createEntry(date: referenceDates[2])
+        try createEntry(date: referenceDates[1])
         
         let result = try await sut.fetchAll()
         XCTAssertEqual(result.count, 4)
@@ -86,6 +92,51 @@ final class ConsumptionManagerTests: XCTestCase {
             .read, .read,
             .save
         ])
+    }
+    
+    func test_delete_failure() async throws {
+        try createEntry(date: referenceDate)
+        try await sut.delete(ConsumptionModel(id: "", date: "", time: "", consumed: 0))
+        XCTAssertEqual(spy.methodLogNames, [.open, .save, .read])
+    }
+    
+    func test_map() {
+        let entity = ConsumptionEntity(context: spy.open())
+        entity.id = nil
+        entity.date = nil
+        entity.time = nil
+        XCTAssertEqual(ConsumptionModel(from: entity),
+                       ConsumptionModel(id: "", date: "", time: "", consumed: 0))
+    }
+    
+    func test_map_withDefaults() {
+        let entity = ConsumptionEntity(context: spy.open())
+        XCTAssertEqual(ConsumptionModel(from: entity),
+                       ConsumptionModel(id: "", date: "", time: "", consumed: 0))
+    }
+    
+    func test_map_withId() {
+        let entity = ConsumptionEntity(context: spy.open())
+        entity.id = "id"
+        XCTAssertEqual(ConsumptionModel(from: entity),
+                       ConsumptionModel(id: "id", date: "", time: "", consumed: 0))
+    }
+    
+    func test_map_withIdAndDate() {
+        let entity = ConsumptionEntity(context: spy.open())
+        entity.id = "id"
+        entity.date = "date"
+        XCTAssertEqual(ConsumptionModel(from: entity),
+                       ConsumptionModel(id: "id", date: "date", time: "", consumed: 0))
+    }
+    
+    func test_map_withIdAndDateAndTime() {
+        let entity = ConsumptionEntity(context: spy.open())
+        entity.id = "id"
+        entity.date = "date"
+        entity.time = "time"
+        XCTAssertEqual(ConsumptionModel(from: entity),
+                       ConsumptionModel(id: "id", date: "date", time: "time", consumed: 0))
     }
 }
 

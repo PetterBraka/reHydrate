@@ -33,11 +33,7 @@ extension ConsumptionManager: ConsumptionManagerType {
         try database.save(context)
         LoggingService.log(level: .debug, "Created consumption \(newEntry)")
         
-        guard let newEntry = ConsumptionModel(from: newEntry)
-        else {
-            throw DatabaseError.creatingElement
-        }
-        return newEntry
+        return ConsumptionModel(from: newEntry)
     }
     
     private func delete(_ entity: ConsumptionEntity) throws {
@@ -92,21 +88,12 @@ extension ConsumptionManager: ConsumptionManagerType {
     }
 }
 
-private extension ConsumptionEntity {
-    convenience init(from model: ConsumptionModel) throws {
-        self.init()
-        self.id = model.id
-        self.date = model.date
-        self.consumed = model.consumed
-        self.time = model.time
-    }
-}
-
-private extension ConsumptionModel {
-    init?(from model: ConsumptionEntity) {
-        guard let id = model.id, let date = model.date, let time = model.time
-        else { return nil }
-        self.init(id: id, date: date, time: time, consumed: model.consumed)
+package extension ConsumptionModel {
+    init(from model: ConsumptionEntity) {
+        self.init(id: model.id ?? "",
+                  date: model.date ?? "",
+                  time: model.time ?? "",
+                  consumed: model.consumed)
     }
 }
 
