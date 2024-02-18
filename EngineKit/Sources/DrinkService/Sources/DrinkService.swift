@@ -9,7 +9,7 @@ import Foundation
 import LoggingService
 import DrinkServiceInterface
 import UnitServiceInterface
-import PortsInterface
+import DBKitInterface
 
 public final class DrinkService: DrinkServiceType {
     public typealias Engine = (
@@ -25,7 +25,7 @@ public final class DrinkService: DrinkServiceType {
     }
     
     public func add(size: Double, container: Container) async throws -> Drink {
-        let newDrink = try await engine.drinkManager.createNewDrink(
+        let newDrink = try engine.drinkManager.createNewDrink(
             size: size, container: container.rawValue
         )
         guard let newDrink = Drink(from: newDrink) else {
@@ -68,7 +68,7 @@ public final class DrinkService: DrinkServiceType {
         
         for drink in defaultDrinks {
             do {
-                _ = try await engine.drinkManager.createNewDrink(
+                _ = try engine.drinkManager.createNewDrink(
                     size: drink.size, container: drink.container.rawValue
                 )
             } catch {

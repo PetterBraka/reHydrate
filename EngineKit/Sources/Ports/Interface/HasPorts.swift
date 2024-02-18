@@ -11,8 +11,5 @@ public protocol HasPorts:
     HasOpenUrlService &
     HasAlternateIconsService &
     HasAppearancePort &
-    HasHealthService &
-    HasDayManagerService &
-    HasDrinkManagerService &
-    HasConsumptionManagerService
+    HasHealthService 
 {}

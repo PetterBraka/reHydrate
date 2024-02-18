@@ -47,10 +47,9 @@ extension Screen.History {
                     router: Router) {
             self.engine = engine
             self.router = router
-            let calendarRange = engine.dateService.getDate(byAddingDays: -(365 * 5), to: .now)! ... .now
-            if let past = engine.dateService.getDate(byAddingDays: -6, to: .now) {
-                selectedRange =  past ... .now
-            }
+            let calendarRange = engine.dateService.getDate(byAddingDays: -(365 * 5), to: .now) ... .now
+            let past = engine.dateService.getDate(byAddingDays: -6, to: .now)
+            selectedRange =  past ... .now
             self.viewModel = .init(
                 isLoading: false,
                 details: .init(averageConsumed: "", averageGoal: "",
@@ -102,7 +101,7 @@ extension Screen.History {
                         newRange = date ... range.upperBound
                     }
                 } else {
-                    newRange = date ... engine.dateService.getDate(byAddingDays: 1, to: date)!
+                    newRange = date ... engine.dateService.getDate(byAddingDays: 1, to: date)
                 }
                 selectedRange = newRange
                 await updateViewModelWithDataBetween(start: newRange.lowerBound,
@@ -167,8 +166,7 @@ private extension Screen.History.Presenter {
 
 private extension Screen.History.Presenter {
     func fetchDays(startDate: Date, endDate: Date) async -> [Day] {
-        let dates = getDates(startDate: startDate, endDate: endDate)
-        return await engine.dayService.getDays(for: dates)
+        (try? await engine.dayService.getDays(between: startDate ... endDate)) ?? []
     }
         
     func getChartData(from days: [Day]) async -> [ViewModel.ChartData.Point] {

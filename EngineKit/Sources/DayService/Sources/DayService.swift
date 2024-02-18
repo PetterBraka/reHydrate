@@ -11,6 +11,7 @@ import DrinkServiceInterface
 import UnitServiceInterface
 import LoggingService
 import PortsInterface
+import DBKitInterface
 
 public final class DayService: DayServiceType {
     public typealias Engine = (
@@ -51,22 +52,16 @@ public final class DayService: DayServiceType {
         return day
     }
     
-    public func getDays(for dates: [Date]) async -> [Day] {
-        var days: [Day] = []
-        for date in dates {
-            let foundDay = try? await engine.dayManager.fetch(with: date)
-            if let day = Day(with: foundDay) {
-                days.append(day)
-            }
-        }
-        return days
+    public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
+        try await engine.dayManager.fetchAll()
+            .compactMap { .init(with: $0) }
     }
     
     public func add(drink: Drink) async throws -> Double {
         let consumedAmount = getConsumption(from: drink)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.add(consumed: consumedAmount, toDayAt: today.date)
-        try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        try engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
         await export(litres: consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
@@ -78,7 +73,7 @@ public final class DayService: DayServiceType {
         let consumedAmount = getConsumption(from: drink)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(consumed: consumedAmount, fromDayAt: today.date)
-        try await engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        try engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
         await export(litres: -consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
@@ -123,7 +118,7 @@ extension Day {
 private extension DayService {
     func createNewDay() async -> Day {
         let lastDay = try? await engine.dayManager.fetchLast()
-        if let createdDay = try? await engine.dayManager.createNewDay(
+        if let createdDay = try? engine.dayManager.createNewDay(
             date: .now, goal: lastDay?.goal ?? 3),
            let newDay = Day(with: createdDay) {
             return newDay

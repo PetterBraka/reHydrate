@@ -10,8 +10,8 @@ import EngineMocks
 import TestHelper
 import LoggingService
 import UnitServiceInterface
-import PortsInterface
-import PortsMocks
+import DBKitInterface
+import DBKitMocks
 import DrinkServiceInterface
 @testable import DrinkService
 
@@ -56,12 +56,13 @@ final class DrinkServiceTests: XCTestCase {
     }
     
     func test_addDrink() async throws {
+        drinkManager.createNewDrink_returnValue = .success(.init(id: "", size: 200, container: "small"))
         let newDrink = try await sut.add(size: 200, container: .small)
         assert(newDrink, .init(id: "", size: 200, container: .small))
     }
     
     func test_addDrink_givenMappingError() async throws {
-        drinkManager.createNewDrink_returnValue = .init(id: "", size: 0, container: "mid")
+        drinkManager.createNewDrink_returnValue = .success(.init(id: "", size: 0, container: "mid"))
         do {
             _ = try await sut.add(size: 200, container: .small)
             XCTFail("Should fail")
@@ -77,7 +78,7 @@ final class DrinkServiceTests: XCTestCase {
     
     func test_addDrink_givenCreationError() async throws {
         // given
-        drinkManager.createNewDrink_returnError = DrinkDBError.creatingDrink
+        drinkManager.createNewDrink_returnValue = .failure(DrinkDBError.creatingDrink)
         // When
         do {
             _ = try await sut.add(size: 200, container: .small)
@@ -164,7 +165,7 @@ final class DrinkServiceTests: XCTestCase {
     }
     
     func test_resetToDefault_whenFailingToStore() async {
-        drinkManager.createNewDrink_returnError = DrinkDBError.creatingDrink
+        drinkManager.createNewDrink_returnValue = .failure(DrinkDBError.creatingDrink)
         let defaults = await sut.resetToDefault()
         assert(defaults, [
             Drink(id: "", size: 300, container: .small),

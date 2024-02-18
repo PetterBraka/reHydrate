@@ -10,11 +10,17 @@ import UserNotifications
 import EngineKit
 import LoggingService
 import PortsInterface
+import DBKit
+import DBKitInterface
+import DBKitMocks
 
 extension Engine {
     typealias EngineType = (
         HasService &
         HasAppInfo &
+        HasDayManagerService &
+        HasDrinkManagerService &
+        HasConsumptionManagerService &
         HasPorts
     )
     

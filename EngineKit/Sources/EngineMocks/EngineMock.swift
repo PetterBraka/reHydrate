@@ -25,6 +25,8 @@ import PortsInterface
 import PortsMocks
 import DateServiceInterface
 import DateServiceMocks
+import DBKitInterface
+import DBKitMocks
 
 public final class EngineMocks {
     public init() {}

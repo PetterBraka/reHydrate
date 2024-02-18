@@ -14,6 +14,7 @@ import PresentationInterface
 import DrinkServiceInterface
 import UserNotifications
 import UIKit
+import DBKit
 
 public final class SceneFactory: ObservableObject {
     static let shared = SceneFactory()
@@ -33,7 +34,7 @@ public final class SceneFactory: ObservableObject {
         let subsystem = "com.braka.reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
         let logger = LoggingService(subsystem: subsystem)
-        let database = Database(logger: logger)
+        let database = Database()
         engine = Engine(
             appGroup: appGroup,
             appVersion: UIApplication.shared.appVersion,

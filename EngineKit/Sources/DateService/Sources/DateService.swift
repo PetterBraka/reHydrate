@@ -9,26 +9,33 @@ import Foundation
 import DateServiceInterface
 
 public final class DateService: DateServiceType {
-    private let calendar: Calendar
+    private let formatter: DateFormatter
+    private let dayInSeconds: Int = 24 * 60 * 60
     
-    public init(calendar: Calendar) {
-        self.calendar = calendar
+    public init() {
+        formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
     }
     
     public func daysBetween(_ start: Date, end: Date) -> Int {
-        calendar.dateComponents([.day], from: start, to: end).day ?? 0
+        let timeSince = end.timeIntervalSince(start)
+        return Int(timeSince) / dayInSeconds
     }
     
-    public func getDate(byAddingDays days: Int, to date: Date) -> Date? {
-        calendar.date(byAdding: .day, value: days, to: date)
+    public func getDate(byAddingDays days: Int, to date: Date) -> Date {
+        date.addingTimeInterval(TimeInterval(days * dayInSeconds))
     }
     
     public func getEnd(of date: Date) -> Date? {
-        calendar.date(bySettingHour: 23, minute: 59, second: 59, of: date)
+        let timeInterval = date.timeIntervalSince1970
+        
+        let secondsUntilEndOfDay = (dayInSeconds - Int(timeInterval) % dayInSeconds) - 1
+        
+        return Date(timeIntervalSince1970: timeInterval + Double(secondsUntilEndOfDay))
     }
     
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
-        let calendar = Calendar.current
-        return calendar.isDate(date, inSameDayAs: inSameDayAs)
+        formatter.string(from: date) == formatter.string(from: inSameDayAs)
     }
 }

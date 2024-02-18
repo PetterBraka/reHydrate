@@ -6,6 +6,7 @@
 //
 
 import LoggingService
+import DBKitInterface
 import DayServiceInterface
 import DrinkServiceInterface
 import LanguageServiceInterface
@@ -18,6 +19,9 @@ import DateServiceInterface
 
 public protocol HasService:
     HasLoggingService,
+    HasDayManagerService,
+    HasDrinkManagerService,
+    HasConsumptionManagerService,
     HasDrinksService,
     HasDayService,
     HasLanguageService,
