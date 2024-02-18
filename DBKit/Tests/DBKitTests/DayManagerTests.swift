@@ -46,104 +46,6 @@ extension DayManagerTests {
     }
 }
 
-// MARK: - fetchDay
-extension DayManagerTests {
-    func test_fetchDay_success() async throws {
-        try preLoad4Days()
-        let lastDate = try XCTUnwrap(referenceDates.last)
-        _ = try await sut.fetch(with: lastDate)
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
-    }
-    
-    func test_fetchDay_noDay() async throws {
-        guard let lastDate = referenceDates.last
-        else {
-            XCTFail("No day found")
-            return
-        }
-        do {
-            _ = try await sut.fetch(with: lastDate)
-            XCTFail("Should fail")
-        } catch {
-            XCTAssertNotNil(error)
-        }
-        XCTAssertEqual(spy.methodLogNames, [.open, .read])
-    }
-}
-
-// MARK: - fetchAll
-extension DayManagerTests {
-    func test_fetchBetween_success() async throws {
-        try preLoad4Days()
-        let days = try await sut.fetch(between: referenceDates.first! ... referenceDates.last! )
-        XCTAssertEqual(days.count, 4)
-        XCTAssertEqual(days.map(\.date),
-                       referenceDates.map { $0.toDateString() })
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
-    }
-    
-    func test_fetchBetween_longRange() async throws {
-        try preLoad4Days()
-        let lower = Date(timeIntervalSince1970: 760521600)
-        let upper = Date(timeIntervalSince1970: 1707206400)
-        let days = try await sut.fetch(between: lower ... upper )
-        XCTAssertEqual(days.count, 4)
-        XCTAssertEqual(days.map(\.date),
-                       referenceDates.map { $0.toDateString() })
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
-    }
-    
-    func test_fetchBetween_noDays() async throws {
-        let days = try await sut.fetch(between: referenceDates.first! ... referenceDates.last! )
-        XCTAssertEqual(days.count, 0)
-        XCTAssertEqual(spy.methodLogNames, [.open, .read])
-    }
-}
-
-// MARK: - fetchAll
-extension DayManagerTests {
-    func test_fetchAll_success() async throws {
-        try preLoad4Days()
-        let days = try await sut.fetchAll()
-        XCTAssertEqual(days.count, 4)
-        XCTAssertEqual(days.map(\.date),
-                       referenceDates.map { $0.toDateString() })
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
-    }
-    
-    func test_fetchAll_noDays() async throws {
-        let days = try await sut.fetchAll()
-        XCTAssertEqual(days.count, 0)
-        XCTAssertEqual(spy.methodLogNames, [.open, .read])
-    }
-}
-
-// MARK: - fetchLast
-extension DayManagerTests {
-    func test_fetchLast_success() async throws {
-        try preLoad4Days()
-        guard let lastDate = referenceDates.last
-        else {
-            XCTFail("No day found")
-            return
-        }
-        let lastDay = try await sut.fetchLast()
-        XCTAssertEqual(lastDay.date, lastDate.toDateString())
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
-                       [.read])
-    }
-    
-    func test_fetchLast_noDays() async throws {
-        do {
-            _ = try await sut.fetchLast()
-            XCTFail("Should fail")
-        } catch {
-            XCTAssertNotNil(error)
-        }
-        XCTAssertEqual(spy.methodLogNames, [.open, .read])
-    }
-}
-
 // MARK: - addConsumed
 extension DayManagerTests {
     func test_addConsumed() async throws {
@@ -250,6 +152,15 @@ extension DayManagerTests {
         XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
                        [.read, .read, .save, .read])
     }
+    
+    func test_deleteDay_withInvalidDate() async throws {
+        do {
+            try await sut.delete(DayModel(id: "", date: "", consumed: 0, goal: 0))
+            XCTFail("Shouldn't be able to delete day without valid data")
+        } catch {}
+        XCTAssertEqual(spy.methodLogNames,
+                       [.open])
+    }
 }
 
 // MARK: - deleteDate
@@ -268,27 +179,6 @@ extension DayManagerTests {
 
 // MARK: - deleteDates
 extension DayManagerTests {
-    func test_deleteDatesInRange_success() async throws {
-        guard let firstDate = referenceDates.first,
-              let lastDate = referenceDates.last
-        else {
-            XCTFail("Failed getting reference dates")
-            return
-        }
-        try preLoad4Days()
-        do {
-            try await sut.deleteDays(in: firstDate ..< lastDate)
-        } catch {
-            XCTFail("Couldn't delete all days. \(error.localizedDescription)")
-        }
-        let days = try await sut.fetchAll()
-        XCTAssertEqual(days.count, 1)
-        let day = try XCTUnwrap(days.first)
-        XCTAssertEqual(day.date, lastDate.toDateString())
-        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read] +
-            .delete(times: 3) + [.read])
-    }
-    
     func test_deleteDatesInClosedRange_success() async throws {
         guard let firstDate = referenceDates.first,
               let lastDate = referenceDates.last
@@ -305,6 +195,151 @@ extension DayManagerTests {
         let days = try await sut.fetchAll()
         XCTAssertTrue(days.isEmpty)
         XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read] + .delete(times: 4) + [.read])
+    }
+}
+
+// MARK: - fetchDay
+extension DayManagerTests {
+    func test_fetchDay_success() async throws {
+        try preLoad4Days()
+        let lastDate = try XCTUnwrap(referenceDates.last)
+        _ = try await sut.fetch(with: lastDate)
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
+    }
+    
+    func test_fetchDay_noDay() async throws {
+        guard let lastDate = referenceDates.last
+        else {
+            XCTFail("No day found")
+            return
+        }
+        do {
+            _ = try await sut.fetch(with: lastDate)
+            XCTFail("Should fail")
+        } catch {
+            XCTAssertNotNil(error)
+        }
+        XCTAssertEqual(spy.methodLogNames, [.open, .read])
+    }
+}
+
+// MARK: - fetchLast
+extension DayManagerTests {
+    func test_fetchLast_success() async throws {
+        try preLoad4Days()
+        let lastDate = referenceDates.last!
+        let lastDay = try await sut.fetchLast()
+        XCTAssertEqual(lastDay.date, lastDate.toDateString())
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() +
+                       [.read])
+    }
+    
+    func test_fetchLast_noDays() async throws {
+        do {
+            _ = try await sut.fetchLast()
+            XCTFail("Should fail")
+        } catch {
+            XCTAssertNotNil(error)
+        }
+        XCTAssertEqual(spy.methodLogNames, [.open, .read])
+    }
+}
+
+// MARK: - fetchBetween
+extension DayManagerTests {
+    func test_fetchBetween_success() async throws {
+        try preLoad4Days()
+        let days = try await sut.fetch(between: referenceDates.first! ... referenceDates.last! )
+        XCTAssertEqual(days.count, 4)
+        XCTAssertEqual(days.map(\.date),
+                       referenceDates.map { $0.toDateString() })
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
+    }
+    
+    func test_fetchBetween_longRange() async throws {
+        try preLoad4Days()
+        let lower = Date(timeIntervalSince1970: 760521600)
+        let upper = Date(timeIntervalSince1970: 1707206400)
+        let days = try await sut.fetch(between: lower ... upper)
+        XCTAssertEqual(days.count, 4)
+        XCTAssertEqual(days.map(\.date),
+                       referenceDates.map { $0.toDateString() })
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
+    }
+    
+    func test_fetchBetween_blankDay() async throws {
+        let context = spy.open()
+        let day = DayEntity(context: context)
+        day.id = ""
+        day.date = ""
+        try context.save()
+        
+        let days = try await sut.fetch(between: referenceDates.first! ... referenceDates.last! )
+        XCTAssertEqual(days.count, 0)
+        XCTAssertEqual(spy.methodLogNames, [.open, .open, .read])
+    }
+    
+    func test_fetchBetween_noDays() async throws {
+        let days = try await sut.fetch(between: referenceDates.first! ... referenceDates.last! )
+        XCTAssertEqual(days.count, 0)
+        XCTAssertEqual(spy.methodLogNames, [.open, .read])
+    }
+}
+
+// MARK: - fetchAll
+extension DayManagerTests {
+    func test_fetchAll_success() async throws {
+        try preLoad4Days()
+        let days = try await sut.fetchAll()
+        XCTAssertEqual(days.count, 4)
+        XCTAssertEqual(days.map(\.date),
+                       referenceDates.map { $0.toDateString() })
+        XCTAssertEqual(spy.methodLogNames, .preLoaded4Days() + [.read])
+    }
+    
+    func test_fetchAll_noDays() async throws {
+        let days = try await sut.fetchAll()
+        XCTAssertEqual(days.count, 0)
+        XCTAssertEqual(spy.methodLogNames, [.open, .read])
+    }
+}
+
+// MARK: - ModelMapping
+extension DayManagerTests {
+    func testMap_validDay_withDefaults() {
+        let validDay = DayEntity(context: spy.open())
+        validDay.id = nil
+        validDay.date = nil
+        XCTAssertEqual(DayModel(from: validDay).date, "")
+        XCTAssertEqual(DayModel(from: validDay).consumed, 0)
+        XCTAssertEqual(DayModel(from: validDay).goal, 0)
+    }
+    
+    func testMap_validDay_withIdAndDate() {
+        let validDay = DayEntity(context: spy.open())
+        validDay.id = "id"
+        validDay.date = "02/05/1999"
+        XCTAssertEqual(DayModel(from: validDay),
+                       DayModel(id: "id", date: "02/05/1999", consumed: 0, goal: 0))
+    }
+    
+    func testMap_validDay() {
+        let validDay = DayEntity(context: spy.open())
+        validDay.id = "id"
+        validDay.date = "02/05/1999"
+        validDay.consumed = 9
+        validDay.goal = 9
+        XCTAssertEqual(DayModel(from: validDay),
+                       DayModel(id: "id", date: "02/05/1999", consumed: 9, goal: 9))
+    }
+    
+    func testMap_invalidDay_id() {
+        let validDay = DayEntity(context: spy.open())
+        validDay.id = nil
+        validDay.date = "02/05/1999"
+        XCTAssertEqual(DayModel(from: validDay).date, "02/05/1999")
+        XCTAssertEqual(DayModel(from: validDay).consumed, 0)
+        XCTAssertEqual(DayModel(from: validDay).goal, 0)
     }
 }
 

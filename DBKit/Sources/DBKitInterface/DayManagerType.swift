@@ -16,7 +16,6 @@ public protocol DayManagerType {
     
     func delete(_ day: DayModel) async throws
     func deleteDay(at date: Date) async throws
-    func deleteDays(in range: Range<Date>) async throws
     func deleteDays(in range: ClosedRange<Date>) async throws
     
     func fetch(with date: Date) async throws -> DayModel

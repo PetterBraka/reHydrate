@@ -11,7 +11,7 @@ import DrinkServiceInterface
 
 public protocol DayServiceStubbing {
     var getToday_returnValue: Day { get set }
-    var getDays_returnValue: [Day] { get set }
+    var getDaysBetween_returnValue: Result<[Day], Error> { get set }
     var addDrink_returnValue: Double { get set }
     var addDrink_returnError: Error? { get set }
     var removeDrink_returnValue: Double { get set }
@@ -26,7 +26,7 @@ public final class DayServiceStub: DayServiceStubbing {
     public init() {}
     
     public var getToday_returnValue: Day = .default
-    public var getDays_returnValue: [Day] = []
+    public var getDaysBetween_returnValue: Result<[Day], Error> = .success([])
     public var addDrink_returnValue: Double = .default
     public var addDrink_returnError: Error?
     public var removeDrink_returnValue: Double = .default
@@ -42,8 +42,13 @@ extension DayServiceStub: DayServiceType {
         getToday_returnValue
     }
     
-    public func getDays(for dates: [Date]) async -> [Day] {
-        getDays_returnValue
+    public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
+        switch getDaysBetween_returnValue {
+        case let .success(days):
+            return days
+        case let .failure(error):
+            throw error
+        }
     }
     
     public func add(drink: Drink) async throws -> Double {

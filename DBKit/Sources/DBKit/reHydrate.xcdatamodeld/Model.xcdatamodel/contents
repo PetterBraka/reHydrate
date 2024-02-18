@@ -8,9 +8,9 @@
     </entity>
     <entity name="DayEntity" representedClassName="DayEntity" syncable="YES" codeGenerationType="class">
         <attribute name="consumed" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="date" attributeType="String"/>
+        <attribute name="date" attributeType="String" defaultValueString=""/>
         <attribute name="goal" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="String"/>
+        <attribute name="id" attributeType="String" defaultValueString=""/>
     </entity>
     <entity name="DrinkEntity" representedClassName="DrinkEntity" syncable="YES" codeGenerationType="class">
         <attribute name="amount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
