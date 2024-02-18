@@ -34,10 +34,13 @@ extension Screen.Home {
         
         public init(engine: Engine, preFilledDrinks: [ViewModel.Drink] = []) {
             self.engine = engine
-            viewModel = ViewModel(consumption: 0,
-                                  goal: 0,
-                                  unit: .liters,
-                                  drinks: preFilledDrinks)
+            let unitSystem = engine.unitService.getUnitSystem()
+            viewModel = ViewModel(
+                consumption: 0,
+                goal: 0,
+                unit: unitSystem == .metric ? .liters : .imperialPints,
+                drinks: preFilledDrinks
+            )
         }
         
         public func perform(action: Home.Action) async {
