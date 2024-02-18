@@ -52,15 +52,9 @@ public final class DayService: DayServiceType {
         return day
     }
     
-    public func getDays(for dates: [Date]) async -> [Day] {
-        var days: [Day] = []
-        for date in dates {
-            let foundDay = try? await engine.dayManager.fetch(with: date)
-            if let day = Day(with: foundDay) {
-                days.append(day)
-            }
-        }
-        return days
+    public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
+        try await engine.dayManager.fetchAll()
+            .compactMap { .init(with: $0) }
     }
     
     public func add(drink: Drink) async throws -> Double {

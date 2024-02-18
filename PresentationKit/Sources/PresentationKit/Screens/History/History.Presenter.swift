@@ -166,8 +166,7 @@ private extension Screen.History.Presenter {
 
 private extension Screen.History.Presenter {
     func fetchDays(startDate: Date, endDate: Date) async -> [Day] {
-        let dates = getDates(startDate: startDate, endDate: endDate)
-        return await engine.dayService.getDays(for: dates)
+        (try? await engine.dayService.getDays(between: startDate ... endDate)) ?? []
     }
         
     func getChartData(from days: [Day]) async -> [ViewModel.ChartData.Point] {

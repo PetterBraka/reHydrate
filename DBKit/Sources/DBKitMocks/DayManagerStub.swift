@@ -18,8 +18,9 @@ public protocol DayManagerStubbing {
     var delete_returnError: Error? { get set }
     var deleteDay_returnError: Error? { get set }
     var deleteDays_returnError: Error? { get set }
-    var fetchWithDate_returnValue: Result<DayModel, Error>{ get set }
-    var fetchLast_returnValue: Result<DayModel, Error>{ get set }
+    var fetchWithDate_returnValue: Result<DayModel, Error> { get set }
+    var fetchLast_returnValue: Result<DayModel, Error> { get set }
+    var fetchBetween_returnValue: Result<[DayModel], Error> { get set }
     var fetchAll_returnValue: Result<[DayModel], Error> { get set }
 }
 
@@ -36,6 +37,7 @@ public final class DayManagerStub: DayManagerStubbing {
     public var deleteDays_returnError: Error?
     public var fetchWithDate_returnValue: Result<DayModel, Error> = .default
     public var fetchLast_returnValue: Result<DayModel, Error> = .default
+    public var fetchBetween_returnValue: Result<[DayModel], Error> = .default
     public var fetchAll_returnValue: Result<[DayModel], Error> = .default
 }
 
@@ -126,6 +128,16 @@ extension DayManagerStub: DayManagerType {
             throw error
         }
     }
+    
+    public func fetch(between date: ClosedRange<Date>) async throws -> [DayModel] {
+        switch fetchBetween_returnValue {
+        case let .success(elements):
+            return elements
+        case let .failure(error):
+            throw error
+        }
+    }
+    
     
     public func fetchAll() async throws -> [DayModel] {
         switch fetchAll_returnValue {

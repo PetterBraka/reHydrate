@@ -49,6 +49,22 @@ private extension DayManager {
         return day
     }
     
+    func fetchEntities(between dates: ClosedRange<Date>) async throws -> [DayEntity] {
+        let lowerBound = DatabaseFormatter.date.string(from: dates.lowerBound)
+        let upperBound = DatabaseFormatter.date.string(from: dates.upperBound)
+        let days: [DayEntity] = try await database.read(
+            matching: NSCompoundPredicate(type: .and, subpredicates: [
+                NSPredicate(format: "date >= %@", lowerBound),
+                NSPredicate(format: "date <= %@", upperBound)
+            ]),
+            sortBy: [.init(key: "date", ascending: true)],
+            limit: nil,
+            context
+        )
+        LoggingService.log(level: .debug, "Found \(days)")
+        return days
+    }
+    
     func fetchAllEntities() async throws -> [DayEntity] {
         let days: [DayEntity] = try await database.read(
             matching: nil,
@@ -204,6 +220,12 @@ extension DayManager: DayManagerType {
         }
         return day
     }
+    
+    public func fetch(between dates: ClosedRange<Date>) async throws -> [DayModel] {
+        try await fetchEntities(between: dates)
+            .compactMap { .init(from: $0) }
+    }
+    
     
     public func fetchAll() async throws -> [DayModel] {
         try await fetchAllEntities().compactMap { .init(from: $0) }

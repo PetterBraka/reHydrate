@@ -21,5 +21,6 @@ public protocol DayManagerType {
     
     func fetch(with date: Date) async throws -> DayModel
     func fetchLast() async throws -> DayModel
+    func fetch(between date: ClosedRange<Date>) async throws -> [DayModel]
     func fetchAll() async throws -> [DayModel]
 }
