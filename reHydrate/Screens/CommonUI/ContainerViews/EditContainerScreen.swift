@@ -17,9 +17,10 @@ struct EditContainerScreen: View {
     let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 8) {
             toolBar
                 .buttonStyle(.borderless)
+            Spacer()
             filledContainer
             VStack {
                 slider
