@@ -83,19 +83,4 @@ public class Database: DatabaseType {
             }
         }
     }
-    
-    public func delete<Element: NSManagedObject>(
-        _ element: Element,
-        _ context: NSManagedObjectContext
-    ) throws {
-        LoggingService.log(level: .info, "Deleting element: \(String(describing: element))")
-        context.delete(element)
-        do {
-            try context.save()
-        } catch {
-            LoggingService.log(level: .error, "Couldn't delete element \(error.localizedDescription)")
-            context.rollback()
-            throw error
-        }
-    }
 }
