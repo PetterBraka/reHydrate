@@ -123,6 +123,38 @@ final class DrinkManagerTests: XCTestCase {
         XCTAssertEqual(foundDrinks.count, drinks.count)
         XCTAssertEqual(foundDrinks, drinks)
     }
+    
+    func test_mapDrink_withDefaults() {
+        let drink = DrinkEntity(context: spy.open())
+        drink.id = nil
+        drink.container = nil
+        XCTAssertEqual(DrinkModel(from: drink),
+                       .init(id: "", size: 0, container: ""))
+    }
+    
+    func test_mapDrink_withId() {
+        let drink = DrinkEntity(context: spy.open())
+        drink.id = "id"
+        XCTAssertEqual(DrinkModel(from: drink),
+                       .init(id: "id", size: 0, container: ""))
+    }
+    
+    func test_mapDrink_withIdAndAmount() {
+        let drink = DrinkEntity(context: spy.open())
+        drink.id = "id"
+        drink.amount = 9
+        XCTAssertEqual(DrinkModel(from: drink),
+                       .init(id: "id", size: 9, container: ""))
+    }
+    
+    func test_mapDrink() {
+        let drink = DrinkEntity(context: spy.open())
+        drink.id = "id"
+        drink.amount = 300
+        drink.container = "Small"
+        XCTAssertEqual(DrinkModel(from: drink),
+                       .init(id: "id", size: 300, container: "Small"))
+    }
 }
 
 extension DrinkManagerTests {

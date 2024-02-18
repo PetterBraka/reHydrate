@@ -53,11 +53,7 @@ extension DrinkManager: DrinkManagerType {
         newDrink.container = container
         try database.save(context)
         LoggingService.log(level: .debug, "Created drink \(newDrink)")
-        guard let newDrink = DrinkModel(from: newDrink)
-        else {
-            throw DatabaseError.creatingElement
-        }
-        return newDrink
+        return DrinkModel(from: newDrink)
     }
     
     public func edit(size: Double, of container: String) async throws -> DrinkModel {
@@ -65,11 +61,7 @@ extension DrinkManager: DrinkManagerType {
         drink.amount = size
         try database.save(context)
         LoggingService.log(level: .debug, "Edited drink \(drink)")
-        guard let drink = DrinkModel(from: drink)
-        else {
-            throw DatabaseError.creatingElement
-        }
-        return drink
+        return DrinkModel(from: drink)
     }
     
     private func delete(_ drink: DrinkEntity) throws {
@@ -107,11 +99,7 @@ extension DrinkManager: DrinkManagerType {
     }
     
     public func fetch(_ container: String) async throws -> DrinkModel {
-        guard let drink = try await DrinkModel(from: fetchEntity(container))
-        else {
-            throw DatabaseError.couldNotMapElement
-        }
-        return drink
+        try await DrinkModel(from: fetchEntity(container))
     }
     
     public func fetchAll() async throws -> [DrinkModel] {
@@ -120,20 +108,11 @@ extension DrinkManager: DrinkManagerType {
     }
 }
 
-extension DrinkEntity {
-    fileprivate convenience init(from model: DrinkModel) throws {
-        self.init()
-        self.id = model.id
-        self.container = model.container
-        self.amount = model.size
-    }
-}
-
-private extension DrinkModel {
-    init?(from model: DrinkEntity) {
-        guard let id = model.id, let container = model.container
-        else { return nil }
-        self.init(id: id, size: model.amount, container: container)
+package extension DrinkModel {
+    init(from model: DrinkEntity) {
+        self.init(id: model.id ?? "",
+                  size: model.amount,
+                  container: model.container ?? "")
     }
 }
 
