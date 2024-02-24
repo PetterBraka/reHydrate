@@ -14,7 +14,7 @@ import {{ import }}
 public protocol {{ protocol.name }}Stubbing {
 {% for method in protocol.methods %}
     {% if method.returnTypeName | !contains: "Void" %}
-    var {% call methodReturnName method %}: {{ method.returnTypeName }} { get set }
+    var {% call methodReturnName method %}: {% if method.throws %}Result<{% endif %}{{ method.returnTypeName }}{% if method.throws %}, Error>{% endif %} { get set }
     {% endif %}
 {% endfor %}
 }
@@ -22,7 +22,7 @@ public protocol {{ protocol.name }}Stubbing {
 public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 {% for method in protocol.methods %}
     {% if method.returnTypeName | !contains: "Void" %}
-    public var {% call methodReturnName method %}: {{ method.returnTypeName }} = .default
+    public var {% call methodReturnName method %}: {% if method.throws %}Result<{% endif %}{{ method.returnTypeName }}{% if method.throws %}, Error>{% endif %} = .default
     {% endif %}
 {% endfor %}
 
@@ -31,9 +31,18 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 
 extension {{ protocol.name }}Stub: {{ protocol.name }} {
 {% for method in protocol.methods %}
-    public func {{ method.name }} -> {{ method.returnTypeName }} {
+    public func {{ method.name }}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
         {% if method.returnTypeName | !contains: "Void" %}
+        {% if method.throws %} 
+        switch {% call methodReturnName method %} {
+        case let .success(value):
+            return value
+        case let .failure(error):
+            throw error
+        }
+        {% else %}
         {% call methodReturnName method %}
+        {% endif %}
         {% endif %}
     }
 
