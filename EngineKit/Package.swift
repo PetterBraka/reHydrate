@@ -35,10 +35,11 @@ let package: Package = {
                         .source(.notificationService),
                         .source(.appearanceService),
                         .source(.dateService),
+                        .engineMocks,
+                        .portsMocks,
                     ]),
             .target(name: engineMocks,
                     dependencies: [
-                        .byName(name: engineKit),
                         .dbKit,
                         .portsMocks,
                         .mocks(.dayService),

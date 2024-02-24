@@ -23,13 +23,19 @@ let package: Package = {
             .target(
                 name: "PresentationKit",
                 dependencies: [
+                    "PresentationInterface",
                     "EngineKit",
-                    "PresentationInterface"
                 ]
             ),
             .target(
                 name: "PresentationInterface"
             ),
+            .testTarget(
+                name: "PresentationTests",
+                dependencies: [
+                    "PresentationKit",
+                ]
+            )
         ]
     )
 }()
