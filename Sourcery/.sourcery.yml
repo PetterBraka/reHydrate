@@ -28,5 +28,14 @@ configurations:
       imports: 
           - DayServiceInterface
           - DrinkServiceInterface
+
+  - sources:
+        - ../EngineKit/Sources/DrinkService
+    templates:
+        - Templates/AutoStub.stencil
+    output: ../EngineKit/Sources/DrinkService/Mocks/Generated/DrinkServiceStub.swift
+    args: 
+      imports:
+          - DrinkServiceInterface
 # PresentationKit
 # PresentationWatchKit

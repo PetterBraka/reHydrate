@@ -45,7 +45,7 @@ public final class EngineMocks {
     public var healthService: HealthInterface = HealthServiceStub()
     
     public var dayService: DayServiceType = DayServiceTypeStub()
-    public var drinksService: DrinkServiceType = DrinkServiceStub()
+    public var drinksService: DrinkServiceType = DrinkServiceTypeStub()
     public var languageService: LanguageServiceType = LanguageServiceStub()
     public var unitService: UnitServiceType = UnitServiceStub()
     
