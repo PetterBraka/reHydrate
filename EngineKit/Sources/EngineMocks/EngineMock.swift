@@ -44,7 +44,7 @@ public final class EngineMocks {
     public var openUrlService: OpenUrlInterface = OpenUrlServiceStub()
     public var healthService: HealthInterface = HealthServiceStub()
     
-    public var dayService: DayServiceType = DayServiceStub()
+    public var dayService: DayServiceType = DayServiceTypeStub()
     public var drinksService: DrinkServiceType = DrinkServiceStub()
     public var languageService: LanguageServiceType = LanguageServiceStub()
     public var unitService: UnitServiceType = UnitServiceStub()

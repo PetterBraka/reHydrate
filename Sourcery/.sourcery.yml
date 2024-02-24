@@ -9,6 +9,7 @@ configurations:
     args: 
       imports: 
         - AppearanceServiceInterface
+
   - sources:
         - ../EngineKit/Sources/DateService
     templates:
@@ -17,5 +18,15 @@ configurations:
     args: 
       imports: 
           - DateServiceInterface
+
+  - sources:
+        - ../EngineKit/Sources/DayService
+    templates:
+        - Templates/AutoStub.stencil
+    output: ../EngineKit/Sources/DayService/Mocks/Generated/DayServiceStub.swift
+    args: 
+      imports: 
+          - DayServiceInterface
+          - DrinkServiceInterface
 # PresentationKit
 # PresentationWatchKit
