@@ -14,13 +14,16 @@ import UserPreferenceServiceInterface
 import DrinkServiceInterface
 import NotificationServiceMocks
 import NotificationServiceInterface
+import DateServiceInterface
+import DateServiceMocks
 @testable import NotificationService
 
 final class NotificationServiceTests: XCTestCase {
     typealias Engine = (
         HasLoggingService &
         HasUserPreferenceService &
-        HasDrinksService
+        HasDrinksService &
+        HasDateService
     )
     
     var engine: Engine = EngineMocks()

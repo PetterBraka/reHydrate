@@ -14,6 +14,7 @@ import DrinkServiceInterface
 import NotificationServiceInterface
 import PortsInterface
 import AppearanceServiceInterface
+import DateServiceInterface
 
 extension Screen.Settings {
     public final class Presenter: SettingsPresenterType {
@@ -25,7 +26,8 @@ extension Screen.Settings {
             HasNotificationService &
             HasOpenUrlService &
             HasAppInfo &
-            HasAppearanceService
+            HasAppearanceService &
+            HasDateService
         )
         public typealias Router = (
             SettingsRoutable
@@ -160,10 +162,10 @@ extension Screen.Settings.Presenter {
     private func getDrinks() async -> [ViewModel.Drink] {
         if let drinks = try? await engine.drinksService.getSaved(),
             !drinks.isEmpty {
-            return drinks.map { .init(from: $0) }
+            return drinks.compactMap { .init(from: $0) }
         } else {
             let drinks = await engine.drinksService.resetToDefault()
-            return drinks.map { .init(from: $0) }
+            return drinks.compactMap { .init(from: $0) }
         }
     }
     
@@ -272,15 +274,17 @@ extension UnitSystem {
 
 // MARK: - Drink
 extension Screen.Settings.Presenter.ViewModel.Drink {
-    init(from drink: Drink) {
+    init?(from drink: Drink) {
+        guard let container = Screen.Settings.Presenter.ViewModel.Container(from: drink.container)
+        else { return nil }
         self = .init(id: drink.id,
                      size: drink.size,
-                     container: .init(from: drink.container))
+                     container: container)
     }
 }
 
 extension Screen.Settings.Presenter.ViewModel.Container {
-    init(from container: Container) {
+    init?(from container: Container) {
         switch container {
         case .small:
             self = .small
@@ -288,6 +292,8 @@ extension Screen.Settings.Presenter.ViewModel.Container {
             self = .medium
         case .large:
             self = .large
+        case .health:
+            return nil
         }
     }
 }
@@ -321,16 +327,15 @@ private extension Screen.Settings.Presenter {
     }
     
     func getRanges(start: Date, stop: Date) -> (start: ClosedRange<Date>, stop: ClosedRange<Date>) {
-        let calendar = Calendar.current
         let minimumAllowedFrequency = engine.notificationService.minimumAllowedFrequency
-        guard let startRangeStart = Date(time: "00:00"),
-              let startRangeEnd = calendar.date(byAdding: .minute, value: -minimumAllowedFrequency, to: stop),
-              let stopRangeStart = calendar.date(byAdding: .minute, value: minimumAllowedFrequency, to: start),
-              let stopRangeEnd = Date(time: "23:59")
+        guard let startRangeStart = Date(time: "00:00"), let stopRangeEnd = Date(time: "23:59")
         else {
             engine.logger.critical("Date formatter stoped working")
             fatalError("Date formatter stoped working")
         }
+        
+        let startRangeEnd = engine.dateService.getDate(byAdding: -minimumAllowedFrequency, component: .minute, to: stop)
+        let stopRangeStart = engine.dateService.getDate(byAdding: minimumAllowedFrequency, component: .minute, to: start)
         
         return (startRangeStart ... startRangeEnd,
                 stopRangeStart ... stopRangeEnd)

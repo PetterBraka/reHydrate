@@ -10,12 +10,14 @@ import LoggingService
 import UserPreferenceServiceInterface
 import DrinkServiceInterface
 import NotificationServiceInterface
+import DateServiceInterface
 
 public final class NotificationService: NotificationServiceType {
     public typealias Engine = (
         HasLoggingService &
         HasUserPreferenceService &
-        HasDrinksService
+        HasDrinksService &
+        HasDateService
     )
     
     public private(set) var notificationCenter: NotificationCenterType

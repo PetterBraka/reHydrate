@@ -47,8 +47,8 @@ extension Screen.History {
                     router: Router) {
             self.engine = engine
             self.router = router
-            let calendarRange = engine.dateService.getDate(byAddingDays: -(365 * 5), to: .now) ... .now
-            let past = engine.dateService.getDate(byAddingDays: -6, to: .now)
+            let calendarRange = engine.dateService.getDate(byAdding: -(365 * 5), component: .day, to: .now) ... .now
+            let past = engine.dateService.getDate(byAdding: -6, component: .day, to: .now)
             selectedRange =  past ... .now
             self.viewModel = .init(
                 isLoading: false,
@@ -101,7 +101,7 @@ extension Screen.History {
                         newRange = date ... range.upperBound
                     }
                 } else {
-                    newRange = date ... engine.dateService.getDate(byAddingDays: 1, to: date)
+                    newRange = date ... engine.dateService.getDate(byAdding: 1, component: .day, to: date)
                 }
                 selectedRange = newRange
                 await updateViewModelWithDataBetween(start: newRange.lowerBound,
@@ -224,11 +224,8 @@ private extension Screen.History.Presenter {
         // Calculate the difference between the given date's weekday and the first day of the week (usually Sunday)
         let daysToAdd = calendar.firstWeekday - weekday
         
-        guard let startDate = calendar.date(byAdding: .day, value: daysToAdd, to: date),
-              let endDate = calendar.date(byAdding: .day, value: 6, to: startDate)
-        else {
-            return nil
-        }
+        let startDate = engine.dateService.getDate(byAdding: daysToAdd, component: .day, to: date)
+        let endDate = engine.dateService.getDate(byAdding: 6, component: .day, to: date)
         return (start: startDate, end: endDate)
     }
     
@@ -238,8 +235,7 @@ private extension Screen.History.Presenter {
         
         while currentDate <= endDate {
             dates.append(currentDate)
-            guard let newDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)
-            else { break }
+            let newDate = engine.dateService.getDate(byAdding: 1, component: .day, to: currentDate)
             currentDate = newDate
         }
         

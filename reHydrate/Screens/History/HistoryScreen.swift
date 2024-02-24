@@ -168,11 +168,12 @@ struct HistoryScreen: View {
     
     @ViewBuilder
     func getSelectionIndicator(for date: Date) -> some View {
+        let engine = SceneFactory.shared.engine
         if let range = observer.viewModel.selectedRange {
-            if range.lowerBound.inSameDayAs(date) {
+            if engine.dateService.isDate(date, inSameDayAs: range.lowerBound){
                 Image(.leftSelected)
                     .resizable(resizingMode: .stretch)
-            } else if range.upperBound.inSameDayAs(date) {
+            } else if engine.dateService.isDate(date, inSameDayAs: range.upperBound) {
                 Image(.rightSelected)
                     .resizable(resizingMode: .stretch)
             } else if range.contains(date) {
@@ -184,8 +185,9 @@ struct HistoryScreen: View {
     
     @ViewBuilder
     func getIndicatorImage(for date: Date) -> some View {
+        let engine = SceneFactory.shared.engine
         let days = observer.viewModel.calendar.days
-        if let day = days.first(where: { $0.date.inSameDayAs(date) }) {
+        if let day = days.first(where: { engine.dateService.isDate(date, inSameDayAs: $0.date) }) {
             let goal = day.goal
             let consumed = day.consumed
             let fill = consumed / goal
