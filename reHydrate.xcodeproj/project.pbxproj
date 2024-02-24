@@ -128,7 +128,6 @@
 		A183BCF12A3126BE00D42033 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A183BCEF2A3126BE00D42033 /* LaunchScreen.storyboard */; };
 		A183BCF92A33B78400D42033 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCF82A33B78400D42033 /* HomeScreen.swift */; };
 		A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BD012A33C70300D42033 /* HomeScreenObservable.swift */; };
-		A1A825E92B7991B700EA98EC /* DBKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1A825E82B7991B700EA98EC /* DBKit */; };
 		A185DB362B77C5F400B9318B /* reHydrateWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A185DB352B77C5F400B9318B /* reHydrateWatchApp.swift */; };
 		A185DB3A2B77C5F500B9318B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A185DB392B77C5F500B9318B /* Assets.xcassets */; };
 		A185DB3D2B77C5F500B9318B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A185DB3C2B77C5F500B9318B /* Preview Assets.xcassets */; };
@@ -143,13 +142,13 @@
 		A185DB6A2B77C82000B9318B /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BD012A33C70300D42033 /* HomeScreenObservable.swift */; };
 		A185DB6B2B77C87000B9318B /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE92A3120C900D42033 /* Font.swift */; };
 		A185DB6C2B77C87F00B9318B /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6C26BC7FCD00DECA9F /* Double+Extensions.swift */; };
+		A1A825E92B7991B700EA98EC /* DBKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1A825E82B7991B700EA98EC /* DBKit */; };
 		A1AA8DDA2AF634C500D12E74 /* AppIconScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD82AF634C500D12E74 /* AppIconScreen.swift */; };
 		A1AA8DDB2AF634C500D12E74 /* AppIconScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */; };
 		A1AA8DDD2AF6386C00D12E74 /* AlternateIconsServicePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */; };
 		A1AA8DDF2AF6466400D12E74 /* AppearanceServicePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */; };
 		A1AA8DE32AF7828500D12E74 /* HealthKitPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */; };
 		A1CA3A1E2B5A5DD5009907EA /* CalendarKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1CA3A1D2B5A5DD5009907EA /* CalendarKit */; };
-		A1E0A81A2B69BB1E007A0957 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E0A8192B69BB1E007A0957 /* Date+Extensions.swift */; };
 		A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111802F2AC36A86007E4585 /* Reminder.swift */; };
 		A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180302AC36A86007E4585 /* Celebration.swift */; };
 		A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */; };
@@ -342,7 +341,6 @@
 		A183BCF02A3126BE00D42033 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A183BCF82A33B78400D42033 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		A183BD012A33C70300D42033 /* HomeScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenObservable.swift; sourceTree = "<group>"; };
-		A1A825E62B7903BE00EA98EC /* DBKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DBKit; sourceTree = "<group>"; };
 		A185DB272B77BAA900B9318B /* PresentationWatchKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationWatchKit; sourceTree = "<group>"; };
 		A185DB332B77C5F300B9318B /* reHydrate Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "reHydrate Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A185DB352B77C5F400B9318B /* reHydrateWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reHydrateWatchApp.swift; sourceTree = "<group>"; };
@@ -355,13 +353,13 @@
 		A185DB522B77C5F600B9318B /* reHydrate_Watch_AppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reHydrate_Watch_AppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A185DB602B77C71D00B9318B /* SceneFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneFactory.swift; sourceTree = "<group>"; };
 		A185DB612B77C71D00B9318B /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A1A825E62B7903BE00EA98EC /* DBKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DBKit; sourceTree = "<group>"; };
 		A1AA8DD82AF634C500D12E74 /* AppIconScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreen.swift; sourceTree = "<group>"; };
 		A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreenObservable.swift; sourceTree = "<group>"; };
 		A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlternateIconsServicePort.swift; sourceTree = "<group>"; };
 		A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceServicePort.swift; sourceTree = "<group>"; };
 		A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPort.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
-		A1E0A8192B69BB1E007A0957 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
 		A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		A1EABF272ADA842100591981 /* EditContainerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContainerScreen.swift; sourceTree = "<group>"; };
@@ -548,9 +546,9 @@
 			isa = PBXGroup;
 			children = (
 				A1A825E62B7903BE00EA98EC /* DBKit */,
-				A185DB272B77BAA900B9318B /* PresentationWatchKit */,
 				A1AF32D22A346CA200FD0C7C /* EngineKit */,
 				A114C6C02A63DAAE00F53770 /* PresentationKit */,
+				A185DB272B77BAA900B9318B /* PresentationWatchKit */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				A149F2A22B69B9DD00710609 /* reHydrateTests */,
 				A185DB342B77C5F400B9318B /* reHydrate Watch App */,
@@ -599,7 +597,6 @@
 				A1EABF3E2AF4E0E300591981 /* View+getSize.swift */,
 				A11C12A72B65B02D00FB1B8C /* View+expand.swift */,
 				A1EABF372AF3924100591981 /* UIApplication+Extensions.swift */,
-				A1E0A8192B69BB1E007A0957 /* Date+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -702,16 +699,6 @@
 				A183BCF82A33B78400D42033 /* HomeScreen.swift */,
 			);
 			path = Home;
-			sourceTree = "<group>";
-		};
-		A185DAB52B6F7FF400B9318B /* Stubs */ = {
-			isa = PBXGroup;
-			children = (
-				A149F29B2B69B95600710609 /* DumyModel.swift */,
-				A149F2972B69B93F00710609 /* DatabaseSpy.swift */,
-				A149F2982B69B93F00710609 /* DatabaseStub.swift */,
-			);
-			path = Stubs;
 			sourceTree = "<group>";
 		};
 		A185DB342B77C5F400B9318B /* reHydrate Watch App */ = {
@@ -1099,7 +1086,6 @@
 				A1EABF382AF3924100591981 /* UIApplication+Extensions.swift in Sources */,
 				A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
-				A1E0A81A2B69BB1E007A0957 /* Date+Extensions.swift in Sources */,
 				A1EABF3F2AF4E0E300591981 /* View+getSize.swift in Sources */,
 				A1EABF3A2AF3F7C800591981 /* CreditsScreenObservable.swift in Sources */,
 				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,
@@ -1693,10 +1679,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationKit;
 		};
-		A1A825E82B7991B700EA98EC /* DBKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DBKit;
-		};
 		A185DB662B77C7A600B9318B /* PresentationWatchKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationWatchKit;
@@ -1704,6 +1686,10 @@
 		A185DB682B77C7AC00B9318B /* EngineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EngineKit;
+		};
+		A1A825E82B7991B700EA98EC /* DBKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DBKit;
 		};
 		A1CA3A1D2B5A5DD5009907EA /* CalendarKit */ = {
 			isa = XCSwiftPackageProductDependency;
