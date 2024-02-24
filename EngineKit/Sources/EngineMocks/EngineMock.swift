@@ -50,7 +50,7 @@ public final class EngineMocks {
     public var unitService: UnitServiceType = UnitServiceStub()
     
     public var appearanceService: AppearanceServiceType = AppearanceServiceStub()
-    public var dateService: DateServiceType = DateServiceStub()
+    public var dateService: DateServiceType = DateServiceTypeStub()
 }
 
 extension EngineMocks: HasService {}
