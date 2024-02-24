@@ -10,7 +10,9 @@ import LoggingService
 import PresentationInterface
 import DayServiceInterface
 import DrinkServiceInterface
+import PortsInterface
 import UnitServiceInterface
+import DateServiceInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
@@ -19,7 +21,9 @@ extension Screen.Home {
             HasLoggingService &
             HasDayService &
             HasDrinksService &
-            HasUnitService
+            HasHealthService &
+            HasUnitService &
+            HasDateService
         )
         public typealias Router = (
             HomeRoutable &
@@ -62,26 +66,19 @@ extension Screen.Home {
             case .didTapSettings:
                 router.showSettings()
             case let .didTapAddDrink(drink):
-                do {
-                    let consumption = try await engine.dayService.add(drink: .init(from: drink))
-                    await updateViewModel(consumption: consumption)
-                } catch {
-                    engine.logger.error("Could not add drink of size \(drink.size)", error: error)
-                }
+                await addDrink(drink)
             case let .didTapEditDrink(drink):
                 router.showEdit(drink: drink)
             case let .didTapRemoveDrink(drink):
-                do {
-                    let consumption = try await engine.dayService.remove(drink: .init(from: drink))
-                    await updateViewModel(consumption: consumption)
-                } catch {
-                    engine.logger.error("Could not remove drink of size \(drink.size)", error: error)
-                }
+                await removeDrink(drink)
             }
         }
         
         private func sync(didComplete: (() -> Void)?) async {
-            let today = await engine.dayService.getToday()
+            var today = await engine.dayService.getToday()
+            
+            await syncDayWithHealth(&today)
+            
             await updateViewModel(
                 date: today.date,
                 consumption: today.consumed,
@@ -113,7 +110,7 @@ extension Screen.Home.Presenter {
         }
         var consumption = consumption ?? viewModel.consumption
         var goal = goal ?? viewModel.goal
-        var drinks: [ViewModel.Drink] = await getDrinks().map { .init(from: $0) }
+        var drinks: [ViewModel.Drink] = await getDrinks().compactMap { .init(from: $0) }
         
         consumption = engine.unitService.convert(consumption,
                                                  from: .litres,
@@ -140,6 +137,7 @@ extension Screen.Home.Presenter {
     }
 }
 
+// MARK: - Drinks
 extension Screen.Home.Presenter {
     private func getDrinks() async -> [Drink] {
         if let drinks = try? await engine.drinksService.getSaved(),
@@ -172,16 +170,18 @@ extension Container {
     }
 }
 
-extension Screen.Home.Presenter.ViewModel.Drink {
-    init(from drink: Drink) {
+private extension Screen.Home.Presenter.ViewModel.Drink {
+    init?(from drink: Drink) {
+        guard let container = Screen.Home.Presenter.ViewModel.Container(from: drink.container)
+        else { return nil }
         self = .init(id: drink.id,
                      size: drink.size,
-                     container: .init(from: drink.container))
+                     container: container)
     }
 }
 
-extension Screen.Home.Presenter.ViewModel.Container {
-    init(from container: Container) {
+private extension Screen.Home.Presenter.ViewModel.Container {
+    init?(from container: Container) {
         switch container {
         case .small:
             self = .small
@@ -189,6 +189,91 @@ extension Screen.Home.Presenter.ViewModel.Container {
             self = .medium
         case .large:
             self = .large
+        case .health:
+            return nil
+        }
+    }
+}
+
+// MARK: - Update consumption
+private extension Screen.Home.Presenter {
+    func addDrink(_ drink: ViewModel.Drink) async {
+        do {
+            let consumption = try await engine.dayService.add(drink: .init(from: drink))
+            await export(consumed: consumption)
+            await updateViewModel(consumption: consumption)
+        } catch {
+            engine.logger.error("Could not add drink of size \(drink.size)", error: error)
+        }
+    }
+    
+    func removeDrink(_ drink: ViewModel.Drink) async {
+        do {
+            let consumption = try await engine.dayService.remove(drink: .init(from: drink))
+            await export(consumed: -consumption)
+            await updateViewModel(consumption: consumption)
+        } catch {
+            engine.logger.error("Could not remove drink of size \(drink.size)", error: error)
+        }
+    }
+}
+
+// MARK: - Health
+private extension Screen.Home.Presenter {
+    func requestHealthAccessIfNeeded() async {
+        let healthData = [HealthDataType.water(.litre)]
+        guard await engine.healthService.shouldRequestAccess(for: healthData)
+        else { return }
+        do {
+            try await engine.healthService.requestAuth(toReadAndWrite: Set(healthData))
+        } catch {
+            engine.logger.error("Could get access to health", error: error)
+        }
+    }
+    
+    func syncDayWithHealth(_ day: inout Day) async {
+        if engine.healthService.isSupported {
+            await requestHealthAccessIfNeeded()
+            let healthTotal = await getHealthTotal()
+            let diff = healthTotal - day.consumed
+            let drink = Drink(id: UUID().uuidString, size: diff, container: .health)
+            if diff > 0,
+               let updatedDay = try? await engine.dayService.add(drink: drink) {
+                day.consumed = updatedDay
+            }
+        }
+    }
+    
+    func export(consumed: Double) async {
+        let unitSystem = engine.unitService.getUnitSystem()
+        let litres = engine.unitService.convert(
+            consumed,
+            from: unitSystem == .metric ? .millilitres : .ounces,
+            to: .litres
+        )
+        do {
+            try await engine.healthService.export(quantity: .init(unit: .litre, value: litres),
+                                                  id: .dietaryWater, date: .now)
+        } catch {
+            engine.logger.error("Could not export to health \(litres)", error: error)
+        }
+    }
+    
+    func getHealthTotal() async -> Double {
+        do {
+            return try await withCheckedThrowingContinuation { continuation in
+                let query = HealthQuery.sum(
+                    start: engine.dateService.getStart(of: .now),
+                    end: engine.dateService.getEnd(of: .now),
+                    intervalComponents: .init(day: 1)
+                ) { result in
+                    continuation.resume(with: result)
+                }
+                engine.healthService.read(.water(.litre), queryType: query)
+            }
+        } catch {
+            engine.logger.error("Couldn't get health data", error: error)
+            return 0
         }
     }
 }

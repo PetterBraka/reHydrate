@@ -18,7 +18,6 @@ public final class DayService: DayServiceType {
         HasDayManagerService &
         HasConsumptionManagerService &
         HasUnitService &
-        HasHealthService &
         HasLoggingService
     )
     
@@ -34,19 +33,11 @@ public final class DayService: DayServiceType {
     
     public func getToday() async -> Day {
         var day: Day
-        await requestHealthAccessIfNeeded()
-        let healthTotal = await getHealthTotal()
         if let foundDay = try? await engine.dayManager.fetch(with: .now),
            let oldDay = Day(with: foundDay) {
             day = oldDay
         } else {
             day = await createNewDay()
-        }
-        let diff = healthTotal - day.consumed
-        if diff > 0,
-           let updatedDay = try? await engine.dayManager.add(consumed: diff, toDayAt: day.date),
-           let updatedDay = Day(with: updatedDay) {
-            day = updatedDay
         }
         self.today = day
         return day
@@ -62,7 +53,6 @@ public final class DayService: DayServiceType {
         let today = await getToday()
         let updatedDay = try await engine.dayManager.add(consumed: consumedAmount, toDayAt: today.date)
         try engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
-        await export(litres: consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
         }
@@ -74,7 +64,6 @@ public final class DayService: DayServiceType {
         let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(consumed: consumedAmount, fromDayAt: today.date)
         try engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
-        await export(litres: -consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
         }
@@ -165,57 +154,5 @@ private extension DayService {
             from: .litres,
             to: unitSystem == .metric ? .litres : .pint
         )
-    }
-}
-
-// MARK: Health
-private extension DayService {
-    func requestHealthAccessIfNeeded() async {
-        let healthData = [HealthDataType.water(.litre)]
-        guard engine.healthService.isSupported,
-              await engine.healthService.shouldRequestAccess(for: healthData)
-        else { return }
-        do {
-            try await engine.healthService.requestAuth(toReadAndWrite: Set(healthData))
-        } catch {
-            engine.logger.error("Could get access to health", error: error)
-        }
-    }
-    
-    func export(litres: Double) async {
-        do {
-            try await engine.healthService.export(quantity: .init(unit: .litre, value: litres),
-                                                  id: .dietaryWater, date: .now)
-        } catch {
-            engine.logger.error("Could not export to health \(litres)", error: error)
-        }
-    }
-    
-    func getHealthTotal() async -> Double {
-        do {
-            return try await withCheckedThrowingContinuation { continuation in
-                let query = HealthQuery.sum(
-                    start: .now.startOfDay,
-                    end: .now.endOfDay ?? .now,
-                    intervalComponents: .init(day: 1)
-                ) { result in
-                    continuation.resume(with: result)
-                }
-                engine.healthService.read(.water(.litre), queryType: query)
-            }
-        } catch {
-            engine.logger.error("Couldn't get health data", error: error)
-            return 0
-        }
-    }
-}
-
-extension Date {
-    var startOfDay: Date {
-        Calendar.current.startOfDay(for: self)
-    }
-    
-    var endOfDay: Date? {
-        Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: self)
     }
 }

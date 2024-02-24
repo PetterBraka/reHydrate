@@ -61,21 +61,6 @@ final class DayServiceTests: XCTestCase {
         assert(day: foundDay, dayModel: givenDay)
     }
     
-    func test_getToday_withHealthDiff_success() async {
-        let givenDate = DatabaseFormatter.date.string(from: .now)
-        let givenDay = DayModel(id: "1",
-                                date: givenDate,
-                                consumed: 0,
-                                goal: 3)
-        dayManager.fetchWithDate_returnValue = .success(givenDay)
-        dayManager.addConsumed_returnValue = .success(.init(id: "", date: givenDate, consumed: 1, goal: 3))
-        healthService.read_sum_returnValue = .success(1)
-        
-        let foundDay = await sut.getToday()
-        assert(day: foundDay,
-               dayModel: .init(id: "", date: givenDate, consumed: 1, goal: 3))
-    }
-    
     func test_getToday_failedFetchForDate() async {
         let givenDate = DatabaseFormatter.date.string(from: .now)
         let givenDay = DayModel(id: "1",
@@ -88,21 +73,6 @@ final class DayServiceTests: XCTestCase {
         
         let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
-    }
-    
-    func test_getToday_withHealthFailed_failed() async {
-        let givenDate = DatabaseFormatter.date.string(from: .now)
-        let givenDay = DayModel(id: "1",
-                                date: givenDate,
-                                consumed: 0,
-                                goal: 3)
-        dayManager.fetchWithDate_returnValue = .success(givenDay)
-        dayManager.addConsumed_returnValue = .success(.init(id: "", date: givenDate, consumed: 1, goal: 3))
-        healthService.read_sum_returnValue = .success(1)
-        
-        let foundDay = await sut.getToday()
-        assert(day: foundDay,
-               dayModel: .init(id: "", date: givenDate, consumed: 1, goal: 3))
     }
     
     func test_getToday_failedFetchForDateAndFetchPrevious() async {
