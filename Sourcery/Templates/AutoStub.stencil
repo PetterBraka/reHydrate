@@ -1,0 +1,38 @@
+// swiftlint:disable line_length
+// swiftlint:disable variable_name
+{# Macro deffinitions #}
+{% macro methodReturnName method %}{{ method.callName }}{% for param in method.parameters %}{{ param.name | upperFirstLetter }}{% endfor %}_returnValue{% endmacro %}
+{# Macro End #}
+
+import Foundation
+{% for import in argument.imports %}
+import {{ import }}
+{% endfor %}
+
+{% for protocol in types.protocols %}
+{% if protocol.annotations.AutoStub %}
+public protocol {{ protocol.name }}Stubbing {
+{% for method in protocol.methods %}
+    var {% call methodReturnName method %}: {{ method.returnTypeName }} { get set }
+{% endfor %}
+}
+
+public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
+{% for method in protocol.methods %}
+    public var {% call methodReturnName method %}: {{ method.returnTypeName }} = .default
+{% endfor %}
+
+    public init() {}
+}
+
+extension {{ protocol.name }}Stub: {{ protocol.name }} {
+{% for method in protocol.methods %}
+    public func {{ method.name }} -> {{ method.returnTypeName }} {
+        {% call methodReturnName method %}
+    }
+
+{% endfor %}
+}
+
+{% endif %}
+{% endfor %}

@@ -1,0 +1,12 @@
+# DBKit
+# EnigneKit
+sources:
+    - ../EngineKit/Sources/DateService
+templates:
+    - Templates/AutoStub.stencil
+output: ../EngineKit/Sources/DateService/Mocks/Generated/DateServiceStub.swift
+args: 
+  imports: 
+      - DateServiceInterface
+# PresentationKit
+# PresentationWatchKit
