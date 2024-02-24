@@ -37,5 +37,14 @@ configurations:
     args: 
       imports:
           - DrinkServiceInterface
+
+  - sources:
+        - ../EngineKit/Sources/LanguageService
+    templates:
+        - Templates/AutoStub.stencil
+    output: ../EngineKit/Sources/LanguageService/Mocks/Generated/LanguageServiceStub.swift
+    args: 
+      imports:
+          - LanguageServiceInterface
 # PresentationKit
 # PresentationWatchKit
