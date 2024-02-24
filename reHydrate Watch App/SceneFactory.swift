@@ -29,11 +29,7 @@ public final class SceneFactory: ObservableObject {
     }
     
     func makeHomeView(isPreviews: Bool = false) -> HomeView {
-        let presenter = Screen.Home.Presenter(engine: engine, preFilledDrinks: [
-            .init(size: 300, container: .small),
-            .init(size: 500, container: .medium),
-            .init(size: 750, container: .large)
-        ])
+        let presenter = Screen.Home.Presenter(engine: engine)
         let observer = HomeScreenObservable(presenter: presenter)
         presenter.scene = observer
         

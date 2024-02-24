@@ -10,13 +10,15 @@ import LoggingService
 import PresentationWatchInterface
 import DrinkServiceInterface
 import UnitServiceInterface
+import DayServiceInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
         public typealias ViewModel = Home.ViewModel
         public typealias Engine = (
             HasLoggingService &
-            HasUnitService
+            HasUnitService &
+            HasDayService
         )
         
         private let engine: Engine
@@ -32,14 +34,13 @@ extension Screen.Home {
             return formatter
         }()
         
-        public init(engine: Engine, preFilledDrinks: [ViewModel.Drink] = []) {
+        public init(engine: Engine) {
             self.engine = engine
-            let unitSystem = engine.unitService.getUnitSystem()
-            viewModel = ViewModel(
-                consumption: 0,
-                goal: 0,
-                unit: unitSystem == .metric ? .liters : .imperialPints,
-                drinks: preFilledDrinks
+            viewModel = ViewModel(consumption: 0, goal: 0, unit: .liters, drinks: [])
+            
+            let unit = getUnit()
+            updateViewModel(
+                unit: unit
             )
         }
         
@@ -56,4 +57,32 @@ extension Screen.Home {
             print("sync")
         }
     }
+}
+
+private extension Screen.Home.Presenter {
+    func updateViewModel(
+        consumption: Double? = nil,
+        goal: Double? = nil,
+        unit: UnitVolume? = nil,
+        drinks: [Home.ViewModel.Drink]? = nil
+    ) {
+        viewModel = .init(
+            consumption: consumption ?? viewModel.consumption,
+            goal: goal ?? viewModel.goal,
+            unit: unit ?? viewModel.unit,
+            drinks: drinks ?? viewModel.drinks
+        )
+    }
+}
+
+// MARK: Units
+private extension Screen.Home.Presenter {
+    func getUnit() -> UnitVolume {
+        let unitSystem = engine.unitService.getUnitSystem()
+        return unitSystem == .metric ? .liters : .imperialPints
+    }
+}
+
+// MARK: Day
+private extension Screen.Home.Presenter {
 }
