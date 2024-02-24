@@ -13,13 +13,17 @@ import {{ import }}
 {% if protocol.annotations.AutoStub %}
 public protocol {{ protocol.name }}Stubbing {
 {% for method in protocol.methods %}
+    {% if method.returnTypeName | !contains: "Void" %}
     var {% call methodReturnName method %}: {{ method.returnTypeName }} { get set }
+    {% endif %}
 {% endfor %}
 }
 
 public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 {% for method in protocol.methods %}
+    {% if method.returnTypeName | !contains: "Void" %}
     public var {% call methodReturnName method %}: {{ method.returnTypeName }} = .default
+    {% endif %}
 {% endfor %}
 
     public init() {}
@@ -28,7 +32,9 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 extension {{ protocol.name }}Stub: {{ protocol.name }} {
 {% for method in protocol.methods %}
     public func {{ method.name }} -> {{ method.returnTypeName }} {
+        {% if method.returnTypeName | !contains: "Void" %}
         {% call methodReturnName method %}
+        {% endif %}
     }
 
 {% endfor %}

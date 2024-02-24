@@ -49,7 +49,7 @@ public final class EngineMocks {
     public var languageService: LanguageServiceType = LanguageServiceStub()
     public var unitService: UnitServiceType = UnitServiceStub()
     
-    public var appearanceService: AppearanceServiceType = AppearanceServiceStub()
+    public var appearanceService: AppearanceServiceType = AppearanceServiceTypeStub()
     public var dateService: DateServiceType = DateServiceTypeStub()
 }
 
