@@ -2,26 +2,41 @@
 // swiftlint:disable variable_name
 {# Macro deffinitions #}
 {% macro methodReturnName method %}{{ method.callName }}{% for param in method.parameters %}{{ param.name | upperFirstLetter }}{% endfor %}_returnValue{% endmacro %}
+{% macro variableName variable %}{{ variable.name }}_returnValue{% endmacro %}
 {# Macro End #}
 
+{% for protocol in types.protocols %}
+{% if protocol.annotations.AutoStub %}
 import Foundation
 {% for import in argument.imports %}
 import {{ import }}
 {% endfor %}
 
-{% for protocol in types.protocols %}
-{% if protocol.annotations.AutoStub %}
 public protocol {{ protocol.name }}Stubbing {
+{% for variable in protocol.variables %}
+    var {% call variableName variable %}: {{ variable.typeName }}{% if variable.isOptional %}?{% endif %} { get set }
+{% endfor %}
 {% for method in protocol.methods %}
-    {% if method.returnTypeName | !contains: "Void" %}
+    {% if method.returnTypeName.name == "Void" %}
+    {% if method.throws %}
+    var {% call methodReturnName method %}: Error? { get set }
+    {% endif %}
+    {% else %}
     var {% call methodReturnName method %}: {% if method.throws %}Result<{% endif %}{{ method.returnTypeName }}{% if method.throws %}, Error>{% endif %} { get set }
     {% endif %}
 {% endfor %}
 }
 
 public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
+{% for variable in protocol.variables %}
+    public var {% call variableName variable %}: {{ variable.typeName }}{% if variable.isOptional %}?{% endif %} = .default
+{% endfor %}
 {% for method in protocol.methods %}
-    {% if method.returnTypeName | !contains: "Void" %}
+    {% if method.returnTypeName.name == "Void" %}
+    {% if method.throws %}
+    public var {% call methodReturnName method %}: Error? = nil
+    {% endif %}
+    {% else %}
     public var {% call methodReturnName method %}: {% if method.throws %}Result<{% endif %}{{ method.returnTypeName }}{% if method.throws %}, Error>{% endif %} = .default
     {% endif %}
 {% endfor %}
@@ -30,9 +45,18 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 }
 
 extension {{ protocol.name }}Stub: {{ protocol.name }} {
+{% for variable in protocol.variables %}
+    public var {{ variable.name }}: {{ variable.typeName }}{% if variable.isOptional %}?{% endif %} { {% call variableName variable %} }
+{% endfor %}
 {% for method in protocol.methods %}
     public func {{ method.name }}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
-        {% if method.returnTypeName | !contains: "Void" %}
+        {% if method.returnTypeName.name == "Void" %}
+        {% if method.throws %}
+        if let {% call methodReturnName method %} {
+            throw {% call methodReturnName method %}
+        }
+        {% endif %}
+        {% else %}
         {% if method.throws %} 
         switch {% call methodReturnName method %} {
         case let .success(value):
