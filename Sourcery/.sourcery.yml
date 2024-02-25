@@ -55,6 +55,15 @@ configurations:
     args: 
       imports:
           - NotificationServiceInterface
+
+  - sources:
+        - ../EngineKit/Sources/UserPreferenceService
+    templates:
+        - Templates/AutoStub.stencil
+    output: ../EngineKit/Sources/UserPreferenceService/Mocks/Generated/UserPreferenceServiceStub.swift
+    args: 
+      imports:
+          - UserPreferenceServiceInterface
           
 # PresentationKit
 # PresentationWatchKit

@@ -34,7 +34,7 @@ public final class EngineMocks {
     public var dayManager: DayManagerType = DayManagerStub()
     public var drinkManager: DrinkManagerType = DrinkManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()
-    public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceStub()
+    public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceTypeStub()
     public var notificationService: NotificationServiceType = NotificationServiceTypeStub()
     public var notificationDelegate: NotificationDelegateType = NotificationDelegateTypeStub()
     

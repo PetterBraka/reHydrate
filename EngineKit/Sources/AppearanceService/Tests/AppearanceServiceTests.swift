@@ -26,14 +26,14 @@ final class AppearanceServiceTests: XCTestCase {
     var engine: Engine!
     
     var appearancePort: AppearancePortStub!
-    var userPreferenceService: UserPreferenceServiceStub!
+    var userPreferenceService: UserPreferenceServiceTypeStub!
     var preferenceKey: String!
     
     var sut: AppearanceServiceType!
     
     override func setUp() {
         appearancePort = AppearancePortStub()
-        userPreferenceService = UserPreferenceServiceStub()
+        userPreferenceService = UserPreferenceServiceTypeStub()
         engine = EngineMocks()
         engine.appearancePort = appearancePort
         engine.userPreferenceService = userPreferenceService
@@ -48,7 +48,7 @@ final class AppearanceServiceTests: XCTestCase {
     }
     
     func test_getAppearance_withSaved() {
-        userPreferenceService.get_returnValue = [
+        userPreferenceService.getKey_returnValue = [
             preferenceKey: "dark"
         ]
         let appearance = sut.getAppearance()
@@ -57,7 +57,7 @@ final class AppearanceServiceTests: XCTestCase {
     
     func test_getAppearance_withNoSavedWithLightCurrent() {
         appearancePort.getStyle_returnValue = .light
-        userPreferenceService.get_returnValue = [
+        userPreferenceService.getKey_returnValue = [
             preferenceKey: ""
         ]
         let appearance = sut.getAppearance()
@@ -66,7 +66,7 @@ final class AppearanceServiceTests: XCTestCase {
     
     func test_getAppearance_withNoSavedWithDarkCurrent() {
         appearancePort.getStyle_returnValue = .dark
-        userPreferenceService.get_returnValue = [
+        userPreferenceService.getKey_returnValue = [
             preferenceKey: ""
         ]
         let appearance = sut.getAppearance()
@@ -75,7 +75,7 @@ final class AppearanceServiceTests: XCTestCase {
     
     func test_getAppearance_withNoSavedAndUnknownCurrent() {
         appearancePort.getStyle_returnValue = .none
-        userPreferenceService.get_returnValue = [
+        userPreferenceService.getKey_returnValue = [
             preferenceKey: ""
         ]
         let appearance = sut.getAppearance()
@@ -102,7 +102,7 @@ final class AppearanceServiceTests: XCTestCase {
     }
     
     func test_setAppearance_storingFails() {
-        userPreferenceService.set_returnError = MockError.some
+        userPreferenceService.setValueKey_returnValue = MockError.some
         sut.setAppearance(.dark)
         let appearance = sut.getAppearance()
         XCTAssertEqual(appearance, .light)
@@ -110,7 +110,7 @@ final class AppearanceServiceTests: XCTestCase {
     
     func test_setAppearance_fails() {
         appearancePort.setStyle_returnValue = MockError.some
-        userPreferenceService.set_returnError = MockError.some
+        userPreferenceService.setValueKey_returnValue = MockError.some
         sut.setAppearance(.dark)
         let appearance = sut.getAppearance()
         XCTAssertEqual(appearance, .light)
