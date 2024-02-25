@@ -1,10 +1,28 @@
 // swiftlint:disable line_length
 // swiftlint:disable variable_name
 {# Macro deffinitions #}
-{% macro methodReturnName method %}{{ method.callName }}{% for param in method.parameters %}{{ param.name | upperFirstLetter }}{% endfor %}_returnValue{% endmacro %}
-{% macro variableName variable %}{{ variable.name }}_returnValue{% endmacro %}
-{# Macro End #}
+{% macro variableName variable -%}{{ variable.name }}_returnValue{% endmacro %}
 
+{% macro methodReturnName method -%}
+{{ method.callName }}
+{%- for param in method.parameters -%}
+{{ param.name | upperFirstLetter }}
+{%- endfor -%}_returnValue
+{%- endmacro -%}
+
+{% macro methodReturnType method -%}
+{% if method.throws -%}
+Result<{{ method.returnTypeName }}, Error>
+{%- else -%}
+{{ method.returnTypeName }}
+{%- endif -%}
+{%- endmacro -%}
+
+{% macro methodReturnNameAndType method -%}
+{% call methodReturnName method %}: {% call methodReturnType method %}
+{%- endmacro -%}
+
+{# Macro End #}
 {% for protocol in types.protocols %}
 {% if protocol.annotations.AutoStub %}
 import Foundation
@@ -22,7 +40,7 @@ public protocol {{ protocol.name }}Stubbing {
     var {% call methodReturnName method %}: Error? { get set }
     {% endif %}
     {% else %}
-    var {% call methodReturnName method %}: {% if method.throws %}Result<{% endif %}{{ method.returnTypeName }}{% if method.throws %}, Error>{% endif %} { get set }
+    var {% call methodReturnNameAndType method %} { get set }
     {% endif %}
 {% endfor %}
 }
@@ -37,7 +55,11 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
     public var {% call methodReturnName method %}: Error? = nil
     {% endif %}
     {% else %}
-    public var {% call methodReturnName method %}: {% if method.throws %}Result<{% endif %}{{ method.returnTypeName }}{% if method.throws %}, Error>{% endif %} = .default
+    {% if method.isOptionalReturnType %}
+    public var {% call methodReturnNameAndType method %} = nil
+    {% else %}
+    public var {% call methodReturnNameAndType method %} = .default
+{% endif %}
     {% endif %}
 {% endfor %}
 
