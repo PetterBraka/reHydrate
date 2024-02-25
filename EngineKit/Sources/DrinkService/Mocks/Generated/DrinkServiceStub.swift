@@ -10,6 +10,7 @@ import DrinkServiceInterface
 public protocol DrinkServiceTypeStubbing {
     var addSizeContainer_returnValue: Result<Drink, Error> { get set }
     var editSizeDrink_returnValue: Result<Drink, Error> { get set }
+    var removeContainer_returnValue: Error? { get set }
     var getSaved_returnValue: Result<[Drink], Error> { get set }
     var resetToDefault_returnValue: [Drink] { get set }
 }
@@ -17,6 +18,7 @@ public protocol DrinkServiceTypeStubbing {
 public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     public var addSizeContainer_returnValue: Result<Drink, Error> = .default
     public var editSizeDrink_returnValue: Result<Drink, Error> = .default
+    public var removeContainer_returnValue: Error? = nil
     public var getSaved_returnValue: Result<[Drink], Error> = .default
     public var resetToDefault_returnValue: [Drink] = .default
 
@@ -43,6 +45,9 @@ extension DrinkServiceTypeStub: DrinkServiceType {
     }
 
     public func remove(container: String) throws -> Void {
+        if let removeContainer_returnValue {
+            throw removeContainer_returnValue
+        }
     }
 
     public func getSaved() throws -> [Drink] {
