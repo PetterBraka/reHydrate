@@ -47,7 +47,7 @@ public final class EngineMocks {
     public var dayService: DayServiceType = DayServiceTypeStub()
     public var drinksService: DrinkServiceType = DrinkServiceTypeStub()
     public var languageService: LanguageServiceType = LanguageServiceTypeStub()
-    public var unitService: UnitServiceType = UnitServiceStub()
+    public var unitService: UnitServiceType = UnitServiceTypeStub()
     
     public var appearanceService: AppearanceServiceType = AppearanceServiceTypeStub()
     public var dateService: DateServiceType = DateServiceTypeStub()

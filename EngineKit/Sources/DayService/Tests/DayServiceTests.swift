@@ -29,7 +29,7 @@ final class DayServiceTests: XCTestCase {
     
     var engine: Engine!
     
-    var unitService: UnitServiceStub!
+    var unitService: UnitServiceTypeStub!
     var dayManager: DayManagerStub!
     var consumptionManager: ConsumptionManagerStub!
     var healthService: HealthServiceStub!
@@ -38,7 +38,7 @@ final class DayServiceTests: XCTestCase {
     
     override func setUp() {
         self.engine = EngineMocks()
-        self.unitService = UnitServiceStub()
+        self.unitService = UnitServiceTypeStub()
         self.engine.unitService = unitService
         self.dayManager = DayManagerStub()
         self.engine.dayManager = dayManager
@@ -92,7 +92,7 @@ final class DayServiceTests: XCTestCase {
     func test_getToday_failedFetch() async {
         dayManager.fetchWithDate_returnValue = .failure(DatabaseError.noElementFound)
         dayManager.createNewDay_returnValue = .failure(DatabaseError.creatingElement)
-        unitService.convert_returnValue = 3
+        unitService.convertValueFromUnitToUnit_returnValue = 3
         
         let day = await sut.getToday()
         XCTAssertEqual(day.consumed, 0)
@@ -100,10 +100,10 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_getToday_failedFetch_unitSystemImperial() async {
-        unitService.currentUnitSystem_returnValue = .imperial
+        unitService.getUnitSystem_returnValue = .imperial
         dayManager.fetchWithDate_returnValue = .failure(DatabaseError.noElementFound)
         dayManager.createNewDay_returnValue = .failure(DatabaseError.creatingElement)
-        unitService.convert_returnValue = 3
+        unitService.convertValueFromUnitToUnit_returnValue = 3
         
         let day = await sut.getToday()
         XCTAssertEqual(day.consumed, 0)
@@ -137,22 +137,22 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_addDrink() async throws {
-        unitService.convert_returnValue = 0.5
+        unitService.convertValueFromUnitToUnit_returnValue = 0.5
         dayManager.addConsumed_returnValue = .success(.init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3))
         let result = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
         XCTAssertEqual(result, 0.5)
     }
     
     func test_addDrink_unitSystemImperial() async throws {
-        unitService.currentUnitSystem_returnValue = .imperial
-        unitService.convert_returnValue = 0.5
+        unitService.getUnitSystem_returnValue = .imperial
+        unitService.convertValueFromUnitToUnit_returnValue = 0.5
         dayManager.addConsumed_returnValue = .success(.init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3))
         let result = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
         XCTAssertEqual(result, 0.5)
     }
     
     func test_addDrink_healthExportFails() async throws {
-        unitService.convert_returnValue = 0.5
+        unitService.convertValueFromUnitToUnit_returnValue = 0.5
         dayManager.addConsumed_returnValue = .success(.init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3))
         healthService.export_returnValue = Error.mock
         
@@ -161,7 +161,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_addDrink_multiple() async throws {
-        unitService.convert_returnValue = 1.55
+        unitService.convertValueFromUnitToUnit_returnValue = 1.55
         let _ = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
         let _ = try await sut.add(drink: .init(id: "", size: 750, container: .medium))
         dayManager.addConsumed_returnValue = .success(.init(id: "---", date: "01/01/2023", consumed: 1.55, goal: 3))
@@ -175,7 +175,7 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_removeDrink_removeLessThenAdded() async throws {
-        unitService.convert_returnValue = 0.75
+        unitService.convertValueFromUnitToUnit_returnValue = 0.75
         let _ = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
         let _ = try await sut.add(drink: .init(id: "", size: 750, container: .medium))
         
@@ -195,22 +195,22 @@ final class DayServiceTests: XCTestCase {
     }
     
     func test_increaseGoal() async throws {
-        unitService.convert_returnValue = 4
+        unitService.convertValueFromUnitToUnit_returnValue = 4
         dayManager.addGoal_returnValue = .success(.init(id: "---", date: "01/01/2023", consumed: 0, goal: 4))
         let result = try await sut.increase(goal: 1)
         XCTAssertEqual(result, 4)
     }
     
     func test_increaseGoal_unitSystemImperial() async throws {
-        unitService.currentUnitSystem_returnValue = .imperial
-        unitService.convert_returnValue = 4
+        unitService.getUnitSystem_returnValue = .imperial
+        unitService.convertValueFromUnitToUnit_returnValue = 4
         dayManager.addGoal_returnValue = .success(.init(id: "---", date: "01/01/2023", consumed: 0, goal: 4))
         let result = try await sut.increase(goal: 1)
         XCTAssertEqual(result, 4)
     }
     
     func test_decreaseGoal() async throws {
-        unitService.convert_returnValue = 2
+        unitService.convertValueFromUnitToUnit_returnValue = 2
         dayManager.addGoal_returnValue = .success(.init(id: "---", date: "01/01/2023", consumed: 0, goal: 2))
         let result = try await sut.decrease(goal: 1)
         XCTAssertEqual(result, 2)

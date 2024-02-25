@@ -64,6 +64,15 @@ configurations:
     args: 
       imports:
           - UserPreferenceServiceInterface
+
+  - sources:
+        - ../EngineKit/Sources/UnitService
+    templates:
+        - Templates/AutoStub.stencil
+    output: ../EngineKit/Sources/UnitService/Mocks/Generated/UnitServiceStub.swift
+    args: 
+      imports:
+          - UnitServiceInterface
           
 # PresentationKit
 # PresentationWatchKit
