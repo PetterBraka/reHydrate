@@ -1,0 +1,74 @@
+{% macro parametersCamelCase method %}{% for param in method.parameters -%}
+    {% if param.argumentLabel != nil -%}
+    _{{ param.argumentLabel }}
+    {%- endif -%}
+    {% endfor -%}
+{% endmacro %}
+{%- for protocol in types.protocols -%}
+{%- if protocol.annotations.AutoSpy -%}
+// swiftlint:disable line_length
+// swiftlint:disable variable_name
+
+import Foundation
+{% for import in argument.imports %}
+import {{ import }}
+{% endfor %}
+
+public protocol {{ protocol.name }}Spying {
+    var variableLog: [{{ protocol.name }}Spy.VariableName] { get set }
+    var methodLog: [{{ protocol.name }}Spy.MethodName] { get set }
+}
+
+public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
+    public enum VariableName {
+        {% for variable in protocol.variables %}
+            case {{ variable.name }}
+        {% endfor %}
+    }
+
+    public enum MethodName {
+        {% for method in protocol.methods %}
+            case {{ method.callName }}{% call parametersCamelCase method %}
+        {% endfor %}
+    }
+
+    public var variableLog: [VariableName] = []
+    public var methodLog: [MethodName] = []
+    private let realObject: {{ protocol.name }}
+    
+    public init(realObject: {{ protocol.name }}) {
+        self.realObject = realObject
+    }
+}
+
+extension {{ protocol.name }}Spy: {{ protocol.name }} {
+{% for variable in protocol.variables %}
+    public var {{ variable.name }}: {{ variable.typeName }} {
+        get {
+            variableLog.append(.{{ variable.name }})
+            return realObject.{{ variable.name }}
+        }
+        {% if !variable.isComputed or variable.isMutable%}
+        set {
+            variableLog.append(.{{ variable.name }})
+            realObject.{{ variable.name }}  = newValue
+        }
+        {% endif %}
+    }
+{% endfor %}
+{% for method in protocol.methods %}
+    public func {{ method.name }}{% if method.isAsync %} async{% endif %}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
+        methodLog.append(.{{ method.callName }}{% call parametersCamelCase method %})
+        {% if method.returnTypeName.name == "Void" %}{% else %}return {% endif -%}
+        {% if method.throws %}try {% endif -%}
+        {% if method.isAsync %}await {% endif -%}
+        realObject.{{ method.callName }}(
+        {%- for param in method.parameters -%}
+        {{ param.argumentLabel }}{% if param.argumentLabel != null %}: {% endif -%}
+        {{ param.name }}{% if not forloop.last %}, {% endif %}
+        {%- endfor -%})
+    }
+{% endfor %}
+}
+{%- endif -%}
+{%- endfor -%}
