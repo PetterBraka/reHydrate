@@ -19,7 +19,11 @@ Result<{{ method.returnTypeName }}, Error>
 {%- endmacro -%}
 
 {% macro methodReturnNameAndType method -%}
+{%- if method.isGeneric -%}
+{%- call methodReturnName method -%}: (any Decodable)?
+{%- else -%}
 {% call methodReturnName method %}: {% call methodReturnType method %}
+{%- endif -%}
 {%- endmacro -%}
 
 {# Macro End #}
@@ -87,7 +91,11 @@ extension {{ protocol.name }}Stub: {{ protocol.name }} {
             throw error
         }
         {% else %}
+        {%- if method.isOptionalReturnType and method.isGeneric -%}
+        {% call methodReturnName method %} as? {{ method.unwrappedReturnTypeName }}
+        {%- else -%}
         {% call methodReturnName method %}
+        {%- endif -%}
         {% endif %}
         {% endif %}
     }
