@@ -40,6 +40,7 @@ let package: Package = {
                     ]),
             .target(name: engineMocks,
                     dependencies: [
+                        .loggingService,
                         .dbKit,
                         .portsMocks,
                         .mocks(.dayService),
