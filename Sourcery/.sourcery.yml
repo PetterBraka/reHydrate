@@ -73,6 +73,15 @@ configurations:
     args: 
       imports:
           - UnitServiceInterface
+
+  - sources:
+        - ../EngineKit/Sources/TimelineService
+    templates:
+        - Templates/AutoStub.stencil
+    output: ../EngineKit/Sources/TimelineService/Mocks/Generated/TimelineServiceStub.swift
+    args: 
+      imports:
+          - TimelineServiceInterface
           
 # PresentationKit
 # PresentationWatchKit
