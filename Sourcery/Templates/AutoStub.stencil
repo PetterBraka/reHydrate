@@ -1,15 +1,11 @@
-// swiftlint:disable line_length
-// swiftlint:disable variable_name
 {# Macro deffinitions #}
 {% macro variableName variable -%}{{ variable.name }}_returnValue{% endmacro %}
-
 {% macro methodReturnName method -%}
 {{ method.callName }}
 {%- for param in method.parameters -%}
 {{ param.name | upperFirstLetter }}
 {%- endfor -%}_returnValue
 {%- endmacro -%}
-
 {% macro methodReturnType method -%}
 {% if method.throws -%}
 Result<{{ method.returnTypeName }}, Error>
@@ -29,6 +25,9 @@ Result<{{ method.returnTypeName }}, Error>
 {# Macro End #}
 {% for protocol in types.protocols %}
 {% if protocol.annotations.AutoStub %}
+// sourcery:file:{{ protocol.name }}+Stub
+// swiftlint:disable line_length
+// swiftlint:disable variable_name    
 import Foundation
 {% for import in argument.imports %}
 import {{ import }}
@@ -102,6 +101,6 @@ extension {{ protocol.name }}Stub: {{ protocol.name }} {
 
 {% endfor %}
 }
-
+// sourcery:end
 {% endif %}
 {% endfor %}

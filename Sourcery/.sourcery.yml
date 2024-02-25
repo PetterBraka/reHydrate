@@ -6,7 +6,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/AppearanceService/Mocks/Generated/AppearanceServiceStub.swift
+    output: ../EngineKit/Sources/AppearanceService/Mocks/Generated/
     args: 
       imports: 
         - AppearanceServiceInterface
@@ -16,7 +16,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/DateService/Mocks/Generated/DateServiceStub.swift
+    output: ../EngineKit/Sources/DateService/Mocks/Generated/
     args: 
       imports: 
           - DateServiceInterface
@@ -26,7 +26,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/DayService/Mocks/Generated/DayServiceStub.swift
+    output: ../EngineKit/Sources/DayService/Mocks/Generated/
     args: 
       imports: 
           - DayServiceInterface
@@ -37,7 +37,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/DrinkService/Mocks/Generated/DrinkServiceStub.swift
+    output: ../EngineKit/Sources/DrinkService/Mocks/Generated/
     args: 
       imports:
           - DrinkServiceInterface
@@ -47,7 +47,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/LanguageService/Mocks/Generated/LanguageServiceStub.swift
+    output: ../EngineKit/Sources/LanguageService/Mocks/Generated/
     args: 
       imports:
           - LanguageServiceInterface
@@ -57,7 +57,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/NotificationService/Mocks/Generated/NotificationServiceStub.swift
+    output: ../EngineKit/Sources/NotificationService/Mocks/Generated/
     args: 
       imports:
           - NotificationServiceInterface
@@ -67,7 +67,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/UserPreferenceService/Mocks/Generated/UserPreferenceServiceStub.swift
+    output: ../EngineKit/Sources/UserPreferenceService/Mocks/Generated/
     args: 
       imports:
           - UserPreferenceServiceInterface
@@ -77,7 +77,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/UnitService/Mocks/Generated/UnitServiceStub.swift
+    output: ../EngineKit/Sources/UnitService/Mocks/Generated/
     args: 
       imports:
           - UnitServiceInterface
@@ -87,7 +87,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/TimelineService/Mocks/Generated/TimelineServiceStub.swift
+    output: ../EngineKit/Sources/TimelineService/Mocks/Generated/
     args: 
       imports:
           - TimelineServiceInterface
@@ -97,7 +97,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/Ports/Mocks/Generated/PortsStub.swift
+    output: ../EngineKit/Sources/Ports/Mocks/Generated/
     args: 
       imports:
           - PortsInterface

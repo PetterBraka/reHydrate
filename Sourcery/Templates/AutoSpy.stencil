@@ -4,8 +4,9 @@
     {%- endif -%}
     {% endfor -%}
 {% endmacro %}
-{%- for protocol in types.protocols -%}
-{%- if protocol.annotations.AutoSpy -%}
+{% for protocol in types.protocols %}
+{% if protocol.annotations.AutoSpy %}
+// sourcery:file:{{ protocol.name }}+Spy
 // swiftlint:disable line_length
 // swiftlint:disable variable_name
 
@@ -70,5 +71,6 @@ extension {{ protocol.name }}Spy: {{ protocol.name }} {
     }
 {% endfor %}
 }
+// sourcery:end
 {%- endif -%}
 {%- endfor -%}
