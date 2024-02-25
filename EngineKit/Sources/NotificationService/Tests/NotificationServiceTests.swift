@@ -28,13 +28,13 @@ final class NotificationServiceTests: XCTestCase {
     
     var engine: Engine = EngineMocks()
     
-    var notificationCenter: (stub: NotificationCenterStub, spy: NotificationCenterSpy)!
+    var notificationCenter: (stub: NotificationCenterTypeStub, spy: NotificationCenterSpy)!
     var userPreferenceService: UserPreferenceServiceStub!
     
     var sut: NotificationServiceType!
     
     override func setUp() {
-        let stub = NotificationCenterStub()
+        let stub = NotificationCenterTypeStub()
         let spy = NotificationCenterSpy(realObject: stub)
         notificationCenter = (stub, spy)
         
@@ -130,7 +130,7 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_deniedAuth() async {
-        notificationCenter.stub.requestAuthorization = .success(false)
+        notificationCenter.stub.requestAuthorization_returnValue = .success(false)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)
@@ -145,7 +145,7 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_unauthorized() async {
-        notificationCenter.stub.requestAuthorization = .failure(NotificationError.unauthorized)
+        notificationCenter.stub.requestAuthorization_returnValue = .failure(NotificationError.unauthorized)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)

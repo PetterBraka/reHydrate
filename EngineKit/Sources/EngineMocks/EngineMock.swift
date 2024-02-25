@@ -35,8 +35,8 @@ public final class EngineMocks {
     public var drinkManager: DrinkManagerType = DrinkManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()
     public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceStub()
-    public var notificationService: NotificationServiceType = NotificationServiceStub()
-    public var notificationDelegate: NotificationDelegateType = NotificationDelegateStub()
+    public var notificationService: NotificationServiceType = NotificationServiceTypeStub()
+    public var notificationDelegate: NotificationDelegateType = NotificationDelegateTypeStub()
     
     //MARK: Ports
     public var appearancePort: AppearancePortType = AppearancePortStub()

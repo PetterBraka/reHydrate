@@ -46,5 +46,15 @@ configurations:
     args: 
       imports:
           - LanguageServiceInterface
+
+  - sources:
+        - ../EngineKit/Sources/NotificationService
+    templates:
+        - Templates/AutoStub.stencil
+    output: ../EngineKit/Sources/NotificationService/Mocks/Generated/NotificationServiceStub.swift
+    args: 
+      imports:
+          - NotificationServiceInterface
+          
 # PresentationKit
 # PresentationWatchKit
