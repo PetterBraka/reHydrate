@@ -39,10 +39,10 @@ public final class EngineMocks {
     public var notificationDelegate: NotificationDelegateType = NotificationDelegateTypeStub()
     
     //MARK: Ports
-    public var appearancePort: AppearancePortType = AppearancePortStub()
-    public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceStub()
-    public var openUrlService: OpenUrlInterface = OpenUrlServiceStub()
-    public var healthService: HealthInterface = HealthServiceStub()
+    public var appearancePort: AppearancePortType = AppearancePortTypeStub()
+    public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceTypeStub()
+    public var openUrlService: OpenUrlInterface = OpenUrlInterfaceStub()
+    public var healthService: HealthInterface = HealthInterfaceStub()
     
     public var dayService: DayServiceType = DayServiceTypeStub()
     public var drinksService: DrinkServiceType = DrinkServiceTypeStub()

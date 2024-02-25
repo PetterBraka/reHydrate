@@ -25,14 +25,14 @@ final class AppearanceServiceTests: XCTestCase {
     
     var engine: Engine!
     
-    var appearancePort: AppearancePortStub!
+    var appearancePort: AppearancePortTypeStub!
     var userPreferenceService: UserPreferenceServiceTypeStub!
     var preferenceKey: String!
     
     var sut: AppearanceServiceType!
     
     override func setUp() {
-        appearancePort = AppearancePortStub()
+        appearancePort = AppearancePortTypeStub()
         userPreferenceService = UserPreferenceServiceTypeStub()
         engine = EngineMocks()
         engine.appearancePort = appearancePort
@@ -95,7 +95,7 @@ final class AppearanceServiceTests: XCTestCase {
     }
     
     func test_setAppearance_setFails() {
-        appearancePort.setStyle_returnValue = MockError.some
+        appearancePort.setStyleStyle_returnValue = MockError.some
         sut.setAppearance(.dark)
         let appearance = sut.getAppearance()
         XCTAssertEqual(appearance, .light)
@@ -109,7 +109,7 @@ final class AppearanceServiceTests: XCTestCase {
     }
     
     func test_setAppearance_fails() {
-        appearancePort.setStyle_returnValue = MockError.some
+        appearancePort.setStyleStyle_returnValue = MockError.some
         userPreferenceService.setValueKey_returnValue = MockError.some
         sut.setAppearance(.dark)
         let appearance = sut.getAppearance()

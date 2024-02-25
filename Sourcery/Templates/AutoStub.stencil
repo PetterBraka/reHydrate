@@ -36,7 +36,7 @@ import {{ import }}
 
 public protocol {{ protocol.name }}Stubbing {
 {% for variable in protocol.variables %}
-    var {% call variableName variable %}: {{ variable.typeName }}{% if variable.isOptional %}?{% endif %} { get set }
+    var {% call variableName variable %}: {{ variable.typeName }} { get set }
 {% endfor %}
 {% for method in protocol.methods %}
     {% if method.returnTypeName.name == "Void" %}
@@ -51,7 +51,7 @@ public protocol {{ protocol.name }}Stubbing {
 
 public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 {% for variable in protocol.variables %}
-    public var {% call variableName variable %}: {{ variable.typeName }}{% if variable.isOptional %}?{% endif %} = .default
+    public var {% call variableName variable %}: {{ variable.typeName }} = .default
 {% endfor %}
 {% for method in protocol.methods %}
     {% if method.returnTypeName.name == "Void" %}
@@ -72,7 +72,7 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 
 extension {{ protocol.name }}Stub: {{ protocol.name }} {
 {% for variable in protocol.variables %}
-    public var {{ variable.name }}: {{ variable.typeName }}{% if variable.isOptional %}?{% endif %} { {% call variableName variable %} }
+    public var {{ variable.name }}: {{ variable.typeName }} { {% call variableName variable %} }
 {% endfor %}
 {% for method in protocol.methods %}
     public func {{ method.name }}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {

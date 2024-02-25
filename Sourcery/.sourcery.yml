@@ -82,6 +82,15 @@ configurations:
     args: 
       imports:
           - TimelineServiceInterface
+
+  - sources:
+        - ../EngineKit/Sources/Ports
+    templates:
+        - Templates/AutoStub.stencil
+    output: ../EngineKit/Sources/Ports/Mocks/Generated/PortsStub.swift
+    args: 
+      imports:
+          - PortsInterface
           
 # PresentationKit
 # PresentationWatchKit

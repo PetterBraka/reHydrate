@@ -32,7 +32,7 @@ final class DayServiceTests: XCTestCase {
     var unitService: UnitServiceTypeStub!
     var dayManager: DayManagerStub!
     var consumptionManager: ConsumptionManagerStub!
-    var healthService: HealthServiceStub!
+    var healthService: HealthInterfaceStub!
     
     var sut: DayServiceType!
     
@@ -44,7 +44,7 @@ final class DayServiceTests: XCTestCase {
         self.engine.dayManager = dayManager
         self.consumptionManager = ConsumptionManagerStub()
         self.engine.consumptionManager = consumptionManager
-        self.healthService = HealthServiceStub()
+        self.healthService = HealthInterfaceStub()
         self.engine.healthService = healthService
         self.sut = DayService(engine: engine)
     }
@@ -69,7 +69,6 @@ final class DayServiceTests: XCTestCase {
                                 goal: 3)
         dayManager.fetchWithDate_returnValue = .failure(DatabaseError.noElementFound)
         dayManager.createNewDay_returnValue = .success(givenDay)
-        healthService.read_sum_returnValue = .failure(HealthError.missingResult)
         
         let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
@@ -116,7 +115,7 @@ final class DayServiceTests: XCTestCase {
                                 date: givenDate,
                                 consumed: 0,
                                 goal: 3)
-        healthService.requestAuth_returnValue = Error.mock
+        healthService.requestAuthReadAndWrite_returnValue = Error.mock
         dayManager.fetchWithDate_returnValue = .success(givenDay)
         
         let foundDay = await sut.getToday()
@@ -154,7 +153,7 @@ final class DayServiceTests: XCTestCase {
     func test_addDrink_healthExportFails() async throws {
         unitService.convertValueFromUnitToUnit_returnValue = 0.5
         dayManager.addConsumed_returnValue = .success(.init(id: "---", date: "01/01/2023", consumed: 0.5, goal: 3))
-        healthService.export_returnValue = Error.mock
+        healthService.exportQuantityIdDate_returnValue = Error.mock
         
         let result = try await sut.add(drink: .init(id: "", size: 500, container: .medium))
         XCTAssertEqual(result, 0.5)
