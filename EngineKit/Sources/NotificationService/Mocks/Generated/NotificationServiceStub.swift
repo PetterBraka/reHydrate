@@ -28,7 +28,7 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
 }
 
 extension NotificationCenterTypeStub: NotificationCenterType {
-    public func requestAuthorization() throws -> Bool {
+    public func requestAuthorization() async throws -> Bool {
         switch requestAuthorization_returnValue {
         case let .success(value):
             return value
@@ -40,17 +40,17 @@ extension NotificationCenterTypeStub: NotificationCenterType {
     public func setNotificationCategories(_ categories: Set<NotificationCategory>) -> Void {
     }
 
-    public func notificationCategories() -> Set<NotificationCategory> {
+    public func notificationCategories() async -> Set<NotificationCategory> {
         notificationCategories_returnValue
     }
 
-    public func add(_ request: NotificationRequest) throws -> Void {
+    public func add(_ request: NotificationRequest) async throws -> Void {
         if let addRequest_returnValue {
             throw addRequest_returnValue
         }
     }
 
-    public func pendingNotificationRequests() -> [NotificationRequest] {
+    public func pendingNotificationRequests() async -> [NotificationRequest] {
         pendingNotificationRequests_returnValue
     }
 
@@ -60,7 +60,7 @@ extension NotificationCenterTypeStub: NotificationCenterType {
     public func removeAllPendingNotificationRequests() -> Void {
     }
 
-    public func deliveredNotifications() -> [DeliveredNotification] {
+    public func deliveredNotifications() async -> [DeliveredNotification] {
         deliveredNotifications_returnValue
     }
 
@@ -70,7 +70,7 @@ extension NotificationCenterTypeStub: NotificationCenterType {
     public func removeAllDeliveredNotifications() -> Void {
     }
 
-    public func setBadgeCount(_ newBadgeCount: Int) throws -> Void {
+    public func setBadgeCount(_ newBadgeCount: Int) async throws -> Void {
         if let setBadgeCountNewBadgeCount_returnValue {
             throw setBadgeCountNewBadgeCount_returnValue
         }
@@ -90,10 +90,10 @@ public final class NotificationDelegateTypeStub: NotificationDelegateTypeStubbin
 }
 
 extension NotificationDelegateTypeStub: NotificationDelegateType {
-    public func userNotificationCenter(_ center: NotificationCenterType, didReceive response: NotificationResponse) -> Void {
+    public func userNotificationCenter(_ center: NotificationCenterType, didReceive response: NotificationResponse) async -> Void {
     }
 
-    public func userNotificationCenter(_ center: NotificationCenterType, willPresent: DeliveredNotification) -> Void {
+    public func userNotificationCenter(_ center: NotificationCenterType, willPresent: DeliveredNotification) async -> Void {
     }
 
     public func userNotificationCenter(_ center: NotificationCenterType, openSettingsFor: DeliveredNotification?) -> Void {
@@ -120,7 +120,7 @@ public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing 
 
 extension NotificationServiceTypeStub: NotificationServiceType {
     public var minimumAllowedFrequency: Int { minimumAllowedFrequency_returnValue }
-    public func enable(withFrequency: Int, start: Date, stop: Date) -> Result<Void, NotificationError> {
+    public func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError> {
         enableWithFrequencyStartStop_returnValue
     }
 

@@ -75,7 +75,7 @@ extension {{ protocol.name }}Stub: {{ protocol.name }} {
     public var {{ variable.name }}: {{ variable.typeName }} { {% call variableName variable %} }
 {% endfor %}
 {% for method in protocol.methods %}
-    public func {{ method.name }}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
+    public func {{ method.name }}{% if method.isAsync %} async{% endif %}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
         {% if method.returnTypeName.name == "Void" %}
         {% if method.throws %}
         if let {% call methodReturnName method %} {

@@ -20,11 +20,11 @@ public final class TimelineServiceTypeStub: TimelineServiceTypeStubbing {
 }
 
 extension TimelineServiceTypeStub: TimelineServiceType {
-    public func getTimeline(for date: Date) -> [Timeline] {
+    public func getTimeline(for date: Date) async -> [Timeline] {
         getTimelineDate_returnValue
     }
 
-    public func getTimelineCollection() -> [TimelineCollection] {
+    public func getTimelineCollection() async -> [TimelineCollection] {
         getTimelineCollection_returnValue
     }
 

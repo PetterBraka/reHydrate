@@ -22,15 +22,15 @@ public final class AlternateIconsServiceTypeStub: AlternateIconsServiceTypeStubb
 }
 
 extension AlternateIconsServiceTypeStub: AlternateIconsServiceType {
-    public func supportsAlternateIcons() -> Bool {
+    public func supportsAlternateIcons() async -> Bool {
         supportsAlternateIcons_returnValue
     }
 
-    public func setAlternateIcon(to iconName: String) -> Error? {
+    public func setAlternateIcon(to iconName: String) async -> Error? {
         setAlternateIconIconName_returnValue
     }
 
-    public func getAlternateIcon() -> String? {
+    public func getAlternateIcon() async -> String? {
         getAlternateIcon_returnValue
     }
 
@@ -89,7 +89,7 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
 
 extension HealthInterfaceStub: HealthInterface {
     public var isSupported: Bool { isSupported_returnValue }
-    public func shouldRequestAccess(for healthDataType: [HealthDataType]) -> Bool {
+    public func shouldRequestAccess(for healthDataType: [HealthDataType]) async -> Bool {
         shouldRequestAccessHealthDataType_returnValue
     }
 
@@ -97,13 +97,13 @@ extension HealthInterfaceStub: HealthInterface {
         canWriteDataType_returnValue
     }
 
-    public func requestAuth(toReadAndWrite readAndWrite: Set<HealthDataType>) throws -> Void {
+    public func requestAuth(toReadAndWrite readAndWrite: Set<HealthDataType>) async throws -> Void {
         if let requestAuthReadAndWrite_returnValue {
             throw requestAuthReadAndWrite_returnValue
         }
     }
 
-    public func export(quantity: Quantity, id: QuantityTypeIdentifier, date: Date) throws -> Void {
+    public func export(quantity: Quantity, id: QuantityTypeIdentifier, date: Date) async throws -> Void {
         if let exportQuantityIdDate_returnValue {
             throw exportQuantityIdDate_returnValue
         }
@@ -112,7 +112,7 @@ extension HealthInterfaceStub: HealthInterface {
     public func read(_ data: HealthDataType, queryType: HealthQuery) -> Void {
     }
 
-    public func enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency) throws -> Void {
+    public func enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency) async throws -> Void {
         if let enableBackgroundDeliveryHealthDataFrequency_returnValue {
             throw enableBackgroundDeliveryHealthDataFrequency_returnValue
         }
@@ -139,13 +139,13 @@ public final class OpenUrlInterfaceStub: OpenUrlInterfaceStubbing {
 
 extension OpenUrlInterfaceStub: OpenUrlInterface {
     public var settingsUrl: URL? { settingsUrl_returnValue }
-    public func open(url: URL) throws -> Void {
+    public func open(url: URL) async throws -> Void {
         if let openUrl_returnValue {
             throw openUrl_returnValue
         }
     }
 
-    public func email(to email: String, cc: String?, bcc: String?, subject: String, body: String?) throws -> Void {
+    public func email(to email: String, cc: String?, bcc: String?, subject: String, body: String?) async throws -> Void {
         if let emailEmailCcBccSubjectBody_returnValue {
             throw emailEmailCcBccSubjectBody_returnValue
         }

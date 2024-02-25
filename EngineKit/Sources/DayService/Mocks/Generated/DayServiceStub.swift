@@ -29,11 +29,11 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
 }
 
 extension DayServiceTypeStub: DayServiceType {
-    public func getToday() -> Day {
+    public func getToday() async -> Day {
         getToday_returnValue
     }
 
-    public func getDays(between dates: ClosedRange<Date>) throws -> [Day] {
+    public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
         switch getDaysDates_returnValue {
         case let .success(value):
             return value
@@ -42,7 +42,7 @@ extension DayServiceTypeStub: DayServiceType {
         }
     }
 
-    public func add(drink: Drink) throws -> Double {
+    public func add(drink: Drink) async throws -> Double {
         switch addDrink_returnValue {
         case let .success(value):
             return value
@@ -51,7 +51,7 @@ extension DayServiceTypeStub: DayServiceType {
         }
     }
 
-    public func remove(drink: Drink) throws -> Double {
+    public func remove(drink: Drink) async throws -> Double {
         switch removeDrink_returnValue {
         case let .success(value):
             return value
@@ -60,7 +60,7 @@ extension DayServiceTypeStub: DayServiceType {
         }
     }
 
-    public func increase(goal: Double) throws -> Double {
+    public func increase(goal: Double) async throws -> Double {
         switch increaseGoal_returnValue {
         case let .success(value):
             return value
@@ -69,7 +69,7 @@ extension DayServiceTypeStub: DayServiceType {
         }
     }
 
-    public func decrease(goal: Double) throws -> Double {
+    public func decrease(goal: Double) async throws -> Double {
         switch decreaseGoal_returnValue {
         case let .success(value):
             return value
