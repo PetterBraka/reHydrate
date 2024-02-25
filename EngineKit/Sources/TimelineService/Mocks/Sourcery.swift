@@ -6,6 +6,6 @@
 //
 import TimelineServiceInterface
 
-// sourcery:begin: AutoStub
+// sourcery:begin: AutoStub, AutoSpy
 extension TimelineServiceType {}
 // sourcery:end

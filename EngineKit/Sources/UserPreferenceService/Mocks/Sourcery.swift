@@ -6,6 +6,6 @@
 //
 import UserPreferenceServiceInterface
 
-// sourcery:begin: AutoStub
+// sourcery:begin: AutoStub, AutoSpy
 extension UserPreferenceServiceType {}
 // sourcery:end

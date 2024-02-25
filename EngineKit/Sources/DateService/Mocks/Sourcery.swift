@@ -6,6 +6,6 @@
 //
 import DateServiceInterface
 
-// sourcery:begin: AutoStub
+// sourcery:begin: AutoStub, AutoSpy
 extension DateServiceType {}
 // sourcery:end

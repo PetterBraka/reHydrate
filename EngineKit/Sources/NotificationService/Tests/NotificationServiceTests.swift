@@ -28,14 +28,14 @@ final class NotificationServiceTests: XCTestCase {
     
     var engine: Engine = EngineMocks()
     
-    var notificationCenter: (stub: NotificationCenterTypeStub, spy: NotificationCenterSpy)!
+    var notificationCenter: (stub: NotificationCenterTypeStub, spy: NotificationCenterTypeSpy)!
     var userPreferenceService: UserPreferenceServiceTypeStub!
     
     var sut: NotificationServiceType!
     
     override func setUp() {
         let stub = NotificationCenterTypeStub()
-        let spy = NotificationCenterSpy(realObject: stub)
+        let spy = NotificationCenterTypeSpy(realObject: stub)
         notificationCenter = (stub, spy)
         
         userPreferenceService = UserPreferenceServiceTypeStub()
@@ -330,7 +330,7 @@ extension NotificationError: CustomStringConvertible {
     }
 }
 
-extension NotificationCenterSpy.MethodName: CustomStringConvertible {
+extension NotificationCenterTypeSpy.MethodName: CustomStringConvertible {
     public var description: String {
         switch self {
         case .requestAuthorization:
@@ -343,13 +343,13 @@ extension NotificationCenterSpy.MethodName: CustomStringConvertible {
             "add"
         case .pendingNotificationRequests:
             "pendingNotificationRequests"
-        case .removePendingNotificationRequests:
+        case .removePendingNotificationRequests_withIdentifiers:
             "removePendingNotificationRequests"
         case .removeAllPendingNotificationRequests:
             "removeAllPendingNotificationRequests"
         case .deliveredNotifications:
             "deliveredNotifications"
-        case .removeDeliveredNotifications:
+        case .removeDeliveredNotifications_withIdentifiers:
             "removeDeliveredNotifications"
         case .removeAllDeliveredNotifications:
             "removeAllDeliveredNotifications"

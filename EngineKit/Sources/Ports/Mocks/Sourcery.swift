@@ -6,7 +6,7 @@
 //
 import PortsInterface
 
-// sourcery:begin: AutoStub
+// sourcery:begin: AutoStub, AutoSpy
 extension AlternateIconsServiceType {}
 extension AppearancePortType {}
 extension HealthInterface {}

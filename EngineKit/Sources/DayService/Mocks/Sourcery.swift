@@ -6,6 +6,6 @@
 //
 import DayServiceInterface
 
-// sourcery:begin: AutoStub
+// sourcery:begin: AutoStub, AutoSpy
 extension DayServiceType {}
 // sourcery:end

@@ -6,7 +6,7 @@
 //
 import NotificationServiceInterface
 
-// sourcery:begin: AutoStub
+// sourcery:begin: AutoStub, AutoSpy
 extension NotificationServiceType {}
 extension NotificationCenterType {}
 extension NotificationDelegateType {}
