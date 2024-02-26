@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E266" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Drink" representedClassName=".Drink" syncable="YES">
-        <attribute name="attribute" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="consumed" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" customClassName="Day"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22C65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DayModel" representedClassName="DayModel" syncable="YES" codeGenerationType="class">
+        <attribute name="consumtion" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="goal" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="drink" optional="YES" toMany="YES" minCount="3" deletionRule="Nullify" ordered="YES" destinationEntity="DrinkModel" inverseName="day" inverseEntity="DrinkModel"/>
     </entity>
-    <elements>
-        <element name="Drink" positionX="-27" positionY="18" width="128" height="88"/>
-    </elements>
+    <entity name="DrinkModel" representedClassName="DrinkModel" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="size" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="day" maxCount="1" deletionRule="Nullify" destinationEntity="DayModel" inverseName="drink" inverseEntity="DayModel"/>
+    </entity>
 </model>

@@ -1,0 +1,80 @@
+{
+  "configurations" : [
+    {
+      "id" : "7FD11C6B-7C91-409E-B419-EE976582A45F",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DayServiceTests",
+        "name" : "DayServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DrinkServiceTests",
+        "name" : "DrinkServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LanguageServiceTests",
+        "name" : "LanguageServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "TimelineServiceTests",
+        "name" : "TimelineServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UnitServiceTests",
+        "name" : "UnitServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UserPreferenceServiceTests",
+        "name" : "UserPreferenceServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NotificationServiceTests",
+        "name" : "NotificationServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AppearanceServiceTests",
+        "name" : "AppearanceServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DateServiceTests",
+        "name" : "DateServiceTests"
+      }
+    }
+  ],
+  "version" : 1
+}

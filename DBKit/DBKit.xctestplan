@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "6ABDA094-FF86-4CDB-AB14-ED913CA5A364",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DBKitTests",
+        "name" : "DBKitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

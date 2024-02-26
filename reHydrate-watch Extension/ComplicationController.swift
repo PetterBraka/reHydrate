@@ -13,7 +13,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     var todayConsumed = Double()
     var todayGoal = Double()
     var todayDate = Date()
-    weak var delegate = WKExtension.shared().delegate as? ExtensionDelegate
+    weak var delegate = WKApplication.shared().delegate as? ExtensionDelegate
 
     func complicationDescriptors() async -> [CLKComplicationDescriptor] {
         let descriptor = CLKComplicationDescriptor(identifier: "reHydrate",
@@ -32,12 +32,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
 
     func privacyBehavior(for _: CLKComplication)
-    async -> CLKComplicationPrivacyBehavior { .showOnLockScreen }
+        async -> CLKComplicationPrivacyBehavior { .showOnLockScreen }
 
     func timelineEndDate(for _: CLKComplication) async -> Date? { nil }
 
     func timelineEntries(for complication: CLKComplication, after _: Date, limit _: Int)
-    async -> [CLKComplicationTimelineEntry]? {
+        async -> [CLKComplicationTimelineEntry]? {
         todayDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
 
         if let template = getComplication(for: complication.family) {
@@ -52,7 +52,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         getComplication(for: complication.family)
     }
 
-    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func getComplication(for family: CLKComplicationFamily) -> CLKComplicationTemplate? {
         let waterDrop = UIImage.waterDrop.withTintColor(.white)
         let formatter = DateFormatter()

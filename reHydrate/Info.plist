@@ -93,11 +93,11 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>blacklexipink</key>
+			<key>blackLexiPink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>blacklexipink</string>
+					<string>blackLexiPink</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
@@ -129,11 +129,11 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>lexipinkwhite</key>
+			<key>lexiPinkWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>lexipinkwhite</string>
+					<string>lexiPinkWhite</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
@@ -264,11 +264,11 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>whitelexipink</key>
+			<key>whiteLexiPink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>whitelexipink</string>
+					<string>whiteLexiPink</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
@@ -380,6 +380,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+            <key>blackLexiPink</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>blackLexiPink</string>
+                </array>
+                <key>UIPrerenderedIcon</key>
+                <false/>
+            </dict>
 			<key>blueWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -407,6 +416,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+            <key>lexiPinkWhite</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>lexiPinkWhite</string>
+                </array>
+                <key>UIPrerenderedIcon</key>
+                <false/>
+            </dict>
 			<key>orangeWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -533,6 +551,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+            <key>whiteLexiPink</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>whiteLexiPink</string>
+                </array>
+                <key>UIPrerenderedIcon</key>
+                <false/>
+            </dict>
 			<key>yellowWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -567,8 +594,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>FirebaseScreenReportingEnabled</key>
-	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -594,13 +619,7 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 </dict>
 </plist>

@@ -15,15 +15,15 @@ import WatchKit
 
 class InterfaceController: WKInterfaceController {
     var metric = true
-    let context = (WKExtension.shared().delegate as? ExtensionDelegate)?.persistentContainer.viewContext
+    let context = (WKApplication.shared().delegate as? ExtensionDelegate)?.persistentContainer.viewContext
     var smallDrink: Double = 250
     var mediumDrink: Double = 500
     var largeDrink: Double = 750
     var today: Day?
     let formatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE - dd MMM yyyy"
-        return dateFormatter
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE - dd MMM yyyy"
+        return formatter
     }()
 
     @IBOutlet var summaryLable: WKInterfaceLabel!
@@ -75,7 +75,7 @@ class InterfaceController: WKInterfaceController {
                 session.activate()
             }
         }
-        let delegate = WKExtension.shared().delegate as? ExtensionDelegate
+        let delegate = WKApplication.shared().delegate as? ExtensionDelegate
         if let today = today {
             delegate?.todayConsumed = today.consumed
             delegate?.todayGoal = today.goal
@@ -90,7 +90,7 @@ class InterfaceController: WKInterfaceController {
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
-        let delegate = WKExtension.shared().delegate as? ExtensionDelegate
+        let delegate = WKApplication.shared().delegate as? ExtensionDelegate
         if let today = today {
             delegate?.todayConsumed = today.consumed
             delegate?.todayGoal = today.goal
@@ -255,7 +255,7 @@ extension InterfaceController: WCSessionDelegate {
             }
             self.saveDays()
             self.updateLabel()
-            let delegate = WKExtension.shared().delegate as? ExtensionDelegate
+            let delegate = WKApplication.shared().delegate as? ExtensionDelegate
             delegate?.todayConsumed = today.consumed
             delegate?.todayGoal = today.goal
             delegate?.todayDate = today.date
