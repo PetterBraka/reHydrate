@@ -9,8 +9,8 @@ configurations:
     output: ../EngineKit/Sources/AppearanceService/Mocks/Generated/
     args: 
       imports: 
-        - AppearanceServiceInterface
-
+          - AppearanceServiceInterface
+  
   - sources:
         - ../EngineKit/Sources/DateService
     templates:
@@ -20,7 +20,7 @@ configurations:
     args: 
       imports: 
           - DateServiceInterface
-
+  
   - sources:
         - ../EngineKit/Sources/DayService
     templates:
@@ -28,10 +28,10 @@ configurations:
         - Templates/AutoSpy.stencil
     output: ../EngineKit/Sources/DayService/Mocks/Generated/
     args: 
-      imports: 
+      imports:
           - DayServiceInterface
           - DrinkServiceInterface
-
+  
   - sources:
         - ../EngineKit/Sources/DrinkService
     templates:
@@ -41,7 +41,7 @@ configurations:
     args: 
       imports:
           - DrinkServiceInterface
-
+  
   - sources:
         - ../EngineKit/Sources/LanguageService
     templates:
@@ -51,7 +51,7 @@ configurations:
     args: 
       imports:
           - LanguageServiceInterface
-
+  
   - sources:
         - ../EngineKit/Sources/NotificationService
     templates:
@@ -61,7 +61,7 @@ configurations:
     args: 
       imports:
           - NotificationServiceInterface
-
+  
   - sources:
         - ../EngineKit/Sources/UserPreferenceService
     templates:
@@ -71,7 +71,7 @@ configurations:
     args: 
       imports:
           - UserPreferenceServiceInterface
-
+  
   - sources:
         - ../EngineKit/Sources/UnitService
     templates:
@@ -81,7 +81,7 @@ configurations:
     args: 
       imports:
           - UnitServiceInterface
-
+  
   - sources:
         - ../EngineKit/Sources/TimelineService
     templates:
@@ -91,7 +91,7 @@ configurations:
     args: 
       imports:
           - TimelineServiceInterface
-
+  
   - sources:
         - ../EngineKit/Sources/Ports
     templates:
@@ -101,6 +101,34 @@ configurations:
     args: 
       imports:
           - PortsInterface
-          
+# EnigneMocks
+  - sources:
+        - ../EngineKit/Sources/EngineMocks
+    templates:
+        - Templates/AutoMock.stencil
+    output: ../EngineKit/Sources/EngineMocks/Generated/EngineMocks.generated.swift
+    args: 
+      imports:
+          - AppearanceServiceInterface
+          - AppearanceServiceMocks
+          - DBKitInterface
+          - DBKitMocks
+          - DateServiceInterface
+          - DateServiceMocks
+          - DayServiceInterface
+          - DayServiceMocks
+          - DrinkServiceInterface
+          - DrinkServiceMocks
+          - LanguageServiceInterface
+          - LanguageServiceMocks
+          - LoggingService
+          - NotificationServiceInterface
+          - NotificationServiceMocks
+          - UnitServiceInterface
+          - UnitServiceMocks
+          - UserPreferenceServiceInterface
+          - UserPreferenceServiceMocks
+          - PortsInterface
+          - PortsMocks
 # PresentationKit
 # PresentationWatchKit
