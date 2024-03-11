@@ -95,7 +95,7 @@ final class UnitServiceTests: XCTestCase {
     }
     
     func test_setAndGetUnitSystem() {
-        sut.set(unitSystem: .imperial)
+        userPreferenceService.getKey_returnValue = UnitSystem.imperial
         let foundSystem: UnitSystem = sut.getUnitSystem()
         XCTAssertEqual(foundSystem, .imperial)
     }
