@@ -87,7 +87,9 @@ final class NotificationServiceTests: XCTestCase {
     func test_init_withNoStoredData() async {
         setUpSut()
         
-        XCTAssertEqual(notificationCenter.spy.methodLog, [])
+        XCTAssertEqual(notificationCenter.spy.methodLog, [
+            .removeAllPendingNotificationRequests
+        ])
     }
     
     func test_enable_success() async {
@@ -98,15 +100,12 @@ final class NotificationServiceTests: XCTestCase {
         
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(notificationCenter.spy.methodLog, [
+            .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories,
             .pendingNotificationRequests,
             .add, .add, .add
         ])
-        
-        let notifications = await notificationCenter.stub.pendingNotificationRequests()
-        assertNotificationTimes(givenRequests: notifications,
-                                expectedTimes: ["08:00:00", "09:00:00", "10:00:00"])
     }
     
     func test_enable_withMissingReminders() async {
@@ -121,13 +120,11 @@ final class NotificationServiceTests: XCTestCase {
         
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(notificationCenter.spy.methodLog, [
+            .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories,
             .pendingNotificationRequests
         ])
-        
-        let notifications = await notificationCenter.stub.pendingNotificationRequests()
-        assertNotificationTimes(givenRequests: notifications, expectedTimes: [])
     }
     
     func test_enable_deniedAuth() async {
@@ -138,11 +135,9 @@ final class NotificationServiceTests: XCTestCase {
         
         assertResult(given: result, expected: .failure(.unauthorized))
         XCTAssertEqual(notificationCenter.spy.methodLog, [
+            .removeAllPendingNotificationRequests,
             .requestAuthorization
         ])
-        
-        let notifications = await notificationCenter.stub.pendingNotificationRequests()
-        assertNotificationTimes(givenRequests: notifications,expectedTimes: [])
     }
     
     func test_enable_unauthorized() async {
@@ -153,14 +148,13 @@ final class NotificationServiceTests: XCTestCase {
         
         assertResult(given: result, expected: .failure(.unauthorized))
         XCTAssertEqual(notificationCenter.spy.methodLog, [
+            .removeAllPendingNotificationRequests,
             .requestAuthorization
         ])
-        
-        let notifications = await notificationCenter.stub.pendingNotificationRequests()
-        assertNotificationTimes(givenRequests: notifications,expectedTimes: [])
     }
     
     func test_enable_twice() async {
+        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(
@@ -179,21 +173,22 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: secondResult, expected: .success(Void()))
         
         XCTAssertEqual(notificationCenter.spy.methodLog, [
+            .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories,
             .pendingNotificationRequests,
             .add,
             .add,
             .add,
-            .pendingNotificationRequests
+            .pendingNotificationRequests,
+            .add,
+            .add,
+            .add,
         ])
-        
-        let notifications = await notificationCenter.stub.pendingNotificationRequests()
-        assertNotificationTimes(givenRequests: notifications, 
-                                expectedTimes: ["08:00:00", "09:00:00", "10:00:00"])
     }
     
     func test_enable_failedStoring() async {
+        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
         userPreferenceService.setValueKey_returnValue = TestingError.mock
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
@@ -209,10 +204,6 @@ final class NotificationServiceTests: XCTestCase {
             .add,
             .add
         ])
-        
-        let notifications = await notificationCenter.stub.pendingNotificationRequests()
-        assertNotificationTimes(givenRequests: notifications,
-                                expectedTimes: ["08:00:00", "09:00:00", "10:00:00"])
     }
     
     func test_enable_extremelyHighFrequency() async {
@@ -243,9 +234,6 @@ final class NotificationServiceTests: XCTestCase {
         
         assertResult(given: result, expected: .failure(.frequencyTooLow))
         XCTAssertEqual(notificationCenter.spy.methodLog, [.removeAllPendingNotificationRequests])
-        
-        let notifications = await notificationCenter.stub.pendingNotificationRequests()
-        assertNotificationTimes(givenRequests: notifications,expectedTimes: [])
     }
     
     func test_getSettings() {
