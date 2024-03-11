@@ -13,12 +13,11 @@ import UserPreferenceServiceMocks
 
 final class UnitServiceTests: XCTestCase {
     var sut: UnitServiceType!
-    var userPreferenceService: UserPreferenceServiceTypeStub!
+    var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     
     override func setUp() {
         let engine = EngineMocks()
-        self.userPreferenceService = UserPreferenceServiceTypeStub()
-        engine.userPreferenceService = userPreferenceService
+        userPreferenceService = engine.makeUserPreferenceService()
         self.sut = UnitService(engine: engine)
     }
     
@@ -95,13 +94,13 @@ final class UnitServiceTests: XCTestCase {
     }
     
     func test_setAndGetUnitSystem() {
-        userPreferenceService.getKey_returnValue = UnitSystem.imperial
+        userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
         let foundSystem: UnitSystem = sut.getUnitSystem()
         XCTAssertEqual(foundSystem, .imperial)
     }
     
     func test_setAndGetUnitSystem_failesSetting() {
-        userPreferenceService.setValueKey_returnValue = DummyError.setting
+        userPreferenceService.stub.setValueKey_returnValue = DummyError.setting
         sut.set(unitSystem: .imperial)
         let foundSystem: UnitSystem = sut.getUnitSystem()
         XCTAssertNotEqual(foundSystem, .imperial)

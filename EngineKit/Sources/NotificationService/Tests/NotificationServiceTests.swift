@@ -26,20 +26,20 @@ final class NotificationServiceTests: XCTestCase {
         HasDateService
     )
     
-    var engine: Engine = EngineMocks()
+    var engine: EngineMocks
     
     var notificationCenter: (stub: NotificationCenterTypeStub, spy: NotificationCenterTypeSpy)!
-    var userPreferenceService: UserPreferenceServiceTypeStub!
+    var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     
     var sut: NotificationServiceType!
     
     override func setUp() {
+        engine = EngineMocks()
         let stub = NotificationCenterTypeStub()
         let spy = NotificationCenterTypeSpy(realObject: stub)
         notificationCenter = (stub, spy)
         
-        userPreferenceService = UserPreferenceServiceTypeStub()
-        engine.userPreferenceService = userPreferenceService
+        userPreferenceService = engine.makeUserPreferenceService()
     }
     
     func setUpSut(
