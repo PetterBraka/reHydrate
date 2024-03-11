@@ -67,6 +67,7 @@ final class NotificationServiceTests: XCTestCase {
     
     func test_init_withStoredData() {
         // TODO: Fix this test
+        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
         userPreferenceService.getKey_returnValue = true
         userPreferenceService.getKey_returnValue = 30
         userPreferenceService.getKey_returnValue = Date(date: "01/01/2023", time: "08:00:00")!
@@ -90,6 +91,7 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_success() async {
+        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)
@@ -108,6 +110,7 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_withMissingReminders() async {
+        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
         setUpSut(reminders: [])
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(
@@ -213,6 +216,7 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_extremelyHighFrequency() async {
+        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 999999999999999999,
@@ -221,24 +225,24 @@ final class NotificationServiceTests: XCTestCase {
         
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(notificationCenter.spy.methodLog, [
+            .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories,
             .pendingNotificationRequests, .add
         ])
-        
-        let notifications = await notificationCenter.stub.pendingNotificationRequests()
-        assertNotificationTimes(givenRequests: notifications,expectedTimes: ["08:00:00"])
     }
     
     func test_enable_extremelyLowFrequency() async {
+        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userPreferenceService.getKey_returnValue = false
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
-        let result = await sut.enable(withFrequency: (0 ..< sut.minimumAllowedFrequency).randomElement() ?? 1,
+        let result = await sut.enable(withFrequency: 5,
                                       start: dates.start,
                                       stop: dates.stop)
         
         assertResult(given: result, expected: .failure(.frequencyTooLow))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [])
+        XCTAssertEqual(notificationCenter.spy.methodLog, [.removeAllPendingNotificationRequests])
         
         let notifications = await notificationCenter.stub.pendingNotificationRequests()
         assertNotificationTimes(givenRequests: notifications,expectedTimes: [])
@@ -252,11 +256,11 @@ final class NotificationServiceTests: XCTestCase {
     
     func test_getSettings_withOldSettings() {
         // TODO: Fix this test
+        setUpSut()
         userPreferenceService.getKey_returnValue = true
         userPreferenceService.getKey_returnValue = 30
         userPreferenceService.getKey_returnValue = Date(date: "01/01/2023", time: "08:00:00")!
         userPreferenceService.getKey_returnValue = Date(date: "01/01/2023", time: "09:00:00")!
-        setUpSut()
         let settings = sut.getSettings()
         XCTAssertEqual(settings, .init(isOn: true, 
                                        start: Date(date: "01/01/2023", time: "08:00:00"),

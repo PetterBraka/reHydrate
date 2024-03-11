@@ -15,12 +15,84 @@ public protocol NotificationCenterTypeStubbing {
 }
 
 public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
-    public var requestAuthorization_returnValue: Result<Bool, Error> = .default
-    public var notificationCategories_returnValue: Set<NotificationCategory> = .default
-    public var addRequest_returnValue: Error? = nil
-    public var pendingNotificationRequests_returnValue: [NotificationRequest] = .default
-    public var deliveredNotifications_returnValue: [DeliveredNotification] = .default
-    public var setBadgeCountNewBadgeCount_returnValue: Error? = nil
+    public var requestAuthorization_returnValue: Result<Bool, Error> {
+        get {
+            if requestAuthorization_returnValues.first != nil {
+                requestAuthorization_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            requestAuthorization_returnValues.append(newValue)
+        }
+    }
+    private var requestAuthorization_returnValues: [Result<Bool, Error>] = []
+    public var notificationCategories_returnValue: Set<NotificationCategory> {
+        get {
+            if notificationCategories_returnValues.first != nil {
+                notificationCategories_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            notificationCategories_returnValues.append(newValue)
+        }
+    }
+    private var notificationCategories_returnValues: [Set<NotificationCategory>] = []
+    public var addRequest_returnValue: Error? {
+        get {
+            if addRequest_returnValues.first != nil {
+                addRequest_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            addRequest_returnValues.append(newValue)
+        }
+    }
+    private var addRequest_returnValues: [Error?] = []
+    public var pendingNotificationRequests_returnValue: [NotificationRequest] {
+        get {
+            if pendingNotificationRequests_returnValues.first != nil {
+                pendingNotificationRequests_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            pendingNotificationRequests_returnValues.append(newValue)
+        }
+    }
+    private var pendingNotificationRequests_returnValues: [[NotificationRequest]] = []
+    public var deliveredNotifications_returnValue: [DeliveredNotification] {
+        get {
+            if deliveredNotifications_returnValues.first != nil {
+                deliveredNotifications_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            deliveredNotifications_returnValues.append(newValue)
+        }
+    }
+    private var deliveredNotifications_returnValues: [[DeliveredNotification]] = []
+    public var setBadgeCountNewBadgeCount_returnValue: Error? {
+        get {
+            if setBadgeCountNewBadgeCount_returnValues.first != nil {
+                setBadgeCountNewBadgeCount_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            setBadgeCountNewBadgeCount_returnValues.append(newValue)
+        }
+    }
+    private var setBadgeCountNewBadgeCount_returnValues: [Error?] = []
 
     public init() {}
 }

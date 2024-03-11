@@ -16,12 +16,84 @@ public protocol DayServiceTypeStubbing {
 }
 
 public final class DayServiceTypeStub: DayServiceTypeStubbing {
-    public var getToday_returnValue: Day = .default
-    public var getDaysDates_returnValue: Result<[Day], Error> = .default
-    public var addDrink_returnValue: Result<Double, Error> = .default
-    public var removeDrink_returnValue: Result<Double, Error> = .default
-    public var increaseGoal_returnValue: Result<Double, Error> = .default
-    public var decreaseGoal_returnValue: Result<Double, Error> = .default
+    public var getToday_returnValue: Day {
+        get {
+            if getToday_returnValues.first != nil {
+                getToday_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            getToday_returnValues.append(newValue)
+        }
+    }
+    private var getToday_returnValues: [Day] = []
+    public var getDaysDates_returnValue: Result<[Day], Error> {
+        get {
+            if getDaysDates_returnValues.first != nil {
+                getDaysDates_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            getDaysDates_returnValues.append(newValue)
+        }
+    }
+    private var getDaysDates_returnValues: [Result<[Day], Error>] = []
+    public var addDrink_returnValue: Result<Double, Error> {
+        get {
+            if addDrink_returnValues.first != nil {
+                addDrink_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            addDrink_returnValues.append(newValue)
+        }
+    }
+    private var addDrink_returnValues: [Result<Double, Error>] = []
+    public var removeDrink_returnValue: Result<Double, Error> {
+        get {
+            if removeDrink_returnValues.first != nil {
+                removeDrink_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            removeDrink_returnValues.append(newValue)
+        }
+    }
+    private var removeDrink_returnValues: [Result<Double, Error>] = []
+    public var increaseGoal_returnValue: Result<Double, Error> {
+        get {
+            if increaseGoal_returnValues.first != nil {
+                increaseGoal_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            increaseGoal_returnValues.append(newValue)
+        }
+    }
+    private var increaseGoal_returnValues: [Result<Double, Error>] = []
+    public var decreaseGoal_returnValue: Result<Double, Error> {
+        get {
+            if decreaseGoal_returnValues.first != nil {
+                decreaseGoal_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            decreaseGoal_returnValues.append(newValue)
+        }
+    }
+    private var decreaseGoal_returnValues: [Result<Double, Error>] = []
 
     public init() {}
 }

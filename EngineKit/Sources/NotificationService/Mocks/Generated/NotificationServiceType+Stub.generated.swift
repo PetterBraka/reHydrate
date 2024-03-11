@@ -12,9 +12,45 @@ public protocol NotificationServiceTypeStubbing {
 }
 
 public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing {
-    public var minimumAllowedFrequency_returnValue: Int = .default
-    public var enableWithFrequencyStartStop_returnValue: Result<Void, NotificationError> = .default
-    public var getSettings_returnValue: NotificationSettings = .default
+    public var minimumAllowedFrequency_returnValue: Int {
+        get {
+            if minimumAllowedFrequency_returnValues.first != nil {
+                minimumAllowedFrequency_returnValues.removeLast()
+            } else {
+                .default
+            }
+        }
+        set {
+            minimumAllowedFrequency_returnValues.append(newValue)
+        }
+    }
+    private var minimumAllowedFrequency_returnValues: [Int] = []
+    public var enableWithFrequencyStartStop_returnValue: Result<Void, NotificationError> {
+        get {
+            if enableWithFrequencyStartStop_returnValues.first != nil {
+                enableWithFrequencyStartStop_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            enableWithFrequencyStartStop_returnValues.append(newValue)
+        }
+    }
+    private var enableWithFrequencyStartStop_returnValues: [Result<Void, NotificationError>] = []
+    public var getSettings_returnValue: NotificationSettings {
+        get {
+            if getSettings_returnValues.first != nil {
+                getSettings_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            getSettings_returnValues.append(newValue)
+        }
+    }
+    private var getSettings_returnValues: [NotificationSettings] = []
 
     public init() {}
 }

@@ -12,9 +12,45 @@ public protocol AlternateIconsServiceTypeStubbing {
 }
 
 public final class AlternateIconsServiceTypeStub: AlternateIconsServiceTypeStubbing {
-    public var supportsAlternateIcons_returnValue: Bool = .default
-    public var setAlternateIconIconName_returnValue: Error? = nil
-    public var getAlternateIcon_returnValue: String? = nil
+    public var supportsAlternateIcons_returnValue: Bool {
+        get {
+            if supportsAlternateIcons_returnValues.first != nil {
+                supportsAlternateIcons_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            supportsAlternateIcons_returnValues.append(newValue)
+        }
+    }
+    private var supportsAlternateIcons_returnValues: [Bool] = []
+    public var setAlternateIconIconName_returnValue: Error? {
+        get {
+            if setAlternateIconIconName_returnValues.first != nil {
+                setAlternateIconIconName_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            setAlternateIconIconName_returnValues.append(newValue)
+        }
+    }
+    private var setAlternateIconIconName_returnValues: [Error?] = []
+    public var getAlternateIcon_returnValue: String? {
+        get {
+            if getAlternateIcon_returnValues.first != nil {
+                getAlternateIcon_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            getAlternateIcon_returnValues.append(newValue)
+        }
+    }
+    private var getAlternateIcon_returnValues: [String?] = []
 
     public init() {}
 }

@@ -12,9 +12,47 @@ public protocol OpenUrlInterfaceStubbing {
 }
 
 public final class OpenUrlInterfaceStub: OpenUrlInterfaceStubbing {
-    public var settingsUrl_returnValue: URL? = .default
-    public var openUrl_returnValue: Error? = nil
-    public var emailEmailCcBccSubjectBody_returnValue: Error? = nil
+    public var settingsUrl_returnValue: URL? {
+        get {
+            if settingsUrl_returnValues.first != nil {
+                settingsUrl_returnValues.removeLast()
+            } else {
+                .default
+            }
+        }
+        set {
+            if let newValue {
+                settingsUrl_returnValues.append(newValue)
+            }
+        }
+    }
+    private var settingsUrl_returnValues: [URL?] = []
+    public var openUrl_returnValue: Error? {
+        get {
+            if openUrl_returnValues.first != nil {
+                openUrl_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            openUrl_returnValues.append(newValue)
+        }
+    }
+    private var openUrl_returnValues: [Error?] = []
+    public var emailEmailCcBccSubjectBody_returnValue: Error? {
+        get {
+            if emailEmailCcBccSubjectBody_returnValues.first != nil {
+                emailEmailCcBccSubjectBody_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            emailEmailCcBccSubjectBody_returnValues.append(newValue)
+        }
+    }
+    private var emailEmailCcBccSubjectBody_returnValues: [Error?] = []
 
     public init() {}
 }

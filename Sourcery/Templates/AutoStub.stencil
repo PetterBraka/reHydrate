@@ -22,6 +22,14 @@ Result<{{ method.returnTypeName }}, Error>
 {%- endif -%}
 {%- endmacro -%}
 
+{%- macro methodReturnNameAndTypes method -%}
+{%- if method.isGeneric -%}
+{%- call methodReturnName method -%}s: [(any Decodable)?]
+{%- else -%}
+{% call methodReturnName method %}s: [{% call methodReturnType method %}]
+{%- endif -%}
+{%- endmacro -%}
+
 {# Macro End #}
 {% for protocol in types.protocols %}
 {% if protocol.annotations.AutoStub %}
@@ -50,18 +58,72 @@ public protocol {{ protocol.name }}Stubbing {
 
 public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 {% for variable in protocol.variables %}
-    public var {% call variableName variable %}: {{ variable.typeName }} = .default
+    public var {% call variableName variable %}: {{ variable.typeName }} {
+        get {
+            if {% call variableName variable %}s.first != nil {
+                {% call variableName variable %}s.removeLast()
+            } else {
+                .default
+            }
+        }
+        set {
+            {% if variable.isOptional %}
+            if let newValue {
+                {% call variableName variable %}s.append(newValue)
+            }
+            {% else %}
+            {% call variableName variable %}s.append(newValue)
+            {% endif %}
+        }
+    }
+    private var {% call variableName variable %}s: [{{ variable.typeName }}] = []
 {% endfor %}
 {% for method in protocol.methods %}
     {% if method.returnTypeName.name == "Void" %}
     {% if method.throws %}
-    public var {% call methodReturnName method %}: Error? = nil
+    public var {% call methodReturnName method %}: Error? {
+        get {
+            if {% call methodReturnName method %}s.first != nil {
+                {% call methodReturnName method %}s.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            {% call methodReturnName method %}s.append(newValue)
+        }
+    }
+    private var {% call methodReturnName method %}s: [Error?] = []
     {% endif %}
     {% else %}
     {% if method.isOptionalReturnType %}
-    public var {% call methodReturnNameAndType method %} = nil
+    public var {% call methodReturnNameAndType method %} {
+        get {
+            if {% call methodReturnName method %}s.first != nil {
+                {% call methodReturnName method %}s.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            {% call methodReturnName method %}s.append(newValue)
+        }
+    }
+    private var {% call methodReturnNameAndTypes method %} = []
     {% else %}
-    public var {% call methodReturnNameAndType method %} = .default
+    public var {% call methodReturnNameAndType method %} {
+        get {
+            if {% call methodReturnName method %}s.first != nil {
+                {% call methodReturnName method %}s.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            {% call methodReturnName method %}s.append(newValue)
+        }
+    }
+    private var {% call methodReturnNameAndTypes method %} = []
 {% endif %}
     {% endif %}
 {% endfor %}

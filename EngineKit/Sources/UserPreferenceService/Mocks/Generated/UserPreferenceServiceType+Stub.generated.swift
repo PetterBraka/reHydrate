@@ -11,8 +11,32 @@ public protocol UserPreferenceServiceTypeStubbing {
 }
 
 public final class UserPreferenceServiceTypeStub: UserPreferenceServiceTypeStubbing {
-    public var setValueKey_returnValue: Error? = nil
-    public var getKey_returnValue: (any Decodable)? = nil
+    public var setValueKey_returnValue: Error? {
+        get {
+            if setValueKey_returnValues.first != nil {
+                setValueKey_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            setValueKey_returnValues.append(newValue)
+        }
+    }
+    private var setValueKey_returnValues: [Error?] = []
+    public var getKey_returnValue: (any Decodable)? {
+        get {
+            if getKey_returnValues.first != nil {
+                getKey_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            getKey_returnValues.append(newValue)
+        }
+    }
+    private var getKey_returnValues: [(any Decodable)?] = []
 
     public init() {}
 }

@@ -10,7 +10,19 @@ public protocol AppearanceServiceTypeStubbing {
 }
 
 public final class AppearanceServiceTypeStub: AppearanceServiceTypeStubbing {
-    public var getAppearance_returnValue: Appearance = .default
+    public var getAppearance_returnValue: Appearance {
+        get {
+            if getAppearance_returnValues.first != nil {
+                getAppearance_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            getAppearance_returnValues.append(newValue)
+        }
+    }
+    private var getAppearance_returnValues: [Appearance] = []
 
     public init() {}
 }

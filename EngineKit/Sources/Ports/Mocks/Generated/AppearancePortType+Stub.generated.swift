@@ -11,8 +11,32 @@ public protocol AppearancePortTypeStubbing {
 }
 
 public final class AppearancePortTypeStub: AppearancePortTypeStubbing {
-    public var getStyle_returnValue: Style? = nil
-    public var setStyleStyle_returnValue: Error? = nil
+    public var getStyle_returnValue: Style? {
+        get {
+            if getStyle_returnValues.first != nil {
+                getStyle_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            getStyle_returnValues.append(newValue)
+        }
+    }
+    private var getStyle_returnValues: [Style?] = []
+    public var setStyleStyle_returnValue: Error? {
+        get {
+            if setStyleStyle_returnValues.first != nil {
+                setStyleStyle_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            setStyleStyle_returnValues.append(newValue)
+        }
+    }
+    private var setStyleStyle_returnValues: [Error?] = []
 
     public init() {}
 }

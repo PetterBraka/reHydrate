@@ -11,8 +11,32 @@ public protocol TimelineServiceTypeStubbing {
 }
 
 public final class TimelineServiceTypeStub: TimelineServiceTypeStubbing {
-    public var getTimelineDate_returnValue: [Timeline] = .default
-    public var getTimelineCollection_returnValue: [TimelineCollection] = .default
+    public var getTimelineDate_returnValue: [Timeline] {
+        get {
+            if getTimelineDate_returnValues.first != nil {
+                getTimelineDate_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            getTimelineDate_returnValues.append(newValue)
+        }
+    }
+    private var getTimelineDate_returnValues: [[Timeline]] = []
+    public var getTimelineCollection_returnValue: [TimelineCollection] {
+        get {
+            if getTimelineCollection_returnValues.first != nil {
+                getTimelineCollection_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            getTimelineCollection_returnValues.append(newValue)
+        }
+    }
+    private var getTimelineCollection_returnValues: [[TimelineCollection]] = []
 
     public init() {}
 }

@@ -15,12 +15,84 @@ public protocol HealthInterfaceStubbing {
 }
 
 public final class HealthInterfaceStub: HealthInterfaceStubbing {
-    public var isSupported_returnValue: Bool = .default
-    public var shouldRequestAccessHealthDataType_returnValue: Bool = .default
-    public var canWriteDataType_returnValue: Bool = .default
-    public var requestAuthReadAndWrite_returnValue: Error? = nil
-    public var exportQuantityIdDate_returnValue: Error? = nil
-    public var enableBackgroundDeliveryHealthDataFrequency_returnValue: Error? = nil
+    public var isSupported_returnValue: Bool {
+        get {
+            if isSupported_returnValues.first != nil {
+                isSupported_returnValues.removeLast()
+            } else {
+                .default
+            }
+        }
+        set {
+            isSupported_returnValues.append(newValue)
+        }
+    }
+    private var isSupported_returnValues: [Bool] = []
+    public var shouldRequestAccessHealthDataType_returnValue: Bool {
+        get {
+            if shouldRequestAccessHealthDataType_returnValues.first != nil {
+                shouldRequestAccessHealthDataType_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            shouldRequestAccessHealthDataType_returnValues.append(newValue)
+        }
+    }
+    private var shouldRequestAccessHealthDataType_returnValues: [Bool] = []
+    public var canWriteDataType_returnValue: Bool {
+        get {
+            if canWriteDataType_returnValues.first != nil {
+                canWriteDataType_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            canWriteDataType_returnValues.append(newValue)
+        }
+    }
+    private var canWriteDataType_returnValues: [Bool] = []
+    public var requestAuthReadAndWrite_returnValue: Error? {
+        get {
+            if requestAuthReadAndWrite_returnValues.first != nil {
+                requestAuthReadAndWrite_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            requestAuthReadAndWrite_returnValues.append(newValue)
+        }
+    }
+    private var requestAuthReadAndWrite_returnValues: [Error?] = []
+    public var exportQuantityIdDate_returnValue: Error? {
+        get {
+            if exportQuantityIdDate_returnValues.first != nil {
+                exportQuantityIdDate_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            exportQuantityIdDate_returnValues.append(newValue)
+        }
+    }
+    private var exportQuantityIdDate_returnValues: [Error?] = []
+    public var enableBackgroundDeliveryHealthDataFrequency_returnValue: Error? {
+        get {
+            if enableBackgroundDeliveryHealthDataFrequency_returnValues.first != nil {
+                enableBackgroundDeliveryHealthDataFrequency_returnValues.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            enableBackgroundDeliveryHealthDataFrequency_returnValues.append(newValue)
+        }
+    }
+    private var enableBackgroundDeliveryHealthDataFrequency_returnValues: [Error?] = []
 
     public init() {}
 }
