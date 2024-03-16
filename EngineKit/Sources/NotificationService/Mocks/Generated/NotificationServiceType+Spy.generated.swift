@@ -13,13 +13,13 @@ public protocol NotificationServiceTypeSpying {
 
 public final class NotificationServiceTypeSpy: NotificationServiceTypeSpying {
     public enum VariableName {
-            case minimumAllowedFrequency
+        case minimumAllowedFrequency
     }
 
     public enum MethodName {
-            case enable_withFrequency_start_stop
-            case disable
-            case getSettings
+        case enable_withFrequency_start_stop
+        case disable
+        case getSettings
     }
 
     public var variableLog: [VariableName] = []

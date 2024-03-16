@@ -16,8 +16,8 @@ public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
     }
 
     public enum MethodName {
-            case getAppearance
-            case setAppearance
+        case getAppearance
+        case setAppearance
     }
 
     public var variableLog: [VariableName] = []

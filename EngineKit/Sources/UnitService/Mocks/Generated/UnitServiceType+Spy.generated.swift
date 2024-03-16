@@ -16,9 +16,9 @@ public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
     }
 
     public enum MethodName {
-            case set_unitSystem
-            case getUnitSystem
-            case convert_from_to
+        case set_unitSystem
+        case getUnitSystem
+        case convert_from_to
     }
 
     public var variableLog: [VariableName] = []

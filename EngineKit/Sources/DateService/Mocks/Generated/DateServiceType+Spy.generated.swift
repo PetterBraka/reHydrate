@@ -16,12 +16,12 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
     }
 
     public enum MethodName {
-            case daysBetween_end
-            case get_component_from
-            case getDate_byAdding_component_to
-            case getStart_of
-            case getEnd_of
-            case isDate_inSameDayAs
+        case daysBetween_end
+        case get_component_from
+        case getDate_byAdding_component_to
+        case getStart_of
+        case getEnd_of
+        case isDate_inSameDayAs
     }
 
     public var variableLog: [VariableName] = []

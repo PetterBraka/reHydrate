@@ -16,8 +16,8 @@ public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying
     }
 
     public enum MethodName {
-            case set_for
-            case get_for
+        case set_for
+        case get_for
     }
 
     public var variableLog: [VariableName] = []

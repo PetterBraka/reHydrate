@@ -17,12 +17,12 @@ public final class DayServiceTypeSpy: DayServiceTypeSpying {
     }
 
     public enum MethodName {
-            case getToday
-            case getDays_between
-            case add_drink
-            case remove_drink
-            case increase_goal
-            case decrease_goal
+        case getToday
+        case getDays_between
+        case add_drink
+        case remove_drink
+        case increase_goal
+        case decrease_goal
     }
 
     public var variableLog: [VariableName] = []

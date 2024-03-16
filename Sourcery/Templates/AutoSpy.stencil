@@ -23,13 +23,13 @@ public protocol {{ protocol.name }}Spying {
 public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
     public enum VariableName {
         {% for variable in protocol.variables %}
-            case {{ variable.name }}
+        case {{ variable.name }}
         {% endfor %}
     }
 
     public enum MethodName {
         {% for method in protocol.methods %}
-            case {{ method.callName }}{% call parametersCamelCase method %}
+        case {{ method.callName }}{% call parametersCamelCase method %}
         {% endfor %}
     }
 

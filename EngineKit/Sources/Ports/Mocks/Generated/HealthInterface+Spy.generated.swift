@@ -13,16 +13,16 @@ public protocol HealthInterfaceSpying {
 
 public final class HealthInterfaceSpy: HealthInterfaceSpying {
     public enum VariableName {
-            case isSupported
+        case isSupported
     }
 
     public enum MethodName {
-            case shouldRequestAccess_for
-            case canWrite
-            case requestAuth_toReadAndWrite
-            case export_quantity_id_date
-            case read_queryType
-            case enableBackgroundDelivery_healthData_frequency
+        case shouldRequestAccess_for
+        case canWrite
+        case requestAuth_toReadAndWrite
+        case export_quantity_id_date
+        case read_queryType
+        case enableBackgroundDelivery_healthData_frequency
     }
 
     public var variableLog: [VariableName] = []

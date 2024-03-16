@@ -16,9 +16,9 @@ public final class NotificationDelegateTypeSpy: NotificationDelegateTypeSpying {
     }
 
     public enum MethodName {
-            case userNotificationCenter_didReceive
-            case userNotificationCenter_willPresent
-            case userNotificationCenter_openSettingsFor
+        case userNotificationCenter_didReceive
+        case userNotificationCenter_willPresent
+        case userNotificationCenter_openSettingsFor
     }
 
     public var variableLog: [VariableName] = []

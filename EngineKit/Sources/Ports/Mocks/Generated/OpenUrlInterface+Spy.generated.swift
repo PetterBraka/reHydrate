@@ -13,12 +13,12 @@ public protocol OpenUrlInterfaceSpying {
 
 public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
     public enum VariableName {
-            case settingsUrl
+        case settingsUrl
     }
 
     public enum MethodName {
-            case open_url
-            case email_to_cc_bcc_subject_body
+        case open_url
+        case email_to_cc_bcc_subject_body
     }
 
     public var variableLog: [VariableName] = []

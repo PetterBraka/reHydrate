@@ -16,9 +16,9 @@ public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
     }
 
     public enum MethodName {
-            case setLanguage_to
-            case getSelectedLanguage
-            case getLanguageOptions
+        case setLanguage_to
+        case getSelectedLanguage
+        case getLanguageOptions
     }
 
     public var variableLog: [VariableName] = []

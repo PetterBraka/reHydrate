@@ -16,17 +16,17 @@ public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
     }
 
     public enum MethodName {
-            case requestAuthorization
-            case setNotificationCategories
-            case notificationCategories
-            case add
-            case pendingNotificationRequests
-            case removePendingNotificationRequests_withIdentifiers
-            case removeAllPendingNotificationRequests
-            case deliveredNotifications
-            case removeDeliveredNotifications_withIdentifiers
-            case removeAllDeliveredNotifications
-            case setBadgeCount
+        case requestAuthorization
+        case setNotificationCategories
+        case notificationCategories
+        case add
+        case pendingNotificationRequests
+        case removePendingNotificationRequests_withIdentifiers
+        case removeAllPendingNotificationRequests
+        case deliveredNotifications
+        case removeDeliveredNotifications_withIdentifiers
+        case removeAllDeliveredNotifications
+        case setBadgeCount
     }
 
     public var variableLog: [VariableName] = []

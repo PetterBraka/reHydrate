@@ -16,8 +16,8 @@ public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
     }
 
     public enum MethodName {
-            case getTimeline_for
-            case getTimelineCollection
+        case getTimeline_for
+        case getTimelineCollection
     }
 
     public var variableLog: [VariableName] = []

@@ -16,11 +16,11 @@ public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
     }
 
     public enum MethodName {
-            case add_size_container
-            case edit_size_of
-            case remove_container
-            case getSaved
-            case resetToDefault
+        case add_size_container
+        case edit_size_of
+        case remove_container
+        case getSaved
+        case resetToDefault
     }
 
     public var variableLog: [VariableName] = []

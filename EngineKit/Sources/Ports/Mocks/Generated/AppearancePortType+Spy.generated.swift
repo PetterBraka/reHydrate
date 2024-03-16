@@ -16,8 +16,8 @@ public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
     }
 
     public enum MethodName {
-            case getStyle
-            case setStyle
+        case getStyle
+        case setStyle
     }
 
     public var variableLog: [VariableName] = []

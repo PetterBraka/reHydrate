@@ -16,9 +16,9 @@ public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying
     }
 
     public enum MethodName {
-            case supportsAlternateIcons
-            case setAlternateIcon_to
-            case getAlternateIcon
+        case supportsAlternateIcons
+        case setAlternateIcon_to
+        case getAlternateIcon
     }
 
     public var variableLog: [VariableName] = []
