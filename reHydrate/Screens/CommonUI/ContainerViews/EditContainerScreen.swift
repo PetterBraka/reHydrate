@@ -74,9 +74,9 @@ struct EditContainerScreen: View {
     
     var image: Image {
         switch observer.viewModel.selectedDrink.container {
-        case .small: .glass
-        case .medium: .bottle
-        case .large: .reusableBottle
+        case .small:  Image(.glassFill0)
+        case .medium: Image(.bottleFill0)
+        case .large: Image(.reusableBottleFill0)
         }
     }
     

@@ -49,6 +49,7 @@ extension Screen.EditContainer {
             case .small: (100, 400)
             case .medium: (300, 700)
             case .large: (500, 1200)
+            case .health: (100, 1500)
             }
             self.didSavingChanges = didSavingChanges
             
@@ -183,6 +184,8 @@ extension EditContainer.ViewModel.Container {
         case .medium:
             self = .medium
         case .large:
+            self = .large
+        case .health:
             self = .large
         }
     }

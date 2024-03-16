@@ -8,8 +8,13 @@
 
 import Foundation
 import UserNotifications
+#if os(iOS)
 import PresentationInterface
 import PresentationKit
+#elseif os(watchOS)
+import PresentationWatchInterface
+import PresentationWatchKit
+#endif
 import EngineKit
 
 final class HomeScreenObservable: ObservableObject, HomeSceneType {

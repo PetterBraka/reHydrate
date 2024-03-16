@@ -10,7 +10,9 @@ import DateServiceInterface
 
 public final class DateService: DateServiceType {
     private let formatter: DateFormatter
-    private let dayInSeconds: Int = 24 * 60 * 60
+    private let minuteInSeconds: TimeInterval = 60
+    private let hourInSeconds: TimeInterval = 60 * 60
+    private let dayInSeconds: TimeInterval = 24 * 60 * 60
     
     public init() {
         formatter = DateFormatter()
@@ -20,19 +22,52 @@ public final class DateService: DateServiceType {
     
     public func daysBetween(_ start: Date, end: Date) -> Int {
         let timeSince = end.timeIntervalSince(start)
-        return Int(timeSince) / dayInSeconds
+        return Int(timeSince) / Int(dayInSeconds)
     }
     
-    public func getDate(byAddingDays days: Int, to date: Date) -> Date {
-        date.addingTimeInterval(TimeInterval(days * dayInSeconds))
+    public func get(component: Component, from date: Date) -> Int {
+        let timeInterval = date.timeIntervalSinceReferenceDate
+        switch component {
+        case .second:
+            return Int(timeInterval.truncatingRemainder(dividingBy: minuteInSeconds))
+        case .minute:
+            return Int((timeInterval / minuteInSeconds).truncatingRemainder(dividingBy: 60))
+        case .hour:
+            return Int((timeInterval / hourInSeconds).truncatingRemainder(dividingBy: 24))
+        case .day:
+            assertionFailure("Can't accurately calculate the days")
+            return 0
+        }
     }
     
-    public func getEnd(of date: Date) -> Date? {
+    public func getDate(byAdding value: Int, component: Component, to date: Date) -> Date {
+        let value = TimeInterval(value)
+        return switch component {
+        case .second:
+            date.addingTimeInterval(value)
+        case .minute:
+            date.addingTimeInterval(value * minuteInSeconds)
+        case .hour:
+            date.addingTimeInterval(value * hourInSeconds)
+        case .day:
+            date.addingTimeInterval(value * dayInSeconds)
+        }
+    }
+    
+    public func getStart(of date: Date) -> Date {
+        let timeInterval = date.timeIntervalSinceReferenceDate
+        
+        let secondsUntilStartOfDay = Int(timeInterval / dayInSeconds * dayInSeconds)
+        
+        return Date(timeIntervalSinceReferenceDate: TimeInterval(secondsUntilStartOfDay))
+    }
+    
+    public func getEnd(of date: Date) -> Date {
         let timeInterval = date.timeIntervalSince1970
         
-        let secondsUntilEndOfDay = (dayInSeconds - Int(timeInterval) % dayInSeconds) - 1
+        let secondsUntilEndOfDay: TimeInterval = (dayInSeconds - timeInterval.truncatingRemainder(dividingBy: dayInSeconds))
         
-        return Date(timeIntervalSince1970: timeInterval + Double(secondsUntilEndOfDay))
+        return Date(timeIntervalSince1970: timeInterval + secondsUntilEndOfDay - 1)
     }
     
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {

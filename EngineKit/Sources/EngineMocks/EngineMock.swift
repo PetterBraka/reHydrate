@@ -5,7 +5,6 @@
 //  Created by Petter vang Brakalsvålet on 14/08/2023.
 //
 
-import EngineKit
 import LoggingService
 import DayServiceInterface
 import DayServiceMocks
@@ -35,23 +34,23 @@ public final class EngineMocks {
     public var dayManager: DayManagerType = DayManagerStub()
     public var drinkManager: DrinkManagerType = DrinkManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()
-    public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceStub()
-    public var notificationService: NotificationServiceType = NotificationServiceStub()
-    public var notificationDelegate: NotificationDelegateType = NotificationDelegateStub()
+    public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceTypeStub()
+    public var notificationService: NotificationServiceType = NotificationServiceTypeStub()
+    public var notificationDelegate: NotificationDelegateType = NotificationDelegateTypeStub()
     
     //MARK: Ports
-    public var appearancePort: AppearancePortType = AppearancePortStub()
-    public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceStub()
-    public var openUrlService: OpenUrlInterface = OpenUrlServiceStub()
-    public var healthService: HealthInterface = HealthServiceStub()
+    public var appearancePort: AppearancePortType = AppearancePortTypeStub()
+    public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceTypeStub()
+    public var openUrlService: OpenUrlInterface = OpenUrlInterfaceStub()
+    public var healthService: HealthInterface = HealthInterfaceStub()
     
-    public var dayService: DayServiceType = DayServiceStub()
-    public var drinksService: DrinkServiceType = DrinkServiceStub()
-    public var languageService: LanguageServiceType = LanguageServiceStub()
-    public var unitService: UnitServiceType = UnitServiceStub()
+    public var dayService: DayServiceType = DayServiceTypeStub()
+    public var drinksService: DrinkServiceType = DrinkServiceTypeStub()
+    public var languageService: LanguageServiceType = LanguageServiceTypeStub()
+    public var unitService: UnitServiceType = UnitServiceTypeStub()
     
-    public var appearanceService: AppearanceServiceType = AppearanceServiceStub()
-    public var dateService: DateServiceType = DateServiceStub()
+    public var appearanceService: AppearanceServiceType = AppearanceServiceTypeStub()
+    public var dateService: DateServiceType = DateServiceTypeStub()
 }
 
 extension EngineMocks: HasService {}

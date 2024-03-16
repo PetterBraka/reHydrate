@@ -9,7 +9,12 @@ import Foundation
 
 public protocol DateServiceType {
     func daysBetween(_ start: Date, end: Date) -> Int
-    func getDate(byAddingDays days: Int, to date: Date) -> Date
-    func getEnd(of date: Date) -> Date?
+    
+    func get(component: Component, from date: Date) -> Int
+    func getDate(byAdding value: Int, component: Component, to date: Date) -> Date
+    
+    func getStart(of date: Date) -> Date
+    func getEnd(of date: Date) -> Date
+    
     func isDate(_ date: Date, inSameDayAs: Date) -> Bool
 }

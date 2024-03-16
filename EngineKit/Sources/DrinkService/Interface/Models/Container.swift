@@ -10,6 +10,8 @@ public enum Container: String {
     case medium
     case large
     
+    case health
+    
     public var rawValue: String {
         switch self {
         case .small:
@@ -18,6 +20,8 @@ public enum Container: String {
             "medium"
         case .large:
             "large"
+        case .health:
+            "health"
         }
     }
 }

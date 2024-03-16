@@ -12,7 +12,8 @@ let package: Package = {
         name: engineKit,
         platforms: [
             .iOS(.v16),
-            .macOS(.v13)
+            .macOS(.v13),
+            .watchOS(.v10)
         ],
         products: [
             .library(name: engineKit, targets: [engineKit]),
@@ -34,10 +35,12 @@ let package: Package = {
                         .source(.notificationService),
                         .source(.appearanceService),
                         .source(.dateService),
+                        .engineMocks,
+                        .portsMocks,
                     ]),
             .target(name: engineMocks,
                     dependencies: [
-                        .byName(name: engineKit),
+                        .loggingService,
                         .dbKit,
                         .portsMocks,
                         .mocks(.dayService),

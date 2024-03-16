@@ -1,0 +1,168 @@
+{# Macro deffinitions #}
+{% macro variableName variable -%}{{ variable.name }}_returnValue{% endmacro %}
+{% macro methodReturnName method -%}
+{{ method.callName }}
+{%- for param in method.parameters -%}
+{{ param.name | upperFirstLetter }}
+{%- endfor -%}_returnValue
+{%- endmacro -%}
+{% macro methodReturnType method -%}
+{% if method.throws -%}
+Result<{{ method.returnTypeName }}, Error>
+{%- else -%}
+{{ method.returnTypeName }}
+{%- endif -%}
+{%- endmacro -%}
+
+{% macro methodReturnNameAndType method -%}
+{%- if method.isGeneric -%}
+{%- call methodReturnName method -%}: (any Decodable)?
+{%- else -%}
+{% call methodReturnName method %}: {% call methodReturnType method %}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro methodReturnNameAndTypes method -%}
+{%- if method.isGeneric -%}
+{%- call methodReturnName method -%}s: [(any Decodable)?]
+{%- else -%}
+{% call methodReturnName method %}s: [{% call methodReturnType method %}]
+{%- endif -%}
+{%- endmacro -%}
+
+{# Macro End #}
+{% for protocol in types.protocols %}
+{% if protocol.annotations.AutoStub %}
+// sourcery:file:{{ protocol.name }}+Stub
+// swiftlint:disable line_length
+// swiftlint:disable variable_name    
+import Foundation
+{% for import in argument.imports %}
+import {{ import }}
+{% endfor %}
+
+public protocol {{ protocol.name }}Stubbing {
+{% for variable in protocol.variables %}
+    var {% call variableName variable %}: {{ variable.typeName }} { get set }
+{% endfor %}
+{% for method in protocol.methods %}
+    {% if method.returnTypeName.name == "Void" %}
+    {% if method.throws %}
+    var {% call methodReturnName method %}: Error? { get set }
+    {% endif %}
+    {% else %}
+    var {% call methodReturnNameAndType method %} { get set }
+    {% endif %}
+{% endfor %}
+}
+
+public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
+{% for variable in protocol.variables %}
+    public var {% call variableName variable %}: {{ variable.typeName }} {
+        get {
+            if {% call variableName variable %}s.first != nil {
+                {% call variableName variable %}s.removeLast()
+            } else {
+                .default
+            }
+        }
+        set {
+            {% if variable.isOptional %}
+            if let newValue {
+                {% call variableName variable %}s.append(newValue)
+            }
+            {% else %}
+            {% call variableName variable %}s.append(newValue)
+            {% endif %}
+        }
+    }
+    private var {% call variableName variable %}s: [{{ variable.typeName }}] = []
+{% endfor %}
+{% for method in protocol.methods %}
+    {% if method.returnTypeName.name == "Void" %}
+    {% if method.throws %}
+    public var {% call methodReturnName method %}: Error? {
+        get {
+            if {% call methodReturnName method %}s.first != nil {
+                {% call methodReturnName method %}s.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            {% call methodReturnName method %}s.append(newValue)
+        }
+    }
+    private var {% call methodReturnName method %}s: [Error?] = []
+    {% endif %}
+    {% else %}
+    {% if method.isOptionalReturnType %}
+    public var {% call methodReturnNameAndType method %} {
+        get {
+            if {% call methodReturnName method %}s.first != nil {
+                {% call methodReturnName method %}s.removeFirst()
+            } else {
+                nil
+            }
+        }
+        set {
+            {% call methodReturnName method %}s.append(newValue)
+        }
+    }
+    private var {% call methodReturnNameAndTypes method %} = []
+    {% else %}
+    public var {% call methodReturnNameAndType method %} {
+        get {
+            if {% call methodReturnName method %}s.first != nil {
+                {% call methodReturnName method %}s.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            {% call methodReturnName method %}s.append(newValue)
+        }
+    }
+    private var {% call methodReturnNameAndTypes method %} = []
+{% endif %}
+    {% endif %}
+{% endfor %}
+
+    public init() {}
+}
+
+extension {{ protocol.name }}Stub: {{ protocol.name }} {
+{% for variable in protocol.variables %}
+    public var {{ variable.name }}: {{ variable.typeName }} { {% call variableName variable %} }
+{% endfor %}
+{% for method in protocol.methods %}
+    public func {{ method.name }}{% if method.isAsync %} async{% endif %}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
+        {% if method.returnTypeName.name == "Void" %}
+        {% if method.throws %}
+        if let {% call methodReturnName method %} {
+            throw {% call methodReturnName method %}
+        }
+        {% endif %}
+        {% else %}
+        {% if method.throws %} 
+        switch {% call methodReturnName method %} {
+        case let .success(value):
+            return value
+        case let .failure(error):
+            throw error
+        }
+        {% else %}
+        {%- if method.isOptionalReturnType and method.isGeneric -%}
+        {% call methodReturnName method %} as? {{ method.unwrappedReturnTypeName }}
+        {%- else -%}
+        {% call methodReturnName method %}
+        {%- endif -%}
+        {% endif %}
+        {% endif %}
+    }
+
+{% endfor %}
+}
+// sourcery:end
+{% endif %}
+{% endfor %}

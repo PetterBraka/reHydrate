@@ -22,12 +22,12 @@ public enum Home {
     }
     
     public struct ViewModel {
-        public var dateTitle: String
-        public var consumption: Double
-        public var goal: Double
-        public var smallUnit: UnitVolume
-        public var largeUnit: UnitVolume
-        public var drinks: [ViewModel.Drink]
+        public let dateTitle: String
+        public let consumption: Double
+        public let goal: Double
+        public let smallUnit: UnitVolume
+        public let largeUnit: UnitVolume
+        public let drinks: [ViewModel.Drink]
         
         public init(
             dateTitle: String,

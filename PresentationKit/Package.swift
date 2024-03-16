@@ -6,7 +6,10 @@ import PackageDescription
 let package: Package = {
     Package(
         name: "PresentationKit",
-        platforms: [.macOS(.v13), .iOS(.v17)],
+        platforms: [
+            .iOS(.v17),
+            .macOS(.v13)
+        ],
         products: [
             .library(
                 name: "PresentationKit",
@@ -20,13 +23,19 @@ let package: Package = {
             .target(
                 name: "PresentationKit",
                 dependencies: [
+                    "PresentationInterface",
                     "EngineKit",
-                    "PresentationInterface"
                 ]
             ),
             .target(
                 name: "PresentationInterface"
             ),
+            .testTarget(
+                name: "PresentationTests",
+                dependencies: [
+                    "PresentationKit",
+                ]
+            )
         ]
     )
 }()

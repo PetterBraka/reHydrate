@@ -13,11 +13,11 @@ import UserPreferenceServiceMocks
 
 final class LanguageServiceTests: XCTestCase {
     var sut: LanguageService!
-    var userPreferenceService: UserPreferenceServiceStub!
+    var userPreferenceService: UserPreferenceServiceTypeStub!
     
     override func setUp() {
         let engine = EngineMocks()
-        self.userPreferenceService = UserPreferenceServiceStub()
+        self.userPreferenceService = UserPreferenceServiceTypeStub()
         engine.userPreferenceService = userPreferenceService
         self.sut = LanguageService(engine: engine)
     }
@@ -28,7 +28,7 @@ final class LanguageServiceTests: XCTestCase {
     }
     
     func test_setLanguage_failure() {
-        userPreferenceService.set_returnError = DummyError.setLanguage
+        userPreferenceService.setValueKey_returnValue = DummyError.setLanguage
         sut.setLanguage(to: .norwegian)
         XCTAssertNotEqual(sut.currentLanguage, .english)
     }
@@ -39,9 +39,7 @@ final class LanguageServiceTests: XCTestCase {
     }
     
     func test_getSelectedLanguage_storedLanguage() {
-        userPreferenceService.get_returnValue = [
-            "LanguageService.Language": Language.norwegian
-        ]
+        userPreferenceService.getKey_returnValue = Language.norwegian
         let language = sut.getSelectedLanguage()
         XCTAssertEqual(language, .norwegian)
     }

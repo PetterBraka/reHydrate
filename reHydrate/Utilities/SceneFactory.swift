@@ -111,6 +111,7 @@ public final class SceneFactory: ObservableObject {
 extension Home.ViewModel.Drink {
     init(from drink: DrinkServiceInterface.Drink) {
         let container: Home.ViewModel.Container = switch drink.container {
+        case .health: .large
         case .large: .large
         case .medium: .medium
         case .small: .small

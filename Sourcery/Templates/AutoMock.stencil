@@ -1,0 +1,24 @@
+// swiftlint:disable line_length
+// swiftlint:disable variable_name
+
+{% for type in types.classes -%}
+{% if type.annotations.AutoMock -%}
+    {% for import in type.allImports %}
+import {{ import }}
+    {% endfor %}
+
+extension {{ type.name }} {
+    {% for variable in type.allVariables %}
+    {% if variable.name != "logger" and variable.name != "dayManager" and variable.name != "drinkManager" and variable.name != "consumptionManager" %}
+    public func make{{ variable.name | upperFirstLetter }}() -> (stub: {{ variable.typeName }}Stubbing, spy: {{ variable.typeName }}Spying) {
+        let stub = {{ variable.typeName }}Stub()
+        let spy = {{ variable.typeName }}Spy(realObject: stub)
+
+        self.{{ variable.name }} = spy
+        return (stub, spy)
+    }
+    {% endif %}
+    {% endfor %}
+}
+{% endif %}
+{% endfor %}

@@ -60,9 +60,45 @@ struct DrinkView<MenuItems: View>: View {
 
     private func getImage(fill: Double, type: Container) -> Image {
         switch type {
-        case .small: return .getGlass(with: fill)
-        case .medium: return .getBottle(with: fill)
-        case .large: return .getReusableBottle(with: fill)
+        case .small:
+            switch fill {
+            case 0:
+                Image(.glassFill0)
+            case 0.1 ... 0.3:
+                Image(.glassFill25)
+            case 0.3 ... 0.6:
+                Image(.glassFill50)
+            case 0.6 ... 0.8:
+                Image(.glassFill75)
+            default:
+                Image(.glassFill100)
+            }
+        case .medium:
+            switch fill {
+            case 0:
+                Image(.bottleFill0)
+            case 0.1 ... 0.3:
+                Image(.bottleFill25)
+            case 0.3 ... 0.6:
+                Image(.bottleFill50)
+            case 0.6 ... 0.8:
+                Image(.bottleFill75)
+            default:
+                Image(.bottleFill100)
+            }
+        case .large:
+            switch fill {
+            case 0:
+                Image(.reusableBottleFill0)
+            case 0.1 ... 0.3:
+                Image(.reusableBottleFill25)
+            case 0.3 ... 0.6:
+                Image(.reusableBottleFill50)
+            case 0.6 ... 0.8:
+                Image(.reusableBottleFill75)
+            default:
+                Image(.reusableBottleFill100)
+            }
         }
     }
 }

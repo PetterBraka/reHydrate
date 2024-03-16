@@ -141,7 +141,7 @@ struct HistoryScreen: View {
                 .overlay {
                     ZStack {
                         if day.isToday {
-                            Image.circle
+                            Image(.circle)
                                 .resizable()
                         }
                         getSelectionIndicator(for: day.date)
@@ -168,15 +168,16 @@ struct HistoryScreen: View {
     
     @ViewBuilder
     func getSelectionIndicator(for date: Date) -> some View {
+        let engine = SceneFactory.shared.engine
         if let range = observer.viewModel.selectedRange {
-            if range.lowerBound.inSameDayAs(date) {
-                Image.leftSelected
+            if engine.dateService.isDate(date, inSameDayAs: range.lowerBound){
+                Image(.leftSelected)
                     .resizable(resizingMode: .stretch)
-            } else if range.upperBound.inSameDayAs(date) {
-                Image.rightSelected
+            } else if engine.dateService.isDate(date, inSameDayAs: range.upperBound) {
+                Image(.rightSelected)
                     .resizable(resizingMode: .stretch)
             } else if range.contains(date) {
-                Image.midSelected
+                Image(.midSelected)
                     .resizable(resizingMode: .stretch)
             }
         }
@@ -184,26 +185,27 @@ struct HistoryScreen: View {
     
     @ViewBuilder
     func getIndicatorImage(for date: Date) -> some View {
+        let engine = SceneFactory.shared.engine
         let days = observer.viewModel.calendar.days
-        if let day = days.first(where: { $0.date.inSameDayAs(date) }) {
+        if let day = days.first(where: { engine.dateService.isDate(date, inSameDayAs: $0.date) }) {
             let goal = day.goal
             let consumed = day.consumed
             let fill = consumed / goal
             switch fill {
             case 0.9 ..< 1 :
-                Image.waterDrop100
+                Image(.waterDrop100)
                     .resizable()
             case 0.6 ... 0.9:
-                Image.waterDrop75
+                Image(.waterDrop75)
                     .resizable()
             case 0.3 ... 0.6:
-                Image.waterDrop50
+                Image(.waterDrop50)
                     .resizable()
             case 0.1 ... 0.3:
-                Image.waterDrop25
+                Image(.waterDrop25)
                     .resizable()
             default:
-                Image.waterDrop0
+                Image(.waterDrop0)
                     .resizable()
             }
         } else {

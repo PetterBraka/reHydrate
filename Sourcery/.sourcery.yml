@@ -1,0 +1,134 @@
+configurations:
+# DBKit
+# EnigneKit
+  - sources:
+      - ../EngineKit/Sources/AppearanceService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/AppearanceService/Mocks/Generated/
+    args: 
+      imports: 
+          - AppearanceServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/DateService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/DateService/Mocks/Generated/
+    args: 
+      imports: 
+          - DateServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/DayService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/DayService/Mocks/Generated/
+    args: 
+      imports:
+          - DayServiceInterface
+          - DrinkServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/DrinkService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/DrinkService/Mocks/Generated/
+    args: 
+      imports:
+          - DrinkServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/LanguageService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/LanguageService/Mocks/Generated/
+    args: 
+      imports:
+          - LanguageServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/NotificationService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/NotificationService/Mocks/Generated/
+    args: 
+      imports:
+          - NotificationServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/UserPreferenceService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/UserPreferenceService/Mocks/Generated/
+    args: 
+      imports:
+          - UserPreferenceServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/UnitService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/UnitService/Mocks/Generated/
+    args: 
+      imports:
+          - UnitServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/TimelineService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/TimelineService/Mocks/Generated/
+    args: 
+      imports:
+          - TimelineServiceInterface
+  
+  - sources:
+        - ../EngineKit/Sources/Ports
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/Ports/Mocks/Generated/
+    args: 
+      imports:
+          - PortsInterface
+# EnigneMocks
+  - sources:
+        - ../EngineKit/Sources/EngineMocks
+    templates:
+        - Templates/AutoMock.stencil
+    output: ../EngineKit/Sources/EngineMocks/Generated/EngineMocks.generated.swift
+    args: 
+      imports:
+          - AppearanceServiceInterface
+          - AppearanceServiceMocks
+          - DBKitInterface
+          - DBKitMocks
+          - DateServiceInterface
+          - DateServiceMocks
+          - DayServiceInterface
+          - DayServiceMocks
+          - DrinkServiceInterface
+          - DrinkServiceMocks
+          - LanguageServiceInterface
+          - LanguageServiceMocks
+          - LoggingService
+          - NotificationServiceInterface
+          - NotificationServiceMocks
+          - UnitServiceInterface
+          - UnitServiceMocks
+          - UserPreferenceServiceInterface
+          - UserPreferenceServiceMocks
+          - PortsInterface
+          - PortsMocks
+# PresentationKit
+# PresentationWatchKit
