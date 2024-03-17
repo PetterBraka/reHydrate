@@ -55,11 +55,9 @@ public final class DateService: DateServiceType {
     }
     
     public func getStart(of date: Date) -> Date {
-        let timeInterval = date.timeIntervalSinceReferenceDate
-        
-        let secondsUntilStartOfDay = Int(timeInterval / dayInSeconds * dayInSeconds)
-        
-        return Date(timeIntervalSinceReferenceDate: TimeInterval(secondsUntilStartOfDay))
+        let truncatingRemainder = date.timeIntervalSince1970.truncatingRemainder(dividingBy: dayInSeconds)
+        let timeInterval = date.timeIntervalSince1970 - truncatingRemainder
+        return Date(timeIntervalSince1970: timeInterval)
     }
     
     public func getEnd(of date: Date) -> Date {
