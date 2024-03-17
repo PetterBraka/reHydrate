@@ -11,6 +11,8 @@ public protocol HealthInterfaceStubbing {
     var canWriteDataType_returnValue: Bool { get set }
     var requestAuthReadAndWrite_returnValue: Error? { get set }
     var exportQuantityIdDate_returnValue: Error? { get set }
+    var readSumDataStartEndIntervalComponents_returnValue: Result<Double, Error> { get set }
+    var readSamplesDataStartEnd_returnValue: Result<[Double], Error> { get set }
     var enableBackgroundDeliveryHealthDataFrequency_returnValue: Error? { get set }
 }
 
@@ -80,6 +82,32 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
         }
     }
     private var exportQuantityIdDate_returnValues: [Error?] = []
+    public var readSumDataStartEndIntervalComponents_returnValue: Result<Double, Error> {
+        get {
+            if readSumDataStartEndIntervalComponents_returnValues.first != nil {
+                readSumDataStartEndIntervalComponents_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            readSumDataStartEndIntervalComponents_returnValues.append(newValue)
+        }
+    }
+    private var readSumDataStartEndIntervalComponents_returnValues: [Result<Double, Error>] = []
+    public var readSamplesDataStartEnd_returnValue: Result<[Double], Error> {
+        get {
+            if readSamplesDataStartEnd_returnValues.first != nil {
+                readSamplesDataStartEnd_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            readSamplesDataStartEnd_returnValues.append(newValue)
+        }
+    }
+    private var readSamplesDataStartEnd_returnValues: [Result<[Double], Error>] = []
     public var enableBackgroundDeliveryHealthDataFrequency_returnValue: Error? {
         get {
             if enableBackgroundDeliveryHealthDataFrequency_returnValues.first != nil {
@@ -119,7 +147,22 @@ extension HealthInterfaceStub: HealthInterface {
         }
     }
 
-    public func read(_ data: HealthDataType, queryType: HealthQuery) -> Void {
+    public func readSum(_ data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents) async throws -> Double {
+        switch readSumDataStartEndIntervalComponents_returnValue {
+        case let .success(value):
+            return value
+        case let .failure(error):
+            throw error
+        }
+    }
+
+    public func readSamples(_ data: HealthDataType, start: Date, end: Date) async throws -> [Double] {
+        switch readSamplesDataStartEnd_returnValue {
+        case let .success(value):
+            return value
+        case let .failure(error):
+            throw error
+        }
     }
 
     public func enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency) async throws -> Void {

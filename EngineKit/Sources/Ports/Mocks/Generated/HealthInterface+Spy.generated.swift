@@ -21,7 +21,8 @@ public final class HealthInterfaceSpy: HealthInterfaceSpying {
         case canWrite
         case requestAuth_toReadAndWrite
         case export_quantity_id_date
-        case read_queryType
+        case readSum_start_end_intervalComponents
+        case readSamples_start_end
         case enableBackgroundDelivery_healthData_frequency
     }
 
@@ -56,9 +57,13 @@ extension HealthInterfaceSpy: HealthInterface {
         methodLog.append(.export_quantity_id_date)
         try await realObject.export(quantity: quantity, id: id, date: date)
     }
-    public func read(_ data: HealthDataType, queryType: HealthQuery) -> Void {
-        methodLog.append(.read_queryType)
-        realObject.read(data, queryType: queryType)
+    public func readSum(_ data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents) async throws -> Double {
+        methodLog.append(.readSum_start_end_intervalComponents)
+        return try await realObject.readSum(data, start: start, end: end, intervalComponents: intervalComponents)
+    }
+    public func readSamples(_ data: HealthDataType, start: Date, end: Date) async throws -> [Double] {
+        methodLog.append(.readSamples_start_end)
+        return try await realObject.readSamples(data, start: start, end: end)
     }
     public func enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency) async throws -> Void {
         methodLog.append(.enableBackgroundDelivery_healthData_frequency)
