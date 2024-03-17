@@ -96,11 +96,7 @@ public final class HealthKitPort: HealthInterface {
 
 extension Quantity {
     init?(from quantity: HKQuantity) {
-        if quantity.is(compatibleWith: .gram()) {
-            self = .init(unit: .gram, value: quantity.doubleValue(for: .gram()))
-        } else if quantity.is(compatibleWith: .meter()) {
-            self = .init(unit: .meter, value: quantity.doubleValue(for: .meter()))
-        } else if quantity.is(compatibleWith: .liter()) {
+        if quantity.is(compatibleWith: .liter()) {
             self = .init(unit: .litre, value: quantity.doubleValue(for: .liter()))
         } else {
             return nil
@@ -117,12 +113,6 @@ extension HKQuantity {
 extension QuantityTypeIdentifier {
     init?(from identifier: HKQuantityTypeIdentifier) {
         switch identifier {
-        case .bodyMass:
-            self = .bodyMass
-        case .height:
-            self = .height
-        case .dietaryCaffeine:
-            self = .dietaryCaffeine
         case .dietaryWater:
             self = .dietaryWater
         default:
@@ -138,12 +128,6 @@ extension HKQuantityType {
     
     convenience init(from identifier: QuantityTypeIdentifier) {
         switch identifier {
-        case .bodyMass:
-            self.init(.bodyMass)
-        case .height:
-            self.init(.height)
-        case .dietaryCaffeine:
-            self.init(.dietaryCaffeine)
         case .dietaryWater:
             self.init(.dietaryWater)
         }
@@ -153,10 +137,6 @@ extension HKQuantityType {
 extension HealthUnit {
     init?(from unit: HKUnit) {
         switch unit {
-        case .gram():
-            self = .gram
-        case .meter():
-            self = .meter
         case .liter():
             self = .litre
         default:
@@ -166,10 +146,6 @@ extension HealthUnit {
 
     func toHK() -> HKUnit {
         switch self {
-        case .gram:
-            HKUnit.gram()
-        case .meter:
-            HKUnit.meter()
         case .litre:
             HKUnit.liter()
         }

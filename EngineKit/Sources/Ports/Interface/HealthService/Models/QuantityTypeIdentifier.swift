@@ -6,10 +6,10 @@
 //
 
 public enum QuantityTypeIdentifier {
-    case bodyMass // kg, Discrete (Arithmetic)
-    case height // m, Discrete (Arithmetic)
-    
-    // Nutrition
-    case dietaryCaffeine // g, Cumulative
+//    case bodyMass // kg, Discrete (Arithmetic)
+//    case height // m, Discrete (Arithmetic)
+//    
+//    // Nutrition
+//    case dietaryCaffeine // g, Cumulative
     case dietaryWater // mL, Cumulative
 }

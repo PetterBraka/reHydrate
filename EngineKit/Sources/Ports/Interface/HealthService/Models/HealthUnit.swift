@@ -6,7 +6,5 @@
 //
 
 public enum HealthUnit {
-    case gram
-    case meter
     case litre
 }
