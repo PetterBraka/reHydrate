@@ -276,3 +276,11 @@ extension HomePresentationTests {
         XCTAssertEqual(router.log, [.showSettings])
     }
 }
+
+// MARK: - didTapEditDrink
+extension HomePresentationTests {
+    func test_performAction_didTapEditDrink() async {
+        await sut.perform(action: .didTapEditDrink(.init(id: "1", size: 100, container: .medium)))
+        XCTAssertEqual(router.log, [.showEdit(.init(id: "1", size: 100, container: .medium))])
+    }
+}
