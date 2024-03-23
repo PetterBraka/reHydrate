@@ -254,6 +254,7 @@ private extension Screen.Home.Presenter {
     }
     
     func exportToHealth(consumed: Double) async {
+        guard consumed != 0 else { return }
         let unitSystem = engine.unitService.getUnitSystem()
         let litres = engine.unitService.convert(
             consumed,
