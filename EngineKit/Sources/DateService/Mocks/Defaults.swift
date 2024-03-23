@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    static var `default` = Date.distantPast
+    static var `default` = Date()
 }
 
 extension Int {

@@ -16,6 +16,7 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
     }
 
     public enum MethodName {
+        case now
         case daysBetween_end
         case get_component_from
         case getDate_byAdding_component_to
@@ -33,6 +34,10 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
 }
 
 extension DateServiceTypeSpy: DateServiceType {
+    public func now() -> Date {
+        methodLog.append(.now)
+        return realObject.now()
+    }
     public func daysBetween(_ start: Date, end: Date) -> Int {
         methodLog.append(.daysBetween_end)
         return realObject.daysBetween(start, end: end)

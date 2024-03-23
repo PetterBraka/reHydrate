@@ -49,7 +49,7 @@ extension Screen.Home {
                     router: Router) {
             self.engine = engine
             self.router = router
-            viewModel = ViewModel(dateTitle: formatter.string(from: .now),
+            viewModel = ViewModel(dateTitle: formatter.string(from: engine.dateService.now()),
                                   consumption: 0,
                                   goal: 0,
                                   smallUnit: .milliliters,
@@ -263,7 +263,8 @@ private extension Screen.Home.Presenter {
         )
         do {
             try await engine.healthService.export(quantity: .init(unit: .litre, value: litres),
-                                                  id: .dietaryWater, date: .now)
+                                                  id: .dietaryWater,
+                                                  date: engine.dateService.now())
         } catch {
             engine.logger.error("Could not export to health \(litres)", error: error)
         }
@@ -271,8 +272,8 @@ private extension Screen.Home.Presenter {
     
     func getHealthTotal() async -> Double {
         do {
-            let start = engine.dateService.getStart(of: .now)
-            let end = engine.dateService.getEnd(of: .now)
+            let start = engine.dateService.getStart(of: engine.dateService.now())
+            let end = engine.dateService.getEnd(of: engine.dateService.now())
             let sum = try await engine.healthService.readSum(
                 .water(.litre), start: start, end: end,
                 intervalComponents: .init(day: 1)

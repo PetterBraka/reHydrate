@@ -361,6 +361,7 @@
 		A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceServicePort.swift; sourceTree = "<group>"; };
 		A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPort.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
+		A1E4A2D32BAEE3B400FC41BE /* TestHelper */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TestHelper; sourceTree = "<group>"; };
 		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
 		A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		A1EABF272ADA842100591981 /* EditContainerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContainerScreen.swift; sourceTree = "<group>"; };
@@ -547,6 +548,7 @@
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
+				A1E4A2D32BAEE3B400FC41BE /* TestHelper */,
 				A1A825E62B7903BE00EA98EC /* DBKit */,
 				A1AF32D22A346CA200FD0C7C /* EngineKit */,
 				A114C6C02A63DAAE00F53770 /* PresentationKit */,

@@ -20,6 +20,10 @@ public final class DateService: DateServiceType {
         formatter.timeStyle = .none
     }
     
+    public func now() -> Date {
+        Date()
+    }
+    
     public func daysBetween(_ start: Date, end: Date) -> Int {
         let timeSince = end.timeIntervalSince(start)
         return Int(timeSince) / Int(dayInSeconds)

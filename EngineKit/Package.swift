@@ -19,7 +19,8 @@ let package: Package = {
             .library(name: engineKit, targets: [engineKit]),
         ],
         dependencies: [
-            .package(name: "DBKit", path: "../DBKit")
+            .package(name: "DBKit", path: "../DBKit"),
+            .package(name: "TestHelper", path: "../TestHelper")
         ],
         targets: [
             .target(name: engineKit,
@@ -54,7 +55,6 @@ let package: Package = {
                     ]
                    ),
             .loggingService,
-            .testHelper,
             .portsInterface,
             .portsMocks,
         ]
@@ -107,7 +107,6 @@ let package: Package = {
 
 extension Target {
     static let loggingService: Target = .target(name: "LoggingService")
-    static let testHelper: Target = .target(name: "TestHelper")
     static let portsInterface: Target = .target(name: "PortsInterface", path: "Sources/Ports/Interface")
     static let portsMocks: Target = .target(name: "PortsMocks", dependencies: [.portsInterface], path: "Sources/Ports/Mocks")
 }

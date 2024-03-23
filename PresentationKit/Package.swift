@@ -18,6 +18,7 @@ let package: Package = {
         ],
         dependencies: [
             .package(path: "../EngineKit"),
+            .package(name: "TestHelper", path: "../TestHelper"),
         ],
         targets: [
             .target(
@@ -34,6 +35,7 @@ let package: Package = {
                 name: "PresentationTests",
                 dependencies: [
                     "PresentationKit",
+                    "TestHelper",
                 ]
             )
         ]

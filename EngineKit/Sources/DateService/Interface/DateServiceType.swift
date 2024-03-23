@@ -8,6 +8,8 @@
 import Foundation
 
 public protocol DateServiceType {
+    func now() -> Date
+    
     func daysBetween(_ start: Date, end: Date) -> Int
     
     func get(component: Component, from date: Date) -> Int
