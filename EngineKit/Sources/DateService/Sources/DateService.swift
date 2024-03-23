@@ -59,17 +59,15 @@ public final class DateService: DateServiceType {
     }
     
     public func getStart(of date: Date) -> Date {
-        let truncatingRemainder = date.timeIntervalSince1970.truncatingRemainder(dividingBy: dayInSeconds)
-        let timeInterval = date.timeIntervalSince1970 - truncatingRemainder
-        return Date(timeIntervalSince1970: timeInterval)
+        let calendar = Calendar.current
+        return calendar.startOfDay(for: date)
     }
     
     public func getEnd(of date: Date) -> Date {
-        let timeInterval = date.timeIntervalSince1970
-        
-        let secondsUntilEndOfDay: TimeInterval = (dayInSeconds - timeInterval.truncatingRemainder(dividingBy: dayInSeconds))
-        
-        return Date(timeIntervalSince1970: timeInterval + secondsUntilEndOfDay - 1)
+        let start = getStart(of: date)
+        let dateWithHours = getDate(byAdding: 23, component: .hour, to: start)
+        let dateWithMinutes = getDate(byAdding: 59, component: .minute, to: dateWithHours)
+        return getDate(byAdding: 59, component: .second, to: dateWithMinutes)
     }
     
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
