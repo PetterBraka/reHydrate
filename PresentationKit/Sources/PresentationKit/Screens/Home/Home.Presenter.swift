@@ -65,10 +65,10 @@ extension Screen.Home {
                 router.showHistory()
             case .didTapSettings:
                 router.showSettings()
-            case let .didTapAddDrink(drink):
-                await addDrink(drink)
             case let .didTapEditDrink(drink):
                 router.showEdit(drink: drink)
+            case let .didTapAddDrink(drink):
+                await addDrink(drink)
             case let .didTapRemoveDrink(drink):
                 await removeDrink(drink)
             }
@@ -255,6 +255,7 @@ private extension Screen.Home.Presenter {
     
     func exportToHealth(consumed: Double) async {
         guard consumed != 0 else { return }
+        guard engine.healthService.isSupported  else { return }
         let unitSystem = engine.unitService.getUnitSystem()
         let litres = engine.unitService.convert(
             consumed,
