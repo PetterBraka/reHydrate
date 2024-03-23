@@ -21,7 +21,7 @@ public enum Home {
         case didTapRemoveDrink(ViewModel.Drink)
     }
     
-    public struct ViewModel {
+    public struct ViewModel: Equatable {
         public let dateTitle: String
         public let consumption: Double
         public let goal: Double

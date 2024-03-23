@@ -39,7 +39,7 @@ extension Screen.Home {
             didSet { scene?.perform(update: .viewModel) }
         }
         
-        let formatter: DateFormatter = {
+        private let formatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEEE - dd MMM"
             return formatter
