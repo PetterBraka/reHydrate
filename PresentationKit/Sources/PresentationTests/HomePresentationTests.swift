@@ -390,6 +390,39 @@ extension HomePresentationTests {
     }
 }
 
+// MARK: - sync
+extension HomePresentationTests {
+    func test_performAction_sync_healthIsNotSupported() async {
+        let givenDate = Date(year: 2023, month: 2, day: 3)
+        dateService.stub.now_returnValue = givenDate
+        dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
+        drinksService.stub.getSaved_returnValue = .success([.init(id: "1", size: 100, container: .small)])
+        healthService.stub.isSupported_returnValue = false
+        
+        sut = .init(engine: engine, router: router)
+        let expectation = expectation(description: "syncing")
+        sut.sync { 
+            expectation.fulfill()
+        }
+        await fulfillment(of: [expectation], timeout: 2)
+        
+        XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
+        XCTAssertEqual(healthService.spy.methodLog, [])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday])
+        XCTAssertEqual(router.log, [])
+        
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                dateTitle: "Friday - 03 Feb",
+                consumption: 1, goal: 2,
+                smallUnit: .milliliters, largeUnit: .liters,
+                drinks: [.init(id: "1", size: 100, container: .small)]
+            )
+        )
+    }
+}
+
 // MARK: - didTapHistory
 extension HomePresentationTests {
     func test_performAction_didTapHistory() async {
