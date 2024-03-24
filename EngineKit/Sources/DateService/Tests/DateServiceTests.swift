@@ -21,32 +21,32 @@ final class DateServiceTests: XCTestCase {
 // MARK: - getComponents tests
 extension DateServiceTests {
     func test_getSeconds_small() {
-        let seconds = sut.get(component: .second, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 2, seconds: 2))
+        let seconds = sut.get(component: .second, from: .init(year: 2024, month: 2, day: 2, seconds: 2))
         XCTAssertEqual(seconds, 2)
     }
     
     func test_getSeconds_large() {
-        let seconds = sut.get(component: .second, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 2, seconds: 59))
+        let seconds = sut.get(component: .second, from: .init(year: 2024, month: 2, day: 2, seconds: 59))
         XCTAssertEqual(seconds, 59)
     }
     
     func test_getMinutes_small() {
-        let minutes = sut.get(component: .minute, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 2, seconds: 2))
+        let minutes = sut.get(component: .minute, from: .init(year: 2024, month: 2, day: 2, minutes: 2))
         XCTAssertEqual(minutes, 2)
     }
     
     func test_getMinutes_Large() {
-        let minutes = sut.get(component: .minute, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 59, seconds: 2))
+        let minutes = sut.get(component: .minute, from: .init(year: 2024, month: 2, day: 2, minutes: 59))
         XCTAssertEqual(minutes, 59)
     }
     
     func test_getHours_small() {
-        let hours = sut.get(component: .hour, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 2, seconds: 2))
+        let hours = sut.get(component: .hour, from: .init(year: 2024, month: 2, day: 2, hours: 2))
         XCTAssertEqual(hours, 2)
     }
     
     func test_getHours_Large() {
-        let hours = sut.get(component: .hour, from: .init(year: 2024, month: 2, day: 2, hours: 23, minutes: 2, seconds: 2))
+        let hours = sut.get(component: .hour, from: .init(year: 2024, month: 2, day: 2, hours: 23))
         XCTAssertEqual(hours, 23)
     }
 }
