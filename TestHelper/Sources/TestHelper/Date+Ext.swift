@@ -33,6 +33,7 @@ public extension Date {
     ) {
         let dateString = "\(day)-\(month)-\(year) \(hours):\(minutes):\(seconds)"
         let components = DateComponents(
+            timeZone: TimeZone(secondsFromGMT: 0),
             year: year, month: month, day: day,
             hour: hours, minute: minutes, second: seconds
         )
