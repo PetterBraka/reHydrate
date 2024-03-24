@@ -31,10 +31,10 @@ public extension Date {
         year: Int, month: Int, day: Int,
         hours: Int = 0, minutes: Int = 0, seconds: Int = 0
     ) {
-        let dateString = "\(day)-\(month)-\(year) \(hours):\(minutes):\(seconds)"
+        let dateString = "\(day)-\(month)-\(year) \(hours):\(minutes):\(seconds) +0000"
         let formatter = DateFormatter()
-        formatter.locale = .init(identifier: "en_UK")
-        formatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
+        formatter.locale = .init(identifier: "en_GB")
+        formatter.dateFormat = "dd-MM-yyyy HH:mm:ss Z"
         guard let date = formatter.date(from: dateString )
         else { fatalError("Invalid date - \(dateString)") }
         print("Date \(date)")
