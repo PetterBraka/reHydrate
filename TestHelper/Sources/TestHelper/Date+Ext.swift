@@ -31,11 +31,12 @@ public extension Date {
         year: Int, month: Int, day: Int,
         hours: Int = 0, minutes: Int = 0, seconds: Int = 0
     ) {
-        let dateString = "\(day)-\(month)-\(year) \(hours):\(minutes):\(seconds) +0000"
-        let formatter = DateFormatter()
-        formatter.locale = .init(identifier: "en_GB")
-        formatter.dateFormat = "dd-MM-yyyy HH:mm:ss Z"
-        guard let date = formatter.date(from: dateString )
+        let dateString = "\(day)-\(month)-\(year) \(hours):\(minutes):\(seconds)"
+        let components = DateComponents(
+            year: year, month: month, day: day,
+            hour: hours, minute: minutes, second: seconds
+        )
+        guard let date = Calendar.current.date(from: components)
         else { fatalError("Invalid date - \(dateString)") }
         print("Date \(date)")
         self = date
