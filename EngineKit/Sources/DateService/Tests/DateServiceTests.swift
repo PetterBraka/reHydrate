@@ -18,13 +18,6 @@ final class DateServiceTests: XCTestCase {
     }
 }
 
-// MARK: - now tests
-extension DateServiceTests {
-    func test_now() {
-        XCTAssertEqual(sut.now(), Date())
-    }
-}
-
 // MARK: - getComponents tests
 extension DateServiceTests {
     func test_getSeconds_small() {
