@@ -37,6 +37,7 @@ public extension Date {
         formatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
         guard let date = formatter.date(from: dateString )
         else { fatalError("Invalid date - \(dateString)") }
+        print("Date \(date)")
         self = date
     }
 }
