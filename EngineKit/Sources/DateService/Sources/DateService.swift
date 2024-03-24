@@ -14,6 +14,8 @@ public final class DateService: DateServiceType {
     private let hourInSeconds: TimeInterval = 60 * 60
     private let dayInSeconds: TimeInterval = 24 * 60 * 60
     
+    let calendar = Calendar.current
+    
     public init() {
         formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -25,22 +27,19 @@ public final class DateService: DateServiceType {
     }
     
     public func daysBetween(_ start: Date, end: Date) -> Int {
-        let timeSince = end.timeIntervalSince(start)
-        return Int(timeSince) / Int(dayInSeconds)
+        calendar.dateComponents([.day], from: start, to: end).day ?? 0
     }
     
     public func get(component: Component, from date: Date) -> Int {
-        let timeInterval = date.timeIntervalSinceReferenceDate
-        switch component {
+        return switch component {
         case .second:
-            return Int(timeInterval.truncatingRemainder(dividingBy: minuteInSeconds))
+            calendar.component(.second, from: date)
         case .minute:
-            return Int((timeInterval / minuteInSeconds).truncatingRemainder(dividingBy: 60))
+            calendar.component(.minute, from: date)
         case .hour:
-            return Int((timeInterval / hourInSeconds).truncatingRemainder(dividingBy: 24))
+            calendar.component(.hour, from: date)
         case .day:
-            assertionFailure("Can't accurately calculate the days")
-            return 0
+            calendar.component(.day, from: date)
         }
     }
     
@@ -59,7 +58,6 @@ public final class DateService: DateServiceType {
     }
     
     public func getStart(of date: Date) -> Date {
-        let calendar = Calendar.current
         return calendar.startOfDay(for: date)
     }
     

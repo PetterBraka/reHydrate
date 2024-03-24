@@ -31,10 +31,12 @@ public extension Date {
         year: Int, month: Int, day: Int,
         hours: Int = 0, minutes: Int = 0, seconds: Int = 0
     ) {
-        let dateString = "\(day)/\(month)/\(year) \(hours):\(minutes):\(seconds)"
+        let dateString = "\(year)-\(month)-\(day) " +
+        "\(hours):\(minutes):\(seconds)"
+        
         print("Expected date \(dateString)")
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         guard let date = formatter.date(from: dateString )
         else { fatalError("Invalid date - \(dateString)") }
         print("Given date \(date)")
