@@ -8,6 +8,7 @@
 
 import XCTest
 import HealthKit
+import TestHelper
 @testable import reHydrate
 
 final class HealthKitPortTests: XCTestCase {
