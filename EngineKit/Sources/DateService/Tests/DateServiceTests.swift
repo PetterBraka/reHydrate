@@ -21,32 +21,32 @@ final class DateServiceTests: XCTestCase {
 // MARK: - getComponents tests
 extension DateServiceTests {
     func test_getSeconds_small() {
-        let seconds = sut.get(component: .second, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 2, seconds: 2))
+        let seconds = sut.get(component: .second, from: .init(year: 2024, month: 2, day: 2, seconds: 2))
         XCTAssertEqual(seconds, 2)
     }
     
     func test_getSeconds_large() {
-        let seconds = sut.get(component: .second, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 2, seconds: 59))
+        let seconds = sut.get(component: .second, from: .init(year: 2024, month: 2, day: 2, seconds: 59))
         XCTAssertEqual(seconds, 59)
     }
     
     func test_getMinutes_small() {
-        let minutes = sut.get(component: .minute, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 2, seconds: 2))
+        let minutes = sut.get(component: .minute, from: .init(year: 2024, month: 2, day: 2, minutes: 2))
         XCTAssertEqual(minutes, 2)
     }
     
     func test_getMinutes_Large() {
-        let minutes = sut.get(component: .minute, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 59, seconds: 2))
+        let minutes = sut.get(component: .minute, from: .init(year: 2024, month: 2, day: 2, minutes: 59))
         XCTAssertEqual(minutes, 59)
     }
     
     func test_getHours_small() {
-        let hours = sut.get(component: .hour, from: .init(year: 2024, month: 2, day: 2, hours: 2, minutes: 2, seconds: 2))
+        let hours = sut.get(component: .hour, from: .init(year: 2024, month: 2, day: 2, hours: 2))
         XCTAssertEqual(hours, 2)
     }
     
     func test_getHours_Large() {
-        let hours = sut.get(component: .hour, from: .init(year: 2024, month: 2, day: 2, hours: 23, minutes: 2, seconds: 2))
+        let hours = sut.get(component: .hour, from: .init(year: 2024, month: 2, day: 2, hours: 23))
         XCTAssertEqual(hours, 23)
     }
 }
@@ -155,95 +155,109 @@ extension DateServiceTests {
     func test_getDate_positive10_Seconds() {
         let date = sut.getDate(byAdding: 10, component: .second, to: .january_1_2024_Monday)
         assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1,
-               expectedHours: 0, expectedMinutes: 0, expectedSeconds: 10)
+               expectedHours: 6, expectedMinutes: 0, expectedSeconds: 10)
     }
     
     func test_getDate_positive120_Seconds() {
         let date = sut.getDate(byAdding: 120, component: .second, to: .january_1_2024_Monday)
         assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1,
-               expectedHours: 0, expectedMinutes: 2, expectedSeconds: 0)
+               expectedHours: 6, expectedMinutes: 2, expectedSeconds: 0)
     }
     
     func test_getDate_negative5_Seconds() {
         let date = sut.getDate(byAdding: -5, component: .second, to: .february_6_1994_Sunday)
-        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 5,
-               expectedHours: 23, expectedMinutes: 59, expectedSeconds: 55)
+        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 6,
+               expectedHours: 5, expectedMinutes: 59, expectedSeconds: 55)
     }
     
     func test_getDate_negative120_Seconds() {
         let date = sut.getDate(byAdding: -120, component: .second, to: .february_6_1994_Sunday)
-        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 5,
-               expectedHours: 23, expectedMinutes: 58, expectedSeconds: 0)
+        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 6,
+               expectedHours: 5, expectedMinutes: 58, expectedSeconds: 0)
     }
     
     func test_getDate_positive10_Minutes() {
         let date = sut.getDate(byAdding: 10, component: .minute, to: .january_1_2024_Monday)
-        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1, expectedHours: 0, expectedMinutes: 10)
+        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1,
+               expectedHours: 6, expectedMinutes: 10)
     }
     
     func test_getDate_positive120_Minutes() {
         let date = sut.getDate(byAdding: 120, component: .minute, to: .january_1_2024_Monday)
-        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1, expectedHours: 2)
+        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1, 
+               expectedHours: 8)
     }
     
     func test_getDate_negative5_Minutes() {
         let date = sut.getDate(byAdding: -5, component: .minute, to: .february_6_1994_Sunday)
-        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 5, expectedHours: 23, expectedMinutes: 55)
+        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 6,
+               expectedHours: 5, expectedMinutes: 55)
     }
     
     func test_getDate_negative120_Minutes() {
         let date = sut.getDate(byAdding: -120, component: .minute, to: .february_6_1994_Sunday)
-        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 5, expectedHours: 22)
+        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 6,
+               expectedHours: 4)
     }
     
     func test_getDate_positive1_Hours() {
         let date = sut.getDate(byAdding: 1, component: .hour, to: .january_1_2024_Monday)
-        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1, expectedHours: 1)
+        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1, 
+               expectedHours: 7)
     }
     
     func test_getDate_positive10_Hours() {
         let date = sut.getDate(byAdding: 10, component: .hour, to: .january_1_2024_Monday)
-        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1, expectedHours: 10)
+        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 1, 
+               expectedHours: 16)
     }
     
     func test_getDate_positive100_Hours() {
         let date = sut.getDate(byAdding: 100, component: .hour, to: .january_1_2024_Monday)
-        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 5, expectedHours: 4)
+        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 5, 
+               expectedHours: 10)
     }
     
     func test_getDate_negative2_Hours() {
         let date = sut.getDate(byAdding: -2, component: .hour, to: .february_6_1994_Sunday)
-        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 5, expectedHours: 22)
+        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 6,
+               expectedHours: 4)
     }
     
     func test_getDate_negative12_Hours() {
         let date = sut.getDate(byAdding: -12, component: .hour, to: .february_6_1994_Sunday)
-        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 5, expectedHours: 12)
+        assert(givenDate: date, expectedYear: 1994, expectedMonth: 2, expectedDay: 5, 
+               expectedHours: 18)
     }
     
     func test_getDate_positive10_days() {
         let date = sut.getDate(byAdding: 10, component: .day, to: .january_1_2024_Monday)
-        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 11)
+        assert(givenDate: date, expectedYear: 2024, expectedMonth: 1, expectedDay: 11,
+               expectedHours: 6)
     }
     
     func test_getDate_positive366_days() {
         let date = sut.getDate(byAdding: 366, component: .day, to: .january_1_2024_Monday)
-        assert(givenDate: date, expectedYear: 2025, expectedMonth: 1, expectedDay: 1)
+        assert(givenDate: date, expectedYear: 2025, expectedMonth: 1, expectedDay: 1,
+               expectedHours: 6)
     }
     
     func test_getDate_positive730_days() {
         let date = sut.getDate(byAdding: 730, component: .day, to: .january_1_2024_Monday)
-        assert(givenDate: date, expectedYear: 2025, expectedMonth: 12, expectedDay: 31)
+        assert(givenDate: date, expectedYear: 2025, expectedMonth: 12, expectedDay: 31,
+               expectedHours: 6)
     }
     
     func test_getDate_negative8_days() {
         let date = sut.getDate(byAdding: -8, component: .day, to: .february_6_1994_Sunday)
-        assert(givenDate: date, expectedYear: 1994, expectedMonth: 1, expectedDay: 29)
+        assert(givenDate: date, expectedYear: 1994, expectedMonth: 1, expectedDay: 29,
+               expectedHours: 6)
     }
     
     func test_getDate_negative60_days() {
         let date = sut.getDate(byAdding: -60, component: .day, to: .february_6_1994_Sunday)
-        assert(givenDate: date, expectedYear: 1993, expectedMonth: 12, expectedDay: 8)
+        assert(givenDate: date, expectedYear: 1993, expectedMonth: 12, expectedDay: 8,
+               expectedHours: 6)
     }
 }
 

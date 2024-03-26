@@ -17,7 +17,8 @@ public protocol HealthInterface {
     func export(quantity: Quantity, 
                 id: QuantityTypeIdentifier,
                 date: Date) async throws
-    func read(_ data: HealthDataType, queryType: HealthQuery)
+    func readSum(_ data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents) async throws -> Double
+    func readSamples(_ data: HealthDataType, start: Date, end: Date) async throws -> [Double]
     
     func enableBackgroundDelivery(healthData: HealthDataType,
                                   frequency: HealthFrequency) async throws

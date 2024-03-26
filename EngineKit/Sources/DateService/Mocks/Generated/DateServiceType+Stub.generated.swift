@@ -6,6 +6,7 @@ import Foundation
 import DateServiceInterface
 
 public protocol DateServiceTypeStubbing {
+    var now_returnValue: Date { get set }
     var daysBetweenStartEnd_returnValue: Int { get set }
     var getComponentDate_returnValue: Int { get set }
     var getDateValueComponentDate_returnValue: Date { get set }
@@ -15,6 +16,19 @@ public protocol DateServiceTypeStubbing {
 }
 
 public final class DateServiceTypeStub: DateServiceTypeStubbing {
+    public var now_returnValue: Date {
+        get {
+            if now_returnValues.first != nil {
+                now_returnValues.removeFirst()
+            } else {
+                .default
+            }
+        }
+        set {
+            now_returnValues.append(newValue)
+        }
+    }
+    private var now_returnValues: [Date] = []
     public var daysBetweenStartEnd_returnValue: Int {
         get {
             if daysBetweenStartEnd_returnValues.first != nil {
@@ -98,6 +112,10 @@ public final class DateServiceTypeStub: DateServiceTypeStubbing {
 }
 
 extension DateServiceTypeStub: DateServiceType {
+    public func now() -> Date {
+        now_returnValue
+    }
+
     public func daysBetween(_ start: Date, end: Date) -> Int {
         daysBetweenStartEnd_returnValue
     }

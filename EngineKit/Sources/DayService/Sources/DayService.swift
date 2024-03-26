@@ -12,28 +12,31 @@ import UnitServiceInterface
 import LoggingService
 import PortsInterface
 import DBKitInterface
+import DateServiceInterface
 
 public final class DayService: DayServiceType {
     public typealias Engine = (
         HasDayManagerService &
         HasConsumptionManagerService &
         HasUnitService &
-        HasLoggingService
+        HasLoggingService &
+        HasDateService
     )
     
     private let engine: Engine
     
-    private var today = Day(date: .now,
-                            consumed: 0,
-                            goal: 3)
+    private var today: Day
     
     public init(engine: Engine) {
         self.engine = engine
+        self.today = Day(date: engine.dateService.now(),
+                         consumed: 0,
+                         goal: 3)
     }
     
     public func getToday() async -> Day {
         var day: Day
-        if let foundDay = try? await engine.dayManager.fetch(with: .now),
+        if let foundDay = try? await engine.dayManager.fetch(with: engine.dateService.now()),
            let oldDay = Day(with: foundDay) {
             day = oldDay
         } else {
@@ -52,7 +55,8 @@ public final class DayService: DayServiceType {
         let consumedAmount = getConsumption(from: drink)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.add(consumed: consumedAmount, toDayAt: today.date)
-        try engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        try engine.consumptionManager.createEntry(date: engine.dateService.now(),
+                                                  consumed: consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
         }
@@ -63,7 +67,8 @@ public final class DayService: DayServiceType {
         let consumedAmount = getConsumption(from: drink)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(consumed: consumedAmount, fromDayAt: today.date)
-        try engine.consumptionManager.createEntry(date: .now, consumed: consumedAmount)
+        try engine.consumptionManager.createEntry(date: engine.dateService.now(),
+                                                  consumed: consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
         }
@@ -108,7 +113,8 @@ private extension DayService {
     func createNewDay() async -> Day {
         let lastDay = try? await engine.dayManager.fetchLast()
         if let createdDay = try? engine.dayManager.createNewDay(
-            date: .now, goal: lastDay?.goal ?? 3),
+            date: engine.dateService.now(),
+            goal: lastDay?.goal ?? 3),
            let newDay = Day(with: createdDay) {
             return newDay
         } else {
@@ -116,7 +122,7 @@ private extension DayService {
             let goal = engine.unitService.convert(3, from: .litres,
                                                   to: unitSystem == .metric ? .litres : .pint
             )
-            return Day(date: .now, consumed: 0, goal: goal)
+            return Day(date: engine.dateService.now(), consumed: 0, goal: goal)
         }
     }
     

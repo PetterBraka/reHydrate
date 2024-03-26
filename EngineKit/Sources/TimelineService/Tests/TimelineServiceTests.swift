@@ -14,6 +14,13 @@ import DBKitMocks
 @testable import TimelineService
 
 final class TimelineServiceTests: XCTestCase {
+    let referenceDate = Date(year: 2023, month: 07, day: 1)
+    let referenceDates = [
+        Date(year: 2023, month: 7, day: 1),
+        Date(year: 2023, month: 7, day: 2),
+        Date(year: 2023, month: 7, day: 3),
+        Date(year: 2023, month: 7, day: 5)
+    ]
     typealias Engine = (
         HasConsumptionManagerService
     )
@@ -37,7 +44,7 @@ final class TimelineServiceTests: XCTestCase {
         ]
         stub.fetchAllAtDate_returnValue = .success(givenConsumption)
         
-        let timeline = await sut.getTimeline(for: XCTest.referenceDate)
+        let timeline = await sut.getTimeline(for: referenceDate)
         
         let expectedTimeline = givenConsumption.map { Timeline(time: $0.time, consumed: $0.consumed) }
         XCTAssertEqual(timeline, expectedTimeline)
@@ -46,7 +53,7 @@ final class TimelineServiceTests: XCTestCase {
     func test_getTimelineForDate_failing() async throws {
         stub.fetchAllAtDate_returnValue = .failure(DatabaseError.noElementFound)
         
-        let timeline = await sut.getTimeline(for: XCTest.referenceDate)
+        let timeline = await sut.getTimeline(for: referenceDate)
         
         XCTAssertEqual(timeline, [])
     }

@@ -47,9 +47,17 @@ extension Screen.History {
                     router: Router) {
             self.engine = engine
             self.router = router
-            let calendarRange = engine.dateService.getDate(byAdding: -(365 * 5), component: .day, to: .now) ... .now
-            let past = engine.dateService.getDate(byAdding: -6, component: .day, to: .now)
-            selectedRange =  past ... .now
+            let calendarRange = (
+                engine.dateService.getDate(
+                    byAdding: -(365 * 5),
+                    component: .day,
+                    to: engine.dateService.now()
+                ) ... engine.dateService.now())
+            let past = engine.dateService.getDate(
+                byAdding: -6, component: .day, 
+                to: engine.dateService.now()
+            )
+            selectedRange =  past ... engine.dateService.now()
             self.viewModel = .init(
                 isLoading: false,
                 details: .init(averageConsumed: "", averageGoal: "",
@@ -57,7 +65,7 @@ extension Screen.History {
                 chart: .init(title: " - ",
                              points: [],
                              selectedOption: .line),
-                calendar: .init(highlightedMonth: .now,
+                calendar: .init(highlightedMonth: engine.dateService.now(),
                                 weekdayStart: .monday,
                                 range: calendarRange,
                                 days: []),
