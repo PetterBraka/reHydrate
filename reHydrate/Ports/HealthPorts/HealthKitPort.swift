@@ -39,10 +39,11 @@ public final class HealthKitPort: HealthInterface {
         let dataToRead = readAndWrite.map {
             HKQuantityType(from: $0)
         }
-        try await store.requestAuthorization(toShare: Set(dataToRead), read: Set(dataToRead))
+        try await store.requestAuthorization(toShare: Set(dataToRead),
+                                             read: Set(dataToRead))
     }
     
-    public func readSum(_ data: HealthDataType, start: Date, end: Date, 
+    public func readSum(_ data: HealthDataType, start: Date, end: Date,
                         intervalComponents: DateComponents) async throws -> Double {
         let predicate = HKSamplePredicate.quantitySample(
             type: HKQuantityType(from: data),
@@ -58,7 +59,7 @@ public final class HealthKitPort: HealthInterface {
         return result ?? 0
     }
     
-    public func readSamples(_ data: HealthDataType, 
+    public func readSamples(_ data: HealthDataType,
                             start: Date, end: Date) async throws -> [Double] {
         let predicate = HKSamplePredicate.quantitySample(
             type: HKQuantityType(from: data),
@@ -74,19 +75,19 @@ public final class HealthKitPort: HealthInterface {
     }
     
     public func export(quantity: Quantity,
-                id: QuantityTypeIdentifier,
-                date: Date) async throws {
+                       id: QuantityTypeIdentifier,
+                       date: Date) async throws {
         let sample = HKQuantitySample(
             type: HKQuantityType(from: id),
             quantity: .init(from: quantity),
-            start: date, 
+            start: date,
             end: date
         )
         try await store.save(sample)
     }
     
     public func enableBackgroundDelivery(healthData: HealthDataType,
-                                  frequency: HealthFrequency) async throws {
+                                         frequency: HealthFrequency) async throws {
         try await store.enableBackgroundDelivery(
             for: HKQuantityType(from: healthData),
             frequency: .init(from: frequency)
@@ -143,7 +144,7 @@ extension HealthUnit {
             return nil
         }
     }
-
+    
     func toHK() -> HKUnit {
         switch self {
         case .litre:
