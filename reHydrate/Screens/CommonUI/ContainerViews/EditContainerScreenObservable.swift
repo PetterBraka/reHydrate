@@ -20,7 +20,6 @@ final class EditContainerScreenObservable: ObservableObject, EditContainerSceneT
     
     let formatter: NumberFormatter
     
-    let range = 0.1 ... 0.9
     @Published var fill: Double
     @Published var size: Double
     

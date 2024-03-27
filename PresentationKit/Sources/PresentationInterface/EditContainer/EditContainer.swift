@@ -14,7 +14,7 @@ public enum EditContainer {
     
     public enum Action {
         case didAppear
-        case didTapSave(Double)
+        case didTapSave
         case didTapCancel
         case didChangeSize(size: Double)
         case didChangeFill(fill: Double)
@@ -22,29 +22,18 @@ public enum EditContainer {
     
     public struct ViewModel {
         public let isSaving: Bool
-        public let unit: UnitSystem
         public let selectedDrink: Drink
         public let editedSize: Double
         public let editedFill: Double
-        public let containerRange: ClosedRange<Double>
         public let error: EditContainerError?
         
-        public init(isSaving: Bool, unit: UnitSystem, selectedDrink: Drink, editedSize: Double, editedFill: Double, containerRange: ClosedRange<Double>, error: EditContainerError?) {
+        public init(isSaving: Bool, selectedDrink: Drink, editedSize: Double, editedFill: Double, error: EditContainerError?) {
             self.isSaving = isSaving
-            self.unit = unit
             self.selectedDrink = selectedDrink
             self.editedSize = editedSize
             self.editedFill = editedFill
-            self.containerRange = containerRange
             self.error = error
         }
-    }
-}
-
-extension EditContainer.ViewModel {
-    public enum UnitSystem {
-        case imperial
-        case metric
     }
 }
 

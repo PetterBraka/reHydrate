@@ -34,7 +34,15 @@ extension Screen.EditContainer {
         
         private let selectedDrink: Drink
         
-        private let containerRanger: (min: Int, max: Int)
+        private var containerRanger: (min: Int, max: Int) {
+            switch selectedDrink.container {
+            case .small: (100, 400)
+            case .medium: (300, 700)
+            case .large: (500, 1200)
+            case .health: (100, 1500)
+            }
+        }
+        
         private let didSavingChanges: (() -> Void)?
         
         public init(engine: Engine,
@@ -44,46 +52,40 @@ extension Screen.EditContainer {
             self.engine = engine
             self.router = router
             self.selectedDrink = selectedDrink
-            self.containerRanger =
-            switch selectedDrink.container {
-            case .small: (100, 400)
-            case .medium: (300, 700)
-            case .large: (500, 1200)
-            case .health: (100, 1500)
-            }
             self.didSavingChanges = didSavingChanges
             
             self.viewModel = .init(
                 isSaving: false,
-                unit: .metric,
                 selectedDrink: .init(from: selectedDrink),
-                editedSize: selectedDrink.size,
-                editedFill: 0.5,
-                containerRange: Double(containerRanger.min)...Double(containerRanger.max),
+                editedSize: 0,
+                editedFill: 0,
                 error: nil
-            )
-            updateViewModel(
-                isSaving: false,
-                unit: .init(from: engine.unitService.getUnitSystem()),
-                editedFill: getFill(from: selectedDrink.size)
             )
         }
         
         public func perform(action: EditContainer.Action) async {
             switch action {
             case .didAppear:
-                break
-            case .didTapSave(let newSize):
+                let unitSystem = engine.unitService.getUnitSystem()
+                let unit: UnitModel = unitSystem == .metric ? .millilitres : .ounces
+                let max = engine.unitService.convert(Double(containerRanger.max), from: .millilitres, to: unit)
+                let size = selectedDrink.size
+                
+                updateViewModel(
+                    isSaving: false,
+                    selectedDrink: .init(from: selectedDrink),
+                    editedSize: size,
+                    editedFill: size / max,
+                    error: nil
+                )
+            case .didTapSave:
                 updateViewModel(isSaving: true)
                 do {
-                    let unit = engine.unitService.getUnitSystem()
-                    let newSize = engine.unitService.convert(
-                        newSize, 
-                        from: unit == .metric ? .millilitres : .ounces,
-                        to: .millilitres
-                    )
-                    _ = try await engine.drinksService.edit(size: newSize, of: selectedDrink)
-                    try? await Task.sleep(for: .seconds(1))
+                    let unitSystem = engine.unitService.getUnitSystem()
+                    let unit: UnitModel = unitSystem == .metric ? .millilitres : .ounces
+                    let size = engine.unitService.convert(viewModel.editedSize, from: unit, to: .millilitres)
+                    let roundedSize = unitSystem == .metric ? size.rounded() : size
+                    _ = try await engine.drinksService.edit(size: roundedSize, of: selectedDrink)
                     updateViewModel(isSaving: false)
                     router.close()
                     didSavingChanges?()
@@ -93,17 +95,23 @@ extension Screen.EditContainer {
             case .didTapCancel:
                 router.close()
             case let .didChangeSize(size):
-                let fill = getFill(from: size)
-                updateViewModel(editedSize: size, editedFill: fill)
+                let unitSystem = engine.unitService.getUnitSystem()
+                let unit: UnitModel = unitSystem == .metric ? .millilitres : .ounces
+                let max = engine.unitService.convert(Double(containerRanger.max), from: .millilitres, to: unit)
+                let roundedSize = unitSystem == .metric ? size.rounded() : size
+                updateViewModel(editedSize: size, editedFill: roundedSize / max)
             case let .didChangeFill(fill):
-                let size = getSize(from: fill)
-                updateViewModel(editedSize: size, editedFill: fill)
+                let unitSystem = engine.unitService.getUnitSystem()
+                let unit: UnitModel = unitSystem == .metric ? .millilitres : .ounces
+                let max = engine.unitService.convert(Double(containerRanger.max), from: .millilitres, to: unit)
+                let size = fill * max
+                let roundedSize = unitSystem == .metric ? size.rounded() : fill * max
+                updateViewModel(editedSize: roundedSize, editedFill: fill)
             }
         }
         
         func updateViewModel(
             isSaving: Bool? = nil,
-            unit: EditContainer.ViewModel.UnitSystem? = nil,
             selectedDrink: ViewModel.Drink? = nil,
             editedSize: Double? = nil,
             editedFill: Double? = nil,
@@ -111,48 +119,11 @@ extension Screen.EditContainer {
         ) {
             viewModel = .init(
                 isSaving: isSaving ?? viewModel.isSaving,
-                unit: unit ?? viewModel.unit,
                 selectedDrink: selectedDrink ?? viewModel.selectedDrink,
                 editedSize: editedSize ?? viewModel.editedSize,
                 editedFill: editedFill ?? viewModel.editedFill,
-                containerRange: Double(containerRanger.min)...Double(containerRanger.max),
                 error: error
             )
-        }
-    }
-}
-
-private extension Screen.EditContainer.Presenter {
-    func getSize(from fill: Double) -> Double {
-        let metricSize = fill * Double(containerRanger.max)
-        let unit = engine.unitService.getUnitSystem()
-        let size = engine.unitService.convert(
-            metricSize,
-            from: unit == .metric ? .millilitres : .ounces,
-            to: .millilitres
-        )
-        return size
-    }
-    
-    func getFill(from size: Double) -> Double {
-        let unit = engine.unitService.getUnitSystem()
-        let size = engine.unitService.convert(
-            size,
-            from: unit == .metric ? .millilitres : .ounces,
-            to: .millilitres
-        )
-        let fill = size / Double(containerRanger.max)
-        return fill
-    }
-}
-
-extension EditContainer.ViewModel.UnitSystem {
-    init(from unit: UnitServiceInterface.UnitSystem) {
-        switch unit {
-        case .imperial:
-            self = .imperial
-        case .metric:
-            self = .metric
         }
     }
 }
