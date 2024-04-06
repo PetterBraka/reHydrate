@@ -69,11 +69,11 @@ extension Screen.EditContainer {
                 let unitSystem = engine.unitService.getUnitSystem()
                 let unit: UnitModel = unitSystem == .metric ? .millilitres : .ounces
                 let max = engine.unitService.convert(Double(containerRanger.max), from: .millilitres, to: unit)
-                let size = selectedDrink.size
+                let size = engine.unitService.convert(selectedDrink.size, from: .millilitres, to: unit)
                 
                 updateViewModel(
                     isSaving: false,
-                    selectedDrink: .init(from: selectedDrink),
+                    selectedDrink: getLocalDrink(fromMetricDrink: selectedDrink, using: unitSystem),
                     editedSize: size,
                     editedFill: size / max,
                     error: nil
@@ -125,6 +125,19 @@ extension Screen.EditContainer {
                 error: error
             )
         }
+    }
+}
+
+private extension Screen.EditContainer.Presenter {
+    func getLocalDrink(fromMetricDrink drink: Drink, using unitSystem: UnitSystem) -> ViewModel.Drink {
+        let unit: UnitModel = unitSystem == .metric ? .millilitres : .ounces
+        
+        let localDrink = ViewModel.Drink(
+            size: engine.unitService.convert(drink.size, from: .millilitres, to: unit),
+            container: .init(from: drink.container)
+        )
+        
+        return localDrink
     }
 }
 

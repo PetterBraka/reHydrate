@@ -57,7 +57,7 @@ public extension EditContainer.ViewModel {
 }
 
 public extension EditContainer.ViewModel {
-    enum EditContainerError {
+    enum EditContainerError: Error {
         case failedSaving
     }
 }
