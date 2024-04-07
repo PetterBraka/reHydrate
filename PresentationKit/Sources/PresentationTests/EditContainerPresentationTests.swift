@@ -228,6 +228,7 @@ extension EditContainerPresentationTests {
     private func assert(
         givenViewModel: Sut.ViewModel,
         expectedViewModel: Sut.ViewModel,
+        accuracy: Double = 0.01,
         file: StaticString = #file, line: UInt = #line
     ) {
         XCTAssertEqual(
@@ -235,7 +236,7 @@ extension EditContainerPresentationTests {
             "isSaving", file: file, line: line
         )
         XCTAssertEqual(
-            givenViewModel.selectedDrink.size, expectedViewModel.selectedDrink.size, accuracy: 2,
+            givenViewModel.selectedDrink.size, expectedViewModel.selectedDrink.size, accuracy: accuracy,
             "selectedDrink.size", file: file, line: line
         )
         XCTAssertEqual(
@@ -243,11 +244,11 @@ extension EditContainerPresentationTests {
             "selectedDrink.container", file: file, line: line
         )
         XCTAssertEqual(
-            givenViewModel.editedSize, expectedViewModel.editedSize, accuracy: 2,
+            givenViewModel.editedSize, expectedViewModel.editedSize, accuracy: accuracy,
             "editedSize", file: file, line: line
         )
         XCTAssertEqual(
-            givenViewModel.editedFill, expectedViewModel.editedFill, accuracy: 2,
+            givenViewModel.editedFill, expectedViewModel.editedFill, accuracy: accuracy,
             "editedFill", file: file, line: line
         )
         
