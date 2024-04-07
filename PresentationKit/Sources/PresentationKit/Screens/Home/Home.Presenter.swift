@@ -66,7 +66,25 @@ extension Screen.Home {
             case .didTapSettings:
                 router.showSettings()
             case let .didTapEditDrink(drink):
-                router.showEdit(drink: drink)
+                let unitSystem = engine.unitService.getUnitSystem()
+                let isMetric = unitSystem == .metric
+                let smallUnit: UnitModel = isMetric ? .millilitres : .ounces
+                
+                let max: Double = switch drink.container {
+                case .small: 400.0
+                case .medium: 700.0
+                case .large: 1200.0
+                }
+                
+                let localMax = engine.unitService.convert(max, from: smallUnit, to: .millilitres)
+                let localSize = engine.unitService.convert(drink.size, from: smallUnit, to: .millilitres)
+                
+                router.showEdit(drink: .init(
+                    id: drink.id,
+                    size: localSize,
+                    fill: localSize / localMax,
+                    container: drink.container
+                ))
             case let .didTapAddDrink(drink):
                 await addDrink(drink)
             case let .didTapRemoveDrink(drink):
@@ -101,38 +119,56 @@ extension Screen.Home.Presenter {
         consumption: Double? = nil,
         goal: Double? = nil
     ) async {
-        let currentSystem = engine.unitService.getUnitSystem()
-        let isMetric = currentSystem == .metric
+        let unitSystem = engine.unitService.getUnitSystem()
+        let isMetric = unitSystem == .metric
+        let smallUnit: UnitModel = isMetric ? .millilitres : .ounces
+        let largeUnit: UnitModel = isMetric ? .litres : .pint
+        
         let title = if let date {
             formatter.string(from: date)
         } else {
             viewModel.dateTitle
         }
-        var consumption = consumption ?? viewModel.consumption
-        var goal = goal ?? viewModel.goal
-        var drinks: [ViewModel.Drink] = await getDrinks().compactMap { .init(from: $0) }
         
-        consumption = engine.unitService.convert(consumption,
-                                                 from: .litres,
-                                                 to: isMetric ? .litres : .pint)
-        goal = engine.unitService.convert(goal,
-                                          from: .litres,
-                                          to: isMetric ? .litres : .pint)
-        drinks = drinks.map { drink in
-            var drink = drink
-            drink.size = engine.unitService.convert(drink.size,
-                                                    from: .millilitres,
-                                                    to: isMetric ? .millilitres : .ounces)
-            return drink
+        let localConsumption: Double
+        if let consumption {
+            localConsumption = engine.unitService.convert(consumption, from: .litres, to: largeUnit)
+        } else {
+            localConsumption = viewModel.consumption
+        }
+        
+        let localGoal: Double
+        if let goal {
+            localGoal = engine.unitService.convert(goal, from: .litres, to: largeUnit)
+        } else {
+            localGoal = viewModel.goal
+        }
+        
+        let localDrinks: [ViewModel.Drink] = await getDrinks().compactMap {
+            guard let container = ViewModel.Container(from: $0.container) else { return nil }
+            let max: Double = switch $0.container {
+            case .small: 400.0
+            case .medium: 700.0
+            case .large: 1200.0
+            case .health: 1
+            }
+            let localMax = engine.unitService.convert(max, from: .millilitres, to: smallUnit)
+            let localSize = engine.unitService.convert($0.size, from: .millilitres, to: smallUnit)
+            return ViewModel.Drink(
+                id: $0.id,
+                size: localSize,
+                fill: localSize / localMax,
+                container: container
+            )
         }
         
         viewModel = ViewModel(
             dateTitle: title,
-            consumption: consumption,
-            goal: goal,
+            consumption: localConsumption,
+            goal: localGoal,
             smallUnit: isMetric ? .milliliters : .imperialFluidOunces,
             largeUnit: isMetric ? .liters : .imperialPints,
-            drinks: drinks
+            drinks: localDrinks
         )
     }
 }
@@ -171,11 +207,12 @@ extension Container {
 }
 
 private extension Screen.Home.Presenter.ViewModel.Drink {
-    init?(from drink: Drink) {
+    init?(from drink: Drink, fill: Double) {
         guard let container = Screen.Home.Presenter.ViewModel.Container(from: drink.container)
         else { return nil }
         self = .init(id: drink.id,
                      size: drink.size,
+                     fill: fill,
                      container: container)
     }
 }

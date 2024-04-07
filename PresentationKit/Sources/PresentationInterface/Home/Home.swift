@@ -53,17 +53,16 @@ public extension Home.ViewModel {
 
         public let container: Container
         public var size: Double
-
-        public var fill: Double {
-            size / Double(container.max)
-        }
-
+        public var fill: Double
+        
         public init(id: String = UUID().uuidString,
                     size: Double,
+                    fill: Double,
                     container: Container) {
             self.id = id
             self.container = container
             self.size = size
+            self.fill = fill
         }
     }
 
@@ -71,22 +70,6 @@ public extension Home.ViewModel {
         case small
         case medium
         case large
-
-        public var max: Int {
-            switch self {
-            case .small: return 400
-            case .medium: return 700
-            case .large: return 1200
-            }
-        }
-
-        public var min: Int {
-            switch self {
-            case .small: return 100
-            case .medium: return 300
-            case .large: return 500
-            }
-        }
     }
 }
 

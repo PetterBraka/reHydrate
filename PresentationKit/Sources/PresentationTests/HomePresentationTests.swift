@@ -16,7 +16,8 @@ import DateServiceMocks
 @testable import PresentationKit
 
 final class HomePresentationTests: XCTestCase {
-    private var sut: Screen.Home.Presenter!
+    fileprivate typealias Sut = Screen.Home.Presenter
+    private var sut: Sut!
     
     private var engine: EngineMocks!
     private var router: RouterSpy!
@@ -51,9 +52,9 @@ final class HomePresentationTests: XCTestCase {
 extension HomePresentationTests {
     func test_init() {
         dateService.stub.now_returnValue = .init(year: 2023, month: 2, day: 2)
-        sut = Screen.Home.Presenter(engine: engine, router: router)
+        sut = Sut(engine: engine, router: router)
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb", consumption: 0, goal: 0,
@@ -83,18 +84,18 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
                 drinks: [
-                    .init(id: "1", size: 100, container: .small),
-                    .init(id: "2", size: 200, container: .medium),
-                    .init(id: "3", size: 300, container: .large)
+                    .init(id: "1", size: 100, fill: 0.25, container: .small),
+                    .init(id: "2", size: 200, fill: 0.29, container: .medium),
+                    .init(id: "3", size: 300, fill: 0.25, container: .large)
                 ]
             )
         )
@@ -121,18 +122,18 @@ extension HomePresentationTests {
             .readSum_start_end_intervalComponents
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
                 drinks: [
-                    .init(id: "1", size: 100, container: .small),
-                    .init(id: "2", size: 200, container: .medium),
-                    .init(id: "3", size: 300, container: .large)
+                    .init(id: "1", size: 100, fill: 0.25, container: .small),
+                    .init(id: "2", size: 200, fill: 0.29, container: .medium),
+                    .init(id: "3", size: 300, fill: 0.25, container: .large)
                 ]
             )
         )
@@ -161,18 +162,18 @@ extension HomePresentationTests {
             .export_quantity_id_date
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
                 drinks: [
-                    .init(id: "1", size: 100, container: .small),
-                    .init(id: "2", size: 200, container: .medium),
-                    .init(id: "3", size: 300, container: .large)
+                    .init(id: "1", size: 100, fill: 0.25, container: .small),
+                    .init(id: "2", size: 200, fill: 0.29, container: .medium),
+                    .init(id: "3", size: 300, fill: 0.25, container: .large)
                 ]
             )
         )
@@ -200,18 +201,18 @@ extension HomePresentationTests {
             .readSum_start_end_intervalComponents,
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday, .add_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 2, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
                 drinks: [
-                    .init(id: "1", size: 100, container: .small),
-                    .init(id: "2", size: 200, container: .medium),
-                    .init(id: "3", size: 300, container: .large)
+                    .init(id: "1", size: 100, fill: 0.25, container: .small),
+                    .init(id: "2", size: 200, fill: 0.29, container: .medium),
+                    .init(id: "3", size: 300, fill: 0.25, container: .large)
                 ]
             )
         )
@@ -241,18 +242,18 @@ extension HomePresentationTests {
             .export_quantity_id_date,
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
                 drinks: [
-                    .init(id: "1", size: 100, container: .small),
-                    .init(id: "2", size: 200, container: .medium),
-                    .init(id: "3", size: 300, container: .large)
+                    .init(id: "1", size: 100, fill: 0.25, container: .small),
+                    .init(id: "2", size: 200, fill: 0.29, container: .medium),
+                    .init(id: "3", size: 300, fill: 0.25, container: .large)
                 ]
             )
         )
@@ -278,15 +279,15 @@ extension HomePresentationTests {
             .export_quantity_id_date,
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -312,15 +313,15 @@ extension HomePresentationTests {
             .export_quantity_id_date,
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -347,15 +348,15 @@ extension HomePresentationTests {
             .export_quantity_id_date,
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -376,15 +377,15 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .resetToDefault])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "id", size: 100, container: .small)]
+                drinks: [.init(id: "id", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -409,15 +410,15 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
                 consumption: 1, goal: 2,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -430,7 +431,7 @@ extension HomePresentationTests {
         
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didTapHistory)
-        XCTAssertEqual(router.log, [.showHistory])
+        assertLog(router.log, [.showHistory])
     }
 }
 
@@ -441,7 +442,7 @@ extension HomePresentationTests {
         
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didTapSettings)
-        XCTAssertEqual(router.log, [.showSettings])
+        assertLog(router.log, [.showSettings])
     }
 }
 
@@ -451,8 +452,8 @@ extension HomePresentationTests {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapEditDrink(.init(id: "1", size: 100, container: .medium)))
-        XCTAssertEqual(router.log, [.showEdit(.init(id: "1", size: 100, container: .medium))])
+        await sut.perform(action: .didTapEditDrink(.init(id: "1", size: 100, fill: 0.1, container: .medium)))
+        assertLog(router.log, [.showEdit(.init(id: "1", size: 100, fill: 0.14, container: .medium))])
     }
 }
 
@@ -467,20 +468,20 @@ extension HomePresentationTests {
         dayService.stub.addDrink_returnValue = .success(0.1)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, container: .small)))
+        await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
                 consumption: 0.1, goal: 0,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -494,20 +495,20 @@ extension HomePresentationTests {
         dayService.stub.addDrink_returnValue = .success(0.1)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, container: .small)))
+        await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [.export_quantity_id_date])
         XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
                 consumption: 0.1, goal: 0,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -522,20 +523,20 @@ extension HomePresentationTests {
         dayService.stub.addDrink_returnValue = .success(0.1)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, container: .small)))
+        await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [.export_quantity_id_date])
         XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
                 consumption: 0.1, goal: 0,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -549,20 +550,20 @@ extension HomePresentationTests {
         dayService.stub.addDrink_returnValue = .success(0.5)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapAddDrink(.init(id: "123", size: 500, container: .large)))
-        
+        await sut.perform(action: .didTapAddDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
+//
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
                 consumption: 0.5, goal: 0,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -576,14 +577,14 @@ extension HomePresentationTests {
         dayService.stub.addDrink_returnValue = .failure(DummyError())
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapAddDrink(.init(id: "123", size: 500, container: .large)))
+        await sut.perform(action: .didTapAddDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
         
         XCTAssertEqual(healthService.spy.variableLog, [])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -608,20 +609,20 @@ extension HomePresentationTests {
         dayService.stub.removeDrink_returnValue = .success(0.9)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, container: .small)))
+        await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
                 consumption: 0.9, goal: 0,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -637,20 +638,20 @@ extension HomePresentationTests {
         dayService.stub.removeDrink_returnValue = .success(0.9)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, container: .small)))
+        await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [.export_quantity_id_date])
         XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
                 consumption: 0.9, goal: 0,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -667,20 +668,20 @@ extension HomePresentationTests {
         dayService.stub.removeDrink_returnValue = .success(0.9)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, container: .medium)))
+        await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, fill: 0.1, container: .medium)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [.export_quantity_id_date])
         XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
                 consumption: 0.9, goal: 0,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .medium)]
+                drinks: [.init(id: "1", size: 100, fill: 0.14, container: .medium)]
             )
         )
     }
@@ -696,20 +697,20 @@ extension HomePresentationTests {
         dayService.stub.removeDrink_returnValue = .success(0.9)
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapRemoveDrink(.init(id: "123", size: 500, container: .large)))
+        await sut.perform(action: .didTapRemoveDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
                 consumption: 0.9, goal: 0,
                 smallUnit: .milliliters, largeUnit: .liters,
-                drinks: [.init(id: "1", size: 100, container: .small)]
+                drinks: [.init(id: "1", size: 100, fill: 0.25, container: .small)]
             )
         )
     }
@@ -725,14 +726,14 @@ extension HomePresentationTests {
         dayService.stub.removeDrink_returnValue = .failure(DummyError())
         
         sut = .init(engine: engine, router: router)
-        await sut.perform(action: .didTapRemoveDrink(.init(id: "123", size: 500, container: .large)))
+        await sut.perform(action: .didTapRemoveDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
         
         XCTAssertEqual(healthService.spy.variableLog, [])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
-        XCTAssertEqual(router.log, [])
+        assertLog(router.log, [])
         
-        XCTAssertEqual(
+        assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -741,5 +742,72 @@ extension HomePresentationTests {
                 drinks: []
             )
         )
+    }
+}
+
+private extension HomePresentationTests {
+    func assertViewModel(
+        _ givenViewModel: Sut.ViewModel, _ expectedViewModel: Sut.ViewModel,
+        accuracy: Double = 0.01, file: StaticString = #file, line: UInt = #line
+    ) {
+        XCTAssertEqual(
+            givenViewModel.consumption, expectedViewModel.consumption, accuracy: accuracy,
+            "consumption", file: file, line: line
+        )
+        XCTAssertEqual(
+            givenViewModel.goal, expectedViewModel.goal, accuracy: accuracy,
+            "goal", file: file, line: line
+        )
+        for index in givenViewModel.drinks.indices {
+            XCTAssertEqual(
+                givenViewModel.drinks[index].id, expectedViewModel.drinks[index].id,
+                "drinks[\(index)].id", file: file, line: line
+            )
+            XCTAssertEqual(
+                givenViewModel.drinks[index].size, expectedViewModel.drinks[index].size, accuracy: accuracy,
+                "drinks[\(index)].size", file: file, line: line
+            )
+            XCTAssertEqual(
+                givenViewModel.drinks[index].fill, expectedViewModel.drinks[index].fill, accuracy: accuracy,
+                "drinks[\(index)].fill", file: file, line: line
+            )
+            XCTAssertEqual(
+                givenViewModel.drinks[index].container, expectedViewModel.drinks[index].container,
+                "drinks[\(index)].container", file: file, line: line
+            )
+        }
+    }
+    
+    func assertLog(
+        _ givenLog: [RouterSpy.MethodCall], _ expectedLog: [RouterSpy.MethodCall],
+        accuracy: Double = 0.01, file: StaticString = #file, line: UInt = #line
+    ) {
+        guard !givenLog.isEmpty, !expectedLog.isEmpty else {
+            return
+        }
+        XCTAssertEqual(givenLog.count, expectedLog.count, file: file, line: line)
+        for index in givenLog.indices {
+            if case let .showEdit(givenDrink) = givenLog[index],
+               case let .showEdit(expectedDrink) = expectedLog[index] {
+                XCTAssertEqual(
+                    givenDrink.id, expectedDrink.id,
+                    "showEdit.drink.id", file: file, line: line
+                )
+                XCTAssertEqual(
+                    givenDrink.size, expectedDrink.size, accuracy: accuracy,
+                    "showEdit.drink.size", file: file, line: line
+                )
+                XCTAssertEqual(
+                    givenDrink.fill, expectedDrink.fill, accuracy: accuracy,
+                    "showEdit.drink.fill", file: file, line: line
+                )
+                XCTAssertEqual(
+                    givenDrink.container, expectedDrink.container,
+                    "showEdit.drink.container", file: file, line: line
+                )
+            } else {
+                XCTAssertEqual(givenLog[index], expectedLog[index], file: file, line: line)
+            }
+        }
     }
 }
