@@ -109,7 +109,7 @@ final class EditContainerPresentationTests: XCTestCase {
     }
     
     func test_didChangeSize_didSave() async {
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: Drink(id: "", size: 300, container: .small), didSavingChanges: nil)
         await sut.perform(action: .didChangeSize(size: 400))
         await sut.perform(action: .didTapSave)
         
@@ -122,6 +122,7 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .none)
         )
         XCTAssertEqual(router.log, [.close])
+        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 400, drink: Drink(id: "", size: 300, container: .small)))
     }
     
     func test_didChangeSize_didSaveFailed() async {
@@ -146,6 +147,7 @@ final class EditContainerPresentationTests: XCTestCase {
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
         let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
         await sut.perform(action: .didChangeSize(size: 14.08))
+        await sut.perform(action: .didTapSave)
         
         assert(
             givenViewModel: sut.viewModel,
@@ -155,7 +157,8 @@ final class EditContainerPresentationTests: XCTestCase {
                                      editedFill: 1,
                                      error: .none)
         )
-        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(router.log, [.close])
+        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 400, drink: Drink(id: "", size: 300, container: .small)))
     }
     
     func test_didChangeFill() async {
@@ -187,6 +190,7 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .none)
         )
         XCTAssertEqual(router.log, [.close])
+        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 200, drink: Drink(id: "", size: 300, container: .small)))
     }
     
     func test_didChangeFill_didSaveFailed() async {
@@ -205,12 +209,14 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .failedSaving)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 200, drink: Drink(id: "", size: 300, container: .small)))
     }
     
     func test_didChangeFill_imperial() async {
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
         let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
         await sut.perform(action: .didChangeFill(fill: 0.5))
+        await sut.perform(action: .didTapSave)
         
         assert(
             givenViewModel: sut.viewModel,
@@ -220,7 +226,8 @@ final class EditContainerPresentationTests: XCTestCase {
                                      editedFill: 0.5,
                                      error: .none)
         )
-        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(router.log, [.close])
+        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 200, drink: Drink(id: "", size: 300, container: .small)))
     }
 }
 
@@ -256,5 +263,41 @@ extension EditContainerPresentationTests {
             givenViewModel.error, expectedViewModel.error,
             "error", file: file, line: line
         )
+    }
+}
+
+extension DrinkServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: DrinkServiceTypeSpy.MethodCall, rhs: DrinkServiceTypeSpy.MethodCall) -> Bool {
+        switch (lhs, rhs) {
+        case let (.add(lhsSize, lhsContainer), .add(rhsSize, rhsContainer)):
+            lhsSize == rhsSize && lhsContainer == rhsContainer
+        case let (.edit(lhsSize, lhsDrink), .edit(rhsSize, rhsDrink)):
+            lhsSize == rhsSize && lhsDrink == rhsDrink
+        case let (.remove(lhsContainer), .remove(rhsContainer)):
+            lhsContainer == rhsContainer
+        case (.getSaved, .getSaved), (.resetToDefault, .resetToDefault):
+            true
+        case (.add, .edit), 
+            (.add, .remove),
+            (.add, .getSaved),
+            (.add, .resetToDefault),
+            (.edit, .add),
+            (.edit, .remove),
+            (.edit, .getSaved),
+            (.edit, .resetToDefault),
+            (.remove, .add),
+            (.remove, .edit),
+            (.remove, .getSaved),
+            (.remove, .resetToDefault),
+            (.getSaved, .add),
+            (.getSaved, .edit),
+            (.getSaved, .remove),
+            (.getSaved, .resetToDefault),
+            (.resetToDefault, .add),
+            (.resetToDefault, .edit),
+            (.resetToDefault, .remove),
+            (.resetToDefault, .getSaved):
+            false
+        }
     }
 }
