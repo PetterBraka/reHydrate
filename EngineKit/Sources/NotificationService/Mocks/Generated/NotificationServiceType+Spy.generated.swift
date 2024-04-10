@@ -8,7 +8,9 @@ import NotificationServiceInterface
 
 public protocol NotificationServiceTypeSpying {
     var variableLog: [NotificationServiceTypeSpy.VariableName] { get set }
-    var methodLog: [NotificationServiceTypeSpy.MethodName] { get set }
+    var lastvariabelCall: NotificationServiceTypeSpy.VariableName? { get }
+    var methodLog: [NotificationServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: NotificationServiceTypeSpy.MethodCall? { get }
 }
 
 public final class NotificationServiceTypeSpy: NotificationServiceTypeSpying {
@@ -16,14 +18,16 @@ public final class NotificationServiceTypeSpy: NotificationServiceTypeSpying {
         case minimumAllowedFrequency
     }
 
-    public enum MethodName {
-        case enable_withFrequency_start_stop
+    public enum MethodCall {
+        case enable(withFrequency: Int, start: Date, stop: Date)
         case disable
         case getSettings
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: NotificationServiceType
     public init(realObject: NotificationServiceType) {
         self.realObject = realObject
@@ -38,7 +42,7 @@ extension NotificationServiceTypeSpy: NotificationServiceType {
         }
     }
     public func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError> {
-        methodLog.append(.enable_withFrequency_start_stop)
+        methodLog.append(.enable(withFrequency: withFrequency, start: start, stop: stop))
         return await realObject.enable(withFrequency: withFrequency, start: start, stop: stop)
     }
     public func disable() -> Void {

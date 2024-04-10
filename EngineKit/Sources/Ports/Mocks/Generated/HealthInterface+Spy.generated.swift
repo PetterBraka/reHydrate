@@ -8,7 +8,9 @@ import PortsInterface
 
 public protocol HealthInterfaceSpying {
     var variableLog: [HealthInterfaceSpy.VariableName] { get set }
-    var methodLog: [HealthInterfaceSpy.MethodName] { get set }
+    var lastvariabelCall: HealthInterfaceSpy.VariableName? { get }
+    var methodLog: [HealthInterfaceSpy.MethodCall] { get set }
+    var lastMethodCall: HealthInterfaceSpy.MethodCall? { get }
 }
 
 public final class HealthInterfaceSpy: HealthInterfaceSpying {
@@ -16,18 +18,20 @@ public final class HealthInterfaceSpy: HealthInterfaceSpying {
         case isSupported
     }
 
-    public enum MethodName {
-        case shouldRequestAccess_for
-        case canWrite
-        case requestAuth_toReadAndWrite
-        case export_quantity_id_date
-        case readSum_start_end_intervalComponents
-        case readSamples_start_end
-        case enableBackgroundDelivery_healthData_frequency
+    public enum MethodCall {
+        case shouldRequestAccess(healthDataType: [HealthDataType])
+        case canWrite(dataType: HealthDataType)
+        case requestAuth(readAndWrite: Set<HealthDataType>)
+        case export(quantity: Quantity, id: QuantityTypeIdentifier, date: Date)
+        case readSum(data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents)
+        case readSamples(data: HealthDataType, start: Date, end: Date)
+        case enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency)
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: HealthInterface
     public init(realObject: HealthInterface) {
         self.realObject = realObject
@@ -42,31 +46,31 @@ extension HealthInterfaceSpy: HealthInterface {
         }
     }
     public func shouldRequestAccess(for healthDataType: [HealthDataType]) async -> Bool {
-        methodLog.append(.shouldRequestAccess_for)
+        methodLog.append(.shouldRequestAccess(healthDataType: healthDataType))
         return await realObject.shouldRequestAccess(for: healthDataType)
     }
     public func canWrite(_ dataType: HealthDataType) -> Bool {
-        methodLog.append(.canWrite)
+        methodLog.append(.canWrite(dataType: dataType))
         return realObject.canWrite(dataType)
     }
     public func requestAuth(toReadAndWrite readAndWrite: Set<HealthDataType>) async throws -> Void {
-        methodLog.append(.requestAuth_toReadAndWrite)
+        methodLog.append(.requestAuth(readAndWrite: readAndWrite))
         try await realObject.requestAuth(toReadAndWrite: readAndWrite)
     }
     public func export(quantity: Quantity, id: QuantityTypeIdentifier, date: Date) async throws -> Void {
-        methodLog.append(.export_quantity_id_date)
+        methodLog.append(.export(quantity: quantity, id: id, date: date))
         try await realObject.export(quantity: quantity, id: id, date: date)
     }
     public func readSum(_ data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents) async throws -> Double {
-        methodLog.append(.readSum_start_end_intervalComponents)
+        methodLog.append(.readSum(data: data, start: start, end: end, intervalComponents: intervalComponents))
         return try await realObject.readSum(data, start: start, end: end, intervalComponents: intervalComponents)
     }
     public func readSamples(_ data: HealthDataType, start: Date, end: Date) async throws -> [Double] {
-        methodLog.append(.readSamples_start_end)
+        methodLog.append(.readSamples(data: data, start: start, end: end))
         return try await realObject.readSamples(data, start: start, end: end)
     }
     public func enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency) async throws -> Void {
-        methodLog.append(.enableBackgroundDelivery_healthData_frequency)
+        methodLog.append(.enableBackgroundDelivery(healthData: healthData, frequency: frequency))
         try await realObject.enableBackgroundDelivery(healthData: healthData, frequency: frequency)
     }
 }

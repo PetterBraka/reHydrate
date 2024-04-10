@@ -281,7 +281,7 @@ private extension Screen.Home.Presenter {
                 diff,
                 from: .litres,
                 to: unitSystem == .metric ? .millilitres : .ounces)
-            let drink = Drink(id: UUID().uuidString, size: size, container: .health)
+            let drink = Drink(id: "health-\(UUID().uuidString)", size: size, container: .health)
             if let updatedDay = try? await engine.dayService.add(drink: drink) {
                 day.consumed = updatedDay
             }

@@ -1,9 +1,3 @@
-{% macro parametersCamelCase method %}{% for param in method.parameters -%}
-    {% if param.argumentLabel != nil -%}
-    _{{ param.argumentLabel }}
-    {%- endif -%}
-    {% endfor -%}
-{% endmacro %}
 {% for protocol in types.protocols %}
 {% if protocol.annotations.AutoSpy %}
 // sourcery:file:{{ protocol.name }}+Spy
@@ -17,7 +11,9 @@ import {{ import }}
 
 public protocol {{ protocol.name }}Spying {
     var variableLog: [{{ protocol.name }}Spy.VariableName] { get set }
-    var methodLog: [{{ protocol.name }}Spy.MethodName] { get set }
+    var lastvariabelCall: {{ protocol.name }}Spy.VariableName? { get }
+    var methodLog: [{{ protocol.name }}Spy.MethodCall] { get set }
+    var lastMethodCall: {{ protocol.name }}Spy.MethodCall? { get }
 }
 
 public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
@@ -27,14 +23,31 @@ public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
         {% endfor %}
     }
 
-    public enum MethodName {
+    public enum MethodCall {
         {% for method in protocol.methods %}
-        case {{ method.callName }}{% call parametersCamelCase method %}
+        case {{ method.callName }}
+            {%- for param in method.parameters -%}
+            {%- if param.name != nil -%}
+                {%- if forloop.first -%}({%- endif -%}
+                {{ param.name }}: {% if param.actualTypeName|hasSuffix: "T" -%}
+                    {%- if param.actualTypeName|hasPrefix: "T" -%}
+                        Any
+                    {%- else -%}
+                        {{ param.actualTypeName }}
+                    {%- endif -%}
+                {%- else -%}
+                    {{ param.actualTypeName }}
+                {%- endif -%}
+                {%- if forloop.last -%}){% else %}, {% endif -%}
+            {%- endif -%}
+            {%- endfor -%}
         {% endfor %}
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: {{ protocol.name }}
     
     public init(realObject: {{ protocol.name }}) {
@@ -59,7 +72,14 @@ extension {{ protocol.name }}Spy: {{ protocol.name }} {
 {% endfor %}
 {% for method in protocol.methods %}
     public func {{ method.name }}{% if method.isAsync %} async{% endif %}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
-        methodLog.append(.{{ method.callName }}{% call parametersCamelCase method %})
+        methodLog.append(.{{ method.callName }}
+        {%- for param in method.parameters -%}
+        {%- if param.name != nil -%}
+            {%- if forloop.first -%}({%- endif -%}
+            {{ param.name }}: {{ param.name }}
+            {%- if forloop.last -%}){% else %}, {% endif -%}
+        {%- endif -%}
+        {%- endfor -%})
         {% if method.returnTypeName.name == "Void" %}{% else %}return {% endif -%}
         {% if method.throws %}try {% endif -%}
         {% if method.isAsync %}await {% endif -%}

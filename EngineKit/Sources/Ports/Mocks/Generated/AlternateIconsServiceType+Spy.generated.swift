@@ -8,21 +8,25 @@ import PortsInterface
 
 public protocol AlternateIconsServiceTypeSpying {
     var variableLog: [AlternateIconsServiceTypeSpy.VariableName] { get set }
-    var methodLog: [AlternateIconsServiceTypeSpy.MethodName] { get set }
+    var lastvariabelCall: AlternateIconsServiceTypeSpy.VariableName? { get }
+    var methodLog: [AlternateIconsServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: AlternateIconsServiceTypeSpy.MethodCall? { get }
 }
 
 public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying {
     public enum VariableName {
     }
 
-    public enum MethodName {
+    public enum MethodCall {
         case supportsAlternateIcons
-        case setAlternateIcon_to
+        case setAlternateIcon(iconName: String)
         case getAlternateIcon
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: AlternateIconsServiceType
     public init(realObject: AlternateIconsServiceType) {
         self.realObject = realObject
@@ -35,7 +39,7 @@ extension AlternateIconsServiceTypeSpy: AlternateIconsServiceType {
         return await realObject.supportsAlternateIcons()
     }
     public func setAlternateIcon(to iconName: String) async -> Error? {
-        methodLog.append(.setAlternateIcon_to)
+        methodLog.append(.setAlternateIcon(iconName: iconName))
         return await realObject.setAlternateIcon(to: iconName)
     }
     public func getAlternateIcon() async -> String? {

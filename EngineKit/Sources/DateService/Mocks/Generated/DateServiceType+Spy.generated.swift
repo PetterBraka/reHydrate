@@ -8,25 +8,29 @@ import DateServiceInterface
 
 public protocol DateServiceTypeSpying {
     var variableLog: [DateServiceTypeSpy.VariableName] { get set }
-    var methodLog: [DateServiceTypeSpy.MethodName] { get set }
+    var lastvariabelCall: DateServiceTypeSpy.VariableName? { get }
+    var methodLog: [DateServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: DateServiceTypeSpy.MethodCall? { get }
 }
 
 public final class DateServiceTypeSpy: DateServiceTypeSpying {
     public enum VariableName {
     }
 
-    public enum MethodName {
+    public enum MethodCall {
         case now
-        case daysBetween_end
-        case get_component_from
-        case getDate_byAdding_component_to
-        case getStart_of
-        case getEnd_of
-        case isDate_inSameDayAs
+        case daysBetween(start: Date, end: Date)
+        case get(component: Component, date: Date)
+        case getDate(value: Int, component: Component, date: Date)
+        case getStart(date: Date)
+        case getEnd(date: Date)
+        case isDate(date: Date, inSameDayAs: Date)
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: DateServiceType
     public init(realObject: DateServiceType) {
         self.realObject = realObject
@@ -39,27 +43,27 @@ extension DateServiceTypeSpy: DateServiceType {
         return realObject.now()
     }
     public func daysBetween(_ start: Date, end: Date) -> Int {
-        methodLog.append(.daysBetween_end)
+        methodLog.append(.daysBetween(start: start, end: end))
         return realObject.daysBetween(start, end: end)
     }
     public func get(component: Component, from date: Date) -> Int {
-        methodLog.append(.get_component_from)
+        methodLog.append(.get(component: component, date: date))
         return realObject.get(component: component, from: date)
     }
     public func getDate(byAdding value: Int, component: Component, to date: Date) -> Date {
-        methodLog.append(.getDate_byAdding_component_to)
+        methodLog.append(.getDate(value: value, component: component, date: date))
         return realObject.getDate(byAdding: value, component: component, to: date)
     }
     public func getStart(of date: Date) -> Date {
-        methodLog.append(.getStart_of)
+        methodLog.append(.getStart(date: date))
         return realObject.getStart(of: date)
     }
     public func getEnd(of date: Date) -> Date {
-        methodLog.append(.getEnd_of)
+        methodLog.append(.getEnd(date: date))
         return realObject.getEnd(of: date)
     }
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
-        methodLog.append(.isDate_inSameDayAs)
+        methodLog.append(.isDate(date: date, inSameDayAs: inSameDayAs))
         return realObject.isDate(date, inSameDayAs: inSameDayAs)
     }
 }

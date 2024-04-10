@@ -9,24 +9,28 @@ import DrinkServiceInterface
 
 public protocol DayServiceTypeSpying {
     var variableLog: [DayServiceTypeSpy.VariableName] { get set }
-    var methodLog: [DayServiceTypeSpy.MethodName] { get set }
+    var lastvariabelCall: DayServiceTypeSpy.VariableName? { get }
+    var methodLog: [DayServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: DayServiceTypeSpy.MethodCall? { get }
 }
 
 public final class DayServiceTypeSpy: DayServiceTypeSpying {
     public enum VariableName {
     }
 
-    public enum MethodName {
+    public enum MethodCall {
         case getToday
-        case getDays_between
-        case add_drink
-        case remove_drink
-        case increase_goal
-        case decrease_goal
+        case getDays(dates: ClosedRange<Date>)
+        case add(drink: Drink)
+        case remove(drink: Drink)
+        case increase(goal: Double)
+        case decrease(goal: Double)
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: DayServiceType
     public init(realObject: DayServiceType) {
         self.realObject = realObject
@@ -39,23 +43,23 @@ extension DayServiceTypeSpy: DayServiceType {
         return await realObject.getToday()
     }
     public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
-        methodLog.append(.getDays_between)
+        methodLog.append(.getDays(dates: dates))
         return try await realObject.getDays(between: dates)
     }
     public func add(drink: Drink) async throws -> Double {
-        methodLog.append(.add_drink)
+        methodLog.append(.add(drink: drink))
         return try await realObject.add(drink: drink)
     }
     public func remove(drink: Drink) async throws -> Double {
-        methodLog.append(.remove_drink)
+        methodLog.append(.remove(drink: drink))
         return try await realObject.remove(drink: drink)
     }
     public func increase(goal: Double) async throws -> Double {
-        methodLog.append(.increase_goal)
+        methodLog.append(.increase(goal: goal))
         return try await realObject.increase(goal: goal)
     }
     public func decrease(goal: Double) async throws -> Double {
-        methodLog.append(.decrease_goal)
+        methodLog.append(.decrease(goal: goal))
         return try await realObject.decrease(goal: goal)
     }
 }
