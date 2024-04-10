@@ -112,14 +112,19 @@ extension HomePresentationTests {
         ])
         healthService.stub.isSupported_returnValue = true
         healthService.stub.readSumDataStartEndIntervalComponents_returnValue = .success(1)
+        let givenStartDate = Date(year: 2023, month: 2, day: 3, hours: 0, minutes: 0, seconds: 0)
+        let givenEndDate = Date(year: 2023, month: 2, day: 3, hours: 23, minutes: 59, seconds: 59)
+        dateService.stub.getStartDate_returnValue = givenStartDate
+        dateService.stub.getEndDate_returnValue = givenEndDate
         
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [
-            .shouldRequestAccess_for,
-            .readSum_start_end_intervalComponents
+            .shouldRequestAccess(healthDataType: [.water(.litre)]),
+            .readSum(data: .water(.litre), start: givenStartDate, end: givenEndDate,
+                     intervalComponents: .init(day: 1))
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
@@ -152,14 +157,20 @@ extension HomePresentationTests {
         healthService.stub.isSupported_returnValue = true
         healthService.stub.readSumDataStartEndIntervalComponents_returnValue = .success(0)
         
+        let givenStartDate = Date(year: 2023, month: 2, day: 3, hours: 0, minutes: 0, seconds: 0)
+        let givenEndDate = Date(year: 2023, month: 2, day: 3, hours: 23, minutes: 59, seconds: 59)
+        dateService.stub.getStartDate_returnValue = givenStartDate
+        dateService.stub.getEndDate_returnValue = givenEndDate
+        
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [
-            .shouldRequestAccess_for,
-            .readSum_start_end_intervalComponents,
-            .export_quantity_id_date
+            .shouldRequestAccess(healthDataType: [.water(.litre)]),
+            .readSum(data: .water(.litre), start: givenStartDate, end: givenEndDate,
+                     intervalComponents: .init(day: 1)),
+            .export(quantity: .init(unit: .litre, value: 1), id: .dietaryWater, date: .distantFuture),
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
@@ -192,15 +203,21 @@ extension HomePresentationTests {
         healthService.stub.readSumDataStartEndIntervalComponents_returnValue = .success(2)
         dayService.stub.addDrink_returnValue = .success(2)
         
+        let givenStartDate = Date(year: 2023, month: 2, day: 3, hours: 0, minutes: 0, seconds: 0)
+        let givenEndDate = Date(year: 2023, month: 2, day: 3, hours: 23, minutes: 59, seconds: 59)
+        dateService.stub.getStartDate_returnValue = givenStartDate
+        dateService.stub.getEndDate_returnValue = givenEndDate
+        
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [
-            .shouldRequestAccess_for,
-            .readSum_start_end_intervalComponents,
+            .shouldRequestAccess(healthDataType: [.water(.litre)]),
+            .readSum(data: .water(.litre), start: givenStartDate, end: givenEndDate,
+                     intervalComponents: .init(day: 1)),
         ])
-        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .add_drink])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .add(drink: .init(id: "", size: 1000, container: .health))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -232,14 +249,20 @@ extension HomePresentationTests {
         healthService.stub.requestAuthReadAndWrite_returnValue = DummyError()
         healthService.stub.readSumDataStartEndIntervalComponents_returnValue = .success(0)
         
+        let givenStartDate = Date(year: 2023, month: 2, day: 3, hours: 0, minutes: 0, seconds: 0)
+        let givenEndDate = Date(year: 2023, month: 2, day: 3, hours: 23, minutes: 59, seconds: 59)
+        dateService.stub.getStartDate_returnValue = givenStartDate
+        dateService.stub.getEndDate_returnValue = givenEndDate
+        
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [
-            .shouldRequestAccess_for,
-            .readSum_start_end_intervalComponents,
-            .export_quantity_id_date,
+            .shouldRequestAccess(healthDataType: [.water(.litre)]),
+            .readSum(data: .water(.litre), start: givenStartDate, end: givenEndDate,
+                     intervalComponents: .init(day: 1)),
+            .export(quantity: .init(unit: .litre, value: 1), id: .dietaryWater, date: .distantFuture),
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
@@ -269,14 +292,20 @@ extension HomePresentationTests {
         healthService.stub.requestAuthReadAndWrite_returnValue = DummyError()
         healthService.stub.readSumDataStartEndIntervalComponents_returnValue = .failure(DummyError())
         
+        let givenStartDate = Date(year: 2023, month: 2, day: 3, hours: 0, minutes: 0, seconds: 0)
+        let givenEndDate = Date(year: 2023, month: 2, day: 3, hours: 23, minutes: 59, seconds: 59)
+        dateService.stub.getStartDate_returnValue = givenStartDate
+        dateService.stub.getEndDate_returnValue = givenEndDate
+        
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [
-            .shouldRequestAccess_for,
-            .readSum_start_end_intervalComponents,
-            .export_quantity_id_date,
+            .shouldRequestAccess(healthDataType: [.water(.litre)]),
+            .readSum(data: .water(.litre), start: givenStartDate, end: givenEndDate,
+                     intervalComponents: .init(day: 1)),
+            .export(quantity: .init(unit: .litre, value: 1), id: .dietaryWater, date: .distantFuture),
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
@@ -302,15 +331,21 @@ extension HomePresentationTests {
         healthService.stub.shouldRequestAccessHealthDataType_returnValue = true
         healthService.stub.readSumDataStartEndIntervalComponents_returnValue = .failure(DummyError())
         
+        let givenStartDate = Date(year: 2023, month: 2, day: 3, hours: 0, minutes: 0, seconds: 0)
+        let givenEndDate = Date(year: 2023, month: 2, day: 3, hours: 23, minutes: 59, seconds: 59)
+        dateService.stub.getStartDate_returnValue = givenStartDate
+        dateService.stub.getEndDate_returnValue = givenEndDate
+        
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [
-            .shouldRequestAccess_for,
-            .requestAuth_toReadAndWrite,
-            .readSum_start_end_intervalComponents,
-            .export_quantity_id_date,
+            .shouldRequestAccess(healthDataType: [.water(.litre)]),
+            .requestAuth(readAndWrite: [.water(.litre)]),
+            .readSum(data: .water(.litre), start: givenStartDate, end: givenEndDate,
+                     intervalComponents: .init(day: 1)),
+            .export(quantity: .init(unit: .litre, value: 1), id: .dietaryWater, date: .distantFuture),
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
@@ -337,15 +372,21 @@ extension HomePresentationTests {
         healthService.stub.requestAuthReadAndWrite_returnValue = DummyError()
         healthService.stub.readSumDataStartEndIntervalComponents_returnValue = .failure(DummyError())
         
+        let givenStartDate = Date(year: 2023, month: 2, day: 3, hours: 0, minutes: 0, seconds: 0)
+        let givenEndDate = Date(year: 2023, month: 2, day: 3, hours: 23, minutes: 59, seconds: 59)
+        dateService.stub.getStartDate_returnValue = givenStartDate
+        dateService.stub.getEndDate_returnValue = givenEndDate
+        
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [
-            .shouldRequestAccess_for,
-            .requestAuth_toReadAndWrite,
-            .readSum_start_end_intervalComponents,
-            .export_quantity_id_date,
+            .shouldRequestAccess(healthDataType: [.water(.litre)]),
+            .requestAuth(readAndWrite: [.water(.litre)]),
+            .readSum(data: .water(.litre), start: givenStartDate, end: givenEndDate,
+                     intervalComponents: .init(day: 1)),
+            .export(quantity: .init(unit: .litre, value: 1), id: .dietaryWater, date: .distantFuture),
         ])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
@@ -472,7 +513,7 @@ extension HomePresentationTests {
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
-        XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
+        XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "1", size: 100, container: .small))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -498,8 +539,8 @@ extension HomePresentationTests {
         await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
-        XCTAssertEqual(healthService.spy.methodLog, [.export_quantity_id_date])
-        XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
+        XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: 0.1), id: .dietaryWater, date: .distantFuture)])
+        XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "1", size: 100, container: .small))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -526,8 +567,8 @@ extension HomePresentationTests {
         await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
-        XCTAssertEqual(healthService.spy.methodLog, [.export_quantity_id_date])
-        XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
+        XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: 0.1), id: .dietaryWater, date: .distantFuture)])
+        XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "1", size: 100, container: .small))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -551,10 +592,10 @@ extension HomePresentationTests {
         
         sut = .init(engine: engine, router: router)
         await sut.perform(action: .didTapAddDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
-//
+
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
-        XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
+        XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "123", size: 500, container: .large))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -581,7 +622,7 @@ extension HomePresentationTests {
         
         XCTAssertEqual(healthService.spy.variableLog, [])
         XCTAssertEqual(healthService.spy.methodLog, [])
-        XCTAssertEqual(dayService.spy.methodLog, [.add_drink])
+        XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "123", size: 500, container: .large))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -613,7 +654,7 @@ extension HomePresentationTests {
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
-        XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
+        XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "1", size: 100, container: .small))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -641,8 +682,8 @@ extension HomePresentationTests {
         await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
-        XCTAssertEqual(healthService.spy.methodLog, [.export_quantity_id_date])
-        XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
+        XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: 0.9), id: .dietaryWater, date: .distantFuture)])
+        XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "1", size: 100, container: .small))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -671,8 +712,8 @@ extension HomePresentationTests {
         await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, fill: 0.1, container: .medium)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
-        XCTAssertEqual(healthService.spy.methodLog, [.export_quantity_id_date])
-        XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
+        XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: 0.9), id: .dietaryWater, date: .distantFuture)])
+        XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "1", size: 100, container: .medium))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -701,7 +742,7 @@ extension HomePresentationTests {
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
-        XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
+        XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "123", size: 500, container: .large))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -730,7 +771,7 @@ extension HomePresentationTests {
         
         XCTAssertEqual(healthService.spy.variableLog, [])
         XCTAssertEqual(healthService.spy.methodLog, [])
-        XCTAssertEqual(dayService.spy.methodLog, [.remove_drink])
+        XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "123", size: 500, container: .large))])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -808,6 +849,60 @@ private extension HomePresentationTests {
             } else {
                 XCTAssertEqual(givenLog[index], expectedLog[index], file: file, line: line)
             }
+        }
+    }
+}
+
+extension DayServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.getToday, .getToday):
+            true
+        case let (.getDays(lhs_dates), .getDays(rhs_dates)):
+            lhs_dates == rhs_dates
+        case let (.add(lhs_drink), .add(rhs_drink)):
+            lhs_drink.size == rhs_drink.size &&
+            lhs_drink.container == rhs_drink.container
+        case let (.remove(lhs_drink), .remove(rhs_drink)):
+            lhs_drink == rhs_drink
+        case let (.increase(lhs_goal), .increase(rhs_goal)):
+            lhs_goal == rhs_goal
+        case let (.decrease(lhs_goal), .decrease(rhs_goal)):
+            lhs_goal == rhs_goal
+        default: false
+        }
+    }
+}
+
+extension HealthInterfaceSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case let (.shouldRequestAccess(lhs_healthDataType), .shouldRequestAccess(rhs_healthDataType)):
+            lhs_healthDataType == rhs_healthDataType
+        case let (.canWrite(lhs_dataType), .canWrite(rhs_dataType)):
+            lhs_dataType == rhs_dataType
+        case let (.requestAuth(lhs_readAndWrite), .requestAuth(rhs_readAndWrite)):
+            lhs_readAndWrite == rhs_readAndWrite
+        case let (.export(lhs_quantity, lhs_id, lhs_date), .export(rhs_quantity, rhs_id, rhs_date)):
+            lhs_quantity == rhs_quantity && 
+            lhs_id == rhs_id
+//            lhs_date == rhs_date // Can't test the date
+        case let (.readSum(lhs_data, lhs_start, lhs_end, lhs_intervalComponents),
+            .readSum(rhs_data, rhs_start, rhs_end, rhs_intervalComponents)):
+            lhs_data == rhs_data &&
+            lhs_start == rhs_start &&
+            lhs_end == rhs_end &&
+            lhs_intervalComponents == rhs_intervalComponents
+        case let (.readSamples(lhs_data, lhs_start, lhs_end), .readSamples(rhs_data, rhs_start, rhs_end)):
+            lhs_data == rhs_data &&
+            lhs_start == rhs_start &&
+            lhs_end == rhs_end
+        case let (.enableBackgroundDelivery(lhs_healthData, lhs_frequency),
+                  .enableBackgroundDelivery(rhs_healthData, rhs_frequency)):
+            lhs_healthData == rhs_healthData &&
+            lhs_frequency == rhs_frequency
+        default:
+            false
         }
     }
 }
