@@ -43,14 +43,14 @@ public enum History {
 }
 
 extension History.ViewModel {
-    public struct ChartData {
+    public struct ChartData: Equatable {
         public enum Option: CaseIterable {
             case bar
             case line
             case plot
         }
         
-        public struct Point {
+        public struct Point: Equatable {
             public let date: Date
             public let dateString: String
             public let consumed: Double?
@@ -78,7 +78,7 @@ extension History.ViewModel {
 }
 
 extension History.ViewModel {
-    public struct CalendarData {
+    public struct CalendarData: Equatable {
         public enum Weekday {
             case monday
             case tuesday
@@ -89,7 +89,7 @@ extension History.ViewModel {
             case sunday
         }
         
-        public struct Day {
+        public struct Day: Equatable {
             public let date: Date
             public let consumed: Double
             public let goal: Double
@@ -116,7 +116,7 @@ extension History.ViewModel {
 }
 
 extension History.ViewModel {
-    public struct Details {
+    public struct Details: Equatable {
         public let averageConsumed: String
         public let averageGoal: String
         public let totalConsumed: String
