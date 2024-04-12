@@ -17,6 +17,14 @@ extension {{ type.name }} {
         self.{{ variable.name }} = spy
         return (stub, spy)
     }
+
+    public func make{{ variable.name | upperFirstLetter }}(_ realObject: {{ variable.typeName }}) -> (realObject: {{ variable.typeName }}, spy: {{ variable.typeName }}Spying) {
+        let spy = {{ variable.typeName }}Spy(realObject: realObject)
+
+        self.{{ variable.name }} = spy
+        return (realObject, spy)
+    }
+
     {% endif %}
     {% endfor %}
 }
