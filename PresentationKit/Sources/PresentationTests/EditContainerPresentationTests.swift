@@ -32,6 +32,13 @@ final class EditContainerPresentationTests: XCTestCase {
         engine.unitService = UnitService(engine: engine)
     }
     
+    override func tearDown() {
+        router = nil
+        engine = nil
+        drinkService = nil
+        userPreferenceService = nil
+    }
+    
     func test_didAppear() async {
         let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
         await sut.perform(action: .didAppear)
