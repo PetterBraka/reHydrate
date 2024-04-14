@@ -42,7 +42,14 @@ final class HistoryPresentationTests: XCTestCase {
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
         
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
         sut = Sut(engine: engine, router: router)
+        
+        try await Task.sleep(nanoseconds: 100_000_000)
     }
     
     override func tearDown() {
@@ -60,7 +67,7 @@ final class HistoryPresentationTests: XCTestCase {
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
         
         sut = Sut(engine: engine, router: router)
-        
+        XCTAssertEqual(router.log, [])
         assertViewModel(sut.viewModel, .init(
             isLoading: false,
             details: .init(averageConsumed: "", averageGoal: "", totalConsumed: "", totalGoal: ""),
@@ -95,7 +102,8 @@ final class HistoryPresentationTests: XCTestCase {
         
         try await Task.sleep(nanoseconds: 250_000_000)
         
-        assertViewModel(sut.viewModel, .init(
+        XCTAssertEqual(router.log, [])
+        assertViewModel(.init(
             isLoading: false,
             details: .init(
                 averageConsumed: "0.17 L",
@@ -136,8 +144,8 @@ final class HistoryPresentationTests: XCTestCase {
     }
     
     // MARK: - perform Action
-    func test_didAppear() async throws {
-        dateService.stub.daysBetweenStartEnd_returnValue = 6
+    // MARK: didAppear
+    func test_didAppear() async {
         dateService.stub.daysBetweenStartEnd_returnValue = 6
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
         
@@ -149,7 +157,8 @@ final class HistoryPresentationTests: XCTestCase {
         
         await sut.perform(action: .didAppear)
         
-        assertViewModel(sut.viewModel, .init(
+        XCTAssertEqual(router.log, [])
+        assertViewModel(.init(
             isLoading: false,
             details: .init(
                 averageConsumed: "0.5 L",
@@ -195,9 +204,144 @@ final class HistoryPresentationTests: XCTestCase {
             error: nil
         ))
     }
+    
+    // MARK: didTapBack
+    func test_didTapBack() async {
+        await sut.perform(action: .didTapBack)
+        XCTAssertEqual(router.log, [.showHome])
+    }
+    
+    // MARK: didSelectChartOption
+    func test_didSelectChartOption_bar() async {
+        dayService.stub.getDaysDates_returnValue = .success([])
+        await sut.perform(action: .didSelectChart(.bar))
+        XCTAssertEqual(router.log, [])
+        assertChart(.init(
+            title: "09/02/2024 - 15/02/2024",
+            points: [
+                .init(date: Date(year: 2024, month: 2, day: 14), dateString: "14/02/2024", consumed: 0, goal: 2),
+                .init(date: Date(year: 2024, month: 2, day: 15), dateString: "15/02/2024", consumed: 0, goal: 2)
+            ],
+            selectedOption: .bar
+        ))
+    }
+    
+    func test_didSelectChartOption_line() async {
+        dayService.stub.getDaysDates_returnValue = .success([])
+        await sut.perform(action: .didSelectChart(.line))
+        XCTAssertEqual(router.log, [])
+        assertChart(.init(
+            title: "09/02/2024 - 15/02/2024",
+            points: [
+                .init(date: Date(year: 2024, month: 2, day: 14), dateString: "14/02/2024", consumed: 0, goal: 2),
+                .init(date: Date(year: 2024, month: 2, day: 15), dateString: "15/02/2024", consumed: 0, goal: 2)
+            ],
+            selectedOption: .line
+        ))
+    }
+    
+    func test_didSelectChartOption_plot() async {
+        dayService.stub.getDaysDates_returnValue = .success([])
+        await sut.perform(action: .didSelectChart(.plot))
+        XCTAssertEqual(router.log, [])
+        assertChart(.init(
+            title: "09/02/2024 - 15/02/2024",
+            points: [
+                .init(date: Date(year: 2024, month: 2, day: 14), dateString: "14/02/2024", consumed: 0, goal: 2),
+                .init(date: Date(year: 2024, month: 2, day: 15), dateString: "15/02/2024", consumed: 0, goal: 2)
+            ],
+            selectedOption: .plot
+        ))
+    }
+    
+    // MARK: didTapClear
+    func test_didTapClear() async {
+        await sut.perform(action: .didTapClear)
+        assertViewModel(.init(
+            isLoading: false,
+            details: .init(
+                averageConsumed: "0 L",
+                averageGoal: "4 L",
+                totalConsumed: "0 L",
+                totalGoal: "4 L"
+            ),
+            chart: .init(
+                title: "09/02/2024 - 15/02/2024",
+                points: [
+                    .init(date: Date(year: 2024, month: 2, day: 14), dateString: "14/02/2024", consumed: 0, goal: 2),
+                    .init(date: Date(year: 2024, month: 2, day: 15), dateString: "15/02/2024", consumed: 0, goal: 2)
+                ],
+                selectedOption: .line
+            ),
+            calendar: .init(
+                highlightedMonth: Date(year: 2024, month: 02, day: 15),
+                weekdayStart: .monday,
+                range: Date(year: 2024 - 5, month: 2, day: 15) ... Date(year: 2024, month: 2, day: 15),
+                days: [
+                    .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+                    .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+                ]
+            ),
+            selectedRange: nil,
+            selectedDays: 1,
+            error: nil
+        ))
+    }
+    
+    // MARK: didTapDate
+    func test_didTapDate_oneDayBefore() async {
+        dateService.stub.daysBetweenStartEnd_returnValue = 2
+        dateService.stub.daysBetweenStartEnd_returnValue = 4
+        
+        dateService.stub.daysBetweenStartEnd_returnValue = 4
+        
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 13), consumed: 2, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
+        await sut.perform(action: .didTap(Date(year: 2024, month: 2, day: 13)))
+        assertViewModel(.init(
+            isLoading: false,
+            details: .init(
+                averageConsumed: "0.5 L",
+                averageGoal: "1.5 L",
+                totalConsumed: "2 L",
+                totalGoal: "6 L"
+            ),
+            chart: .init(
+                title: "13/02/2024 - 15/02/2024",
+                points: [
+                    .init(date: Date(year: 2024, month: 2, day: 13), dateString: "13/02/2024", consumed: 2, goal: 2),
+                    .init(date: Date(year: 2024, month: 2, day: 14), dateString: "14/02/2024", consumed: 0, goal: 2),
+                    .init(date: Date(year: 2024, month: 2, day: 15), dateString: "15/02/2024", consumed: 0, goal: 2)
+                ],
+                selectedOption: .line
+            ),
+            calendar: .init(
+                highlightedMonth: Date(year: 2024, month: 02, day: 13),
+                weekdayStart: .monday,
+                range: Date(year: 2024 - 5, month: 2, day: 15) ... Date(year: 2024, month: 2, day: 15),
+                days: [
+                    .init(date: Date(year: 2024, month: 2, day: 13), consumed: 2, goal: 2),
+                    .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+                    .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+                ]
+            ),
+            selectedRange: Date(year: 2024, month: 2, day: 13) ... Date(year: 2024, month: 2, day: 15),
+            selectedDays: 4,
+            error: nil
+        ))
+    }
 }
 
 extension HistoryPresentationTests {
+    private func assertViewModel(_ expectedViewModel: Sut.ViewModel,
+                                 file: StaticString = #file, line: UInt = #line) {
+        assertViewModel(sut.viewModel, expectedViewModel, file: file, line: line)
+    }
+    
     private func assertViewModel(_ givenViewModel: Sut.ViewModel, _ expectedViewModel: Sut.ViewModel,
                                  file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(givenViewModel.isLoading, expectedViewModel.isLoading, "isLoading", file: file, line: line)
@@ -208,5 +352,20 @@ extension HistoryPresentationTests {
         XCTAssertEqual(givenViewModel.selectedDays, expectedViewModel.selectedDays, "selectedDays", file: file, line: line)
         
         XCTAssertEqual(givenViewModel.error, expectedViewModel.error, "error", file: file, line: line)
+    }
+    
+    private func assertDetails(_ expectedDetails: Sut.ViewModel.Details,
+                               file: StaticString = #file, line: UInt = #line) {
+        XCTAssertEqual(sut.viewModel.details, expectedDetails, "details", file: file, line: line)
+    }
+    
+    private func assertChart(_ expectedChart: Sut.ViewModel.ChartData,
+                             file: StaticString = #file, line: UInt = #line) {
+        XCTAssertEqual(sut.viewModel.chart, expectedChart, "chart", file: file, line: line)
+    }
+    
+    private func assertCalendar(_ expectedCalendar: Sut.ViewModel.CalendarData,
+                                file: StaticString = #file, line: UInt = #line) {
+        XCTAssertEqual(sut.viewModel.calendar, expectedCalendar, "calendar", file: file, line: line)
     }
 }

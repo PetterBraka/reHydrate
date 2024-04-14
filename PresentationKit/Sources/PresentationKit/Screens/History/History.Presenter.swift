@@ -140,13 +140,13 @@ private extension Screen.History.Presenter {
         } else {
             ""
         }
-        
         let details = ViewModel.Details(
-            averageConsumed: getCleanTitle(averageConsumed),
-            averageGoal: getCleanTitle(averageGoal),
-            totalConsumed: getCleanTitle(totalConsumed),
-            totalGoal: getCleanTitle(totalGoal)
-        )
+            averageConsumed: averageConsumed,
+            averageGoal: averageGoal,
+            totalConsumed: totalConsumed,
+            totalGoal: totalGoal,
+            unitSystem: engine.unitService.getUnitSystem()
+        ) ?? viewModel.details
         let chart = ViewModel.ChartData(
             title: title,
             points: chartPoints ?? viewModel.chart.points,
@@ -196,20 +196,19 @@ private extension Screen.History.Presenter {
             daysSelected = 1
         }
         
-        var totalGoal = 0.0
-        var totalConsumed = 0.0
-        
-        points.forEach { day in
-            totalGoal += day.goal ?? 0
-            totalConsumed += day.consumed ?? 0
+        let total = points.reduce(into: (goal: 0, consumed: 0)) { partial, point in
+            let goal =  partial.goal + (point.goal ?? 0)
+            let consumed = partial.consumed + (point.consumed ?? 0)
+            partial = (goal, consumed)
         }
-        let averageGoal = totalGoal / Double(daysSelected)
-        let averageConsumed = totalConsumed / Double(daysSelected)
+        
+        let averageGoal = total.goal / Double(daysSelected)
+        let averageConsumed = total.consumed / Double(daysSelected)
         
         updateViewModel(
             isLoading: false,
             averageConsumed: averageConsumed, averageGoal: averageGoal,
-            totalConsumed: totalConsumed, totalGoal: totalGoal,
+            totalConsumed: total.consumed, totalGoal: total.goal,
             chartPoints: points,
             calendarDays: days.mapToViewModel(),
             daysSelected: daysSelected
@@ -241,24 +240,6 @@ private extension Screen.History.Presenter {
         
         return dates
     }
-    
-    func getCleanTitle(_ input: Double?) -> String {
-        let unit = engine.unitService.getUnitSystem()
-        let symbol = unit == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
-        
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 0
-        formatter.allowsFloats = true
-        
-        return if let input,
-                  let title = formatter.string(from: input as NSNumber) {
-            "\(title) \(symbol)"
-        } else {
-            "0 \(symbol)"
-        }
-    }
 }
 
 private extension Array where Element == Day {
@@ -270,5 +251,32 @@ private extension Array where Element == Day {
                 goal: $0.goal
             )
         }
+    }
+}
+
+extension History.ViewModel.Details {
+    init?(averageConsumed: Double?, averageGoal: Double?,
+         totalConsumed: Double?, totalGoal: Double?, unitSystem: UnitSystem) {
+        let symbol = unitSystem == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        formatter.allowsFloats = true
+        
+        guard let averageConsumed, let averageGoal, let totalConsumed, let totalGoal else { return nil }
+        
+        let averageConsumedString = formatter.string(from: averageConsumed as NSNumber) ?? "0"
+        let averageGoalString = formatter.string(from: averageGoal as NSNumber) ?? "0"
+        let totalConsumedString = formatter.string(from: totalConsumed as NSNumber) ?? "0"
+        let totalGoalString = formatter.string(from: totalGoal as NSNumber) ?? "0"
+        
+        self.init(
+            averageConsumed: averageConsumedString + " " + symbol,
+            averageGoal: averageGoalString + " " + symbol,
+            totalConsumed: totalConsumedString + " " + symbol,
+            totalGoal: totalGoalString + " " + symbol
+        )
     }
 }
