@@ -40,7 +40,6 @@ public enum Settings {
         public let isDarkModeOn: Bool
         public let unitSystem: UnitSystem
         public let goal: Double
-        public let drinks: [ViewModel.Drink]
         public let notifications: NotificationSettings
         public let error: Error?
         public let appVersion: String
@@ -50,7 +49,6 @@ public enum Settings {
             isDarkModeOn: Bool,
             unitSystem: UnitSystem,
             goal: Double,
-            drinks: [ViewModel.Drink],
             notifications: NotificationSettings,
             appVersion: String,
             error: Error?
@@ -59,7 +57,6 @@ public enum Settings {
             self.isDarkModeOn = isDarkModeOn
             self.unitSystem = unitSystem
             self.goal = goal
-            self.drinks = drinks
             self.notifications = notifications
             self.appVersion = appVersion
             self.error = error
@@ -71,45 +68,6 @@ extension Settings.ViewModel {
     public enum UnitSystem {
         case imperial
         case metric
-    }
-}
-
-extension Settings.ViewModel {
-    public struct Drink: Identifiable {
-        public let id: String
-        
-        public let container: Container
-        public var size: Double
-        
-        public init(id: String = UUID().uuidString,
-                    size: Double,
-                    container: Container) {
-            self.id = id
-            self.container = container
-            self.size = size
-        }
-    }
-    
-    public enum Container: Hashable {
-        case small
-        case medium
-        case large
-        
-        public var max: Int {
-            switch self {
-            case .small: return 400
-            case .medium: return 700
-            case .large: return 1200
-            }
-        }
-        
-        public var min: Int {
-            switch self {
-            case .small: return 100
-            case .medium: return 300
-            case .large: return 500
-            }
-        }
     }
 }
     

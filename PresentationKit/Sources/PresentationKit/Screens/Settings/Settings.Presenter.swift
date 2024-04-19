@@ -10,7 +10,6 @@ import LoggingService
 import PresentationInterface
 import UnitServiceInterface
 import DayServiceInterface
-import DrinkServiceInterface
 import NotificationServiceInterface
 import PortsInterface
 import AppearanceServiceInterface
@@ -21,7 +20,6 @@ extension Screen.Settings {
         public typealias Engine = (
             HasLoggingService &
             HasDayService &
-            HasDrinksService &
             HasUnitService &
             HasNotificationService &
             HasOpenUrlService &
@@ -57,7 +55,6 @@ extension Screen.Settings {
                 isDarkModeOn: engine.appearanceService.getAppearance() == .dark,
                 unitSystem: .metric,
                 goal: 0,
-                drinks: [],
                 notifications: .init(
                     isOn: false,
                     frequency: 30,
@@ -159,16 +156,6 @@ extension Screen.Settings {
 }
 
 extension Screen.Settings.Presenter {
-    private func getDrinks() async -> [ViewModel.Drink] {
-        if let drinks = try? await engine.drinksService.getSaved(),
-            !drinks.isEmpty {
-            return drinks.compactMap { .init(from: $0) }
-        } else {
-            let drinks = await engine.drinksService.resetToDefault()
-            return drinks.compactMap { .init(from: $0) }
-        }
-    }
-    
     private func updateViewModel(
         isLoading: Bool,
         isDarkModeOn: Bool? = nil,
@@ -187,15 +174,6 @@ extension Screen.Settings.Presenter {
         }
         newGoal = engine.unitService.convert(newGoal, from: .litres,
                                              to: isMetric ? .litres : .pint)
-        var drinks = await getDrinks()
-        drinks = drinks.map { [weak self] drink in
-            guard let self else { return drink }
-            var drink = drink
-            drink.size = engine.unitService.convert(drink.size,
-                                                    from: .millilitres,
-                                                    to: isMetric ? .millilitres : .ounces)
-            return drink
-        }
         
         let notifications = notifications ?? viewModel.notifications
         
@@ -204,7 +182,6 @@ extension Screen.Settings.Presenter {
             isDarkModeOn: isDarkModeOn ?? viewModel.isDarkModeOn,
             unitSystem: unitSystem,
             goal: newGoal,
-            drinks: drinks,
             notifications: notifications,
             appVersion: engine.appVersion,
             error: error
@@ -272,31 +249,6 @@ extension UnitSystem {
     }
 }
 
-// MARK: - Drink
-extension Screen.Settings.Presenter.ViewModel.Drink {
-    init?(from drink: Drink) {
-        guard let container = Screen.Settings.Presenter.ViewModel.Container(from: drink.container)
-        else { return nil }
-        self = .init(id: drink.id,
-                     size: drink.size,
-                     container: container)
-    }
-}
-
-extension Screen.Settings.Presenter.ViewModel.Container {
-    init?(from container: Container) {
-        switch container {
-        case .small:
-            self = .small
-        case .medium:
-            self = .medium
-        case .large:
-            self = .large
-        case .health:
-            return nil
-        }
-    }
-}
 // MARK: - Notifications
 private extension Screen.Settings.Presenter {
     func enableNotifications() async {
