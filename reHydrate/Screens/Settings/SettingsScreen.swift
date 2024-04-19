@@ -175,7 +175,7 @@ struct SettingsScreen: View {
         VStack(spacing: sectionSpacing) {
             CheckBoxButton(
                 isChecked: Binding {
-                    observer.viewModel.notifications.isOn
+                    observer.viewModel.notifications != nil
                 } set: { value in
                     withAnimation {
                         observer.perform(action: .didSetReminders(value))
@@ -186,33 +186,33 @@ struct SettingsScreen: View {
                 image: .remindersOff,
                 highlightedImage: .remindersOn
             )
-            if observer.viewModel.notifications.isOn {
+            if let notifications = observer.viewModel.notifications {
                 DatePicker(
                     Localized.startingTimeTitle,
                     selection: Binding {
-                        observer.viewModel.notifications.start
+                        notifications.start
                     } set: {
                         observer.perform(action: .didSetRemindersStart($0))
                     },
-                    in: observer.viewModel.notifications.startRange,
+                    in: notifications.startRange,
                     displayedComponents: .hourAndMinute
                 )
                 .transition(.move(edge: .top))
                 DatePicker(
                     Localized.endingTimeTitle,
                     selection: Binding {
-                        observer.viewModel.notifications.stop
+                        notifications.stop
                     } set: {
                         observer.perform(action: .didSetRemindersStop($0))
                     },
-                    in: observer.viewModel.notifications.stopRange,
+                    in: notifications.stopRange,
                     displayedComponents: .hourAndMinute
                 )
                 .transition(.move(edge: .top))
                 HStack {
                     Text(Localized.frequencyTitle)
                     Spacer()
-                    StepperView(value: "\(observer.viewModel.notifications.frequency)") {
+                    StepperView(value: "\(notifications.frequency)") {
                         observer.perform(action: .didTapIncrementFrequency)
                     } onDecrement: {
                         observer.perform(action: .didTapDecrementFrequency)

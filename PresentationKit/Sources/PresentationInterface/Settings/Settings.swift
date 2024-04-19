@@ -40,7 +40,7 @@ public enum Settings {
         public let isDarkModeOn: Bool
         public let unitSystem: UnitSystem
         public let goal: Double
-        public let notifications: NotificationSettings
+        public let notifications: NotificationSettings?
         public let error: Error?
         public let appVersion: String
         
@@ -49,7 +49,7 @@ public enum Settings {
             isDarkModeOn: Bool,
             unitSystem: UnitSystem,
             goal: Double,
-            notifications: NotificationSettings,
+            notifications: NotificationSettings?,
             appVersion: String,
             error: Error?
         ) {
@@ -73,20 +73,17 @@ extension Settings.ViewModel {
     
 extension Settings.ViewModel {
     public struct NotificationSettings {
-        public let isOn: Bool
         public let frequency: Int
         public let start: Date
         public let startRange: ClosedRange<Date>
         public let stop: Date
         public let stopRange: ClosedRange<Date>
         
-        public init(isOn: Bool,
-                    frequency: Int,
+        public init(frequency: Int,
                     start: Date,
                     startRange: ClosedRange<Date>,
                     stop: Date,
                     stopRange: ClosedRange<Date>) {
-            self.isOn = isOn
             self.frequency = frequency
             self.start = start
             self.startRange = startRange
