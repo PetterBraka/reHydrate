@@ -8,7 +8,7 @@ import UserPreferenceServiceInterface
 
 public protocol UserPreferenceServiceTypeSpying {
     var variableLog: [UserPreferenceServiceTypeSpy.VariableName] { get set }
-    var lastvariabelCall: UserPreferenceServiceTypeSpy.VariableName? { get }
+    var lastVariabelCall: UserPreferenceServiceTypeSpy.VariableName? { get }
     var methodLog: [UserPreferenceServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: UserPreferenceServiceTypeSpy.MethodCall? { get }
 }
@@ -23,7 +23,7 @@ public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: UserPreferenceServiceType

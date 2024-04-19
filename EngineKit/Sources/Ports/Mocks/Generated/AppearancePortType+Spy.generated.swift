@@ -8,7 +8,7 @@ import PortsInterface
 
 public protocol AppearancePortTypeSpying {
     var variableLog: [AppearancePortTypeSpy.VariableName] { get set }
-    var lastvariabelCall: AppearancePortTypeSpy.VariableName? { get }
+    var lastVariabelCall: AppearancePortTypeSpy.VariableName? { get }
     var methodLog: [AppearancePortTypeSpy.MethodCall] { get set }
     var lastMethodCall: AppearancePortTypeSpy.MethodCall? { get }
 }
@@ -23,7 +23,7 @@ public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: AppearancePortType

@@ -8,7 +8,7 @@ import AppearanceServiceInterface
 
 public protocol AppearanceServiceTypeSpying {
     var variableLog: [AppearanceServiceTypeSpy.VariableName] { get set }
-    var lastvariabelCall: AppearanceServiceTypeSpy.VariableName? { get }
+    var lastVariabelCall: AppearanceServiceTypeSpy.VariableName? { get }
     var methodLog: [AppearanceServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: AppearanceServiceTypeSpy.MethodCall? { get }
 }
@@ -23,7 +23,7 @@ public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: AppearanceServiceType

@@ -8,7 +8,7 @@ import PortsInterface
 
 public protocol OpenUrlInterfaceSpying {
     var variableLog: [OpenUrlInterfaceSpy.VariableName] { get set }
-    var lastvariabelCall: OpenUrlInterfaceSpy.VariableName? { get }
+    var lastVariabelCall: OpenUrlInterfaceSpy.VariableName? { get }
     var methodLog: [OpenUrlInterfaceSpy.MethodCall] { get set }
     var lastMethodCall: OpenUrlInterfaceSpy.MethodCall? { get }
 }
@@ -24,7 +24,7 @@ public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: OpenUrlInterface

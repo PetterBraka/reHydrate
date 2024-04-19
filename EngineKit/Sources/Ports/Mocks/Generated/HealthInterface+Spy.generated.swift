@@ -8,7 +8,7 @@ import PortsInterface
 
 public protocol HealthInterfaceSpying {
     var variableLog: [HealthInterfaceSpy.VariableName] { get set }
-    var lastvariabelCall: HealthInterfaceSpy.VariableName? { get }
+    var lastVariabelCall: HealthInterfaceSpy.VariableName? { get }
     var methodLog: [HealthInterfaceSpy.MethodCall] { get set }
     var lastMethodCall: HealthInterfaceSpy.MethodCall? { get }
 }
@@ -29,7 +29,7 @@ public final class HealthInterfaceSpy: HealthInterfaceSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: HealthInterface

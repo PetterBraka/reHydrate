@@ -8,7 +8,7 @@ import PortsInterface
 
 public protocol AlternateIconsServiceTypeSpying {
     var variableLog: [AlternateIconsServiceTypeSpy.VariableName] { get set }
-    var lastvariabelCall: AlternateIconsServiceTypeSpy.VariableName? { get }
+    var lastVariabelCall: AlternateIconsServiceTypeSpy.VariableName? { get }
     var methodLog: [AlternateIconsServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: AlternateIconsServiceTypeSpy.MethodCall? { get }
 }
@@ -24,7 +24,7 @@ public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: AlternateIconsServiceType

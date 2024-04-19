@@ -8,7 +8,7 @@ import DateServiceInterface
 
 public protocol DateServiceTypeSpying {
     var variableLog: [DateServiceTypeSpy.VariableName] { get set }
-    var lastvariabelCall: DateServiceTypeSpy.VariableName? { get }
+    var lastVariabelCall: DateServiceTypeSpy.VariableName? { get }
     var methodLog: [DateServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: DateServiceTypeSpy.MethodCall? { get }
 }
@@ -28,7 +28,7 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: DateServiceType

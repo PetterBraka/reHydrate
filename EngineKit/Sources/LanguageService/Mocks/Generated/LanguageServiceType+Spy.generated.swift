@@ -8,7 +8,7 @@ import LanguageServiceInterface
 
 public protocol LanguageServiceTypeSpying {
     var variableLog: [LanguageServiceTypeSpy.VariableName] { get set }
-    var lastvariabelCall: LanguageServiceTypeSpy.VariableName? { get }
+    var lastVariabelCall: LanguageServiceTypeSpy.VariableName? { get }
     var methodLog: [LanguageServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: LanguageServiceTypeSpy.MethodCall? { get }
 }
@@ -24,7 +24,7 @@ public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: LanguageServiceType

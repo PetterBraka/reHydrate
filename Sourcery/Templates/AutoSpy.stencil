@@ -11,7 +11,7 @@ import {{ import }}
 
 public protocol {{ protocol.name }}Spying {
     var variableLog: [{{ protocol.name }}Spy.VariableName] { get set }
-    var lastvariabelCall: {{ protocol.name }}Spy.VariableName? { get }
+    var lastVariabelCall: {{ protocol.name }}Spy.VariableName? { get }
     var methodLog: [{{ protocol.name }}Spy.MethodCall] { get set }
     var lastMethodCall: {{ protocol.name }}Spy.MethodCall? { get }
 }
@@ -45,7 +45,7 @@ public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: {{ protocol.name }}

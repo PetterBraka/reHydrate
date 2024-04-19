@@ -8,7 +8,7 @@ import TimelineServiceInterface
 
 public protocol TimelineServiceTypeSpying {
     var variableLog: [TimelineServiceTypeSpy.VariableName] { get set }
-    var lastvariabelCall: TimelineServiceTypeSpy.VariableName? { get }
+    var lastVariabelCall: TimelineServiceTypeSpy.VariableName? { get }
     var methodLog: [TimelineServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: TimelineServiceTypeSpy.MethodCall? { get }
 }
@@ -23,7 +23,7 @@ public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: TimelineServiceType

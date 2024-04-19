@@ -8,7 +8,7 @@ import NotificationServiceInterface
 
 public protocol NotificationCenterTypeSpying {
     var variableLog: [NotificationCenterTypeSpy.VariableName] { get set }
-    var lastvariabelCall: NotificationCenterTypeSpy.VariableName? { get }
+    var lastVariabelCall: NotificationCenterTypeSpy.VariableName? { get }
     var methodLog: [NotificationCenterTypeSpy.MethodCall] { get set }
     var lastMethodCall: NotificationCenterTypeSpy.MethodCall? { get }
 }
@@ -32,7 +32,7 @@ public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: NotificationCenterType

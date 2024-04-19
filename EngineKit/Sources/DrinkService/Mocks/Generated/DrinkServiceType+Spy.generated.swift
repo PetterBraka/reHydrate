@@ -8,7 +8,7 @@ import DrinkServiceInterface
 
 public protocol DrinkServiceTypeSpying {
     var variableLog: [DrinkServiceTypeSpy.VariableName] { get set }
-    var lastvariabelCall: DrinkServiceTypeSpy.VariableName? { get }
+    var lastVariabelCall: DrinkServiceTypeSpy.VariableName? { get }
     var methodLog: [DrinkServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: DrinkServiceTypeSpy.MethodCall? { get }
 }
@@ -26,7 +26,7 @@ public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: DrinkServiceType

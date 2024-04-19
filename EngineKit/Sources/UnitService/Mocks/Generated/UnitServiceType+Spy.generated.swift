@@ -8,7 +8,7 @@ import UnitServiceInterface
 
 public protocol UnitServiceTypeSpying {
     var variableLog: [UnitServiceTypeSpy.VariableName] { get set }
-    var lastvariabelCall: UnitServiceTypeSpy.VariableName? { get }
+    var lastVariabelCall: UnitServiceTypeSpy.VariableName? { get }
     var methodLog: [UnitServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: UnitServiceTypeSpy.MethodCall? { get }
 }
@@ -24,7 +24,7 @@ public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
     }
 
     public var variableLog: [VariableName] = []
-    public var lastvariabelCall: VariableName? { variableLog.last }
+    public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: UnitServiceType
