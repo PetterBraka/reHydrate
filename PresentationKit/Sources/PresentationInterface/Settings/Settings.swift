@@ -35,7 +35,7 @@ public enum Settings {
         case dismissAlert
     }
     
-    public struct ViewModel {
+    public struct ViewModel: Equatable {
         public let isLoading: Bool
         public let isDarkModeOn: Bool
         public let unitSystem: UnitSystem
@@ -72,7 +72,7 @@ extension Settings.ViewModel {
 }
     
 extension Settings.ViewModel {
-    public struct NotificationSettings {
+    public struct NotificationSettings: Equatable {
         public let frequency: Int
         public let start: Date
         public let startRange: ClosedRange<Date>

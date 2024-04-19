@@ -1,28 +1,61 @@
 //
 //  SettingsPresentationTests.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 24/02/2024.
 //
 
 import XCTest
+import TestHelper
+import PortsMocks
 import EngineMocks
+import DayServiceMocks
+import UnitServiceMocks
+import DateServiceMocks
+@testable import PresentationKit
 
 final class SettingsPresentationTests: XCTestCase {
+    fileprivate typealias Sut = Screen.Settings.Presenter
+    private var sut: Sut!
     
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    private var engine: EngineMocks!
+    private var router: RouterSpy!
+    private var dayService: (stub: DayServiceTypeStubbing, spy: DayServiceTypeSpying)!
+    private var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
+    private var unitService: (stub: UnitServiceTypeStubbing, spy: UnitServiceTypeSpying)!
+    
+    override func setUp() {
+        engine = EngineMocks()
+        router = RouterSpy()
+        
+        dayService = engine.makeDayService()
+        unitService = engine.makeUnitService()
+        dateService = engine.makeDateService()
     }
     
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func test_didTapBack() async {
+        let sut = Sut(engine: engine, router: router)
+        await sut.perform(action: .didTapBack)
+        
+        XCTAssertEqual(router.log, [.showHome])
     }
     
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func test_didSetDarkMode_on() async {
+        let sut = Sut(engine: engine, router: router)
+        await sut.perform(action: .didSetDarkMode(true))
+        
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: true,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
     }
 }
