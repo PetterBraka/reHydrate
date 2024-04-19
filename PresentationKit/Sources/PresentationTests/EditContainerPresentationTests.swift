@@ -129,7 +129,10 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .none)
         )
         XCTAssertEqual(router.log, [.close])
-        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 400, drink: Drink(id: "", size: 300, container: .small)))
+        assert(
+            givenCall: drinkService.spy.lastMethodCall,
+            expectedCall: .edit(size: 400, drink: Drink(id: "", size: 300, container: .small))
+        )
     }
     
     func test_didChangeSize_didSaveFailed() async {
@@ -152,6 +155,7 @@ final class EditContainerPresentationTests: XCTestCase {
     
     func test_didChangeSize_imperial() async {
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
+        userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
         let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
         await sut.perform(action: .didChangeSize(size: 14.08))
         await sut.perform(action: .didTapSave)
@@ -165,7 +169,11 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .none)
         )
         XCTAssertEqual(router.log, [.close])
-        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 400, drink: Drink(id: "", size: 300, container: .small)))
+        assert(
+            givenCall: drinkService.spy.lastMethodCall,
+            expectedCall: .edit(size: 400, drink: Drink(id: "", size: 300, container: .small)),
+            accuracy: 1
+        )
     }
     
     func test_didChangeFill() async {
@@ -197,7 +205,10 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .none)
         )
         XCTAssertEqual(router.log, [.close])
-        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 200, drink: Drink(id: "", size: 300, container: .small)))
+        assert(
+            givenCall: drinkService.spy.lastMethodCall,
+            expectedCall:.edit(size: 200, drink: Drink(id: "", size: 300, container: .small))
+        )
     }
     
     func test_didChangeFill_didSaveFailed() async {
@@ -216,11 +227,16 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .failedSaving)
         )
         XCTAssertEqual(router.log, [])
-        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 200, drink: Drink(id: "", size: 300, container: .small)))
+        assert(
+            givenCall: drinkService.spy.lastMethodCall,
+            expectedCall: .edit(size: 200, drink: Drink(id: "", size: 300, container: .small))
+        )
     }
     
     func test_didChangeFill_imperial() async {
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
+        userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
+        
         let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
         await sut.perform(action: .didChangeFill(fill: 0.5))
         await sut.perform(action: .didTapSave)
@@ -234,7 +250,10 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .none)
         )
         XCTAssertEqual(router.log, [.close])
-        XCTAssertEqual(drinkService.spy.lastMethodCall, .edit(size: 200, drink: Drink(id: "", size: 300, container: .small)))
+        assert(
+            givenCall: drinkService.spy.lastMethodCall,
+            expectedCall: .edit(size: 200, drink: Drink(id: "", size: 300, container: .small))
+        )
     }
 }
 
@@ -273,18 +292,22 @@ extension EditContainerPresentationTests {
     }
 }
 
-extension DrinkServiceTypeSpy.MethodCall: Equatable {
-    public static func == (lhs: DrinkServiceTypeSpy.MethodCall, rhs: DrinkServiceTypeSpy.MethodCall) -> Bool {
-        switch (lhs, rhs) {
-        case let (.add(lhsSize, lhsContainer), .add(rhsSize, rhsContainer)):
-            lhsSize == rhsSize && lhsContainer == rhsContainer
-        case let (.edit(lhsSize, lhsDrink), .edit(rhsSize, rhsDrink)):
-            lhsSize == rhsSize && lhsDrink == rhsDrink
-        case let (.remove(lhsContainer), .remove(rhsContainer)):
-            lhsContainer == rhsContainer
+private extension EditContainerPresentationTests {
+    func assert(givenCall: DrinkServiceTypeSpy.MethodCall?, expectedCall: DrinkServiceTypeSpy.MethodCall,
+                accuracy: Double = 0.01,
+                file: StaticString = #file, line: UInt = #line) {
+        switch (givenCall, expectedCall) {
+        case let (.add(givenSize, givenContainer), .add(expectedSize, expectedContainer)):
+            XCTAssertEqual(givenSize, expectedSize, accuracy: accuracy, file: file, line: line)
+            XCTAssertEqual(givenContainer, expectedContainer, file: file, line: line)
+        case let (.edit(givenSize, givenDrink), .edit(expectedSize, expectedDrink)):
+            XCTAssertEqual(givenSize, expectedSize, accuracy: accuracy, file: file, line: line)
+            XCTAssertEqual(givenDrink, expectedDrink, file: file, line: line)
+        case let (.remove(givenContainer), .remove(expectedContainer)):
+            XCTAssertEqual(givenContainer, expectedContainer)
         case (.getSaved, .getSaved), (.resetToDefault, .resetToDefault):
-            true
-        case (.add, .edit), 
+            XCTAssertTrue(true, file: file, line: line)
+        case (.add, .edit),
             (.add, .remove),
             (.add, .getSaved),
             (.add, .resetToDefault),
@@ -303,8 +326,13 @@ extension DrinkServiceTypeSpy.MethodCall: Equatable {
             (.resetToDefault, .add),
             (.resetToDefault, .edit),
             (.resetToDefault, .remove),
-            (.resetToDefault, .getSaved):
-            false
+            (.resetToDefault, .getSaved),
+            (.none, .add),
+            (.none, .edit),
+            (.none, .remove),
+            (.none, .getSaved),
+            (.none, .resetToDefault):
+            XCTFail("\(String(describing: givenCall)), is not \(expectedCall)", file: file, line: line)
         }
     }
 }

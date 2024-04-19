@@ -853,6 +853,43 @@ private extension HomePresentationTests {
     }
 }
 
+extension DrinkServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: DrinkServiceTypeSpy.MethodCall, rhs: DrinkServiceTypeSpy.MethodCall) -> Bool {
+        switch (lhs, rhs) {
+        case let (.add(lhsSize, lhsContainer), .add(rhsSize, rhsContainer)):
+            lhsSize == rhsSize && lhsContainer == rhsContainer
+        case let (.edit(lhsSize, lhsDrink), .edit(rhsSize, rhsDrink)):
+            lhsSize == rhsSize && lhsDrink == rhsDrink
+        case let (.remove(lhsContainer), .remove(rhsContainer)):
+            lhsContainer == rhsContainer
+        case (.getSaved, .getSaved), (.resetToDefault, .resetToDefault):
+            true
+        case (.add, .edit),
+            (.add, .remove),
+            (.add, .getSaved),
+            (.add, .resetToDefault),
+            (.edit, .add),
+            (.edit, .remove),
+            (.edit, .getSaved),
+            (.edit, .resetToDefault),
+            (.remove, .add),
+            (.remove, .edit),
+            (.remove, .getSaved),
+            (.remove, .resetToDefault),
+            (.getSaved, .add),
+            (.getSaved, .edit),
+            (.getSaved, .remove),
+            (.getSaved, .resetToDefault),
+            (.resetToDefault, .add),
+            (.resetToDefault, .edit),
+            (.resetToDefault, .remove),
+            (.resetToDefault, .getSaved):
+            false
+        }
+    }
+}
+
+
 extension DayServiceTypeSpy.MethodCall: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
