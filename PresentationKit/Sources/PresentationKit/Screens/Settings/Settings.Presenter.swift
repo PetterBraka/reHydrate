@@ -69,6 +69,10 @@ extension Screen.Settings {
                 isLoading: false,
                 unitSystem: .init(from: currentSystem),
                 goal: goal,
+                error: nil
+            )
+            await updateViewModel(
+                isLoading: false,
                 notifications: updatedNotificationsSettings(
                     isOn: notificationServiceSettings.isOn,
                     frequency: notificationServiceSettings.frequency,
@@ -163,7 +167,6 @@ extension Screen.Settings.Presenter {
         isDarkModeOn: Bool? = nil,
         unitSystem: Settings.ViewModel.UnitSystem? = nil,
         goal: Double? = nil,
-        notifications: Settings.ViewModel.NotificationSettings? = nil,
         error: Settings.ViewModel.Error? = nil
     ) async {
         let unitSystem = unitSystem ?? viewModel.unitSystem
@@ -177,13 +180,27 @@ extension Screen.Settings.Presenter {
         newGoal = engine.unitService.convert(newGoal, from: .litres,
                                              to: isMetric ? .litres : .pint)
         
-        let notifications = notifications ?? viewModel.notifications
-        
         viewModel = ViewModel(
             isLoading: isLoading,
             isDarkModeOn: isDarkModeOn ?? viewModel.isDarkModeOn,
             unitSystem: unitSystem,
             goal: newGoal,
+            notifications: viewModel.notifications,
+            appVersion: engine.appVersion,
+            error: error
+        )
+    }
+    
+    private func updateViewModel(
+        isLoading: Bool,
+        notifications: Settings.ViewModel.NotificationSettings?,
+        error: Settings.ViewModel.Error? = nil
+    ) async {
+        viewModel = ViewModel(
+            isLoading: isLoading,
+            isDarkModeOn: viewModel.isDarkModeOn,
+            unitSystem: viewModel.unitSystem,
+            goal: viewModel.goal,
             notifications: notifications,
             appVersion: engine.appVersion,
             error: error
@@ -255,7 +272,7 @@ extension UnitSystem {
 private extension Screen.Settings.Presenter {
     func enableNotifications() async {
         let now = engine.dateService.now()
-        let frequency = viewModel.notifications?.frequency ?? 30
+        let frequency = viewModel.notifications?.frequency ?? engine.notificationService.minimumAllowedFrequency
         let start = viewModel.notifications?.start ?? engine.dateService.getStart(of: now)
         let stop = viewModel.notifications?.stop ?? engine.dateService.getEnd(of: now)
         
