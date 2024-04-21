@@ -27,6 +27,7 @@ final class SettingsPresentationTests: XCTestCase {
     private var unitService: (stub: UnitServiceTypeStubbing, spy: UnitServiceTypeSpying)!
     private var notificationService: (stub: NotificationServiceTypeStubbing, spy: NotificationServiceTypeSpying)!
     private var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
+    private var urlService: (stub: OpenUrlInterfaceStubbing, spy: OpenUrlInterfaceSpying)!
     
     override func setUp() {
         engine = EngineMocks()
@@ -37,6 +38,7 @@ final class SettingsPresentationTests: XCTestCase {
         dateService = engine.makeDateService()
         notificationService = engine.makeNotificationService()
         userPreferenceService = engine.makeUserPreferenceService()
+        urlService = engine.makeOpenUrlService()
     }
     
     
@@ -44,6 +46,17 @@ final class SettingsPresentationTests: XCTestCase {
         let sut = Sut(engine: engine, router: router)
         await sut.perform(action: .didTapBack)
         
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
         XCTAssertEqual(router.log, [.showHome])
     }
     
@@ -63,6 +76,123 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [.showAppIcon])
+    }
+    
+    func test_didTapCredits_() async {
+        let sut = Sut(engine: engine, router: router)
+        await sut.perform(action: .didTapCredits)
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [.showCredits])
+    }
+    
+    func test_didTapContactMe_() async {
+        let sut = Sut(engine: engine, router: router)
+        await sut.perform(action: .didTapContactMe)
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(
+            urlService.spy.methodLog,
+            [.email(
+                email: "Petter.braka+reHydrate@gmail.com", cc: nil, bcc: nil,
+                subject: "reHydrate query - v0.0.0-mock", body: nil
+            )]
+        )
+    }
+    
+    func test_didTapPrivacy_() async {
+        let sut = Sut(engine: engine, router: router)
+        await sut.perform(action: .didTapPrivacy)
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(urlService.spy.methodLog, 
+                       [.open(url: URL(string: "https://github.com/PetterBraka/reHydrate/blob/master/Privacy-Policy.md")!)])
+    }
+    
+    func test_didTapDeveloperInstagram_() async {
+        let sut = Sut(engine: engine, router: router)
+        await sut.perform(action: .didTapDeveloperInstagram)
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(urlService.spy.methodLog, 
+                       [.open(url: URL(string:"https://www.instagram.com/braka.coding/")!)])
+    }
+    
+    func test_didTapMerchandise_() async {
+        let sut = Sut(engine: engine, router: router)
+        await sut.perform(action: .didTapMerchandise)
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(urlService.spy.methodLog, 
+                       [.open(url: URL(string:"https://www.redbubble.com/people/petter-braka/shop")!)])
+    }
+    
+    func test_didOpenSettings_() async {
+        urlService.stub.settingsUrl_returnValue = URL(string: "prefs:root=reHydrate")
+        let sut = Sut(engine: engine, router: router)
+        await sut.perform(action: .didOpenSettings)
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(urlService.spy.methodLog, [.open(url: URL(string: "prefs:root=reHydrate")!)])
     }
     
     func test_didSetDarkMode_on() async {
@@ -199,5 +329,23 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
+    }
+}
+
+extension OpenUrlInterfaceSpy.MethodCall: Equatable {
+    public static func == (lhs: OpenUrlInterfaceSpy.MethodCall, rhs: OpenUrlInterfaceSpy.MethodCall) -> Bool {
+        switch (lhs, rhs) {
+        case let (.open(lhsUrl), .open(url: rhsUrl)):
+            lhsUrl == rhsUrl
+        case let (.email(lhsEmail, lhsCc, lhsBcc, lhsSubject, lhsBody),
+            .email(rhsEmail, rhsCc, rhsBcc, rhsSubject, rhsBody)):
+            lhsEmail == rhsEmail &&
+            lhsCc == rhsCc &&
+            lhsBcc == rhsBcc &&
+            lhsSubject == rhsSubject &&
+            lhsBody == rhsBody
+        case (.open, .email), (.email, .open):
+            false
+        }
     }
 }
