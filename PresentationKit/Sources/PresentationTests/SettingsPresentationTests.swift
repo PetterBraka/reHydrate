@@ -81,6 +81,7 @@ final class SettingsPresentationTests: XCTestCase {
     func test_didTapCredits_() async {
         let sut = Sut(engine: engine, router: router)
         await sut.perform(action: .didTapCredits)
+        
         XCTAssertEqual(
             sut.viewModel,
             .init(
@@ -98,6 +99,7 @@ final class SettingsPresentationTests: XCTestCase {
     func test_didTapContactMe_() async {
         let sut = Sut(engine: engine, router: router)
         await sut.perform(action: .didTapContactMe)
+        
         XCTAssertEqual(
             sut.viewModel,
             .init(
@@ -122,6 +124,7 @@ final class SettingsPresentationTests: XCTestCase {
     func test_didTapPrivacy_() async {
         let sut = Sut(engine: engine, router: router)
         await sut.perform(action: .didTapPrivacy)
+        
         XCTAssertEqual(
             sut.viewModel,
             .init(
@@ -141,6 +144,7 @@ final class SettingsPresentationTests: XCTestCase {
     func test_didTapDeveloperInstagram_() async {
         let sut = Sut(engine: engine, router: router)
         await sut.perform(action: .didTapDeveloperInstagram)
+        
         XCTAssertEqual(
             sut.viewModel,
             .init(
@@ -160,6 +164,7 @@ final class SettingsPresentationTests: XCTestCase {
     func test_didTapMerchandise_() async {
         let sut = Sut(engine: engine, router: router)
         await sut.perform(action: .didTapMerchandise)
+        
         XCTAssertEqual(
             sut.viewModel,
             .init(
@@ -180,6 +185,7 @@ final class SettingsPresentationTests: XCTestCase {
         urlService.stub.settingsUrl_returnValue = URL(string: "prefs:root=reHydrate")
         let sut = Sut(engine: engine, router: router)
         await sut.perform(action: .didOpenSettings)
+        
         XCTAssertEqual(
             sut.viewModel,
             .init(
@@ -277,9 +283,6 @@ final class SettingsPresentationTests: XCTestCase {
         dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0)
         dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)
         
-        dateService.stub.now_returnValue = .december_8_2021_Wednesday
-        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0)
-        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 5, seconds: 0)
         
@@ -330,6 +333,125 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
     }
+    
+    func test_didSetRemindersStart_to12() async {
+        let sut = Sut(engine: engine, router: router)
+        
+        notificationService.stub.minimumAllowedFrequency_returnValue = 5
+        dateService.stub.now_returnValue = .december_8_2021_Wednesday
+        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8, 
+                                                         hours: 0, minutes: 0, seconds: 0)
+        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8, 
+                                                       hours: 23, minutes: 59, seconds: 59)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 23, minutes: 54, seconds: 59)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 12, minutes: 5, seconds: 0)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 23, minutes: 54, seconds: 59)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 12, minutes: 5, seconds: 0)
+        
+        await sut.perform(action: .didSetRemindersStart(Date(year: 2021, month: 12, day: 8,
+                                                             hours: 12, minutes: 0, seconds: 0)))
+        
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: .init(
+                    frequency: 5,
+                    start: Date(year: 2021, month: 12, day: 8, 
+                                hours: 12, minutes: 0, seconds: 0),
+                    startRange: Date(year: 2021, month: 12, day: 8, 
+                                     hours: 0, minutes: 0, seconds: 0) ... Date(year: 2021, month: 12, day: 8,
+                                                                                hours: 23, minutes: 54, seconds: 59),
+                    stop: Date(year: 2021, month: 12, day: 8, 
+                               hours: 23, minutes: 59, seconds: 59),
+                    stopRange: Date(year: 2021, month: 12, day: 8, 
+                                    hours: 12, minutes: 5, seconds: 0) ... Date(year: 2021, month: 12, day: 8,
+                                                                                hours: 23, minutes: 59, seconds: 59)
+                ),
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(notificationService.spy.lastMethodCall,
+                       .enable(withFrequency: 5, 
+                               start: Date(year: 2021, month: 12, day: 8,
+                                           hours: 12, minutes: 0, seconds: 0),
+                               stop: Date(year: 2021, month: 12, day: 8,
+                                          hours: 23, minutes: 59, seconds: 59)))
+    }
+    
+    func test_didSetRemindersStop_to20() async {
+        let sut = Sut(engine: engine, router: router)
+        
+        // Update settings
+        notificationService.stub.getSettings_returnValue = .init(
+            isOn: true,
+            start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+            stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
+            frequency: 5
+        )
+        
+        dateService.stub.now_returnValue = .december_8_2021_Wednesday
+        notificationService.stub.minimumAllowedFrequency_returnValue = 5
+        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8, 
+                                                         hours: 0, minutes: 0, seconds: 0)
+        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                       hours: 23, minutes: 59, seconds: 59)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 23, minutes: 54, seconds: 59)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 0, minutes: 5, seconds: 0)
+
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 23, minutes: 54, seconds: 59)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 0, minutes: 5, seconds: 0)
+        
+        await sut.perform(action: .didSetRemindersStop(Date(year: 2021, month: 12, day: 8,
+                                                            hours: 20, minutes: 0, seconds: 0)))
+        
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: .init(
+                    frequency: 5,
+                    start: Date(year: 2021, month: 12, day: 8,
+                                hours: 0, minutes: 0, seconds: 0),
+                    startRange: Date(year: 2021, month: 12, day: 8,
+                                     hours: 0, minutes: 0, seconds: 0) ... Date(year: 2021, month: 12, day: 8,
+                                                                                hours: 23, minutes: 54, seconds: 59),
+                    stop: Date(year: 2021, month: 12, day: 8,
+                               hours: 20, minutes: 0, seconds: 0),
+                    stopRange: Date(year: 2021, month: 12, day: 8,
+                                    hours: 0, minutes: 5, seconds: 0) ... Date(year: 2021, month: 12, day: 8,
+                                                                               hours: 23, minutes: 59, seconds: 59)
+                ),
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(notificationService.spy.lastMethodCall,
+                       .enable(withFrequency: 5,
+                               start: Date(year: 2021, month: 12, day: 8,
+                                           hours: 0, minutes: 0, seconds: 0),
+                               stop: Date(year: 2021, month: 12, day: 8,
+                                          hours: 20, minutes: 0, seconds: 0)))
+    }
+    
 }
 
 extension OpenUrlInterfaceSpy.MethodCall: Equatable {
@@ -347,5 +469,47 @@ extension OpenUrlInterfaceSpy.MethodCall: Equatable {
         case (.open, .email), (.email, .open):
             false
         }
+    }
+}
+
+extension NotificationServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: NotificationServiceTypeSpy.MethodCall, rhs: NotificationServiceTypeSpy.MethodCall) -> Bool {
+        switch (lhs, rhs) {
+        case let (.enable(lhsFrequency, lhsStart, lhsStop), .enable(rhsFrequency, rhsStart, rhsStop)):
+            lhsFrequency == rhsFrequency &&
+            lhsStart == rhsStart &&
+            lhsStop == rhsStop
+        case (.disable, .disable), (.getSettings, .getSettings):
+            true
+        case (.enable, .disable),
+            (.enable, .getSettings),
+            (.disable, .enable),
+            (.disable, .getSettings),
+            (.getSettings, .enable),
+            (.getSettings, .disable):
+            false
+        }
+    }
+}
+
+extension Screen.Settings.Presenter.ViewModel: CustomStringConvertible {
+    public var description: String {
+        """
+
+isLoading: \(isLoading),
+isDarkModeOn: \(isDarkModeOn),
+unitSystem: \(unitSystem),
+goal: \(goal),
+notifications:
+    frequency: \(String(describing: notifications?.frequency)),
+    start: \(String(describing: notifications?.start)),
+    startRange: \(String(describing: notifications?.startRange)),
+    stop: \(String(describing: notifications?.stop)),
+    stopRange: \(String(describing: notifications?.stopRange))
+),
+appVersion: \(appVersion),
+error: \(String(describing: error))
+
+"""
     }
 }
