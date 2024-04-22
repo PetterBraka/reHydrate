@@ -18,10 +18,10 @@ public protocol DateServiceTypeStubbing {
 public final class DateServiceTypeStub: DateServiceTypeStubbing {
     public var now_returnValue: Date {
         get {
-            if now_returnValues.first != nil {
+            if now_returnValues.count > 1 {
                 now_returnValues.removeFirst()
             } else {
-                .default
+                now_returnValues.first ?? .default
             }
         }
         set {
@@ -31,10 +31,10 @@ public final class DateServiceTypeStub: DateServiceTypeStubbing {
     private var now_returnValues: [Date] = []
     public var daysBetweenStartEnd_returnValue: Int {
         get {
-            if daysBetweenStartEnd_returnValues.first != nil {
+            if daysBetweenStartEnd_returnValues.count > 1 {
                 daysBetweenStartEnd_returnValues.removeFirst()
             } else {
-                .default
+                daysBetweenStartEnd_returnValues.first ?? .default
             }
         }
         set {
@@ -44,10 +44,10 @@ public final class DateServiceTypeStub: DateServiceTypeStubbing {
     private var daysBetweenStartEnd_returnValues: [Int] = []
     public var getComponentDate_returnValue: Int {
         get {
-            if getComponentDate_returnValues.first != nil {
+            if getComponentDate_returnValues.count > 1 {
                 getComponentDate_returnValues.removeFirst()
             } else {
-                .default
+                getComponentDate_returnValues.first ?? .default
             }
         }
         set {
@@ -57,10 +57,10 @@ public final class DateServiceTypeStub: DateServiceTypeStubbing {
     private var getComponentDate_returnValues: [Int] = []
     public var getDateValueComponentDate_returnValue: Date {
         get {
-            if getDateValueComponentDate_returnValues.first != nil {
+            if getDateValueComponentDate_returnValues.count > 1 {
                 getDateValueComponentDate_returnValues.removeFirst()
             } else {
-                .default
+                getDateValueComponentDate_returnValues.first ?? .default
             }
         }
         set {
@@ -70,10 +70,10 @@ public final class DateServiceTypeStub: DateServiceTypeStubbing {
     private var getDateValueComponentDate_returnValues: [Date] = []
     public var getStartDate_returnValue: Date {
         get {
-            if getStartDate_returnValues.first != nil {
+            if getStartDate_returnValues.count > 1 {
                 getStartDate_returnValues.removeFirst()
             } else {
-                .default
+                getStartDate_returnValues.first ?? .default
             }
         }
         set {
@@ -83,10 +83,10 @@ public final class DateServiceTypeStub: DateServiceTypeStubbing {
     private var getStartDate_returnValues: [Date] = []
     public var getEndDate_returnValue: Date {
         get {
-            if getEndDate_returnValues.first != nil {
+            if getEndDate_returnValues.count > 1 {
                 getEndDate_returnValues.removeFirst()
             } else {
-                .default
+                getEndDate_returnValues.first ?? .default
             }
         }
         set {
@@ -96,10 +96,10 @@ public final class DateServiceTypeStub: DateServiceTypeStubbing {
     private var getEndDate_returnValues: [Date] = []
     public var isDateDateInSameDayAs_returnValue: Bool {
         get {
-            if isDateDateInSameDayAs_returnValues.first != nil {
+            if isDateDateInSameDayAs_returnValues.count > 1 {
                 isDateDateInSameDayAs_returnValues.removeFirst()
             } else {
-                .default
+                isDateDateInSameDayAs_returnValues.first ?? .default
             }
         }
         set {

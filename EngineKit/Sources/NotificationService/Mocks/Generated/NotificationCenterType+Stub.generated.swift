@@ -17,10 +17,10 @@ public protocol NotificationCenterTypeStubbing {
 public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     public var requestAuthorization_returnValue: Result<Bool, Error> {
         get {
-            if requestAuthorization_returnValues.first != nil {
+            if requestAuthorization_returnValues.count > 1 {
                 requestAuthorization_returnValues.removeFirst()
             } else {
-                .default
+                requestAuthorization_returnValues.first ?? .default
             }
         }
         set {
@@ -30,10 +30,10 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var requestAuthorization_returnValues: [Result<Bool, Error>] = []
     public var notificationCategories_returnValue: Set<NotificationCategory> {
         get {
-            if notificationCategories_returnValues.first != nil {
+            if notificationCategories_returnValues.count > 1 {
                 notificationCategories_returnValues.removeFirst()
             } else {
-                .default
+                notificationCategories_returnValues.first ?? .default
             }
         }
         set {
@@ -43,10 +43,10 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var notificationCategories_returnValues: [Set<NotificationCategory>] = []
     public var addRequest_returnValue: Error? {
         get {
-            if addRequest_returnValues.first != nil {
+            if addRequest_returnValues.count > 1 {
                 addRequest_returnValues.removeFirst()
             } else {
-                nil
+                addRequest_returnValues.first ?? nil
             }
         }
         set {
@@ -56,10 +56,10 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var addRequest_returnValues: [Error?] = []
     public var pendingNotificationRequests_returnValue: [NotificationRequest] {
         get {
-            if pendingNotificationRequests_returnValues.first != nil {
+            if pendingNotificationRequests_returnValues.count > 1 {
                 pendingNotificationRequests_returnValues.removeFirst()
             } else {
-                .default
+                pendingNotificationRequests_returnValues.first ?? .default
             }
         }
         set {
@@ -69,10 +69,10 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var pendingNotificationRequests_returnValues: [[NotificationRequest]] = []
     public var deliveredNotifications_returnValue: [DeliveredNotification] {
         get {
-            if deliveredNotifications_returnValues.first != nil {
+            if deliveredNotifications_returnValues.count > 1 {
                 deliveredNotifications_returnValues.removeFirst()
             } else {
-                .default
+                deliveredNotifications_returnValues.first ?? .default
             }
         }
         set {
@@ -82,10 +82,10 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var deliveredNotifications_returnValues: [[DeliveredNotification]] = []
     public var setBadgeCountNewBadgeCount_returnValue: Error? {
         get {
-            if setBadgeCountNewBadgeCount_returnValues.first != nil {
+            if setBadgeCountNewBadgeCount_returnValues.count > 1 {
                 setBadgeCountNewBadgeCount_returnValues.removeFirst()
             } else {
-                nil
+                setBadgeCountNewBadgeCount_returnValues.first ?? nil
             }
         }
         set {

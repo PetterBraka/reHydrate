@@ -14,10 +14,10 @@ public protocol NotificationServiceTypeStubbing {
 public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing {
     public var minimumAllowedFrequency_returnValue: Int {
         get {
-            if minimumAllowedFrequency_returnValues.first != nil {
-                minimumAllowedFrequency_returnValues.removeLast()
+            if minimumAllowedFrequency_returnValues.count > 2 {
+                minimumAllowedFrequency_returnValues.removeFirst()
             } else {
-                .default
+                minimumAllowedFrequency_returnValues.first ?? .default
             }
         }
         set {
@@ -27,10 +27,10 @@ public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing 
     private var minimumAllowedFrequency_returnValues: [Int] = []
     public var enableWithFrequencyStartStop_returnValue: Result<Void, NotificationError> {
         get {
-            if enableWithFrequencyStartStop_returnValues.first != nil {
+            if enableWithFrequencyStartStop_returnValues.count > 1 {
                 enableWithFrequencyStartStop_returnValues.removeFirst()
             } else {
-                .default
+                enableWithFrequencyStartStop_returnValues.first ?? .default
             }
         }
         set {
@@ -40,10 +40,10 @@ public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing 
     private var enableWithFrequencyStartStop_returnValues: [Result<Void, NotificationError>] = []
     public var getSettings_returnValue: NotificationSettings {
         get {
-            if getSettings_returnValues.first != nil {
+            if getSettings_returnValues.count > 1 {
                 getSettings_returnValues.removeFirst()
             } else {
-                .default
+                getSettings_returnValues.first ?? .default
             }
         }
         set {

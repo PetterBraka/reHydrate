@@ -18,10 +18,10 @@ public protocol DayServiceTypeStubbing {
 public final class DayServiceTypeStub: DayServiceTypeStubbing {
     public var getToday_returnValue: Day {
         get {
-            if getToday_returnValues.first != nil {
+            if getToday_returnValues.count > 1 {
                 getToday_returnValues.removeFirst()
             } else {
-                .default
+                getToday_returnValues.first ?? .default
             }
         }
         set {
@@ -31,10 +31,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var getToday_returnValues: [Day] = []
     public var getDaysDates_returnValue: Result<[Day], Error> {
         get {
-            if getDaysDates_returnValues.first != nil {
+            if getDaysDates_returnValues.count > 1 {
                 getDaysDates_returnValues.removeFirst()
             } else {
-                .default
+                getDaysDates_returnValues.first ?? .default
             }
         }
         set {
@@ -44,10 +44,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var getDaysDates_returnValues: [Result<[Day], Error>] = []
     public var addDrink_returnValue: Result<Double, Error> {
         get {
-            if addDrink_returnValues.first != nil {
+            if addDrink_returnValues.count > 1 {
                 addDrink_returnValues.removeFirst()
             } else {
-                .default
+                addDrink_returnValues.first ?? .default
             }
         }
         set {
@@ -57,10 +57,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var addDrink_returnValues: [Result<Double, Error>] = []
     public var removeDrink_returnValue: Result<Double, Error> {
         get {
-            if removeDrink_returnValues.first != nil {
+            if removeDrink_returnValues.count > 1 {
                 removeDrink_returnValues.removeFirst()
             } else {
-                .default
+                removeDrink_returnValues.first ?? .default
             }
         }
         set {
@@ -70,10 +70,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var removeDrink_returnValues: [Result<Double, Error>] = []
     public var increaseGoal_returnValue: Result<Double, Error> {
         get {
-            if increaseGoal_returnValues.first != nil {
+            if increaseGoal_returnValues.count > 1 {
                 increaseGoal_returnValues.removeFirst()
             } else {
-                .default
+                increaseGoal_returnValues.first ?? .default
             }
         }
         set {
@@ -83,10 +83,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var increaseGoal_returnValues: [Result<Double, Error>] = []
     public var decreaseGoal_returnValue: Result<Double, Error> {
         get {
-            if decreaseGoal_returnValues.first != nil {
+            if decreaseGoal_returnValues.count > 1 {
                 decreaseGoal_returnValues.removeFirst()
             } else {
-                .default
+                decreaseGoal_returnValues.first ?? .default
             }
         }
         set {

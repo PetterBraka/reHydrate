@@ -13,10 +13,10 @@ public protocol UserPreferenceServiceTypeStubbing {
 public final class UserPreferenceServiceTypeStub: UserPreferenceServiceTypeStubbing {
     public var setValueKey_returnValue: Error? {
         get {
-            if setValueKey_returnValues.first != nil {
+            if setValueKey_returnValues.count > 1 {
                 setValueKey_returnValues.removeFirst()
             } else {
-                nil
+                setValueKey_returnValues.first ?? nil
             }
         }
         set {
@@ -26,10 +26,10 @@ public final class UserPreferenceServiceTypeStub: UserPreferenceServiceTypeStubb
     private var setValueKey_returnValues: [Error?] = []
     public var getKey_returnValue: (any Decodable)? {
         get {
-            if getKey_returnValues.first != nil {
+            if getKey_returnValues.count > 1 {
                 getKey_returnValues.removeFirst()
             } else {
-                nil
+                getKey_returnValues.first ?? nil
             }
         }
         set {

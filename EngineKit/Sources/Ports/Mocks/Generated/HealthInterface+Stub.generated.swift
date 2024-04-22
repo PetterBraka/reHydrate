@@ -19,10 +19,10 @@ public protocol HealthInterfaceStubbing {
 public final class HealthInterfaceStub: HealthInterfaceStubbing {
     public var isSupported_returnValue: Bool {
         get {
-            if isSupported_returnValues.first != nil {
-                isSupported_returnValues.removeLast()
+            if isSupported_returnValues.count > 2 {
+                isSupported_returnValues.removeFirst()
             } else {
-                .default
+                isSupported_returnValues.first ?? .default
             }
         }
         set {
@@ -32,10 +32,10 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
     private var isSupported_returnValues: [Bool] = []
     public var shouldRequestAccessHealthDataType_returnValue: Bool {
         get {
-            if shouldRequestAccessHealthDataType_returnValues.first != nil {
+            if shouldRequestAccessHealthDataType_returnValues.count > 1 {
                 shouldRequestAccessHealthDataType_returnValues.removeFirst()
             } else {
-                .default
+                shouldRequestAccessHealthDataType_returnValues.first ?? .default
             }
         }
         set {
@@ -45,10 +45,10 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
     private var shouldRequestAccessHealthDataType_returnValues: [Bool] = []
     public var canWriteDataType_returnValue: Bool {
         get {
-            if canWriteDataType_returnValues.first != nil {
+            if canWriteDataType_returnValues.count > 1 {
                 canWriteDataType_returnValues.removeFirst()
             } else {
-                .default
+                canWriteDataType_returnValues.first ?? .default
             }
         }
         set {
@@ -58,10 +58,10 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
     private var canWriteDataType_returnValues: [Bool] = []
     public var requestAuthReadAndWrite_returnValue: Error? {
         get {
-            if requestAuthReadAndWrite_returnValues.first != nil {
+            if requestAuthReadAndWrite_returnValues.count > 1 {
                 requestAuthReadAndWrite_returnValues.removeFirst()
             } else {
-                nil
+                requestAuthReadAndWrite_returnValues.first ?? nil
             }
         }
         set {
@@ -71,10 +71,10 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
     private var requestAuthReadAndWrite_returnValues: [Error?] = []
     public var exportQuantityIdDate_returnValue: Error? {
         get {
-            if exportQuantityIdDate_returnValues.first != nil {
+            if exportQuantityIdDate_returnValues.count > 1 {
                 exportQuantityIdDate_returnValues.removeFirst()
             } else {
-                nil
+                exportQuantityIdDate_returnValues.first ?? nil
             }
         }
         set {
@@ -84,10 +84,10 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
     private var exportQuantityIdDate_returnValues: [Error?] = []
     public var readSumDataStartEndIntervalComponents_returnValue: Result<Double, Error> {
         get {
-            if readSumDataStartEndIntervalComponents_returnValues.first != nil {
+            if readSumDataStartEndIntervalComponents_returnValues.count > 1 {
                 readSumDataStartEndIntervalComponents_returnValues.removeFirst()
             } else {
-                .default
+                readSumDataStartEndIntervalComponents_returnValues.first ?? .default
             }
         }
         set {
@@ -97,10 +97,10 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
     private var readSumDataStartEndIntervalComponents_returnValues: [Result<Double, Error>] = []
     public var readSamplesDataStartEnd_returnValue: Result<[Double], Error> {
         get {
-            if readSamplesDataStartEnd_returnValues.first != nil {
+            if readSamplesDataStartEnd_returnValues.count > 1 {
                 readSamplesDataStartEnd_returnValues.removeFirst()
             } else {
-                .default
+                readSamplesDataStartEnd_returnValues.first ?? .default
             }
         }
         set {
@@ -110,10 +110,10 @@ public final class HealthInterfaceStub: HealthInterfaceStubbing {
     private var readSamplesDataStartEnd_returnValues: [Result<[Double], Error>] = []
     public var enableBackgroundDeliveryHealthDataFrequency_returnValue: Error? {
         get {
-            if enableBackgroundDeliveryHealthDataFrequency_returnValues.first != nil {
+            if enableBackgroundDeliveryHealthDataFrequency_returnValues.count > 1 {
                 enableBackgroundDeliveryHealthDataFrequency_returnValues.removeFirst()
             } else {
-                nil
+                enableBackgroundDeliveryHealthDataFrequency_returnValues.first ?? nil
             }
         }
         set {

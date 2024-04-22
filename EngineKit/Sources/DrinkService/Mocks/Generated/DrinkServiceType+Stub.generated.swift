@@ -16,10 +16,10 @@ public protocol DrinkServiceTypeStubbing {
 public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     public var addSizeContainer_returnValue: Result<Drink, Error> {
         get {
-            if addSizeContainer_returnValues.first != nil {
+            if addSizeContainer_returnValues.count > 1 {
                 addSizeContainer_returnValues.removeFirst()
             } else {
-                .default
+                addSizeContainer_returnValues.first ?? .default
             }
         }
         set {
@@ -29,10 +29,10 @@ public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     private var addSizeContainer_returnValues: [Result<Drink, Error>] = []
     public var editSizeDrink_returnValue: Result<Drink, Error> {
         get {
-            if editSizeDrink_returnValues.first != nil {
+            if editSizeDrink_returnValues.count > 1 {
                 editSizeDrink_returnValues.removeFirst()
             } else {
-                .default
+                editSizeDrink_returnValues.first ?? .default
             }
         }
         set {
@@ -42,10 +42,10 @@ public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     private var editSizeDrink_returnValues: [Result<Drink, Error>] = []
     public var removeContainer_returnValue: Error? {
         get {
-            if removeContainer_returnValues.first != nil {
+            if removeContainer_returnValues.count > 1 {
                 removeContainer_returnValues.removeFirst()
             } else {
-                nil
+                removeContainer_returnValues.first ?? nil
             }
         }
         set {
@@ -55,10 +55,10 @@ public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     private var removeContainer_returnValues: [Error?] = []
     public var getSaved_returnValue: Result<[Drink], Error> {
         get {
-            if getSaved_returnValues.first != nil {
+            if getSaved_returnValues.count > 1 {
                 getSaved_returnValues.removeFirst()
             } else {
-                .default
+                getSaved_returnValues.first ?? .default
             }
         }
         set {
@@ -68,10 +68,10 @@ public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     private var getSaved_returnValues: [Result<[Drink], Error>] = []
     public var resetToDefault_returnValue: [Drink] {
         get {
-            if resetToDefault_returnValues.first != nil {
+            if resetToDefault_returnValues.count > 1 {
                 resetToDefault_returnValues.removeFirst()
             } else {
-                .default
+                resetToDefault_returnValues.first ?? .default
             }
         }
         set {
