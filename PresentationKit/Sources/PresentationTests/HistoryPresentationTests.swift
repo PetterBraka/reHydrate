@@ -37,19 +37,6 @@ final class HistoryPresentationTests: XCTestCase {
         dateService = engine.makeDateService()
         userPreferenceService = engine.makeUserPreferenceService()
         unitService = engine.makeUnitService(UnitService(engine: engine))
-        
-        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
-        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
-        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
-        
-        dayService.stub.getDaysDates_returnValue = .success([
-            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
-            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
-        ])
-        
-        sut = Sut(engine: engine, router: router)
-        
-        try await Task.sleep(nanoseconds: 100_000_000)
     }
     
     override func tearDown() {
@@ -64,7 +51,6 @@ final class HistoryPresentationTests: XCTestCase {
     func test_init() {
         dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
-        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
         
         sut = Sut(engine: engine, router: router)
         XCTAssertEqual(router.log, [])
@@ -146,6 +132,15 @@ final class HistoryPresentationTests: XCTestCase {
     // MARK: - perform Action
     // MARK: didAppear
     func test_didAppear() async {
+        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
+        
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
         dateService.stub.daysBetweenStartEnd_returnValue = 6
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
         
@@ -154,6 +149,9 @@ final class HistoryPresentationTests: XCTestCase {
             Day(date: Date(year: 2024, month: 2, day: 13), consumed: 1, goal: 2.5),
             Day(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2.5)
         ])
+        
+        sut = Sut(engine: engine, router: router)
+        try? await Task.sleep(nanoseconds: 100_000_000)
         
         await sut.perform(action: .didAppear)
         
@@ -207,12 +205,36 @@ final class HistoryPresentationTests: XCTestCase {
     
     // MARK: didTapBack
     func test_didTapBack() async {
+        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
+        
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
+        sut = Sut(engine: engine, router: router)
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        
         await sut.perform(action: .didTapBack)
         XCTAssertEqual(router.log, [.showHome])
     }
     
     // MARK: didSelectChartOption
     func test_didSelectChartOption_bar() async {
+        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
+        
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
+        sut = Sut(engine: engine, router: router)
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        
         dayService.stub.getDaysDates_returnValue = .success([])
         await sut.perform(action: .didSelectChart(.bar))
         XCTAssertEqual(router.log, [])
@@ -227,6 +249,18 @@ final class HistoryPresentationTests: XCTestCase {
     }
     
     func test_didSelectChartOption_line() async {
+        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
+        
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
+        sut = Sut(engine: engine, router: router)
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        
         dayService.stub.getDaysDates_returnValue = .success([])
         await sut.perform(action: .didSelectChart(.line))
         XCTAssertEqual(router.log, [])
@@ -241,6 +275,18 @@ final class HistoryPresentationTests: XCTestCase {
     }
     
     func test_didSelectChartOption_plot() async {
+        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
+        
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
+        sut = Sut(engine: engine, router: router)
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        
         dayService.stub.getDaysDates_returnValue = .success([])
         await sut.perform(action: .didSelectChart(.plot))
         XCTAssertEqual(router.log, [])
@@ -256,6 +302,18 @@ final class HistoryPresentationTests: XCTestCase {
     
     // MARK: didTapClear
     func test_didTapClear() async {
+        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
+        
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
+        sut = Sut(engine: engine, router: router)
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        
         await sut.perform(action: .didTapClear)
         assertViewModel(.init(
             isLoading: false,
@@ -290,6 +348,15 @@ final class HistoryPresentationTests: XCTestCase {
     
     // MARK: didTapDate
     func test_didTapDate_oneDayBefore() async {
+        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
+        
+        dayService.stub.getDaysDates_returnValue = .success([
+            .init(date: Date(year: 2024, month: 2, day: 14), consumed: 0, goal: 2),
+            .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
+        ])
+        
         dateService.stub.daysBetweenStartEnd_returnValue = 2
         dateService.stub.daysBetweenStartEnd_returnValue = 4
         
@@ -301,6 +368,8 @@ final class HistoryPresentationTests: XCTestCase {
             .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
         ])
         
+        sut = Sut(engine: engine, router: router)
+        try? await Task.sleep(nanoseconds: 100_000_000)
         await sut.perform(action: .didTap(Date(year: 2024, month: 2, day: 13)))
         assertViewModel(.init(
             isLoading: false,
