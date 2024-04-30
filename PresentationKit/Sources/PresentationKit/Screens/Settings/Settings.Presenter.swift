@@ -94,32 +94,17 @@ extension Screen.Settings {
                 await enableNotifications()
                 await updateViewModel(isLoading: false)
             case .didTapIncrementFrequency:
-                await updateViewModel(isLoading: true)
-                if var frequency = viewModel.notifications?.frequency {
-                    frequency += engine.notificationService.minimumAllowedFrequency
-                    await updateViewModel(isLoading: false,
-                                          notifications: updatedNotificationsSettings(isOn: true, frequency: frequency))
-                } else {
-                    let frequency = engine.notificationService.minimumAllowedFrequency
-                    await updateViewModel(isLoading: false, 
-                                          notifications: updatedNotificationsSettings(isOn: true, frequency: frequency))
-                }
-                await enableNotifications()
+                await increaseFrequency()
             case .didTapDecrementFrequency:
-                await updateViewModel(isLoading: true)
-                if var frequency = viewModel.notifications?.frequency {
-                    frequency -= engine.notificationService.minimumAllowedFrequency
-                    await updateViewModel(isLoading: false, 
-                                          notifications: updatedNotificationsSettings(isOn: true, frequency: frequency))
-                } else {
-                    let frequency = engine.notificationService.minimumAllowedFrequency
-                    await updateViewModel(isLoading: false, 
-                                          notifications: updatedNotificationsSettings(isOn: true, frequency: frequency))
-                }
-                await enableNotifications()
+                await decreaseFrequency()
             case .dismissAlert:
                 let frequency = engine.notificationService.minimumAllowedFrequency
-                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(isOn: true, frequency: frequency), error: nil)
+                let settings = engine.notificationService.getSettings()
+                await updateViewModel(
+                    isLoading: false,
+                    notifications: updatedNotificationsSettings(isOn: settings.isOn, frequency: frequency),
+                    error: nil
+                )
             case .didOpenSettings:
                 await open(url: engine.openUrlService.settingsUrl)
             case .didTapPrivacy:
@@ -289,6 +274,34 @@ extension UnitSystem {
 
 // MARK: - Notifications
 private extension Screen.Settings.Presenter {
+    func increaseFrequency() async {
+        await updateViewModel(isLoading: true)
+        let minFrequency = engine.notificationService.minimumAllowedFrequency
+        let newFrequency: Int
+        if let frequency = engine.notificationService.getSettings().frequency {
+            newFrequency = frequency + minFrequency
+        } else {
+            newFrequency = minFrequency
+        }
+        let settings = updatedNotificationsSettings(isOn: true, frequency: newFrequency)
+        await updateViewModel(isLoading: true, notifications: settings)
+        await enableNotifications()
+    }
+    
+    func decreaseFrequency() async {
+        await updateViewModel(isLoading: true)
+        let minFrequency = engine.notificationService.minimumAllowedFrequency
+        let newFrequency: Int
+        if let frequency = engine.notificationService.getSettings().frequency {
+            newFrequency = frequency - minFrequency
+        } else {
+            newFrequency = minFrequency
+        }
+        let settings = updatedNotificationsSettings(isOn: true, frequency: newFrequency)
+        await updateViewModel(isLoading: true, notifications: settings)
+        await enableNotifications()
+    }
+    
     func enableNotifications() async {
         let now = engine.dateService.now()
         let frequency = viewModel.notifications?.frequency ?? engine.notificationService.minimumAllowedFrequency
@@ -357,7 +370,7 @@ private extension Screen.Settings.Presenter {
         let start = start ?? notificationSettings.start ?? engine.dateService.getStart(of: now)
         let stop = stop ?? notificationSettings.stop ?? engine.dateService.getEnd(of: now)
         let range = getRanges(start: start, stop: stop)
-
+        
         return .init(
             frequency: frequency,
             start: start,
