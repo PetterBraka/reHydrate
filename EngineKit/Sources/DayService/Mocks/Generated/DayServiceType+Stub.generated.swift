@@ -18,14 +18,10 @@ public protocol DayServiceTypeStubbing {
 public final class DayServiceTypeStub: DayServiceTypeStubbing {
     public var getToday_returnValue: Day {
         get {
-            if getToday_returnValues.count > 0 {
-                let value = getToday_returnValues.removeFirst()
-                if getToday_returnValues.isEmpty {
-                    getToday_returnValues.insert(value, at: 0)
-                }
-                return value
+            if getToday_returnValues.isEmpty {
+                .default
             } else {
-                return getToday_returnValues.first ?? .default
+                getToday_returnValues.removeFirst()
             }
         }
         set {
@@ -35,14 +31,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var getToday_returnValues: [Day] = []
     public var getDaysDates_returnValue: Result<[Day], Error> {
         get {
-            if getDaysDates_returnValues.count > 0 {
-                let value = getDaysDates_returnValues.removeFirst()
-                if getDaysDates_returnValues.isEmpty {
-                    getDaysDates_returnValues.insert(value, at: 0)
-                }
-                return value
+            if getDaysDates_returnValues.isEmpty {
+                .default
             } else {
-                return getDaysDates_returnValues.first ?? .default
+                getDaysDates_returnValues.removeFirst()
             }
         }
         set {
@@ -52,14 +44,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var getDaysDates_returnValues: [Result<[Day], Error>] = []
     public var addDrink_returnValue: Result<Double, Error> {
         get {
-            if addDrink_returnValues.count > 0 {
-                let value = addDrink_returnValues.removeFirst()
-                if addDrink_returnValues.isEmpty {
-                    addDrink_returnValues.insert(value, at: 0)
-                }
-                return value
+            if addDrink_returnValues.isEmpty {
+                .default
             } else {
-                return addDrink_returnValues.first ?? .default
+                addDrink_returnValues.removeFirst()
             }
         }
         set {
@@ -69,14 +57,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var addDrink_returnValues: [Result<Double, Error>] = []
     public var removeDrink_returnValue: Result<Double, Error> {
         get {
-            if removeDrink_returnValues.count > 0 {
-                let value = removeDrink_returnValues.removeFirst()
-                if removeDrink_returnValues.isEmpty {
-                    removeDrink_returnValues.insert(value, at: 0)
-                }
-                return value
+            if removeDrink_returnValues.isEmpty {
+                .default
             } else {
-                return removeDrink_returnValues.first ?? .default
+                removeDrink_returnValues.removeFirst()
             }
         }
         set {
@@ -86,14 +70,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var removeDrink_returnValues: [Result<Double, Error>] = []
     public var increaseGoal_returnValue: Result<Double, Error> {
         get {
-            if increaseGoal_returnValues.count > 0 {
-                let value = increaseGoal_returnValues.removeFirst()
-                if increaseGoal_returnValues.isEmpty {
-                    increaseGoal_returnValues.insert(value, at: 0)
-                }
-                return value
+            if increaseGoal_returnValues.isEmpty {
+                .default
             } else {
-                return increaseGoal_returnValues.first ?? .default
+                increaseGoal_returnValues.removeFirst()
             }
         }
         set {
@@ -103,14 +83,10 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
     private var increaseGoal_returnValues: [Result<Double, Error>] = []
     public var decreaseGoal_returnValue: Result<Double, Error> {
         get {
-            if decreaseGoal_returnValues.count > 0 {
-                let value = decreaseGoal_returnValues.removeFirst()
-                if decreaseGoal_returnValues.isEmpty {
-                    decreaseGoal_returnValues.insert(value, at: 0)
-                }
-                return value
+            if decreaseGoal_returnValues.isEmpty {
+                .default
             } else {
-                return decreaseGoal_returnValues.first ?? .default
+                decreaseGoal_returnValues.removeFirst()
             }
         }
         set {

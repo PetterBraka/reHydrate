@@ -13,14 +13,10 @@ public protocol TimelineServiceTypeStubbing {
 public final class TimelineServiceTypeStub: TimelineServiceTypeStubbing {
     public var getTimelineDate_returnValue: [Timeline] {
         get {
-            if getTimelineDate_returnValues.count > 0 {
-                let value = getTimelineDate_returnValues.removeFirst()
-                if getTimelineDate_returnValues.isEmpty {
-                    getTimelineDate_returnValues.insert(value, at: 0)
-                }
-                return value
+            if getTimelineDate_returnValues.isEmpty {
+                .default
             } else {
-                return getTimelineDate_returnValues.first ?? .default
+                getTimelineDate_returnValues.removeFirst()
             }
         }
         set {
@@ -30,14 +26,10 @@ public final class TimelineServiceTypeStub: TimelineServiceTypeStubbing {
     private var getTimelineDate_returnValues: [[Timeline]] = []
     public var getTimelineCollection_returnValue: [TimelineCollection] {
         get {
-            if getTimelineCollection_returnValues.count > 0 {
-                let value = getTimelineCollection_returnValues.removeFirst()
-                if getTimelineCollection_returnValues.isEmpty {
-                    getTimelineCollection_returnValues.insert(value, at: 0)
-                }
-                return value
+            if getTimelineCollection_returnValues.isEmpty {
+                .default
             } else {
-                return getTimelineCollection_returnValues.first ?? .default
+                getTimelineCollection_returnValues.removeFirst()
             }
         }
         set {

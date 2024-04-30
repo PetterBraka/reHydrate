@@ -50,6 +50,8 @@ final class HistoryPresentationTests: XCTestCase {
     // MARK: - init
     func test_init() {
         dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.now_returnValue = .init(year: 2024, month: 2, day: 15)
+        dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
         
         sut = Sut(engine: engine, router: router)
@@ -141,6 +143,7 @@ final class HistoryPresentationTests: XCTestCase {
             .init(date: Date(year: 2024, month: 2, day: 15), consumed: 0, goal: 2)
         ])
         
+        dateService.stub.daysBetweenStartEnd_returnValue = 6
         dateService.stub.daysBetweenStartEnd_returnValue = 6
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 15 - 6)
         
@@ -360,6 +363,7 @@ final class HistoryPresentationTests: XCTestCase {
         dateService.stub.daysBetweenStartEnd_returnValue = 2
         dateService.stub.daysBetweenStartEnd_returnValue = 4
         
+        dateService.stub.daysBetweenStartEnd_returnValue = 4
         dateService.stub.daysBetweenStartEnd_returnValue = 4
         
         dayService.stub.getDaysDates_returnValue = .success([

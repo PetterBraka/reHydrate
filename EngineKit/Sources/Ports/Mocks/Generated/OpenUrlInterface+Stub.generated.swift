@@ -14,14 +14,10 @@ public protocol OpenUrlInterfaceStubbing {
 public final class OpenUrlInterfaceStub: OpenUrlInterfaceStubbing {
     public var settingsUrl_returnValue: URL? {
         get {
-            if settingsUrl_returnValues.count > 0 {
-                let value = settingsUrl_returnValues.removeFirst()
-                if settingsUrl_returnValues.isEmpty {
-                    settingsUrl_returnValues.insert(value, at: 0)
-                }
-                return value
+            if settingsUrl_returnValues.isEmpty {
+                .default
             } else {
-                return settingsUrl_returnValues.first ?? .default
+                settingsUrl_returnValues.removeFirst()
             }
         }
         set {
@@ -33,14 +29,10 @@ public final class OpenUrlInterfaceStub: OpenUrlInterfaceStubbing {
     private var settingsUrl_returnValues: [URL?] = []
     public var openUrl_returnValue: Error? {
         get {
-            if openUrl_returnValues.count > 0 {
-                let value = openUrl_returnValues.removeFirst()
-                if openUrl_returnValues.isEmpty {
-                    openUrl_returnValues.insert(value, at: 0)
-                }
-                return value
+            if openUrl_returnValues.isEmpty {
+                nil
             } else {
-                return openUrl_returnValues.first ?? nil
+                openUrl_returnValues.removeFirst()
             }
         }
         set {
@@ -50,14 +42,10 @@ public final class OpenUrlInterfaceStub: OpenUrlInterfaceStubbing {
     private var openUrl_returnValues: [Error?] = []
     public var emailEmailCcBccSubjectBody_returnValue: Error? {
         get {
-            if emailEmailCcBccSubjectBody_returnValues.count > 0 {
-                let value = emailEmailCcBccSubjectBody_returnValues.removeFirst()
-                if emailEmailCcBccSubjectBody_returnValues.isEmpty {
-                    emailEmailCcBccSubjectBody_returnValues.insert(value, at: 0)
-                }
-                return value
+            if emailEmailCcBccSubjectBody_returnValues.isEmpty {
+                nil
             } else {
-                return emailEmailCcBccSubjectBody_returnValues.first ?? nil
+                emailEmailCcBccSubjectBody_returnValues.removeFirst()
             }
         }
         set {

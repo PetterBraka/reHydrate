@@ -23,3 +23,15 @@ extension Result where Success == Double, Failure == Error {
 extension Result where Success == [Double], Failure == Error {
     static let `default`: Result<Success, Failure> = .success([])
 }
+
+extension Optional where Wrapped == Style {
+    static let `default`: Wrapped? = nil
+}
+
+extension Optional where Wrapped == Error {
+    static let `default`: Wrapped? = nil
+}
+
+extension Optional where Wrapped == String {
+    static let `default`: Wrapped? = nil
+}

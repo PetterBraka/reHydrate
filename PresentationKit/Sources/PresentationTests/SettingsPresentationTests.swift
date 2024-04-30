@@ -279,9 +279,12 @@ final class SettingsPresentationTests: XCTestCase {
         let sut = Sut(engine: engine, router: router)
         
         notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        dateService.stub.now_returnValue = .december_8_2021_Wednesday
-        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0)
-        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
         
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 5, seconds: 0)
@@ -338,11 +341,12 @@ final class SettingsPresentationTests: XCTestCase {
         let sut = Sut(engine: engine, router: router)
         
         notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        dateService.stub.now_returnValue = .december_8_2021_Wednesday
-        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8, 
-                                                         hours: 0, minutes: 0, seconds: 0)
-        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8, 
-                                                       hours: 23, minutes: 59, seconds: 59)
+        givenRange(with: .december_8_2021_Wednesday, 
+                   start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
         
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
                                                                       hours: 23, minutes: 54, seconds: 59)
@@ -399,13 +403,17 @@ final class SettingsPresentationTests: XCTestCase {
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
             frequency: 5
         )
-        
-        dateService.stub.now_returnValue = .december_8_2021_Wednesday
         notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8, 
-                                                         hours: 0, minutes: 0, seconds: 0)
-        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                       hours: 23, minutes: 59, seconds: 59)
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
         
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
                                                                       hours: 23, minutes: 54, seconds: 59)
@@ -460,13 +468,12 @@ final class SettingsPresentationTests: XCTestCase {
             frequency: 5
         )
         
-        dateService.stub.now_returnValue = .december_8_2021_Wednesday
         notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        
-        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                         hours: 0, minutes: 0, seconds: 0)
-        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                       hours: 23, minutes: 59, seconds: 59)
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
         
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
                                                                       hours: 8, minutes: 0, seconds: 0)
@@ -475,10 +482,21 @@ final class SettingsPresentationTests: XCTestCase {
         
         let sut = Sut(engine: engine, router: router)
         
-        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                         hours: 0, minutes: 0, seconds: 0)
-        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                       hours: 23, minutes: 59, seconds: 59)
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
         
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
                                                                       hours: 8, minutes: 0, seconds: 0)
@@ -526,7 +544,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
     }
     
-    func test_didTapDecrementFrequency_() async {
+    func test_didTapDecrementFrequency() async {
         notificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0),
@@ -534,13 +552,12 @@ final class SettingsPresentationTests: XCTestCase {
             frequency: 20
         )
         
-        dateService.stub.now_returnValue = .december_8_2021_Wednesday
         notificationService.stub.minimumAllowedFrequency_returnValue = 10
-        
-        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                         hours: 0, minutes: 0, seconds: 0)
-        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                       hours: 23, minutes: 59, seconds: 59)
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
         
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
                                                                       hours: 8, minutes: 0, seconds: 0)
@@ -548,11 +565,21 @@ final class SettingsPresentationTests: XCTestCase {
                                                                       hours: 20, minutes: 50, seconds: 0)
         
         let sut = Sut(engine: engine, router: router)
-        
-        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                         hours: 0, minutes: 0, seconds: 0)
-        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                       hours: 23, minutes: 59, seconds: 59)
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
+        givenRange(with: .december_8_2021_Wednesday,
+                   start: Date(year: 2021, month: 12, day: 8,
+                               hours: 0, minutes: 0, seconds: 0),
+                   end: Date(year: 2021, month: 12, day: 8,
+                             hours: 23, minutes: 59, seconds: 59))
         
         dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
                                                                       hours: 8, minutes: 0, seconds: 0)
@@ -635,6 +662,14 @@ final class SettingsPresentationTests: XCTestCase {
     }
 }
 
+private extension SettingsPresentationTests {
+    func givenRange(with now: Date, start: Date, end: Date) {
+        dateService.stub.now_returnValue = now
+        dateService.stub.getStartDate_returnValue = start
+        dateService.stub.getEndDate_returnValue = end
+    }
+}
+
 extension OpenUrlInterfaceSpy.MethodCall: Equatable {
     public static func == (lhs: OpenUrlInterfaceSpy.MethodCall, rhs: OpenUrlInterfaceSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
@@ -681,13 +716,13 @@ isLoading: \(isLoading),
 isDarkModeOn: \(isDarkModeOn),
 unitSystem: \(unitSystem),
 goal: \(goal),
-notifications:
+notifications: {
     frequency: \(String(describing: notifications?.frequency)),
     start: \(String(describing: notifications?.start)),
     startRange: \(String(describing: notifications?.startRange)),
     stop: \(String(describing: notifications?.stop)),
     stopRange: \(String(describing: notifications?.stopRange))
-),
+},
 appVersion: \(appVersion),
 error: \(String(describing: error))
 

@@ -13,14 +13,10 @@ public protocol AppearancePortTypeStubbing {
 public final class AppearancePortTypeStub: AppearancePortTypeStubbing {
     public var getStyle_returnValue: Style? {
         get {
-            if getStyle_returnValues.count > 0 {
-                let value = getStyle_returnValues.removeFirst()
-                if getStyle_returnValues.isEmpty {
-                    getStyle_returnValues.insert(value, at: 0)
-                }
-                return value
+            if getStyle_returnValues.isEmpty {
+                .default
             } else {
-                return getStyle_returnValues.first ?? nil
+                getStyle_returnValues.removeFirst()
             }
         }
         set {
@@ -30,14 +26,10 @@ public final class AppearancePortTypeStub: AppearancePortTypeStubbing {
     private var getStyle_returnValues: [Style?] = []
     public var setStyleStyle_returnValue: Error? {
         get {
-            if setStyleStyle_returnValues.count > 0 {
-                let value = setStyleStyle_returnValues.removeFirst()
-                if setStyleStyle_returnValues.isEmpty {
-                    setStyleStyle_returnValues.insert(value, at: 0)
-                }
-                return value
+            if setStyleStyle_returnValues.isEmpty {
+                nil
             } else {
-                return setStyleStyle_returnValues.first ?? nil
+                setStyleStyle_returnValues.removeFirst()
             }
         }
         set {

@@ -13,14 +13,10 @@ public protocol LanguageServiceTypeStubbing {
 public final class LanguageServiceTypeStub: LanguageServiceTypeStubbing {
     public var getSelectedLanguage_returnValue: Language {
         get {
-            if getSelectedLanguage_returnValues.count > 0 {
-                let value = getSelectedLanguage_returnValues.removeFirst()
-                if getSelectedLanguage_returnValues.isEmpty {
-                    getSelectedLanguage_returnValues.insert(value, at: 0)
-                }
-                return value
+            if getSelectedLanguage_returnValues.isEmpty {
+                .default
             } else {
-                return getSelectedLanguage_returnValues.first ?? .default
+                getSelectedLanguage_returnValues.removeFirst()
             }
         }
         set {
@@ -30,14 +26,10 @@ public final class LanguageServiceTypeStub: LanguageServiceTypeStubbing {
     private var getSelectedLanguage_returnValues: [Language] = []
     public var getLanguageOptions_returnValue: [Language] {
         get {
-            if getLanguageOptions_returnValues.count > 0 {
-                let value = getLanguageOptions_returnValues.removeFirst()
-                if getLanguageOptions_returnValues.isEmpty {
-                    getLanguageOptions_returnValues.insert(value, at: 0)
-                }
-                return value
+            if getLanguageOptions_returnValues.isEmpty {
+                .default
             } else {
-                return getLanguageOptions_returnValues.first ?? .default
+                getLanguageOptions_returnValues.removeFirst()
             }
         }
         set {

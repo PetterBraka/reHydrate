@@ -267,7 +267,7 @@ final class NotificationServiceTests: XCTestCase {
                                       stop: dates.stop)
         
         assertResult(given: result, expected: .failure(.frequencyTooLow))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [])
+        XCTAssertEqual(notificationCenter.spy.methodLog, [.removeAllPendingNotificationRequests])
     }
     
     func test_getSettings() {
