@@ -13,6 +13,8 @@ public enum Settings {
     }
     
     public enum Action {
+        case didAppear
+        
         case didTapBack
         case didSetDarkMode(Bool)
         case didSetUnitSystem(ViewModel.UnitSystem)

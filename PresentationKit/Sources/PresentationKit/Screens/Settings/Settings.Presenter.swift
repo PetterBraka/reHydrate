@@ -48,7 +48,7 @@ extension Screen.Settings {
             self.router = router
             
             viewModel = .init(
-                isLoading: false,
+                isLoading: true,
                 isDarkModeOn: engine.appearanceService.getAppearance() == .dark,
                 unitSystem: .metric,
                 goal: 0,
@@ -56,38 +56,13 @@ extension Screen.Settings {
                 appVersion: engine.appVersion,
                 error: nil
             )
-            Task(priority: .high) { [weak self] in
-                await self?.initRealViewModel()
-            }
-        }
-        
-        private func initRealViewModel() async {
-            let currentSystem = engine.unitService.getUnitSystem()
-            let goal = await engine.unitService.convert(engine.dayService.getToday().goal, from: .litres,
-                                                        to: currentSystem == .metric ? .litres : .pint)
-            let notificationServiceSettings = engine.notificationService.getSettings()
-
-            await updateViewModel(
-                isLoading: false,
-                unitSystem: .init(from: currentSystem),
-                goal: goal,
-                error: nil
-            )
-            await updateViewModel(
-                isLoading: false,
-                notifications: updatedNotificationsSettings(
-                    isOn: notificationServiceSettings.isOn,
-                    frequency: notificationServiceSettings.frequency,
-                    start: notificationServiceSettings.start,
-                    stop: notificationServiceSettings.stop
-                ),
-                error: nil
-            )
         }
         
         @MainActor
         public func perform(action: Settings.Action) async {
             switch action {
+            case .didAppear:
+                await didAppear()
             case .didTapBack:
                 router.showHome()
             case .didTapCredits:
@@ -166,6 +141,47 @@ extension Screen.Settings {
                 await updateViewModel(isLoading: false, isDarkModeOn: isDarkModeOn, error: nil)
             }
         }
+        
+        private func didAppear() async {
+            let currentSystem = engine.unitService.getUnitSystem()
+            let goal = await engine.unitService.convert(engine.dayService.getToday().goal, from: .litres,
+                                                        to: currentSystem == .metric ? .litres : .pint)
+            let notificationSettings = engine.notificationService.getSettings()
+            
+            await updateViewModel(
+                isLoading: true,
+                unitSystem: .init(from: currentSystem),
+                goal: goal,
+                error: nil
+            )
+            
+            guard let frequency = notificationSettings.frequency,
+                  let start = notificationSettings.start,
+                  let stop = notificationSettings.stop
+            else {
+                await updateViewModel(
+                    isLoading: false,
+                    notifications: nil,
+                    error: nil
+                )
+                return
+            }
+            
+            let range = getRanges(start: start, stop: stop)
+            
+            await updateViewModel(
+                isLoading: false,
+                notifications: .init(
+                    frequency: frequency,
+                    start: start,
+                    startRange: range.start,
+                    stop: stop,
+                    stopRange: range.stop
+                ),
+                error: nil
+            )
+        }
+        
     }
 }
 

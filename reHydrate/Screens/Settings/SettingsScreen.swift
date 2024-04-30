@@ -51,6 +51,9 @@ struct SettingsScreen: View {
                 .background(in: .rect(cornerRadius: 16))
             }
         }
+        .onAppear {
+            observer.perform(action: .didAppear)
+        }
         .transaction { $0.animation = .easeInOut }
         .alert(isPresented: Binding { observer.alert != nil } set: { _ in }, error: observer.alert) { error in
             switch error {
