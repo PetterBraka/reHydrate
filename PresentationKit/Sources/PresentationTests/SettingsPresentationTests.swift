@@ -279,15 +279,16 @@ final class SettingsPresentationTests: XCTestCase {
         let sut = Sut(engine: engine, router: router)
         
         notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
-        
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 5, seconds: 0)
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59),
+                          Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 5, seconds: 0)))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 5, seconds: 0),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
         
         await sut.perform(action: .didSetReminders(true))
         
@@ -341,22 +342,21 @@ final class SettingsPresentationTests: XCTestCase {
         let sut = Sut(engine: engine, router: router)
         
         notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        givenRange(with: .december_8_2021_Wednesday, 
-                   start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
-        
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 23, minutes: 54, seconds: 59)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 12, minutes: 5, seconds: 0)
-        
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 23, minutes: 54, seconds: 59)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 12, minutes: 5, seconds: 0)
+        givenRanges(with: .december_8_2021_Wednesday,
+                   start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                           Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)),
+                   end: (Date(year: 2021, month: 12, day: 8, hours: 12, minutes: 5, seconds: 0),
+                         Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 12, minutes: 5, seconds: 0),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 12, minutes: 5, seconds: 0),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
         
         await sut.perform(action: .didSetRemindersStart(Date(year: 2021, month: 12, day: 8,
                                                              hours: 12, minutes: 0, seconds: 0)))
@@ -404,26 +404,16 @@ final class SettingsPresentationTests: XCTestCase {
             frequency: 5
         )
         notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
-        
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 23, minutes: 54, seconds: 59)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 0, minutes: 5, seconds: 0)
-
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 23, minutes: 54, seconds: 59)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 0, minutes: 5, seconds: 0)
+        givenRanges(with: .december_8_2021_Wednesday,
+                   start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                           Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)),
+                   end: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 5, seconds: 0),
+                         Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 5, seconds: 0),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
         
         await sut.perform(action: .didSetRemindersStop(Date(year: 2021, month: 12, day: 8,
                                                             hours: 20, minutes: 0, seconds: 0)))
@@ -469,44 +459,30 @@ final class SettingsPresentationTests: XCTestCase {
         )
         
         notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
-        
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 8, minutes: 0, seconds: 0)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 20, minutes: 50, seconds: 0)
+        givenRanges(with: .december_8_2021_Wednesday,
+                   start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                           Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0)),
+                   end: (Date(year: 2021, month: 12, day: 8, hours: 20, minutes: 50, seconds: 0),
+                         Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
         
         let sut = Sut(engine: engine, router: router)
         
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
+        givenRanges(with: .december_8_2021_Wednesday,
+                   start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                           Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0)),
+                   end: (Date(year: 2021, month: 12, day: 8, hours: 20, minutes: 50, seconds: 0),
+                         Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 10, seconds: 0)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 10, seconds: 0)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
         
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 8, minutes: 0, seconds: 0)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 20, minutes: 50, seconds: 0)
-        
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 8, minutes: 10, seconds: 0)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 23, minutes: 59, seconds: 59)
         try? await Task.sleep(for: .seconds(0.1))
         await sut.perform(action: .didTapIncrementFrequency)
         
@@ -553,43 +529,29 @@ final class SettingsPresentationTests: XCTestCase {
         )
         
         notificationService.stub.minimumAllowedFrequency_returnValue = 10
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
-        
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 8, minutes: 0, seconds: 0)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 20, minutes: 50, seconds: 0)
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 20, minutes: 50, seconds: 0)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
         
         let sut = Sut(engine: engine, router: router)
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
-        givenRange(with: .december_8_2021_Wednesday,
-                   start: Date(year: 2021, month: 12, day: 8,
-                               hours: 0, minutes: 0, seconds: 0),
-                   end: Date(year: 2021, month: 12, day: 8,
-                             hours: 23, minutes: 59, seconds: 59))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 10, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 20, minutes: 50, seconds: 0)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 10, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 20, minutes: 50, seconds: 0)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
+        givenRanges(with: .december_8_2021_Wednesday,
+                    start: (Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 10, seconds: 0),
+                            Date(year: 2021, month: 12, day: 8, hours: 20, minutes: 50, seconds: 0)),
+                    end: (Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0),
+                          Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
         
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 8, minutes: 0, seconds: 0)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 20, minutes: 50, seconds: 0)
-        
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 8, minutes: 10, seconds: 0)
-        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
-                                                                      hours: 23, minutes: 59, seconds: 59)
         try? await Task.sleep(for: .seconds(0.1))
         await sut.perform(action: .didTapDecrementFrequency)
         
@@ -663,10 +625,14 @@ final class SettingsPresentationTests: XCTestCase {
 }
 
 private extension SettingsPresentationTests {
-    func givenRange(with now: Date, start: Date, end: Date) {
+    func givenRanges(with now: Date, start: (start: Date, end: Date), end: (start: Date, end: Date)) {
         dateService.stub.now_returnValue = now
-        dateService.stub.getStartDate_returnValue = start
-        dateService.stub.getEndDate_returnValue = end
+        
+        dateService.stub.getStartDate_returnValue = start.start
+        dateService.stub.getDateValueComponentDate_returnValue = start.end
+        
+        dateService.stub.getDateValueComponentDate_returnValue = end.start
+        dateService.stub.getEndDate_returnValue = end.end
     }
 }
 
