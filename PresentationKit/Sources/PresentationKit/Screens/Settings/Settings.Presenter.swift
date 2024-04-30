@@ -63,8 +63,10 @@ extension Screen.Settings {
         
         private func initRealViewModel() async {
             let currentSystem = engine.unitService.getUnitSystem()
-            let goal = await engine.dayService.getToday().goal
+            let goal = await engine.unitService.convert(engine.dayService.getToday().goal, from: .litres,
+                                                        to: currentSystem == .metric ? .litres : .pint)
             let notificationServiceSettings = engine.notificationService.getSettings()
+
             await updateViewModel(
                 isLoading: false,
                 unitSystem: .init(from: currentSystem),
@@ -175,22 +177,11 @@ extension Screen.Settings.Presenter {
         goal: Double? = nil,
         error: Settings.ViewModel.Error? = nil
     ) async {
-        let unitSystem = unitSystem ?? viewModel.unitSystem
-        let isMetric = unitSystem == .metric
-        var newGoal: Double
-        if let goal {
-            newGoal = goal
-        } else {
-            newGoal = await engine.dayService.getToday().goal
-        }
-        newGoal = engine.unitService.convert(newGoal, from: .litres,
-                                             to: isMetric ? .litres : .pint)
-        
         viewModel = ViewModel(
             isLoading: isLoading,
             isDarkModeOn: isDarkModeOn ?? viewModel.isDarkModeOn,
-            unitSystem: unitSystem,
-            goal: newGoal,
+            unitSystem: unitSystem ?? viewModel.unitSystem,
+            goal: goal ?? viewModel.goal,
             notifications: viewModel.notifications,
             appVersion: engine.appVersion,
             error: error
@@ -219,15 +210,21 @@ extension Screen.Settings.Presenter {
     private func increaseGoal() async {
         do {
             let increment = 0.5
-            let oldGoal = viewModel.goal
-            let diffToNextHalf = oldGoal.roundToHalf(.up) - oldGoal
-            let newGoal: Double
-            if  diffToNextHalf > 0 && diffToNextHalf < increment {
-                newGoal = try await engine.dayService.increase(goal: diffToNextHalf)
+            let currentGoal = viewModel.goal
+            let diffToNextHalf = currentGoal.roundToHalf(.up) - currentGoal
+            let incrementedGoal = if  diffToNextHalf > 0 && diffToNextHalf < increment {
+                try await engine.dayService.increase(goal: diffToNextHalf)
             } else {
-                newGoal = try await engine.dayService.increase(goal: 0.5)
+                try await engine.dayService.increase(goal: 0.5)
             }
-            await updateViewModel(isLoading: false, goal: newGoal.roundToHalf(.up))
+            
+            let currentSystem = engine.unitService.getUnitSystem()
+            let newGoal = engine.unitService.convert(incrementedGoal.roundToHalf(.up), from: .litres,
+                                                     to: currentSystem == .metric ? .litres : .pint)
+            await updateViewModel(
+                isLoading: false, 
+                goal: newGoal
+            )
         } catch {
             engine.logger.error("Couldn't increase the goal", error: error)
         }

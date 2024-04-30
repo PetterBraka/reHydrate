@@ -452,6 +452,187 @@ final class SettingsPresentationTests: XCTestCase {
                                           hours: 20, minutes: 0, seconds: 0)))
     }
     
+    func test_didTapIncrementFrequency() async {
+        notificationService.stub.getSettings_returnValue = .init(
+            isOn: true,
+            start: Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0),
+            stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
+            frequency: 5
+        )
+        
+        dateService.stub.now_returnValue = .december_8_2021_Wednesday
+        notificationService.stub.minimumAllowedFrequency_returnValue = 5
+        
+        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                         hours: 0, minutes: 0, seconds: 0)
+        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                       hours: 23, minutes: 59, seconds: 59)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 8, minutes: 0, seconds: 0)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 20, minutes: 50, seconds: 0)
+        
+        let sut = Sut(engine: engine, router: router)
+        
+        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                         hours: 0, minutes: 0, seconds: 0)
+        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                       hours: 23, minutes: 59, seconds: 59)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 8, minutes: 0, seconds: 0)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 20, minutes: 50, seconds: 0)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 8, minutes: 10, seconds: 0)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 23, minutes: 59, seconds: 59)
+        try? await Task.sleep(for: .seconds(0.1))
+        await sut.perform(action: .didTapIncrementFrequency)
+        
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: .init(
+                    frequency: 10,
+                    start: Date(year: 2021, month: 12, day: 8,
+                                hours: 8, minutes: 0, seconds: 0),
+                    startRange: Date(year: 2021, month: 12, day: 8,
+                                     hours: 0, minutes: 0, seconds: 0) ... Date(year: 2021, month: 12, day: 8,
+                                                                                hours: 20, minutes: 50, seconds: 0),
+                    stop: Date(year: 2021, month: 12, day: 8,
+                               hours: 21, minutes: 0, seconds: 0),
+                    stopRange: Date(year: 2021, month: 12, day: 8,
+                                    hours: 8, minutes: 10, seconds: 0) ... Date(year: 2021, month: 12, day: 8,
+                                                                                hours: 23, minutes: 59, seconds: 59)
+                ),
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(
+            notificationService.spy.lastMethodCall,
+            .enable(withFrequency: 10,
+                    start: Date(year: 2021, month: 12, day: 8,
+                                hours: 8, minutes: 0, seconds: 0),
+                    stop: Date(year: 2021, month: 12, day: 8,
+                               hours: 21, minutes: 0, seconds: 0))
+        )
+    }
+    
+    func test_didTapDecrementFrequency_() async {
+        notificationService.stub.getSettings_returnValue = .init(
+            isOn: true,
+            start: Date(year: 2021, month: 12, day: 8, hours: 8, minutes: 0, seconds: 0),
+            stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
+            frequency: 20
+        )
+        
+        dateService.stub.now_returnValue = .december_8_2021_Wednesday
+        notificationService.stub.minimumAllowedFrequency_returnValue = 10
+        
+        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                         hours: 0, minutes: 0, seconds: 0)
+        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                       hours: 23, minutes: 59, seconds: 59)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 8, minutes: 0, seconds: 0)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 20, minutes: 50, seconds: 0)
+        
+        let sut = Sut(engine: engine, router: router)
+        
+        dateService.stub.getStartDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                         hours: 0, minutes: 0, seconds: 0)
+        dateService.stub.getEndDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                       hours: 23, minutes: 59, seconds: 59)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 8, minutes: 0, seconds: 0)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 20, minutes: 50, seconds: 0)
+        
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 8, minutes: 10, seconds: 0)
+        dateService.stub.getDateValueComponentDate_returnValue = Date(year: 2021, month: 12, day: 8,
+                                                                      hours: 23, minutes: 59, seconds: 59)
+        try? await Task.sleep(for: .seconds(0.1))
+        await sut.perform(action: .didTapDecrementFrequency)
+        
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 0,
+                notifications: .init(
+                    frequency: 10,
+                    start: Date(year: 2021, month: 12, day: 8,
+                                hours: 8, minutes: 0, seconds: 0),
+                    startRange: Date(year: 2021, month: 12, day: 8,
+                                     hours: 0, minutes: 0, seconds: 0) ... Date(year: 2021, month: 12, day: 8,
+                                                                                hours: 20, minutes: 50, seconds: 0),
+                    stop: Date(year: 2021, month: 12, day: 8,
+                               hours: 21, minutes: 0, seconds: 0),
+                    stopRange: Date(year: 2021, month: 12, day: 8,
+                                    hours: 8, minutes: 10, seconds: 0) ... Date(year: 2021, month: 12, day: 8,
+                                                                                hours: 23, minutes: 59, seconds: 59)
+                ),
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(
+            notificationService.spy.lastMethodCall,
+            .enable(withFrequency: 10,
+                    start: Date(year: 2021, month: 12, day: 8,
+                                hours: 8, minutes: 0, seconds: 0),
+                    stop: Date(year: 2021, month: 12, day: 8,
+                               hours: 21, minutes: 0, seconds: 0))
+        )
+    }
+    
+    func test_didTapIncrementGoal_2() async {
+        dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 0, goal: 1.5)
+        unitService.stub.convertValueFromUnitToUnit_returnValue = 1.5
+        notificationService.stub.getSettings_returnValue = .init(isOn: false, start: nil, stop: nil, frequency: nil)
+        let sut = Sut(engine: engine, router: router)
+        try? await Task.sleep(for: .seconds(0.1))
+        
+        dayService.stub.increaseGoal_returnValue = .success(2)
+        unitService.stub.convertValueFromUnitToUnit_returnValue = 2
+        await sut.perform(action: .didTapIncrementGoal)
+        
+        XCTAssertEqual(
+            sut.viewModel,
+            .init(
+                isLoading: false,
+                isDarkModeOn: false,
+                unitSystem: .metric,
+                goal: 2,
+                notifications: nil,
+                appVersion: "0.0.0-mock",
+                error: nil)
+        )
+        XCTAssertEqual(router.log, [])
+        XCTAssertEqual(dayService.spy.lastMethodCall, .increase(goal: 0.5))
+    }
+    
+    func test_didTapDecrementGoal_() async {
+        
+    }
+    
+    func test_dismissAlert_() async {
+        
+    }
 }
 
 extension OpenUrlInterfaceSpy.MethodCall: Equatable {
