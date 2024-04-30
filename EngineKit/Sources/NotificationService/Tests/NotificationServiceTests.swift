@@ -33,6 +33,13 @@ final class NotificationServiceTests: XCTestCase {
     
     var sut: NotificationServiceType!
     
+    let dummyNotificationRequest = NotificationRequest(
+        identifier: "dumy",
+        content: .init(title: "dumy", subtitle: "dumy", body: "dumy", 
+                       categoryIdentifier: "dumy", userInfo: [:]),
+        trigger: nil
+    )
+    
     override func setUp() {
         engine = EngineMocks()
         let stub = NotificationCenterTypeStub()
@@ -76,11 +83,15 @@ final class NotificationServiceTests: XCTestCase {
         
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .requestAuthorization,
-            .setNotificationCategories,
+            .setNotificationCategories(categories: [
+                .init(identifier: "com.rehydrate.reminder",
+                      actions: [.init(identifier: "small",title: "small (-999)")],
+                      intentIdentifiers: ["small"])
+            ]),
             .pendingNotificationRequests,
-            .add,
-            .add,
-            .add
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest)
         ])
     }
     
@@ -102,9 +113,15 @@ final class NotificationServiceTests: XCTestCase {
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories,
+            .setNotificationCategories(categories: [
+                .init(identifier: "com.rehydrate.reminder",
+                      actions: [.init(identifier: "small",title: "small (-999)")],
+                      intentIdentifiers: ["small"])
+            ]),
             .pendingNotificationRequests,
-            .add, .add, .add
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest)
         ])
     }
     
@@ -122,7 +139,11 @@ final class NotificationServiceTests: XCTestCase {
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories,
+            .setNotificationCategories(categories: [
+                .init(identifier: "com.rehydrate.reminder",
+                      actions: [.init(identifier: "small",title: "small (-999)")],
+                      intentIdentifiers: ["small"])
+            ]),
             .pendingNotificationRequests
         ])
     }
@@ -175,15 +196,19 @@ final class NotificationServiceTests: XCTestCase {
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories,
+            .setNotificationCategories(categories: [
+                .init(identifier: "com.rehydrate.reminder",
+                      actions: [.init(identifier: "small",title: "small (-999)")],
+                      intentIdentifiers: ["small"])
+            ]),
             .pendingNotificationRequests,
-            .add,
-            .add,
-            .add,
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest),
             .pendingNotificationRequests,
-            .add,
-            .add,
-            .add,
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest),
         ])
     }
     
@@ -198,11 +223,15 @@ final class NotificationServiceTests: XCTestCase {
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories,
+            .setNotificationCategories(categories: [
+                .init(identifier: "com.rehydrate.reminder",
+                      actions: [.init(identifier: "small",title: "small (-999)")],
+                      intentIdentifiers: ["small"])
+            ]),
             .pendingNotificationRequests,
-            .add,
-            .add,
-            .add
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest),
+            .add(request: dummyNotificationRequest),
         ])
     }
     
@@ -218,8 +247,13 @@ final class NotificationServiceTests: XCTestCase {
         XCTAssertEqual(notificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories,
-            .pendingNotificationRequests, .add
+            .setNotificationCategories(categories: [
+                .init(identifier: "com.rehydrate.reminder",
+                      actions: [.init(identifier: "small",title: "small (-999)")],
+                      intentIdentifiers: ["small"])
+            ]),
+            .pendingNotificationRequests,
+            .add(request: dummyNotificationRequest),
         ])
     }
     
@@ -233,7 +267,7 @@ final class NotificationServiceTests: XCTestCase {
                                       stop: dates.stop)
         
         assertResult(given: result, expected: .failure(.frequencyTooLow))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [.removeAllPendingNotificationRequests])
+        XCTAssertEqual(notificationCenter.spy.methodLog, [])
     }
     
     func test_getSettings() {
@@ -322,32 +356,84 @@ extension NotificationError: CustomStringConvertible {
     }
 }
 
-extension NotificationCenterTypeSpy.MethodName: CustomStringConvertible {
+extension NotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .requestAuthorization:
             "requestAuthorization"
-        case .setNotificationCategories:
-            "setNotificationCategories"
+        case .setNotificationCategories(let categories):
+            "setNotificationCategories: \(categories.description)"
         case .notificationCategories:
             "notificationCategories"
         case .add:
             "add"
         case .pendingNotificationRequests:
             "pendingNotificationRequests"
-        case .removePendingNotificationRequests_withIdentifiers:
-            "removePendingNotificationRequests"
+        case .removePendingNotificationRequests(let identifiers):
+            "removePendingNotificationRequests with \(identifiers)"
         case .removeAllPendingNotificationRequests:
             "removeAllPendingNotificationRequests"
         case .deliveredNotifications:
             "deliveredNotifications"
-        case .removeDeliveredNotifications_withIdentifiers:
-            "removeDeliveredNotifications"
+        case .removeDeliveredNotifications(let identifiers):
+            "removeDeliveredNotifications with \(identifiers)"
         case .removeAllDeliveredNotifications:
             "removeAllDeliveredNotifications"
         case .setBadgeCount:
             "setBadgeCount"
         }
+    }
+}
+extension NotificationCenterTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: NotificationCenterTypeSpy.MethodCall, rhs: NotificationCenterTypeSpy.MethodCall) -> Bool {
+        switch (lhs, rhs) {
+        case (.requestAuthorization, .requestAuthorization),
+            (.notificationCategories, .notificationCategories),
+            (.deliveredNotifications, .deliveredNotifications),
+            (.pendingNotificationRequests, .pendingNotificationRequests),
+            (.removeAllDeliveredNotifications, .removeAllDeliveredNotifications),
+            (.removeAllPendingNotificationRequests, .removeAllPendingNotificationRequests):
+            true
+        case (.add(let lhsRequest), .add(let rhsRequest)):
+//            lhsRequest == rhsRequest
+            true
+        case (.setNotificationCategories(let lhsCategories), .setNotificationCategories(let rhsCategories)):
+            lhsCategories == rhsCategories
+        case (.removePendingNotificationRequests(let lhsIdentifiers), .removePendingNotificationRequests(let rhsIdentifiers)):
+            lhsIdentifiers == rhsIdentifiers
+        case (.removeDeliveredNotifications(let lhsIdentifiers), .removeDeliveredNotifications(let rhsIdentifiers)):
+            lhsIdentifiers == rhsIdentifiers
+        case (.setBadgeCount(let lhsNewBadgeCount), .setBadgeCount(let rhsNewBadgeCount)):
+            lhsNewBadgeCount == rhsNewBadgeCount
+        default:
+            false
+        }
+    }
+}
+
+extension NotificationRequest: Equatable {
+    public static func == (lhs: NotificationRequest, rhs: NotificationRequest) -> Bool {
+        lhs.identifier == rhs.identifier &&
+        lhs.content == rhs.content &&
+        lhs.trigger == rhs.trigger
+    }
+}
+
+extension NotificationContent: Equatable {
+    public static func == (lhs: NotificationContent, rhs: NotificationContent) -> Bool {
+        lhs.title == rhs.title &&
+        lhs.subtitle == rhs.subtitle &&
+        lhs.body == rhs.body &&
+        lhs.userInfo.debugDescription == rhs.userInfo.debugDescription &&
+        lhs.categoryIdentifier == rhs.categoryIdentifier
+    }
+}
+
+extension NotificationTrigger: Equatable {
+    public static func == (lhs: NotificationTrigger, rhs: NotificationTrigger) -> Bool {
+        lhs.repeats == rhs.repeats &&
+        lhs.dateComponents == rhs.dateComponents &&
+        lhs.date == rhs.date
     }
 }
 

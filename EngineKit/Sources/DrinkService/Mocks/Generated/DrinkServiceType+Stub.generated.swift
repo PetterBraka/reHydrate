@@ -16,10 +16,14 @@ public protocol DrinkServiceTypeStubbing {
 public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     public var addSizeContainer_returnValue: Result<Drink, Error> {
         get {
-            if addSizeContainer_returnValues.count > 1 {
-                addSizeContainer_returnValues.removeFirst()
+            if addSizeContainer_returnValues.count > 0 {
+                let value = addSizeContainer_returnValues.removeFirst()
+                if addSizeContainer_returnValues.isEmpty {
+                    addSizeContainer_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                addSizeContainer_returnValues.first ?? .default
+                return addSizeContainer_returnValues.first ?? .default
             }
         }
         set {
@@ -29,10 +33,14 @@ public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     private var addSizeContainer_returnValues: [Result<Drink, Error>] = []
     public var editSizeDrink_returnValue: Result<Drink, Error> {
         get {
-            if editSizeDrink_returnValues.count > 1 {
-                editSizeDrink_returnValues.removeFirst()
+            if editSizeDrink_returnValues.count > 0 {
+                let value = editSizeDrink_returnValues.removeFirst()
+                if editSizeDrink_returnValues.isEmpty {
+                    editSizeDrink_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                editSizeDrink_returnValues.first ?? .default
+                return editSizeDrink_returnValues.first ?? .default
             }
         }
         set {
@@ -42,10 +50,14 @@ public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     private var editSizeDrink_returnValues: [Result<Drink, Error>] = []
     public var removeContainer_returnValue: Error? {
         get {
-            if removeContainer_returnValues.count > 1 {
-                removeContainer_returnValues.removeFirst()
+            if removeContainer_returnValues.count > 0 {
+                let value = removeContainer_returnValues.removeFirst()
+                if removeContainer_returnValues.isEmpty {
+                    removeContainer_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                removeContainer_returnValues.first ?? nil
+                return removeContainer_returnValues.first ?? nil
             }
         }
         set {
@@ -55,10 +67,14 @@ public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     private var removeContainer_returnValues: [Error?] = []
     public var getSaved_returnValue: Result<[Drink], Error> {
         get {
-            if getSaved_returnValues.count > 1 {
-                getSaved_returnValues.removeFirst()
+            if getSaved_returnValues.count > 0 {
+                let value = getSaved_returnValues.removeFirst()
+                if getSaved_returnValues.isEmpty {
+                    getSaved_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                getSaved_returnValues.first ?? .default
+                return getSaved_returnValues.first ?? .default
             }
         }
         set {
@@ -68,10 +84,14 @@ public final class DrinkServiceTypeStub: DrinkServiceTypeStubbing {
     private var getSaved_returnValues: [Result<[Drink], Error>] = []
     public var resetToDefault_returnValue: [Drink] {
         get {
-            if resetToDefault_returnValues.count > 1 {
-                resetToDefault_returnValues.removeFirst()
+            if resetToDefault_returnValues.count > 0 {
+                let value = resetToDefault_returnValues.removeFirst()
+                if resetToDefault_returnValues.isEmpty {
+                    resetToDefault_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                resetToDefault_returnValues.first ?? .default
+                return resetToDefault_returnValues.first ?? .default
             }
         }
         set {

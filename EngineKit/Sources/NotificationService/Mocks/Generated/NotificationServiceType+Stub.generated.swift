@@ -14,10 +14,14 @@ public protocol NotificationServiceTypeStubbing {
 public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing {
     public var minimumAllowedFrequency_returnValue: Int {
         get {
-            if minimumAllowedFrequency_returnValues.count > 2 {
-                minimumAllowedFrequency_returnValues.removeFirst()
+            if minimumAllowedFrequency_returnValues.count > 0 {
+                let value = minimumAllowedFrequency_returnValues.removeFirst()
+                if minimumAllowedFrequency_returnValues.isEmpty {
+                    minimumAllowedFrequency_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                minimumAllowedFrequency_returnValues.first ?? .default
+                return minimumAllowedFrequency_returnValues.first ?? .default
             }
         }
         set {
@@ -27,10 +31,14 @@ public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing 
     private var minimumAllowedFrequency_returnValues: [Int] = []
     public var enableWithFrequencyStartStop_returnValue: Result<Void, NotificationError> {
         get {
-            if enableWithFrequencyStartStop_returnValues.count > 1 {
-                enableWithFrequencyStartStop_returnValues.removeFirst()
+            if enableWithFrequencyStartStop_returnValues.count > 0 {
+                let value = enableWithFrequencyStartStop_returnValues.removeFirst()
+                if enableWithFrequencyStartStop_returnValues.isEmpty {
+                    enableWithFrequencyStartStop_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                enableWithFrequencyStartStop_returnValues.first ?? .default
+                return enableWithFrequencyStartStop_returnValues.first ?? .default
             }
         }
         set {
@@ -40,10 +48,14 @@ public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing 
     private var enableWithFrequencyStartStop_returnValues: [Result<Void, NotificationError>] = []
     public var getSettings_returnValue: NotificationSettings {
         get {
-            if getSettings_returnValues.count > 1 {
-                getSettings_returnValues.removeFirst()
+            if getSettings_returnValues.count > 0 {
+                let value = getSettings_returnValues.removeFirst()
+                if getSettings_returnValues.isEmpty {
+                    getSettings_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                getSettings_returnValues.first ?? .default
+                return getSettings_returnValues.first ?? .default
             }
         }
         set {

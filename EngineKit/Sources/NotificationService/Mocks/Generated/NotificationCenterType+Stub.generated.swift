@@ -17,10 +17,14 @@ public protocol NotificationCenterTypeStubbing {
 public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     public var requestAuthorization_returnValue: Result<Bool, Error> {
         get {
-            if requestAuthorization_returnValues.count > 1 {
-                requestAuthorization_returnValues.removeFirst()
+            if requestAuthorization_returnValues.count > 0 {
+                let value = requestAuthorization_returnValues.removeFirst()
+                if requestAuthorization_returnValues.isEmpty {
+                    requestAuthorization_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                requestAuthorization_returnValues.first ?? .default
+                return requestAuthorization_returnValues.first ?? .default
             }
         }
         set {
@@ -30,10 +34,14 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var requestAuthorization_returnValues: [Result<Bool, Error>] = []
     public var notificationCategories_returnValue: Set<NotificationCategory> {
         get {
-            if notificationCategories_returnValues.count > 1 {
-                notificationCategories_returnValues.removeFirst()
+            if notificationCategories_returnValues.count > 0 {
+                let value = notificationCategories_returnValues.removeFirst()
+                if notificationCategories_returnValues.isEmpty {
+                    notificationCategories_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                notificationCategories_returnValues.first ?? .default
+                return notificationCategories_returnValues.first ?? .default
             }
         }
         set {
@@ -43,10 +51,14 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var notificationCategories_returnValues: [Set<NotificationCategory>] = []
     public var addRequest_returnValue: Error? {
         get {
-            if addRequest_returnValues.count > 1 {
-                addRequest_returnValues.removeFirst()
+            if addRequest_returnValues.count > 0 {
+                let value = addRequest_returnValues.removeFirst()
+                if addRequest_returnValues.isEmpty {
+                    addRequest_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                addRequest_returnValues.first ?? nil
+                return addRequest_returnValues.first ?? nil
             }
         }
         set {
@@ -56,10 +68,14 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var addRequest_returnValues: [Error?] = []
     public var pendingNotificationRequests_returnValue: [NotificationRequest] {
         get {
-            if pendingNotificationRequests_returnValues.count > 1 {
-                pendingNotificationRequests_returnValues.removeFirst()
+            if pendingNotificationRequests_returnValues.count > 0 {
+                let value = pendingNotificationRequests_returnValues.removeFirst()
+                if pendingNotificationRequests_returnValues.isEmpty {
+                    pendingNotificationRequests_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                pendingNotificationRequests_returnValues.first ?? .default
+                return pendingNotificationRequests_returnValues.first ?? .default
             }
         }
         set {
@@ -69,10 +85,14 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var pendingNotificationRequests_returnValues: [[NotificationRequest]] = []
     public var deliveredNotifications_returnValue: [DeliveredNotification] {
         get {
-            if deliveredNotifications_returnValues.count > 1 {
-                deliveredNotifications_returnValues.removeFirst()
+            if deliveredNotifications_returnValues.count > 0 {
+                let value = deliveredNotifications_returnValues.removeFirst()
+                if deliveredNotifications_returnValues.isEmpty {
+                    deliveredNotifications_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                deliveredNotifications_returnValues.first ?? .default
+                return deliveredNotifications_returnValues.first ?? .default
             }
         }
         set {
@@ -82,10 +102,14 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     private var deliveredNotifications_returnValues: [[DeliveredNotification]] = []
     public var setBadgeCountNewBadgeCount_returnValue: Error? {
         get {
-            if setBadgeCountNewBadgeCount_returnValues.count > 1 {
-                setBadgeCountNewBadgeCount_returnValues.removeFirst()
+            if setBadgeCountNewBadgeCount_returnValues.count > 0 {
+                let value = setBadgeCountNewBadgeCount_returnValues.removeFirst()
+                if setBadgeCountNewBadgeCount_returnValues.isEmpty {
+                    setBadgeCountNewBadgeCount_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                setBadgeCountNewBadgeCount_returnValues.first ?? nil
+                return setBadgeCountNewBadgeCount_returnValues.first ?? nil
             }
         }
         set {

@@ -12,10 +12,14 @@ public protocol AppearanceServiceTypeStubbing {
 public final class AppearanceServiceTypeStub: AppearanceServiceTypeStubbing {
     public var getAppearance_returnValue: Appearance {
         get {
-            if getAppearance_returnValues.count > 1 {
-                getAppearance_returnValues.removeFirst()
+            if getAppearance_returnValues.count > 0 {
+                let value = getAppearance_returnValues.removeFirst()
+                if getAppearance_returnValues.isEmpty {
+                    getAppearance_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                getAppearance_returnValues.first ?? .default
+                return getAppearance_returnValues.first ?? .default
             }
         }
         set {

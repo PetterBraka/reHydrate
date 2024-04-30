@@ -13,10 +13,14 @@ public protocol UnitServiceTypeStubbing {
 public final class UnitServiceTypeStub: UnitServiceTypeStubbing {
     public var getUnitSystem_returnValue: UnitSystem {
         get {
-            if getUnitSystem_returnValues.count > 1 {
-                getUnitSystem_returnValues.removeFirst()
+            if getUnitSystem_returnValues.count > 0 {
+                let value = getUnitSystem_returnValues.removeFirst()
+                if getUnitSystem_returnValues.isEmpty {
+                    getUnitSystem_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                getUnitSystem_returnValues.first ?? .default
+                return getUnitSystem_returnValues.first ?? .default
             }
         }
         set {
@@ -26,10 +30,14 @@ public final class UnitServiceTypeStub: UnitServiceTypeStubbing {
     private var getUnitSystem_returnValues: [UnitSystem] = []
     public var convertValueFromUnitToUnit_returnValue: Double {
         get {
-            if convertValueFromUnitToUnit_returnValues.count > 1 {
-                convertValueFromUnitToUnit_returnValues.removeFirst()
+            if convertValueFromUnitToUnit_returnValues.count > 0 {
+                let value = convertValueFromUnitToUnit_returnValues.removeFirst()
+                if convertValueFromUnitToUnit_returnValues.isEmpty {
+                    convertValueFromUnitToUnit_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                convertValueFromUnitToUnit_returnValues.first ?? .default
+                return convertValueFromUnitToUnit_returnValues.first ?? .default
             }
         }
         set {

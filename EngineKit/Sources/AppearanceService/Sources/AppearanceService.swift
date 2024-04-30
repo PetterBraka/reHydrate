@@ -32,12 +32,12 @@ public final class AppearanceService: AppearanceServiceType {
     
     public func setAppearance(_ appearance: AppearanceServiceInterface.Appearance) {
         do {
-            try engine.userPreferenceService.set(preferenceKey, for: appearance.rawValue)
+            try engine.userPreferenceService.set(appearance.rawValue, for: preferenceKey)
             try engine.appearancePort.setStyle(.init(from: appearance))
         } catch {
             engine.logger.error("Unable to set \(appearance.rawValue) appearance", error: error)
             let inverted: Appearance = appearance == .dark ? .light : .dark
-            try? engine.userPreferenceService.set(preferenceKey, for: inverted.rawValue)
+            try? engine.userPreferenceService.set(inverted.rawValue, for: preferenceKey)
         }
     }
 }

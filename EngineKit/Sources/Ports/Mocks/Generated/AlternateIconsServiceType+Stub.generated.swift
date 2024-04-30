@@ -14,10 +14,14 @@ public protocol AlternateIconsServiceTypeStubbing {
 public final class AlternateIconsServiceTypeStub: AlternateIconsServiceTypeStubbing {
     public var supportsAlternateIcons_returnValue: Bool {
         get {
-            if supportsAlternateIcons_returnValues.count > 1 {
-                supportsAlternateIcons_returnValues.removeFirst()
+            if supportsAlternateIcons_returnValues.count > 0 {
+                let value = supportsAlternateIcons_returnValues.removeFirst()
+                if supportsAlternateIcons_returnValues.isEmpty {
+                    supportsAlternateIcons_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                supportsAlternateIcons_returnValues.first ?? .default
+                return supportsAlternateIcons_returnValues.first ?? .default
             }
         }
         set {
@@ -27,10 +31,14 @@ public final class AlternateIconsServiceTypeStub: AlternateIconsServiceTypeStubb
     private var supportsAlternateIcons_returnValues: [Bool] = []
     public var setAlternateIconIconName_returnValue: Error? {
         get {
-            if setAlternateIconIconName_returnValues.count > 1 {
-                setAlternateIconIconName_returnValues.removeFirst()
+            if setAlternateIconIconName_returnValues.count > 0 {
+                let value = setAlternateIconIconName_returnValues.removeFirst()
+                if setAlternateIconIconName_returnValues.isEmpty {
+                    setAlternateIconIconName_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                setAlternateIconIconName_returnValues.first ?? nil
+                return setAlternateIconIconName_returnValues.first ?? nil
             }
         }
         set {
@@ -40,10 +48,14 @@ public final class AlternateIconsServiceTypeStub: AlternateIconsServiceTypeStubb
     private var setAlternateIconIconName_returnValues: [Error?] = []
     public var getAlternateIcon_returnValue: String? {
         get {
-            if getAlternateIcon_returnValues.count > 1 {
-                getAlternateIcon_returnValues.removeFirst()
+            if getAlternateIcon_returnValues.count > 0 {
+                let value = getAlternateIcon_returnValues.removeFirst()
+                if getAlternateIcon_returnValues.isEmpty {
+                    getAlternateIcon_returnValues.insert(value, at: 0)
+                }
+                return value
             } else {
-                getAlternateIcon_returnValues.first ?? nil
+                return getAlternateIcon_returnValues.first ?? nil
             }
         }
         set {
