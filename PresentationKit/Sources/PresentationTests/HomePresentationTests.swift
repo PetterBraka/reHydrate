@@ -920,8 +920,8 @@ extension HealthInterfaceSpy.MethodCall: Equatable {
             lhs_dataType == rhs_dataType
         case let (.requestAuth(lhs_readAndWrite), .requestAuth(rhs_readAndWrite)):
             lhs_readAndWrite == rhs_readAndWrite
-        case let (.export(lhs_quantity, lhs_id, lhs_date), .export(rhs_quantity, rhs_id, rhs_date)):
-            lhs_quantity == rhs_quantity && 
+        case let (.export(lhs_quantity, lhs_id, _), .export(rhs_quantity, rhs_id, _)):
+            lhs_quantity == rhs_quantity &&
             lhs_id == rhs_id
 //            lhs_date == rhs_date // Can't test the date
         case let (.readSum(lhs_data, lhs_start, lhs_end, lhs_intervalComponents),
