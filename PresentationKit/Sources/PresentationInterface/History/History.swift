@@ -79,7 +79,7 @@ extension History.ViewModel {
 
 extension History.ViewModel {
     public struct CalendarData: Equatable {
-        public enum Weekday {
+        public enum Weekday: String {
             case monday
             case tuesday
             case wednesday
