@@ -44,7 +44,7 @@ public enum History {
 
 extension History.ViewModel {
     public struct ChartData: Equatable {
-        public enum Option: CaseIterable {
+        public enum Option: String, CaseIterable {
             case bar
             case line
             case plot

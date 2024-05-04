@@ -15,6 +15,7 @@ import UnitService
 import UnitServiceInterface
 import UnitServiceMocks
 import UserPreferenceServiceMocks
+import PresentationInterface
 @testable import PresentationKit
 
 final class HistoryPresentationTests: XCTestCase {
@@ -440,5 +441,27 @@ extension HistoryPresentationTests {
     private func assertCalendar(_ expectedCalendar: Sut.ViewModel.CalendarData,
                                 file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(sut.viewModel.calendar, expectedCalendar, "calendar", file: file, line: line)
+    }
+}
+
+extension Screen.History.Presenter.ViewModel.ChartData: CustomStringConvertible {
+    public var description: String {
+        """
+title: \(title)
+points: \(points)
+selectedOption: \(selectedOption.rawValue)
+options: \(options.map { $0.rawValue })
+"""
+    }
+}
+
+extension Screen.History.Presenter.ViewModel.ChartData.Point: CustomStringConvertible {
+    public var description: String {
+        """
+date: \(date)
+dateString: \(dateString)
+consumed: \(String(describing: consumed))
+goal: \(String(describing: goal))
+"""
     }
 }
