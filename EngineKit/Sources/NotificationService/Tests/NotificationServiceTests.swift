@@ -459,6 +459,7 @@ extension NotificationSettings: Equatable {
 extension Date {
     init?(date: String, time: String) {
         let formatter = DateFormatter()
+        formatter.locale = .init(identifier: "en_GB")
         formatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
         guard let date = formatter.date(from: "\(date) \(time)")
         else { return nil }
@@ -467,6 +468,7 @@ extension Date {
     
     func toTimeString() -> String {
         let formatter = DateFormatter()
+        formatter.locale = .init(identifier: "en_GB")
         formatter.dateFormat = "hh:mm:ss"
         return formatter.string(from: self)
     }

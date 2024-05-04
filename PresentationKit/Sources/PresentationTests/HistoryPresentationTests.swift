@@ -43,7 +43,12 @@ final class HistoryPresentationTests: XCTestCase {
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024 - 5, month: 2, day: 15)
         dateService.stub.getDateValueComponentDate_returnValue = .init(year: 2024, month: 2, day: 9)
         
-        sut = Sut(engine: engine, router: router)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        formatter.locale = .init(identifier: "en_GB")
+        
+        sut = Sut(engine: engine, router: router, formatter: formatter)
     }
     
     override func tearDown() {

@@ -32,17 +32,12 @@ extension Screen.History {
         public private(set) var viewModel: ViewModel {
             didSet { scene?.perform(update: .viewModel) }
         }
+        private let formatter: DateFormatter
         
-        private let formatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .short
-            formatter.timeStyle = .none
-            return formatter
-        }()
-        
-        public init(engine: Engine, router: Router) {
+        public init(engine: Engine, router: Router, formatter: DateFormatter) {
             self.engine = engine
             self.router = router
+            self.formatter = formatter
             let dateNow = engine.dateService.now()
             let start = engine.dateService.getDate(byAdding: -(365 * 5), component: .day, to: dateNow)
             let past = engine.dateService.getDate(byAdding: -6, component: .day, to: dateNow)

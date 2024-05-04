@@ -36,6 +36,7 @@ public extension Date {
         
         print("Expected date \(dateString)")
         let formatter = DateFormatter()
+        formatter.locale = .init(identifier: "en_GB")
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         guard let date = formatter.date(from: dateString )
         else { fatalError("Invalid date - \(dateString)") }

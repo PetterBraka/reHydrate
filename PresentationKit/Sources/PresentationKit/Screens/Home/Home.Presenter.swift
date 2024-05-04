@@ -39,16 +39,12 @@ extension Screen.Home {
             didSet { scene?.perform(update: .viewModel) }
         }
         
-        private let formatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "EEEE - dd MMM"
-            return formatter
-        }()
+        private let formatter: DateFormatter
         
-        public init(engine: Engine,
-                    router: Router) {
+        public init(engine: Engine, router: Router, formatter: DateFormatter) {
             self.engine = engine
             self.router = router
+            self.formatter = formatter
             viewModel = ViewModel(dateTitle: formatter.string(from: engine.dateService.now()),
                                   consumption: 0,
                                   goal: 0,

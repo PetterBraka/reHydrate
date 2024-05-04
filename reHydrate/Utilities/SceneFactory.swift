@@ -23,9 +23,28 @@ public final class SceneFactory: ObservableObject {
     public let router = Router()
     
     // Root presenters
-    private lazy var homePresenter = Screen.Home.Presenter(engine: engine, router: router)
+    private lazy var homePresenter = Screen.Home.Presenter(
+        engine: engine,
+        router: router,
+        formatter: {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE - dd MMM"
+            formatter.locale = .current
+            return formatter
+        }()
+    )
     private lazy var settingsPresenter = Screen.Settings.Presenter(engine: engine, router: router)
-    private lazy var historyPresenter = Screen.History.Presenter(engine: engine, router: router)
+    private lazy var historyPresenter = Screen.History.Presenter(
+        engine: engine,
+        router: router,
+        formatter: {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .none
+            formatter.locale = .current
+            return formatter
+        }()
+    )
     
     // Port
     let notificationDelegate: NotificationDelegatePort
