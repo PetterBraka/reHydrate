@@ -343,12 +343,10 @@ extension HistoryPresentationTests {
 extension Screen.History.Presenter.ViewModel.ChartData: CustomStringConvertible {
     public var description: String {
         """
-
 title: \(title)
-points: \(points)
+points: \(points.description)
 selectedOption: \(selectedOption.rawValue)
 options: \(options.map { $0.rawValue })
-
 """
     }
 }
@@ -357,11 +355,10 @@ extension Screen.History.Presenter.ViewModel.ChartData.Point: CustomStringConver
     public var description: String {
         """
 
-date: \(date)
-dateString: \(dateString)
-consumed: \(String(describing: consumed))
-goal: \(String(describing: goal))
-
+    date: \(date)
+    dateString: \(dateString)
+    consumed: \(consumed ?? 999)
+    goal: \(goal ?? 999)
 """
     }
 }
@@ -373,14 +370,19 @@ extension Screen.History.Presenter.ViewModel.CalendarData: CustomStringConvertib
 highlightedMonth: \(highlightedMonth)
 weekdayStart: \(weekdayStart)
 range: \(range)
-days: \(days)
-
+days: \(days.description)
 """
     }
 }
 
 extension Screen.History.Presenter.ViewModel.CalendarData.Day: CustomStringConvertible {
     public var description: String {
-        "date: \(date), consumed: \(consumed), goal: \(goal)"
+        """
+
+    date: \(date)
+    consumed: \(consumed)
+    goal: \(goal)
+
+"""
     }
 }
