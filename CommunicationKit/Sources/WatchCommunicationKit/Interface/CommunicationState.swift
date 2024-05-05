@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CommunicationState.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 05/05/2024.

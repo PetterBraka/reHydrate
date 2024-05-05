@@ -36,7 +36,7 @@ let package = Package(
         .target(
             name: "WatchCommunicationKitMock",
             dependencies: ["WatchCommunicationKitInterface"],
-            path: "Sources/WatchCommunicationKit/Mock"
+            path: "Sources/WatchCommunicationKit/Mocks"
         ),
         .testTarget(
             name: "WatchCommunicationKitTests",
