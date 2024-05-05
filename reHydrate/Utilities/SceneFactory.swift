@@ -23,9 +23,28 @@ public final class SceneFactory: ObservableObject {
     public let router = Router()
     
     // Root presenters
-    private lazy var homePresenter = Screen.Home.Presenter(engine: engine, router: router)
+    private lazy var homePresenter = Screen.Home.Presenter(
+        engine: engine,
+        router: router,
+        formatter: {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE - dd MMM"
+            formatter.locale = .current
+            return formatter
+        }()
+    )
     private lazy var settingsPresenter = Screen.Settings.Presenter(engine: engine, router: router)
-    private lazy var historyPresenter = Screen.History.Presenter(engine: engine, router: router)
+    private lazy var historyPresenter = Screen.History.Presenter(
+        engine: engine,
+        router: router,
+        formatter: {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .none
+            formatter.locale = .current
+            return formatter
+        }()
+    )
     
     // Port
     let notificationDelegate: NotificationDelegatePort
@@ -105,21 +124,6 @@ public final class SceneFactory: ObservableObject {
         historyPresenter.scene = observer
         
         return HistoryScreen(observer: observer)
-    }
-}
-
-extension Home.ViewModel.Drink {
-    init(from drink: DrinkServiceInterface.Drink) {
-        let container: Home.ViewModel.Container = switch drink.container {
-        case .health: .large
-        case .large: .large
-        case .medium: .medium
-        case .small: .small
-        }
-
-        self = .init(id: drink.id,
-                     size: drink.size,
-                     container: container)
     }
 }
 

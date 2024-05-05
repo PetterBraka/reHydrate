@@ -15,7 +15,6 @@ import DateServiceInterface
 extension Screen.History {
     public final class Presenter: HistoryPresenterType {
         public typealias ViewModel = History.ViewModel
-        
         public typealias Engine = (
             HasLoggingService &
             HasUnitService &
@@ -33,55 +32,24 @@ extension Screen.History {
         public private(set) var viewModel: ViewModel {
             didSet { scene?.perform(update: .viewModel) }
         }
+        private let formatter: DateFormatter
         
-        private let formatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .short
-            formatter.timeStyle = .none
-            return formatter
-        }()
-        
-        private var selectedRange: ClosedRange<Date>?
-        
-        public init(engine: Engine,
-                    router: Router) {
+        public init(engine: Engine, router: Router, formatter: DateFormatter) {
             self.engine = engine
             self.router = router
-            let calendarRange = (
-                engine.dateService.getDate(
-                    byAdding: -(365 * 5),
-                    component: .day,
-                    to: engine.dateService.now()
-                ) ... engine.dateService.now())
-            let past = engine.dateService.getDate(
-                byAdding: -6, component: .day, 
-                to: engine.dateService.now()
-            )
-            selectedRange =  past ... engine.dateService.now()
+            self.formatter = formatter
+            let dateNow = engine.dateService.now()
+            let start = engine.dateService.getDate(byAdding: -(365 * 5), component: .day, to: dateNow)
+            let past = engine.dateService.getDate(byAdding: -6, component: .day, to: dateNow)
             self.viewModel = .init(
                 isLoading: false,
-                details: .init(averageConsumed: "", averageGoal: "",
-                               totalConsumed: "", totalGoal: ""),
-                chart: .init(title: " - ",
-                             points: [],
-                             selectedOption: .line),
-                calendar: .init(highlightedMonth: engine.dateService.now(),
-                                weekdayStart: .monday,
-                                range: calendarRange,
-                                days: []),
-                selectedRange: nil,
+                details: .init(averageConsumed: "", averageGoal: "", totalConsumed: "", totalGoal: ""),
+                chart: .init(title: "", points: [], selectedOption: .line),
+                calendar: .init(highlightedMonth: dateNow, weekdayStart: .monday, range: start ... dateNow, days: []),
+                selectedRange: past ... dateNow,
                 selectedDays: 0,
                 error: nil
             )
-            Task(priority: .low) {
-                guard let start = selectedRange?.lowerBound,
-                      let end = selectedRange?.upperBound
-                else { return }
-                let days = await fetchDays(startDate: calendarRange.lowerBound,
-                                           endDate: calendarRange.upperBound)
-                updateViewModel(isLoading: true, daysFound: days.mapToViewModel())
-                await updateViewModelWithDataBetween(start: start, end: end)
-            }
         }
         
         public func perform(action: History.Action) async {
@@ -89,18 +57,16 @@ extension Screen.History {
             case .didTapBack:
                 router.showHome()
             case .didAppear:
-                guard let selectedRange else { return }
-                await updateViewModelWithDataBetween(start: selectedRange.lowerBound,
-                                                     end: selectedRange.upperBound)
+                guard let selectedRange = viewModel.selectedRange else { return }
+                await updateViewModelWithDataBetween(start: selectedRange.lowerBound, end: selectedRange.upperBound)
             case .didTapClear:
-                selectedRange = nil
-                updateViewModel(isLoading: false)
+                updateViewModel(isLoading: false, selectedRange: nil)
             case .didSelectChart(let chart):
-                updateViewModel(isLoading: false, chartOption: chart)
+                updateViewModel(isLoading: false, chartOption: chart, selectedRange: viewModel.selectedRange)
             case let .didTap(date):
-                updateViewModel(isLoading: true, highlightedMonth: date)
+                updateViewModel(isLoading: true, selectedRange: viewModel.selectedRange, highlightedMonth: date)
                 let newRange: ClosedRange<Date>
-                if let range = selectedRange {
+                if let range = viewModel.selectedRange {
                     let startToDate = engine.dateService.daysBetween(range.lowerBound, end: date)
                     let endToDate = engine.dateService.daysBetween(date, end: range.upperBound)
                     if date > range.upperBound || startToDate > endToDate {
@@ -111,9 +77,7 @@ extension Screen.History {
                 } else {
                     newRange = date ... engine.dateService.getDate(byAdding: 1, component: .day, to: date)
                 }
-                selectedRange = newRange
-                await updateViewModelWithDataBetween(start: newRange.lowerBound,
-                                                     end: newRange.upperBound)
+                await updateViewModelWithDataBetween(start: newRange.lowerBound, end: newRange.upperBound)
             }
         }
     }
@@ -129,7 +93,8 @@ private extension Screen.History.Presenter {
         chartPoints: [ViewModel.ChartData.Point]? = nil,
         chartOption: ViewModel.ChartData.Option? = nil,
         calendarRange: ClosedRange<Date>? = nil,
-        daysFound: [ViewModel.CalendarData.Day]? = nil,
+        calendarDays: [ViewModel.CalendarData.Day]? = nil,
+        selectedRange: ClosedRange<Date>?,
         daysSelected: Int? = nil,
         weekdayStart: ViewModel.CalendarData.Weekday? = nil,
         highlightedMonth: Date? = nil,
@@ -142,13 +107,13 @@ private extension Screen.History.Presenter {
         } else {
             ""
         }
-        
         let details = ViewModel.Details(
-            averageConsumed: getCleanTitle(averageConsumed),
-            averageGoal: getCleanTitle(averageGoal),
-            totalConsumed: getCleanTitle(totalConsumed),
-            totalGoal: getCleanTitle(totalGoal)
-        )
+            averageConsumed: averageConsumed,
+            averageGoal: averageGoal,
+            totalConsumed: totalConsumed,
+            totalGoal: totalGoal,
+            unitSystem: engine.unitService.getUnitSystem()
+        ) ?? viewModel.details
         let chart = ViewModel.ChartData(
             title: title,
             points: chartPoints ?? viewModel.chart.points,
@@ -158,7 +123,7 @@ private extension Screen.History.Presenter {
             highlightedMonth: highlightedMonth ?? viewModel.calendar.highlightedMonth,
             weekdayStart: weekdayStart ?? viewModel.calendar.weekdayStart,
             range: calendarRange ?? viewModel.calendar.range,
-            days: daysFound ?? viewModel.calendar.days
+            days: calendarDays ?? viewModel.calendar.days
         )
         viewModel = .init(
             isLoading: isLoading,
@@ -172,54 +137,48 @@ private extension Screen.History.Presenter {
     }
 }
 
+extension Array where Element == Screen.History.Presenter.ViewModel.ChartData.Point {
+    init(from days: [Day], with formatter: DateFormatter) {
+        self = days.map { day in
+            .init(
+                date: day.date,
+                dateString: formatter.string(from: day.date),
+                consumed: day.consumed,
+                goal: day.goal
+            )
+        }
+    }
+}
+
 private extension Screen.History.Presenter {
     func fetchDays(startDate: Date, endDate: Date) async -> [Day] {
         (try? await engine.dayService.getDays(between: startDate ... endDate)) ?? []
     }
-        
-    func getChartData(from days: [Day]) async -> [ViewModel.ChartData.Point] {
-        let formatter = formatter
-        let dateService = engine.dateService
-        
-        return days
-            .map { [formatter, dateService] day in
-                let dateString = formatter.string(from: day.date)
-                if let day = days.first(where: {
-                    dateService.isDate($0.date, inSameDayAs: day.date)
-                }) {
-                    return ViewModel.ChartData.Point(
-                        date: day.date, dateString: dateString,
-                        consumed: day.consumed, goal: day.goal
-                    )
-                } else {
-                    return ViewModel.ChartData.Point(
-                        date: day.date, dateString: dateString,
-                        consumed: 0, goal: nil
-                    )
-                }
-            }
-    }
     
     func updateViewModelWithDataBetween(start: Date, end: Date) async {
         let days = await fetchDays(startDate: start, endDate: end)
-        let points = await getChartData(from: days)
-        let daysSelected = engine.dateService.daysBetween(start, end: end) + 1
-        
-        var totalGoal = 0.0
-        var totalConsumed = 0.0
-        
-        points.forEach { day in
-            totalGoal += day.goal ?? 0
-            totalConsumed += day.consumed ?? 0
+        let points: [ViewModel.ChartData.Point] = .init(from: days, with: formatter)
+        var daysSelected = engine.dateService.daysBetween(start, end: end)
+        if daysSelected == 0 {
+            daysSelected = 1
         }
-        let averageGoal = totalGoal / Double(daysSelected)
-        let averageConsumed = totalConsumed / Double(daysSelected)
+        
+        let total = points.reduce(into: (goal: 0, consumed: 0)) { partial, point in
+            let goal =  partial.goal + (point.goal ?? 0)
+            let consumed = partial.consumed + (point.consumed ?? 0)
+            partial = (goal, consumed)
+        }
+        
+        let averageGoal = total.goal / Double(daysSelected)
+        let averageConsumed = total.consumed / Double(daysSelected)
         
         updateViewModel(
             isLoading: false,
             averageConsumed: averageConsumed, averageGoal: averageGoal,
-            totalConsumed: totalConsumed, totalGoal: totalGoal,
+            totalConsumed: total.consumed, totalGoal: total.goal,
             chartPoints: points,
+            calendarDays: days.mapToViewModel(),
+            selectedRange: start ... end,
             daysSelected: daysSelected
         )
     }
@@ -249,24 +208,6 @@ private extension Screen.History.Presenter {
         
         return dates
     }
-    
-    func getCleanTitle(_ input: Double?) -> String {
-        let unit = engine.unitService.getUnitSystem()
-        let symbol = unit == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
-        
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 0
-        formatter.allowsFloats = true
-        
-        return if let input,
-                  let title = formatter.string(from: input as NSNumber) {
-            "\(title) \(symbol)"
-        } else {
-            "0 \(symbol)"
-        }
-    }
 }
 
 private extension Array where Element == Day {
@@ -278,5 +219,32 @@ private extension Array where Element == Day {
                 goal: $0.goal
             )
         }
+    }
+}
+
+extension History.ViewModel.Details {
+    init?(averageConsumed: Double?, averageGoal: Double?,
+         totalConsumed: Double?, totalGoal: Double?, unitSystem: UnitSystem) {
+        let symbol = unitSystem == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        formatter.allowsFloats = true
+        
+        guard let averageConsumed, let averageGoal, let totalConsumed, let totalGoal else { return nil }
+        
+        let averageConsumedString = formatter.string(from: averageConsumed as NSNumber) ?? "0"
+        let averageGoalString = formatter.string(from: averageGoal as NSNumber) ?? "0"
+        let totalConsumedString = formatter.string(from: totalConsumed as NSNumber) ?? "0"
+        let totalGoalString = formatter.string(from: totalGoal as NSNumber) ?? "0"
+        
+        self.init(
+            averageConsumed: averageConsumedString + " " + symbol,
+            averageGoal: averageGoalString + " " + symbol,
+            totalConsumed: totalConsumedString + " " + symbol,
+            totalGoal: totalGoalString + " " + symbol
+        )
     }
 }

@@ -8,20 +8,24 @@ import AppearanceServiceInterface
 
 public protocol AppearanceServiceTypeSpying {
     var variableLog: [AppearanceServiceTypeSpy.VariableName] { get set }
-    var methodLog: [AppearanceServiceTypeSpy.MethodName] { get set }
+    var lastVariabelCall: AppearanceServiceTypeSpy.VariableName? { get }
+    var methodLog: [AppearanceServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: AppearanceServiceTypeSpy.MethodCall? { get }
 }
 
 public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
     public enum VariableName {
     }
 
-    public enum MethodName {
+    public enum MethodCall {
         case getAppearance
-        case setAppearance
+        case setAppearance(appearance: Appearance)
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastVariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: AppearanceServiceType
     public init(realObject: AppearanceServiceType) {
         self.realObject = realObject
@@ -34,7 +38,7 @@ extension AppearanceServiceTypeSpy: AppearanceServiceType {
         return realObject.getAppearance()
     }
     public func setAppearance(_ appearance: Appearance) -> Void {
-        methodLog.append(.setAppearance)
+        methodLog.append(.setAppearance(appearance: appearance))
         realObject.setAppearance(appearance)
     }
 }

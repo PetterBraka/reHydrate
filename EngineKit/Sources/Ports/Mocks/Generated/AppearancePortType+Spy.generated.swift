@@ -8,20 +8,24 @@ import PortsInterface
 
 public protocol AppearancePortTypeSpying {
     var variableLog: [AppearancePortTypeSpy.VariableName] { get set }
-    var methodLog: [AppearancePortTypeSpy.MethodName] { get set }
+    var lastVariabelCall: AppearancePortTypeSpy.VariableName? { get }
+    var methodLog: [AppearancePortTypeSpy.MethodCall] { get set }
+    var lastMethodCall: AppearancePortTypeSpy.MethodCall? { get }
 }
 
 public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
     public enum VariableName {
     }
 
-    public enum MethodName {
+    public enum MethodCall {
         case getStyle
-        case setStyle
+        case setStyle(style: Style)
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastVariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: AppearancePortType
     public init(realObject: AppearancePortType) {
         self.realObject = realObject
@@ -34,7 +38,7 @@ extension AppearancePortTypeSpy: AppearancePortType {
         return realObject.getStyle()
     }
     public func setStyle(_ style: Style) throws -> Void {
-        methodLog.append(.setStyle)
+        methodLog.append(.setStyle(style: style))
         try realObject.setStyle(style)
     }
 }

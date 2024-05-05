@@ -8,7 +8,9 @@ import PortsInterface
 
 public protocol OpenUrlInterfaceSpying {
     var variableLog: [OpenUrlInterfaceSpy.VariableName] { get set }
-    var methodLog: [OpenUrlInterfaceSpy.MethodName] { get set }
+    var lastVariabelCall: OpenUrlInterfaceSpy.VariableName? { get }
+    var methodLog: [OpenUrlInterfaceSpy.MethodCall] { get set }
+    var lastMethodCall: OpenUrlInterfaceSpy.MethodCall? { get }
 }
 
 public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
@@ -16,13 +18,15 @@ public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
         case settingsUrl
     }
 
-    public enum MethodName {
-        case open_url
-        case email_to_cc_bcc_subject_body
+    public enum MethodCall {
+        case open(url: URL)
+        case email(email: String, cc: String?, bcc: String?, subject: String, body: String?)
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastVariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: OpenUrlInterface
     public init(realObject: OpenUrlInterface) {
         self.realObject = realObject
@@ -37,11 +41,11 @@ extension OpenUrlInterfaceSpy: OpenUrlInterface {
         }
     }
     public func open(url: URL) async throws -> Void {
-        methodLog.append(.open_url)
+        methodLog.append(.open(url: url))
         try await realObject.open(url: url)
     }
     public func email(to email: String, cc: String?, bcc: String?, subject: String, body: String?) async throws -> Void {
-        methodLog.append(.email_to_cc_bcc_subject_body)
+        methodLog.append(.email(email: email, cc: cc, bcc: bcc, subject: subject, body: body))
         try await realObject.email(to: email, cc: cc, bcc: bcc, subject: subject, body: body)
     }
 }

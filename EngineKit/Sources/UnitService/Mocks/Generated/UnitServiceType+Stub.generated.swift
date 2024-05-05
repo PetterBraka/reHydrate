@@ -13,10 +13,10 @@ public protocol UnitServiceTypeStubbing {
 public final class UnitServiceTypeStub: UnitServiceTypeStubbing {
     public var getUnitSystem_returnValue: UnitSystem {
         get {
-            if getUnitSystem_returnValues.first != nil {
-                getUnitSystem_returnValues.removeFirst()
-            } else {
+            if getUnitSystem_returnValues.isEmpty {
                 .default
+            } else {
+                getUnitSystem_returnValues.removeFirst()
             }
         }
         set {
@@ -26,10 +26,10 @@ public final class UnitServiceTypeStub: UnitServiceTypeStubbing {
     private var getUnitSystem_returnValues: [UnitSystem] = []
     public var convertValueFromUnitToUnit_returnValue: Double {
         get {
-            if convertValueFromUnitToUnit_returnValues.first != nil {
-                convertValueFromUnitToUnit_returnValues.removeFirst()
-            } else {
+            if convertValueFromUnitToUnit_returnValues.isEmpty {
                 .default
+            } else {
+                convertValueFromUnitToUnit_returnValues.removeFirst()
             }
         }
         set {

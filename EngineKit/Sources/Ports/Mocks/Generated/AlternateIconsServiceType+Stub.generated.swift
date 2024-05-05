@@ -14,10 +14,10 @@ public protocol AlternateIconsServiceTypeStubbing {
 public final class AlternateIconsServiceTypeStub: AlternateIconsServiceTypeStubbing {
     public var supportsAlternateIcons_returnValue: Bool {
         get {
-            if supportsAlternateIcons_returnValues.first != nil {
-                supportsAlternateIcons_returnValues.removeFirst()
-            } else {
+            if supportsAlternateIcons_returnValues.isEmpty {
                 .default
+            } else {
+                supportsAlternateIcons_returnValues.removeFirst()
             }
         }
         set {
@@ -27,10 +27,10 @@ public final class AlternateIconsServiceTypeStub: AlternateIconsServiceTypeStubb
     private var supportsAlternateIcons_returnValues: [Bool] = []
     public var setAlternateIconIconName_returnValue: Error? {
         get {
-            if setAlternateIconIconName_returnValues.first != nil {
-                setAlternateIconIconName_returnValues.removeFirst()
+            if setAlternateIconIconName_returnValues.isEmpty {
+                .default
             } else {
-                nil
+                setAlternateIconIconName_returnValues.removeFirst()
             }
         }
         set {
@@ -40,10 +40,10 @@ public final class AlternateIconsServiceTypeStub: AlternateIconsServiceTypeStubb
     private var setAlternateIconIconName_returnValues: [Error?] = []
     public var getAlternateIcon_returnValue: String? {
         get {
-            if getAlternateIcon_returnValues.first != nil {
-                getAlternateIcon_returnValues.removeFirst()
+            if getAlternateIcon_returnValues.isEmpty {
+                .default
             } else {
-                nil
+                getAlternateIcon_returnValues.removeFirst()
             }
         }
         set {

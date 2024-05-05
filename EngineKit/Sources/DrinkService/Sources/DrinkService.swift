@@ -63,7 +63,6 @@ public final class DrinkService: DrinkServiceType {
             .init(id: UUID().uuidString, size: 300, container: .small),
             .init(id: UUID().uuidString, size: 500, container: .medium),
             .init(id: UUID().uuidString, size: 750, container: .large)
-            
         ]
         
         for drink in defaultDrinks {

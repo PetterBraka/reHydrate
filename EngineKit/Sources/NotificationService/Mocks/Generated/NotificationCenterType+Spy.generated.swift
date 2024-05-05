@@ -8,29 +8,33 @@ import NotificationServiceInterface
 
 public protocol NotificationCenterTypeSpying {
     var variableLog: [NotificationCenterTypeSpy.VariableName] { get set }
-    var methodLog: [NotificationCenterTypeSpy.MethodName] { get set }
+    var lastVariabelCall: NotificationCenterTypeSpy.VariableName? { get }
+    var methodLog: [NotificationCenterTypeSpy.MethodCall] { get set }
+    var lastMethodCall: NotificationCenterTypeSpy.MethodCall? { get }
 }
 
 public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
     public enum VariableName {
     }
 
-    public enum MethodName {
+    public enum MethodCall {
         case requestAuthorization
-        case setNotificationCategories
+        case setNotificationCategories(categories: Set<NotificationCategory>)
         case notificationCategories
-        case add
+        case add(request: NotificationRequest)
         case pendingNotificationRequests
-        case removePendingNotificationRequests_withIdentifiers
+        case removePendingNotificationRequests(identifiers: [String])
         case removeAllPendingNotificationRequests
         case deliveredNotifications
-        case removeDeliveredNotifications_withIdentifiers
+        case removeDeliveredNotifications(identifiers: [String])
         case removeAllDeliveredNotifications
-        case setBadgeCount
+        case setBadgeCount(newBadgeCount: Int)
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastVariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: NotificationCenterType
     public init(realObject: NotificationCenterType) {
         self.realObject = realObject
@@ -43,7 +47,7 @@ extension NotificationCenterTypeSpy: NotificationCenterType {
         return try await realObject.requestAuthorization()
     }
     public func setNotificationCategories(_ categories: Set<NotificationCategory>) -> Void {
-        methodLog.append(.setNotificationCategories)
+        methodLog.append(.setNotificationCategories(categories: categories))
         realObject.setNotificationCategories(categories)
     }
     public func notificationCategories() async -> Set<NotificationCategory> {
@@ -51,7 +55,7 @@ extension NotificationCenterTypeSpy: NotificationCenterType {
         return await realObject.notificationCategories()
     }
     public func add(_ request: NotificationRequest) async throws -> Void {
-        methodLog.append(.add)
+        methodLog.append(.add(request: request))
         try await realObject.add(request)
     }
     public func pendingNotificationRequests() async -> [NotificationRequest] {
@@ -59,7 +63,7 @@ extension NotificationCenterTypeSpy: NotificationCenterType {
         return await realObject.pendingNotificationRequests()
     }
     public func removePendingNotificationRequests(withIdentifiers identifiers: [String]) -> Void {
-        methodLog.append(.removePendingNotificationRequests_withIdentifiers)
+        methodLog.append(.removePendingNotificationRequests(identifiers: identifiers))
         realObject.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     public func removeAllPendingNotificationRequests() -> Void {
@@ -71,7 +75,7 @@ extension NotificationCenterTypeSpy: NotificationCenterType {
         return await realObject.deliveredNotifications()
     }
     public func removeDeliveredNotifications(withIdentifiers identifiers: [String]) -> Void {
-        methodLog.append(.removeDeliveredNotifications_withIdentifiers)
+        methodLog.append(.removeDeliveredNotifications(identifiers: identifiers))
         realObject.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
     public func removeAllDeliveredNotifications() -> Void {
@@ -79,7 +83,7 @@ extension NotificationCenterTypeSpy: NotificationCenterType {
         realObject.removeAllDeliveredNotifications()
     }
     public func setBadgeCount(_ newBadgeCount: Int) async throws -> Void {
-        methodLog.append(.setBadgeCount)
+        methodLog.append(.setBadgeCount(newBadgeCount: newBadgeCount))
         try await realObject.setBadgeCount(newBadgeCount)
     }
 }

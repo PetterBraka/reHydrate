@@ -71,7 +71,11 @@ final class AppearanceServiceTests: XCTestCase {
     
     func test_setAppearance_dark() {
         sut.setAppearance(.dark)
-        XCTAssertEqual(userPreferenceService.spy.methodLog, [.set_for])
+        XCTAssertEqual(
+            userPreferenceService.spy.methodLog.debugDescription,
+            [UserPreferenceServiceTypeSpy.MethodCall.set(value: "dark", key: "AppearanceService.key")]
+                .debugDescription
+        )
     }
     
     func test_setAppearance_setFails() {

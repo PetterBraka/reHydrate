@@ -8,20 +8,24 @@ import TimelineServiceInterface
 
 public protocol TimelineServiceTypeSpying {
     var variableLog: [TimelineServiceTypeSpy.VariableName] { get set }
-    var methodLog: [TimelineServiceTypeSpy.MethodName] { get set }
+    var lastVariabelCall: TimelineServiceTypeSpy.VariableName? { get }
+    var methodLog: [TimelineServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: TimelineServiceTypeSpy.MethodCall? { get }
 }
 
 public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
     public enum VariableName {
     }
 
-    public enum MethodName {
-        case getTimeline_for
+    public enum MethodCall {
+        case getTimeline(date: Date)
         case getTimelineCollection
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastVariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: TimelineServiceType
     public init(realObject: TimelineServiceType) {
         self.realObject = realObject
@@ -30,7 +34,7 @@ public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
 
 extension TimelineServiceTypeSpy: TimelineServiceType {
     public func getTimeline(for date: Date) async -> [Timeline] {
-        methodLog.append(.getTimeline_for)
+        methodLog.append(.getTimeline(date: date))
         return await realObject.getTimeline(for: date)
     }
     public func getTimelineCollection() async -> [TimelineCollection] {

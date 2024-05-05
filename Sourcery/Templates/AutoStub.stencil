@@ -60,10 +60,10 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 {% for variable in protocol.variables %}
     public var {% call variableName variable %}: {{ variable.typeName }} {
         get {
-            if {% call variableName variable %}s.first != nil {
-                {% call variableName variable %}s.removeLast()
-            } else {
+            if {% call variableName variable %}s.isEmpty {
                 .default
+            } else {
+                {% call variableName variable %}s.removeFirst()
             }
         }
         set {
@@ -83,10 +83,10 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
     {% if method.throws %}
     public var {% call methodReturnName method %}: Error? {
         get {
-            if {% call methodReturnName method %}s.first != nil {
-                {% call methodReturnName method %}s.removeFirst()
-            } else {
+            if {% call methodReturnName method %}s.isEmpty {
                 nil
+            } else {
+                {% call methodReturnName method %}s.removeFirst()
             }
         }
         set {
@@ -99,10 +99,10 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
     {% if method.isOptionalReturnType %}
     public var {% call methodReturnNameAndType method %} {
         get {
-            if {% call methodReturnName method %}s.first != nil {
-                {% call methodReturnName method %}s.removeFirst()
+            if {% call methodReturnName method %}s.isEmpty {
+                .default
             } else {
-                nil
+                {% call methodReturnName method %}s.removeFirst()
             }
         }
         set {
@@ -113,10 +113,10 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
     {% else %}
     public var {% call methodReturnNameAndType method %} {
         get {
-            if {% call methodReturnName method %}s.first != nil {
-                {% call methodReturnName method %}s.removeFirst()
-            } else {
+            if {% call methodReturnName method %}s.isEmpty {
                 .default
+            } else {
+                {% call methodReturnName method %}s.removeFirst()
             }
         }
         set {

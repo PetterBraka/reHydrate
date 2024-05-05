@@ -8,21 +8,25 @@ import LanguageServiceInterface
 
 public protocol LanguageServiceTypeSpying {
     var variableLog: [LanguageServiceTypeSpy.VariableName] { get set }
-    var methodLog: [LanguageServiceTypeSpy.MethodName] { get set }
+    var lastVariabelCall: LanguageServiceTypeSpy.VariableName? { get }
+    var methodLog: [LanguageServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: LanguageServiceTypeSpy.MethodCall? { get }
 }
 
 public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
     public enum VariableName {
     }
 
-    public enum MethodName {
-        case setLanguage_to
+    public enum MethodCall {
+        case setLanguage(language: Language)
         case getSelectedLanguage
         case getLanguageOptions
     }
 
     public var variableLog: [VariableName] = []
-    public var methodLog: [MethodName] = []
+    public var lastVariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
     private let realObject: LanguageServiceType
     public init(realObject: LanguageServiceType) {
         self.realObject = realObject
@@ -31,7 +35,7 @@ public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
 
 extension LanguageServiceTypeSpy: LanguageServiceType {
     public func setLanguage(to language: Language) -> Void {
-        methodLog.append(.setLanguage_to)
+        methodLog.append(.setLanguage(language: language))
         realObject.setLanguage(to: language)
     }
     public func getSelectedLanguage() -> Language {

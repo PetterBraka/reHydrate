@@ -35,6 +35,9 @@ struct EditContainerScreen: View {
             .padding(16)
         }
         .transaction { $0.animation = nil }
+        .onAppear{
+            observer.perform(action: .didAppear)
+        }
         .overlay {
             if observer.viewModel.isSaving {
                 Color.black.opacity(0.25)
@@ -49,24 +52,14 @@ struct EditContainerScreen: View {
         CustomToolbar {
             Text(title)
         } leadingButton: {
-            Button(
-                LocalizedString(
-                    "ui.edit.container.navigation.cancel",
-                    value: "Cancel",
-                    comment: "The button which will cancel your edits and go back")
-            ) {
+            Button(cancelText) {
                 observer.perform(action: .didTapCancel)
             }
             .tint(.red)
             .buttonStyle(.bordered)
         } trailingButton: {
-            Button(
-                LocalizedString(
-                    "ui.edit.container.navigation.save",
-                    value: "Save",
-                    comment: "The button which will save your edits and go back")
-            ) {
-                observer.perform(action: .didTapSave(observer.size))
+            Button(saveText) {
+                observer.perform(action: .didTapSave)
             }
             .buttonStyle(.borderedProminent)
         }
@@ -130,7 +123,7 @@ struct EditContainerScreen: View {
     var slider: some View {
         Slider(
             value: $observer.fill,
-            in: observer.range,
+            in: 0.1 ... 0.9,
             step: 0.001
         )
         .onChange(of: observer.fill) { oldValue, newValue in
@@ -169,6 +162,14 @@ private extension EditContainerScreen {
     
     var textFieldTip: String {
         LocalizedString("ui.edit.container.size.textfiled", value: "Size", comment: "An input field for the user to edit the size of the container")
+    }
+    
+    var saveText: String {
+        LocalizedString("ui.edit.container.navigation.save", value: "Save", comment: "The button which will save your edits and go back")
+    }
+    
+    var cancelText: String {
+        LocalizedString("ui.edit.container.navigation.cancel", value: "Cancel", comment: "The button which will cancel your edits and go back")
     }
     
     var savingText: String {

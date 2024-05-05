@@ -14,10 +14,10 @@ public protocol OpenUrlInterfaceStubbing {
 public final class OpenUrlInterfaceStub: OpenUrlInterfaceStubbing {
     public var settingsUrl_returnValue: URL? {
         get {
-            if settingsUrl_returnValues.first != nil {
-                settingsUrl_returnValues.removeLast()
-            } else {
+            if settingsUrl_returnValues.isEmpty {
                 .default
+            } else {
+                settingsUrl_returnValues.removeFirst()
             }
         }
         set {
@@ -29,10 +29,10 @@ public final class OpenUrlInterfaceStub: OpenUrlInterfaceStubbing {
     private var settingsUrl_returnValues: [URL?] = []
     public var openUrl_returnValue: Error? {
         get {
-            if openUrl_returnValues.first != nil {
-                openUrl_returnValues.removeFirst()
-            } else {
+            if openUrl_returnValues.isEmpty {
                 nil
+            } else {
+                openUrl_returnValues.removeFirst()
             }
         }
         set {
@@ -42,10 +42,10 @@ public final class OpenUrlInterfaceStub: OpenUrlInterfaceStubbing {
     private var openUrl_returnValues: [Error?] = []
     public var emailEmailCcBccSubjectBody_returnValue: Error? {
         get {
-            if emailEmailCcBccSubjectBody_returnValues.first != nil {
-                emailEmailCcBccSubjectBody_returnValues.removeFirst()
-            } else {
+            if emailEmailCcBccSubjectBody_returnValues.isEmpty {
                 nil
+            } else {
+                emailEmailCcBccSubjectBody_returnValues.removeFirst()
             }
         }
         set {

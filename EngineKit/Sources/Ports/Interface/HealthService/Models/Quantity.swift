@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 25/11/2023.
 //
 
-public struct Quantity {
+public struct Quantity: Equatable {
     public let unit: HealthUnit
     public let value: Double
     

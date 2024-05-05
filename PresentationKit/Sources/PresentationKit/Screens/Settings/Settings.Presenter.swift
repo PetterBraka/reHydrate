@@ -10,7 +10,6 @@ import LoggingService
 import PresentationInterface
 import UnitServiceInterface
 import DayServiceInterface
-import DrinkServiceInterface
 import NotificationServiceInterface
 import PortsInterface
 import AppearanceServiceInterface
@@ -21,7 +20,6 @@ extension Screen.Settings {
         public typealias Engine = (
             HasLoggingService &
             HasDayService &
-            HasDrinksService &
             HasUnitService &
             HasNotificationService &
             HasOpenUrlService &
@@ -48,46 +46,14 @@ extension Screen.Settings {
                     router: Router) {
             self.engine = engine
             self.router = router
-            let startOfDay = Date(time:"00:00")!
-            let start = Date(time:"08:00")!
-            let stop = Date(time:"20:00")!
-            let endOfDay = Date(time:"23:59")!
+            
             viewModel = .init(
-                isLoading: false,
+                isLoading: true,
                 isDarkModeOn: engine.appearanceService.getAppearance() == .dark,
                 unitSystem: .metric,
                 goal: 0,
-                drinks: [],
-                notifications: .init(
-                    isOn: false,
-                    frequency: 30,
-                    start: start,
-                    startRange: startOfDay ... stop,
-                    stop: Date(time: "20:00")!,
-                    stopRange: start ... endOfDay
-                ),
+                notifications: nil,
                 appVersion: engine.appVersion,
-                error: nil
-            )
-            Task(priority: .high) { [weak self] in
-                await self?.initRealViewModel()
-            }
-        }
-        
-        private func initRealViewModel() async {
-            let currentSystem = engine.unitService.getUnitSystem()
-            let goal = await engine.dayService.getToday().goal
-            let notificationServiceSettings = engine.notificationService.getSettings()
-            await updateViewModel(
-                isLoading: false,
-                unitSystem: .init(from: currentSystem),
-                goal: goal,
-                notifications: updatedNotificationsSettings(
-                    isOn: notificationServiceSettings.isOn,
-                    frequency: notificationServiceSettings.frequency,
-                    start: notificationServiceSettings.start,
-                    stop: notificationServiceSettings.stop
-                ),
                 error: nil
             )
         }
@@ -95,6 +61,8 @@ extension Screen.Settings {
         @MainActor
         public func perform(action: Settings.Action) async {
             switch action {
+            case .didAppear:
+                await didAppear()
             case .didTapBack:
                 router.showHome()
             case .didTapCredits:
@@ -116,24 +84,27 @@ extension Screen.Settings {
                     await disableNotifications()
                 }
             case let .didSetRemindersStart(start):
-                await updateViewModel(isLoading: true)
+                await updateViewModel(isLoading: true, notifications: updatedNotificationsSettings(isOn: true,
+                                                                                                   start: start))
                 await enableNotifications()
-                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(start: start))
+                await updateViewModel(isLoading: false)
             case let .didSetRemindersStop(stop):
-                await updateViewModel(isLoading: true)
+                await updateViewModel(isLoading: true, notifications: updatedNotificationsSettings(isOn: true,
+                                                                                                   stop: stop))
                 await enableNotifications()
-                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(stop: stop))
+                await updateViewModel(isLoading: false)
             case .didTapIncrementFrequency:
-                let frequency = viewModel.notifications.frequency + engine.notificationService.minimumAllowedFrequency
-                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
-                await enableNotifications()
+                await increaseFrequency()
             case .didTapDecrementFrequency:
-                await updateViewModel(isLoading: true)
-                let frequency = viewModel.notifications.frequency - engine.notificationService.minimumAllowedFrequency
-                await enableNotifications()
-                await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(frequency: frequency))
+                await decreaseFrequency()
             case .dismissAlert:
-                await updateViewModel(isLoading: false, error: nil)
+                let frequency = engine.notificationService.minimumAllowedFrequency
+                let settings = engine.notificationService.getSettings()
+                await updateViewModel(
+                    isLoading: false,
+                    notifications: updatedNotificationsSettings(isOn: settings.isOn, frequency: frequency),
+                    error: nil
+                )
             case .didOpenSettings:
                 await open(url: engine.openUrlService.settingsUrl)
             case .didTapPrivacy:
@@ -155,56 +126,79 @@ extension Screen.Settings {
                 await updateViewModel(isLoading: false, isDarkModeOn: isDarkModeOn, error: nil)
             }
         }
+        
+        private func didAppear() async {
+            let currentSystem = engine.unitService.getUnitSystem()
+            let goal = await engine.unitService.convert(engine.dayService.getToday().goal, from: .litres,
+                                                        to: currentSystem == .metric ? .litres : .pint)
+            let notificationSettings = engine.notificationService.getSettings()
+            
+            await updateViewModel(
+                isLoading: true,
+                unitSystem: .init(from: currentSystem),
+                goal: goal,
+                error: nil
+            )
+            
+            guard let frequency = notificationSettings.frequency,
+                  let start = notificationSettings.start,
+                  let stop = notificationSettings.stop
+            else {
+                await updateViewModel(
+                    isLoading: false,
+                    notifications: nil,
+                    error: nil
+                )
+                return
+            }
+            
+            let range = getRanges(start: start, stop: stop)
+            
+            await updateViewModel(
+                isLoading: false,
+                notifications: .init(
+                    frequency: frequency,
+                    start: start,
+                    startRange: range.start,
+                    stop: stop,
+                    stopRange: range.stop
+                ),
+                error: nil
+            )
+        }
+        
     }
 }
 
 extension Screen.Settings.Presenter {
-    private func getDrinks() async -> [ViewModel.Drink] {
-        if let drinks = try? await engine.drinksService.getSaved(),
-            !drinks.isEmpty {
-            return drinks.compactMap { .init(from: $0) }
-        } else {
-            let drinks = await engine.drinksService.resetToDefault()
-            return drinks.compactMap { .init(from: $0) }
-        }
-    }
-    
     private func updateViewModel(
         isLoading: Bool,
         isDarkModeOn: Bool? = nil,
         unitSystem: Settings.ViewModel.UnitSystem? = nil,
         goal: Double? = nil,
-        notifications: Settings.ViewModel.NotificationSettings? = nil,
         error: Settings.ViewModel.Error? = nil
     ) async {
-        let unitSystem = unitSystem ?? viewModel.unitSystem
-        let isMetric = unitSystem == .metric
-        var newGoal: Double
-        if let goal {
-            newGoal = goal
-        } else {
-            newGoal = await engine.dayService.getToday().goal
-        }
-        newGoal = engine.unitService.convert(newGoal, from: .litres,
-                                             to: isMetric ? .litres : .pint)
-        var drinks = await getDrinks()
-        drinks = drinks.map { [weak self] drink in
-            guard let self else { return drink }
-            var drink = drink
-            drink.size = engine.unitService.convert(drink.size,
-                                                    from: .millilitres,
-                                                    to: isMetric ? .millilitres : .ounces)
-            return drink
-        }
-        
-        let notifications = notifications ?? viewModel.notifications
-        
         viewModel = ViewModel(
             isLoading: isLoading,
             isDarkModeOn: isDarkModeOn ?? viewModel.isDarkModeOn,
-            unitSystem: unitSystem,
-            goal: newGoal,
-            drinks: drinks,
+            unitSystem: unitSystem ?? viewModel.unitSystem,
+            goal: goal ?? viewModel.goal,
+            notifications: viewModel.notifications,
+            appVersion: engine.appVersion,
+            error: error
+        )
+    }
+    
+    private func updateViewModel(
+        isLoading: Bool,
+        notifications: Settings.ViewModel.NotificationSettings?,
+        error: Settings.ViewModel.Error? = nil
+    ) async {
+        viewModel = ViewModel(
+            isLoading: isLoading,
+            isDarkModeOn: viewModel.isDarkModeOn,
+            unitSystem: viewModel.unitSystem,
+            goal: viewModel.goal,
             notifications: notifications,
             appVersion: engine.appVersion,
             error: error
@@ -217,15 +211,21 @@ extension Screen.Settings.Presenter {
     private func increaseGoal() async {
         do {
             let increment = 0.5
-            let oldGoal = viewModel.goal
-            let diffToNextHalf = oldGoal.roundToHalf(.up) - oldGoal
-            let newGoal: Double
-            if  diffToNextHalf > 0 && diffToNextHalf < increment {
-                newGoal = try await engine.dayService.increase(goal: diffToNextHalf)
+            let currentGoal = viewModel.goal
+            let diffToNextHalf = currentGoal.roundToHalf(.up) - currentGoal
+            let incrementedGoal = if  diffToNextHalf > 0 && diffToNextHalf < increment {
+                try await engine.dayService.increase(goal: diffToNextHalf)
             } else {
-                newGoal = try await engine.dayService.increase(goal: 0.5)
+                try await engine.dayService.increase(goal: 0.5)
             }
-            await updateViewModel(isLoading: false, goal: newGoal.roundToHalf(.up))
+            
+            let currentSystem = engine.unitService.getUnitSystem()
+            let newGoal = engine.unitService.convert(incrementedGoal.roundToHalf(.up), from: .litres,
+                                                     to: currentSystem == .metric ? .litres : .pint)
+            await updateViewModel(
+                isLoading: false, 
+                goal: newGoal
+            )
         } catch {
             engine.logger.error("Couldn't increase the goal", error: error)
         }
@@ -272,43 +272,55 @@ extension UnitSystem {
     }
 }
 
-// MARK: - Drink
-extension Screen.Settings.Presenter.ViewModel.Drink {
-    init?(from drink: Drink) {
-        guard let container = Screen.Settings.Presenter.ViewModel.Container(from: drink.container)
-        else { return nil }
-        self = .init(id: drink.id,
-                     size: drink.size,
-                     container: container)
-    }
-}
-
-extension Screen.Settings.Presenter.ViewModel.Container {
-    init?(from container: Container) {
-        switch container {
-        case .small:
-            self = .small
-        case .medium:
-            self = .medium
-        case .large:
-            self = .large
-        case .health:
-            return nil
-        }
-    }
-}
 // MARK: - Notifications
 private extension Screen.Settings.Presenter {
+    func increaseFrequency() async {
+        await updateViewModel(isLoading: true)
+        let minFrequency = engine.notificationService.minimumAllowedFrequency
+        let newFrequency: Int
+        if let frequency = engine.notificationService.getSettings().frequency {
+            newFrequency = frequency + minFrequency
+        } else {
+            newFrequency = minFrequency
+        }
+        let settings = updatedNotificationsSettings(isOn: true, frequency: newFrequency)
+        await updateViewModel(isLoading: true, notifications: settings)
+        await enableNotifications()
+    }
+    
+    func decreaseFrequency() async {
+        await updateViewModel(isLoading: true)
+        let minFrequency = engine.notificationService.minimumAllowedFrequency
+        let newFrequency: Int
+        if let frequency = engine.notificationService.getSettings().frequency {
+            newFrequency = frequency - minFrequency
+        } else {
+            newFrequency = minFrequency
+        }
+        let settings = updatedNotificationsSettings(isOn: true, frequency: newFrequency)
+        await updateViewModel(isLoading: true, notifications: settings)
+        await enableNotifications()
+    }
+    
     func enableNotifications() async {
+        let now = engine.dateService.now()
+        let frequency = viewModel.notifications?.frequency ?? engine.notificationService.minimumAllowedFrequency
+        let start = viewModel.notifications?.start ?? engine.dateService.getStart(of: now)
+        let stop = viewModel.notifications?.stop ?? engine.dateService.getEnd(of: now)
+        
         let result = await engine.notificationService.enable(
-            withFrequency: viewModel.notifications.frequency,
-            start: viewModel.notifications.start,
-            stop: viewModel.notifications.stop
+            withFrequency: frequency,
+            start: start,
+            stop: stop
         )
         
         switch result {
         case .success:
-            await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(isOn: true))
+            let range = getRanges(start: start, stop: stop)
+            await updateViewModel(
+                isLoading: false,
+                notifications: .init(frequency: frequency, start: start, startRange: range.start, stop: stop, stopRange: range.stop)
+            )
         case .failure(let error):
             switch error {
             case .unauthorized:
@@ -327,12 +339,11 @@ private extension Screen.Settings.Presenter {
     }
     
     func getRanges(start: Date, stop: Date) -> (start: ClosedRange<Date>, stop: ClosedRange<Date>) {
+        let now = engine.dateService.now()
         let minimumAllowedFrequency = engine.notificationService.minimumAllowedFrequency
-        guard let startRangeStart = Date(time: "00:00"), let stopRangeEnd = Date(time: "23:59")
-        else {
-            engine.logger.critical("Date formatter stoped working")
-            fatalError("Date formatter stoped working")
-        }
+        
+        let startRangeStart = engine.dateService.getStart(of: now)
+        let stopRangeEnd = engine.dateService.getEnd(of: now)
         
         let startRangeEnd = engine.dateService.getDate(byAdding: -minimumAllowedFrequency, component: .minute, to: stop)
         let stopRangeStart = engine.dateService.getDate(byAdding: minimumAllowedFrequency, component: .minute, to: start)
@@ -347,19 +358,20 @@ private extension Screen.Settings.Presenter {
     }
     
     func updatedNotificationsSettings(
-        isOn: Bool? = nil,
+        isOn: Bool,
         frequency: Int? = nil,
         start: Date? = nil,
         stop: Date? = nil
-    ) -> ViewModel.NotificationSettings {
-        let isOn = isOn ?? viewModel.notifications.isOn
-        let frequency = frequency ?? viewModel.notifications.frequency
-        let start = start ?? viewModel.notifications.start
-        let stop = stop ?? viewModel.notifications.stop
+    ) -> ViewModel.NotificationSettings? {
+        guard isOn else { return nil }
+        let now = engine.dateService.now()
+        let notificationSettings = engine.notificationService.getSettings()
+        let frequency = frequency ?? notificationSettings.frequency ?? engine.notificationService.minimumAllowedFrequency
+        let start = start ?? notificationSettings.start ?? engine.dateService.getStart(of: now)
+        let stop = stop ?? notificationSettings.stop ?? engine.dateService.getEnd(of: now)
         let range = getRanges(start: start, stop: stop)
-
+        
         return .init(
-            isOn: isOn,
             frequency: frequency,
             start: start,
             startRange: range.start,

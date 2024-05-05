@@ -9,7 +9,7 @@ import {{ import }}
 
 extension {{ type.name }} {
     {% for variable in type.allVariables %}
-    {% if variable.name != "logger" and variable.name != "dayManager" and variable.name != "drinkManager" and variable.name != "consumptionManager" %}
+    {% if variable.name != "logger" and variable.name != "dayManager" and variable.name != "drinkManager" and variable.name != "consumptionManager" and variable.name != "appVersion"%}
     public func make{{ variable.name | upperFirstLetter }}() -> (stub: {{ variable.typeName }}Stubbing, spy: {{ variable.typeName }}Spying) {
         let stub = {{ variable.typeName }}Stub()
         let spy = {{ variable.typeName }}Spy(realObject: stub)
@@ -17,6 +17,14 @@ extension {{ type.name }} {
         self.{{ variable.name }} = spy
         return (stub, spy)
     }
+
+    public func make{{ variable.name | upperFirstLetter }}(_ realObject: {{ variable.typeName }}) -> (realObject: {{ variable.typeName }}, spy: {{ variable.typeName }}Spying) {
+        let spy = {{ variable.typeName }}Spy(realObject: realObject)
+
+        self.{{ variable.name }} = spy
+        return (realObject, spy)
+    }
+
     {% endif %}
     {% endfor %}
 }

@@ -126,9 +126,18 @@ struct HomeScreen: View {
 }
 
 #Preview {
-    HomeScreen(observer: HomeScreenObservable(
-        presenter: Screen.Home.Presenter(
-            engine: Engine.mock,
-            router: Router())
-    ))
+    HomeScreen(
+        observer: HomeScreenObservable(
+            presenter: Screen.Home.Presenter(
+                engine: Engine.mock,
+                router: Router(),
+                formatter: {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "EEEE - dd MMM"
+                    formatter.locale = .current
+                    return formatter
+                }()
+            )
+        )
+    )
 }
