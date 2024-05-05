@@ -354,6 +354,7 @@
 		A185DB522B77C5F600B9318B /* reHydrate_Watch_AppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reHydrate_Watch_AppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A185DB602B77C71D00B9318B /* SceneFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneFactory.swift; sourceTree = "<group>"; };
 		A185DB612B77C71D00B9318B /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A191F4B32BE7DA4A003A8484 /* CommunicationKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CommunicationKit; sourceTree = "<group>"; };
 		A1A825E62B7903BE00EA98EC /* DBKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DBKit; sourceTree = "<group>"; };
 		A1AA8DD82AF634C500D12E74 /* AppIconScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreen.swift; sourceTree = "<group>"; };
 		A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconScreenObservable.swift; sourceTree = "<group>"; };
@@ -548,6 +549,7 @@
 		3378766A24378A9300F5A732 = {
 			isa = PBXGroup;
 			children = (
+				A191F4B32BE7DA4A003A8484 /* CommunicationKit */,
 				A1E4A2D32BAEE3B400FC41BE /* TestHelper */,
 				A1A825E62B7903BE00EA98EC /* DBKit */,
 				A1AF32D22A346CA200FD0C7C /* EngineKit */,
