@@ -7,7 +7,7 @@ let package = Package(
     name: "PresentationWatchKit",
     platforms: [
         .watchOS(.v10), 
-        .macOS(.v13)
+        .macOS(.v14)
     ],
     products: [
         .library(
