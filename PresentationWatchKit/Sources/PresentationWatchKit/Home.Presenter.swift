@@ -28,14 +28,11 @@ extension Screen.Home {
             didSet { scene?.perform(update: .viewModel) }
         }
         
-        let formatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "EEEE - dd MMM"
-            return formatter
-        }()
+        let formatter: DateFormatter
         
-        public init(engine: Engine) {
+        public init(engine: Engine, formatter: DateFormatter) {
             self.engine = engine
+            self.formatter = formatter
             viewModel = ViewModel(consumption: 0, goal: 0, unit: .liters, drinks: [])
             
             let unit = getUnit()

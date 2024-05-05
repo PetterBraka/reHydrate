@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  WatchEngine.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 10/02/2024.
@@ -20,8 +20,7 @@ import DayService
 import DBKitInterface
 import DBKit
 
-// The Mini engine is intended for app extensions (Watch & Widgets)
-public final class MiniEngine {
+public final class WatchEngine {
     private let sharedDefaults: UserDefaults
     private let subsystem: String
     
@@ -51,7 +50,7 @@ public final class MiniEngine {
     public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)
 }
 
-extension MiniEngine:
+extension WatchEngine:
     HasLoggingService,
     HasUnitService,
     HasUserPreferenceService,

@@ -18,18 +18,21 @@ import UIKit
 public final class SceneFactory: ObservableObject {
     static let shared = SceneFactory()
     
-    private let engine: MiniEngine
+    private let engine: WatchEngine
     
     // Root presenters
     
     private init() {
-        let subsystem = "com.braka.reHydrate"
+        let subsystem = "com.braka.reHydrate.watch"
         let appGroup = "group.com.braka.reHydrate.shared"
-        engine = MiniEngine(appGroup: appGroup, subsystem: subsystem)
+        engine = WatchEngine(appGroup: appGroup, subsystem: subsystem)
     }
     
     func makeHomeView(isPreviews: Bool = false) -> HomeView {
-        let presenter = Screen.Home.Presenter(engine: engine)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE - dd MMM"
+        formatter.locale = .current
+        let presenter = Screen.Home.Presenter(engine: engine, formatter: formatter)
         let observer = HomeScreenObservable(presenter: presenter)
         presenter.scene = observer
         
