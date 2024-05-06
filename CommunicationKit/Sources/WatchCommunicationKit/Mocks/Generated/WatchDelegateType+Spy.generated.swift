@@ -19,14 +19,7 @@ public final class WatchDelegateTypeSpy: WatchDelegateTypeSpying {
 
     public enum MethodCall {
         case session(activationState: CommunicationState, error: Error?)
-#if os(iOS)
-        case sessionDidDeactivate
-        case sessionDidBecomeInactive
-        case sessionWatchStateDidChange
-#endif
-#if os(watchOS)
         case sessionCompanionAppInstalledDidChange
-#endif
         case sessionReachabilityDidChange
         case session(applicationContext: [String : Any])
         case session(message: [String : Any])
@@ -52,26 +45,10 @@ extension WatchDelegateTypeSpy: WatchDelegateType {
         methodLog.append(.session(activationState: activationState, error: error))
         realObject.session(activationDidCompleteWith: activationState, error: error)
     }
-#if os(iOS)
-    public func sessionDidDeactivate() -> Void {
-        methodLog.append(.sessionDidDeactivate)
-        realObject.sessionDidDeactivate()
-    }
-    public func sessionDidBecomeInactive() -> Void {
-        methodLog.append(.sessionDidBecomeInactive)
-        realObject.sessionDidBecomeInactive()
-    }
-    public func sessionWatchStateDidChange() -> Void {
-        methodLog.append(.sessionWatchStateDidChange)
-        realObject.sessionWatchStateDidChange()
-    }
-#endif
-#if os(watchOS)
     public func sessionCompanionAppInstalledDidChange() -> Void {
         methodLog.append(.sessionCompanionAppInstalledDidChange)
         realObject.sessionCompanionAppInstalledDidChange()
     }
-#endif
     public func sessionReachabilityDidChange() -> Void {
         methodLog.append(.sessionReachabilityDidChange)
         realObject.sessionReachabilityDidChange()

@@ -1,4 +1,14 @@
 configurations:
+# CommunicationKit
+  - sources:
+      - ../CommunicationKit/Sources/WatchCommunicationKit
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../CommunicationKit/Sources/WatchCommunicationKit/Mocks/Generated/
+    args: 
+      imports: 
+          - WatchCommunicationKitInterface
 # DBKit
 # EnigneKit
   - sources:

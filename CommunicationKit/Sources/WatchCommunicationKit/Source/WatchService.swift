@@ -28,11 +28,20 @@ public final class WatchService: NSObject, WatchServiceType {
         self.applicationContext = session.applicationContext
         self.receivedApplicationContext = session.receivedApplicationContext
         
-        self.isCompanionAppInstalled = session.isCompanionAppInstalled
-        self.iOSDeviceNeedsUnlockAfterRebootForReachability = session.iOSDeviceNeedsUnlockAfterRebootForReachability
+        self.isCompanionAppInstalled = false
+        self.iOSDeviceNeedsUnlockAfterRebootForReachability = false
         
         super.init()
         self.session.delegate = self
+        self.didReceivedUpdates(from: session)
+    }
+    
+    func didReceivedUpdates(from session: WCSession) {
+        self.currentState = .init(from: session.activationState)
+        self.isReachable = session.isReachable
+#if os(watchOS)
+        self.iOSDeviceNeedsUnlockAfterRebootForReachability = session.iOSDeviceNeedsUnlockAfterRebootForReachability
+#endif
     }
 }
 

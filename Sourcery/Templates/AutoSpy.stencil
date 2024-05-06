@@ -33,10 +33,10 @@ public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
                     {%- if param.actualTypeName|hasPrefix: "T" -%}
                         Any
                     {%- else -%}
-                        {{ param.actualTypeName }}
+                        {{ param.actualTypeName | replace: "@escaping ","" }}
                     {%- endif -%}
                 {%- else -%}
-                    {{ param.actualTypeName }}
+                    {{ param.actualTypeName | replace: "@escaping ","" }}
                 {%- endif -%}
                 {%- if forloop.last -%}){% else %}, {% endif -%}
             {%- endif -%}

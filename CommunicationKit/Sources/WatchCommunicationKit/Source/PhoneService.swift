@@ -10,7 +10,7 @@ import WatchCommunicationKitInterface
 
 public final class PhoneService: NSObject, PhoneServiceType {
     private var session: WCSession
-    public var delegate: WatchDelegateType?
+    public var delegate: PhoneDelegateType?
     
     public var currentState: CommunicationState
     public var isReachable: Bool
@@ -23,7 +23,7 @@ public final class PhoneService: NSObject, PhoneServiceType {
     public var isComplicationEnabled: Bool
     public var remainingComplicationUserInfoTransfers: Int
     
-    public init(session: WCSession, delegate: WatchDelegateType?) {
+    public init(session: WCSession, delegate: PhoneDelegateType?) {
         self.session = session
         self.delegate = delegate
         

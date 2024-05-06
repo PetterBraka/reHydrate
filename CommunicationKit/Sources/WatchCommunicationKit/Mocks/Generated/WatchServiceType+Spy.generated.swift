@@ -20,17 +20,8 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
         case isReachable
         case applicationContext
         case receivedApplicationContext
-#if os(iOS)
-        case isPaired
-        case watchDirectoryUrl
-        case isWatchAppInstalled
-        case isComplicationEnabled
-        case remainingComplicationUserInfoTransfers
-#endif
-#if os(watchOS)
         case isCompanionAppInstalled
         case iOSDeviceNeedsUnlockAfterRebootForReachability
-#endif
     }
 
     public enum MethodCall {
@@ -39,9 +30,6 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
         case update(applicationContext: [String : Any])
         case send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?)
         case send(data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?)
-#if os(iOS)
-        case transferComplication(userInfo: [String : Any])
-#endif
         case transfer(userInfo: [String : Any])
     }
 
@@ -49,7 +37,7 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private var realObject: WatchServiceType
+    private let realObject: WatchServiceType
     public init(realObject: WatchServiceType) {
         self.realObject = realObject
     }
@@ -106,59 +94,6 @@ extension WatchServiceTypeSpy: WatchServiceType {
             realObject.receivedApplicationContext  = newValue
         }
     }
-#if os(iOS)
-    public var isPaired: Bool {
-        get {
-            variableLog.append(.isPaired)
-            return realObject.isPaired
-        }
-        set {
-            variableLog.append(.isPaired)
-            realObject.isPaired  = newValue
-        }
-    }
-    public var watchDirectoryUrl: URL? {
-        get {
-            variableLog.append(.watchDirectoryUrl)
-            return realObject.watchDirectoryUrl
-        }
-        set {
-            variableLog.append(.watchDirectoryUrl)
-            realObject.watchDirectoryUrl  = newValue
-        }
-    }
-    public var isWatchAppInstalled: Bool {
-        get {
-            variableLog.append(.isWatchAppInstalled)
-            return realObject.isWatchAppInstalled
-        }
-        set {
-            variableLog.append(.isWatchAppInstalled)
-            realObject.isWatchAppInstalled  = newValue
-        }
-    }
-    public var isComplicationEnabled: Bool {
-        get {
-            variableLog.append(.isComplicationEnabled)
-            return realObject.isComplicationEnabled
-        }
-        set {
-            variableLog.append(.isComplicationEnabled)
-            realObject.isComplicationEnabled  = newValue
-        }
-    }
-    public var remainingComplicationUserInfoTransfers: Int {
-        get {
-            variableLog.append(.remainingComplicationUserInfoTransfers)
-            return realObject.remainingComplicationUserInfoTransfers
-        }
-        set {
-            variableLog.append(.remainingComplicationUserInfoTransfers)
-            realObject.remainingComplicationUserInfoTransfers  = newValue
-        }
-    }
-#endif
-#if os(watchOS)
     public var isCompanionAppInstalled: Bool {
         get {
             variableLog.append(.isCompanionAppInstalled)
@@ -179,7 +114,6 @@ extension WatchServiceTypeSpy: WatchServiceType {
             realObject.iOSDeviceNeedsUnlockAfterRebootForReachability  = newValue
         }
     }
-#endif
     public func isSupported() -> Bool {
         methodLog.append(.isSupported)
         return realObject.isSupported()
@@ -200,12 +134,6 @@ extension WatchServiceTypeSpy: WatchServiceType {
         methodLog.append(.send(data: data, replyHandler: replyHandler, errorHandler: errorHandler))
         realObject.send(messageData: data, replyHandler: replyHandler, errorHandler: errorHandler)
     }
-#if os(iOS)
-    public func transferComplication(userInfo: [String : Any]) -> CommunicationInfo {
-        methodLog.append(.transferComplication(userInfo: userInfo))
-        return realObject.transferComplication(userInfo: userInfo)
-    }
-#endif
     public func transfer(userInfo: [String : Any]) -> CommunicationInfo {
         methodLog.append(.transfer(userInfo: userInfo))
         return realObject.transfer(userInfo: userInfo)

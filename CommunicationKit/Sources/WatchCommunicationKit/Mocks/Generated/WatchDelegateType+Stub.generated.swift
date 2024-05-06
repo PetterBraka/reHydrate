@@ -17,15 +17,6 @@ extension WatchDelegateTypeStub: WatchDelegateType {
     public func session(activationDidCompleteWith activationState: CommunicationState, error: Error?) -> Void {
     }
 
-    public func sessionDidDeactivate() -> Void {
-    }
-
-    public func sessionDidBecomeInactive() -> Void {
-    }
-
-    public func sessionWatchStateDidChange() -> Void {
-    }
-
     public func sessionCompanionAppInstalledDidChange() -> Void {
     }
 

@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol PhoneServiceType {
-    var delegate: WatchDelegateType? { get set }
+    var delegate: PhoneDelegateType? { get set }
     var currentState: CommunicationState { get set }
     var isReachable: Bool { get set }
     var applicationContext: [String : Any] { get set }

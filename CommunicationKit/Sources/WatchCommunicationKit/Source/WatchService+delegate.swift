@@ -7,22 +7,6 @@
 
 import WatchConnectivity
 
-private extension WatchService {
-    func didReceivedUpdates(from session: WCSession) {
-        self.currentState = .init(from: session.activationState)
-        self.isReachable = session.isReachable
-#if os(watchOS)
-        self.iOSDeviceNeedsUnlockAfterRebootForReachability = session.iOSDeviceNeedsUnlockAfterRebootForReachability
-#endif
-#if os(iOS)
-        self.isPaired = session.isPaired
-        self.watchDirectoryUrl = session.watchDirectoryURL
-        self.isWatchAppInstalled = session.isWatchAppInstalled
-        self.isComplicationEnabled = session.isComplicationEnabled
-#endif
-    }
-}
-
 extension WatchService: WCSessionDelegate {
     public func session(
         _ session: WCSession,
@@ -33,28 +17,14 @@ extension WatchService: WCSessionDelegate {
         self.delegate?.session(activationDidCompleteWith: self.currentState, error: error)
     }
     
-#if os(iOS)
-    public func sessionDidBecomeInactive(_ session: WCSession) {
-        didReceivedUpdates(from: session)
-        delegate?.sessionDidBecomeInactive()
-    }
-    
-    public func sessionDidDeactivate(_ session: WCSession) {
-        didReceivedUpdates(from: session)
-        delegate?.sessionDidDeactivate()
-    }
-    
-    public func sessionWatchStateDidChange(_ session: WCSession) {
-        didReceivedUpdates(from: session)
-        delegate?.sessionWatchStateDidChange()
-    }
-#endif
-    
 #if os(watchOS)
     public func sessionCompanionAppInstalledDidChange(_ session: WCSession) {
         didReceivedUpdates(from: session)
         delegate?.sessionCompanionAppInstalledDidChange()
     }
+#else
+    public func sessionDidBecomeInactive(_ session: WCSession) {}
+    public func sessionDidDeactivate(_ session: WCSession) {}
 #endif
     
     public func sessionReachabilityDidChange(_ session: WCSession) {
