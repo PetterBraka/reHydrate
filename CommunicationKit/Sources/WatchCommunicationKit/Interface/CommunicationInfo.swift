@@ -31,7 +31,7 @@ public struct CommunicationInfo {
     var userInfo: [String : Any]
     var isTransferring: Bool
     
-    init(
+    public init(
         userInfo: [String : Any],
         isTransferring: Bool
     ) {

@@ -33,7 +33,7 @@ public protocol WatchServiceType {
     func send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?)
     func send(messageData data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?)
 #if os(iOS)
-    public func transferComplication(userInfo: [String : Any]) -> CommunicationInfo
+    func transferComplication(userInfo: [String : Any]) -> CommunicationInfo
 #endif
     func transfer(userInfo: [String : Any]) -> CommunicationInfo
 }
