@@ -31,7 +31,7 @@ public final class DayServiceTypeSpy: DayServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: DayServiceType
+    private var realObject: DayServiceType
     public init(realObject: DayServiceType) {
         self.realObject = realObject
     }

@@ -35,7 +35,7 @@ public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: NotificationCenterType
+    private var realObject: NotificationCenterType
     public init(realObject: NotificationCenterType) {
         self.realObject = realObject
     }

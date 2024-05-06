@@ -27,7 +27,7 @@ public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: OpenUrlInterface
+    private var realObject: OpenUrlInterface
     public init(realObject: OpenUrlInterface) {
         self.realObject = realObject
     }

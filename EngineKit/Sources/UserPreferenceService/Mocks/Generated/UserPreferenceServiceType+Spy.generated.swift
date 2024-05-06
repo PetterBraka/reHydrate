@@ -26,7 +26,7 @@ public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: UserPreferenceServiceType
+    private var realObject: UserPreferenceServiceType
     public init(realObject: UserPreferenceServiceType) {
         self.realObject = realObject
     }

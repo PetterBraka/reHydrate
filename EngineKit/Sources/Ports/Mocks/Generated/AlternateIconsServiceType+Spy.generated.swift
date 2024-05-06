@@ -27,7 +27,7 @@ public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: AlternateIconsServiceType
+    private var realObject: AlternateIconsServiceType
     public init(realObject: AlternateIconsServiceType) {
         self.realObject = realObject
     }

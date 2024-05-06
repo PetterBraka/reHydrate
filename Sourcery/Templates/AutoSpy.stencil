@@ -48,7 +48,7 @@ public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: {{ protocol.name }}
+    private var realObject: {{ protocol.name }}
     
     public init(realObject: {{ protocol.name }}) {
         self.realObject = realObject

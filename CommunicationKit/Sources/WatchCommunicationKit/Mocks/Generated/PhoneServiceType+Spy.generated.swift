@@ -41,7 +41,7 @@ public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: PhoneServiceType
+    private var realObject: PhoneServiceType
     public init(realObject: PhoneServiceType) {
         self.realObject = realObject
     }

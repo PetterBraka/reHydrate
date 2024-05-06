@@ -34,7 +34,7 @@ public final class WatchDelegateTypeSpy: WatchDelegateTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: WatchDelegateType
+    private var realObject: WatchDelegateType
     public init(realObject: WatchDelegateType) {
         self.realObject = realObject
     }

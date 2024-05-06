@@ -32,7 +32,7 @@ public final class HealthInterfaceSpy: HealthInterfaceSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: HealthInterface
+    private var realObject: HealthInterface
     public init(realObject: HealthInterface) {
         self.realObject = realObject
     }

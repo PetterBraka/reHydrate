@@ -28,7 +28,7 @@ public final class NotificationServiceTypeSpy: NotificationServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: NotificationServiceType
+    private var realObject: NotificationServiceType
     public init(realObject: NotificationServiceType) {
         self.realObject = realObject
     }

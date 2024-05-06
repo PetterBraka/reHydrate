@@ -26,7 +26,7 @@ public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: TimelineServiceType
+    private var realObject: TimelineServiceType
     public init(realObject: TimelineServiceType) {
         self.realObject = realObject
     }

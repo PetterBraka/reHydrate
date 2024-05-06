@@ -29,7 +29,7 @@ public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: DrinkServiceType
+    private var realObject: DrinkServiceType
     public init(realObject: DrinkServiceType) {
         self.realObject = realObject
     }

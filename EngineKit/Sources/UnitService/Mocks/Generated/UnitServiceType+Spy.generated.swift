@@ -27,7 +27,7 @@ public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: UnitServiceType
+    private var realObject: UnitServiceType
     public init(realObject: UnitServiceType) {
         self.realObject = realObject
     }

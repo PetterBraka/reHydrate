@@ -37,7 +37,7 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: WatchServiceType
+    private var realObject: WatchServiceType
     public init(realObject: WatchServiceType) {
         self.realObject = realObject
     }

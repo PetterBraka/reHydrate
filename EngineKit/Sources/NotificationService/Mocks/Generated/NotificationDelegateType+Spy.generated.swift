@@ -27,7 +27,7 @@ public final class NotificationDelegateTypeSpy: NotificationDelegateTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: NotificationDelegateType
+    private var realObject: NotificationDelegateType
     public init(realObject: NotificationDelegateType) {
         self.realObject = realObject
     }
