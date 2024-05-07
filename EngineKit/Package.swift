@@ -4,46 +4,61 @@
 import PackageDescription
 
 let package: Package = {
-    // MARK: Packages
-    let engineKit = "EngineKit"
-    let engineMocks = "EngineMocks"
-
-    return Package(
-        name: engineKit,
+    Package(
+        name: "EngineKit",
         platforms: [
             .iOS(.v17),
             .macOS(.v14),
             .watchOS(.v10)
         ],
         products: [
-            .library(name: engineKit, targets: [engineKit]),
+            .library(name: "EngineKit", targets: ["EngineKit"]),
+            .library(name: "WatchEngineKit", targets: ["WatchEngineKit"]),
         ],
         dependencies: [
             .package(name: "DBKit", path: "../DBKit"),
-            .package(name: "TestHelper", path: "../TestHelper")
+            .package(name: "TestHelper", path: "../TestHelper"),
+            .package(name: "CommunicationKit", path: "../CommunicationKit"),
         ],
         targets: [
-            .target(name: engineKit,
+            .target(
+                name: "EngineKit",
+                dependencies: [
+                    .loggingService,
+                    .portsInterface,
+                    .dbKit,
+                    .watchCommunicationKit,
+                    .source(.dayService),
+                    .source(.drinkService),
+                    .source(.languageService),
+                    .source(.unitService),
+                    .source(.userPreferenceService),
+                    .source(.notificationService),
+                    .source(.appearanceService),
+                    .source(.dateService),
+                ]
+            ),
+            .target(
+                name: "WatchEngineKit",
+                dependencies: [
+                    .loggingService,
+                    .dbKit,
+                    .watchCommunicationKit,
+                    .source(.dayService),
+                    .source(.drinkService),
+                    .source(.languageService),
+                    .source(.unitService),
+                    .source(.userPreferenceService),
+                    .source(.dateService),
+                ]
+            ),
+            .target(
+                name: "EngineMocks",
                     dependencies: [
                         .loggingService,
-                        .portsInterface,
-                        .dbKit,
-                        .source(.dayService),
-                        .source(.drinkService),
-                        .source(.languageService),
-                        .source(.unitService),
-                        .source(.userPreferenceService),
-                        .source(.notificationService),
-                        .source(.appearanceService),
-                        .source(.dateService),
-                        .engineMocks,
-                        .portsMocks,
-                    ]),
-            .target(name: engineMocks,
-                    dependencies: [
-                        .loggingService,
                         .dbKit,
                         .portsMocks,
+                        .watchCommunicationKitMock,
                         .mocks(.dayService),
                         .mocks(.drinkService),
                         .mocks(.languageService),
@@ -118,9 +133,10 @@ extension Target.Dependency {
     static let portsInterface: Target.Dependency = .byName(name: "PortsInterface")
     static let portsMocks: Target.Dependency = .byName(name: "PortsMocks")
     
+    static let watchCommunicationKit: Target.Dependency = .product(name: "WatchCommunicationKit", package: "CommunicationKit")
+    static let watchCommunicationKitMock: Target.Dependency = .product(name: "WatchCommunicationKitMock", package: "CommunicationKit")
+    
     static let engineMocks: Target.Dependency = .byName(name: "EngineMocks")
-    static let blackbird: Target.Dependency = .product(name: "Blackbird",
-                                                       package: "Blackbird")
 }
 
 enum Feature: String {

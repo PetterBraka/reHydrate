@@ -9,7 +9,7 @@
 import Foundation
 import PresentationWatchKit
 import PresentationWatchInterface
-import EngineKit
+import WatchEngineKit
 import LoggingService
 import DrinkServiceInterface
 import UserNotifications
