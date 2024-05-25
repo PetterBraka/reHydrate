@@ -1,26 +1,26 @@
 //
-//  HomeViewObservable.swift
-//  reHydrate
+//  HomeScreenObservable.swift
+//  reHydrate Watch App
 //
-//  Created by Petter vang Brakalsvålet on 09/06/2023.
-//  Copyright © 2023 Petter vang Brakalsvålet. All rights reserved.
+//  Created by Petter vang Brakalsvålet on 25/05/2024.
+//  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import Foundation
-import PresentationInterface
-import PresentationKit
+import SwiftUI
+import PresentationWatchInterface
+import PresentationWatchKit
 import EngineKit
 
 final class HomeScreenObservable: ObservableObject, HomeSceneType {
     private let presenter: HomePresenterType
     
     var viewModel: Home.ViewModel
-
+    
     init(presenter: HomePresenterType) {
         self.presenter = presenter
         self.viewModel = presenter.viewModel
     }
-
+    
     func perform(update: Home.Update) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }

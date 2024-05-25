@@ -110,6 +110,7 @@
 		33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7A274D06070049E414 /* SettingsScreen.swift */; };
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
+		A11153382C01DC7F001366FE /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11153372C01DC7F001366FE /* HomeScreenObservable.swift */; };
 		A11180332AC3768D007E4585 /* NotificationCenterPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180322AC3768D007E4585 /* NotificationCenterPort.swift */; };
 		A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C12A72B65B02D00FB1B8C /* View+expand.swift */; };
 		A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */; };
@@ -140,7 +141,6 @@
 		A185DB622B77C71D00B9318B /* SceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A185DB602B77C71D00B9318B /* SceneFactory.swift */; };
 		A185DB632B77C71D00B9318B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A185DB612B77C71D00B9318B /* HomeView.swift */; };
 		A185DB672B77C7A600B9318B /* PresentationWatchKit in Frameworks */ = {isa = PBXBuildFile; productRef = A185DB662B77C7A600B9318B /* PresentationWatchKit */; };
-		A185DB6A2B77C82000B9318B /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BD012A33C70300D42033 /* HomeScreenObservable.swift */; };
 		A185DB6B2B77C87000B9318B /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE92A3120C900D42033 /* Font.swift */; };
 		A185DB6C2B77C87F00B9318B /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6C26BC7FCD00DECA9F /* Double+Extensions.swift */; };
 		A1A825E92B7991B700EA98EC /* DBKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1A825E82B7991B700EA98EC /* DBKit */; };
@@ -322,6 +322,7 @@
 		33EFF4012470451400D0A003 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		A11153372C01DC7F001366FE /* HomeScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenObservable.swift; sourceTree = "<group>"; };
 		A111802F2AC36A86007E4585 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		A11180302AC36A86007E4585 /* Celebration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Celebration.swift; sourceTree = "<group>"; };
 		A11180322AC3768D007E4585 /* NotificationCenterPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterPort.swift; sourceTree = "<group>"; };
@@ -607,6 +608,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		A11153362C01DC6D001366FE /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A11153372C01DC7F001366FE /* HomeScreenObservable.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		A111802E2AC36A86007E4585 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -746,6 +755,7 @@
 		A185DB642B77C72200B9318B /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				A11153362C01DC6D001366FE /* Home */,
 				A185DB352B77C5F400B9318B /* reHydrateWatchApp.swift */,
 				A185DB612B77C71D00B9318B /* HomeView.swift */,
 			);
@@ -1149,9 +1159,9 @@
 				A185DB6C2B77C87F00B9318B /* Double+Extensions.swift in Sources */,
 				A185DB632B77C71D00B9318B /* HomeView.swift in Sources */,
 				A185DB362B77C5F400B9318B /* reHydrateWatchApp.swift in Sources */,
+				A11153382C01DC7F001366FE /* HomeScreenObservable.swift in Sources */,
 				A185DB6B2B77C87000B9318B /* Font.swift in Sources */,
 				A185DB622B77C71D00B9318B /* SceneFactory.swift in Sources */,
-				A185DB6A2B77C82000B9318B /* HomeScreenObservable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
