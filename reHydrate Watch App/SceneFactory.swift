@@ -23,7 +23,7 @@ public final class SceneFactory: ObservableObject {
     // Root presenters
     
     private init() {
-        let subsystem = "com.braka.reHydrate.watch"
+        let subsystem = "com.braka.reHydrate.watchkitapp"
         let appGroup = "group.com.braka.reHydrate.shared"
         engine = WatchEngine(appGroup: appGroup, subsystem: subsystem)
     }

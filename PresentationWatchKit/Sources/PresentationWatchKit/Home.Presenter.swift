@@ -36,15 +36,15 @@ extension Screen.Home {
             viewModel = ViewModel(consumption: 0, goal: 0, unit: .liters, drinks: [])
             
             let unit = getUnit()
-            updateViewModel(
-                unit: unit
-            )
+            updateViewModel(unit: unit)
         }
         
         public func perform(action: Home.Action) async {
             switch action {
             case .didAppear:
-                print("didAppear")
+                let unit = getUnit()
+                let today = await getToday()
+                updateViewModel(consumption: today.consumed, goal: today.goal, unit: unit)
             case .didTapAddDrink(let drink):
                 print("didTapAddDrink \(drink.container.rawValue)")
             }
@@ -82,4 +82,7 @@ private extension Screen.Home.Presenter {
 
 // MARK: Day
 private extension Screen.Home.Presenter {
+    func getToday() async -> Day {
+        await engine.dayService.getToday()
+    }
 }

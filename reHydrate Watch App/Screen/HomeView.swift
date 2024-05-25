@@ -22,6 +22,9 @@ struct HomeView: View {
                 drinksView
             }
         }
+        .onAppear {
+            observer.perform(action: .didAppear)
+        }
     }
     
     @ViewBuilder
