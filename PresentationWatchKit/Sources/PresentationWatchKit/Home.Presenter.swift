@@ -37,28 +37,31 @@ extension Screen.Home {
             viewModel = ViewModel(consumption: 0, goal: 0, unit: .liters, drinks: [])
             
             let unit = getUnit()
-            updateViewModel(unit: unit)
+            updateViewModel(unit: unit.mapToDomain())
         }
         
         public func perform(action: Home.Action) async {
             switch action {
             case .didAppear:
-                let unit = getUnit()
-                let today = await getToday()
-                let drinks = await getDrinks()
-                updateViewModel(
-                    consumption: today.consumed,
-                    goal: today.goal,
-                    unit: unit,
-                    drinks: drinks
-                )
-            case .didTapAddDrink(let drink):
-                print("didTapAddDrink \(drink.container.rawValue)")
+                sync(didComplete: nil)
+            case let .didTapAddDrink(drink):
+                await add(drink: drink)
             }
         }
         
         public func sync(didComplete: (() -> Void)?) {
-            print("sync")
+            Task {
+                let unit = getUnit()
+                let today = await getToday()
+                let drinks = await getDrinks()
+                updateViewModel(
+                    consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
+                    goal: engine.unitService.convert(today.goal, from: .litres, to: unit),
+                    unit: unit.mapToDomain(),
+                    drinks: drinks
+                )
+                didComplete?()
+            }
         }
     }
 }
@@ -81,9 +84,9 @@ private extension Screen.Home.Presenter {
 
 // MARK: Units
 private extension Screen.Home.Presenter {
-    func getUnit() -> UnitVolume {
+    func getUnit() -> UnitModel {
         let unitSystem = engine.unitService.getUnitSystem()
-        return unitSystem == .metric ? .liters : .imperialPints
+        return unitSystem == .metric ? .litres : .pint
     }
 }
 
@@ -91,6 +94,19 @@ private extension Screen.Home.Presenter {
 private extension Screen.Home.Presenter {
     func getToday() async -> Day {
         await engine.dayService.getToday()
+    }
+    
+    func add(drink: Home.ViewModel.Drink) async {
+        do {
+            let consumed = try await engine.dayService.add(drink: .init(from: drink))
+            let unit = getUnit()
+            updateViewModel(
+                consumption: engine.unitService.convert(consumed, from: .litres, to: unit),
+                unit: unit.mapToDomain()
+            )
+        } catch {
+            engine.logger.error("Could add drink of size \(drink.size)", error: error)
+        }
     }
 }
 
@@ -110,25 +126,44 @@ private extension Screen.Home.Presenter {
 private extension Home.ViewModel.Drink {
     init?(from drink: Drink) {
         guard let container = Home.ViewModel.Container(from: drink.container) else { return nil }
-        self.init(
-            id: drink.id,
-            size: drink.size,
-            container: container
-        )
+        self.init(id: drink.id, size: drink.size, container: container)
     }
 }
 
 private extension Home.ViewModel.Container {
     init?(from container: Container) {
         switch container {
-        case .large: 
-            self = .large
-        case .medium:
-            self = .medium
-        case .small:
-            self = .small
-        case .health:
-            return nil
+        case .large:  self = .large
+        case .medium: self = .medium
+        case .small: self = .small
+        case .health: return nil
+        }
+    }
+}
+
+private extension Drink {
+    init(from drink: Home.ViewModel.Drink) {
+        self.init(id: drink.id, size: drink.size, container: Container(from: drink.container))
+    }
+}
+
+private extension Container {
+    init(from container: Home.ViewModel.Container) {
+        switch container {
+        case .large: self = .large
+        case .medium: self = .medium
+        case .small: self = .small
+        }
+    }
+}
+
+private extension UnitModel {
+    func mapToDomain() -> UnitVolume {
+        switch self {
+        case .ounces:.imperialFluidOunces
+        case .pint: .pints
+        case .litres: .liters
+        case .millilitres: .milliliters
         }
     }
 }
