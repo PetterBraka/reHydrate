@@ -98,8 +98,8 @@ private extension Screen.Home.Presenter {
     
     func add(drink: Home.ViewModel.Drink) async {
         do {
-            let unit = getUnit()
             let consumed = try await engine.dayService.add(drink: .init(from: drink))
+            let unit = getUnit()
             updateViewModel(
                 consumption: engine.unitService.convert(consumed, from: .litres, to: unit),
                 unit: unit.mapToDomain()
