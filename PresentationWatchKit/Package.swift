@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "PresentationWatchKit",
     platforms: [
-        .watchOS(.v10), 
+        .iOS(.v17),
+        .watchOS(.v10),
         .macOS(.v14)
     ],
     products: [
