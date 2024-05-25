@@ -18,7 +18,8 @@ extension Screen.Home {
         public typealias Engine = (
             HasLoggingService &
             HasUnitService &
-            HasDayService
+            HasDayService &
+            HasDrinksService
         )
         
         private let engine: Engine
@@ -44,7 +45,13 @@ extension Screen.Home {
             case .didAppear:
                 let unit = getUnit()
                 let today = await getToday()
-                updateViewModel(consumption: today.consumed, goal: today.goal, unit: unit)
+                let drinks = await getDrinks()
+                updateViewModel(
+                    consumption: today.consumed,
+                    goal: today.goal,
+                    unit: unit,
+                    drinks: drinks
+                )
             case .didTapAddDrink(let drink):
                 print("didTapAddDrink \(drink.container.rawValue)")
             }
@@ -84,5 +91,44 @@ private extension Screen.Home.Presenter {
 private extension Screen.Home.Presenter {
     func getToday() async -> Day {
         await engine.dayService.getToday()
+    }
+}
+
+// MARK: Drink
+private extension Screen.Home.Presenter {
+    func getDrinks() async -> [Home.ViewModel.Drink] {
+        var drinks = (try? await engine.drinksService.getSaved()) ?? []
+        if drinks.isEmpty {
+            drinks = await engine.drinksService.resetToDefault()
+        }
+        return drinks.compactMap { drink in
+            Home.ViewModel.Drink(from: drink)
+        }
+    }
+}
+
+private extension Home.ViewModel.Drink {
+    init?(from drink: Drink) {
+        guard let container = Home.ViewModel.Container(from: drink.container) else { return nil }
+        self.init(
+            id: drink.id,
+            size: drink.size,
+            container: container
+        )
+    }
+}
+
+private extension Home.ViewModel.Container {
+    init?(from container: Container) {
+        switch container {
+        case .large: 
+            self = .large
+        case .medium:
+            self = .medium
+        case .small:
+            self = .small
+        case .health:
+            return nil
+        }
     }
 }
