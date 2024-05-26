@@ -177,7 +177,7 @@ private extension Container {
 }
 
 // MARK: WatchCommunication
-private extension Screen.Home.Presenter {
+private extension Screen.Home.Presenter { // TODO: Petter come back to this
     func addObservers() {
         notificationCenter.addObserver(forName: .Watch.activation, 
                                        object: self, queue: .current,
