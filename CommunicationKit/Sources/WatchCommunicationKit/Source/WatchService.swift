@@ -10,7 +10,6 @@ import WatchCommunicationKitInterface
 
 public final class WatchService: NSObject, WatchServiceType {
     private var session: WCSession
-    public var delegate: WatchDelegateType?
     
     public var currentState: CommunicationState
     public var isReachable: Bool
@@ -19,9 +18,8 @@ public final class WatchService: NSObject, WatchServiceType {
     public var isCompanionAppInstalled: Bool
     public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool
     
-    public init(session: WCSession, delegate: WatchDelegateType?) {
+    public init(session: WCSession) {
         self.session = session
-        self.delegate = delegate
         
         self.currentState = .init(from: session.activationState)
         self.isReachable = session.isReachable
@@ -32,7 +30,6 @@ public final class WatchService: NSObject, WatchServiceType {
         self.iOSDeviceNeedsUnlockAfterRebootForReachability = false
         
         super.init()
-        self.session.delegate = self
         self.didReceivedUpdates(from: session)
     }
     
