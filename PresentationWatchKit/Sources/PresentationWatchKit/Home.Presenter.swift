@@ -11,6 +11,7 @@ import PresentationWatchInterface
 import DrinkServiceInterface
 import UnitServiceInterface
 import DayServiceInterface
+import WatchCommunicationKitInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
@@ -19,24 +20,32 @@ extension Screen.Home {
             HasLoggingService &
             HasUnitService &
             HasDayService &
-            HasDrinksService
+            HasDrinksService &
+            HasWatchService
         )
         
         private let engine: Engine
         private let formatter: DateFormatter
+        private let notificationCenter: NotificationCenter
         
         public weak var scene: HomeSceneType?
         public private(set) var viewModel: ViewModel {
             didSet { scene?.perform(update: .viewModel) }
         }
         
-        public init(engine: Engine, formatter: DateFormatter) {
+        public init(engine: Engine, formatter: DateFormatter, notificationCenter: NotificationCenter) {
             self.engine = engine
             self.formatter = formatter
+            self.notificationCenter = notificationCenter
             viewModel = ViewModel(consumption: 0, goal: 0, unit: .liters, drinks: [])
             
             let unit = getUnit()
             updateViewModel(unit: unit.mapToDomain())
+            addObservers()
+        }
+        
+        deinit {
+            removeObservers()
         }
         
         public func perform(action: Home.Action) async {
@@ -167,5 +176,55 @@ private extension Container {
     }
 }
 
+// MARK: WatchCommunication
+private extension Screen.Home.Presenter {
+    func addObservers() {
+        notificationCenter.addObserver(forName: .Watch.activation, 
+                                       object: self, queue: .current,
+                                       using: activationHandler)
+        notificationCenter.addObserver(forName: .Watch.didFinishTransfer, 
+                                       object: self, queue: .current,
+                                       using: didFinishTransferHandler)
+        notificationCenter.addObserver(forName: .Watch.companionAppInstalledDidChange, 
+                                       object: self, queue: .current,
+                                       using: companionAppInstalledDidChangeHandler)
+        notificationCenter.addObserver(forName: .Watch.reachabilityDidChange, 
+                                       object: self, queue: .current,
+                                       using: reachabilityDidChangeHandler)
+        notificationCenter.addObserver(forName: .Watch.didReceiveApplicationContext, 
+                                       object: self, queue: .current,
+                                       using: didReceiveApplicationContextHandler)
+        notificationCenter.addObserver(forName: .Watch.didReceiveMessage, 
+                                       object: self, queue: .current,
+                                       using: didReceiveMessageHandler)
+        notificationCenter.addObserver(forName: .Watch.didReceiveMessageData, 
+                                       object: self, queue: .current,
+                                       using: didReceiveMessageDataHandler)
+        notificationCenter.addObserver(forName: .Watch.didReceiveUserInfo, 
+                                       object: self, queue: .current,
+                                       using: didReceiveUserInfoHandler)
     }
+    
+    func removeObservers() {
+        notificationCenter.removeObserver(self, name: .Watch.activation, object: nil)
+        notificationCenter.removeObserver(self, name: .Watch.didFinishTransfer, object: nil)
+        notificationCenter.removeObserver(self, name: .Watch.companionAppInstalledDidChange, object: nil)
+        notificationCenter.removeObserver(self, name: .Watch.reachabilityDidChange, object: nil)
+        notificationCenter.removeObserver(self, name: .Watch.didReceiveApplicationContext, object: nil)
+        notificationCenter.removeObserver(self, name: .Watch.didReceiveMessage, object: nil)
+        notificationCenter.removeObserver(self, name: .Watch.didReceiveMessageData, object: nil)
+        notificationCenter.removeObserver(self, name: .Watch.didReceiveUserInfo, object: nil)
+    }
+    
+    func activationHandler(_ notification: Notification) {}
+    func didFinishTransferHandler(_ notification: Notification) {}
+    func companionAppInstalledDidChangeHandler(_ notification: Notification) {}
+    func reachabilityDidChangeHandler(_ notification: Notification) {}
+    func didReceiveApplicationContextHandler(_ notification: Notification) {}
+    // This might have a response handle
+    func didReceiveMessageHandler(_ notification: Notification) {}
+    // This might have a response handle
+    func didReceiveMessageDataHandler(_ notification: Notification) {}
+    func didReceiveUserInfoHandler(_ notification: Notification) {}
+    
 }
