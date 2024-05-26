@@ -19,16 +19,22 @@ import DayServiceInterface
 import DayService
 import DBKitInterface
 import DBKit
+import WatchConnectivity
+import WatchCommunicationKitInterface
+import WatchCommunicationKit
 
 public final class WatchEngine {
     private let sharedDefaults: UserDefaults
     private let subsystem: String
+    private let watchSession: WCSession
     
     public init(
         appGroup: String,
-        subsystem: String
+        subsystem: String,
+        watchSession: WCSession
     ) {
         self.subsystem = subsystem
+        self.watchSession = watchSession
         
         guard let sharedDefaults = UserDefaults(suiteName: appGroup)
         else {
@@ -38,6 +44,7 @@ public final class WatchEngine {
     }
     
     private let database: DatabaseType = Database()
+    public lazy var watchService: WatchServiceType = WatchService(session: watchSession)
     
     public lazy var logger: LoggingService = LoggingService(subsystem: subsystem)
     public lazy var userPreferenceService: UserPreferenceServiceType = UserPreferenceService(defaults: sharedDefaults)
@@ -59,5 +66,6 @@ extension WatchEngine:
     HasConsumptionManagerService,
     HasDrinkManagerService,
     HasDayService,
-    HasDrinksService
+    HasDrinksService,
+    HasWatchService
 {}
