@@ -23,13 +23,12 @@ extension Screen.Home {
         )
         
         private let engine: Engine
+        private let formatter: DateFormatter
         
         public weak var scene: HomeSceneType?
         public private(set) var viewModel: ViewModel {
             didSet { scene?.perform(update: .viewModel) }
         }
-        
-        let formatter: DateFormatter
         
         public init(engine: Engine, formatter: DateFormatter) {
             self.engine = engine
@@ -87,6 +86,17 @@ private extension Screen.Home.Presenter {
     func getUnit() -> UnitModel {
         let unitSystem = engine.unitService.getUnitSystem()
         return unitSystem == .metric ? .litres : .pint
+    }
+}
+
+private extension UnitModel {
+    func mapToDomain() -> UnitVolume {
+        switch self {
+        case .ounces:.imperialFluidOunces
+        case .pint: .pints
+        case .litres: .liters
+        case .millilitres: .milliliters
+        }
     }
 }
 
@@ -157,13 +167,5 @@ private extension Container {
     }
 }
 
-private extension UnitModel {
-    func mapToDomain() -> UnitVolume {
-        switch self {
-        case .ounces:.imperialFluidOunces
-        case .pint: .pints
-        case .litres: .liters
-        case .millilitres: .milliliters
-        }
     }
 }
