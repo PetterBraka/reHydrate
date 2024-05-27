@@ -178,7 +178,24 @@ private extension Container {
     }
 }
 
-// MARK: WatchCommunication
+// MARK: Watch communication
+private extension Screen.Home.Presenter {
+    func sendUpdatedToday() async {
+        let watchService = engine.watchService
+        guard watchService.isSupported(),
+              watchService.currentState == .activated
+        else { return }
+        let today = await getToday()
+        let message: [String: Any] = [
+            "today": today
+        ]
+        watchService.send(message: message, replyHandler: nil) { [weak self] error in
+            self?.engine.logger.error("Failed sending \(message) to iOS device", error: error)
+        }
+    }
+}
+
+// MARK: Phone communication
 private extension Screen.Home.Presenter {
     func addObservers() {
         notificationCenter.addObserver(forName: .Watch.didReceiveApplicationContext, 
@@ -200,20 +217,6 @@ private extension Screen.Home.Presenter {
         notificationCenter.removeObserver(self, name: .Watch.didReceiveMessage, object: nil)
         notificationCenter.removeObserver(self, name: .Watch.didReceiveMessageData, object: nil)
         notificationCenter.removeObserver(self, name: .Watch.didReceiveUserInfo, object: nil)
-    }
-    
-    func sendUpdatedToday() async {
-        let watchService = engine.watchService
-        guard watchService.isSupported(),
-              watchService.currentState == .activated
-        else { return }
-        let today = await getToday()
-        let message: [String: Any] = [
-            "today": today
-        ]
-        watchService.send(message: message, replyHandler: nil) { [weak self] error in
-            self?.engine.logger.error("Failed sending \(message) to iOS device", error: error)
-        }
     }
     
     func didReceiveApplicationContextHandler(_ notification: Notification) {}
