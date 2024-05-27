@@ -12,6 +12,7 @@ import DrinkServiceInterface
 import UnitServiceInterface
 import DayServiceInterface
 import WatchCommunicationKitInterface
+import DateServiceInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
@@ -21,7 +22,8 @@ extension Screen.Home {
             HasUnitService &
             HasDayService &
             HasDrinksService &
-            HasWatchService
+            HasWatchService &
+            HasDateService
         )
         
         private let engine: Engine
@@ -104,7 +106,7 @@ private extension UnitModel {
     func mapToDomain() -> UnitVolume {
         switch self {
         case .ounces:.imperialFluidOunces
-        case .pint: .pints
+        case .pint: .imperialPints
         case .litres: .liters
         case .millilitres: .milliliters
         }
@@ -200,29 +202,43 @@ private extension Screen.Home.Presenter {
     func addObservers() {
         notificationCenter.addObserver(forName: .Watch.didReceiveApplicationContext, 
                                        object: self, queue: .current,
-                                       using: didReceiveApplicationContextHandler)
-        notificationCenter.addObserver(forName: .Watch.didReceiveMessage, 
+                                       using: processPhone(notification:))
+        notificationCenter.addObserver(forName: .Watch.didReceiveMessage,
                                        object: self, queue: .current,
-                                       using: didReceiveMessageHandler)
-        notificationCenter.addObserver(forName: .Watch.didReceiveMessageData, 
+                                       using: processPhone(notification:))
+        notificationCenter.addObserver(forName: .Watch.didReceiveUserInfo,
                                        object: self, queue: .current,
-                                       using: didReceiveMessageDataHandler)
-        notificationCenter.addObserver(forName: .Watch.didReceiveUserInfo, 
-                                       object: self, queue: .current,
-                                       using: didReceiveUserInfoHandler)
+                                       using: processPhone(notification:))
     }
     
     func removeObservers() {
         notificationCenter.removeObserver(self, name: .Watch.didReceiveApplicationContext, object: nil)
         notificationCenter.removeObserver(self, name: .Watch.didReceiveMessage, object: nil)
-        notificationCenter.removeObserver(self, name: .Watch.didReceiveMessageData, object: nil)
         notificationCenter.removeObserver(self, name: .Watch.didReceiveUserInfo, object: nil)
     }
     
-    func didReceiveApplicationContextHandler(_ notification: Notification) {}
-    // This might have a response handle
-    func didReceiveMessageHandler(_ notification: Notification) {}
-    // This might have a response handle
-    func didReceiveMessageDataHandler(_ notification: Notification) {}
-    func didReceiveUserInfoHandler(_ notification: Notification) {}
+    func processPhone(notification: Notification) {
+        guard let phoneInfo = notification.userInfo else { return }
+        Task {
+            let unit: UnitModel
+            if let unitSystem = phoneInfo["unitSystem"] as? UnitSystem {
+                unit = unitSystem == .metric ? .litres : .pint
+            } else {
+                unit = getUnit()
+            }
+            let today: Day
+            if let day = phoneInfo["day"] as? Day,
+               engine.dateService.isDate(day.date, inSameDayAs: engine.dateService.now()) {
+                today = day
+            } else {
+                today = await getToday()
+            }
+            
+            updateViewModel(
+                consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
+                goal: engine.unitService.convert(today.goal, from: .litres, to: unit),
+                unit: unit.mapToDomain()
+            )
+        }
+    }
 }
