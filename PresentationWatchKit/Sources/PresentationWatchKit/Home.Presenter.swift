@@ -39,8 +39,9 @@ extension Screen.Home {
             self.notificationCenter = notificationCenter
             viewModel = ViewModel(consumption: 0, goal: 0, unit: .liters, drinks: [])
             
-            let unit = getUnit()
-            updateViewModel(unit: unit.mapToDomain())
+            updateViewModel(
+                unit: getUnit().mapToDomain()
+            )
             addObservers()
         }
         
