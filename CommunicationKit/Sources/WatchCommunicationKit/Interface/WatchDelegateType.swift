@@ -21,15 +21,11 @@ public protocol WatchDelegateType {
     func session(didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void)
 
     func session(didReceiveUserInfo userInfo: [String : Any])
-    func session(didFinish communicationInfo: CommunicationInfo, error: Error?)
 }
 
 extension Notification.Name {
     public enum Watch {
         public static let activation = Notification.Name("sessionActivationDidComplete")
-        public static let didFinishTransfer = Notification.Name("sessionDidFinish")
-        
-        public static let companionAppInstalledDidChange = Notification.Name("sessionCompanionAppInstalledDidChange")
         public static let reachabilityDidChange = Notification.Name("sessionReachabilityDidChange")
         public static let didReceiveApplicationContext = Notification.Name("sessionDidReceiveApplicationContext")
         public static let didReceiveMessage = Notification.Name("sessionDidReceiveMessage")
