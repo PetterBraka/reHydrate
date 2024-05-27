@@ -35,6 +35,8 @@ public final class SceneFactory: ObservableObject {
             watchSession: watchSession
         )
         watchDelegate = CommunicationDelegate(session: watchSession, notificationCenter: notificationCenter)
+        
+        engine.watchService.activate()
     }
     
     func makeHomeView(isPreviews: Bool = false) -> HomeView {
