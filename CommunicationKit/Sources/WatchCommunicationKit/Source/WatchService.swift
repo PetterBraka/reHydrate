@@ -15,7 +15,6 @@ public final class WatchService: NSObject, WatchServiceType {
     public var isReachable: Bool
     public var applicationContext: [String : Any]
     public var receivedApplicationContext: [String : Any]
-    public var isCompanionAppInstalled: Bool
     public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool
     
     public init(session: WCSession) {
@@ -26,7 +25,6 @@ public final class WatchService: NSObject, WatchServiceType {
         self.applicationContext = session.applicationContext
         self.receivedApplicationContext = session.receivedApplicationContext
         
-        self.isCompanionAppInstalled = false
         self.iOSDeviceNeedsUnlockAfterRebootForReachability = false
         
         super.init()
@@ -71,7 +69,7 @@ extension WatchService {
         session.sendMessageData(data, replyHandler: replyHandler, errorHandler: errorHandler)
     }
     
-    public func transfer(userInfo: [String : Any]) -> CommunicationInfo {
+    public func send(userInfo: [String : Any]) -> CommunicationInfo {
         .init(from: session.transferUserInfo(userInfo))
     }
 }
