@@ -41,7 +41,7 @@ public final class SceneFactory: ObservableObject {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd MMM"
         formatter.locale = .current
-        let presenter = Screen.Home.Presenter(engine: engine, formatter: formatter)
+        let presenter = Screen.Home.Presenter(engine: engine, formatter: formatter, notificationCenter: notificationCenter)
         let observer = HomeScreenObservable(presenter: presenter)
         presenter.scene = observer
         

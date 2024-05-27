@@ -26,16 +26,13 @@ extension CommunicationDelegate {
         activationDidCompleteWith activationState: WCSessionActivationState,
         error: (any Error)?
     ) {
-        let userInfo = ["state": activationState]
+        let userInfo: [String: Any] = ["session": session, "activationState": activationState]
         notificationCenter.post(name: .Watch.activation, object: self, userInfo: userInfo)
     }
     
-    public func sessionCompanionAppInstalledDidChange(_ session: WCSession) {
-        notificationCenter.post(name: .Watch.companionAppInstalledDidChange, object: self, userInfo: nil)
-    }
-    
     public func sessionReachabilityDidChange(_ session: WCSession) {
-        notificationCenter.post(name: .Watch.reachabilityDidChange, object: self, userInfo: nil)
+        let userInfo: [String: Any] = ["session": session]
+        notificationCenter.post(name: .Watch.reachabilityDidChange, object: self, userInfo: userInfo)
     }
 }
 
@@ -45,14 +42,18 @@ extension CommunicationDelegate {
         _ session: WCSession,
         didReceiveApplicationContext applicationContext: [String : Any]
     ) {
-        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: applicationContext)
+        var userInfo: [String: Any] = applicationContext
+        userInfo["session"] = session
+        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
     }
     
     public func session(
         _ session: WCSession,
         didReceiveMessage message: [String : Any]
     ) {
-        notificationCenter.post(name: .Watch.didReceiveMessage, object: self, userInfo: message)
+        var userInfo: [String: Any] = message
+        userInfo["session"] = session
+        notificationCenter.post(name: .Watch.didReceiveMessage, object: self, userInfo: userInfo)
     }
     
     public func session(
@@ -60,7 +61,10 @@ extension CommunicationDelegate {
         didReceiveMessage message: [String : Any],
         replyHandler: @escaping ([String : Any]) -> Void
     ) {
-        notificationCenter.post(name: .Watch.didReceiveMessage, object: self, userInfo: message)
+        var userInfo: [String: Any] = message
+        userInfo["session"] = session
+        notificationCenter.post(name: .Watch.didReceiveMessage, object: self, userInfo: userInfo)
+        
         notificationCenter.addObserver(forName: .Watch.messageReplay, object: self, queue: .current) { notification in
             if let userInfo = notification.userInfo {
                 let reply = userInfo.reduce(into: [:]) { (result, dictionary: (key: AnyHashable, value: Any)) in
@@ -78,7 +82,7 @@ extension CommunicationDelegate {
         _ session: WCSession,
         didReceiveMessageData messageData: Data
     ) {
-        let userInfo = ["data" : messageData]
+        let userInfo: [String: Any] = ["session": session, "messageData" : messageData]
         notificationCenter.post(name: .Watch.didReceiveMessageData, object: self, userInfo: userInfo)
     }
     
@@ -87,10 +91,10 @@ extension CommunicationDelegate {
         didReceiveMessageData messageData: Data,
         replyHandler: @escaping (Data) -> Void
     ) {
-        let userInfo = ["data" : messageData]
+        let userInfo: [String: Any] = ["session": session, "messageData" : messageData]
         notificationCenter.post(name: .Watch.didReceiveMessageData, object: self, userInfo: userInfo)
         notificationCenter.addObserver(forName: .Watch.messageDataReplay, object: self, queue: .current) { notification in
-            if let data = notification.userInfo?["data"] as? Data {
+            if let data = notification.userInfo?["messageData"] as? Data {
                 replyHandler(data)
             }
         }
@@ -103,19 +107,8 @@ extension CommunicationDelegate {
         _ session: WCSession,
         didReceiveUserInfo userInfo: [String : Any]
     ) {
+        var userInfo: [String: Any] = userInfo
+        userInfo["session"] = session
         notificationCenter.post(name: .Watch.didReceiveUserInfo, object: self, userInfo: userInfo)
-    }
-    
-    public func session(
-        _ session: WCSession,
-        didFinish userInfoTransfer: WCSessionUserInfoTransfer,
-        error: (any Error)?
-    ) {
-        let userInfo = if let error {
-            ["error" : error]
-        } else {
-            [:]
-        }
-        notificationCenter.post(name: .Watch.didFinishTransfer, object: self, userInfo: userInfo)
     }
 }

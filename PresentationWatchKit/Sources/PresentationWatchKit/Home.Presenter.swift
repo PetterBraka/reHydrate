@@ -177,20 +177,8 @@ private extension Container {
 }
 
 // MARK: WatchCommunication
-private extension Screen.Home.Presenter { // TODO: Petter come back to this
+private extension Screen.Home.Presenter {
     func addObservers() {
-        notificationCenter.addObserver(forName: .Watch.activation, 
-                                       object: self, queue: .current,
-                                       using: activationHandler)
-        notificationCenter.addObserver(forName: .Watch.didFinishTransfer, 
-                                       object: self, queue: .current,
-                                       using: didFinishTransferHandler)
-        notificationCenter.addObserver(forName: .Watch.companionAppInstalledDidChange, 
-                                       object: self, queue: .current,
-                                       using: companionAppInstalledDidChangeHandler)
-        notificationCenter.addObserver(forName: .Watch.reachabilityDidChange, 
-                                       object: self, queue: .current,
-                                       using: reachabilityDidChangeHandler)
         notificationCenter.addObserver(forName: .Watch.didReceiveApplicationContext, 
                                        object: self, queue: .current,
                                        using: didReceiveApplicationContextHandler)
@@ -206,25 +194,16 @@ private extension Screen.Home.Presenter { // TODO: Petter come back to this
     }
     
     func removeObservers() {
-        notificationCenter.removeObserver(self, name: .Watch.activation, object: nil)
-        notificationCenter.removeObserver(self, name: .Watch.didFinishTransfer, object: nil)
-        notificationCenter.removeObserver(self, name: .Watch.companionAppInstalledDidChange, object: nil)
-        notificationCenter.removeObserver(self, name: .Watch.reachabilityDidChange, object: nil)
         notificationCenter.removeObserver(self, name: .Watch.didReceiveApplicationContext, object: nil)
         notificationCenter.removeObserver(self, name: .Watch.didReceiveMessage, object: nil)
         notificationCenter.removeObserver(self, name: .Watch.didReceiveMessageData, object: nil)
         notificationCenter.removeObserver(self, name: .Watch.didReceiveUserInfo, object: nil)
     }
     
-    func activationHandler(_ notification: Notification) {}
-    func didFinishTransferHandler(_ notification: Notification) {}
-    func companionAppInstalledDidChangeHandler(_ notification: Notification) {}
-    func reachabilityDidChangeHandler(_ notification: Notification) {}
     func didReceiveApplicationContextHandler(_ notification: Notification) {}
     // This might have a response handle
     func didReceiveMessageHandler(_ notification: Notification) {}
     // This might have a response handle
     func didReceiveMessageDataHandler(_ notification: Notification) {}
     func didReceiveUserInfoHandler(_ notification: Notification) {}
-    
 }
