@@ -125,7 +125,7 @@ private extension Screen.Home.Presenter {
             let consumed = try await engine.dayService.add(drink: .init(from: drink))
             let unit = getUnit()
             updateViewModel(
-                consumption: engine.unitService.convert(consumed, from: .litres, to: unit),
+                consumption: consumed,
                 unit: unit.mapToDomain()
             )
         } catch {
@@ -141,16 +141,20 @@ private extension Screen.Home.Presenter {
         if drinks.isEmpty {
             drinks = await engine.drinksService.resetToDefault()
         }
-        return drinks.compactMap { drink in
-            Home.ViewModel.Drink(from: drink)
-        }
+        return getDrinks(from: drinks)
     }
-}
-
-private extension Home.ViewModel.Drink {
-    init?(from drink: Drink) {
-        guard let container = Home.ViewModel.Container(from: drink.container) else { return nil }
-        self.init(id: drink.id, size: drink.size, container: container)
+    
+    func getDrinks(from drinks: [Drink]) -> [Home.ViewModel.Drink] {
+        let unitSystem = engine.unitService.getUnitSystem()
+        let unitModel: UnitModel = unitSystem == .metric ? .millilitres : .ounces
+        return drinks.compactMap { drink in
+            guard let container = Home.ViewModel.Container(from: drink.container) else { return nil }
+            return Home.ViewModel.Drink(
+                id: drink.id,
+                size: engine.unitService.convert(drink.size, from: .millilitres, to: unitModel),
+                container: container
+            )
+        }
     }
 }
 
@@ -221,12 +225,16 @@ private extension Screen.Home.Presenter {
     func processPhone(notification: Notification) {
         guard let phoneInfo = notification.userInfo else { return }
         Task {
+            let unitSystem: UnitSystem
             let unit: UnitModel
-            if let unitSystem = phoneInfo["unitSystem"] as? UnitSystem {
-                unit = unitSystem == .metric ? .litres : .pint
+            if let phoneUnitSystem = phoneInfo["unitSystem"] as? UnitSystem {
+                unitSystem = phoneUnitSystem
+                engine.unitService.set(unitSystem: phoneUnitSystem)
             } else {
-                unit = getUnit()
+                unitSystem = engine.unitService.getUnitSystem()
             }
+            unit = unitSystem == .metric ? .litres : .pint
+            
             let today: Day
             if let day = phoneInfo["day"] as? Day,
                engine.dateService.isDate(day.date, inSameDayAs: engine.dateService.now()) {
@@ -235,10 +243,18 @@ private extension Screen.Home.Presenter {
                 today = await getToday()
             }
             
+            let drinks: [Home.ViewModel.Drink]
+            if let phoneDrinks = phoneInfo["drinks"] as? [Drink] {
+                drinks = getDrinks(from: phoneDrinks)
+            } else {
+                drinks = await getDrinks()
+            }
+            
             updateViewModel(
                 consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
                 goal: engine.unitService.convert(today.goal, from: .litres, to: unit),
-                unit: unit.mapToDomain()
+                unit: unit.mapToDomain(),
+                drinks: drinks
             )
         }
     }
