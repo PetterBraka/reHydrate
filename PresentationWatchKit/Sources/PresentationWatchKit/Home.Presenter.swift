@@ -22,11 +22,11 @@ extension Screen.Home {
             HasUnitService &
             HasDayService &
             HasDrinksService &
-            HasWatchService &
             HasDateService
         )
         
         private let engine: Engine
+        private let watchService: WatchServiceType
         private let formatter: DateFormatter
         private let notificationCenter: NotificationCenter
         
@@ -35,8 +35,9 @@ extension Screen.Home {
             didSet { scene?.perform(update: .viewModel) }
         }
         
-        public init(engine: Engine, formatter: DateFormatter, notificationCenter: NotificationCenter) {
+        public init(engine: Engine, watchService: WatchServiceType, formatter: DateFormatter, notificationCenter: NotificationCenter) {
             self.engine = engine
+            self.watchService = watchService
             self.formatter = formatter
             self.notificationCenter = notificationCenter
             viewModel = ViewModel(consumption: 0, goal: 0, unit: .liters, drinks: [])
@@ -183,7 +184,7 @@ private extension Container {
 // MARK: Watch communication
 private extension Screen.Home.Presenter {
     func sendUpdatedToday() async {
-        let watchService = engine.watchService
+        let watchService = watchService
         guard watchService.isSupported(),
               watchService.currentState == .activated
         else { return }

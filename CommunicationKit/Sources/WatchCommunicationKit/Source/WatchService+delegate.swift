@@ -5,8 +5,6 @@
 //  Created by Petter vang Brakalsvålet on 05/05/2024.
 //
 
-import WatchConnectivity
-
 //extension WatchService: WCSessionDelegate {
 //    public func session(
 //        _ session: WCSession,

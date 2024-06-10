@@ -17,8 +17,7 @@ let package: Package = {
         ],
         dependencies: [
             .package(name: "DBKit", path: "../DBKit"),
-            .package(name: "TestHelper", path: "../TestHelper"),
-            .package(name: "CommunicationKit", path: "../CommunicationKit"),
+            .package(name: "TestHelper", path: "../TestHelper")
         ],
         targets: [
             .target(
@@ -27,7 +26,6 @@ let package: Package = {
                     .loggingService,
                     .portsInterface,
                     .dbKit,
-                    .watchCommunicationKit,
                     .source(.dayService),
                     .source(.drinkService),
                     .source(.languageService),
@@ -43,7 +41,6 @@ let package: Package = {
                 dependencies: [
                     .loggingService,
                     .dbKit,
-                    .watchCommunicationKit,
                     .source(.dayService),
                     .source(.drinkService),
                     .source(.languageService),
@@ -58,7 +55,6 @@ let package: Package = {
                         .loggingService,
                         .dbKit,
                         .portsMocks,
-                        .watchCommunicationKitMock,
                         .mocks(.dayService),
                         .mocks(.drinkService),
                         .mocks(.languageService),
@@ -132,9 +128,6 @@ extension Target.Dependency {
     static let testHelper: Target.Dependency = .byName(name: "TestHelper")
     static let portsInterface: Target.Dependency = .byName(name: "PortsInterface")
     static let portsMocks: Target.Dependency = .byName(name: "PortsMocks")
-    
-    static let watchCommunicationKit: Target.Dependency = .product(name: "WatchCommunicationKit", package: "CommunicationKit")
-    static let watchCommunicationKitMock: Target.Dependency = .product(name: "WatchCommunicationKitMock", package: "CommunicationKit")
     
     static let engineMocks: Target.Dependency = .byName(name: "EngineMocks")
 }
