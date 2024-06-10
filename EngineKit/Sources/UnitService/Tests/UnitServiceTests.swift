@@ -12,6 +12,7 @@ import UserPreferenceServiceMocks
 @testable import UnitService
 
 final class UnitServiceTests: XCTestCase {
+    let accuracy: Double = 0.01
     var sut: UnitServiceType!
     var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     
@@ -24,73 +25,78 @@ final class UnitServiceTests: XCTestCase {
     func test_convertSmallImperialToLargImperial() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .ounces, to: .pint)
-        XCTAssertEqual(result, 0.05, accuracy: 2)
+        XCTAssertEqual(result, 0.05, accuracy: accuracy)
     }
     
     func test_convertLargeImperialToSmallImperial() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .pint, to: .ounces)
-        XCTAssertEqual(result, 20, accuracy: 2)
+        XCTAssertEqual(result, 20, accuracy: accuracy)
     }
     
     func test_convertSmallImperialToSmallMetric() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .ounces, to: .millilitres)
-        XCTAssertEqual(result, 28.4131)
+        XCTAssertEqual(result, 28.4131, accuracy: accuracy)
     }
     
     func test_convertLargeImperialToSmallMetric() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .pint, to: .millilitres)
-        XCTAssertEqual(result, 568.261)
+        XCTAssertEqual(result, 568.261, accuracy: accuracy)
     }
     
     func test_convertSmallImperialToLargeMetric() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .ounces, to: .litres)
-        XCTAssertEqual(result, 0.0284131)
+        XCTAssertEqual(result, 0.0284131, accuracy: accuracy)
     }
     
     func test_convertLargeImperialToLargeMetric() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .pint, to: .litres)
-        XCTAssertEqual(result, 0.568261)
+        XCTAssertEqual(result, 0.568261, accuracy: accuracy)
     }
     
     func test_convertSmallMetricToSmallImperial() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .millilitres, to: .ounces)
-        XCTAssertEqual(result, 0.0351951, accuracy: 8)
+        XCTAssertEqual(result, 0.0351951, accuracy: accuracy)
     }
     
     func test_convertSmallMetricToLargeImperial() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .millilitres, to: .pint)
-        XCTAssertEqual(result, 0.00175975, accuracy: 8)
+        XCTAssertEqual(result, 0.00175975, accuracy: accuracy)
     }
     
     func test_convertLargeMetricToSmallImperial() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .litres, to: .ounces)
-        XCTAssertEqual(result, 35.1951, accuracy: 4)
+        XCTAssertEqual(result, 35.1951, accuracy: accuracy)
     }
     
     func test_convertLargeMetricToLargeImperial() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .litres, to: .pint)
-        XCTAssertEqual(result, 1.7597, accuracy: 4)
+        XCTAssertEqual(result, 1.7597, accuracy: accuracy)
     }
     
     func test_convertSmallMetricToLargeMetric() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .millilitres, to: .litres)
-        XCTAssertEqual(result, 0.001)
+        XCTAssertEqual(result, 0.001, accuracy: accuracy)
     }
     
     func test_convertLargeMetricToSmallMetric() {
         let givenValue: Double = 1
         let result = sut.convert(givenValue, from: .litres, to: .millilitres)
-        XCTAssertEqual(result, 1000)
+        XCTAssertEqual(result, 1000, accuracy: accuracy)
+    }
+    
+    func test_convert_500ml_to_oz() {
+        let value = sut.convert(500, from: .millilitres, to: .ounces)
+        XCTAssertEqual(value, 17.6, accuracy: accuracy)
     }
     
     func test_setAndGetUnitSystem() {
