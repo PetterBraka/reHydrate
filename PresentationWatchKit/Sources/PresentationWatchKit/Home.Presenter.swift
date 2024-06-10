@@ -229,6 +229,7 @@ private extension Screen.Home.Presenter {
             let unit: UnitModel
             if let phoneUnitSystem = phoneInfo["unitSystem"] as? UnitSystem {
                 unitSystem = phoneUnitSystem
+                engine.unitService.set(unitSystem: phoneUnitSystem)
             } else {
                 unitSystem = engine.unitService.getUnitSystem()
             }
