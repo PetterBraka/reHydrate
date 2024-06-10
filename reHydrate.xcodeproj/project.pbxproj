@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -112,6 +112,8 @@
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		A11153382C01DC7F001366FE /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11153372C01DC7F001366FE /* HomeScreenObservable.swift */; };
 		A111533A2C01EA95001366FE /* CommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11153392C01EA95001366FE /* CommunicationDelegate.swift */; };
+		A111533D2C179EA0001366FE /* WatchCommunicationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A111533C2C179EA0001366FE /* WatchCommunicationKit */; };
+		A11153412C179EAE001366FE /* WatchCommunicationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A11153402C179EAE001366FE /* WatchCommunicationKit */; };
 		A11180332AC3768D007E4585 /* NotificationCenterPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180322AC3768D007E4585 /* NotificationCenterPort.swift */; };
 		A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C12A72B65B02D00FB1B8C /* View+expand.swift */; };
 		A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */; };
@@ -385,6 +387,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A111533D2C179EA0001366FE /* WatchCommunicationKit in Frameworks */,
 				A1CA3A1E2B5A5DD5009907EA /* CalendarKit in Frameworks */,
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				A1A825E92B7991B700EA98EC /* DBKit in Frameworks */,
@@ -405,6 +408,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A11153412C179EAE001366FE /* WatchCommunicationKit in Frameworks */,
 				A185DB672B77C7A600B9318B /* PresentationWatchKit in Frameworks */,
 				A16B30192BEA09DE0036DE54 /* WatchEngineKit in Frameworks */,
 			);
@@ -818,6 +822,7 @@
 				A126D24E2A76665900A296BA /* PresentationKit */,
 				A1CA3A1D2B5A5DD5009907EA /* CalendarKit */,
 				A1A825E82B7991B700EA98EC /* DBKit */,
+				A111533C2C179EA0001366FE /* WatchCommunicationKit */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -860,6 +865,7 @@
 			packageProductDependencies = (
 				A185DB662B77C7A600B9318B /* PresentationWatchKit */,
 				A16B30182BEA09DE0036DE54 /* WatchEngineKit */,
+				A11153402C179EAE001366FE /* WatchCommunicationKit */,
 			);
 			productName = "reHydrate Watch App";
 			productReference = A185DB332B77C5F300B9318B /* reHydrate Watch App.app */;
@@ -949,6 +955,7 @@
 			mainGroup = 3378766A24378A9300F5A732;
 			packageReferences = (
 				A1CA3A1C2B5A5DD5009907EA /* XCRemoteSwiftPackageReference "CalendarKit" */,
+				A111533B2C179EA0001366FE /* XCLocalSwiftPackageReference "CommunicationKit" */,
 			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
@@ -1682,6 +1689,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		A111533B2C179EA0001366FE /* XCLocalSwiftPackageReference "CommunicationKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = CommunicationKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		A1CA3A1C2B5A5DD5009907EA /* XCRemoteSwiftPackageReference "CalendarKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1694,6 +1708,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A111533C2C179EA0001366FE /* WatchCommunicationKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WatchCommunicationKit;
+		};
+		A11153402C179EAE001366FE /* WatchCommunicationKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WatchCommunicationKit;
+		};
 		A126D24A2A76665800A296BA /* EngineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EngineKit;
