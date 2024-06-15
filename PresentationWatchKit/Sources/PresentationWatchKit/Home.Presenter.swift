@@ -225,14 +225,8 @@ private extension Screen.Home.Presenter {
     func processPhone(notification: Notification) {
         guard let phoneInfo = notification.userInfo else { return }
         Task {
-            let today: Day
-            if let day = phoneInfo["day"] as? Day,
-               engine.dateService.isDate(day.date, inSameDayAs: engine.dateService.now()) {
-                today = day
-            } else {
-                today = await getToday()
-            }
             let unit = processUnit(fromPhoneInfo: phoneInfo)
+            let today = await processDay(fromPhoneInfo: phoneInfo)
             let drinks = await processDrinks(fromPhoneInfo: phoneInfo)
             
             updateViewModel(
@@ -253,6 +247,30 @@ private extension Screen.Home.Presenter {
             unitSystem = engine.unitService.getUnitSystem()
         }
         return unitSystem == .metric ? .litres : .pint
+    }
+    
+    func processDay(fromPhoneInfo phoneInfo: [AnyHashable: Any]) async -> Day {
+        let watchToday = await getToday()
+        guard let phoneDay = phoneInfo["day"] as? Day,
+              engine.dateService.isDate(phoneDay.date, inSameDayAs: engine.dateService.now())
+        else { return watchToday }
+        
+        let consumedDiff = phoneDay.consumed - watchToday.consumed
+        let drink = Drink(id: "phone-message", size: abs(consumedDiff), container: .medium)
+        if consumedDiff < 0 {
+            _ = try? await engine.dayService.add(drink: drink)
+        } else if consumedDiff > 0 {
+            _ = try? await engine.dayService.remove(drink: drink)
+        }
+        
+        let goalDiff = phoneDay.goal - watchToday.goal
+        if goalDiff < 0 {
+            _ = try? await engine.dayService.increase(goal: abs(goalDiff))
+        } else if goalDiff > 0 {
+            _ = try? await engine.dayService.decrease(goal: abs(goalDiff))
+        }
+        
+        return phoneDay
     }
     
     func processDrinks(fromPhoneInfo phoneInfo: [AnyHashable: Any]) async -> [Drink] {
