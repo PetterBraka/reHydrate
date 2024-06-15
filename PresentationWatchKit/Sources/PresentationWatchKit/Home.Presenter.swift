@@ -233,26 +233,19 @@ private extension Screen.Home.Presenter {
                 today = await getToday()
             }
             let unit = processUnit(fromPhoneInfo: phoneInfo)
-            
-            let drinks: [Home.ViewModel.Drink]
-            if let phoneDrinks = phoneInfo["drinks"] as? [Drink] {
-                drinks = getDrinks(from: phoneDrinks)
-            } else {
-                drinks = await getDrinks()
-            }
+            let drinks = await processDrinks(fromPhoneInfo: phoneInfo)
             
             updateViewModel(
                 consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
                 goal: engine.unitService.convert(today.goal, from: .litres, to: unit),
                 unit: unit.mapToDomain(),
-                drinks: drinks
+                drinks: getDrinks(from: drinks)
             )
         }
     }
     
     func processUnit(fromPhoneInfo phoneInfo: [AnyHashable: Any]) -> UnitModel {
         let unitSystem: UnitSystem
-        let unit: UnitModel
         if let phoneUnitSystem = phoneInfo["unitSystem"] as? UnitSystem {
             unitSystem = phoneUnitSystem
             engine.unitService.set(unitSystem: phoneUnitSystem)
@@ -260,5 +253,22 @@ private extension Screen.Home.Presenter {
             unitSystem = engine.unitService.getUnitSystem()
         }
         return unitSystem == .metric ? .litres : .pint
+    }
+    
+    func processDrinks(fromPhoneInfo phoneInfo: [AnyHashable: Any]) async -> [Drink] {
+        var processedDrinks = [Drink]()
+        
+        if let phoneDrinks = phoneInfo["drinks"] as? [Drink] {
+            for phoneDrink in phoneDrinks {
+                if let drink = try? await engine.drinksService.edit(size: phoneDrink.size, of: phoneDrink.container) {
+                    processedDrinks.append(drink)
+                } else if let drink = try? await engine.drinksService.add(size: phoneDrink.size, container: phoneDrink.container) {
+                    processedDrinks.append(drink)
+                }
+            }
+        } else {
+            processedDrinks = await getDrinks()
+        }
+        return processedDrinks
     }
 }
