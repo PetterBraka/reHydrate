@@ -14,7 +14,7 @@ public enum Home {
     
     public enum Action {
         case didAppear
-        case didTapAddDrink(ViewModel.Drink)
+        case didTapAddDrink(ViewModel.Container)
 //        case didTapRemoveDrink(ViewModel.Drink) // TODO: Nice to have in the future.
     }
     
@@ -61,4 +61,5 @@ public extension Home.ViewModel {
     }
 }
 
+extension Home.ViewModel: Equatable {}
 extension Home.ViewModel.Drink: Equatable {}

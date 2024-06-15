@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import WatchEngineKit
 import LoggingService
 import PresentationWatchInterface
 import DrinkServiceInterface
@@ -55,8 +56,10 @@ extension Screen.Home {
         public func perform(action: Home.Action) async {
             switch action {
             case .didAppear:
-                sync(didComplete: nil)
-            case let .didTapAddDrink(drink):
+                await sync()
+            case let .didTapAddDrink(container):
+                guard let drink = viewModel.drinks.first(where: { $0.container == container })
+                else { return }
                 await add(drink: drink)
                 await sendUpdatedToday()
             }
@@ -64,17 +67,21 @@ extension Screen.Home {
         
         public func sync(didComplete: (() -> Void)?) {
             Task {
-                let unit = getUnit()
-                let today = await getToday()
-                let drinks = await getDrinks()
-                updateViewModel(
-                    consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
-                    goal: engine.unitService.convert(today.goal, from: .litres, to: unit),
-                    unit: unit.mapToDomain(),
-                    drinks: getDrinks(from: drinks)
-                )
+                await sync()
                 didComplete?()
             }
+        }
+        
+        private func sync() async {
+            let unit = getUnit()
+            let today = await getToday()
+            let drinks = await getDrinks()
+            updateViewModel(
+                consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
+                goal: engine.unitService.convert(today.goal, from: .litres, to: unit),
+                unit: unit.mapToDomain(),
+                drinks: getDrinks(from: drinks)
+            )
         }
     }
 }

@@ -43,7 +43,7 @@ struct HomeView: View {
         HStack(alignment: .bottom, spacing: 8) {
             ForEach(observer.viewModel.drinks, id: \.id) { drink in
                 Button {
-                    observer.perform(action: .didTapAddDrink(drink))
+                    observer.perform(action: .didTapAddDrink(drink.container))
                 } label: {
                     getImage(for: drink)
                         .frame(maxWidth: .infinity, alignment: .bottom)

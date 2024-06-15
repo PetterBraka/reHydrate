@@ -13,6 +13,7 @@ let package: Package = {
         ],
         products: [
             .library(name: "EngineKit", targets: ["EngineKit"]),
+            .library(name: "EngineMocks", targets: ["EngineMocks"]),
             .library(name: "WatchEngineKit", targets: ["WatchEngineKit"]),
         ],
         dependencies: [
