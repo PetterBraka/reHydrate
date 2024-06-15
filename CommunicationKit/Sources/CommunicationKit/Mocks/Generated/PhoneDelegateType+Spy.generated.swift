@@ -4,22 +4,24 @@
 // swiftlint:disable variable_name
 
 import Foundation
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
-public protocol WatchDelegateTypeSpying {
-    var variableLog: [WatchDelegateTypeSpy.VariableName] { get set }
-    var lastVariabelCall: WatchDelegateTypeSpy.VariableName? { get }
-    var methodLog: [WatchDelegateTypeSpy.MethodCall] { get set }
-    var lastMethodCall: WatchDelegateTypeSpy.MethodCall? { get }
+public protocol PhoneDelegateTypeSpying {
+    var variableLog: [PhoneDelegateTypeSpy.VariableName] { get set }
+    var lastVariabelCall: PhoneDelegateTypeSpy.VariableName? { get }
+    var methodLog: [PhoneDelegateTypeSpy.MethodCall] { get set }
+    var lastMethodCall: PhoneDelegateTypeSpy.MethodCall? { get }
 }
 
-public final class WatchDelegateTypeSpy: WatchDelegateTypeSpying {
+public final class PhoneDelegateTypeSpy: PhoneDelegateTypeSpying {
     public enum VariableName {
     }
 
     public enum MethodCall {
         case session(activationState: CommunicationState, error: Error?)
-        case sessionCompanionAppInstalledDidChange
+        case sessionDidDeactivate
+        case sessionDidBecomeInactive
+        case sessionWatchStateDidChange
         case sessionReachabilityDidChange
         case session(applicationContext: [String : Any])
         case session(message: [String : Any])
@@ -34,20 +36,28 @@ public final class WatchDelegateTypeSpy: WatchDelegateTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private var realObject: WatchDelegateType
-    public init(realObject: WatchDelegateType) {
+    private var realObject: PhoneDelegateType
+    public init(realObject: PhoneDelegateType) {
         self.realObject = realObject
     }
 }
 
-extension WatchDelegateTypeSpy: WatchDelegateType {
+extension PhoneDelegateTypeSpy: PhoneDelegateType {
     public func session(activationDidCompleteWith activationState: CommunicationState, error: Error?) -> Void {
         methodLog.append(.session(activationState: activationState, error: error))
         realObject.session(activationDidCompleteWith: activationState, error: error)
     }
-    public func sessionCompanionAppInstalledDidChange() -> Void {
-        methodLog.append(.sessionCompanionAppInstalledDidChange)
-        realObject.sessionCompanionAppInstalledDidChange()
+    public func sessionDidDeactivate() -> Void {
+        methodLog.append(.sessionDidDeactivate)
+        realObject.sessionDidDeactivate()
+    }
+    public func sessionDidBecomeInactive() -> Void {
+        methodLog.append(.sessionDidBecomeInactive)
+        realObject.sessionDidBecomeInactive()
+    }
+    public func sessionWatchStateDidChange() -> Void {
+        methodLog.append(.sessionWatchStateDidChange)
+        realObject.sessionWatchStateDidChange()
     }
     public func sessionReachabilityDidChange() -> Void {
         methodLog.append(.sessionReachabilityDidChange)

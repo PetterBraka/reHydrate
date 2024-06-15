@@ -18,13 +18,15 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../EngineKit"),
+        .package(path: "../CommunicationKit"),
     ],
     targets: [
         .target(
             name: "PresentationWatchKit",
             dependencies: [
+                "EngineKit",
                 "PresentationWatchInterface",
-                "EngineKit"
+                "CommunicationKit",
             ]
         ),
         .target(

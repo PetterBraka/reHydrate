@@ -4,7 +4,7 @@
 // swiftlint:disable variable_name
 
 import Foundation
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
 public protocol PhoneServiceTypeSpying {
     var variableLog: [PhoneServiceTypeSpy.VariableName] { get set }

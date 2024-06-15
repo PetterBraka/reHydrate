@@ -9,7 +9,7 @@
 import SwiftUI
 import PresentationWatchInterface
 import PresentationWatchKit
-import EngineKit
+import WatchEngineKit
 
 final class HomeScreenObservable: ObservableObject, HomeSceneType {
     private let presenter: HomePresenterType

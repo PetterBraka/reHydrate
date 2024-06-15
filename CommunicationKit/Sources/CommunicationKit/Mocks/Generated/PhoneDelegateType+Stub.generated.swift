@@ -3,7 +3,7 @@
 // swiftlint:disable line_length
 // swiftlint:disable variable_name    
 import Foundation
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
 public protocol PhoneDelegateTypeStubbing {
 }

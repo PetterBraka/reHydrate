@@ -11,31 +11,31 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "WatchCommunicationKit",
+            name: "CommunicationKit",
             targets: [
-                "WatchCommunicationKit",
-                "WatchCommunicationKitInterface",
+                "CommunicationKit",
+                "CommunicationKitInterface",
             ]
         ),
         .library(
-            name: "WatchCommunicationKitMock",
-            targets: ["WatchCommunicationKitMock"]
+            name: "CommunicationKitMock",
+            targets: ["CommunicationKitMock"]
         ),
     ],
     targets: [
         .target(
-            name: "WatchCommunicationKit",
-            dependencies: ["WatchCommunicationKitInterface"],
-            path: "Sources/WatchCommunicationKit/Source"
+            name: "CommunicationKit",
+            dependencies: ["CommunicationKitInterface"],
+            path: "Sources/CommunicationKit/Source"
         ),
         .target(
-            name: "WatchCommunicationKitInterface",
-            path: "Sources/WatchCommunicationKit/Interface"
+            name: "CommunicationKitInterface",
+            path: "Sources/CommunicationKit/Interface"
         ),
         .target(
-            name: "WatchCommunicationKitMock",
-            dependencies: ["WatchCommunicationKitInterface"],
-            path: "Sources/WatchCommunicationKit/Mocks"
+            name: "CommunicationKitMock",
+            dependencies: ["CommunicationKitInterface"],
+            path: "Sources/CommunicationKit/Mocks"
         ),
     ]
 )

@@ -6,7 +6,7 @@
 //
 
 import WatchConnectivity
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
 public final class PhoneService: NSObject, PhoneServiceType {
     private var session: WCSession
