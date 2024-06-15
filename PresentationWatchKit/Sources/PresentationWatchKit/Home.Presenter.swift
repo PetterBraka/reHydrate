@@ -212,14 +212,14 @@ private extension Screen.Home.Presenter {
 // MARK: Phone communication
 private extension Screen.Home.Presenter {
     func addObservers() {
-        notificationCenter.addObserver(forName: .Watch.didReceiveApplicationContext, 
-                                       object: self, queue: .current,
+        notificationCenter.addObserver(forName: .Watch.didReceiveApplicationContext,
+                                       object: nil, queue: .current,
                                        using: processPhone(notification:))
         notificationCenter.addObserver(forName: .Watch.didReceiveMessage,
-                                       object: self, queue: .current,
+                                       object: nil, queue: .current,
                                        using: processPhone(notification:))
         notificationCenter.addObserver(forName: .Watch.didReceiveUserInfo,
-                                       object: self, queue: .current,
+                                       object: nil, queue: .current,
                                        using: processPhone(notification:))
     }
     
@@ -230,7 +230,10 @@ private extension Screen.Home.Presenter {
     }
     
     func processPhone(notification: Notification) {
-        guard let phoneInfo = notification.userInfo else { return }
+        guard let phoneInfo = notification.userInfo else {
+            notificationCenter.post(name: .init("NotificationProcessed"), object: self)
+            return
+        }
         Task {
             let unit = processUnit(fromPhoneInfo: phoneInfo)
             let today = await processDay(fromPhoneInfo: phoneInfo)
@@ -242,12 +245,13 @@ private extension Screen.Home.Presenter {
                 unit: unit.mapToDomain(),
                 drinks: getDrinks(from: drinks)
             )
+            notificationCenter.post(name: .init("NotificationProcessed"), object: self)
         }
     }
     
     func processUnit(fromPhoneInfo phoneInfo: [AnyHashable: Any]) -> UnitModel {
         let unitSystem: UnitSystem
-        if let phoneUnitSystem = phoneInfo["unitSystem"] as? UnitSystem {
+        if let phoneUnitSystem = phoneInfo["unit-system"] as? UnitSystem {
             unitSystem = phoneUnitSystem
             engine.unitService.set(unitSystem: phoneUnitSystem)
         } else {
@@ -282,17 +286,19 @@ private extension Screen.Home.Presenter {
     
     func processDrinks(fromPhoneInfo phoneInfo: [AnyHashable: Any]) async -> [Drink] {
         var processedDrinks = [Drink]()
+        let watchDrinks = await getDrinks()
         
-        if let phoneDrinks = phoneInfo["drinks"] as? [Drink] {
-            for phoneDrink in phoneDrinks {
-                if let drink = try? await engine.drinksService.edit(size: phoneDrink.size, of: phoneDrink.container) {
-                    processedDrinks.append(drink)
-                } else if let drink = try? await engine.drinksService.add(size: phoneDrink.size, container: phoneDrink.container) {
-                    processedDrinks.append(drink)
-                }
+        guard let phoneDrinks = phoneInfo["drinks"] as? [Drink], phoneDrinks != watchDrinks
+        else { return watchDrinks }
+        
+        for phoneDrink in phoneDrinks {
+            if let drink = watchDrinks.first(where: { $0.container == phoneDrink.container }), drink.size == phoneDrink.size {
+                processedDrinks.append(drink)
+            } else if let drink = try? await engine.drinksService.edit(size: phoneDrink.size, of: phoneDrink.container) {
+                processedDrinks.append(drink)
+            } else if let drink = try? await engine.drinksService.add(size: phoneDrink.size, container: phoneDrink.container) {
+                processedDrinks.append(drink)
             }
-        } else {
-            processedDrinks = await getDrinks()
         }
         return processedDrinks
     }
