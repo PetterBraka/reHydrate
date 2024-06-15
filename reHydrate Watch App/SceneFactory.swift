@@ -43,8 +43,7 @@ public final class SceneFactory: ObservableObject {
     
     func makeHomeView(isPreviews: Bool = false) -> HomeView {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE - dd MMM"
-        formatter.locale = .current
+        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE - dd MMM", options: 0, locale: .current)
         let presenter = Screen.Home.Presenter(engine: engine, watchService: watchService, formatter: formatter, notificationCenter: notificationCenter)
         let observer = HomeScreenObservable(presenter: presenter)
         presenter.scene = observer
