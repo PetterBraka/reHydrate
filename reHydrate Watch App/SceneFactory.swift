@@ -15,8 +15,8 @@ import DrinkServiceInterface
 import UserNotifications
 import UIKit
 import WatchConnectivity
-import WatchCommunicationKit
-import WatchCommunicationKitInterface
+import CommunicationKit
+import CommunicationKitInterface
 
 public final class SceneFactory: ObservableObject {
     static let shared = SceneFactory()

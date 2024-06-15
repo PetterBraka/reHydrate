@@ -3,23 +3,27 @@
 // swiftlint:disable line_length
 // swiftlint:disable variable_name    
 import Foundation
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
-public protocol WatchServiceTypeStubbing {
-    var delegate_returnValue: WatchDelegateType? { get set }
+public protocol PhoneServiceTypeStubbing {
+    var delegate_returnValue: PhoneDelegateType? { get set }
     var currentState_returnValue: CommunicationState { get set }
     var isReachable_returnValue: Bool { get set }
     var applicationContext_returnValue: [String : Any] { get set }
     var receivedApplicationContext_returnValue: [String : Any] { get set }
-    var isCompanionAppInstalled_returnValue: Bool { get set }
-    var iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue: Bool { get set }
+    var isPaired_returnValue: Bool { get set }
+    var watchDirectoryUrl_returnValue: URL? { get set }
+    var isWatchAppInstalled_returnValue: Bool { get set }
+    var isComplicationEnabled_returnValue: Bool { get set }
+    var remainingComplicationUserInfoTransfers_returnValue: Int { get set }
     var isSupported_returnValue: Bool { get set }
     var updateApplicationContext_returnValue: Error? { get set }
+    var transferComplicationUserInfo_returnValue: CommunicationInfo { get set }
     var transferUserInfo_returnValue: CommunicationInfo { get set }
 }
 
-public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
-    public var delegate_returnValue: WatchDelegateType? {
+public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
+    public var delegate_returnValue: PhoneDelegateType? {
         get {
             if delegate_returnValues.isEmpty {
                 .default
@@ -33,7 +37,7 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
             }
         }
     }
-    private var delegate_returnValues: [WatchDelegateType?] = []
+    private var delegate_returnValues: [PhoneDelegateType?] = []
     public var currentState_returnValue: CommunicationState {
         get {
             if currentState_returnValues.isEmpty {
@@ -86,32 +90,73 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
         }
     }
     private var receivedApplicationContext_returnValues: [[String : Any]] = []
-    public var isCompanionAppInstalled_returnValue: Bool {
+    public var isPaired_returnValue: Bool {
         get {
-            if isCompanionAppInstalled_returnValues.isEmpty {
+            if isPaired_returnValues.isEmpty {
                 .default
             } else {
-                isCompanionAppInstalled_returnValues.removeFirst()
+                isPaired_returnValues.removeFirst()
             }
         }
         set {
-            isCompanionAppInstalled_returnValues.append(newValue)
+            isPaired_returnValues.append(newValue)
         }
     }
-    private var isCompanionAppInstalled_returnValues: [Bool] = []
-    public var iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue: Bool {
+    private var isPaired_returnValues: [Bool] = []
+    public var watchDirectoryUrl_returnValue: URL? {
         get {
-            if iOSDeviceNeedsUnlockAfterRebootForReachability_returnValues.isEmpty {
+            if watchDirectoryUrl_returnValues.isEmpty {
                 .default
             } else {
-                iOSDeviceNeedsUnlockAfterRebootForReachability_returnValues.removeFirst()
+                watchDirectoryUrl_returnValues.removeFirst()
             }
         }
         set {
-            iOSDeviceNeedsUnlockAfterRebootForReachability_returnValues.append(newValue)
+            if let newValue {
+                watchDirectoryUrl_returnValues.append(newValue)
+            }
         }
     }
-    private var iOSDeviceNeedsUnlockAfterRebootForReachability_returnValues: [Bool] = []
+    private var watchDirectoryUrl_returnValues: [URL?] = []
+    public var isWatchAppInstalled_returnValue: Bool {
+        get {
+            if isWatchAppInstalled_returnValues.isEmpty {
+                .default
+            } else {
+                isWatchAppInstalled_returnValues.removeFirst()
+            }
+        }
+        set {
+            isWatchAppInstalled_returnValues.append(newValue)
+        }
+    }
+    private var isWatchAppInstalled_returnValues: [Bool] = []
+    public var isComplicationEnabled_returnValue: Bool {
+        get {
+            if isComplicationEnabled_returnValues.isEmpty {
+                .default
+            } else {
+                isComplicationEnabled_returnValues.removeFirst()
+            }
+        }
+        set {
+            isComplicationEnabled_returnValues.append(newValue)
+        }
+    }
+    private var isComplicationEnabled_returnValues: [Bool] = []
+    public var remainingComplicationUserInfoTransfers_returnValue: Int {
+        get {
+            if remainingComplicationUserInfoTransfers_returnValues.isEmpty {
+                .default
+            } else {
+                remainingComplicationUserInfoTransfers_returnValues.removeFirst()
+            }
+        }
+        set {
+            remainingComplicationUserInfoTransfers_returnValues.append(newValue)
+        }
+    }
+    private var remainingComplicationUserInfoTransfers_returnValues: [Int] = []
     public var isSupported_returnValue: Bool {
         get {
             if isSupported_returnValues.isEmpty {
@@ -138,6 +183,19 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
         }
     }
     private var updateApplicationContext_returnValues: [Error?] = []
+    public var transferComplicationUserInfo_returnValue: CommunicationInfo {
+        get {
+            if transferComplicationUserInfo_returnValues.isEmpty {
+                .default
+            } else {
+                transferComplicationUserInfo_returnValues.removeFirst()
+            }
+        }
+        set {
+            transferComplicationUserInfo_returnValues.append(newValue)
+        }
+    }
+    private var transferComplicationUserInfo_returnValues: [CommunicationInfo] = []
     public var transferUserInfo_returnValue: CommunicationInfo {
         get {
             if transferUserInfo_returnValues.isEmpty {
@@ -155,8 +213,8 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
     public init() {}
 }
 
-extension WatchServiceTypeStub: WatchServiceType {
-    public var delegate: WatchDelegateType? { 
+extension PhoneServiceTypeStub: PhoneServiceType {
+    public var delegate: PhoneDelegateType? { 
         get { delegate_returnValue }
         set { delegate_returnValue = newValue }
     }
@@ -176,13 +234,25 @@ extension WatchServiceTypeStub: WatchServiceType {
         get { receivedApplicationContext_returnValue }
         set { receivedApplicationContext_returnValue = newValue }
     }
-    public var isCompanionAppInstalled: Bool { 
-        get { isCompanionAppInstalled_returnValue }
-        set { isCompanionAppInstalled_returnValue = newValue }
+    public var isPaired: Bool { 
+        get { isPaired_returnValue }
+        set { isPaired_returnValue = newValue }
     }
-    public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool { 
-        get { iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue }
-        set { iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue = newValue }
+    public var watchDirectoryUrl: URL? { 
+        get { watchDirectoryUrl_returnValue }
+        set { watchDirectoryUrl_returnValue = newValue }
+    }
+    public var isWatchAppInstalled: Bool { 
+        get { isWatchAppInstalled_returnValue }
+        set { isWatchAppInstalled_returnValue = newValue }
+    }
+    public var isComplicationEnabled: Bool { 
+        get { isComplicationEnabled_returnValue }
+        set { isComplicationEnabled_returnValue = newValue }
+    }
+    public var remainingComplicationUserInfoTransfers: Int { 
+        get { remainingComplicationUserInfoTransfers_returnValue }
+        set { remainingComplicationUserInfoTransfers_returnValue = newValue }
     }
     public func isSupported() -> Bool {
         isSupported_returnValue
@@ -201,6 +271,10 @@ extension WatchServiceTypeStub: WatchServiceType {
     }
 
     public func send(messageData data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) -> Void {
+    }
+
+    public func transferComplication(userInfo: [String : Any]) -> CommunicationInfo {
+        transferComplicationUserInfo_returnValue
     }
 
     public func transfer(userInfo: [String : Any]) -> CommunicationInfo {

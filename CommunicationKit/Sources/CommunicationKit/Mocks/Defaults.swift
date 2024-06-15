@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
 extension Int {
     static let `default`: Self = 0

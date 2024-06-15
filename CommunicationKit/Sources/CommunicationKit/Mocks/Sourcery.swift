@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 05/05/2024.
 //
 
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
 // sourcery:begin: AutoStub, AutoSpy
 extension WatchServiceType {}

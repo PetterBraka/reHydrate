@@ -19,8 +19,8 @@ public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
 
     public enum MethodCall {
         case add(size: Double, container: Container)
-        case edit(size: Double, drink: Drink)
-        case remove(container: String)
+        case edit(size: Double, drink: Container)
+        case remove(container: Container)
         case getSaved
         case resetToDefault
     }
@@ -40,11 +40,11 @@ extension DrinkServiceTypeSpy: DrinkServiceType {
         methodLog.append(.add(size: size, container: container))
         return try await realObject.add(size: size, container: container)
     }
-    public func edit(size: Double, of drink: Drink) async throws -> Drink {
+    public func edit(size: Double, of drink: Container) async throws -> Drink {
         methodLog.append(.edit(size: size, drink: drink))
         return try await realObject.edit(size: size, of: drink)
     }
-    public func remove(container: String) async throws -> Void {
+    public func remove(container: Container) async throws -> Void {
         methodLog.append(.remove(container: container))
         try await realObject.remove(container: container)
     }

@@ -11,7 +11,7 @@ import PresentationWatchInterface
 import DrinkServiceInterface
 import UnitServiceInterface
 import DayServiceInterface
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 import DateServiceInterface
 
 extension Screen.Home {

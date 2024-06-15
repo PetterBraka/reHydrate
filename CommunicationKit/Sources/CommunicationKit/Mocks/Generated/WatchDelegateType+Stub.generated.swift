@@ -3,7 +3,7 @@
 // swiftlint:disable line_length
 // swiftlint:disable variable_name    
 import Foundation
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
 public protocol WatchDelegateTypeStubbing {
 }
@@ -39,9 +39,6 @@ extension WatchDelegateTypeStub: WatchDelegateType {
     }
 
     public func session(didReceiveUserInfo userInfo: [String : Any]) -> Void {
-    }
-
-    public func session(didFinish communicationInfo: CommunicationInfo, error: Error?) -> Void {
     }
 
 }

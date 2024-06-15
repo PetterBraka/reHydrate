@@ -4,7 +4,7 @@
 // swiftlint:disable variable_name
 
 import Foundation
-import WatchCommunicationKitInterface
+import CommunicationKitInterface
 
 public protocol WatchServiceTypeSpying {
     var variableLog: [WatchServiceTypeSpy.VariableName] { get set }
@@ -15,12 +15,10 @@ public protocol WatchServiceTypeSpying {
 
 public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
     public enum VariableName {
-        case delegate
         case currentState
         case isReachable
         case applicationContext
         case receivedApplicationContext
-        case isCompanionAppInstalled
         case iOSDeviceNeedsUnlockAfterRebootForReachability
     }
 
@@ -30,7 +28,7 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
         case update(applicationContext: [String : Any])
         case send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?)
         case send(data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?)
-        case transfer(userInfo: [String : Any])
+        case send(userInfo: [String : Any])
     }
 
     public var variableLog: [VariableName] = []
@@ -44,16 +42,6 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
 }
 
 extension WatchServiceTypeSpy: WatchServiceType {
-    public var delegate: WatchDelegateType? {
-        get {
-            variableLog.append(.delegate)
-            return realObject.delegate
-        }
-        set {
-            variableLog.append(.delegate)
-            realObject.delegate  = newValue
-        }
-    }
     public var currentState: CommunicationState {
         get {
             variableLog.append(.currentState)
@@ -94,16 +82,6 @@ extension WatchServiceTypeSpy: WatchServiceType {
             realObject.receivedApplicationContext  = newValue
         }
     }
-    public var isCompanionAppInstalled: Bool {
-        get {
-            variableLog.append(.isCompanionAppInstalled)
-            return realObject.isCompanionAppInstalled
-        }
-        set {
-            variableLog.append(.isCompanionAppInstalled)
-            realObject.isCompanionAppInstalled  = newValue
-        }
-    }
     public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool {
         get {
             variableLog.append(.iOSDeviceNeedsUnlockAfterRebootForReachability)
@@ -134,8 +112,8 @@ extension WatchServiceTypeSpy: WatchServiceType {
         methodLog.append(.send(data: data, replyHandler: replyHandler, errorHandler: errorHandler))
         realObject.send(messageData: data, replyHandler: replyHandler, errorHandler: errorHandler)
     }
-    public func transfer(userInfo: [String : Any]) -> CommunicationInfo {
-        methodLog.append(.transfer(userInfo: userInfo))
-        return realObject.transfer(userInfo: userInfo)
+    public func send(userInfo: [String : Any]) -> CommunicationInfo {
+        methodLog.append(.send(userInfo: userInfo))
+        return realObject.send(userInfo: userInfo)
     }
 }

@@ -93,7 +93,7 @@ extension DrinkServiceTypeStub: DrinkServiceType {
         }
     }
 
-    public func edit(size: Double, of drink: Drink) async throws -> Drink {
+    public func edit(size: Double, of drink: Container) async throws -> Drink {
         switch editSizeDrink_returnValue {
         case let .success(value):
             return value
@@ -102,7 +102,7 @@ extension DrinkServiceTypeStub: DrinkServiceType {
         }
     }
 
-    public func remove(container: String) async throws -> Void {
+    public func remove(container: Container) async throws -> Void {
         if let removeContainer_returnValue {
             throw removeContainer_returnValue
         }
