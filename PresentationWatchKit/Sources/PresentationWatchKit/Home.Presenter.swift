@@ -71,7 +71,7 @@ extension Screen.Home {
                     consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
                     goal: engine.unitService.convert(today.goal, from: .litres, to: unit),
                     unit: unit.mapToDomain(),
-                    drinks: drinks
+                    drinks: getDrinks(from: drinks)
                 )
                 didComplete?()
             }
@@ -136,12 +136,12 @@ private extension Screen.Home.Presenter {
 
 // MARK: Drink
 private extension Screen.Home.Presenter {
-    func getDrinks() async -> [Home.ViewModel.Drink] {
+    func getDrinks() async -> [Drink] {
         var drinks = (try? await engine.drinksService.getSaved()) ?? []
         if drinks.isEmpty {
             drinks = await engine.drinksService.resetToDefault()
         }
-        return getDrinks(from: drinks)
+        return drinks
     }
     
     func getDrinks(from drinks: [Drink]) -> [Home.ViewModel.Drink] {
