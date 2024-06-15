@@ -246,7 +246,6 @@ private extension Screen.Home.Presenter {
     
     func processUnit(fromPhoneInfo phoneInfo: [AnyHashable: Any]) -> UnitModel {
         let unitSystem: UnitSystem
-        let unit: UnitModel
         if let phoneUnitSystem = phoneInfo["unitSystem"] as? UnitSystem {
             unitSystem = phoneUnitSystem
             engine.unitService.set(unitSystem: phoneUnitSystem)
