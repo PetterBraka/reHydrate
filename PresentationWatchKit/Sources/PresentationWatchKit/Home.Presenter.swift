@@ -225,16 +225,6 @@ private extension Screen.Home.Presenter {
     func processPhone(notification: Notification) {
         guard let phoneInfo = notification.userInfo else { return }
         Task {
-            let unitSystem: UnitSystem
-            let unit: UnitModel
-            if let phoneUnitSystem = phoneInfo["unitSystem"] as? UnitSystem {
-                unitSystem = phoneUnitSystem
-                engine.unitService.set(unitSystem: phoneUnitSystem)
-            } else {
-                unitSystem = engine.unitService.getUnitSystem()
-            }
-            unit = unitSystem == .metric ? .litres : .pint
-            
             let today: Day
             if let day = phoneInfo["day"] as? Day,
                engine.dateService.isDate(day.date, inSameDayAs: engine.dateService.now()) {
@@ -242,6 +232,7 @@ private extension Screen.Home.Presenter {
             } else {
                 today = await getToday()
             }
+            let unit = processUnit(fromPhoneInfo: phoneInfo)
             
             let drinks: [Home.ViewModel.Drink]
             if let phoneDrinks = phoneInfo["drinks"] as? [Drink] {
@@ -257,5 +248,17 @@ private extension Screen.Home.Presenter {
                 drinks: drinks
             )
         }
+    }
+    
+    func processUnit(fromPhoneInfo phoneInfo: [AnyHashable: Any]) -> UnitModel {
+        let unitSystem: UnitSystem
+        let unit: UnitModel
+        if let phoneUnitSystem = phoneInfo["unitSystem"] as? UnitSystem {
+            unitSystem = phoneUnitSystem
+            engine.unitService.set(unitSystem: phoneUnitSystem)
+        } else {
+            unitSystem = engine.unitService.getUnitSystem()
+        }
+        return unitSystem == .metric ? .litres : .pint
     }
 }
