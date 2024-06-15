@@ -85,7 +85,7 @@ extension Screen.EditContainer {
                     let unit: UnitModel = unitSystem == .metric ? .millilitres : .ounces
                     let size = engine.unitService.convert(viewModel.editedSize, from: unit, to: .millilitres)
                     let roundedSize = unitSystem == .metric ? size.rounded() : size
-                    _ = try await engine.drinksService.edit(size: roundedSize, of: selectedDrink)
+                    _ = try await engine.drinksService.edit(size: roundedSize, of: selectedDrink.container)
                     updateViewModel(isSaving: false)
                     router.close()
                     didSavingChanges?()

@@ -36,10 +36,10 @@ public final class DrinkService: DrinkServiceType {
         return newDrink
     }
     
-    public func edit(size: Double, of drink: Drink) async throws -> Drink {
+    public func edit(size: Double, of container: Container) async throws -> Drink {
         let updatedDrink = try await engine.drinkManager.edit(
             size: size,
-            of: drink.container.rawValue
+            of: container.rawValue
         )
         guard let updatedDrink = Drink(from: updatedDrink) else {
             let error = DrinkDBError.notFound
@@ -49,8 +49,8 @@ public final class DrinkService: DrinkServiceType {
         return updatedDrink
     }
     
-    public func remove(container: String) async throws {
-        try await engine.drinkManager.deleteDrink(container: container)
+    public func remove(container: Container) async throws {
+        try await engine.drinkManager.deleteDrink(container: container.rawValue)
     }
     
     public func getSaved() async throws -> [Drink] {
