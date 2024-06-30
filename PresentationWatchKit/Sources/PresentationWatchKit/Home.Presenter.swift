@@ -230,7 +230,7 @@ private extension Screen.Home.Presenter {
     }
     
     func processPhone(notification: Notification) {
-        guard let phoneInfo = notification.userInfo else {
+        guard let phoneInfo = notification.userInfo as? [CommunicationUserInfo: Any] else {
             notificationCenter.post(name: .init("NotificationProcessed"), object: self)
             return
         }
@@ -249,9 +249,9 @@ private extension Screen.Home.Presenter {
         }
     }
     
-    func processUnit(fromPhoneInfo phoneInfo: [AnyHashable: Any]) -> UnitModel {
+    func processUnit(fromPhoneInfo phoneInfo: [CommunicationUserInfo: Any]) -> UnitModel {
         let unitSystem: UnitSystem
-        if let phoneUnitSystem = phoneInfo["unit-system"] as? UnitSystem {
+        if let phoneUnitSystem = phoneInfo[.unitSystem] as? UnitSystem {
             unitSystem = phoneUnitSystem
             engine.unitService.set(unitSystem: phoneUnitSystem)
         } else {
@@ -260,9 +260,9 @@ private extension Screen.Home.Presenter {
         return unitSystem == .metric ? .litres : .pint
     }
     
-    func processDay(fromPhoneInfo phoneInfo: [AnyHashable: Any]) async -> Day {
+    func processDay(fromPhoneInfo phoneInfo: [CommunicationUserInfo: Any]) async -> Day {
         let watchToday = await getToday()
-        guard let phoneDay = phoneInfo["day"] as? Day,
+        guard let phoneDay = phoneInfo[.day] as? Day,
               engine.dateService.isDate(phoneDay.date, inSameDayAs: engine.dateService.now())
         else { return watchToday }
         
@@ -284,17 +284,18 @@ private extension Screen.Home.Presenter {
         return phoneDay
     }
     
-    func processDrinks(fromPhoneInfo phoneInfo: [AnyHashable: Any]) async -> [Drink] {
+    func processDrinks(fromPhoneInfo phoneInfo: [CommunicationUserInfo: Any]) async -> [Drink] {
         var processedDrinks = [Drink]()
         let watchDrinks = await getDrinks()
         
-        guard let phoneDrinks = phoneInfo["drinks"] as? [Drink], phoneDrinks != watchDrinks
+        guard let phoneDrinks = phoneInfo[.drinks] as? [Drink], phoneDrinks != watchDrinks
         else { return watchDrinks }
         
         for phoneDrink in phoneDrinks {
             if let drink = watchDrinks.first(where: { $0.container == phoneDrink.container }), drink.size == phoneDrink.size {
                 processedDrinks.append(drink)
-            } else if let drink = try? await engine.drinksService.edit(size: phoneDrink.size, of: phoneDrink.container) {
+            } else if watchDrinks.contains(where: { $0.container == phoneDrink.container }),
+                      let drink = try? await engine.drinksService.edit(size: phoneDrink.size, of: phoneDrink.container) {
                 processedDrinks.append(drink)
             } else if let drink = try? await engine.drinksService.add(size: phoneDrink.size, container: phoneDrink.container) {
                 processedDrinks.append(drink)

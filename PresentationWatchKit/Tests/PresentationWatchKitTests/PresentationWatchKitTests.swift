@@ -4,13 +4,13 @@ import UnitService
 import EngineMocks
 import DayServiceMocks
 import DateServiceMocks
-import UnitServiceMocks
 import DrinkServiceMocks
 import CommunicationKitMock
+import CommunicationKitInterface
 import DayServiceInterface
 import UnitServiceInterface
 import DrinkServiceInterface
-import UserPreferenceService
+import UserPreferenceServiceMocks
 import PresentationWatchInterface
 @testable import PresentationWatchKit
 
@@ -22,15 +22,16 @@ final class PresentationWatchKitTests: XCTestCase {
     var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
     var drinkService: (stub: DrinkServiceTypeStubbing, spy: DrinkServiceTypeSpying)!
     var watchService: (stub: WatchServiceTypeStub, spy: WatchServiceTypeSpying)!
+    var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     
     override func setUp() {
         notificationCenter = NotificationCenter.default
         let engine = EngineMocks()
-        dayService = engine.makeDayService()
-        engine.userPreferenceService = UserPreferenceService(defaults: .standard)
         engine.unitService = UnitService(engine: engine)
+        dayService = engine.makeDayService()
         dateService = engine.makeDateService()
         drinkService = engine.makeDrinksService()
+        userPreferenceService = engine.makeUserPreferenceService()
         
         let watchServiceStub = WatchServiceTypeStub()
         let watchServiceSpy = WatchServiceTypeSpy(realObject: watchServiceStub)
@@ -55,6 +56,7 @@ final class PresentationWatchKitTests: XCTestCase {
         dateService = nil
         drinkService = nil
         watchService = nil
+        userPreferenceService = nil
     }
 }
 
@@ -196,14 +198,14 @@ extension PresentationWatchKitTests {
             Drink(id: "3", size: 300, container: .large)
         ])
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        let userInfo: [AnyHashable: Any] = [
-            "day": Day(id: "test", date: Date(year: 2021, month: 12, day: 10), consumed: 1, goal: 2),
-            "drinks": [
+        let userInfo: [CommunicationUserInfo: Any] = [
+            .day: Day(id: "test", date: Date(year: 2021, month: 12, day: 10), consumed: 1, goal: 2),
+            .drinks: [
                 Drink(id: "1", size: 100, container: .small),
                 Drink(id: "2", size: 200, container: .medium),
                 Drink(id: "3", size: 300, container: .large)
             ],
-            "unit-system": UnitSystem.metric
+            .unitSystem: UnitSystem.metric
         ]
         notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
@@ -219,8 +221,8 @@ extension PresentationWatchKitTests {
         drinkService.stub.resetToDefault_returnValue = []
         dateService.stub.isDateDateInSameDayAs_returnValue = true
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        let userInfo: [AnyHashable: Any] = [
-            "day": Day(id: "test", date: Date(year: 2021, month: 12, day: 8), consumed: 1, goal: 2)
+        let userInfo: [CommunicationUserInfo: Any] = [
+            .day: Day(id: "test", date: Date(year: 2021, month: 12, day: 8), consumed: 1, goal: 2)
         ]
         notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
@@ -235,8 +237,8 @@ extension PresentationWatchKitTests {
             Drink(id: "3", size: 300, container: .large),
         ])
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        let userInfo: [AnyHashable: Any] = [
-            "drinks": [
+        let userInfo: [CommunicationUserInfo: Any] = [
+            .drinks: [
                 Drink(id: "1", size: 100, container: .small),
                 Drink(id: "2", size: 200, container: .medium),
                 Drink(id: "3", size: 300, container: .large),
@@ -259,8 +261,8 @@ extension PresentationWatchKitTests {
             Drink(id: "3", size: 300, container: .large),
         ])
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        let userInfo: [AnyHashable: Any] = [
-            "drinks": [
+        let userInfo: [CommunicationUserInfo: Any] = [
+            .drinks: [
                 Drink(id: "1", size: 100, container: .small),
                 Drink(id: "2", size: 200, container: .medium),
                 Drink(id: "3", size: 300, container: .large),
@@ -279,8 +281,8 @@ extension PresentationWatchKitTests {
         dayService.stub.getToday_returnValue = .init(date: Date(year: 2018, month: 6, day: 10), consumed: 0, goal: 2)
         drinkService.stub.getSaved_returnValue = .success([.init(id: "1", size: 200, container: .medium)])
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        let userInfo: [AnyHashable: Any] = [
-            "unit-system": UnitSystem.metric
+        let userInfo: [CommunicationUserInfo: Any] = [
+            .unitSystem: UnitSystem.metric
         ]
         notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
@@ -290,9 +292,10 @@ extension PresentationWatchKitTests {
     func test_didReceiveNotification_onlyUnit_imperial() async {
         dayService.stub.getToday_returnValue = .init(date: Date(year: 2018, month: 6, day: 10), consumed: 0, goal: 2)
         drinkService.stub.getSaved_returnValue = .success([.init(id: "1", size: 200, container: .medium)])
+        userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        let userInfo: [AnyHashable: Any] = [
-            "unit-system": UnitSystem.imperial
+        let userInfo: [CommunicationUserInfo: Any] = [
+            .unitSystem: UnitSystem.imperial
         ]
         notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)

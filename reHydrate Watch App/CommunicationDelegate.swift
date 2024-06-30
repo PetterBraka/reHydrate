@@ -8,6 +8,7 @@
 
 import Foundation
 import WatchConnectivity
+import CommunicationKitInterface
 
 final class CommunicationDelegate: NSObject, WCSessionDelegate {
     private let notificationCenter: NotificationCenter
@@ -26,12 +27,12 @@ extension CommunicationDelegate {
         activationDidCompleteWith activationState: WCSessionActivationState,
         error: (any Error)?
     ) {
-        let userInfo: [String: Any] = ["session": session, "activationState": activationState]
+        let userInfo: [CommunicationUserInfo: Any] = [.session: session, .activationState: activationState]
         notificationCenter.post(name: .Watch.activation, object: self, userInfo: userInfo)
     }
     
     public func sessionReachabilityDidChange(_ session: WCSession) {
-        let userInfo: [String: Any] = ["session": session]
+        let userInfo: [CommunicationUserInfo: Any] = [.session: session]
         notificationCenter.post(name: .Watch.reachabilityDidChange, object: self, userInfo: userInfo)
     }
 }
@@ -43,7 +44,7 @@ extension CommunicationDelegate {
         didReceiveApplicationContext applicationContext: [String : Any]
     ) {
         var userInfo: [String: Any] = applicationContext
-        userInfo["session"] = session
+        userInfo[CommunicationUserInfo.session.key] = session
         notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
     }
     
@@ -51,8 +52,9 @@ extension CommunicationDelegate {
         _ session: WCSession,
         didReceiveMessage message: [String : Any]
     ) {
+        
         var userInfo: [String: Any] = message
-        userInfo["session"] = session
+        userInfo[CommunicationUserInfo.session.key] = session
         notificationCenter.post(name: .Watch.didReceiveMessage, object: self, userInfo: userInfo)
     }
     
@@ -62,7 +64,7 @@ extension CommunicationDelegate {
         replyHandler: @escaping ([String : Any]) -> Void
     ) {
         var userInfo: [String: Any] = message
-        userInfo["session"] = session
+        userInfo[CommunicationUserInfo.session.key] = session
         notificationCenter.post(name: .Watch.didReceiveMessage, object: self, userInfo: userInfo)
         
         notificationCenter.addObserver(forName: .Watch.messageReplay, object: self, queue: .current) { notification in
@@ -82,7 +84,7 @@ extension CommunicationDelegate {
         _ session: WCSession,
         didReceiveMessageData messageData: Data
     ) {
-        let userInfo: [String: Any] = ["session": session, "messageData" : messageData]
+        let userInfo: [CommunicationUserInfo: Any] = [.session: session, .messageData: messageData]
         notificationCenter.post(name: .Watch.didReceiveMessageData, object: self, userInfo: userInfo)
     }
     
@@ -91,10 +93,10 @@ extension CommunicationDelegate {
         didReceiveMessageData messageData: Data,
         replyHandler: @escaping (Data) -> Void
     ) {
-        let userInfo: [String: Any] = ["session": session, "messageData" : messageData]
+        let userInfo: [CommunicationUserInfo: Any] = [.session: session, .messageData: messageData]
         notificationCenter.post(name: .Watch.didReceiveMessageData, object: self, userInfo: userInfo)
         notificationCenter.addObserver(forName: .Watch.messageDataReplay, object: self, queue: .current) { notification in
-            if let data = notification.userInfo?["messageData"] as? Data {
+            if let data = notification.userInfo?[CommunicationUserInfo.messageData.key] as? Data {
                 replyHandler(data)
             }
         }
@@ -108,7 +110,7 @@ extension CommunicationDelegate {
         didReceiveUserInfo userInfo: [String : Any]
     ) {
         var userInfo: [String: Any] = userInfo
-        userInfo["session"] = session
+        userInfo[CommunicationUserInfo.session.key] = session
         notificationCenter.post(name: .Watch.didReceiveUserInfo, object: self, userInfo: userInfo)
     }
 }
