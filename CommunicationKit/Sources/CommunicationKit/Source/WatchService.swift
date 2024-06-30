@@ -82,21 +82,21 @@ extension WatchService {
 
 extension WatchService {
     func addDelegateObservers() {
-        notificationCenter.addObserver(forName: .Watch.activation,
+        notificationCenter.addObserver(forName: .Shared.activation,
                                        object: self, queue: .current,
                                        using: activationHandler)
-        notificationCenter.addObserver(forName: .Watch.reachabilityDidChange,
+        notificationCenter.addObserver(forName: .Shared.reachabilityDidChange,
                                        object: self, queue: .current,
                                        using: reachabilityDidChangeHandler)
-        notificationCenter.addObserver(forName: .Watch.didReceiveApplicationContext,
+        notificationCenter.addObserver(forName: .Shared.didReceiveApplicationContext,
                                        object: self, queue: .current,
                                        using: didReceiveApplicationContextHandler)
     }
     
     func removeDelegateObservers() {
-        notificationCenter.removeObserver(self, name:.Watch.activation, object: nil)
-        notificationCenter.removeObserver(self, name:.Watch.reachabilityDidChange, object: nil)
-        notificationCenter.removeObserver(self, name:.Watch.didReceiveApplicationContext, object: nil)
+        notificationCenter.removeObserver(self, name:.Shared.activation, object: nil)
+        notificationCenter.removeObserver(self, name:.Shared.reachabilityDidChange, object: nil)
+        notificationCenter.removeObserver(self, name:.Shared.didReceiveApplicationContext, object: nil)
     }
     
     func activationHandler(_ notification: Notification) {

@@ -1,8 +1,8 @@
 //
 //  CommunicationDelegate.swift
-//  reHydrate Watch App
+//  reHydrate
 //
-//  Created by Petter vang Brakalsvålet on 25/05/2024.
+//  Created by Petter vang Brakalsvålet on 30/06/2024.
 //  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
 //
 
@@ -33,6 +33,16 @@ extension CommunicationDelegate: WCSessionDelegate {
     public func sessionReachabilityDidChange(_ session: WCSession) {
         let userInfo: [CommunicationUserInfo: Any] = [.session: session]
         notificationCenter.post(name: .Shared.reachabilityDidChange, object: self, userInfo: userInfo)
+    }
+    
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        let userInfo: [CommunicationUserInfo: Any] = [.session: session]
+        notificationCenter.post(name: .Phone.didBecomeInactive, object: self, userInfo: userInfo)
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        let userInfo: [CommunicationUserInfo: Any] = [.session: session]
+        notificationCenter.post(name: .Phone.didDeactivate, object: self, userInfo: userInfo)
     }
 }
 

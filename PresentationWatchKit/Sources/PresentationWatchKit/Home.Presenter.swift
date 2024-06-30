@@ -212,21 +212,21 @@ private extension Screen.Home.Presenter {
 // MARK: Phone communication
 private extension Screen.Home.Presenter {
     func addObservers() {
-        notificationCenter.addObserver(forName: .Watch.didReceiveApplicationContext,
+        notificationCenter.addObserver(forName: .Shared.didReceiveApplicationContext,
                                        object: nil, queue: .current,
                                        using: processPhone(notification:))
-        notificationCenter.addObserver(forName: .Watch.didReceiveMessage,
+        notificationCenter.addObserver(forName: .Shared.didReceiveMessage,
                                        object: nil, queue: .current,
                                        using: processPhone(notification:))
-        notificationCenter.addObserver(forName: .Watch.didReceiveUserInfo,
+        notificationCenter.addObserver(forName: .Shared.didReceiveUserInfo,
                                        object: nil, queue: .current,
                                        using: processPhone(notification:))
     }
     
     func removeObservers() {
-        notificationCenter.removeObserver(self, name: .Watch.didReceiveApplicationContext, object: nil)
-        notificationCenter.removeObserver(self, name: .Watch.didReceiveMessage, object: nil)
-        notificationCenter.removeObserver(self, name: .Watch.didReceiveUserInfo, object: nil)
+        notificationCenter.removeObserver(self, name: .Shared.didReceiveApplicationContext, object: nil)
+        notificationCenter.removeObserver(self, name: .Shared.didReceiveMessage, object: nil)
+        notificationCenter.removeObserver(self, name: .Shared.didReceiveUserInfo, object: nil)
     }
     
     func processPhone(notification: Notification) {
