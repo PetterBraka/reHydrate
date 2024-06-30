@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import WatchConnectivity
 
 public struct CommunicationInfo {
     /// Not used by watchOS
@@ -22,22 +21,5 @@ public struct CommunicationInfo {
         self.isCurrentComplicationInfo = isCurrentComplicationInfo
         self.userInfo = userInfo
         self.isTransferring = isTransferring
-    }
-}
-
-extension CommunicationInfo {
-    public init(from info: WCSessionUserInfoTransfer) {
-        let isCurrentComplicationInfo: Bool
-#if os(iOS)
-        isCurrentComplicationInfo = info.isCurrentComplicationInfo
-#else
-        isCurrentComplicationInfo = false
-#endif
-        
-        self.init(
-            isCurrentComplicationInfo: isCurrentComplicationInfo,
-            userInfo: info.userInfo,
-            isTransferring: info.isTransferring
-        )
     }
 }

@@ -29,13 +29,5 @@ extension CommunicationState {
 }
 
 extension CommunicationInfo {
-    static let `default`: Self = .init(from: .init())
-}
-
-extension Optional where Wrapped == PhoneDelegateType {
-    static let `default`: Self = nil
-}
-
-extension Optional where Wrapped == WatchDelegateType {
-    static let `default`: Self = nil
+    static let `default`: Self = .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false)
 }

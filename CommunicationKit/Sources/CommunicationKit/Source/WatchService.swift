@@ -122,3 +122,13 @@ extension Dictionary where Key == AnyHashable {
         }
     }
 }
+
+fileprivate extension CommunicationInfo {
+    init(from info: WCSessionUserInfoTransfer) {
+        self.init(
+            isCurrentComplicationInfo: false,
+            userInfo: info.userInfo,
+            isTransferring: info.isTransferring
+        )
+    }
+}
