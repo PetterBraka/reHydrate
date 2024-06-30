@@ -115,6 +115,7 @@
 		A11180332AC3768D007E4585 /* NotificationCenterPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180322AC3768D007E4585 /* NotificationCenterPort.swift */; };
 		A114B6FD2C31383300EB0AC4 /* CommunicationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A114B6FC2C31383300EB0AC4 /* CommunicationKit */; };
 		A114B6FF2C31383F00EB0AC4 /* CommunicationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A114B6FE2C31383F00EB0AC4 /* CommunicationKit */; };
+		A114B7022C3148F600EB0AC4 /* CommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114B7012C3148F600EB0AC4 /* CommunicationDelegate.swift */; };
 		A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C12A72B65B02D00FB1B8C /* View+expand.swift */; };
 		A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */; };
 		A126D24B2A76665800A296BA /* EngineKit in Frameworks */ = {isa = PBXBuildFile; productRef = A126D24A2A76665800A296BA /* EngineKit */; };
@@ -330,6 +331,7 @@
 		A111802F2AC36A86007E4585 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		A11180302AC36A86007E4585 /* Celebration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Celebration.swift; sourceTree = "<group>"; };
 		A11180322AC3768D007E4585 /* NotificationCenterPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterPort.swift; sourceTree = "<group>"; };
+		A114B7012C3148F600EB0AC4 /* CommunicationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationDelegate.swift; sourceTree = "<group>"; };
 		A114C6C02A63DAAE00F53770 /* PresentationKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationKit; sourceTree = "<group>"; };
 		A11C12A72B65B02D00FB1B8C /* View+expand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+expand.swift"; sourceTree = "<group>"; };
 		A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenObservable.swift; sourceTree = "<group>"; };
@@ -587,11 +589,11 @@
 		3378767524378A9400F5A732 /* reHydrate */ = {
 			isa = PBXGroup;
 			children = (
+				A114B7002C3148DE00EB0AC4 /* Delegate */,
 				A11180312AC3767F007E4585 /* Ports */,
 				332315E8274273F20039EE23 /* Resources */,
 				A183BCF62A33B75000D42033 /* Screens */,
 				A1614D512A362E7300235D02 /* Utilities */,
-				330C23D527665D4C00293092 /* AppDelegate.swift */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
 				A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */,
@@ -642,6 +644,15 @@
 				A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */,
 			);
 			path = Ports;
+			sourceTree = "<group>";
+		};
+		A114B7002C3148DE00EB0AC4 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				330C23D527665D4C00293092 /* AppDelegate.swift */,
+				A114B7012C3148F600EB0AC4 /* CommunicationDelegate.swift */,
+			);
+			path = Delegate;
 			sourceTree = "<group>";
 		};
 		A11D4CD72A3C34A500A70B9B /* Settings */ = {
@@ -1115,6 +1126,7 @@
 				A1EABF382AF3924100591981 /* UIApplication+Extensions.swift in Sources */,
 				A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */,
 				33231624274A75530039EE23 /* reHydrateApp.swift in Sources */,
+				A114B7022C3148F600EB0AC4 /* CommunicationDelegate.swift in Sources */,
 				A1EABF3F2AF4E0E300591981 /* View+getSize.swift in Sources */,
 				A1EABF3A2AF3F7C800591981 /* CreditsScreenObservable.swift in Sources */,
 				A183BD022A33C70300D42033 /* HomeScreenObservable.swift in Sources */,

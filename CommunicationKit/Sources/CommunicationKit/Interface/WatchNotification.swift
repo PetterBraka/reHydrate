@@ -8,7 +8,12 @@
 import Foundation
 
 extension Notification.Name {
-    public enum Watch {
+    public enum Phone {
+        public static let didBecomeInactive = Notification.Name("sessionDidBecomeInactive")
+        public static let didDeactivate = Notification.Name("sessionDidDeactivate")
+    }
+    
+    public enum Shared {
         public static let activation = Notification.Name("sessionActivationDidComplete")
         public static let reachabilityDidChange = Notification.Name("sessionReachabilityDidChange")
         public static let didReceiveApplicationContext = Notification.Name("sessionDidReceiveApplicationContext")
