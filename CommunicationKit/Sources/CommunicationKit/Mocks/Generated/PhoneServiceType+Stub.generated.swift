@@ -6,7 +6,6 @@ import Foundation
 import CommunicationKitInterface
 
 public protocol PhoneServiceTypeStubbing {
-    var delegate_returnValue: PhoneDelegateType? { get set }
     var currentState_returnValue: CommunicationState { get set }
     var isReachable_returnValue: Bool { get set }
     var applicationContext_returnValue: [String : Any] { get set }
@@ -23,21 +22,6 @@ public protocol PhoneServiceTypeStubbing {
 }
 
 public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
-    public var delegate_returnValue: PhoneDelegateType? {
-        get {
-            if delegate_returnValues.isEmpty {
-                .default
-            } else {
-                delegate_returnValues.removeFirst()
-            }
-        }
-        set {
-            if let newValue {
-                delegate_returnValues.append(newValue)
-            }
-        }
-    }
-    private var delegate_returnValues: [PhoneDelegateType?] = []
     public var currentState_returnValue: CommunicationState {
         get {
             if currentState_returnValues.isEmpty {
@@ -214,10 +198,6 @@ public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
 }
 
 extension PhoneServiceTypeStub: PhoneServiceType {
-    public var delegate: PhoneDelegateType? { 
-        get { delegate_returnValue }
-        set { delegate_returnValue = newValue }
-    }
     public var currentState: CommunicationState { 
         get { currentState_returnValue }
         set { currentState_returnValue = newValue }

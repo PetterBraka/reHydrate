@@ -10,7 +10,6 @@ import CommunicationKitInterface
 
 public final class PhoneService: NSObject, PhoneServiceType {
     private var session: WCSession
-    public var delegate: PhoneDelegateType?
     
     public var currentState: CommunicationState
     public var isReachable: Bool
@@ -23,9 +22,8 @@ public final class PhoneService: NSObject, PhoneServiceType {
     public var isComplicationEnabled: Bool
     public var remainingComplicationUserInfoTransfers: Int
     
-    public init(session: WCSession, delegate: PhoneDelegateType?) {
+    public init(session: WCSession) {
         self.session = session
-        self.delegate = delegate
         
         self.currentState = .init(from: session.activationState)
         self.isReachable = session.isReachable
@@ -39,7 +37,6 @@ public final class PhoneService: NSObject, PhoneServiceType {
         self.remainingComplicationUserInfoTransfers = 0
         
         super.init()
-        self.session.delegate = self
         self.didReceivedUpdates(from: session)
     }
     

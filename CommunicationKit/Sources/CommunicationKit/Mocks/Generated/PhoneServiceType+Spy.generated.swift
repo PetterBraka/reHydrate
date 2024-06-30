@@ -15,7 +15,6 @@ public protocol PhoneServiceTypeSpying {
 
 public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
     public enum VariableName {
-        case delegate
         case currentState
         case isReachable
         case applicationContext
@@ -48,16 +47,6 @@ public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
 }
 
 extension PhoneServiceTypeSpy: PhoneServiceType {
-    public var delegate: PhoneDelegateType? {
-        get {
-            variableLog.append(.delegate)
-            return realObject.delegate
-        }
-        set {
-            variableLog.append(.delegate)
-            realObject.delegate  = newValue
-        }
-    }
     public var currentState: CommunicationState {
         get {
             variableLog.append(.currentState)
