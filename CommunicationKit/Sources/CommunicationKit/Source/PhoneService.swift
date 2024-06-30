@@ -91,6 +91,22 @@ extension PhoneService {
     }
     
     public func transfer(userInfo: [String : Any]) -> CommunicationInfo {
+#if os(watchOS)
+        .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false)
+#else
         .init(from: session.transferUserInfo(userInfo))
+#endif
     }
+}
+
+fileprivate extension CommunicationInfo {
+#if os(iOS)
+    init(from info: WCSessionUserInfoTransfer) {
+        self.init(
+            isCurrentComplicationInfo: info.isCurrentComplicationInfo,
+            userInfo: info.userInfo,
+            isTransferring: info.isTransferring
+        )
+    }
+#endif
 }
