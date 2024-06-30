@@ -1,27 +1,11 @@
 //
-//  WatchDelegateType.swift
+//  File.swift
 //  
 //
-//  Created by Petter vang Brakalsvålet on 05/05/2024.
+//  Created by Petter vang Brakalsvålet on 30/06/2024.
 //
 
 import Foundation
-
-public protocol WatchDelegateType {
-    func session(activationDidCompleteWith activationState: CommunicationState, error: Error?)
-    func sessionCompanionAppInstalledDidChange()
-    func sessionReachabilityDidChange()
-
-    func session(didReceiveApplicationContext applicationContext: [String : Any])
-
-    func session(didReceiveMessage message: [String : Any])
-    func session(didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void)
-
-    func session(didReceiveMessageData messageData: Data)
-    func session(didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void)
-
-    func session(didReceiveUserInfo userInfo: [String : Any])
-}
 
 extension Notification.Name {
     public enum Watch {
