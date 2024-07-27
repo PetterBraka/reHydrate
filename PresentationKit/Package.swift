@@ -26,17 +26,20 @@ let package: Package = {
                 dependencies: [
                     "PresentationInterface",
                     "EngineKit",
-                ]
+                ],
+                path: "Source"
             ),
             .target(
-                name: "PresentationInterface"
+                name: "PresentationInterface",
+                path: "Interface"
             ),
             .testTarget(
                 name: "PresentationTests",
                 dependencies: [
                     "PresentationKit",
                     "TestHelper",
-                ]
+                ],
+                path: "Tests"
             )
         ]
     )

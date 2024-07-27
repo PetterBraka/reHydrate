@@ -26,10 +26,12 @@ let package = Package(
             dependencies: [
                 "PresentationWatchInterface",
                 .product(name: "WatchEngineKit", package: "EngineKit"),
-            ]
+            ],
+            path: "Source"
         ),
         .target(
-            name: "PresentationWatchInterface"
+            name: "PresentationWatchInterface",
+            path: "Interface"
         ),
         .testTarget(
             name: "PresentationWatchKitTests",
@@ -37,6 +39,8 @@ let package = Package(
                 "TestHelper",
                 "PresentationWatchKit",
                 .product(name: "EngineMocks", package: "EngineKit"),
-            ]),
+            ],
+            path: "Tests"
+        ),
     ]
 )

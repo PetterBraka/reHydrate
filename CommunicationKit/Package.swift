@@ -27,16 +27,16 @@ let package = Package(
         .target(
             name: "CommunicationKit",
             dependencies: ["CommunicationKitInterface"],
-            path: "Sources/CommunicationKit/Source"
+            path: "Source"
         ),
         .target(
             name: "CommunicationKitInterface",
-            path: "Sources/CommunicationKit/Interface"
+            path: "Interface"
         ),
         .target(
             name: "CommunicationKitMocks",
             dependencies: ["CommunicationKitInterface"],
-            path: "Sources/CommunicationKit/Mocks"
+            path: "Mocks"
         ),
     ]
 )

@@ -6,5 +6,5 @@ import PackageDescription
 let package = Package(
     name: "TestHelper",
     products: [.library(name: "TestHelper", targets: ["TestHelper"])],
-    targets: [.target(name: "TestHelper")]
+    targets: [.target(name: "TestHelper", path: "Sources")]
 )

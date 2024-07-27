@@ -19,17 +19,22 @@ let package = Package(
     targets: [
         .target(
             name: "DBKit",
-            dependencies: ["DBKitInterface"]
+            dependencies: ["DBKitInterface"],
+            path: "Source"
         ),
         .target(
-            name: "DBKitInterface"
+            name: "DBKitInterface",
+            path: "Interface"
         ),
         .target(
             name: "DBKitMocks",
-            dependencies: ["DBKitInterface"]
+            dependencies: ["DBKitInterface"],
+            path: "Mocks"
         ),
         .testTarget(
             name: "DBKitTests",
-            dependencies: ["DBKit", "DBKitMocks"]),
+            dependencies: ["DBKit", "DBKitMocks"],
+            path: "Tests"
+        ),
     ]
 )
