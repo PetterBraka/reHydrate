@@ -19,14 +19,13 @@ import DayServiceInterface
 import DayService
 import DBKitInterface
 import DBKit
+import CommunicationKitInterface
 
 public final class WatchEngine {
-    private let sharedDefaults: UserDefaults
-    private let subsystem: String
-    
     public init(
         appGroup: String,
-        subsystem: String
+        subsystem: String,
+        watchService: WatchServiceType
     ) {
         self.subsystem = subsystem
         
@@ -35,9 +34,14 @@ public final class WatchEngine {
             fatalError("Shared UserDefaults couldn't be setup")
         }
         self.sharedDefaults = sharedDefaults
+        self.watchService = watchService
     }
     
     private let database: DatabaseType = Database()
+    private let sharedDefaults: UserDefaults
+    private let subsystem: String
+    
+    public var watchService: WatchServiceType
     
     public lazy var logger: LoggingService = LoggingService(subsystem: subsystem)
     public lazy var userPreferenceService: UserPreferenceServiceType = UserPreferenceService(defaults: sharedDefaults)
@@ -59,5 +63,6 @@ extension WatchEngine:
     HasConsumptionManagerService,
     HasDrinkManagerService,
     HasDayService,
-    HasDrinksService
+    HasDrinksService,
+    HasWatchService
 {}

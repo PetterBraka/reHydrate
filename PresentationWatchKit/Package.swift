@@ -18,7 +18,6 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../EngineKit"),
-        .package(path: "../CommunicationKit"),
         .package(path: "../TestHelper")
     ],
     targets: [
@@ -26,7 +25,6 @@ let package = Package(
             name: "PresentationWatchKit",
             dependencies: [
                 "PresentationWatchInterface",
-                "CommunicationKit",
                 .product(name: "WatchEngineKit", package: "EngineKit"),
             ]
         ),
@@ -39,7 +37,6 @@ let package = Package(
                 "TestHelper",
                 "PresentationWatchKit",
                 .product(name: "EngineMocks", package: "EngineKit"),
-                .product(name: "CommunicationKitMock", package: "CommunicationKit")
             ]),
     ]
 )

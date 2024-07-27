@@ -25,6 +25,7 @@ import AppearanceService
 import DateServiceInterface
 import DateService
 import DBKitInterface
+import CommunicationKitInterface
 
 public final class Engine {
     public init(
@@ -40,7 +41,9 @@ public final class Engine {
         openUrlService: OpenUrlInterface,
         alternateIconsService: AlternateIconsServiceType,
         appearancePort: AppearancePortType,
-        healthService: HealthInterface
+        healthService: HealthInterface,
+        watchService: WatchServiceType,
+        phoneService: PhoneServiceType
     ) {
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
         else {
@@ -60,6 +63,8 @@ public final class Engine {
         self.alternateIconsService = alternateIconsService
         self.appearancePort = appearancePort
         self.healthService = healthService
+        self.watchService = watchService
+        self.phoneService = phoneService
     }
     
     public var appVersion: String
@@ -79,6 +84,8 @@ public final class Engine {
     public var alternateIconsService: AlternateIconsServiceType
     public var appearancePort: AppearancePortType
     public var healthService: HealthInterface
+    public var watchService: WatchServiceType
+    public var phoneService: PhoneServiceType
     
     public lazy var notificationService: NotificationServiceType = NotificationService(
         engine: self,

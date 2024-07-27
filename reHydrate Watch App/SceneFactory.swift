@@ -24,7 +24,6 @@ public final class SceneFactory: ObservableObject {
     public let engine: WatchEngine
     private let watchDelegate: WCSessionDelegate
     private let notificationCenter: NotificationCenter
-    private let watchService: WatchServiceType
     
     private init() {
         let subsystem = "com.braka.reHydrate.watchkitapp"
@@ -34,17 +33,17 @@ public final class SceneFactory: ObservableObject {
         
         engine = WatchEngine(
             appGroup: appGroup,
-            subsystem: subsystem
+            subsystem: subsystem,
+            watchService: WatchService(session: watchSession)
         )
         self.watchDelegate = CommunicationDelegate(session: watchSession, notificationCenter: notificationCenter)
-        self.watchService = WatchService(session: watchSession)
-        self.watchService.activate()
+        self.engine.watchService.activate()
     }
     
     func makeHomeView(isPreviews: Bool = false) -> HomeView {
         let formatter = DateFormatter()
         formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE - dd MMM", options: 0, locale: .current)
-        let presenter = Screen.Home.Presenter(engine: engine, watchService: watchService, formatter: formatter, notificationCenter: notificationCenter)
+        let presenter = Screen.Home.Presenter(engine: engine, formatter: formatter, notificationCenter: notificationCenter)
         let observer = HomeScreenObservable(presenter: presenter)
         presenter.scene = observer
         

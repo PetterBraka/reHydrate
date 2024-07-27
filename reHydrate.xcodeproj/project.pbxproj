@@ -113,8 +113,6 @@
 		A11153382C01DC7F001366FE /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11153372C01DC7F001366FE /* HomeScreenObservable.swift */; };
 		A111533A2C01EA95001366FE /* CommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11153392C01EA95001366FE /* CommunicationDelegate.swift */; };
 		A11180332AC3768D007E4585 /* NotificationCenterPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180322AC3768D007E4585 /* NotificationCenterPort.swift */; };
-		A114B6FD2C31383300EB0AC4 /* CommunicationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A114B6FC2C31383300EB0AC4 /* CommunicationKit */; };
-		A114B6FF2C31383F00EB0AC4 /* CommunicationKit in Frameworks */ = {isa = PBXBuildFile; productRef = A114B6FE2C31383F00EB0AC4 /* CommunicationKit */; };
 		A114B7022C3148F600EB0AC4 /* CommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114B7012C3148F600EB0AC4 /* CommunicationDelegate.swift */; };
 		A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C12A72B65B02D00FB1B8C /* View+expand.swift */; };
 		A11D4CD92A3D9F4C00A70B9B /* SettingsScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D4CD82A3D9F4C00A70B9B /* SettingsScreenObservable.swift */; };
@@ -147,6 +145,10 @@
 		A185DB672B77C7A600B9318B /* PresentationWatchKit in Frameworks */ = {isa = PBXBuildFile; productRef = A185DB662B77C7A600B9318B /* PresentationWatchKit */; };
 		A185DB6B2B77C87000B9318B /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE92A3120C900D42033 /* Font.swift */; };
 		A185DB6C2B77C87F00B9318B /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B28F6C26BC7FCD00DECA9F /* Double+Extensions.swift */; };
+		A19889102C559B54007AAC32 /* CommunicationInterface in Frameworks */ = {isa = PBXBuildFile; productRef = A198890F2C559B54007AAC32 /* CommunicationInterface */; };
+		A19889122C559B54007AAC32 /* CommunicationSource in Frameworks */ = {isa = PBXBuildFile; productRef = A19889112C559B54007AAC32 /* CommunicationSource */; };
+		A19889142C559B6A007AAC32 /* CommunicationInterface in Frameworks */ = {isa = PBXBuildFile; productRef = A19889132C559B6A007AAC32 /* CommunicationInterface */; };
+		A19889162C559B6A007AAC32 /* CommunicationSource in Frameworks */ = {isa = PBXBuildFile; productRef = A19889152C559B6A007AAC32 /* CommunicationSource */; };
 		A1A825E92B7991B700EA98EC /* DBKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1A825E82B7991B700EA98EC /* DBKit */; };
 		A1AA8DDA2AF634C500D12E74 /* AppIconScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD82AF634C500D12E74 /* AppIconScreen.swift */; };
 		A1AA8DDB2AF634C500D12E74 /* AppIconScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */; };
@@ -389,10 +391,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A114B6FD2C31383300EB0AC4 /* CommunicationKit in Frameworks */,
 				A1CA3A1E2B5A5DD5009907EA /* CalendarKit in Frameworks */,
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				A1A825E92B7991B700EA98EC /* DBKit in Frameworks */,
+				A19889142C559B6A007AAC32 /* CommunicationInterface in Frameworks */,
+				A19889162C559B6A007AAC32 /* CommunicationSource in Frameworks */,
 				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
 				A126D24F2A76665900A296BA /* PresentationKit in Frameworks */,
 			);
@@ -410,8 +413,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A114B6FF2C31383F00EB0AC4 /* CommunicationKit in Frameworks */,
+				A19889102C559B54007AAC32 /* CommunicationInterface in Frameworks */,
 				A185DB672B77C7A600B9318B /* PresentationWatchKit in Frameworks */,
+				A19889122C559B54007AAC32 /* CommunicationSource in Frameworks */,
 				A16B30192BEA09DE0036DE54 /* WatchEngineKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -833,7 +837,8 @@
 				A126D24E2A76665900A296BA /* PresentationKit */,
 				A1CA3A1D2B5A5DD5009907EA /* CalendarKit */,
 				A1A825E82B7991B700EA98EC /* DBKit */,
-				A114B6FC2C31383300EB0AC4 /* CommunicationKit */,
+				A19889132C559B6A007AAC32 /* CommunicationInterface */,
+				A19889152C559B6A007AAC32 /* CommunicationSource */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -876,7 +881,8 @@
 			packageProductDependencies = (
 				A185DB662B77C7A600B9318B /* PresentationWatchKit */,
 				A16B30182BEA09DE0036DE54 /* WatchEngineKit */,
-				A114B6FE2C31383F00EB0AC4 /* CommunicationKit */,
+				A198890F2C559B54007AAC32 /* CommunicationInterface */,
+				A19889112C559B54007AAC32 /* CommunicationSource */,
 			);
 			productName = "reHydrate Watch App";
 			productReference = A185DB332B77C5F300B9318B /* reHydrate Watch App.app */;
@@ -1720,14 +1726,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A114B6FC2C31383300EB0AC4 /* CommunicationKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CommunicationKit;
-		};
-		A114B6FE2C31383F00EB0AC4 /* CommunicationKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CommunicationKit;
-		};
 		A126D24A2A76665800A296BA /* EngineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EngineKit;
@@ -1747,6 +1745,22 @@
 		A185DB662B77C7A600B9318B /* PresentationWatchKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationWatchKit;
+		};
+		A198890F2C559B54007AAC32 /* CommunicationInterface */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CommunicationInterface;
+		};
+		A19889112C559B54007AAC32 /* CommunicationSource */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CommunicationSource;
+		};
+		A19889132C559B6A007AAC32 /* CommunicationInterface */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CommunicationInterface;
+		};
+		A19889152C559B6A007AAC32 /* CommunicationSource */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CommunicationSource;
 		};
 		A1A825E82B7991B700EA98EC /* DBKit */ = {
 			isa = XCSwiftPackageProductDependency;

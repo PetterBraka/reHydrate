@@ -18,7 +18,8 @@ let package: Package = {
         ],
         dependencies: [
             .package(name: "DBKit", path: "../DBKit"),
-            .package(name: "TestHelper", path: "../TestHelper")
+            .package(name: "TestHelper", path: "../TestHelper"),
+            .package(name: "CommunicationKit", path: "../CommunicationKit"),
         ],
         targets: [
             .target(
@@ -35,11 +36,13 @@ let package: Package = {
                     .source(.notificationService),
                     .source(.appearanceService),
                     .source(.dateService),
+                    .communicationInterface,
                 ]
             ),
             .target(
                 name: "WatchEngineKit",
                 dependencies: [
+                    .communicationInterface,
                     .loggingService,
                     .dbKit,
                     .source(.dayService),
@@ -53,6 +56,7 @@ let package: Package = {
             .target(
                 name: "EngineMocks",
                     dependencies: [
+                        .communicationMocks,
                         .loggingService,
                         .dbKit,
                         .portsMocks,
@@ -119,14 +123,22 @@ let package: Package = {
 
 extension Target {
     static let loggingService: Target = .target(name: "LoggingService")
-    static let portsInterface: Target = .target(name: "PortsInterface", path: "Sources/Ports/Interface")
+    static let portsInterface: Target = .target(
+        name: "PortsInterface",
+        dependencies: [.communicationInterface],
+        path: "Sources/Ports/Interface"
+    )
     static let portsMocks: Target = .target(name: "PortsMocks", dependencies: [.portsInterface], path: "Sources/Ports/Mocks")
 }
 
 extension Target.Dependency {
-    static let dbKit: Target.Dependency = .byName(name: "DBKit")
+    static let dbKit: Target.Dependency = .product(name: "DBKit", package: "DBKit")
+    static let testHelper: Target.Dependency = .product(name: "TestHelper", package: "TestHelper")
+    static let communicationSource: Target.Dependency = .product(name: "CommunicationSource", package: "CommunicationKit")
+    static let communicationInterface: Target.Dependency = .product(name: "CommunicationInterface", package: "CommunicationKit")
+    static let communicationMocks: Target.Dependency = .product(name: "CommunicationMocks", package: "CommunicationKit")
+    
     static let loggingService: Target.Dependency = .byName(name: "LoggingService")
-    static let testHelper: Target.Dependency = .byName(name: "TestHelper")
     static let portsInterface: Target.Dependency = .byName(name: "PortsInterface")
     static let portsMocks: Target.Dependency = .byName(name: "PortsMocks")
     

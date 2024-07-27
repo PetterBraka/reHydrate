@@ -21,7 +21,7 @@ final class PresentationWatchKitTests: XCTestCase {
     var dayService: (stub: DayServiceTypeStubbing, spy: DayServiceTypeSpying)!
     var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
     var drinkService: (stub: DrinkServiceTypeStubbing, spy: DrinkServiceTypeSpying)!
-    var watchService: (stub: WatchServiceTypeStub, spy: WatchServiceTypeSpying)!
+    var watchService: (stub: WatchServiceTypeStubbing, spy: WatchServiceTypeSpying)!
     var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     
     override func setUp() {
@@ -32,10 +32,7 @@ final class PresentationWatchKitTests: XCTestCase {
         dateService = engine.makeDateService()
         drinkService = engine.makeDrinksService()
         userPreferenceService = engine.makeUserPreferenceService()
-        
-        let watchServiceStub = WatchServiceTypeStub()
-        let watchServiceSpy = WatchServiceTypeSpy(realObject: watchServiceStub)
-        watchService = (watchServiceStub, watchServiceSpy)
+        watchService = engine.makeWatchService()
         
         let formatter = DateFormatter()
         formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE - dd MMM", options: 0, locale: .init(identifier: "en_gb"))
@@ -43,7 +40,6 @@ final class PresentationWatchKitTests: XCTestCase {
         engine.unitService.set(unitSystem: .metric)
         sut = Screen.Home.Presenter(
             engine: engine,
-            watchService: watchService.stub,
             formatter: formatter,
             notificationCenter: notificationCenter
         )
@@ -174,19 +170,19 @@ extension PresentationWatchKitTests {
 extension PresentationWatchKitTests {
     func test_didReceiveApplicationContext_isReceived() async {
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: [:])
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: self, userInfo: [:])
         await fulfillment(of: [processedNotification], timeout: 2)
     }
     
     func test_didReceiveMessage_isReceived() async {
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        NotificationCenter.default.post(name: .Watch.didReceiveMessage, object: nil, userInfo: [:])
+        NotificationCenter.default.post(name: .Shared.didReceiveMessage, object: nil, userInfo: [:])
         await fulfillment(of: [processedNotification], timeout: 2)
     }
     
     func test_didReceiveUserInfo_isReceived() async {
         let processedNotification = XCTNSNotificationExpectation(name: .init("NotificationProcessed"))
-        NotificationCenter.default.post(name: .Watch.didReceiveUserInfo, object: nil, userInfo: [:])
+        NotificationCenter.default.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: [:])
         await fulfillment(of: [processedNotification], timeout: 2)
     }
     
@@ -207,7 +203,7 @@ extension PresentationWatchKitTests {
             ],
             .unitSystem: UnitSystem.metric
         ]
-        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
         assert(viewModel: .init(consumption: 1, goal: 2, unit: .liters, drinks: [
             .init(size: 100, container: .small),
@@ -224,7 +220,7 @@ extension PresentationWatchKitTests {
         let userInfo: [CommunicationUserInfo: Any] = [
             .day: Day(id: "test", date: Date(year: 2021, month: 12, day: 8), consumed: 1, goal: 2)
         ]
-        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
         assert(viewModel: .init(consumption: 1, goal: 2, unit: .liters, drinks: []))
     }
@@ -244,7 +240,7 @@ extension PresentationWatchKitTests {
                 Drink(id: "3", size: 300, container: .large),
             ]
         ]
-        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
         assert(viewModel: .init(consumption: 0, goal: 2, unit: .liters, drinks: [
             .init(size: 100, container: .small),
@@ -268,7 +264,7 @@ extension PresentationWatchKitTests {
                 Drink(id: "3", size: 300, container: .large),
             ]
         ]
-        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
         assert(viewModel: .init(consumption: 0, goal: 2, unit: .liters, drinks: [
             .init(size: 100, container: .small),
@@ -284,7 +280,7 @@ extension PresentationWatchKitTests {
         let userInfo: [CommunicationUserInfo: Any] = [
             .unitSystem: UnitSystem.metric
         ]
-        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
         assert(viewModel: .init(consumption: 0, goal: 2, unit: .liters, drinks: [.init(size: 200, container: .medium)]))
     }
@@ -297,7 +293,7 @@ extension PresentationWatchKitTests {
         let userInfo: [CommunicationUserInfo: Any] = [
             .unitSystem: UnitSystem.imperial
         ]
-        notificationCenter.post(name: .Watch.didReceiveApplicationContext, object: self, userInfo: userInfo)
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: self, userInfo: userInfo)
         await fulfillment(of: [processedNotification], timeout: 2)
         assert(viewModel: .init(consumption: 0, goal: 3.52, unit: .pints, drinks: [.init(size: 7, container: .medium)]))
     }

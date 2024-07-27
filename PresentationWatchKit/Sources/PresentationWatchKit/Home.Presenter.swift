@@ -23,11 +23,11 @@ extension Screen.Home {
             HasUnitService &
             HasDayService &
             HasDrinksService &
-            HasDateService
+            HasDateService &
+            HasWatchService
         )
         
         private let engine: Engine
-        private let watchService: WatchServiceType
         private let formatter: DateFormatter
         private let notificationCenter: NotificationCenter
         
@@ -36,9 +36,8 @@ extension Screen.Home {
             didSet { scene?.perform(update: .viewModel) }
         }
         
-        public init(engine: Engine, watchService: WatchServiceType, formatter: DateFormatter, notificationCenter: NotificationCenter) {
+        public init(engine: Engine, formatter: DateFormatter, notificationCenter: NotificationCenter) {
             self.engine = engine
-            self.watchService = watchService
             self.formatter = formatter
             self.notificationCenter = notificationCenter
             viewModel = ViewModel(consumption: 0, goal: 0, unit: .liters, drinks: [])
@@ -195,15 +194,14 @@ private extension Container {
 // MARK: Watch communication
 private extension Screen.Home.Presenter {
     func sendUpdatedToday() async {
-        let watchService = watchService
-        guard watchService.isSupported(),
-              watchService.currentState == .activated
+        guard engine.watchService.isSupported(),
+              engine.watchService.currentState == .activated
         else { return }
         let today = await getToday()
         let message: [String: Any] = [
             "today": today
         ]
-        watchService.send(message: message, replyHandler: nil) { [weak self] error in
+        engine.watchService.send(message: message, replyHandler: nil) { [weak self] error in
             self?.engine.logger.error("Failed sending \(message) to iOS device", error: error)
         }
     }

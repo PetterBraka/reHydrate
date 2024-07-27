@@ -11,15 +11,16 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "CommunicationKit",
-            targets: [
-                "CommunicationKit",
-                "CommunicationKitInterface",
-            ]
+            name: "CommunicationSource",
+            targets: ["CommunicationKit"]
         ),
         .library(
-            name: "CommunicationKitMock",
-            targets: ["CommunicationKitMock"]
+            name: "CommunicationInterface",
+            targets: ["CommunicationKitInterface", "CommunicationKitMocks"]
+        ),
+        .library(
+            name: "CommunicationMocks",
+            targets: ["CommunicationKitMocks"]
         ),
     ],
     targets: [
@@ -33,7 +34,7 @@ let package = Package(
             path: "Sources/CommunicationKit/Interface"
         ),
         .target(
-            name: "CommunicationKitMock",
+            name: "CommunicationKitMocks",
             dependencies: ["CommunicationKitInterface"],
             path: "Sources/CommunicationKit/Mocks"
         ),

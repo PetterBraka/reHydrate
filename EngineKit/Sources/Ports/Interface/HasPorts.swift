@@ -6,10 +6,13 @@
 //
 
 import Foundation
+import CommunicationKitInterface
 
 public protocol HasPorts:
     HasOpenUrlService &
     HasAlternateIconsService &
     HasAppearancePort &
-    HasHealthService 
+    HasHealthService &
+    HasWatchService &
+    HasPhoneService
 {}
