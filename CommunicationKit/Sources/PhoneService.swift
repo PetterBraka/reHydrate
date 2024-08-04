@@ -82,7 +82,7 @@ extension PhoneService {
     
     public func transferComplication(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
 #if os(watchOS)
-        .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false)
+        .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false) {}
 #else
         .init(from: session.transferCurrentComplicationUserInfo(userInfo.mapKeys()))
 #endif
@@ -90,7 +90,7 @@ extension PhoneService {
     
     public func transfer(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
 #if os(watchOS)
-        .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false)
+        .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false) {}
 #else
         .init(from: session.transferUserInfo(userInfo.mapKeys()))
 #endif
@@ -103,7 +103,8 @@ fileprivate extension CommunicationInfo {
         self.init(
             isCurrentComplicationInfo: info.isCurrentComplicationInfo,
             userInfo: info.userInfo,
-            isTransferring: info.isTransferring
+            isTransferring: info.isTransferring,
+            cancel: info.cancel
         )
     }
 #endif

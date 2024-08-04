@@ -118,7 +118,8 @@ fileprivate extension CommunicationInfo {
         self.init(
             isCurrentComplicationInfo: false,
             userInfo: info.userInfo,
-            isTransferring: info.isTransferring
+            isTransferring: info.isTransferring,
+            cancel: info.cancel
         )
     }
 }

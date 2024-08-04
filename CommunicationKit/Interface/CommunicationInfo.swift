@@ -9,17 +9,20 @@ import Foundation
 
 public struct CommunicationInfo {
     /// Not used by watchOS
-    var isCurrentComplicationInfo: Bool
-    var userInfo: [String : Any]
-    var isTransferring: Bool
+    public let isCurrentComplicationInfo: Bool
+    public let userInfo: [String : Any]
+    public let isTransferring: Bool
+    public let cancel: () -> Void
     
     public init(
         isCurrentComplicationInfo: Bool,
         userInfo: [String : Any],
-        isTransferring: Bool
+        isTransferring: Bool,
+        cancel: @escaping () -> Void
     ) {
         self.isCurrentComplicationInfo = isCurrentComplicationInfo
         self.userInfo = userInfo
         self.isTransferring = isTransferring
+        self.cancel = cancel
     }
 }

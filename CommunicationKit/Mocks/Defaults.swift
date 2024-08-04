@@ -29,5 +29,5 @@ extension CommunicationState {
 }
 
 extension CommunicationInfo {
-    static let `default`: Self = .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false)
+    static let `default`: Self = .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false) {}
 }
