@@ -156,6 +156,8 @@
 		A1AA8DDF2AF6466400D12E74 /* AppearanceServicePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */; };
 		A1AA8DE32AF7828500D12E74 /* HealthKitPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */; };
 		A1CA3A1E2B5A5DD5009907EA /* CalendarKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1CA3A1D2B5A5DD5009907EA /* CalendarKit */; };
+		A1E935522C5F62E100B73E35 /* EngineMocks in Frameworks */ = {isa = PBXBuildFile; productRef = A1E935512C5F62E100B73E35 /* EngineMocks */; };
+		A1E935542C5F639600B73E35 /* PhoneCommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E935532C5F639600B73E35 /* PhoneCommunicationDelegate.swift */; };
 		A1EABF1D2AC5C76E00591981 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111802F2AC36A86007E4585 /* Reminder.swift */; };
 		A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180302AC36A86007E4585 /* Celebration.swift */; };
 		A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */; };
@@ -372,6 +374,7 @@
 		A1AA8DE22AF7828500D12E74 /* HealthKitPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPort.swift; sourceTree = "<group>"; };
 		A1AF32D22A346CA200FD0C7C /* EngineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EngineKit; sourceTree = "<group>"; };
 		A1E4A2D32BAEE3B400FC41BE /* TestHelper */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TestHelper; sourceTree = "<group>"; };
+		A1E935532C5F639600B73E35 /* PhoneCommunicationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCommunicationDelegate.swift; sourceTree = "<group>"; };
 		A1EABF212ACB5AD500591981 /* NotificationDelegatePort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegatePort.swift; sourceTree = "<group>"; };
 		A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		A1EABF272ADA842100591981 /* EditContainerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContainerScreen.swift; sourceTree = "<group>"; };
@@ -397,6 +400,7 @@
 				A19889142C559B6A007AAC32 /* CommunicationInterface in Frameworks */,
 				A19889162C559B6A007AAC32 /* CommunicationSource in Frameworks */,
 				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
+				A1E935522C5F62E100B73E35 /* EngineMocks in Frameworks */,
 				A126D24F2A76665900A296BA /* PresentationKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -646,6 +650,7 @@
 				A1AA8DDC2AF6386C00D12E74 /* AlternateIconsServicePort.swift */,
 				A1AA8DDE2AF6466400D12E74 /* AppearanceServicePort.swift */,
 				A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */,
+				A1E935532C5F639600B73E35 /* PhoneCommunicationDelegate.swift */,
 			);
 			path = Ports;
 			sourceTree = "<group>";
@@ -839,6 +844,7 @@
 				A1A825E82B7991B700EA98EC /* DBKit */,
 				A19889132C559B6A007AAC32 /* CommunicationInterface */,
 				A19889152C559B6A007AAC32 /* CommunicationSource */,
+				A1E935512C5F62E100B73E35 /* EngineMocks */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -1151,6 +1157,7 @@
 				A1AA8DDD2AF6386C00D12E74 /* AlternateIconsServicePort.swift in Sources */,
 				A1EABF2E2ADAC80000591981 /* LocalizedString.swift in Sources */,
 				A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */,
+				A1E935542C5F639600B73E35 /* PhoneCommunicationDelegate.swift in Sources */,
 				33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */,
 				A1AA8DDA2AF634C500D12E74 /* AppIconScreen.swift in Sources */,
 				33B28F6B26BC7FAB00DECA9F /* UIImage+Extensions.swift in Sources */,
@@ -1770,6 +1777,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A1CA3A1C2B5A5DD5009907EA /* XCRemoteSwiftPackageReference "CalendarKit" */;
 			productName = CalendarKit;
+		};
+		A1E935512C5F62E100B73E35 /* EngineMocks */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EngineMocks;
 		};
 /* End XCSwiftPackageProductDependency section */
 

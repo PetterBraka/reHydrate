@@ -42,7 +42,6 @@ public final class Engine {
         alternateIconsService: AlternateIconsServiceType,
         appearancePort: AppearancePortType,
         healthService: HealthInterface,
-        watchService: WatchServiceType,
         phoneService: PhoneServiceType
     ) {
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
@@ -63,7 +62,6 @@ public final class Engine {
         self.alternateIconsService = alternateIconsService
         self.appearancePort = appearancePort
         self.healthService = healthService
-        self.watchService = watchService
         self.phoneService = phoneService
     }
     
@@ -84,7 +82,6 @@ public final class Engine {
     public var alternateIconsService: AlternateIconsServiceType
     public var appearancePort: AppearancePortType
     public var healthService: HealthInterface
-    public var watchService: WatchServiceType
     public var phoneService: PhoneServiceType
     
     public lazy var notificationService: NotificationServiceType = NotificationService(

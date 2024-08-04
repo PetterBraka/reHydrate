@@ -13,6 +13,5 @@ public protocol HasPorts:
     HasAlternateIconsService &
     HasAppearancePort &
     HasHealthService &
-    HasWatchService &
     HasPhoneService
 {}

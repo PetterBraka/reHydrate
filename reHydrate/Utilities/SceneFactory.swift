@@ -15,6 +15,9 @@ import DrinkServiceInterface
 import UserNotifications
 import UIKit
 import DBKit
+import CommunicationKit
+import CommunicationKitInterface
+import WatchConnectivity
 
 public final class SceneFactory: ObservableObject {
     static let shared = SceneFactory()
@@ -48,12 +51,17 @@ public final class SceneFactory: ObservableObject {
     
     // Port
     let notificationDelegate: NotificationDelegatePort
+    private let notificationCenter: NotificationCenter
+    private let phoneDelegate: WCSessionDelegate
     
     private init() {
         let subsystem = "com.braka.reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
         let logger = LoggingService(subsystem: subsystem)
         let database = Database()
+        let phoneSession = WCSession.default
+        self.notificationCenter = NotificationCenter.default
+        
         engine = Engine(
             appGroup: appGroup,
             appVersion: UIApplication.shared.appVersion,
@@ -67,12 +75,16 @@ public final class SceneFactory: ObservableObject {
             openUrlService: OpenUrlPort(),
             alternateIconsService: AlternateIconsServicePort(), 
             appearancePort: AppearanceServicePort(),
-            healthService: HealthKitPort()
+            healthService: HealthKitPort(),
+            phoneService: PhoneService(session: phoneSession)
         )
+        phoneDelegate = PhoneCommunicationDelegate(session: phoneSession, notificationCenter: notificationCenter)
         notificationDelegate = NotificationDelegatePort(engine: engine)
+        
         engine.didCompleteNotificationAction = { [weak self] in
             self?.homePresenter.sync(didComplete: nil)
         }
+        engine.phoneService.activate()
     }
     
     func makeHomeScreen() -> HomeScreen {
