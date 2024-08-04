@@ -111,7 +111,7 @@
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
 		A11153382C01DC7F001366FE /* HomeScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11153372C01DC7F001366FE /* HomeScreenObservable.swift */; };
-		A111533A2C01EA95001366FE /* CommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11153392C01EA95001366FE /* CommunicationDelegate.swift */; };
+		A111533A2C01EA95001366FE /* WatchCommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11153392C01EA95001366FE /* WatchCommunicationDelegate.swift */; };
 		A11180332AC3768D007E4585 /* NotificationCenterPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180322AC3768D007E4585 /* NotificationCenterPort.swift */; };
 		A114B7022C3148F600EB0AC4 /* CommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114B7012C3148F600EB0AC4 /* CommunicationDelegate.swift */; };
 		A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C12A72B65B02D00FB1B8C /* View+expand.swift */; };
@@ -329,7 +329,7 @@
 		33F320FD243CEB2100E61D27 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33F32133243D115600E61D27 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A11153372C01DC7F001366FE /* HomeScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenObservable.swift; sourceTree = "<group>"; };
-		A11153392C01EA95001366FE /* CommunicationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationDelegate.swift; sourceTree = "<group>"; };
+		A11153392C01EA95001366FE /* WatchCommunicationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchCommunicationDelegate.swift; sourceTree = "<group>"; };
 		A111802F2AC36A86007E4585 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		A11180302AC36A86007E4585 /* Celebration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Celebration.swift; sourceTree = "<group>"; };
 		A11180322AC3768D007E4585 /* NotificationCenterPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterPort.swift; sourceTree = "<group>"; };
@@ -743,7 +743,7 @@
 			children = (
 				A185DB642B77C72200B9318B /* Screen */,
 				A185DB602B77C71D00B9318B /* SceneFactory.swift */,
-				A11153392C01EA95001366FE /* CommunicationDelegate.swift */,
+				A11153392C01EA95001366FE /* WatchCommunicationDelegate.swift */,
 				A185DB392B77C5F500B9318B /* Assets.xcassets */,
 				A185DB3B2B77C5F500B9318B /* Preview Content */,
 			);
@@ -1187,7 +1187,7 @@
 				A185DB6C2B77C87F00B9318B /* Double+Extensions.swift in Sources */,
 				A185DB632B77C71D00B9318B /* HomeView.swift in Sources */,
 				A185DB362B77C5F400B9318B /* reHydrateWatchApp.swift in Sources */,
-				A111533A2C01EA95001366FE /* CommunicationDelegate.swift in Sources */,
+				A111533A2C01EA95001366FE /* WatchCommunicationDelegate.swift in Sources */,
 				A11153382C01DC7F001366FE /* HomeScreenObservable.swift in Sources */,
 				A185DB6B2B77C87000B9318B /* Font.swift in Sources */,
 				A185DB622B77C71D00B9318B /* SceneFactory.swift in Sources */,
