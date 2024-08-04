@@ -13,6 +13,7 @@ import DrinkServiceInterface
 import PortsInterface
 import UnitServiceInterface
 import DateServiceInterface
+import CommunicationKitInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
@@ -23,7 +24,8 @@ extension Screen.Home {
             HasDrinksService &
             HasHealthService &
             HasUnitService &
-            HasDateService
+            HasDateService &
+            HasPhoneService
         )
         public typealias Router = (
             HomeRoutable &
@@ -55,8 +57,10 @@ extension Screen.Home {
         
         public func perform(action: Home.Action) async {
             switch action {
-            case .didAppear:
+            case .didAppear, .didBecomeActive:
                 await sync(didComplete: nil)
+            case .didBackground:
+                await setAppContext()
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
@@ -83,8 +87,10 @@ extension Screen.Home {
                 ))
             case let .didTapAddDrink(drink):
                 await addDrink(drink)
+                await sendMessageToWatch()
             case let .didTapRemoveDrink(drink):
                 await removeDrink(drink)
+                await sendMessageToWatch()
             }
         }
         
@@ -323,4 +329,55 @@ private extension Screen.Home.Presenter {
             return 0
         }
     }
+}
+
+// MARK: - Phone communication
+private extension Screen.Home.Presenter {
+    func getPhoneData() async -> [CommunicationUserInfo: Any] {
+        await [
+            .day: engine.dayService.getToday(),
+            .drinks: getDrinks(),
+            .unitSystem: engine.unitService.getUnitSystem()
+        ]
+    }
+    
+    func sendMessageToWatch() async {
+        guard engine.phoneService.isSupported(),
+              engine.phoneService.isReachable
+        else { return }
+        
+        let message = await getPhoneData()
+        engine.phoneService.send(message: message) { [weak self] error in
+            self?.engine.logger.error("Failed sending \(message) to watchOS device", error: error)
+        }
+    }
+    
+    func sendWatchComplecationData() async {
+        guard engine.phoneService.isSupported(),
+              engine.phoneService.currentState == .activated
+        else { return }
+        if engine.phoneService.remainingComplicationUserInfoTransfers > 0 {
+            let context = await getPhoneData()
+            _ = engine.phoneService.transferComplication(userInfo: context)
+        } else {
+            await setAppContext()
+        }
+    }
+    
+    func setAppContext() async {
+        guard engine.phoneService.isSupported(),
+              engine.phoneService.currentState == .activated
+        else { return }
+        let context = await getPhoneData()
+        do {
+            try engine.phoneService.update(applicationContext: context)
+        } catch {
+            engine.logger.error("Failed updating context \(context) to watchOS device", error: error)
+        }
+    }
+}
+
+// MARK: Watch communication
+private extension Screen.Home.Presenter {
+    
 }
