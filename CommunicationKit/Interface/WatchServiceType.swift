@@ -10,14 +10,14 @@ import Foundation
 public protocol WatchServiceType {
     var currentState: CommunicationState { get set }
     var isReachable: Bool { get set }
-    var applicationContext: [String : Any] { get set }
-    var receivedApplicationContext: [String : Any] { get set }
+    var applicationContext: [CommunicationUserInfo : Any] { get set }
+    var receivedApplicationContext: [CommunicationUserInfo : Any] { get set }
     var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool { get set }
     
     func isSupported() -> Bool
     func activate()
-    func update(applicationContext: [String : Any]) throws
-    func send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?)
-    func send(messageData data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?)
-    func send(userInfo: [String : Any]) -> CommunicationInfo
+    func update(applicationContext: [CommunicationUserInfo : Any]) throws
+    func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?)
+    func send(messageData data: Data, errorHandler: ((Error) -> Void)?)
+    func send(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo
 }

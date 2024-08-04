@@ -8,8 +8,8 @@ import CommunicationKitInterface
 public protocol WatchServiceTypeStubbing {
     var currentState_returnValue: CommunicationState { get set }
     var isReachable_returnValue: Bool { get set }
-    var applicationContext_returnValue: [String : Any] { get set }
-    var receivedApplicationContext_returnValue: [String : Any] { get set }
+    var applicationContext_returnValue: [CommunicationUserInfo : Any] { get set }
+    var receivedApplicationContext_returnValue: [CommunicationUserInfo : Any] { get set }
     var iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue: Bool { get set }
     var isSupported_returnValue: Bool { get set }
     var updateApplicationContext_returnValue: Error? { get set }
@@ -43,7 +43,7 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
         }
     }
     private var isReachable_returnValues: [Bool] = []
-    public var applicationContext_returnValue: [String : Any] {
+    public var applicationContext_returnValue: [CommunicationUserInfo : Any] {
         get {
             if applicationContext_returnValues.isEmpty {
                 .default
@@ -55,8 +55,8 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
             applicationContext_returnValues.append(newValue)
         }
     }
-    private var applicationContext_returnValues: [[String : Any]] = []
-    public var receivedApplicationContext_returnValue: [String : Any] {
+    private var applicationContext_returnValues: [[CommunicationUserInfo : Any]] = []
+    public var receivedApplicationContext_returnValue: [CommunicationUserInfo : Any] {
         get {
             if receivedApplicationContext_returnValues.isEmpty {
                 .default
@@ -68,7 +68,7 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
             receivedApplicationContext_returnValues.append(newValue)
         }
     }
-    private var receivedApplicationContext_returnValues: [[String : Any]] = []
+    private var receivedApplicationContext_returnValues: [[CommunicationUserInfo : Any]] = []
     public var iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue: Bool {
         get {
             if iOSDeviceNeedsUnlockAfterRebootForReachability_returnValues.isEmpty {
@@ -134,11 +134,11 @@ extension WatchServiceTypeStub: WatchServiceType {
         get { isReachable_returnValue }
         set { isReachable_returnValue = newValue }
     }
-    public var applicationContext: [String : Any] { 
+    public var applicationContext: [CommunicationUserInfo : Any] { 
         get { applicationContext_returnValue }
         set { applicationContext_returnValue = newValue }
     }
-    public var receivedApplicationContext: [String : Any] { 
+    public var receivedApplicationContext: [CommunicationUserInfo : Any] { 
         get { receivedApplicationContext_returnValue }
         set { receivedApplicationContext_returnValue = newValue }
     }
@@ -153,19 +153,19 @@ extension WatchServiceTypeStub: WatchServiceType {
     public func activate() -> Void {
     }
 
-    public func update(applicationContext: [String : Any]) throws -> Void {
+    public func update(applicationContext: [CommunicationUserInfo : Any]) throws -> Void {
         if let updateApplicationContext_returnValue {
             throw updateApplicationContext_returnValue
         }
     }
 
-    public func send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?) -> Void {
+    public func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func send(messageData data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) -> Void {
+    public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func send(userInfo: [String : Any]) -> CommunicationInfo {
+    public func send(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
         sendUserInfo_returnValue
     }
 

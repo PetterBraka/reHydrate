@@ -25,10 +25,10 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
     public enum MethodCall {
         case isSupported
         case activate
-        case update(applicationContext: [String : Any])
-        case send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?)
-        case send(data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?)
-        case send(userInfo: [String : Any])
+        case update(applicationContext: [CommunicationUserInfo : Any])
+        case send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?)
+        case send(data: Data, errorHandler: ((Error) -> Void)?)
+        case send(userInfo: [CommunicationUserInfo : Any])
     }
 
     public var variableLog: [VariableName] = []
@@ -62,7 +62,7 @@ extension WatchServiceTypeSpy: WatchServiceType {
             realObject.isReachable  = newValue
         }
     }
-    public var applicationContext: [String : Any] {
+    public var applicationContext: [CommunicationUserInfo : Any] {
         get {
             variableLog.append(.applicationContext)
             return realObject.applicationContext
@@ -72,7 +72,7 @@ extension WatchServiceTypeSpy: WatchServiceType {
             realObject.applicationContext  = newValue
         }
     }
-    public var receivedApplicationContext: [String : Any] {
+    public var receivedApplicationContext: [CommunicationUserInfo : Any] {
         get {
             variableLog.append(.receivedApplicationContext)
             return realObject.receivedApplicationContext
@@ -100,19 +100,19 @@ extension WatchServiceTypeSpy: WatchServiceType {
         methodLog.append(.activate)
         realObject.activate()
     }
-    public func update(applicationContext: [String : Any]) throws -> Void {
+    public func update(applicationContext: [CommunicationUserInfo : Any]) throws -> Void {
         methodLog.append(.update(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
-    public func send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.send(message: message, replyHandler: replyHandler, errorHandler: errorHandler))
-        realObject.send(message: message, replyHandler: replyHandler, errorHandler: errorHandler)
+    public func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?) -> Void {
+        methodLog.append(.send(message: message, errorHandler: errorHandler))
+        realObject.send(message: message, errorHandler: errorHandler)
     }
-    public func send(messageData data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.send(data: data, replyHandler: replyHandler, errorHandler: errorHandler))
-        realObject.send(messageData: data, replyHandler: replyHandler, errorHandler: errorHandler)
+    public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
+        methodLog.append(.send(data: data, errorHandler: errorHandler))
+        realObject.send(messageData: data, errorHandler: errorHandler)
     }
-    public func send(userInfo: [String : Any]) -> CommunicationInfo {
+    public func send(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
         methodLog.append(.send(userInfo: userInfo))
         return realObject.send(userInfo: userInfo)
     }

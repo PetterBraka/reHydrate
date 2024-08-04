@@ -20,7 +20,7 @@ extension Optional where Wrapped == URL {
     static let `default`: Self = nil
 }
 
-extension Dictionary where Key == String, Value == Any {
+extension Dictionary where Key == CommunicationUserInfo, Value == Any {
     static let `default`: Self = [:]
 }
 

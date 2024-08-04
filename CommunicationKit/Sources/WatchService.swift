@@ -13,8 +13,8 @@ public final class WatchService: NSObject, WatchServiceType {
     
     public var currentState: CommunicationState
     public var isReachable: Bool
-    public var applicationContext: [String : Any]
-    public var receivedApplicationContext: [String : Any]
+    public var applicationContext: [CommunicationUserInfo : Any]
+    public var receivedApplicationContext: [CommunicationUserInfo : Any]
     public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool
     private let notificationCenter = NotificationCenter.default
     
@@ -23,8 +23,8 @@ public final class WatchService: NSObject, WatchServiceType {
         
         self.currentState = .init(from: session.activationState)
         self.isReachable = session.isReachable
-        self.applicationContext = session.applicationContext
-        self.receivedApplicationContext = session.receivedApplicationContext
+        self.applicationContext = session.applicationContext.mapKeys()
+        self.receivedApplicationContext = session.receivedApplicationContext.mapKeys()
         
         self.iOSDeviceNeedsUnlockAfterRebootForReachability = false
         
@@ -55,28 +55,26 @@ extension WatchService {
         session.activate()
     }
     
-    public func update(applicationContext: [String : Any]) throws {
-        try session.updateApplicationContext(applicationContext)
+    public func update(applicationContext: [CommunicationUserInfo : Any]) throws {
+        try session.updateApplicationContext(applicationContext.mapKeys())
     }
     
     public func send(
-        message: [String : Any],
-        replyHandler: (([String : Any]) -> Void)?,
+        message: [CommunicationUserInfo : Any],
         errorHandler: ((any Error) -> Void)? = nil
     ) {
-        session.sendMessage(message, replyHandler: replyHandler, errorHandler: errorHandler)
+        session.sendMessage(message.mapKeys(), replyHandler: nil, errorHandler: errorHandler)
     }
     
     public func send(
         messageData data: Data,
-        replyHandler: ((Data) -> Void)?,
         errorHandler: ((any Error) -> Void)? = nil
     ) {
-        session.sendMessageData(data, replyHandler: replyHandler, errorHandler: errorHandler)
+        session.sendMessageData(data, replyHandler: nil, errorHandler: errorHandler)
     }
     
-    public func send(userInfo: [String : Any]) -> CommunicationInfo {
-        .init(from: session.transferUserInfo(userInfo))
+    public func send(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+        .init(from: session.transferUserInfo(userInfo.mapKeys()))
     }
 }
 
@@ -111,15 +109,7 @@ extension WatchService {
     
     func didReceiveApplicationContextHandler(_ notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
-        self.applicationContext = userInfo.mapKeyToString()
-    }
-}
-
-extension Dictionary where Key == AnyHashable {
-    func mapKeyToString() -> Dictionary<String, Value> {
-        reduce(into: [:]) { (partialResult, dictionary) in
-            partialResult["\(dictionary.key)"] = dictionary.value
-        }
+        self.applicationContext = userInfo.mapKeys()
     }
 }
 
@@ -130,5 +120,31 @@ fileprivate extension CommunicationInfo {
             userInfo: info.userInfo,
             isTransferring: info.isTransferring
         )
+    }
+}
+
+fileprivate extension Dictionary where Key == CommunicationUserInfo {
+    func mapKeys() -> [String: Value]{
+        reduce(into: [String: Value]()) { partialResult, element in
+            partialResult[element.key.rawValue] = element.value
+        }
+    }
+}
+
+fileprivate extension Dictionary where Key == String {
+    func mapKeys() -> [CommunicationUserInfo: Value]{
+        reduce(into: [CommunicationUserInfo: Value]()) { partialResult, element in
+            guard let key = CommunicationUserInfo(rawValue: element.key) else { return }
+            partialResult[key] = element.value
+        }
+    }
+}
+
+fileprivate extension Dictionary where Key == AnyHashable {
+    func mapKeys() -> [CommunicationUserInfo: Value]{
+        reduce(into: [CommunicationUserInfo: Value]()) { partialResult, element in
+            guard let key = CommunicationUserInfo(rawValue: "\(element.key)") else { return }
+            partialResult[key] = element.value
+        }
     }
 }

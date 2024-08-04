@@ -8,8 +8,8 @@ import CommunicationKitInterface
 public protocol PhoneServiceTypeStubbing {
     var currentState_returnValue: CommunicationState { get set }
     var isReachable_returnValue: Bool { get set }
-    var applicationContext_returnValue: [String : Any] { get set }
-    var receivedApplicationContext_returnValue: [String : Any] { get set }
+    var applicationContext_returnValue: [CommunicationUserInfo : Any] { get set }
+    var receivedApplicationContext_returnValue: [CommunicationUserInfo : Any] { get set }
     var isPaired_returnValue: Bool { get set }
     var watchDirectoryUrl_returnValue: URL? { get set }
     var isWatchAppInstalled_returnValue: Bool { get set }
@@ -48,7 +48,7 @@ public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
         }
     }
     private var isReachable_returnValues: [Bool] = []
-    public var applicationContext_returnValue: [String : Any] {
+    public var applicationContext_returnValue: [CommunicationUserInfo : Any] {
         get {
             if applicationContext_returnValues.isEmpty {
                 .default
@@ -60,8 +60,8 @@ public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
             applicationContext_returnValues.append(newValue)
         }
     }
-    private var applicationContext_returnValues: [[String : Any]] = []
-    public var receivedApplicationContext_returnValue: [String : Any] {
+    private var applicationContext_returnValues: [[CommunicationUserInfo : Any]] = []
+    public var receivedApplicationContext_returnValue: [CommunicationUserInfo : Any] {
         get {
             if receivedApplicationContext_returnValues.isEmpty {
                 .default
@@ -73,7 +73,7 @@ public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
             receivedApplicationContext_returnValues.append(newValue)
         }
     }
-    private var receivedApplicationContext_returnValues: [[String : Any]] = []
+    private var receivedApplicationContext_returnValues: [[CommunicationUserInfo : Any]] = []
     public var isPaired_returnValue: Bool {
         get {
             if isPaired_returnValues.isEmpty {
@@ -206,11 +206,11 @@ extension PhoneServiceTypeStub: PhoneServiceType {
         get { isReachable_returnValue }
         set { isReachable_returnValue = newValue }
     }
-    public var applicationContext: [String : Any] { 
+    public var applicationContext: [CommunicationUserInfo : Any] { 
         get { applicationContext_returnValue }
         set { applicationContext_returnValue = newValue }
     }
-    public var receivedApplicationContext: [String : Any] { 
+    public var receivedApplicationContext: [CommunicationUserInfo : Any] { 
         get { receivedApplicationContext_returnValue }
         set { receivedApplicationContext_returnValue = newValue }
     }
@@ -241,23 +241,23 @@ extension PhoneServiceTypeStub: PhoneServiceType {
     public func activate() -> Void {
     }
 
-    public func update(applicationContext: [String : Any]) throws -> Void {
+    public func update(applicationContext: [CommunicationUserInfo : Any]) throws -> Void {
         if let updateApplicationContext_returnValue {
             throw updateApplicationContext_returnValue
         }
     }
 
-    public func send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?) -> Void {
+    public func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func send(messageData data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) -> Void {
+    public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func transferComplication(userInfo: [String : Any]) -> CommunicationInfo {
+    public func transferComplication(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
         transferComplicationUserInfo_returnValue
     }
 
-    public func transfer(userInfo: [String : Any]) -> CommunicationInfo {
+    public func transfer(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
         transferUserInfo_returnValue
     }
 

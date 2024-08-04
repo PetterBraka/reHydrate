@@ -27,7 +27,7 @@ let package = Package(
         .target(
             name: "CommunicationKit",
             dependencies: ["CommunicationKitInterface"],
-            path: "Source"
+            path: "Sources"
         ),
         .target(
             name: "CommunicationKitInterface",

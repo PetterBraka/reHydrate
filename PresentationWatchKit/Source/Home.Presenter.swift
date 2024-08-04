@@ -198,10 +198,10 @@ private extension Screen.Home.Presenter {
               engine.watchService.currentState == .activated
         else { return }
         let today = await getToday()
-        let message: [String: Any] = [
-            "today": today
+        let message: [CommunicationUserInfo: Any] = [
+            .day: today
         ]
-        engine.watchService.send(message: message, replyHandler: nil) { [weak self] error in
+        engine.watchService.send(message: message) { [weak self] error in
             self?.engine.logger.error("Failed sending \(message) to iOS device", error: error)
         }
     }

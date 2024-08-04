@@ -10,8 +10,8 @@ import Foundation
 public protocol PhoneServiceType {
     var currentState: CommunicationState { get set }
     var isReachable: Bool { get set }
-    var applicationContext: [String : Any] { get set }
-    var receivedApplicationContext: [String : Any] { get set }
+    var applicationContext: [CommunicationUserInfo : Any] { get set }
+    var receivedApplicationContext: [CommunicationUserInfo : Any] { get set }
     var isPaired: Bool { get set }
     var watchDirectoryUrl: URL? { get set }
     var isWatchAppInstalled: Bool { get set }
@@ -20,9 +20,9 @@ public protocol PhoneServiceType {
     
     func isSupported() -> Bool
     func activate()
-    func update(applicationContext: [String : Any]) throws
-    func send(message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?)
-    func send(messageData data: Data, replyHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?)
-    func transferComplication(userInfo: [String : Any]) -> CommunicationInfo
-    func transfer(userInfo: [String : Any]) -> CommunicationInfo
+    func update(applicationContext: [CommunicationUserInfo : Any]) throws
+    func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?)
+    func send(messageData data: Data, errorHandler: ((Error) -> Void)?)
+    func transferComplication(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo
+    func transfer(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo
 }
