@@ -73,7 +73,7 @@ extension Screen.Home {
         
         private func sync() async {
             let unit = getUnit()
-            let today = await getToday()
+            let today = await engine.dayService.getToday()
             let drinks = await getDrinks()
             updateViewModel(
                 consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
@@ -122,10 +122,6 @@ private extension UnitModel {
 
 // MARK: Day
 private extension Screen.Home.Presenter {
-    func getToday() async -> Day {
-        await engine.dayService.getToday()
-    }
-    
     func add(drink: Home.ViewModel.Drink) async {
         do {
             let consumed = try await engine.dayService.add(drink: .init(from: drink))
@@ -197,8 +193,8 @@ private extension Screen.Home.Presenter {
         guard engine.watchService.isSupported(),
               engine.watchService.currentState == .activated
         else { return }
-        let today = await getToday()
-        let message: [CommunicationUserInfo: Any] = [
+        let today = await engine.dayService.getToday()
+        let message: [CommunicationUserInfo: Codable] = [
             .day: today
         ]
         engine.watchService.send(message: message) { [weak self] error in
@@ -228,7 +224,7 @@ private extension Screen.Home.Presenter {
     }
     
     func processPhone(notification: Notification) {
-        guard let phoneInfo = notification.userInfo as? [CommunicationUserInfo: Any] else {
+        guard let phoneInfo = notification.userInfo?.mapKeys() else {
             notificationCenter.post(name: .init("NotificationProcessed"), object: self)
             return
         }
@@ -249,7 +245,8 @@ private extension Screen.Home.Presenter {
     
     func processUnit(fromPhoneInfo phoneInfo: [CommunicationUserInfo: Any]) -> UnitModel {
         let unitSystem: UnitSystem
-        if let phoneUnitSystem = phoneInfo[.unitSystem] as? UnitSystem {
+        if let data = phoneInfo[.unitSystem] as? Data,
+           let phoneUnitSystem = try? JSONDecoder().decode(UnitSystem.self, from: data) {
             unitSystem = phoneUnitSystem
             engine.unitService.set(unitSystem: phoneUnitSystem)
         } else {
@@ -259,8 +256,9 @@ private extension Screen.Home.Presenter {
     }
     
     func processDay(fromPhoneInfo phoneInfo: [CommunicationUserInfo: Any]) async -> Day {
-        let watchToday = await getToday()
-        guard let phoneDay = phoneInfo[.day] as? Day,
+        let watchToday = await engine.dayService.getToday()
+        guard let data = phoneInfo[.day] as? Data,
+              let phoneDay = try? JSONDecoder().decode(Day.self, from: data),
               engine.dateService.isDate(phoneDay.date, inSameDayAs: engine.dateService.now())
         else { return watchToday }
         
@@ -279,14 +277,16 @@ private extension Screen.Home.Presenter {
             _ = try? await engine.dayService.decrease(goal: abs(goalDiff))
         }
         
-        return phoneDay
+        return await engine.dayService.getToday()
     }
     
     func processDrinks(fromPhoneInfo phoneInfo: [CommunicationUserInfo: Any]) async -> [Drink] {
         var processedDrinks = [Drink]()
         let watchDrinks = await getDrinks()
         
-        guard let phoneDrinks = phoneInfo[.drinks] as? [Drink], phoneDrinks != watchDrinks
+        guard let data = phoneInfo[.drinks] as? Data,
+              let phoneDrinks = try? JSONDecoder().decode([Drink].self, from: data),
+              phoneDrinks != watchDrinks
         else { return watchDrinks }
         
         for phoneDrink in phoneDrinks {
@@ -300,5 +300,14 @@ private extension Screen.Home.Presenter {
             }
         }
         return processedDrinks
+    }
+}
+
+fileprivate extension Dictionary where Key == AnyHashable {
+    func mapKeys() -> [CommunicationUserInfo: Value]{
+        reduce(into: [CommunicationUserInfo: Value]()) { partialResult, element in
+            guard let key = CommunicationUserInfo(rawValue: "\(element.key)") else { return }
+            partialResult[key] = element.value
+        }
     }
 }

@@ -19,21 +19,21 @@ public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
         case isReachable
         case applicationContext
         case receivedApplicationContext
+        case remainingComplicationUserInfoTransfers
         case isPaired
         case watchDirectoryUrl
         case isWatchAppInstalled
         case isComplicationEnabled
-        case remainingComplicationUserInfoTransfers
     }
 
     public enum MethodCall {
         case isSupported
         case activate
-        case update(applicationContext: [CommunicationUserInfo : Any])
-        case send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?)
+        case update(applicationContext: [CommunicationUserInfo : Codable])
+        case send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
         case send(data: Data, errorHandler: ((Error) -> Void)?)
-        case transferComplication(userInfo: [CommunicationUserInfo : Any])
-        case transfer(userInfo: [CommunicationUserInfo : Any])
+        case transferComplication(userInfo: [CommunicationUserInfo : Codable])
+        case transfer(userInfo: [CommunicationUserInfo : Codable])
     }
 
     public var variableLog: [VariableName] = []
@@ -52,19 +52,11 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
             variableLog.append(.currentState)
             return realObject.currentState
         }
-        set {
-            variableLog.append(.currentState)
-            realObject.currentState  = newValue
-        }
     }
     public var isReachable: Bool {
         get {
             variableLog.append(.isReachable)
             return realObject.isReachable
-        }
-        set {
-            variableLog.append(.isReachable)
-            realObject.isReachable  = newValue
         }
     }
     public var applicationContext: [CommunicationUserInfo : Any] {
@@ -72,19 +64,17 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
             variableLog.append(.applicationContext)
             return realObject.applicationContext
         }
-        set {
-            variableLog.append(.applicationContext)
-            realObject.applicationContext  = newValue
-        }
     }
     public var receivedApplicationContext: [CommunicationUserInfo : Any] {
         get {
             variableLog.append(.receivedApplicationContext)
             return realObject.receivedApplicationContext
         }
-        set {
-            variableLog.append(.receivedApplicationContext)
-            realObject.receivedApplicationContext  = newValue
+    }
+    public var remainingComplicationUserInfoTransfers: Int {
+        get {
+            variableLog.append(.remainingComplicationUserInfoTransfers)
+            return realObject.remainingComplicationUserInfoTransfers
         }
     }
     public var isPaired: Bool {
@@ -127,16 +117,6 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
             realObject.isComplicationEnabled  = newValue
         }
     }
-    public var remainingComplicationUserInfoTransfers: Int {
-        get {
-            variableLog.append(.remainingComplicationUserInfoTransfers)
-            return realObject.remainingComplicationUserInfoTransfers
-        }
-        set {
-            variableLog.append(.remainingComplicationUserInfoTransfers)
-            realObject.remainingComplicationUserInfoTransfers  = newValue
-        }
-    }
     public func isSupported() -> Bool {
         methodLog.append(.isSupported)
         return realObject.isSupported()
@@ -145,11 +125,11 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
         methodLog.append(.activate)
         realObject.activate()
     }
-    public func update(applicationContext: [CommunicationUserInfo : Any]) throws -> Void {
+    public func update(applicationContext: [CommunicationUserInfo : Codable]) throws -> Void {
         methodLog.append(.update(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
-    public func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?) -> Void {
+    public func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
         methodLog.append(.send(message: message, errorHandler: errorHandler))
         realObject.send(message: message, errorHandler: errorHandler)
     }
@@ -157,11 +137,11 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
         methodLog.append(.send(data: data, errorHandler: errorHandler))
         realObject.send(messageData: data, errorHandler: errorHandler)
     }
-    public func transferComplication(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func transferComplication(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         methodLog.append(.transferComplication(userInfo: userInfo))
         return realObject.transferComplication(userInfo: userInfo)
     }
-    public func transfer(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func transfer(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         methodLog.append(.transfer(userInfo: userInfo))
         return realObject.transfer(userInfo: userInfo)
     }

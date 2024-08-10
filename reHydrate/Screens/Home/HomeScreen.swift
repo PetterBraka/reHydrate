@@ -149,7 +149,8 @@ struct HomeScreen: View {
                     formatter.dateFormat = "EEEE - dd MMM"
                     formatter.locale = .current
                     return formatter
-                }()
+                }(),
+                notificationCenter: .default
             )
         )
     )

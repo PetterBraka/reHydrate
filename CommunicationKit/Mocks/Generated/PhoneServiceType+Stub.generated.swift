@@ -10,11 +10,11 @@ public protocol PhoneServiceTypeStubbing {
     var isReachable_returnValue: Bool { get set }
     var applicationContext_returnValue: [CommunicationUserInfo : Any] { get set }
     var receivedApplicationContext_returnValue: [CommunicationUserInfo : Any] { get set }
+    var remainingComplicationUserInfoTransfers_returnValue: Int { get set }
     var isPaired_returnValue: Bool { get set }
     var watchDirectoryUrl_returnValue: URL? { get set }
     var isWatchAppInstalled_returnValue: Bool { get set }
     var isComplicationEnabled_returnValue: Bool { get set }
-    var remainingComplicationUserInfoTransfers_returnValue: Int { get set }
     var isSupported_returnValue: Bool { get set }
     var updateApplicationContext_returnValue: Error? { get set }
     var transferComplicationUserInfo_returnValue: CommunicationInfo { get set }
@@ -74,6 +74,19 @@ public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
         }
     }
     private var receivedApplicationContext_returnValues: [[CommunicationUserInfo : Any]] = []
+    public var remainingComplicationUserInfoTransfers_returnValue: Int {
+        get {
+            if remainingComplicationUserInfoTransfers_returnValues.isEmpty {
+                .default
+            } else {
+                remainingComplicationUserInfoTransfers_returnValues.removeFirst()
+            }
+        }
+        set {
+            remainingComplicationUserInfoTransfers_returnValues.append(newValue)
+        }
+    }
+    private var remainingComplicationUserInfoTransfers_returnValues: [Int] = []
     public var isPaired_returnValue: Bool {
         get {
             if isPaired_returnValues.isEmpty {
@@ -128,19 +141,6 @@ public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
         }
     }
     private var isComplicationEnabled_returnValues: [Bool] = []
-    public var remainingComplicationUserInfoTransfers_returnValue: Int {
-        get {
-            if remainingComplicationUserInfoTransfers_returnValues.isEmpty {
-                .default
-            } else {
-                remainingComplicationUserInfoTransfers_returnValues.removeFirst()
-            }
-        }
-        set {
-            remainingComplicationUserInfoTransfers_returnValues.append(newValue)
-        }
-    }
-    private var remainingComplicationUserInfoTransfers_returnValues: [Int] = []
     public var isSupported_returnValue: Bool {
         get {
             if isSupported_returnValues.isEmpty {
@@ -198,22 +198,11 @@ public final class PhoneServiceTypeStub: PhoneServiceTypeStubbing {
 }
 
 extension PhoneServiceTypeStub: PhoneServiceType {
-    public var currentState: CommunicationState { 
-        get { currentState_returnValue }
-        set { currentState_returnValue = newValue }
-    }
-    public var isReachable: Bool { 
-        get { isReachable_returnValue }
-        set { isReachable_returnValue = newValue }
-    }
-    public var applicationContext: [CommunicationUserInfo : Any] { 
-        get { applicationContext_returnValue }
-        set { applicationContext_returnValue = newValue }
-    }
-    public var receivedApplicationContext: [CommunicationUserInfo : Any] { 
-        get { receivedApplicationContext_returnValue }
-        set { receivedApplicationContext_returnValue = newValue }
-    }
+    public var currentState: CommunicationState { currentState_returnValue }
+    public var isReachable: Bool { isReachable_returnValue }
+    public var applicationContext: [CommunicationUserInfo : Any] { applicationContext_returnValue }
+    public var receivedApplicationContext: [CommunicationUserInfo : Any] { receivedApplicationContext_returnValue }
+    public var remainingComplicationUserInfoTransfers: Int { remainingComplicationUserInfoTransfers_returnValue }
     public var isPaired: Bool { 
         get { isPaired_returnValue }
         set { isPaired_returnValue = newValue }
@@ -230,10 +219,6 @@ extension PhoneServiceTypeStub: PhoneServiceType {
         get { isComplicationEnabled_returnValue }
         set { isComplicationEnabled_returnValue = newValue }
     }
-    public var remainingComplicationUserInfoTransfers: Int { 
-        get { remainingComplicationUserInfoTransfers_returnValue }
-        set { remainingComplicationUserInfoTransfers_returnValue = newValue }
-    }
     public func isSupported() -> Bool {
         isSupported_returnValue
     }
@@ -241,23 +226,23 @@ extension PhoneServiceTypeStub: PhoneServiceType {
     public func activate() -> Void {
     }
 
-    public func update(applicationContext: [CommunicationUserInfo : Any]) throws -> Void {
+    public func update(applicationContext: [CommunicationUserInfo : Codable]) throws -> Void {
         if let updateApplicationContext_returnValue {
             throw updateApplicationContext_returnValue
         }
     }
 
-    public func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?) -> Void {
+    public func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
     }
 
     public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func transferComplication(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func transferComplication(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         transferComplicationUserInfo_returnValue
     }
 
-    public func transfer(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func transfer(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         transferUserInfo_returnValue
     }
 

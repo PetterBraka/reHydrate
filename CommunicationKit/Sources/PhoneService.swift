@@ -11,38 +11,44 @@ import CommunicationKitInterface
 public final class PhoneService: NSObject, PhoneServiceType {
     private var session: WCSession
     
-    public var currentState: CommunicationState
-    public var isReachable: Bool
-    public var applicationContext: [CommunicationUserInfo : Any]
-    public var receivedApplicationContext: [CommunicationUserInfo : Any]
+    public var currentState: CommunicationState {
+        .init(from: session.activationState)
+    }
+    public var isReachable: Bool {
+        session.isReachable
+    }
+    public var applicationContext: [CommunicationUserInfo : Any] {
+        session.applicationContext.mapKeys()
+    }
+    public var receivedApplicationContext: [CommunicationUserInfo : Any] {
+        session.receivedApplicationContext.mapKeys()
+    }
+    public var remainingComplicationUserInfoTransfers: Int {
+#if os(watchOS)
+        0
+#else
+        session.remainingComplicationUserInfoTransfers
+#endif
+    }
     
     public var isPaired: Bool
     public var watchDirectoryUrl: URL?
     public var isWatchAppInstalled: Bool
     public var isComplicationEnabled: Bool
-    public var remainingComplicationUserInfoTransfers: Int
     
     public init(session: WCSession) {
         self.session = session
-        
-        self.currentState = .init(from: session.activationState)
-        self.isReachable = session.isReachable
-        self.applicationContext = session.applicationContext.mapKeys()
-        self.receivedApplicationContext = session.receivedApplicationContext.mapKeys()
         
         self.isPaired = false
         self.watchDirectoryUrl = nil
         self.isWatchAppInstalled = false
         self.isComplicationEnabled = false
-        self.remainingComplicationUserInfoTransfers = 0
         
         super.init()
         self.didReceivedUpdates(from: session)
     }
     
     internal func didReceivedUpdates(from session: WCSession) {
-        self.currentState = .init(from: session.activationState)
-        self.isReachable = session.isReachable
         #if os(watchOS)
         #else
         self.isPaired = session.isPaired
@@ -62,12 +68,12 @@ extension PhoneService {
         session.activate()
     }
     
-    public func update(applicationContext: [CommunicationUserInfo : Any]) throws {
+    public func update(applicationContext: [CommunicationUserInfo : Codable]) throws {
         try session.updateApplicationContext(applicationContext.mapKeys())
     }
     
     public func send(
-        message: [CommunicationUserInfo : Any],
+        message: [CommunicationUserInfo : Codable],
         errorHandler: ((any Error) -> Void)? = nil
     ) {
         session.sendMessage(message.mapKeys(), replyHandler: nil, errorHandler: errorHandler)
@@ -80,7 +86,7 @@ extension PhoneService {
         session.sendMessageData(data, replyHandler: nil, errorHandler: errorHandler)
     }
     
-    public func transferComplication(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func transferComplication(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
 #if os(watchOS)
         .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false) {}
 #else
@@ -88,7 +94,7 @@ extension PhoneService {
 #endif
     }
     
-    public func transfer(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func transfer(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
 #if os(watchOS)
         .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false) {}
 #else
@@ -110,17 +116,18 @@ fileprivate extension CommunicationInfo {
 #endif
 }
 
-fileprivate extension Dictionary where Key == CommunicationUserInfo {
-    func mapKeys() -> [String: Value]{
-        reduce(into: [String: Value]()) { partialResult, element in
-            partialResult[element.key.rawValue] = element.value
+fileprivate extension Dictionary where Key == CommunicationUserInfo, Value == Codable {
+    func mapKeys() -> [String: Data]{
+        reduce(into: [String: Data]()) { partialResult, element in
+            let encoder = JSONEncoder()
+            partialResult[element.key.rawValue] = try? encoder.encode(element.value)
         }
     }
 }
 
 fileprivate extension Dictionary where Key == String {
-    func mapKeys() -> [CommunicationUserInfo: Value]{
-        reduce(into: [CommunicationUserInfo: Value]()) { partialResult, element in
+    func mapKeys() -> [CommunicationUserInfo: Any]{
+        reduce(into: [CommunicationUserInfo: Any]()) { partialResult, element in
             guard let key = CommunicationUserInfo(rawValue: element.key) else { return }
             partialResult[key] = element.value
         }
@@ -128,8 +135,8 @@ fileprivate extension Dictionary where Key == String {
 }
 
 fileprivate extension Dictionary where Key == AnyHashable {
-    func mapKeys() -> [CommunicationUserInfo: Value]{
-        reduce(into: [CommunicationUserInfo: Value]()) { partialResult, element in
+    func mapKeys() -> [CommunicationUserInfo: Any]{
+        reduce(into: [CommunicationUserInfo: Any]()) { partialResult, element in
             guard let key = CommunicationUserInfo(rawValue: "\(element.key)") else { return }
             partialResult[key] = element.value
         }

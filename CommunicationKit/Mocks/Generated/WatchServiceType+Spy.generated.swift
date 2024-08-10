@@ -25,10 +25,10 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
     public enum MethodCall {
         case isSupported
         case activate
-        case update(applicationContext: [CommunicationUserInfo : Any])
-        case send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?)
+        case update(applicationContext: [CommunicationUserInfo : Codable])
+        case send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
         case send(data: Data, errorHandler: ((Error) -> Void)?)
-        case send(userInfo: [CommunicationUserInfo : Any])
+        case send(userInfo: [CommunicationUserInfo : Codable])
     }
 
     public var variableLog: [VariableName] = []
@@ -47,19 +47,11 @@ extension WatchServiceTypeSpy: WatchServiceType {
             variableLog.append(.currentState)
             return realObject.currentState
         }
-        set {
-            variableLog.append(.currentState)
-            realObject.currentState  = newValue
-        }
     }
     public var isReachable: Bool {
         get {
             variableLog.append(.isReachable)
             return realObject.isReachable
-        }
-        set {
-            variableLog.append(.isReachable)
-            realObject.isReachable  = newValue
         }
     }
     public var applicationContext: [CommunicationUserInfo : Any] {
@@ -67,29 +59,17 @@ extension WatchServiceTypeSpy: WatchServiceType {
             variableLog.append(.applicationContext)
             return realObject.applicationContext
         }
-        set {
-            variableLog.append(.applicationContext)
-            realObject.applicationContext  = newValue
-        }
     }
     public var receivedApplicationContext: [CommunicationUserInfo : Any] {
         get {
             variableLog.append(.receivedApplicationContext)
             return realObject.receivedApplicationContext
         }
-        set {
-            variableLog.append(.receivedApplicationContext)
-            realObject.receivedApplicationContext  = newValue
-        }
     }
     public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool {
         get {
             variableLog.append(.iOSDeviceNeedsUnlockAfterRebootForReachability)
             return realObject.iOSDeviceNeedsUnlockAfterRebootForReachability
-        }
-        set {
-            variableLog.append(.iOSDeviceNeedsUnlockAfterRebootForReachability)
-            realObject.iOSDeviceNeedsUnlockAfterRebootForReachability  = newValue
         }
     }
     public func isSupported() -> Bool {
@@ -100,11 +80,11 @@ extension WatchServiceTypeSpy: WatchServiceType {
         methodLog.append(.activate)
         realObject.activate()
     }
-    public func update(applicationContext: [CommunicationUserInfo : Any]) throws -> Void {
+    public func update(applicationContext: [CommunicationUserInfo : Codable]) throws -> Void {
         methodLog.append(.update(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
-    public func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?) -> Void {
+    public func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
         methodLog.append(.send(message: message, errorHandler: errorHandler))
         realObject.send(message: message, errorHandler: errorHandler)
     }
@@ -112,7 +92,7 @@ extension WatchServiceTypeSpy: WatchServiceType {
         methodLog.append(.send(data: data, errorHandler: errorHandler))
         realObject.send(messageData: data, errorHandler: errorHandler)
     }
-    public func send(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func send(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         methodLog.append(.send(userInfo: userInfo))
         return realObject.send(userInfo: userInfo)
     }

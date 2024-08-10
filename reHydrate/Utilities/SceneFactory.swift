@@ -34,7 +34,8 @@ public final class SceneFactory: ObservableObject {
             formatter.dateFormat = "EEEE - dd MMM"
             formatter.locale = .current
             return formatter
-        }()
+        }(),
+        notificationCenter: notificationCenter
     )
     private lazy var settingsPresenter = Screen.Settings.Presenter(engine: engine, router: router)
     private lazy var historyPresenter = Screen.History.Presenter(

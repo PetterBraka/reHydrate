@@ -126,26 +126,11 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
 }
 
 extension WatchServiceTypeStub: WatchServiceType {
-    public var currentState: CommunicationState { 
-        get { currentState_returnValue }
-        set { currentState_returnValue = newValue }
-    }
-    public var isReachable: Bool { 
-        get { isReachable_returnValue }
-        set { isReachable_returnValue = newValue }
-    }
-    public var applicationContext: [CommunicationUserInfo : Any] { 
-        get { applicationContext_returnValue }
-        set { applicationContext_returnValue = newValue }
-    }
-    public var receivedApplicationContext: [CommunicationUserInfo : Any] { 
-        get { receivedApplicationContext_returnValue }
-        set { receivedApplicationContext_returnValue = newValue }
-    }
-    public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool { 
-        get { iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue }
-        set { iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue = newValue }
-    }
+    public var currentState: CommunicationState { currentState_returnValue }
+    public var isReachable: Bool { isReachable_returnValue }
+    public var applicationContext: [CommunicationUserInfo : Any] { applicationContext_returnValue }
+    public var receivedApplicationContext: [CommunicationUserInfo : Any] { receivedApplicationContext_returnValue }
+    public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool { iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue }
     public func isSupported() -> Bool {
         isSupported_returnValue
     }
@@ -153,19 +138,19 @@ extension WatchServiceTypeStub: WatchServiceType {
     public func activate() -> Void {
     }
 
-    public func update(applicationContext: [CommunicationUserInfo : Any]) throws -> Void {
+    public func update(applicationContext: [CommunicationUserInfo : Codable]) throws -> Void {
         if let updateApplicationContext_returnValue {
             throw updateApplicationContext_returnValue
         }
     }
 
-    public func send(message: [CommunicationUserInfo : Any], errorHandler: ((Error) -> Void)?) -> Void {
+    public func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
     }
 
     public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func send(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func send(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         sendUserInfo_returnValue
     }
 

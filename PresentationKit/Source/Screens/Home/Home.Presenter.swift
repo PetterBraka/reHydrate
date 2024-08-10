@@ -42,17 +42,24 @@ extension Screen.Home {
         }
         
         private let formatter: DateFormatter
+        private let notificationCenter: NotificationCenter
         
-        public init(engine: Engine, router: Router, formatter: DateFormatter) {
+        public init(engine: Engine, router: Router, formatter: DateFormatter, notificationCenter: NotificationCenter) {
             self.engine = engine
             self.router = router
             self.formatter = formatter
+            self.notificationCenter = notificationCenter
             viewModel = ViewModel(dateTitle: formatter.string(from: engine.dateService.now()),
                                   consumption: 0,
                                   goal: 0,
                                   smallUnit: .milliliters,
                                   largeUnit: .liters,
                                   drinks: [])
+            addObservers()
+        }
+        
+        deinit {
+            removeObservers()
         }
         
         public func perform(action: Home.Action) async {
@@ -333,7 +340,7 @@ private extension Screen.Home.Presenter {
 
 // MARK: - Phone communication
 private extension Screen.Home.Presenter {
-    func getPhoneData() async -> [CommunicationUserInfo: Any] {
+    func getPhoneData() async -> [CommunicationUserInfo: Codable] {
         await [
             .day: engine.dayService.getToday(),
             .drinks: getDrinks(),
@@ -353,10 +360,9 @@ private extension Screen.Home.Presenter {
     }
     
     func sendComplicationDataToWatch() async {
-        guard engine.phoneService.isSupported(),
-              engine.phoneService.currentState == .activated
-        else { return }
-        if engine.phoneService.remainingComplicationUserInfoTransfers > 0 {
+        if engine.phoneService.isSupported(),
+           engine.phoneService.currentState == .activated,
+           engine.phoneService.remainingComplicationUserInfoTransfers > 0 {
             let context = await getPhoneData()
             _ = engine.phoneService.transferComplication(userInfo: context)
         } else {
@@ -379,5 +385,68 @@ private extension Screen.Home.Presenter {
 
 // MARK: Watch communication
 private extension Screen.Home.Presenter {
+    func addObservers() {
+        notificationCenter.addObserver(forName: .Shared.didReceiveApplicationContext,
+                                       object: nil, queue: .current,
+                                       using: processWatch(notification:))
+        notificationCenter.addObserver(forName: .Shared.didReceiveMessage,
+                                       object: nil, queue: .current,
+                                       using: processWatch(notification:))
+        notificationCenter.addObserver(forName: .Shared.didReceiveUserInfo,
+                                       object: nil, queue: .current,
+                                       using: processWatch(notification:))
+    }
     
+    func removeObservers() {
+        notificationCenter.removeObserver(self, name: .Shared.didReceiveApplicationContext, object: nil)
+        notificationCenter.removeObserver(self, name: .Shared.didReceiveMessage, object: nil)
+        notificationCenter.removeObserver(self, name: .Shared.didReceiveUserInfo, object: nil)
+    }
+    
+    func processWatch(notification: Notification) {
+        guard let watchInfo = notification.userInfo?.mapKeys() else {
+            notificationCenter.post(name: .init("NotificationProcessed"), object: self)
+            return
+        }
+        Task {
+            let today = await processDay(fromWatchInfo: watchInfo)
+            
+            await updateViewModel(consumption: today.consumed, goal: today.goal)
+            notificationCenter.post(name: .init("NotificationProcessed"), object: self)
+        }
+    }
+    
+    func processDay(fromWatchInfo watchInfo: [CommunicationUserInfo: Any]) async -> Day {
+        let phoneToday = await engine.dayService.getToday()
+        guard let data = watchInfo[.day] as? Data,
+              let watchDay = try? JSONDecoder().decode(Day.self, from: data),
+              engine.dateService.isDate(watchDay.date, inSameDayAs: engine.dateService.now())
+        else { return phoneToday }
+        
+        let consumedDiff = watchDay.consumed - phoneToday.consumed
+        let drink = Drink(id: "phone-message", size: abs(consumedDiff), container: .medium)
+        if consumedDiff < 0 {
+            _ = try? await engine.dayService.add(drink: drink)
+        } else if consumedDiff > 0 {
+            _ = try? await engine.dayService.remove(drink: drink)
+        }
+        
+        let goalDiff = watchDay.goal - phoneToday.goal
+        if goalDiff < 0 {
+            _ = try? await engine.dayService.increase(goal: abs(goalDiff))
+        } else if goalDiff > 0 {
+            _ = try? await engine.dayService.decrease(goal: abs(goalDiff))
+        }
+        
+        return await engine.dayService.getToday()
+    }
+}
+
+fileprivate extension Dictionary where Key == AnyHashable {
+    func mapKeys() -> [CommunicationUserInfo: Value]{
+        reduce(into: [CommunicationUserInfo: Value]()) { partialResult, element in
+            guard let key = CommunicationUserInfo(rawValue: "\(element.key)") else { return }
+            partialResult[key] = element.value
+        }
+    }
 }

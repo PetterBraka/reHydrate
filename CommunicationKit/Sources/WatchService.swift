@@ -11,38 +11,29 @@ import CommunicationKitInterface
 public final class WatchService: NSObject, WatchServiceType {
     private var session: WCSession
     
-    public var currentState: CommunicationState
-    public var isReachable: Bool
-    public var applicationContext: [CommunicationUserInfo : Any]
-    public var receivedApplicationContext: [CommunicationUserInfo : Any]
-    public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool
-    private let notificationCenter = NotificationCenter.default
+    public var currentState: CommunicationState {
+        .init(from: session.activationState)
+    }
+    public var isReachable: Bool {
+        session.isReachable
+    }
+    public var applicationContext: [CommunicationUserInfo : Any] {
+        session.applicationContext.mapKeys()
+    }
+    public var receivedApplicationContext: [CommunicationUserInfo : Any] {
+        session.receivedApplicationContext.mapKeys()
+    }
+    public var iOSDeviceNeedsUnlockAfterRebootForReachability: Bool {
+#if os(watchOS)
+        session.iOSDeviceNeedsUnlockAfterRebootForReachability
+#else
+        false
+#endif
+    }
     
     public init(session: WCSession) {
         self.session = session
-        
-        self.currentState = .init(from: session.activationState)
-        self.isReachable = session.isReachable
-        self.applicationContext = session.applicationContext.mapKeys()
-        self.receivedApplicationContext = session.receivedApplicationContext.mapKeys()
-        
-        self.iOSDeviceNeedsUnlockAfterRebootForReachability = false
-        
         super.init()
-        self.didReceivedUpdates(from: session)
-        self.addDelegateObservers()
-    }
-    
-    deinit {
-        self.removeDelegateObservers()
-    }
-    
-    func didReceivedUpdates(from session: WCSession) {
-        self.currentState = .init(from: session.activationState)
-        self.isReachable = session.isReachable
-#if os(watchOS)
-        self.iOSDeviceNeedsUnlockAfterRebootForReachability = session.iOSDeviceNeedsUnlockAfterRebootForReachability
-#endif
     }
 }
 
@@ -55,12 +46,12 @@ extension WatchService {
         session.activate()
     }
     
-    public func update(applicationContext: [CommunicationUserInfo : Any]) throws {
+    public func update(applicationContext: [CommunicationUserInfo : Codable]) throws {
         try session.updateApplicationContext(applicationContext.mapKeys())
     }
     
     public func send(
-        message: [CommunicationUserInfo : Any],
+        message: [CommunicationUserInfo : Codable],
         errorHandler: ((any Error) -> Void)? = nil
     ) {
         session.sendMessage(message.mapKeys(), replyHandler: nil, errorHandler: errorHandler)
@@ -73,43 +64,8 @@ extension WatchService {
         session.sendMessageData(data, replyHandler: nil, errorHandler: errorHandler)
     }
     
-    public func send(userInfo: [CommunicationUserInfo : Any]) -> CommunicationInfo {
+    public func send(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         .init(from: session.transferUserInfo(userInfo.mapKeys()))
-    }
-}
-
-extension WatchService {
-    func addDelegateObservers() {
-        notificationCenter.addObserver(forName: .Shared.activation,
-                                       object: self, queue: .current,
-                                       using: activationHandler)
-        notificationCenter.addObserver(forName: .Shared.reachabilityDidChange,
-                                       object: self, queue: .current,
-                                       using: reachabilityDidChangeHandler)
-        notificationCenter.addObserver(forName: .Shared.didReceiveApplicationContext,
-                                       object: self, queue: .current,
-                                       using: didReceiveApplicationContextHandler)
-    }
-    
-    func removeDelegateObservers() {
-        notificationCenter.removeObserver(self, name:.Shared.activation, object: nil)
-        notificationCenter.removeObserver(self, name:.Shared.reachabilityDidChange, object: nil)
-        notificationCenter.removeObserver(self, name:.Shared.didReceiveApplicationContext, object: nil)
-    }
-    
-    func activationHandler(_ notification: Notification) {
-        guard let state = notification.userInfo?["activationState"] as? WCSessionActivationState else { return }
-        self.currentState = .init(from: state)
-    }
-    
-    func reachabilityDidChangeHandler(_ notification: Notification) {
-        guard let session = notification.userInfo?["session"] as? WCSession else { return }
-        self.isReachable = session.isReachable
-    }
-    
-    func didReceiveApplicationContextHandler(_ notification: Notification) {
-        guard let userInfo = notification.userInfo else { return }
-        self.applicationContext = userInfo.mapKeys()
     }
 }
 
@@ -124,10 +80,11 @@ fileprivate extension CommunicationInfo {
     }
 }
 
-fileprivate extension Dictionary where Key == CommunicationUserInfo {
+fileprivate extension Dictionary where Key == CommunicationUserInfo, Value == Codable {
     func mapKeys() -> [String: Value]{
         reduce(into: [String: Value]()) { partialResult, element in
-            partialResult[element.key.rawValue] = element.value
+            let encoder = JSONEncoder()
+            partialResult[element.key.rawValue] = try? encoder.encode(element.value)
         }
     }
 }
