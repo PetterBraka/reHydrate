@@ -60,7 +60,7 @@ extension Screen.Home {
             case .didAppear, .didBecomeActive:
                 await sync(didComplete: nil)
             case .didBackground:
-                await setAppContext()
+                await sendAppContextToWatch()
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
@@ -87,10 +87,10 @@ extension Screen.Home {
                 ))
             case let .didTapAddDrink(drink):
                 await addDrink(drink)
-                await sendMessageToWatch()
+                await sendComplicationDataToWatch()
             case let .didTapRemoveDrink(drink):
                 await removeDrink(drink)
-                await sendMessageToWatch()
+                await sendComplicationDataToWatch()
             }
         }
         
@@ -352,7 +352,7 @@ private extension Screen.Home.Presenter {
         }
     }
     
-    func sendWatchComplecationData() async {
+    func sendComplicationDataToWatch() async {
         guard engine.phoneService.isSupported(),
               engine.phoneService.currentState == .activated
         else { return }
@@ -360,11 +360,11 @@ private extension Screen.Home.Presenter {
             let context = await getPhoneData()
             _ = engine.phoneService.transferComplication(userInfo: context)
         } else {
-            await setAppContext()
+            await sendAppContextToWatch()
         }
     }
     
-    func setAppContext() async {
+    func sendAppContextToWatch() async {
         guard engine.phoneService.isSupported(),
               engine.phoneService.currentState == .activated
         else { return }
