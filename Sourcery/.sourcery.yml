@@ -111,6 +111,16 @@ configurations:
     args: 
       imports:
           - PortsInterface
+
+  - sources:
+      - ../EngineKit/Sources/PhoneComms
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/PhoneComms/Mocks/Generated/
+    args: 
+      imports: 
+          - PhoneCommsInterface
 # EnigneMocks
   - sources:
         - ../EngineKit/Sources/EngineMocks
