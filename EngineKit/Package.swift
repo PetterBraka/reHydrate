@@ -74,50 +74,69 @@ let package: Package = {
             .portsInterface,
             .portsMocks,
         ]
-            .with(targetsFrom: .dayService,
-                  sourceDependancy: [
+            .with(
+                targetsFrom: .dayService,
+                sourceDependancy: [
                     .interface(.unitService),
                     .interface(.userPreferenceService),
                     .portsInterface,
                     .dbKit
-                  ],
-                  interfaceDependancy: [
+                ],
+                interfaceDependancy: [
                     .interface(.drinkService)
-                  ])
-            .with(targetsFrom: .drinkService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .drinkService,
+                sourceDependancy: [
                     .portsInterface,
                     .dbKit,
                     .interface(.unitService),
                     .interface(.userPreferenceService)
-                  ])
-            .with(targetsFrom: .languageService, sourceDependancy: [
-                .interface(.userPreferenceService)
-            ])
-            .with(targetsFrom: .timelineService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .languageService,
+                sourceDependancy: [
+                    .interface(.userPreferenceService)
+                ]
+            )
+            .with(
+                targetsFrom: .timelineService,
+                sourceDependancy: [
                     .portsInterface,
                     .dbKit
-                  ],
-                  testsDependancy: [
+                ],
+                testsDependancy: [
                     .portsMocks
-                  ])
-            .with(targetsFrom: .unitService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .unitService,
+                sourceDependancy: [
                     .interface(.userPreferenceService)
-                  ])
-            .with(targetsFrom: .userPreferenceService)
-            .with(targetsFrom: .notificationService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .userPreferenceService
+            )
+            .with(
+                targetsFrom: .notificationService,
+                sourceDependancy: [
                     .interface(.dayService),
                     .interface(.userPreferenceService)
-                  ])
-            .with(targetsFrom: .appearanceService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .appearanceService,
+                sourceDependancy: [
                     .interface(.userPreferenceService),
                     .portsInterface
-                  ])
-            .with(targetsFrom: .dateService)
+                ]
+            )
+            .with(
+                targetsFrom: .dateService
+            )
     )
 }()
 
