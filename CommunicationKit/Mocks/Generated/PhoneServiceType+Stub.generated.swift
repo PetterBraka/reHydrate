@@ -203,22 +203,10 @@ extension PhoneServiceTypeStub: PhoneServiceType {
     public var applicationContext: [CommunicationUserInfo : Any] { applicationContext_returnValue }
     public var receivedApplicationContext: [CommunicationUserInfo : Any] { receivedApplicationContext_returnValue }
     public var remainingComplicationUserInfoTransfers: Int { remainingComplicationUserInfoTransfers_returnValue }
-    public var isPaired: Bool { 
-        get { isPaired_returnValue }
-        set { isPaired_returnValue = newValue }
-    }
-    public var watchDirectoryUrl: URL? { 
-        get { watchDirectoryUrl_returnValue }
-        set { watchDirectoryUrl_returnValue = newValue }
-    }
-    public var isWatchAppInstalled: Bool { 
-        get { isWatchAppInstalled_returnValue }
-        set { isWatchAppInstalled_returnValue = newValue }
-    }
-    public var isComplicationEnabled: Bool { 
-        get { isComplicationEnabled_returnValue }
-        set { isComplicationEnabled_returnValue = newValue }
-    }
+    public var isPaired: Bool { isPaired_returnValue }
+    public var watchDirectoryUrl: URL? { watchDirectoryUrl_returnValue }
+    public var isWatchAppInstalled: Bool { isWatchAppInstalled_returnValue }
+    public var isComplicationEnabled: Bool { isComplicationEnabled_returnValue }
     public func isSupported() -> Bool {
         isSupported_returnValue
     }

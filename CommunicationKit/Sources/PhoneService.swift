@@ -31,31 +31,15 @@ public final class PhoneService: NSObject, PhoneServiceType {
 #endif
     }
     
-    public var isPaired: Bool
-    public var watchDirectoryUrl: URL?
-    public var isWatchAppInstalled: Bool
-    public var isComplicationEnabled: Bool
+    public var isPaired: Bool { session.isPaired }
+    public var watchDirectoryUrl: URL? { session.watchDirectoryURL }
+    public var isWatchAppInstalled: Bool { session.isWatchAppInstalled }
+    public var isComplicationEnabled: Bool { session.isComplicationEnabled }
     
     public init(session: WCSession) {
         self.session = session
         
-        self.isPaired = false
-        self.watchDirectoryUrl = nil
-        self.isWatchAppInstalled = false
-        self.isComplicationEnabled = false
-        
         super.init()
-        self.didReceivedUpdates(from: session)
-    }
-    
-    internal func didReceivedUpdates(from session: WCSession) {
-        #if os(watchOS)
-        #else
-        self.isPaired = session.isPaired
-        self.watchDirectoryUrl = session.watchDirectoryURL
-        self.isWatchAppInstalled = session.isWatchAppInstalled
-        self.isComplicationEnabled = session.isComplicationEnabled
-        #endif
     }
 }
 

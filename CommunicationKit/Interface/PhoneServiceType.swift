@@ -13,10 +13,10 @@ public protocol PhoneServiceType {
     var applicationContext: [CommunicationUserInfo : Any] { get }
     var receivedApplicationContext: [CommunicationUserInfo : Any] { get }
     var remainingComplicationUserInfoTransfers: Int { get }
-    var isPaired: Bool { get set }
-    var watchDirectoryUrl: URL? { get set }
-    var isWatchAppInstalled: Bool { get set }
-    var isComplicationEnabled: Bool { get set }
+    var isPaired: Bool { get }
+    var watchDirectoryUrl: URL? { get }
+    var isWatchAppInstalled: Bool { get }
+    var isComplicationEnabled: Bool { get }
     
     func isSupported() -> Bool
     func activate()

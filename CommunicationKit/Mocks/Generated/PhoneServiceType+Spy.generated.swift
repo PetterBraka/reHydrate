@@ -82,19 +82,11 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
             variableLog.append(.isPaired)
             return realObject.isPaired
         }
-        set {
-            variableLog.append(.isPaired)
-            realObject.isPaired  = newValue
-        }
     }
     public var watchDirectoryUrl: URL? {
         get {
             variableLog.append(.watchDirectoryUrl)
             return realObject.watchDirectoryUrl
-        }
-        set {
-            variableLog.append(.watchDirectoryUrl)
-            realObject.watchDirectoryUrl  = newValue
         }
     }
     public var isWatchAppInstalled: Bool {
@@ -102,19 +94,11 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
             variableLog.append(.isWatchAppInstalled)
             return realObject.isWatchAppInstalled
         }
-        set {
-            variableLog.append(.isWatchAppInstalled)
-            realObject.isWatchAppInstalled  = newValue
-        }
     }
     public var isComplicationEnabled: Bool {
         get {
             variableLog.append(.isComplicationEnabled)
             return realObject.isComplicationEnabled
-        }
-        set {
-            variableLog.append(.isComplicationEnabled)
-            realObject.isComplicationEnabled  = newValue
         }
     }
     public func isSupported() -> Bool {
