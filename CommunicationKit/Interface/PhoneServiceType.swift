@@ -21,8 +21,8 @@ public protocol PhoneServiceType {
     func isSupported() -> Bool
     func activate()
     func update(applicationContext: [CommunicationUserInfo : Codable]) throws
-    func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
-    func send(messageData data: Data, errorHandler: ((Error) -> Void)?)
+    func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
+    func sendData(_ data: Data, errorHandler: ((Error) -> Void)?)
     func transferComplication(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo
     func transfer(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo
 }

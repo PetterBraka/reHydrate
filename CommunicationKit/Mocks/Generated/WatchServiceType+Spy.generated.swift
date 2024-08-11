@@ -26,9 +26,9 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
         case isSupported
         case activate
         case update(applicationContext: [CommunicationUserInfo : Codable])
-        case send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
-        case send(data: Data, errorHandler: ((Error) -> Void)?)
-        case send(userInfo: [CommunicationUserInfo : Codable])
+        case sendMessage(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
+        case sendData(data: Data, errorHandler: ((Error) -> Void)?)
+        case sendUserInfo(userInfo: [CommunicationUserInfo : Codable])
     }
 
     public var variableLog: [VariableName] = []
@@ -84,16 +84,16 @@ extension WatchServiceTypeSpy: WatchServiceType {
         methodLog.append(.update(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
-    public func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.send(message: message, errorHandler: errorHandler))
-        realObject.send(message: message, errorHandler: errorHandler)
+    public func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
+        methodLog.append(.sendMessage(message: message, errorHandler: errorHandler))
+        realObject.sendMessage(message, errorHandler: errorHandler)
     }
-    public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.send(data: data, errorHandler: errorHandler))
-        realObject.send(messageData: data, errorHandler: errorHandler)
+    public func sendData(_ data: Data, errorHandler: ((Error) -> Void)?) -> Void {
+        methodLog.append(.sendData(data: data, errorHandler: errorHandler))
+        realObject.sendData(data, errorHandler: errorHandler)
     }
-    public func send(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
-        methodLog.append(.send(userInfo: userInfo))
-        return realObject.send(userInfo: userInfo)
+    public func sendUserInfo(_ userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
+        methodLog.append(.sendUserInfo(userInfo: userInfo))
+        return realObject.sendUserInfo(userInfo)
     }
 }

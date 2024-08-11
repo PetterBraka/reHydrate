@@ -13,7 +13,7 @@ public protocol WatchServiceTypeStubbing {
     var iOSDeviceNeedsUnlockAfterRebootForReachability_returnValue: Bool { get set }
     var isSupported_returnValue: Bool { get set }
     var updateApplicationContext_returnValue: Error? { get set }
-    var sendUserInfo_returnValue: CommunicationInfo { get set }
+    var sendUserInfoUserInfo_returnValue: CommunicationInfo { get set }
 }
 
 public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
@@ -108,19 +108,19 @@ public final class WatchServiceTypeStub: WatchServiceTypeStubbing {
         }
     }
     private var updateApplicationContext_returnValues: [Error?] = []
-    public var sendUserInfo_returnValue: CommunicationInfo {
+    public var sendUserInfoUserInfo_returnValue: CommunicationInfo {
         get {
-            if sendUserInfo_returnValues.isEmpty {
+            if sendUserInfoUserInfo_returnValues.isEmpty {
                 .default
             } else {
-                sendUserInfo_returnValues.removeFirst()
+                sendUserInfoUserInfo_returnValues.removeFirst()
             }
         }
         set {
-            sendUserInfo_returnValues.append(newValue)
+            sendUserInfoUserInfo_returnValues.append(newValue)
         }
     }
-    private var sendUserInfo_returnValues: [CommunicationInfo] = []
+    private var sendUserInfoUserInfo_returnValues: [CommunicationInfo] = []
 
     public init() {}
 }
@@ -144,14 +144,14 @@ extension WatchServiceTypeStub: WatchServiceType {
         }
     }
 
-    public func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
+    public func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
+    public func sendData(_ data: Data, errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func send(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
-        sendUserInfo_returnValue
+    public func sendUserInfo(_ userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
+        sendUserInfoUserInfo_returnValue
     }
 
 }

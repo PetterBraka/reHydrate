@@ -50,21 +50,21 @@ extension WatchService {
         try session.updateApplicationContext(applicationContext.mapKeys())
     }
     
-    public func send(
-        message: [CommunicationUserInfo : Codable],
+    public func sendMessage(
+        _ message: [CommunicationUserInfo : Codable],
         errorHandler: ((any Error) -> Void)? = nil
     ) {
         session.sendMessage(message.mapKeys(), replyHandler: nil, errorHandler: errorHandler)
     }
     
-    public func send(
-        messageData data: Data,
+    public func sendData(
+        _ data: Data,
         errorHandler: ((any Error) -> Void)? = nil
     ) {
         session.sendMessageData(data, replyHandler: nil, errorHandler: errorHandler)
     }
     
-    public func send(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
+    public func sendUserInfo(_ userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         .init(from: session.transferUserInfo(userInfo.mapKeys()))
     }
 }

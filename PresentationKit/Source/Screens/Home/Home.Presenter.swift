@@ -354,7 +354,7 @@ private extension Screen.Home.Presenter {
         else { return }
         
         let message = await getPhoneData()
-        engine.phoneService.send(message: message) { [weak self] error in
+        engine.phoneService.sendMessage(message) { [weak self] error in
             self?.engine.logger.error("Failed sending \(message) to watchOS device", error: error)
         }
     }

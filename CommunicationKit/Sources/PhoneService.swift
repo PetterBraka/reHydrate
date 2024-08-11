@@ -31,10 +31,34 @@ public final class PhoneService: NSObject, PhoneServiceType {
 #endif
     }
     
-    public var isPaired: Bool { session.isPaired }
-    public var watchDirectoryUrl: URL? { session.watchDirectoryURL }
-    public var isWatchAppInstalled: Bool { session.isWatchAppInstalled }
-    public var isComplicationEnabled: Bool { session.isComplicationEnabled }
+    public var isPaired: Bool {
+#if os(watchOS)
+        false
+#else
+        session.isPaired
+#endif
+    }
+    public var watchDirectoryUrl: URL? {
+#if os(watchOS)
+        nil
+#else
+        session.watchDirectoryURL
+#endif
+    }
+    public var isWatchAppInstalled: Bool {
+#if os(watchOS)
+        false
+#else
+        session.isWatchAppInstalled
+#endif
+    }
+    public var isComplicationEnabled: Bool {
+#if os(watchOS)
+        false
+#else
+        session.isComplicationEnabled
+#endif
+    }
     
     public init(session: WCSession) {
         self.session = session
@@ -56,15 +80,15 @@ extension PhoneService {
         try session.updateApplicationContext(applicationContext.mapKeys())
     }
     
-    public func send(
-        message: [CommunicationUserInfo : Codable],
+    public func sendMessage(
+        _ message: [CommunicationUserInfo : Codable],
         errorHandler: ((any Error) -> Void)? = nil
     ) {
         session.sendMessage(message.mapKeys(), replyHandler: nil, errorHandler: errorHandler)
     }
     
-    public func send(
-        messageData data: Data,
+    public func sendData(
+        _ data: Data,
         errorHandler: ((any Error) -> Void)? = nil
     ) {
         session.sendMessageData(data, replyHandler: nil, errorHandler: errorHandler)
@@ -123,6 +147,17 @@ fileprivate extension Dictionary where Key == AnyHashable {
         reduce(into: [CommunicationUserInfo: Any]()) { partialResult, element in
             guard let key = CommunicationUserInfo(rawValue: "\(element.key)") else { return }
             partialResult[key] = element.value
+        }
+    }
+}
+
+extension CommunicationState {
+    public init(from state: WCSessionActivationState) {
+        switch state {
+        case .activated: self = .activated
+        case .inactive: self = .inactive
+        case .notActivated: self = .notActivated
+        @unknown default: self = .unowned
         }
     }
 }

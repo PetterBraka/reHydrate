@@ -220,10 +220,10 @@ extension PhoneServiceTypeStub: PhoneServiceType {
         }
     }
 
-    public func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
+    public func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
     }
 
-    public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
+    public func sendData(_ data: Data, errorHandler: ((Error) -> Void)?) -> Void {
     }
 
     public func transferComplication(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {

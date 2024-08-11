@@ -197,7 +197,7 @@ private extension Screen.Home.Presenter {
         let message: [CommunicationUserInfo: Codable] = [
             .day: today
         ]
-        engine.watchService.send(message: message) { [weak self] error in
+        engine.watchService.sendMessage(message) { [weak self] error in
             self?.engine.logger.error("Failed sending \(message) to iOS device", error: error)
         }
     }

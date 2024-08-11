@@ -17,7 +17,7 @@ public protocol WatchServiceType {
     func isSupported() -> Bool
     func activate()
     func update(applicationContext: [CommunicationUserInfo : Codable]) throws
-    func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
-    func send(messageData data: Data, errorHandler: ((Error) -> Void)?)
-    func send(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo
+    func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
+    func sendData(_ data: Data, errorHandler: ((Error) -> Void)?)
+    func sendUserInfo(_ userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo
 }

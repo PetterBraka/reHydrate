@@ -30,8 +30,8 @@ public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
         case isSupported
         case activate
         case update(applicationContext: [CommunicationUserInfo : Codable])
-        case send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
-        case send(data: Data, errorHandler: ((Error) -> Void)?)
+        case sendMessage(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
+        case sendData(data: Data, errorHandler: ((Error) -> Void)?)
         case transferComplication(userInfo: [CommunicationUserInfo : Codable])
         case transfer(userInfo: [CommunicationUserInfo : Codable])
     }
@@ -113,13 +113,13 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
         methodLog.append(.update(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
-    public func send(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.send(message: message, errorHandler: errorHandler))
-        realObject.send(message: message, errorHandler: errorHandler)
+    public func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
+        methodLog.append(.sendMessage(message: message, errorHandler: errorHandler))
+        realObject.sendMessage(message, errorHandler: errorHandler)
     }
-    public func send(messageData data: Data, errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.send(data: data, errorHandler: errorHandler))
-        realObject.send(messageData: data, errorHandler: errorHandler)
+    public func sendData(_ data: Data, errorHandler: ((Error) -> Void)?) -> Void {
+        methodLog.append(.sendData(data: data, errorHandler: errorHandler))
+        realObject.sendData(data, errorHandler: errorHandler)
     }
     public func transferComplication(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
         methodLog.append(.transferComplication(userInfo: userInfo))
