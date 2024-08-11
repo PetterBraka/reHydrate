@@ -141,6 +141,10 @@ let package: Package = {
                 targetsFrom: .phoneComms,
                 sourceDependancy: [.communicationInterface]
             )
+            .with(
+                targetsFrom: .watchComms,
+                sourceDependancy: [.communicationInterface]
+            )
     )
 }()
 
@@ -179,6 +183,7 @@ enum Feature: String {
     case notificationService = "NotificationService"
     case appearanceService = "AppearanceService"
     case phoneComms = "PhoneComms"
+    case watchComms = "WatchComms"
 }
 
 extension Feature {
