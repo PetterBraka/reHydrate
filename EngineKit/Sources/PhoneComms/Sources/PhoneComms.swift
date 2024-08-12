@@ -86,11 +86,14 @@ private extension PhoneComms {
     }
     
     func getPhoneData() async -> [CommunicationUserInfo: Codable] {
-        await [
+        var data: [CommunicationUserInfo: Codable] = await [
             .day: engine.dayService.getToday(),
-            .drinks: try? engine.drinksService.getSaved(),
             .unitSystem: engine.unitService.getUnitSystem()
         ]
+        if let drinks = try? await engine.drinksService.getSaved(){
+            data[.drinks] = drinks
+        }
+        return data
     }
     
     func sendMessage(_ data: [CommunicationUserInfo: Codable]) async {
