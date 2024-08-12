@@ -22,15 +22,16 @@ import CommunicationKitInterface
 @testable import PhoneComms
 
 final class PhoneCommsTests: XCTestCase {
-    let notificationCenter = NotificationCenter.default
+    private let timeout: TimeInterval = 0.5
+    private var notificationCenter: NotificationCenter!
     
-    var sut: PhoneComms!
+    private var sut: PhoneComms!
     
-    var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
-    var dayService: (stub: DayServiceTypeStubbing, spy: DayServiceTypeSpying)!
-    var drinksService: (stub: DrinkServiceTypeStubbing, spy: DrinkServiceTypeSpying)!
-    var unitService: (stub: UnitServiceTypeStubbing, spy: UnitServiceTypeSpying)!
-    var phoneService: (stub: PhoneServiceTypeStubbing, spy: PhoneServiceTypeSpying)!
+    private var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
+    private var dayService: (stub: DayServiceTypeStubbing, spy: DayServiceTypeSpying)!
+    private var drinksService: (stub: DrinkServiceTypeStubbing, spy: DrinkServiceTypeSpying)!
+    private var unitService: (stub: UnitServiceTypeStubbing, spy: UnitServiceTypeSpying)!
+    private var phoneService: (stub: PhoneServiceTypeStubbing, spy: PhoneServiceTypeSpying)!
     
     override func setUp() {
         let engine = EngineMocks()
@@ -39,6 +40,7 @@ final class PhoneCommsTests: XCTestCase {
         drinksService = engine.makeDrinksService()
         unitService = engine.makeUnitService()
         phoneService = engine.makePhoneService()
+        notificationCenter = NotificationCenter()
         
         sut = PhoneComms(engine: engine, notificationCenter: notificationCenter)
     }
@@ -501,6 +503,183 @@ final class PhoneCommsTests: XCTestCase {
             [.isSupported, .sendMessage(message: [.day: day, .unitSystem: unitSystem], errorHandler: nil)]
         )
     }
+    
+    func test_addObserver_didReceiveApplicationContext() async {
+        phoneService.stub.isSupported_returnValue = true
+        phoneService.stub.currentState_returnValue = .activated
+        phoneService.stub.isPaired_returnValue = true
+        phoneService.stub.isWatchAppInstalled_returnValue = true
+        phoneService.stub.isComplicationEnabled_returnValue = true
+        phoneService.stub.remainingComplicationUserInfoTransfers_returnValue = 10
+        
+        let unitSystem = UnitSystem.metric
+        let day = Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5)
+        let drinks = [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
+        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
+            .unitSystem : unitSystem,
+            .day : day,
+            .drinks : drinks
+        ]
+        
+        let expectation = expectation(description: "didReceiveApplicationContext - Should trigger update")
+        sut.addObserver {
+            expectation.fulfill()
+        }
+        
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: nil, userInfo: expectedUserInfo)
+
+        await fulfillment(of: [expectation], timeout: timeout, enforceOrder: false)
+        XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .add(size: 300, container: .small), .add(size: 500, container: .medium)])
+    }
+    
+    func test_addObserver_didReceiveMessage() async {
+        phoneService.stub.isSupported_returnValue = true
+        phoneService.stub.currentState_returnValue = .activated
+        phoneService.stub.isPaired_returnValue = true
+        phoneService.stub.isWatchAppInstalled_returnValue = true
+        phoneService.stub.isComplicationEnabled_returnValue = true
+        phoneService.stub.remainingComplicationUserInfoTransfers_returnValue = 10
+        
+        let unitSystem = UnitSystem.metric
+        let day = Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5)
+        let drinks = [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
+        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
+            .unitSystem : unitSystem,
+            .day : day,
+            .drinks : drinks
+        ]
+        
+        let expectation = expectation(description: "didReceiveMessage - Should trigger update")
+        sut.addObserver {
+            expectation.fulfill()
+        }
+        
+        notificationCenter.post(name: .Shared.didReceiveMessage, object: nil, userInfo: expectedUserInfo)
+        
+        await fulfillment(of: [expectation], timeout: timeout, enforceOrder: false)
+        XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .add(size: 300, container: .small), .add(size: 500, container: .medium)])
+    }
+    
+    func test_addObserver_didReceiveUserInfo() async {
+        phoneService.stub.isSupported_returnValue = true
+        phoneService.stub.currentState_returnValue = .activated
+        phoneService.stub.isPaired_returnValue = true
+        phoneService.stub.isWatchAppInstalled_returnValue = true
+        phoneService.stub.isComplicationEnabled_returnValue = true
+        phoneService.stub.remainingComplicationUserInfoTransfers_returnValue = 10
+        
+        let unitSystem = UnitSystem.metric
+        let day = Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5)
+        let drinks = [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
+        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
+            .unitSystem : unitSystem,
+            .day : day,
+            .drinks : drinks
+        ]
+        
+        let expectation = expectation(description: "didReceiveUserInfo - Should trigger update")
+        sut.addObserver {
+            expectation.fulfill()
+        }
+        
+        notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo)
+        
+        await fulfillment(of: [expectation], timeout: timeout, enforceOrder: false)
+        XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .add(size: 300, container: .small), .add(size: 500, container: .medium)])
+    }
+    
+    func test_removeObserver_didReceiveApplicationContext() async {
+        phoneService.stub.isSupported_returnValue = true
+        phoneService.stub.currentState_returnValue = .activated
+        phoneService.stub.isPaired_returnValue = true
+        phoneService.stub.isWatchAppInstalled_returnValue = true
+        phoneService.stub.isComplicationEnabled_returnValue = true
+        phoneService.stub.remainingComplicationUserInfoTransfers_returnValue = 10
+        
+        let unitSystem = UnitSystem.metric
+        let day = Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5)
+        let drinks = [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
+        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
+            .unitSystem : unitSystem,
+            .day : day,
+            .drinks : drinks
+        ]
+        let message =  "didReceiveApplicationContext - didReceiveApplicationContext not trigger update"
+        let expectation = expectation(description: message)
+        expectation.isInverted = true
+        sut.addObserver {
+            XCTFail(message)
+        }
+        sut.removeObserver()
+        
+        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: nil, userInfo: expectedUserInfo)
+        
+        await fulfillment(of: [expectation], timeout: timeout, enforceOrder: false)
+    }
+    
+    func test_removeObserver_didReceiveMessage() async {
+        phoneService.stub.isSupported_returnValue = true
+        phoneService.stub.currentState_returnValue = .activated
+        phoneService.stub.isPaired_returnValue = true
+        phoneService.stub.isWatchAppInstalled_returnValue = true
+        phoneService.stub.isComplicationEnabled_returnValue = true
+        phoneService.stub.remainingComplicationUserInfoTransfers_returnValue = 10
+        
+        let unitSystem = UnitSystem.metric
+        let day = Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5)
+        let drinks = [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
+        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
+            .unitSystem : unitSystem,
+            .day : day,
+            .drinks : drinks
+        ]
+        let message =  "didReceiveMessage - Should not trigger update"
+        let expectation = expectation(description:message)
+        expectation.isInverted = true
+        sut.addObserver {
+            XCTFail(message)
+        }
+        sut.removeObserver()
+        
+        notificationCenter.post(name: .Shared.didReceiveMessage, object: nil, userInfo: expectedUserInfo)
+        
+        await fulfillment(of: [expectation], timeout: timeout, enforceOrder: false)
+    }
+    
+    func test_removeObserver_didReceiveUserInfo() async {
+        phoneService.stub.isSupported_returnValue = true
+        phoneService.stub.currentState_returnValue = .activated
+        phoneService.stub.isPaired_returnValue = true
+        phoneService.stub.isWatchAppInstalled_returnValue = true
+        phoneService.stub.isComplicationEnabled_returnValue = true
+        phoneService.stub.remainingComplicationUserInfoTransfers_returnValue = 10
+        
+        let unitSystem = UnitSystem.metric
+        let day = Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5)
+        let drinks = [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
+        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
+            .unitSystem : unitSystem,
+            .day : day,
+            .drinks : drinks
+        ]
+        let message = "didReceiveUserInfo - Should not trigger update"
+        let expectation = expectation(description: message)
+        expectation.isInverted = true
+        sut.addObserver {
+            XCTFail(message)
+        }
+        sut.removeObserver()
+        
+        notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo)
+        
+        await fulfillment(of: [expectation], timeout: timeout, enforceOrder: false)
+    }
 }
 
 extension PhoneServiceTypeSpy.MethodCall: Equatable {
@@ -553,8 +732,8 @@ extension PhoneServiceTypeSpy.MethodCall: CustomStringConvertible {
         case .isSupported: "isSupported"
         case .activate: "activate"
         case .update(let applicationContext): "update(\(applicationContext)"
-        case .sendMessage(let message, let errorHandler): "sendMessage(\(message), errorHandler)"
-        case .sendData(let data, let errorHandler): "sendData(\(data), errorHandler)"
+        case .sendMessage(let message, _): "sendMessage(\(message), errorHandler)"
+        case .sendData(let data, _): "sendData(\(data), errorHandler)"
         case .transferComplication(let userInfo): "transferComplication(\(userInfo)"
         case .transfer(let userInfo): "transfer(\(userInfo)"
         }
@@ -599,5 +778,73 @@ extension Day: CustomStringConvertible {
 extension Drink: CustomStringConvertible {
     public var description: String {
         "Drink(id: \(id), container: .\(container.rawValue), size: \(size))"
+    }
+}
+
+extension UnitServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.set(let unitSystem_lhs), .set(let unitSystem_rhs)):
+            unitSystem_lhs == unitSystem_rhs
+        case (.getUnitSystem, .getUnitSystem):
+            true
+        case (let .convert(value_lhs, fromUnit_lhs, toUnit_lhs), let .convert(value_rhs, fromUnit_rhs, toUnit_rhs)):
+            value_lhs == value_rhs &&
+            fromUnit_lhs == fromUnit_rhs &&
+            toUnit_lhs == toUnit_rhs
+        case (.getUnitSystem, .set), (.convert, .set),
+            (.set, .getUnitSystem), (.convert, .getUnitSystem),
+            (.set, .convert), (.getUnitSystem, .convert):
+            false
+        }
+    }
+}
+
+extension DayServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.getToday, .getToday):
+            true
+        case (.getDays(let dates_lhs), .getDays(let dates_rhs)):
+            dates_lhs == dates_rhs
+        case (.add(let drink_lhs), .add(let drink_rhs)):
+            drink_lhs == drink_rhs
+        case (.remove(let drink_lhs), .remove(let drink_rhs)):
+            drink_lhs == drink_rhs
+        case (.increase(let goal_lhs), .increase(let goal_rhs)):
+            goal_lhs == goal_rhs
+        case (.decrease(let goal_lhs), .decrease(let goal_rhs)):
+            goal_lhs == goal_rhs
+        case (.getDays, .getToday), (.add, .getToday), (.remove, .getToday), (.increase, .getToday), (.decrease, .getToday),
+            (.getToday, .getDays), (.add, .getDays), (.remove, .getDays), (.increase, .getDays), (.decrease, .getDays),
+            (.getToday, .add), (.getDays, .add), (.remove, .add), (.increase, .add), (.decrease, .add),
+            (.getToday, .remove), (.getDays, .remove), (.add, .remove), (.increase, .remove), (.decrease, .remove),
+            (.getToday, .increase), (.getDays, .increase), (.add, .increase), (.remove, .increase), (.decrease, .increase),
+            (.getToday, .decrease), (.getDays, .decrease), (.add, .decrease), (.remove, .decrease), (.increase, .decrease):
+            false
+        }
+    }
+}
+
+extension DrinkServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.add(let size_lhs, let container_lhs), .add(let size_rhs, let container_rhs)):
+            size_lhs == size_rhs &&
+            container_rhs == container_rhs
+        case (.edit(let size_lhs, let drink_lhs), .edit(let size_rhs, let drink_rhs)):
+            size_lhs == size_rhs &&
+            drink_lhs == drink_rhs
+        case (.remove(let container_lhs), .remove(let container_rhs)):
+            container_lhs == container_rhs
+        case (.getSaved, .getSaved), (.resetToDefault, .resetToDefault):
+            true
+        case (.edit, .add), (.remove, .add), (.getSaved, .add), (.resetToDefault, .add),
+            (.add, .edit), (.remove, .edit), (.getSaved, .edit), (.resetToDefault, .edit),
+            (.add, .remove), (.edit, .remove), (.getSaved, .remove), (.resetToDefault, .remove),
+            (.add, .getSaved), (.edit, .getSaved), (.remove, .getSaved), (.resetToDefault, .getSaved),
+            (.add, .resetToDefault), (.edit, .resetToDefault), (.remove, .resetToDefault), (.getSaved, .resetToDefault):
+            false
+        }
     }
 }
