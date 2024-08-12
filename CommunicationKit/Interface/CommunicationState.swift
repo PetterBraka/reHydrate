@@ -9,5 +9,5 @@ public enum CommunicationState: Sendable {
     case activated
     case inactive
     case notActivated
-    case unowned
+    case unknown
 }

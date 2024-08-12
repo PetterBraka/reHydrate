@@ -25,7 +25,7 @@ extension Dictionary where Key == CommunicationUserInfo, Value == Any {
 }
 
 extension CommunicationState {
-    static let `default`: Self = .unowned
+    static let `default`: Self = .unknown
 }
 
 extension CommunicationInfo {

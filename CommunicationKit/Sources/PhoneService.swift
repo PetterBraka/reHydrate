@@ -157,7 +157,7 @@ extension CommunicationState {
         case .activated: self = .activated
         case .inactive: self = .inactive
         case .notActivated: self = .notActivated
-        @unknown default: self = .unowned
+        @unknown default: self = .unknown
         }
     }
 }
