@@ -263,7 +263,9 @@ private extension Screen.Home.Presenter {
         else { return watchToday }
         
         let consumedDiff = phoneDay.consumed - watchToday.consumed
-        let drink = Drink(id: "phone-message", size: abs(consumedDiff), container: .medium)
+        let unitSystem = engine.unitService.getUnitSystem()
+        let size = engine.unitService.convert(abs(consumedDiff), from: .litres, to: unitSystem == .metric ? .millilitres : .ounces)
+        let drink = Drink(id: "phone-message", size: size, container: .medium)
         if consumedDiff < 0 {
             _ = try? await engine.dayService.add(drink: drink)
         } else if consumedDiff > 0 {
