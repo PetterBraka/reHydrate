@@ -135,49 +135,51 @@ private extension PhoneComms {
     }
     
     func process(notification: Notification) {
-        let watchInfo = notification.userInfo?.mapKeysAndValues()
+        guard let watchData = notification.userInfo?.mapKeysAndValues() else { return }
         Task {
-            await process(day: watchInfo?[.day])
-            await process(drinks: watchInfo?[.drinks])
-            process(unitSystem: watchInfo?[.unitSystem])
+            await process(day: watchData[.day])
+            await process(drinks: watchData[.drinks])
+            process(unitSystem: watchData[.unitSystem])
             
             updateBlock?()
         }
     }
     
     func process(day data: Data?) async {
-        let today = await engine.dayService.getToday()
-        
         guard let data,
-              let day = try? JSONDecoder().decode(Day.self, from: data),
-              engine.dateService.isDate(day.date, inSameDayAs: today.date)
-        else {
-            return
-        }
+              let day = try? JSONDecoder().decode(Day.self, from: data)
+        else { return }
+        
+        let today = await engine.dayService.getToday()
+        guard engine.dateService.isDate(day.date, inSameDayAs: today.date)
+        else { return }
         
         let consumedDiff = today.consumed - day.consumed
-        let size = engine.unitService.convert(abs(consumedDiff), from: .litres, to: .millilitres)
-        let drink = Drink(id: "watch-message", size: size, container: .medium)
-        if consumedDiff < 0 {
-            _ = try? await engine.dayService.add(drink: drink)
-        } else if consumedDiff > 0 {
-            _ = try? await engine.dayService.remove(drink: drink)
+        if consumedDiff != 0 {
+            let size = engine.unitService.convert(abs(consumedDiff), from: .litres, to: .millilitres)
+            let drink = Drink(id: "watch-message", size: size, container: .medium)
+            if consumedDiff < 0 {
+                _ = try? await engine.dayService.add(drink: drink)
+            } else if consumedDiff > 0 {
+                _ = try? await engine.dayService.remove(drink: drink)
+            }
         }
         
         let goalDiff = today.goal - day.goal
         if goalDiff < 0 {
-            _ = try? await engine.dayService.increase(goal: goalDiff)
+            _ = try? await engine.dayService.increase(goal: abs(goalDiff))
         } else if goalDiff > 0 {
             _ = try? await engine.dayService.decrease(goal: abs(goalDiff))
         }
     }
     
     func process(drinks data: Data?) async {
-        let drinks = try? await engine.drinksService.getSaved()
         guard let data,
-              let watchDrinks = try? JSONDecoder().decode([Drink].self, from: data),
-              watchDrinks != drinks
+              let watchDrinks = try? JSONDecoder().decode([Drink].self, from: data)
         else { return }
+        
+        let drinks = try? await engine.drinksService.getSaved()
+        guard watchDrinks != drinks else { return }
         
         for watchDrink in watchDrinks {
             if drinks?.contains(where: { $0.container == watchDrink.container }) == true {
