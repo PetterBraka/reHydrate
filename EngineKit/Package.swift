@@ -36,7 +36,7 @@ let package: Package = {
                     .source(.notificationService),
                     .source(.appearanceService),
                     .source(.dateService),
-                    .communicationInterface,
+                    .source(.phoneComms),
                 ]
             ),
             .target(
@@ -68,6 +68,7 @@ let package: Package = {
                         .mocks(.notificationService),
                         .mocks(.appearanceService),
                         .mocks(.dateService),
+                        .mocks(.phoneComms),
                     ]
                    ),
             .loggingService,

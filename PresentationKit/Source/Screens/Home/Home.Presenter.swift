@@ -13,7 +13,7 @@ import DrinkServiceInterface
 import PortsInterface
 import UnitServiceInterface
 import DateServiceInterface
-import CommunicationKitInterface
+import PhoneCommsInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
@@ -25,7 +25,7 @@ extension Screen.Home {
             HasHealthService &
             HasUnitService &
             HasDateService &
-            HasPhoneService
+            HasPhoneComms
         )
         public typealias Router = (
             HomeRoutable &
@@ -55,11 +55,11 @@ extension Screen.Home {
                                   smallUnit: .milliliters,
                                   largeUnit: .liters,
                                   drinks: [])
-            addObservers()
+            engine.phoneComms.removeObserver()
         }
         
         deinit {
-            removeObservers()
+            engine.phoneComms.removeObserver()
         }
         
         public func perform(action: Home.Action) async {
@@ -67,7 +67,7 @@ extension Screen.Home {
             case .didAppear, .didBecomeActive:
                 await sync(didComplete: nil)
             case .didBackground:
-                await sendAppContextToWatch()
+                await engine.phoneComms.sendDataToWatch()
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
@@ -94,10 +94,10 @@ extension Screen.Home {
                 ))
             case let .didTapAddDrink(drink):
                 await addDrink(drink)
-                await sendComplicationDataToWatch()
+                await engine.phoneComms.sendDataToWatch()
             case let .didTapRemoveDrink(drink):
                 await removeDrink(drink)
-                await sendComplicationDataToWatch()
+                await engine.phoneComms.sendDataToWatch()
             }
         }
         
@@ -334,119 +334,6 @@ private extension Screen.Home.Presenter {
         } catch {
             engine.logger.error("Couldn't get health data", error: error)
             return 0
-        }
-    }
-}
-
-// MARK: - Phone communication
-private extension Screen.Home.Presenter {
-    func getPhoneData() async -> [CommunicationUserInfo: Codable] {
-        await [
-            .day: engine.dayService.getToday(),
-            .drinks: getDrinks(),
-            .unitSystem: engine.unitService.getUnitSystem()
-        ]
-    }
-    
-    func sendMessageToWatch() async {
-        guard engine.phoneService.isSupported(),
-              engine.phoneService.isReachable
-        else { return }
-        
-        let message = await getPhoneData()
-        engine.phoneService.sendMessage(message) { [weak self] error in
-            self?.engine.logger.error("Failed sending \(message) to watchOS device", error: error)
-        }
-    }
-    
-    func sendComplicationDataToWatch() async {
-        if engine.phoneService.isSupported(),
-           engine.phoneService.currentState == .activated,
-           engine.phoneService.remainingComplicationUserInfoTransfers > 0 {
-            let context = await getPhoneData()
-            _ = engine.phoneService.transferComplication(userInfo: context)
-        } else {
-            await sendAppContextToWatch()
-        }
-    }
-    
-    func sendAppContextToWatch() async {
-        guard engine.phoneService.isSupported(),
-              engine.phoneService.currentState == .activated
-        else { return }
-        let context = await getPhoneData()
-        do {
-            try engine.phoneService.update(applicationContext: context)
-        } catch {
-            engine.logger.error("Failed updating context \(context) to watchOS device", error: error)
-        }
-    }
-}
-
-// MARK: Watch communication
-private extension Screen.Home.Presenter {
-    func addObservers() {
-        notificationCenter.addObserver(forName: .Shared.didReceiveApplicationContext,
-                                       object: nil, queue: .current,
-                                       using: processWatch(notification:))
-        notificationCenter.addObserver(forName: .Shared.didReceiveMessage,
-                                       object: nil, queue: .current,
-                                       using: processWatch(notification:))
-        notificationCenter.addObserver(forName: .Shared.didReceiveUserInfo,
-                                       object: nil, queue: .current,
-                                       using: processWatch(notification:))
-    }
-    
-    func removeObservers() {
-        notificationCenter.removeObserver(self, name: .Shared.didReceiveApplicationContext, object: nil)
-        notificationCenter.removeObserver(self, name: .Shared.didReceiveMessage, object: nil)
-        notificationCenter.removeObserver(self, name: .Shared.didReceiveUserInfo, object: nil)
-    }
-    
-    func processWatch(notification: Notification) {
-        guard let watchInfo = notification.userInfo?.mapKeys() else {
-            notificationCenter.post(name: .init("NotificationProcessed"), object: self)
-            return
-        }
-        Task {
-            let today = await processDay(fromWatchInfo: watchInfo)
-            
-            await updateViewModel(consumption: today.consumed, goal: today.goal)
-            notificationCenter.post(name: .init("NotificationProcessed"), object: self)
-        }
-    }
-    
-    func processDay(fromWatchInfo watchInfo: [CommunicationUserInfo: Any]) async -> Day {
-        let phoneToday = await engine.dayService.getToday()
-        guard let data = watchInfo[.day] as? Data,
-              let watchDay = try? JSONDecoder().decode(Day.self, from: data),
-              engine.dateService.isDate(watchDay.date, inSameDayAs: engine.dateService.now())
-        else { return phoneToday }
-        
-        let consumedDiff = watchDay.consumed - phoneToday.consumed
-        let drink = Drink(id: "phone-message", size: abs(consumedDiff), container: .medium)
-        if consumedDiff < 0 {
-            _ = try? await engine.dayService.add(drink: drink)
-        } else if consumedDiff > 0 {
-            _ = try? await engine.dayService.remove(drink: drink)
-        }
-        
-        let goalDiff = watchDay.goal - phoneToday.goal
-        if goalDiff < 0 {
-            _ = try? await engine.dayService.increase(goal: abs(goalDiff))
-        } else if goalDiff > 0 {
-            _ = try? await engine.dayService.decrease(goal: abs(goalDiff))
-        }
-        
-        return await engine.dayService.getToday()
-    }
-}
-
-fileprivate extension Dictionary where Key == AnyHashable {
-    func mapKeys() -> [CommunicationUserInfo: Value]{
-        reduce(into: [CommunicationUserInfo: Value]()) { partialResult, element in
-            guard let key = CommunicationUserInfo(rawValue: "\(element.key)") else { return }
-            partialResult[key] = element.value
         }
     }
 }
