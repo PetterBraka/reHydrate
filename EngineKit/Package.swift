@@ -42,7 +42,6 @@ let package: Package = {
             .target(
                 name: "WatchEngineKit",
                 dependencies: [
-                    .communicationInterface,
                     .loggingService,
                     .dbKit,
                     .source(.dayService),
@@ -51,6 +50,7 @@ let package: Package = {
                     .source(.unitService),
                     .source(.userPreferenceService),
                     .source(.dateService),
+                    .source(.watchComms),
                 ]
             ),
             .target(
@@ -69,6 +69,7 @@ let package: Package = {
                         .mocks(.appearanceService),
                         .mocks(.dateService),
                         .mocks(.phoneComms),
+                        .mocks(.watchComms),
                     ]
                    ),
             .loggingService,
