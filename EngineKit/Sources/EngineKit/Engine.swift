@@ -102,9 +102,4 @@ public final class Engine {
     public lazy var dateService: DateServiceType = DateService()
 }
 
-extension Engine: HasDayManagerService &
-HasConsumptionManagerService &
-HasDrinkManagerService &
-HasService &
-HasPorts &
-HasAppInfo {}
+extension Engine: HasService & HasPorts & HasAppInfo {}
