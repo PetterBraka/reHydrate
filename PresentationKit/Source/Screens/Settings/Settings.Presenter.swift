@@ -78,8 +78,7 @@ extension Screen.Settings {
                 await decreaseGoal()
                 await engine.phoneComms.sendDataToWatch()
             case let .didSetUnitSystem(system):
-                engine.unitService.set(unitSystem: .init(from: system))
-                await updateViewModel(isLoading: false, unitSystem: system)
+                await setUnitSystem(to: system)
                 await engine.phoneComms.sendDataToWatch()
             case .didSetReminders(let shouldEnable):
                 await updateViewModel(isLoading: true)
@@ -218,19 +217,13 @@ extension Screen.Settings.Presenter {
             let increment = 0.5
             let currentGoal = viewModel.goal
             let diffToNextHalf = currentGoal.roundToHalf(.up) - currentGoal
-            let incrementedGoal = if  diffToNextHalf > 0 && diffToNextHalf < increment {
+            let newGoal = if diffToNextHalf > 0 {
                 try await engine.dayService.increase(goal: diffToNextHalf)
             } else {
-                try await engine.dayService.increase(goal: 0.5)
+                try await engine.dayService.increase(goal: increment)
             }
             
-            let currentSystem = engine.unitService.getUnitSystem()
-            let newGoal = engine.unitService.convert(incrementedGoal.roundToHalf(.up), from: .litres,
-                                                     to: currentSystem == .metric ? .litres : .pint)
-            await updateViewModel(
-                isLoading: false, 
-                goal: newGoal
-            )
+            await updateViewModel(isLoading: false, goal: newGoal)
         } catch {
             engine.logger.error("Couldn't increase the goal", error: error)
         }
@@ -241,13 +234,13 @@ extension Screen.Settings.Presenter {
             let decrement = 0.5
             let oldGoal = viewModel.goal
             let diffToNextHalf = oldGoal - oldGoal.roundToHalf(.down)
-            let newGoal: Double
-            if diffToNextHalf > 0 && diffToNextHalf < decrement {
-                newGoal = try await engine.dayService.decrease(goal: diffToNextHalf)
+            let newGoal = if diffToNextHalf > 0 {
+                try await engine.dayService.decrease(goal: diffToNextHalf)
             } else {
-                newGoal = try await engine.dayService.decrease(goal: decrement)
+                try await engine.dayService.decrease(goal: decrement)
             }
-            await updateViewModel(isLoading: false, goal: newGoal.roundToHalf(.down))
+            
+            await updateViewModel(isLoading: false, goal: newGoal)
         } catch {
             engine.logger.error("Couldn't decrease the goal", error: error)
         }
@@ -255,6 +248,16 @@ extension Screen.Settings.Presenter {
 }
 
 // MARK: - Units
+extension Screen.Settings.Presenter {
+    func setUnitSystem(to newSystem: Settings.ViewModel.UnitSystem) async {
+        engine.unitService.set(unitSystem: .init(from: newSystem))
+        let previousUnit: UnitModel = viewModel.unitSystem == .metric ? .litres : .pint
+        let newUnit: UnitModel = newSystem == .metric ? .litres : .pint
+        let newGoal = engine.unitService.convert(viewModel.goal, from: previousUnit, to: newUnit)
+        await updateViewModel(isLoading: false, unitSystem: newSystem, goal: newGoal)
+    }
+}
+
 extension Settings.ViewModel.UnitSystem {
     init(from system: UnitServiceInterface.UnitSystem) {
         switch system {
