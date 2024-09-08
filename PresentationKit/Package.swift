@@ -25,7 +25,7 @@ let package: Package = {
                 name: "PresentationKit",
                 dependencies: [
                     "PresentationInterface",
-                    "EngineKit",
+                    .product(name: "EngineKit", package: "EngineKit")
                 ],
                 path: "Source"
             ),
@@ -38,6 +38,7 @@ let package: Package = {
                 dependencies: [
                     "PresentationKit",
                     "TestHelper",
+                    .product(name: "EngineMocks", package: "EngineKit")
                 ],
                 path: "Tests"
             )
