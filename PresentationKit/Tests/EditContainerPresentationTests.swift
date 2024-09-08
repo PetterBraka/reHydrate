@@ -13,6 +13,7 @@ import DrinkServiceMocks
 import UnitService
 import UnitServiceInterface
 import UserPreferenceServiceMocks
+import PhoneCommsMocks
 @testable import PresentationKit
 
 final class EditContainerPresentationTests: XCTestCase {
@@ -23,6 +24,7 @@ final class EditContainerPresentationTests: XCTestCase {
     
     private var drinkService: (stub: DrinkServiceTypeStubbing, spy: DrinkServiceTypeSpying)!
     private var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
+    private var phoneComms: (stub: PhoneCommsTypeStubbing, spy: PhoneCommsTypeSpying)!
     
     override func setUp() async throws {
         router = RouterSpy()
@@ -30,6 +32,7 @@ final class EditContainerPresentationTests: XCTestCase {
         drinkService = engine.makeDrinksService()
         userPreferenceService = engine.makeUserPreferenceService()
         engine.unitService = UnitService(engine: engine)
+        phoneComms = engine.makePhoneComms()
     }
     
     override func tearDown() {
@@ -133,6 +136,7 @@ final class EditContainerPresentationTests: XCTestCase {
             givenCall: drinkService.spy.lastMethodCall,
             expectedCall: .edit(size: 400, drink: .small)
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_didChangeSize_didSaveFailed() async {
@@ -151,6 +155,7 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .failedSaving)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didChangeSize_imperial() async {
@@ -174,6 +179,7 @@ final class EditContainerPresentationTests: XCTestCase {
             expectedCall: .edit(size: 400, drink: .small),
             accuracy: 1
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_didChangeFill() async {
@@ -209,6 +215,7 @@ final class EditContainerPresentationTests: XCTestCase {
             givenCall: drinkService.spy.lastMethodCall,
             expectedCall:.edit(size: 200, drink: .small)
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_didChangeFill_didSaveFailed() async {
@@ -231,6 +238,7 @@ final class EditContainerPresentationTests: XCTestCase {
             givenCall: drinkService.spy.lastMethodCall,
             expectedCall: .edit(size: 200, drink: .small)
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didChangeFill_imperial() async {
@@ -254,6 +262,7 @@ final class EditContainerPresentationTests: XCTestCase {
             givenCall: drinkService.spy.lastMethodCall,
             expectedCall: .edit(size: 200, drink: .small)
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
 }
 

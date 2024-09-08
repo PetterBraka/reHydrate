@@ -10,6 +10,7 @@ import LoggingService
 import PresentationInterface
 import DrinkServiceInterface
 import UnitServiceInterface
+import PhoneCommsInterface
 
 extension Screen.EditContainer {
     public final class Presenter: EditContainerPresenterType {
@@ -17,7 +18,8 @@ extension Screen.EditContainer {
         public typealias Engine = (
             HasLoggingService &
             HasDrinksService &
-            HasUnitService
+            HasUnitService &
+            HasPhoneComms
         )
         public typealias Router = (
             EditContainerRoutable
@@ -88,6 +90,7 @@ extension Screen.EditContainer {
                     _ = try await engine.drinksService.edit(size: roundedSize, of: selectedDrink.container)
                     updateViewModel(isSaving: false)
                     router.close()
+                    await engine.phoneComms.sendDataToWatch()
                     didSavingChanges?()
                 } catch {
                     updateViewModel(isSaving: false, error: .failedSaving)
