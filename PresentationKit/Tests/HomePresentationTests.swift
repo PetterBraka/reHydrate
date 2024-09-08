@@ -1,6 +1,6 @@
 //
 //  HomePresentationTests.swift
-//  
+//
 //
 //  Created by Petter vang Brakalsvålet on 24/02/2024.
 //
@@ -13,6 +13,7 @@ import DrinkServiceMocks
 import PortsMocks
 import UnitService
 import DateServiceMocks
+import PhoneCommsMocks
 @testable import PresentationKit
 
 final class HomePresentationTests: XCTestCase {
@@ -26,6 +27,7 @@ final class HomePresentationTests: XCTestCase {
     private var drinksService: (stub: DrinkServiceTypeStubbing, spy: DrinkServiceTypeSpying)!
     private var healthService: (stub: HealthInterfaceStubbing, spy: HealthInterfaceSpying)!
     private var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
+    private var phoneComms: (stub: PhoneCommsTypeStubbing, spy: PhoneCommsTypeSpying)!
     private var notificationCenter: NotificationCenter!
     
     override func setUp() {
@@ -41,6 +43,7 @@ final class HomePresentationTests: XCTestCase {
         healthService = engine.makeHealthService()
         engine.unitService = UnitService(engine: engine) // Using real UnitService to not over-stub
         dateService = engine.makeDateService()
+        phoneComms = engine.makePhoneComms()
     }
     
     override func tearDown() {
@@ -54,7 +57,7 @@ final class HomePresentationTests: XCTestCase {
     }
 }
 
-// MARK: - init
+// MARK: - init / deinit
 extension HomePresentationTests {
     func test_init() {
         dateService.stub.now_returnValue = .init(year: 2023, month: 2, day: 2)
@@ -68,6 +71,16 @@ extension HomePresentationTests {
                 drinks: []
             )
         )
+        XCTAssertEqual(phoneComms.spy.variableLog.count, 0)
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {})])
+    }
+    
+    func test_deinit() {
+        dateService.stub.now_returnValue = .init(year: 2023, month: 2, day: 2)
+        _ = Sut(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
+        
+        XCTAssertEqual(phoneComms.spy.variableLog.count, 0)
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .removeObserver])
     }
 }
 
@@ -449,7 +462,7 @@ extension HomePresentationTests {
         
         sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         let expectation = expectation(description: "syncing")
-        sut.sync { 
+        sut.sync {
             expectation.fulfill()
         }
         await fulfillment(of: [expectation], timeout: 2)
@@ -520,6 +533,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "1", size: 100, container: .small))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -547,6 +561,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: 0.1), id: .dietaryWater, date: .distantFuture)])
         XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "1", size: 100, container: .small))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -575,6 +590,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: 0.1), id: .dietaryWater, date: .distantFuture)])
         XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "1", size: 100, container: .small))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -598,10 +614,11 @@ extension HomePresentationTests {
         
         sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapAddDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
-
+        
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "123", size: 500, container: .large))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -629,6 +646,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.add(drink: .init(id: "123", size: 500, container: .large))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -661,6 +679,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "1", size: 100, container: .small))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -690,6 +709,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: 0.9), id: .dietaryWater, date: .distantFuture)])
         XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "1", size: 100, container: .small))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -720,6 +740,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: 0.9), id: .dietaryWater, date: .distantFuture)])
         XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "1", size: 100, container: .medium))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -749,6 +770,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "123", size: 500, container: .large))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -778,6 +800,7 @@ extension HomePresentationTests {
         XCTAssertEqual(healthService.spy.variableLog, [])
         XCTAssertEqual(healthService.spy.methodLog, [])
         XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "123", size: 500, container: .large))])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
         assertViewModel(
@@ -790,11 +813,6 @@ extension HomePresentationTests {
             )
         )
     }
-}
-
-// MARK: Watch communication
-extension HomePresentationTests {
-    
 }
 
 // MARK: Test helpers
@@ -901,7 +919,6 @@ extension DrinkServiceTypeSpy.MethodCall: Equatable {
     }
 }
 
-
 extension DayServiceTypeSpy.MethodCall: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
@@ -935,9 +952,9 @@ extension HealthInterfaceSpy.MethodCall: Equatable {
         case let (.export(lhs_quantity, lhs_id, _), .export(rhs_quantity, rhs_id, _)):
             lhs_quantity == rhs_quantity &&
             lhs_id == rhs_id
-//            lhs_date == rhs_date // Can't test the date
+            //            lhs_date == rhs_date // Can't test the date
         case let (.readSum(lhs_data, lhs_start, lhs_end, lhs_intervalComponents),
-            .readSum(rhs_data, rhs_start, rhs_end, rhs_intervalComponents)):
+                  .readSum(rhs_data, rhs_start, rhs_end, rhs_intervalComponents)):
             lhs_data == rhs_data &&
             lhs_start == rhs_start &&
             lhs_end == rhs_end &&
@@ -951,6 +968,32 @@ extension HealthInterfaceSpy.MethodCall: Equatable {
             lhs_healthData == rhs_healthData &&
             lhs_frequency == rhs_frequency
         default:
+            false
+        }
+    }
+}
+
+extension PhoneCommsTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: PhoneCommsTypeSpy.MethodCall, rhs: PhoneCommsTypeSpy.MethodCall) -> Bool {
+        switch (lhs, rhs) {
+        case (.setAppContext, .setAppContext), (.sendDataToWatch, .sendDataToWatch),
+            (.addObserver, .addObserver), (.removeObserver, .removeObserver):
+            true
+        case (.setAppContext, .sendDataToWatch),
+            (.setAppContext, .addObserver),
+            (.setAppContext, .removeObserver):
+            false
+        case (.sendDataToWatch, .setAppContext),
+            (.sendDataToWatch, .addObserver),
+            (.sendDataToWatch, .removeObserver):
+            false
+        case (.addObserver, .setAppContext),
+            (.addObserver, .sendDataToWatch),
+            (.addObserver, .removeObserver):
+            false
+        case (.removeObserver, .setAppContext),
+            (.removeObserver, .sendDataToWatch),
+            (.removeObserver, .addObserver):
             false
         }
     }
