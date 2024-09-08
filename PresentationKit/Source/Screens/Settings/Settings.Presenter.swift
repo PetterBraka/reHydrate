@@ -14,6 +14,7 @@ import NotificationServiceInterface
 import PortsInterface
 import AppearanceServiceInterface
 import DateServiceInterface
+import PhoneCommsInterface
 
 extension Screen.Settings {
     public final class Presenter: SettingsPresenterType {
@@ -25,7 +26,8 @@ extension Screen.Settings {
             HasOpenUrlService &
             HasAppInfo &
             HasAppearanceService &
-            HasDateService
+            HasDateService &
+            HasPhoneComms
         )
         public typealias Router = (
             SettingsRoutable
@@ -71,11 +73,14 @@ extension Screen.Settings {
                 router.showAppIcon()
             case .didTapIncrementGoal:
                 await increaseGoal()
+                await engine.phoneComms.sendDataToWatch()
             case .didTapDecrementGoal:
                 await decreaseGoal()
+                await engine.phoneComms.sendDataToWatch()
             case let .didSetUnitSystem(system):
                 engine.unitService.set(unitSystem: .init(from: system))
                 await updateViewModel(isLoading: false, unitSystem: system)
+                await engine.phoneComms.sendDataToWatch()
             case .didSetReminders(let shouldEnable):
                 await updateViewModel(isLoading: true)
                 if shouldEnable {
