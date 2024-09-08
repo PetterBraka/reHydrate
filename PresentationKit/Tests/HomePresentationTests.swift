@@ -26,6 +26,7 @@ final class HomePresentationTests: XCTestCase {
     private var drinksService: (stub: DrinkServiceTypeStubbing, spy: DrinkServiceTypeSpying)!
     private var healthService: (stub: HealthInterfaceStubbing, spy: HealthInterfaceSpying)!
     private var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
+    private var notificationCenter: NotificationCenter!
     
     override func setUp() {
         engine = EngineMocks()
@@ -33,6 +34,7 @@ final class HomePresentationTests: XCTestCase {
         formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd MMM"
         formatter.locale = .init(identifier: "en_GB")
+        notificationCenter = .init()
         
         dayService = engine.makeDayService()
         drinksService = engine.makeDrinksService()
@@ -56,7 +58,7 @@ final class HomePresentationTests: XCTestCase {
 extension HomePresentationTests {
     func test_init() {
         dateService.stub.now_returnValue = .init(year: 2023, month: 2, day: 2)
-        sut = Sut(engine: engine, router: router, formatter: formatter)
+        sut = Sut(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         
         assertViewModel(
             sut.viewModel,
@@ -82,7 +84,7 @@ extension HomePresentationTests {
         ])
         healthService.stub.isSupported_returnValue = false
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -121,7 +123,7 @@ extension HomePresentationTests {
         dateService.stub.getStartDate_returnValue = givenStartDate
         dateService.stub.getEndDate_returnValue = givenEndDate
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -166,7 +168,7 @@ extension HomePresentationTests {
         dateService.stub.getStartDate_returnValue = givenStartDate
         dateService.stub.getEndDate_returnValue = givenEndDate
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
@@ -212,7 +214,7 @@ extension HomePresentationTests {
         dateService.stub.getStartDate_returnValue = givenStartDate
         dateService.stub.getEndDate_returnValue = givenEndDate
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -258,7 +260,7 @@ extension HomePresentationTests {
         dateService.stub.getStartDate_returnValue = givenStartDate
         dateService.stub.getEndDate_returnValue = givenEndDate
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
@@ -301,7 +303,7 @@ extension HomePresentationTests {
         dateService.stub.getStartDate_returnValue = givenStartDate
         dateService.stub.getEndDate_returnValue = givenEndDate
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
@@ -340,7 +342,7 @@ extension HomePresentationTests {
         dateService.stub.getStartDate_returnValue = givenStartDate
         dateService.stub.getEndDate_returnValue = givenEndDate
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
@@ -381,7 +383,7 @@ extension HomePresentationTests {
         dateService.stub.getStartDate_returnValue = givenStartDate
         dateService.stub.getEndDate_returnValue = givenEndDate
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
@@ -415,7 +417,7 @@ extension HomePresentationTests {
                                                                container: .small)]
         healthService.stub.isSupported_returnValue = false
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didAppear)
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -445,7 +447,7 @@ extension HomePresentationTests {
         drinksService.stub.getSaved_returnValue = .success([.init(id: "1", size: 100, container: .small)])
         healthService.stub.isSupported_returnValue = false
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         let expectation = expectation(description: "syncing")
         sut.sync { 
             expectation.fulfill()
@@ -474,7 +476,7 @@ extension HomePresentationTests {
     func test_performAction_didTapHistory() async {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapHistory)
         assertLog(router.log, [.showHistory])
     }
@@ -485,7 +487,7 @@ extension HomePresentationTests {
     func test_performAction_didTapSettings() async {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapSettings)
         assertLog(router.log, [.showSettings])
     }
@@ -496,7 +498,7 @@ extension HomePresentationTests {
     func test_performAction_didTapEditDrink() async {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapEditDrink(.init(id: "1", size: 100, fill: 0.1, container: .medium)))
         assertLog(router.log, [.showEdit(.init(id: "1", size: 100, fill: 0.14, container: .medium))])
     }
@@ -512,7 +514,7 @@ extension HomePresentationTests {
         healthService.stub.isSupported_returnValue = false
         dayService.stub.addDrink_returnValue = .success(0.1)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -539,7 +541,7 @@ extension HomePresentationTests {
         healthService.stub.isSupported_returnValue = true
         dayService.stub.addDrink_returnValue = .success(0.1)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -567,7 +569,7 @@ extension HomePresentationTests {
         healthService.stub.exportQuantityIdDate_returnValue = DummyError()
         dayService.stub.addDrink_returnValue = .success(0.1)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapAddDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -594,7 +596,7 @@ extension HomePresentationTests {
         healthService.stub.isSupported_returnValue = false
         dayService.stub.addDrink_returnValue = .success(0.5)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapAddDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
 
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -621,7 +623,7 @@ extension HomePresentationTests {
         healthService.stub.isSupported_returnValue = false
         dayService.stub.addDrink_returnValue = .failure(DummyError())
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapAddDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
         
         XCTAssertEqual(healthService.spy.variableLog, [])
@@ -653,7 +655,7 @@ extension HomePresentationTests {
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
         dayService.stub.removeDrink_returnValue = .success(0.9)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -682,7 +684,7 @@ extension HomePresentationTests {
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
         dayService.stub.removeDrink_returnValue = .success(0.9)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, fill: 0.1, container: .small)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -712,7 +714,7 @@ extension HomePresentationTests {
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
         dayService.stub.removeDrink_returnValue = .success(0.9)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapRemoveDrink(.init(id: "1", size: 100, fill: 0.1, container: .medium)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -741,7 +743,7 @@ extension HomePresentationTests {
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
         dayService.stub.removeDrink_returnValue = .success(0.9)
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapRemoveDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
         
         XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
@@ -770,7 +772,7 @@ extension HomePresentationTests {
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
         dayService.stub.removeDrink_returnValue = .failure(DummyError())
         
-        sut = .init(engine: engine, router: router, formatter: formatter)
+        sut = .init(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
         await sut.perform(action: .didTapRemoveDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
         
         XCTAssertEqual(healthService.spy.variableLog, [])
