@@ -34,7 +34,7 @@ public final class SceneFactory: ObservableObject {
         engine = WatchEngine(
             appGroup: appGroup,
             subsystem: subsystem,
-            watchService: WatchService(session: watchSession)
+            watchService: WatchService(session: watchSession), notificationCenter: notificationCenter
         )
         self.watchDelegate = WatchCommunicationDelegate(session: watchSession, notificationCenter: notificationCenter)
         self.engine.watchService.activate()

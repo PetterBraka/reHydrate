@@ -792,6 +792,12 @@ extension HomePresentationTests {
     }
 }
 
+// MARK: Watch communication
+extension HomePresentationTests {
+    
+}
+
+// MARK: Test helpers
 private extension HomePresentationTests {
     func assertViewModel(
         _ givenViewModel: Sut.ViewModel, _ expectedViewModel: Sut.ViewModel,

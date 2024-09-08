@@ -72,12 +72,13 @@ public final class SceneFactory: ObservableObject {
             consumptionManager: ConsumptionManager(database: database),
             reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
             celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
-            notificationCenter: UNUserNotificationCenter.current(),
+            userNotificationCenter: UNUserNotificationCenter.current(),
             openUrlService: OpenUrlPort(),
             alternateIconsService: AlternateIconsServicePort(), 
             appearancePort: AppearanceServicePort(),
             healthService: HealthKitPort(),
-            phoneService: PhoneService(session: phoneSession)
+            phoneService: PhoneService(session: phoneSession), 
+            notificationCenter: notificationCenter
         )
         phoneDelegate = PhoneCommunicationDelegate(session: phoneSession, notificationCenter: notificationCenter)
         notificationDelegate = NotificationDelegatePort(engine: engine)

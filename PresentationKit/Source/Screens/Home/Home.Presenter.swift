@@ -55,7 +55,9 @@ extension Screen.Home {
                                   smallUnit: .milliliters,
                                   largeUnit: .liters,
                                   drinks: [])
-            engine.phoneComms.removeObserver()
+            engine.phoneComms.addObserver { [weak self] in
+                self?.sync(didComplete: nil)
+            }
         }
         
         deinit {

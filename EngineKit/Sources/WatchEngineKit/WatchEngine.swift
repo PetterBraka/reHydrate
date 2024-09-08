@@ -19,7 +19,6 @@ import DayServiceInterface
 import DayService
 import DBKitInterface
 import DBKit
-import NotificationServiceInterface
 import CommunicationKitInterface
 import WatchCommsInterface
 import WatchComms
