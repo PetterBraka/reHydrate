@@ -131,7 +131,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [.close])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall: .edit(size: 400, drink: Drink(id: "", size: 300, container: .small))
+            expectedCall: .edit(size: 400, drink: .small)
         )
     }
     
@@ -171,7 +171,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [.close])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall: .edit(size: 400, drink: Drink(id: "", size: 300, container: .small)),
+            expectedCall: .edit(size: 400, drink: .small),
             accuracy: 1
         )
     }
@@ -207,7 +207,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [.close])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall:.edit(size: 200, drink: Drink(id: "", size: 300, container: .small))
+            expectedCall:.edit(size: 200, drink: .small)
         )
     }
     
@@ -229,7 +229,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall: .edit(size: 200, drink: Drink(id: "", size: 300, container: .small))
+            expectedCall: .edit(size: 200, drink: .small)
         )
     }
     
@@ -252,7 +252,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [.close])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall: .edit(size: 200, drink: Drink(id: "", size: 300, container: .small))
+            expectedCall: .edit(size: 200, drink: .small)
         )
     }
 }
