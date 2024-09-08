@@ -14,6 +14,7 @@ import UnitServiceMocks
 import DateServiceMocks
 import NotificationServiceMocks
 import UserPreferenceServiceMocks
+import PhoneCommsMocks
 @testable import PresentationKit
 
 final class SettingsPresentationTests: XCTestCase {
@@ -28,6 +29,7 @@ final class SettingsPresentationTests: XCTestCase {
     private var notificationService: (stub: NotificationServiceTypeStubbing, spy: NotificationServiceTypeSpying)!
     private var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     private var urlService: (stub: OpenUrlInterfaceStubbing, spy: OpenUrlInterfaceSpying)!
+    private var phoneComms: (stub: PhoneCommsTypeStubbing, spy: PhoneCommsTypeSpying)!
     
     override func setUp() {
         engine = EngineMocks()
@@ -39,6 +41,7 @@ final class SettingsPresentationTests: XCTestCase {
         notificationService = engine.makeNotificationService()
         userPreferenceService = engine.makeUserPreferenceService()
         urlService = engine.makeOpenUrlService()
+        phoneComms = engine.makePhoneComms()
         
         sut = Sut(engine: engine, router: router)
     }
@@ -69,6 +72,7 @@ final class SettingsPresentationTests: XCTestCase {
                       appVersion: "0.0.0-mock",
                       error: nil)
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didAppear_withGoal() async {
@@ -88,6 +92,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         
         XCTAssertEqual(unitService.spy.lastMethodCall, .convert(value: 2, fromUnit: .litres, toUnit: .litres))
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didAppear_withImperialGoal() async {
@@ -108,6 +113,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         
         XCTAssertEqual(unitService.spy.lastMethodCall, .convert(value: 2, fromUnit: .litres, toUnit: .pint))
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didAppear_withNotificationSettings() async {
@@ -142,6 +148,7 @@ final class SettingsPresentationTests: XCTestCase {
                   appVersion: "0.0.0-mock",
                   error: nil)
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapBack() async {
@@ -159,6 +166,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [.showHome])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapEditAppIcon() async {
@@ -176,6 +184,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [.showAppIcon])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapCredits() async {
@@ -193,6 +202,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [.showCredits])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapContactMe() async {
@@ -217,6 +227,7 @@ final class SettingsPresentationTests: XCTestCase {
                 subject: "reHydrate query - v0.0.0-mock", body: nil
             )]
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapPrivacy() async {
@@ -236,6 +247,7 @@ final class SettingsPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(urlService.spy.methodLog, 
                        [.open(url: URL(string: "https://github.com/PetterBraka/reHydrate/blob/master/Privacy-Policy.md")!)])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapDeveloperInstagram() async {
@@ -255,6 +267,7 @@ final class SettingsPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(urlService.spy.methodLog, 
                        [.open(url: URL(string:"https://www.instagram.com/braka.coding/")!)])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapMerchandise() async {
@@ -274,6 +287,7 @@ final class SettingsPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(urlService.spy.methodLog, 
                        [.open(url: URL(string:"https://www.redbubble.com/people/petter-braka/shop")!)])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didOpenSettings() async {
@@ -293,6 +307,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(urlService.spy.methodLog, [.open(url: URL(string: "prefs:root=reHydrate")!)])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didSetDarkMode_on() async {
@@ -310,6 +325,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didSetDarkMode_off() async {
@@ -327,6 +343,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didSetUnitSystem_metric() async {
@@ -345,6 +362,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_didSetUnitSystem_imperial() async {
@@ -363,6 +381,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_didSetReminders_on() async {
@@ -398,6 +417,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didSetReminders_off() async {
@@ -421,6 +441,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didSetRemindersStart_to12() async {
@@ -473,6 +494,7 @@ final class SettingsPresentationTests: XCTestCase {
                                            hours: 12, minutes: 0, seconds: 0),
                                stop: Date(year: 2021, month: 12, day: 8,
                                           hours: 21, minutes: 0, seconds: 0)))
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didSetRemindersStop_to20() async {
@@ -524,6 +546,7 @@ final class SettingsPresentationTests: XCTestCase {
                                            hours: 7, minutes: 0, seconds: 0),
                                stop: Date(year: 2021, month: 12, day: 8,
                                           hours: 20, minutes: 0, seconds: 0)))
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapIncrementFrequency() async {
@@ -579,6 +602,7 @@ final class SettingsPresentationTests: XCTestCase {
                     stop: Date(year: 2021, month: 12, day: 8,
                                hours: 23, minutes: 59, seconds: 59))
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapIncrementFrequency_afterDidLoad() async {
@@ -657,6 +681,7 @@ final class SettingsPresentationTests: XCTestCase {
                     stop: Date(year: 2021, month: 12, day: 8,
                                hours: 21, minutes: 0, seconds: 0))
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapDecrementFrequency() async {
@@ -716,6 +741,7 @@ final class SettingsPresentationTests: XCTestCase {
                     stop: Date(year: 2021, month: 12, day: 8,
                                hours: 23, minutes: 59, seconds: 59))
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapDecrementFrequency_afterDidLoad() async {
@@ -794,6 +820,7 @@ final class SettingsPresentationTests: XCTestCase {
                     stop: Date(year: 2021, month: 12, day: 8,
                                hours: 21, minutes: 0, seconds: 0))
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapIncrementGoal() async {
@@ -814,6 +841,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(dayService.spy.lastMethodCall, .increase(goal: 0.5))
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_didTapIncrementGoal_afterDidLoad() async {
@@ -839,6 +867,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(dayService.spy.lastMethodCall, .increase(goal: 0.5))
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_didTapDecrementGoal() async {
@@ -859,6 +888,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(dayService.spy.lastMethodCall, .decrease(goal: 0.5))
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_didTapDecrementGoal_afterDidLoad() async {
@@ -884,6 +914,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(dayService.spy.lastMethodCall, .decrease(goal: 0.5))
+        XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
     func test_dismissAlert() async {
@@ -909,6 +940,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil
             )
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_dismissAlert_forMissing() async {
@@ -939,6 +971,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil
             )
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
 }
 

@@ -55,6 +55,7 @@ final class EditContainerPresentationTests: XCTestCase {
                   error: .none)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didAppear_imperial() async {
@@ -71,6 +72,7 @@ final class EditContainerPresentationTests: XCTestCase {
                   error: .none)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapCancel() async {
@@ -85,6 +87,7 @@ final class EditContainerPresentationTests: XCTestCase {
                                      editedFill: 0,
                                      error: .none))
         XCTAssertEqual(router.log, [.close])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didTapCancel_afterDidAppear() async {
@@ -101,6 +104,7 @@ final class EditContainerPresentationTests: XCTestCase {
                   error: .none)
         )
         XCTAssertEqual(router.log, [.close])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didChangeSize() async {
@@ -116,6 +120,7 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .none)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didChangeSize_didSave() async {
@@ -195,6 +200,7 @@ final class EditContainerPresentationTests: XCTestCase {
                                      error: .none)
         )
         XCTAssertEqual(router.log, [])
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didChangeFill_didSave() async {
@@ -238,6 +244,7 @@ final class EditContainerPresentationTests: XCTestCase {
             givenCall: drinkService.spy.lastMethodCall,
             expectedCall: .edit(size: 200, drink: .small)
         )
+        XCTAssertEqual(phoneComms.spy.methodLog, [])
         XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
