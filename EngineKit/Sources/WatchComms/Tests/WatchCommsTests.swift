@@ -18,6 +18,8 @@ import DrinkServiceInterface
 import UnitServiceMocks
 import UnitServiceInterface
 import WatchCommsInterface
+import CommunicationKitInterface
+import CommunicationKitMocks
 @testable import WatchComms
 
 final class WatchCommsTests: XCTestCase {

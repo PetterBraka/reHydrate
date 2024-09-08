@@ -26,6 +26,8 @@ import DateServiceInterface
 import DateServiceMocks
 import DBKitInterface
 import DBKitMocks
+import CommunicationKitInterface
+import CommunicationKitMocks
 import PhoneCommsInterface
 import PhoneCommsMocks
 import WatchCommsInterface
@@ -57,6 +59,8 @@ public final class EngineMocks {
     
     public var appearanceService: AppearanceServiceType = AppearanceServiceTypeStub()
     public var dateService: DateServiceType = DateServiceTypeStub()
+    public var phoneService: PhoneServiceType = PhoneServiceTypeStub()
+    public var watchService: WatchServiceType = WatchServiceTypeStub()
     public var phoneComms: PhoneCommsType = PhoneCommsTypeStub()
     public var watchComms: WatchCommsType = WatchCommsTypeStub()
 }

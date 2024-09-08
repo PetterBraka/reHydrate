@@ -17,6 +17,7 @@ import NotificationServiceInterface
 import AppearanceServiceInterface
 import DateServiceInterface
 import CommunicationKitInterface
+import PhoneCommsInterface
 
 public protocol HasService:
     HasLoggingService,
@@ -31,5 +32,6 @@ public protocol HasService:
     HasNotificationService,
     HasAppearanceService,
     HasDateService,
-    HasPhoneService
+    HasPhoneService,
+    HasPhoneComms
 {}
