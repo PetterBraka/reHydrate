@@ -28,7 +28,7 @@ final class NotificationServiceTests: XCTestCase {
     
     var engine: EngineMocks!
     
-    var notificationCenter: (stub: NotificationCenterTypeStub, spy: NotificationCenterTypeSpy)!
+    var userNotificationCenter: (stub: UserNotificationCenterTypeStub, spy: UserNotificationCenterTypeSpy)!
     var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     
     var sut: NotificationServiceType!
@@ -42,9 +42,9 @@ final class NotificationServiceTests: XCTestCase {
     
     override func setUp() {
         engine = EngineMocks()
-        let stub = NotificationCenterTypeStub()
-        let spy = NotificationCenterTypeSpy(realObject: stub)
-        notificationCenter = (stub, spy)
+        let stub = UserNotificationCenterTypeStub()
+        let spy = UserNotificationCenterTypeSpy(realObject: stub)
+        userNotificationCenter = (stub, spy)
         
         userPreferenceService = engine.makeUserPreferenceService()
     }
@@ -58,30 +58,30 @@ final class NotificationServiceTests: XCTestCase {
             engine: engine,
             reminders: reminders,
             celebrations: celebrations,
-            notificationCenter: notificationCenter.spy
+            userNotificationCenter: userNotificationCenter.spy
         ) {
             completionExpectation.fulfill()
         }
         
         wait(for: [completionExpectation], timeout: 5)
         if (userPreferenceService.stub.getKey_returnValue as? Bool) == false {
-            XCTAssertEqual(notificationCenter.spy.methodLog, [
+            XCTAssertEqual(userNotificationCenter.spy.methodLog, [
                 .removeAllPendingNotificationRequests
             ])
-            notificationCenter.spy.methodLog.removeAll()
+            userNotificationCenter.spy.methodLog.removeAll()
         }
     }
     
     func test_init_withStoredData() {
         // TODO: Fix this test
-        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .success(true)
         userPreferenceService.stub.getKey_returnValue = true
         userPreferenceService.stub.getKey_returnValue = 30
         userPreferenceService.stub.getKey_returnValue = Date(date: "01/01/2023", time: "08:00:00")!
         userPreferenceService.stub.getKey_returnValue = Date(date: "01/01/2023", time: "09:00:00")!
         setUpSut()
         
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .requestAuthorization,
             .setNotificationCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
@@ -98,19 +98,19 @@ final class NotificationServiceTests: XCTestCase {
     func test_init_withNoStoredData() async {
         setUpSut()
         
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests
         ])
     }
     
     func test_enable_success() async {
-        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .success(true)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)
         
         assertResult(given: result, expected: .success(Void()))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
@@ -126,7 +126,7 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_withMissingReminders() async {
-        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .success(true)
         setUpSut(reminders: [])
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(
@@ -136,7 +136,7 @@ final class NotificationServiceTests: XCTestCase {
         )
         
         assertResult(given: result, expected: .success(Void()))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
@@ -149,33 +149,33 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_deniedAuth() async {
-        notificationCenter.stub.requestAuthorization_returnValue = .success(false)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .success(false)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)
         
         assertResult(given: result, expected: .failure(.unauthorized))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization
         ])
     }
     
     func test_enable_unauthorized() async {
-        notificationCenter.stub.requestAuthorization_returnValue = .failure(NotificationError.unauthorized)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .failure(NotificationError.unauthorized)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)
         
         assertResult(given: result, expected: .failure(.unauthorized))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization
         ])
     }
     
     func test_enable_twice() async {
-        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .success(true)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(
@@ -193,7 +193,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         assertResult(given: secondResult, expected: .success(Void()))
         
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
@@ -213,14 +213,14 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_failedStoring() async {
-        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .success(true)
         userPreferenceService.stub.setValueKey_returnValue = TestingError.mock
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)
         
         assertResult(given: result, expected: .success(Void()))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
@@ -236,7 +236,7 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_extremelyHighFrequency() async {
-        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .success(true)
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(withFrequency: 999999999999999999,
@@ -244,7 +244,7 @@ final class NotificationServiceTests: XCTestCase {
                                       stop: dates.stop)
         
         assertResult(given: result, expected: .success(Void()))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
@@ -258,7 +258,7 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func test_enable_extremelyLowFrequency() async {
-        notificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userNotificationCenter.stub.requestAuthorization_returnValue = .success(true)
         userPreferenceService.stub.getKey_returnValue = false
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
@@ -267,7 +267,7 @@ final class NotificationServiceTests: XCTestCase {
                                       stop: dates.stop)
         
         assertResult(given: result, expected: .failure(.frequencyTooLow))
-        XCTAssertEqual(notificationCenter.spy.methodLog, [.removeAllPendingNotificationRequests])
+        XCTAssertEqual(userNotificationCenter.spy.methodLog, [.removeAllPendingNotificationRequests])
     }
     
     func test_getSettings() {
@@ -356,7 +356,7 @@ extension NotificationError: CustomStringConvertible {
     }
 }
 
-extension NotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
+extension UserNotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .requestAuthorization:
@@ -384,8 +384,8 @@ extension NotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
         }
     }
 }
-extension NotificationCenterTypeSpy.MethodCall: Equatable {
-    public static func == (lhs: NotificationCenterTypeSpy.MethodCall, rhs: NotificationCenterTypeSpy.MethodCall) -> Bool {
+extension UserNotificationCenterTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: UserNotificationCenterTypeSpy.MethodCall, rhs: UserNotificationCenterTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
         case (.requestAuthorization, .requestAuthorization),
             (.notificationCategories, .notificationCategories),

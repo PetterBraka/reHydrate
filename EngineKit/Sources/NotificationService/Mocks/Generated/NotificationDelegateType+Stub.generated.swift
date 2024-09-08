@@ -14,13 +14,13 @@ public final class NotificationDelegateTypeStub: NotificationDelegateTypeStubbin
 }
 
 extension NotificationDelegateTypeStub: NotificationDelegateType {
-    public func userNotificationCenter(_ center: NotificationCenterType, didReceive response: NotificationResponse) async -> Void {
+    public func userNotificationCenter(_ center: UserNotificationCenterType, didReceive response: NotificationResponse) async -> Void {
     }
 
-    public func userNotificationCenter(_ center: NotificationCenterType, willPresent: DeliveredNotification) async -> Void {
+    public func userNotificationCenter(_ center: UserNotificationCenterType, willPresent: DeliveredNotification) async -> Void {
     }
 
-    public func userNotificationCenter(_ center: NotificationCenterType, openSettingsFor: DeliveredNotification?) -> Void {
+    public func userNotificationCenter(_ center: UserNotificationCenterType, openSettingsFor: DeliveredNotification?) -> Void {
     }
 
 }

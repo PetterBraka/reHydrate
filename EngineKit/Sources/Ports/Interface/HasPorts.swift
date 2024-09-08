@@ -8,8 +8,8 @@
 import Foundation
 
 public protocol HasPorts:
-    HasOpenUrlService &
-    HasAlternateIconsService &
-    HasAppearancePort &
-    HasHealthService 
+    HasOpenUrlService,
+    HasAlternateIconsService,
+    HasAppearancePort,
+    HasHealthService
 {}

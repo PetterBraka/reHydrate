@@ -6,14 +6,14 @@
 import Foundation
 import NotificationServiceInterface
 
-public protocol NotificationCenterTypeSpying {
-    var variableLog: [NotificationCenterTypeSpy.VariableName] { get set }
-    var lastVariabelCall: NotificationCenterTypeSpy.VariableName? { get }
-    var methodLog: [NotificationCenterTypeSpy.MethodCall] { get set }
-    var lastMethodCall: NotificationCenterTypeSpy.MethodCall? { get }
+public protocol UserNotificationCenterTypeSpying {
+    var variableLog: [UserNotificationCenterTypeSpy.VariableName] { get set }
+    var lastVariabelCall: UserNotificationCenterTypeSpy.VariableName? { get }
+    var methodLog: [UserNotificationCenterTypeSpy.MethodCall] { get set }
+    var lastMethodCall: UserNotificationCenterTypeSpy.MethodCall? { get }
 }
 
-public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
+public final class UserNotificationCenterTypeSpy: UserNotificationCenterTypeSpying {
     public enum VariableName {
     }
 
@@ -35,13 +35,13 @@ public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private var realObject: NotificationCenterType
-    public init(realObject: NotificationCenterType) {
+    private var realObject: UserNotificationCenterType
+    public init(realObject: UserNotificationCenterType) {
         self.realObject = realObject
     }
 }
 
-extension NotificationCenterTypeSpy: NotificationCenterType {
+extension UserNotificationCenterTypeSpy: UserNotificationCenterType {
     public func requestAuthorization() async throws -> Bool {
         methodLog.append(.requestAuthorization)
         return try await realObject.requestAuthorization()

@@ -8,6 +8,6 @@ import NotificationServiceInterface
 
 // sourcery:begin: AutoStub, AutoSpy
 extension NotificationServiceType {}
-extension NotificationCenterType {}
+extension UserNotificationCenterType {}
 extension NotificationDelegateType {}
 // sourcery:end

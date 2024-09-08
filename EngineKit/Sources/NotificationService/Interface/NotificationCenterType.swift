@@ -1,11 +1,11 @@
 //
-//  NotificationCenterType.swift
+//  UserNotificationCenterType.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 26/09/2023.
 //
 
-public protocol NotificationCenterType {
+public protocol UserNotificationCenterType {
     func requestAuthorization() async throws -> Bool
     func setNotificationCategories(_ categories: Set<NotificationCategory>)
     func notificationCategories() async -> Set<NotificationCategory>

@@ -30,17 +30,17 @@ public final class NotificationDelegateService: NotificationDelegateType {
     }
     
     public func userNotificationCenter(
-        _ center: NotificationCenterType,
+        _ center: UserNotificationCenterType,
         openSettingsFor: DeliveredNotification?
     ) {}
     
     public func userNotificationCenter(
-        _ center: NotificationCenterType,
+        _ center: UserNotificationCenterType,
         willPresent: DeliveredNotification
     ) async {}
     
     public func userNotificationCenter(
-        _ center: NotificationCenterType,
+        _ center: UserNotificationCenterType,
         didReceive response: NotificationResponse
     ) async {
         let actionId = response.actionIdentifier

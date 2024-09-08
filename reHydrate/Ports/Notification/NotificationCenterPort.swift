@@ -9,7 +9,7 @@
 import NotificationServiceInterface
 import UserNotifications
 
-extension UNUserNotificationCenter: NotificationCenterType {
+extension UNUserNotificationCenter: UserNotificationCenterType {
     public func requestAuthorization() async throws -> Bool {
         try await requestAuthorization(options: [UNAuthorizationOptions.badge, .sound, .alert])
     }

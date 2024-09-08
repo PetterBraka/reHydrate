@@ -5,7 +5,7 @@
 import Foundation
 import NotificationServiceInterface
 
-public protocol NotificationCenterTypeStubbing {
+public protocol UserNotificationCenterTypeStubbing {
     var requestAuthorization_returnValue: Result<Bool, Error> { get set }
     var notificationCategories_returnValue: Set<NotificationCategory> { get set }
     var addRequest_returnValue: Error? { get set }
@@ -14,7 +14,7 @@ public protocol NotificationCenterTypeStubbing {
     var setBadgeCountNewBadgeCount_returnValue: Error? { get set }
 }
 
-public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
+public final class UserNotificationCenterTypeStub: UserNotificationCenterTypeStubbing {
     public var requestAuthorization_returnValue: Result<Bool, Error> {
         get {
             if requestAuthorization_returnValues.isEmpty {
@@ -97,7 +97,7 @@ public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
     public init() {}
 }
 
-extension NotificationCenterTypeStub: NotificationCenterType {
+extension UserNotificationCenterTypeStub: UserNotificationCenterType {
     public func requestAuthorization() async throws -> Bool {
         switch requestAuthorization_returnValue {
         case let .success(value):
