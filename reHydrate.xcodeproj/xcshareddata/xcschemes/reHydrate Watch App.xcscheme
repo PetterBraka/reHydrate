@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A185DB322B77C5F300B9318B"
-               BuildableName = "Watch App.app"
+               BuildableName = "reHydrate.app"
                BlueprintName = "Watch App"
                ReferencedContainer = "container:reHydrate.xcodeproj">
             </BuildableReference>
@@ -82,7 +82,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A185DB322B77C5F300B9318B"
-            BuildableName = "Watch App.app"
+            BuildableName = "reHydrate.app"
             BlueprintName = "Watch App"
             ReferencedContainer = "container:reHydrate.xcodeproj">
          </BuildableReference>
@@ -99,7 +99,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A185DB322B77C5F300B9318B"
-            BuildableName = "Watch App.app"
+            BuildableName = "reHydrate.app"
             BlueprintName = "Watch App"
             ReferencedContainer = "container:reHydrate.xcodeproj">
          </BuildableReference>
