@@ -128,6 +128,11 @@
 		A1271B462C8F945700336920 /* watch_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1271B442C8F945700336920 /* watch_AppTests.swift */; };
 		A1271B4A2C8F946400336920 /* watch_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1271B472C8F946400336920 /* watch_AppUITests.swift */; };
 		A1271B4B2C8F946400336920 /* watch_AppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1271B482C8F946400336920 /* watch_AppUITestsLaunchTests.swift */; };
+		A1271B522C8F950700336920 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1271B512C8F950700336920 /* WidgetKit.framework */; };
+		A1271B542C8F950700336920 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1271B532C8F950700336920 /* SwiftUI.framework */; };
+		A1271B572C8F950700336920 /* Watch_Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1271B562C8F950700336920 /* Watch_Widget.swift */; };
+		A1271B592C8F950800336920 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1271B582C8F950800336920 /* Assets.xcassets */; };
+		A1271B5D2C8F950800336920 /* Watch WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A1271B502C8F950700336920 /* Watch WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */; };
 		A13BFF5E2B16971B00E47671 /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */; };
 		A13BFF602B16A29600E47671 /* HistoryScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */; };
@@ -175,6 +180,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A1271B5B2C8F950800336920 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1271B4F2C8F950700336920;
+			remoteInfo = "Watch WidgetExtension";
+		};
 		A149F2A52B69B9DD00710609 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
@@ -215,6 +227,17 @@
 				A185DB562B77C5F600B9318B /* reHydrate.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1271B612C8F950800336920 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A1271B5D2C8F950800336920 /* Watch WidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -349,6 +372,12 @@
 		A1271B442C8F945700336920 /* watch_AppTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = watch_AppTests.swift; sourceTree = "<group>"; };
 		A1271B472C8F946400336920 /* watch_AppUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = watch_AppUITests.swift; sourceTree = "<group>"; };
 		A1271B482C8F946400336920 /* watch_AppUITestsLaunchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = watch_AppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A1271B502C8F950700336920 /* Watch WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Watch WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1271B512C8F950700336920 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		A1271B532C8F950700336920 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		A1271B562C8F950700336920 /* Watch_Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watch_Widget.swift; sourceTree = "<group>"; };
+		A1271B582C8F950800336920 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1271B5A2C8F950800336920 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
 		A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
 		A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreenObservable.swift; sourceTree = "<group>"; };
@@ -402,6 +431,15 @@
 				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
 				A1E935522C5F62E100B73E35 /* EngineMocks in Frameworks */,
 				A126D24F2A76665900A296BA /* PresentationKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1271B4D2C8F950700336920 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1271B542C8F950700336920 /* SwiftUI.framework in Frameworks */,
+				A1271B522C8F950700336920 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +615,7 @@
 				A1271B3C2C8F944700336920 /* Watch App */,
 				A1271B452C8F945700336920 /* Watch AppTests */,
 				A1271B492C8F946400336920 /* Watch AppUITests */,
+				A1271B552C8F950700336920 /* Watch Widget */,
 				3378767424378A9400F5A732 /* Products */,
 				F887073E19DFDDCFF694E7E8 /* Frameworks */,
 			);
@@ -590,6 +629,7 @@
 				A185DB332B77C5F300B9318B /* reHydrate.app */,
 				A185DB422B77C5F500B9318B /* Watch AppTests.xctest */,
 				A185DB4C2B77C5F600B9318B /* Watch AppUITests.xctest */,
+				A1271B502C8F950700336920 /* Watch WidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -723,6 +763,16 @@
 			path = "Watch AppUITests";
 			sourceTree = "<group>";
 		};
+		A1271B552C8F950700336920 /* Watch Widget */ = {
+			isa = PBXGroup;
+			children = (
+				A1271B562C8F950700336920 /* Watch_Widget.swift */,
+				A1271B582C8F950800336920 /* Assets.xcassets */,
+				A1271B5A2C8F950800336920 /* Info.plist */,
+			);
+			path = "Watch Widget";
+			sourceTree = "<group>";
+		};
 		A13BFF5C2B1696F500E47671 /* History */ = {
 			isa = PBXGroup;
 			children = (
@@ -815,6 +865,8 @@
 			children = (
 				33F32133243D115600E61D27 /* CoreData.framework */,
 				33CD6D58243BE53B00EF0335 /* HealthKit.framework */,
+				A1271B512C8F950700336920 /* WidgetKit.framework */,
+				A1271B532C8F950700336920 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -850,6 +902,23 @@
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A1271B4F2C8F950700336920 /* Watch WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1271B5E2C8F950800336920 /* Build configuration list for PBXNativeTarget "Watch WidgetExtension" */;
+			buildPhases = (
+				A1271B4C2C8F950700336920 /* Sources */,
+				A1271B4D2C8F950700336920 /* Frameworks */,
+				A1271B4E2C8F950700336920 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Watch WidgetExtension";
+			productName = "Watch WidgetExtension";
+			productReference = A1271B502C8F950700336920 /* Watch WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		A149F2A02B69B9DD00710609 /* reHydrateTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A149F2A72B69B9DD00710609 /* Build configuration list for PBXNativeTarget "reHydrateTests" */;
@@ -878,10 +947,12 @@
 				A185DB2F2B77C5F300B9318B /* Sources */,
 				A185DB302B77C5F300B9318B /* Frameworks */,
 				A185DB312B77C5F300B9318B /* Resources */,
+				A1271B612C8F950800336920 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A1271B5C2C8F950800336920 /* PBXTargetDependency */,
 			);
 			name = "Watch App";
 			packageProductDependencies = (
@@ -940,12 +1011,15 @@
 				KnownAssetTags = (
 					watchComplicationsTemplate,
 				);
-				LastSwiftUpdateCheck = 1520;
+				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = "Petter vang Brakalsvålet";
 				TargetAttributes = {
 					3378767224378A9400F5A732 = {
 						CreatedOnToolsVersion = 11.4;
+					};
+					A1271B4F2C8F950700336920 = {
+						CreatedOnToolsVersion = 15.4;
 					};
 					A149F2A02B69B9DD00710609 = {
 						CreatedOnToolsVersion = 15.2;
@@ -989,6 +1063,7 @@
 				A185DB322B77C5F300B9318B /* Watch App */,
 				A185DB412B77C5F500B9318B /* Watch AppTests */,
 				A185DB4B2B77C5F500B9318B /* Watch AppUITests */,
+				A1271B4F2C8F950700336920 /* Watch WidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -1094,6 +1169,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A1271B4E2C8F950700336920 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1271B592C8F950800336920 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A149F29F2B69B9DD00710609 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1179,6 +1262,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A1271B4C2C8F950700336920 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1271B572C8F950700336920 /* Watch_Widget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A149F29D2B69B9DD00710609 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1221,6 +1312,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A1271B5C2C8F950800336920 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A1271B4F2C8F950700336920 /* Watch WidgetExtension */;
+			targetProxy = A1271B5B2C8F950800336920 /* PBXContainerItemProxy */;
+		};
 		A149F2A62B69B9DD00710609 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3378767224378A9400F5A732 /* reHydrate */;
@@ -1436,6 +1532,73 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A1271B5F2C8F950800336920 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DCQ3V8BLU5;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Watch Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Watch Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.braka.reHydrate.watchkitapp.Watch-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+			};
+			name = Debug;
+		};
+		A1271B602C8F950800336920 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DCQ3V8BLU5;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Watch Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Watch Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.braka.reHydrate.watchkitapp.Watch-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
 			};
 			name = Release;
 		};
@@ -1672,6 +1835,15 @@
 			buildConfigurations = (
 				3378768824378A9800F5A732 /* Debug */,
 				3378768924378A9800F5A732 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1271B5E2C8F950800336920 /* Build configuration list for PBXNativeTarget "Watch WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1271B5F2C8F950800336920 /* Debug */,
+				A1271B602C8F950800336920 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
