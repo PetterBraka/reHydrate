@@ -1,6 +1,6 @@
 //
 //  HomeView.swift
-//  reHydrate Watch App
+//  Watch App
 //
 //  Created by Petter vang Brakalsvålet on 10/02/2024.
 //  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.

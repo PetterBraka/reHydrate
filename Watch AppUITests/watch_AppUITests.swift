@@ -1,6 +1,6 @@
 //
 //  reHydrate_Watch_AppUITests.swift
-//  reHydrate Watch AppUITests
+//  Watch AppUITests
 //
 //  Created by Petter vang Brakalsvålet on 10/02/2024.
 //  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
