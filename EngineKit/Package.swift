@@ -15,7 +15,7 @@ let package: Package = {
             .library(name: "EngineKit", targets: ["EngineKit"]),
             .library(name: "EngineMocks", targets: ["EngineMocks"]),
             .library(name: "WidgetEngine", targets: ["WidgetEngine"]),
-            .library(name: "WatchEngineKit", targets: ["WatchEngineKit"]),
+            .library(name: "WatchEngine", targets: ["WatchEngine"]),
         ],
         dependencies: [
             .package(name: "DBKit", path: "../DBKit"),
@@ -41,7 +41,7 @@ let package: Package = {
                 ]
             ),
             .target(
-                name: "WatchEngineKit",
+                name: "WatchEngine",
                 dependencies: [
                     .loggingService,
                     .dbKit,

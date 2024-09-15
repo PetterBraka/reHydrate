@@ -110,6 +110,7 @@
 		33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A7A274D06070049E414 /* SettingsScreen.swift */; };
 		33EC3A882754BA420049E414 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EC3A872754BA420049E414 /* Localizable.swift */; };
 		33EFF3FC2470449A00D0A003 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33EFF3FE2470449A00D0A003 /* Localizable.strings */; };
+		A10D69342C971F760093BBAB /* WatchEngine in Frameworks */ = {isa = PBXBuildFile; productRef = A10D69332C971F760093BBAB /* WatchEngine */; };
 		A11180332AC3768D007E4585 /* NotificationCenterPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11180322AC3768D007E4585 /* NotificationCenterPort.swift */; };
 		A114B7022C3148F600EB0AC4 /* CommunicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114B7012C3148F600EB0AC4 /* CommunicationDelegate.swift */; };
 		A11C12A82B65B02D00FB1B8C /* View+expand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11C12A72B65B02D00FB1B8C /* View+expand.swift */; };
@@ -140,7 +141,6 @@
 		A13BFF602B16A29600E47671 /* HistoryScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */; };
 		A149F2A42B69B9DD00710609 /* HealthKitPortTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2A32B69B9DD00710609 /* HealthKitPortTests.swift */; };
 		A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1614D522A362E8C00235D02 /* SceneFactory.swift */; };
-		A16B30192BEA09DE0036DE54 /* WatchEngineKit in Frameworks */ = {isa = PBXBuildFile; productRef = A16B30182BEA09DE0036DE54 /* WatchEngineKit */; };
 		A16CBD992BB3524A00F5C914 /* TestHelper in Frameworks */ = {isa = PBXBuildFile; productRef = A16CBD982BB3524A00F5C914 /* TestHelper */; };
 		A183BCEB2A3122CB00D42033 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE82A3120C900D42033 /* Images.swift */; };
 		A183BCEC2A3122CE00D42033 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE92A3120C900D42033 /* Font.swift */; };
@@ -459,10 +459,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10D69342C971F760093BBAB /* WatchEngine in Frameworks */,
 				A19889102C559B54007AAC32 /* CommunicationInterface in Frameworks */,
 				A185DB672B77C7A600B9318B /* PresentationWatchKit in Frameworks */,
 				A19889122C559B54007AAC32 /* CommunicationSource in Frameworks */,
-				A16B30192BEA09DE0036DE54 /* WatchEngineKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -963,9 +963,9 @@
 			name = "Watch App";
 			packageProductDependencies = (
 				A185DB662B77C7A600B9318B /* PresentationWatchKit */,
-				A16B30182BEA09DE0036DE54 /* WatchEngineKit */,
 				A198890F2C559B54007AAC32 /* CommunicationInterface */,
 				A19889112C559B54007AAC32 /* CommunicationSource */,
+				A10D69332C971F760093BBAB /* WatchEngine */,
 			);
 			productName = "Watch App";
 			productReference = A185DB332B77C5F300B9318B /* reHydrate.app */;
@@ -1913,6 +1913,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A10D69332C971F760093BBAB /* WatchEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WatchEngine;
+		};
 		A126D24A2A76665800A296BA /* EngineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EngineKit;
@@ -1921,7 +1925,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationKit;
 		};
-		A16B30182BEA09DE0036DE54 /* WatchEngineKit */ = {
+		A1271B6D2C97187300336920 /* WidgetEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WidgetEngine;
+		};
 			isa = XCSwiftPackageProductDependency;
 			productName = WatchEngineKit;
 		};
