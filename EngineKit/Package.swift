@@ -60,6 +60,7 @@ let package: Package = {
                     .dbKit,
                     .loggingService,
                     .source(.dayService),
+                    .source(.dateService),
                     .source(.unitService),
                     .source(.userPreferenceService),
                 ]
