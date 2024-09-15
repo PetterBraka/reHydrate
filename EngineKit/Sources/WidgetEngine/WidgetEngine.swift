@@ -5,18 +5,18 @@
 //  Created by Petter vang Brakalsvålet on 10/02/2024.
 //
 
-import UserPreferenceServiceInterface
-import DateServiceInterface
-import UnitServiceInterface
-import DayServiceInterface
-import DBKitInterface
-
-import UserPreferenceService
-import LoggingService
-import UnitService
-import DateService
-import DayService
 import Foundation
+
+import LoggingService
+import UserPreferenceServiceInterface
+import UserPreferenceService
+import DateServiceInterface
+import DateService
+import UnitServiceInterface
+import UnitService
+import DayServiceInterface
+import DayService
+import DBKitInterface
 import DBKit
 
 public final class WatchWidgetEngine {
