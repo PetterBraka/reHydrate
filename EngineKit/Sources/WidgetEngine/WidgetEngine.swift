@@ -1,5 +1,5 @@
 //
-//  WatchWidgetEngine.swift
+//  WidgetEngine.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 10/02/2024.
@@ -19,7 +19,7 @@ import DayService
 import DBKitInterface
 import DBKit
 
-public final class WatchWidgetEngine {
+public final class WidgetEngine {
     public init(
         appGroup: String,
         subsystem: String
@@ -46,7 +46,7 @@ public final class WatchWidgetEngine {
     public lazy var dateService: DateServiceType = DateService()
 }
 
-extension WatchWidgetEngine:
+extension WidgetEngine:
     HasConsumptionManagerService,
     HasUserPreferenceService,
     HasDayManagerService,

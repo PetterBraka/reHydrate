@@ -6,6 +6,6 @@
 //
 
 public protocol BasicPresenter {
-    func getViewModel() async -> Basic.ViewModel
-    func getEndOfDayViewModel() async -> Basic.ViewModel
+    func getViewModel() -> Basic.ViewModel
+    func getEndOfDayViewModel() -> Basic.ViewModel
 }

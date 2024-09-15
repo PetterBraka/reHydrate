@@ -1,30 +1,23 @@
 //
-//  Entry.swift
+//  BasicView.swift
 //  Watch WidgetExtension
 //
-//  Created by Petter vang Brakalsvålet on 09/09/2024.
+//  Created by Petter vang Brakalsvålet on 15/09/2024.
 //  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
 //
 
 import WidgetKit
 import SwiftUI
 
-struct SimpleEntry: TimelineEntry {
-    let date: Date
-    let consumed: Double
-    let goal: Double
-    let symbol: String
-}
-
-struct Watch_WidgetEntryView : View {
+struct BasicView : View {
     @Environment(\.widgetFamily) private var family
     
-    var entry: Provider.Entry
+    var entry: BasicEntry
     
     var body: some View {
         Group {
             switch family {
-            case .accessoryCircular:
+            case .accessoryCircular, .systemSmall:
                 accessoryCircular
             case .accessoryCorner:
                 accessoryCorner
@@ -32,13 +25,14 @@ struct Watch_WidgetEntryView : View {
                 accessoryRectangular
             case .accessoryInline:
                 accessoryInline
-            case .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge:
+            case .systemMedium, .systemLarge, .systemExtraLarge:
                 unsupported
             @unknown default:
                 unsupported
             }
         }
         .tint(.cyan)
+        .privacySensitive(false)
     }
     
     private var accessoryCircular: some View {

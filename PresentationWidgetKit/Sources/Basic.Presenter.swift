@@ -13,7 +13,7 @@ import UnitServiceInterface
 import PresentationWidgetKitInterface
 import UserPreferenceServiceInterface
 
-extension Widget.Basic {
+extension Screen.Basic {
     public final class Presenter: BasicPresenter {
         public typealias Engine = (
             HasLoggingService &
@@ -28,7 +28,7 @@ extension Widget.Basic {
             self.engine = engine
         }
         
-        public func getViewModel() async -> Basic.ViewModel {
+        public func getViewModel() -> Basic.ViewModel {
             let (unit, symbol) = getUnitSystem()
             guard let day = engine.dayService.getSharedToday()
             else {
@@ -46,7 +46,7 @@ extension Widget.Basic {
             )
         }
         
-        public func getEndOfDayViewModel() async -> Basic.ViewModel {
+        public func getEndOfDayViewModel() -> Basic.ViewModel {
             let (unit, symbol) = getUnitSystem()
             let endOfDay = engine.dateService.getEnd(of: engine.dateService.now())
             
