@@ -81,6 +81,7 @@ let package: Package = {
                 sourceDependancy: [
                     .interface(.unitService),
                     .interface(.userPreferenceService),
+                    .interface(.dateService),
                     .portsInterface,
                     .dbKit
                 ],
