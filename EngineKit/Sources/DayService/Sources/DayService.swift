@@ -13,6 +13,7 @@ import LoggingService
 import PortsInterface
 import DBKitInterface
 import DateServiceInterface
+import UserPreferenceServiceInterface
 
 public final class DayService: DayServiceType {
     public typealias Engine = (
@@ -20,18 +21,15 @@ public final class DayService: DayServiceType {
         HasConsumptionManagerService &
         HasUnitService &
         HasLoggingService &
-        HasDateService
+        HasDateService &
+        HasUserPreferenceService
     )
     
     private let engine: Engine
-    
-    private var today: Day
+    private let storageKeyToday: String = "storage-today"
     
     public init(engine: Engine) {
         self.engine = engine
-        self.today = Day(date: engine.dateService.now(),
-                         consumed: 0,
-                         goal: 3)
     }
     
     public func getToday() async -> Day {
@@ -42,8 +40,12 @@ public final class DayService: DayServiceType {
         } else {
             day = await createNewDay()
         }
-        self.today = day
+        try? engine.userPreferenceService.set(day, for: storageKeyToday)
         return day
+    }
+    
+    public func getSharedToday() -> Day? {
+        engine.userPreferenceService.get(for: storageKeyToday)
     }
     
     public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
@@ -58,7 +60,7 @@ public final class DayService: DayServiceType {
         try engine.consumptionManager.createEntry(date: engine.dateService.now(),
                                                   consumed: consumedAmount)
         if let day = Day(with: updatedDay) {
-            self.today = day
+            try? engine.userPreferenceService.set(day, for: storageKeyToday)
         }
         return getConsumptionTotal(from: updatedDay)
     }
@@ -70,7 +72,7 @@ public final class DayService: DayServiceType {
         try engine.consumptionManager.createEntry(date: engine.dateService.now(),
                                                   consumed: consumedAmount)
         if let day = Day(with: updatedDay) {
-            self.today = day
+            try? engine.userPreferenceService.set(day, for: storageKeyToday)
         }
         return getConsumptionTotal(from: updatedDay)
     }
@@ -80,7 +82,7 @@ public final class DayService: DayServiceType {
         let today = await getToday()
         let updatedDay = try await engine.dayManager.add(goal: goal, toDayAt: today.date)
         if let day = Day(with: updatedDay) {
-            self.today = day
+            try? engine.userPreferenceService.set(day, for: storageKeyToday)
         }
         return getGoalTotal(from: updatedDay)
     }
@@ -90,7 +92,7 @@ public final class DayService: DayServiceType {
         let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(goal: goal, fromDayAt: today.date)
         if let day = Day(with: updatedDay) {
-            self.today = day
+            try? engine.userPreferenceService.set(day, for: storageKeyToday)
         }
         return getGoalTotal(from: updatedDay)
     }

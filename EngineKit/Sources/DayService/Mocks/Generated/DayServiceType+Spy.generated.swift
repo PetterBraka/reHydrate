@@ -20,6 +20,7 @@ public final class DayServiceTypeSpy: DayServiceTypeSpying {
 
     public enum MethodCall {
         case getToday
+        case getSharedToday
         case getDays(dates: ClosedRange<Date>)
         case add(drink: Drink)
         case remove(drink: Drink)
@@ -41,6 +42,10 @@ extension DayServiceTypeSpy: DayServiceType {
     public func getToday() async -> Day {
         methodLog.append(.getToday)
         return await realObject.getToday()
+    }
+    public func getSharedToday() -> Day? {
+        methodLog.append(.getSharedToday)
+        return realObject.getSharedToday()
     }
     public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
         methodLog.append(.getDays(dates: dates))
