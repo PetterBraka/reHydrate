@@ -25,7 +25,9 @@ public class Database: DatabaseType {
         }
         persistentContainer.loadPersistentStores { description, error in
             if let error {
-                fatalError("Failed to load persistent stores: \(error.localizedDescription)")
+                let message = "Failed to load persistent stores: \(error.localizedDescription)"
+                LoggingService.log(level: .error, message)
+                fatalError(message)
             }
             LoggingService.log(level: .debug, "Loaded persistent store: \(description)")
         }
