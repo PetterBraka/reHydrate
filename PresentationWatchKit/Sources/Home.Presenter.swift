@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import WatchEngineKit
+import WatchEngine
 import LoggingService
 import PresentationWatchInterface
 import DrinkServiceInterface

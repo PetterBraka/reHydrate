@@ -1,10 +1,10 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.10
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
-    name: "PresentationWatchKit",
+    name: "PresentationWidgetKit",
     platforms: [
         .iOS(.v17),
         .watchOS(.v10),
@@ -12,8 +12,8 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "PresentationWatchKit",
-            targets: ["PresentationWatchKit"]
+            name: "PresentationWidgetKit",
+            targets: ["PresentationWidgetKit"]
         )
     ],
     dependencies: [
@@ -22,25 +22,25 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "PresentationWatchKit",
+            name: "PresentationWidgetKit",
             dependencies: [
-                "PresentationWatchInterface",
-                .product(name: "WatchEngine", package: "EngineKit"),
+                "PresentationWidgetKitInterface",
+                .product(name: "WidgetEngine", package: "EngineKit")
             ],
             path: "Sources"
         ),
         .target(
-            name: "PresentationWatchInterface",
+            name: "PresentationWidgetKitInterface",
+            dependencies: [],
             path: "Interface"
         ),
         .testTarget(
-            name: "PresentationWatchKitTests",
+            name: "PresentationWidgetKitTests",
             dependencies: [
+                "PresentationWidgetKit",
                 "TestHelper",
-                "PresentationWatchKit",
                 .product(name: "EngineMocks", package: "EngineKit"),
-            ],
-            path: "Tests"
+            ]
         ),
     ]
 )
