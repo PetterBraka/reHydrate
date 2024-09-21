@@ -6,83 +6,41 @@
 //  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
 //
 
+import PresentationWidgetKitInterface
+import PresentationWidgetKit
+import WidgetEngine
 import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), emoji: "😀")
+    let userDefaults = UserDefaults(suiteName: "group.com.braka.reHydrate.shared")
+    
+    func placeholder(in context: Context) -> BasicEntry {
+        BasicEntry(date: .now, consumed: 0, goal: 2, symbol: "L")
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), emoji: "😀")
+    func getSnapshot(in context: Context, completion: @escaping (BasicEntry) -> ()) {
+        let entry = BasicEntry(date: .now, consumed: 0, goal: 2, symbol: "L")
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, emoji: "😀")
-            entries.append(entry)
-        }
-
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+        let entry = BasicEntry(date: .now, consumed: 0, goal: 2, symbol: "L")
+        
+        let timeline = Timeline(entries: [entry], policy: .atEnd)
         completion(timeline)
-    }
-
-//    func relevances() async -> WidgetRelevances<Void> {
-//        // Generate a list containing the contexts this widget is relevant in.
-//    }
-}
-
-struct SimpleEntry: TimelineEntry {
-    let date: Date
-    let emoji: String
-}
-
-struct WatchWidgetEntryView : View {
-    var entry: Provider.Entry
-
-    var body: some View {
-        VStack {
-            HStack {
-                Text("Time:")
-                Text(entry.date, style: .time)
-            }
-
-            Text("Emoji:")
-            Text(entry.emoji)
-        }
     }
 }
 
 @main
 struct WatchWidget: Widget {
-    let kind: String = "WatchWidget"
+    let kind: String = "today-widget"
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(watchOS 10.0, *) {
-                WatchWidgetEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
-            } else {
-                WatchWidgetEntryView(entry: entry)
-                    .padding()
-                    .background()
-            }
+            BasicView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("My today")
+        .description("This helps you keep track of your water consumption today.")
     }
-}
-
-#Preview(as: .accessoryRectangular) {
-    WatchWidget()
-} timeline: {
-    SimpleEntry(date: .now, emoji: "😀")
-    SimpleEntry(date: .now, emoji: "🤩")
 }
