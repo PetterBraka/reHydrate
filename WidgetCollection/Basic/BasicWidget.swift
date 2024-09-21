@@ -11,7 +11,10 @@ import WidgetKit
 import SwiftUI
 
 struct BasicWidget: Widget {
-    let engine: WidgetEngine = .shared
+    let engine: WidgetEngine = WidgetEngine(
+        appGroup: "group.com.braka.reHydrate.shared",
+        subsystem: "com.braka.reHydrate.Widget"
+    )
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "basic", provider: BasicProvider(engine: engine)) { entry in

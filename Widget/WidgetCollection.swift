@@ -6,7 +6,6 @@
 //  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import WidgetEngine
 import WidgetKit
 import SwiftUI
 

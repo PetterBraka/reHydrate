@@ -28,21 +28,25 @@ struct BasicProvider: TimelineProvider {
         if context.isPreview {
             completion(BasicEntry(date: .now, consumed: 1.4, goal: 2, symbol: "L"))
         } else {
-            let viewModel = presenter.getViewModel()
-            let entry = BasicEntry(from: viewModel)
-            completion(entry)
+            Task {
+                let viewModel = await presenter.getViewModel()
+                let entry = BasicEntry(from: viewModel)
+                completion(entry)
+            }
         }
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<BasicEntry>) -> ()) {
-        let viewModel = presenter.getViewModel()
-        let endOfDayViewModel = presenter.getEndOfDayViewModel()
-        let entry = BasicEntry(from: viewModel)
-        let lastEntry = BasicEntry(from: endOfDayViewModel)
-        
-        let timeline = Timeline(entries: [entry, lastEntry], policy: .never)
-        
-        completion(timeline)
+        Task {
+            let viewModel = await presenter.getViewModel()
+            let endOfDayViewModel = await presenter.getEndOfDayViewModel()
+            let entry = BasicEntry(from: viewModel)
+            let lastEntry = BasicEntry(from: endOfDayViewModel)
+            
+            let timeline = Timeline(entries: [entry, lastEntry], policy: .never)
+            
+            completion(timeline)
+        }
     }
 }
 
