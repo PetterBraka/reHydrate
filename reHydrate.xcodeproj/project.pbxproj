@@ -187,6 +187,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A10765B82C9EC193007C33D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10D69382C9755030093BBAB;
+			remoteInfo = WidgetExtension;
+		};
+		A10765BB2C9EC198007C33D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10D69382C9755030093BBAB;
+			remoteInfo = WidgetExtension;
+		};
 		A10D69472C9755050093BBAB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3378766B24378A9300F5A732 /* Project object */;
@@ -236,6 +250,16 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A10765BA2C9EC193007C33D4 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A10D694D2C9755050093BBAB /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -243,16 +267,6 @@
 			dstSubfolderSpec = 13;
 			files = (
 				A10D69492C9755050093BBAB /* WidgetExtension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A1271B612C8F950800336920 /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1004,11 +1018,13 @@
 				A185DB2F2B77C5F300B9318B /* Sources */,
 				A185DB302B77C5F300B9318B /* Frameworks */,
 				A185DB312B77C5F300B9318B /* Resources */,
-				A1271B612C8F950800336920 /* Embed Foundation Extensions */,
+				A10765BA2C9EC193007C33D4 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A10765B92C9EC193007C33D4 /* PBXTargetDependency */,
+				A10765BC2C9EC198007C33D4 /* PBXTargetDependency */,
 			);
 			name = "Watch App";
 			packageProductDependencies = (
@@ -1373,6 +1389,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A10765B92C9EC193007C33D4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A10D69382C9755030093BBAB /* WidgetExtension */;
+			targetProxy = A10765B82C9EC193007C33D4 /* PBXContainerItemProxy */;
+		};
+		A10765BC2C9EC198007C33D4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A10D69382C9755030093BBAB /* WidgetExtension */;
+			targetProxy = A10765BB2C9EC198007C33D4 /* PBXContainerItemProxy */;
+		};
 		A10D69482C9755050093BBAB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A10D69382C9755030093BBAB /* WidgetExtension */;
@@ -1626,16 +1652,16 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.Widget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchos watchsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,4";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WATCHOS_DEPLOYMENT_TARGET = 10;
 			};
 			name = Debug;
@@ -1670,15 +1696,15 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.Widget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchos watchsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,4";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WATCHOS_DEPLOYMENT_TARGET = 10;
 			};
 			name = Release;
@@ -1753,7 +1779,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchapp;
 				PRODUCT_NAME = reHydrate;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1788,7 +1814,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.braka.reHydrate.watchapp;
 				PRODUCT_NAME = reHydrate;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1813,7 +1839,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.petter.braka.reHydrate-Watch-AppTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.petter.braka.watch-AppTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1839,7 +1865,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.petter.braka.reHydrate-Watch-AppTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.petter.braka.watch-AppTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -1863,7 +1889,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.petter.braka.reHydrate-Watch-AppUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.petter.braka.watch-AppUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1888,7 +1914,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.petter.braka.reHydrate-Watch-AppUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.petter.braka.watch-AppUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
