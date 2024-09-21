@@ -13,10 +13,10 @@ import WidgetKit
 import SwiftUI
 
 struct BasicProvider: TimelineProvider {
-    let presenter: BasicPresenter
+    let presenter: TodayPresenter
     
     init(engine: WidgetEngine) {
-        self.presenter = Screen.Basic.Presenter(engine: engine)
+        self.presenter = Screen.Today.Presenter(engine: engine)
     }
     
     func placeholder(in context: Context) -> BasicEntry {
@@ -50,7 +50,7 @@ struct BasicProvider: TimelineProvider {
 }
 
 extension BasicEntry {
-    init(from viewModel: Basic.ViewModel) {
+    init(from viewModel: Today.ViewModel) {
         date = viewModel.date
         consumed = viewModel.consumed
         goal = viewModel.goal

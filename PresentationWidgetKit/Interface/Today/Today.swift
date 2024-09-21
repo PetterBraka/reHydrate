@@ -1,5 +1,5 @@
 //
-//  Basic.swift
+//  Today.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 10/09/2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Basic {
+public enum Today {
     public struct ViewModel {
         public let date: Date
         public let consumed: Double

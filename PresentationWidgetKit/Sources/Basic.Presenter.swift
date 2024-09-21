@@ -1,5 +1,5 @@
 //
-//  Basic.Presenter.swift
+//  Today.Presenter.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 10/09/2024.
@@ -13,8 +13,8 @@ import UnitServiceInterface
 import PresentationWidgetKitInterface
 import UserPreferenceServiceInterface
 
-extension Screen.Basic {
-    public final class Presenter: BasicPresenter {
+extension Screen.Today {
+    public final class Presenter: TodayPresenter {
         public typealias Engine = (
             HasLoggingService &
             HasUnitService &
@@ -28,13 +28,13 @@ extension Screen.Basic {
             self.engine = engine
         }
         
-        public func getViewModel() async -> Basic.ViewModel {
+        public func getViewModel() async -> Today.ViewModel {
             let (unit, symbol) = getUnitSystem()
             let day = await engine.dayService.getToday()
             let consumed = engine.unitService.convert(day.consumed, from: .litres, to: unit)
             let goal = engine.unitService.convert(day.goal, from: .litres, to: unit)
             
-            return Basic.ViewModel(
+            return Today.ViewModel(
                 date: day.date,
                 consumed: consumed,
                 goal: goal,
@@ -42,14 +42,14 @@ extension Screen.Basic {
             )
         }
         
-        public func getEndOfDayViewModel() async -> Basic.ViewModel {
+        public func getEndOfDayViewModel() async -> Today.ViewModel {
             let (unit, symbol) = getUnitSystem()
             let endOfDay = engine.dateService.getEnd(of: engine.dateService.now())
             
             let day = await engine.dayService.getToday()
             let goal = engine.unitService.convert(day.goal, from: .litres, to: unit)
             
-            return Basic.ViewModel(
+            return Today.ViewModel(
                 date: endOfDay,
                 consumed: 0,
                 goal: goal,

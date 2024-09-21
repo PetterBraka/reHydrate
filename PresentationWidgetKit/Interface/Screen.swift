@@ -6,5 +6,5 @@
 //
 
 public enum Screen {
-    public enum Basic {}
+    public enum Today {}
 }

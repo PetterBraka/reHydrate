@@ -159,8 +159,8 @@
 		A1A7A8782C9F4A8E00305573 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1271B512C8F950700336920 /* WidgetKit.framework */; };
 		A1A7A8792C9F4A8E00305573 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1271B532C8F950700336920 /* SwiftUI.framework */; };
 		A1A7A8822C9F4A8F00305573 /* WatchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A1A7A8772C9F4A8E00305573 /* WatchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A1A7A8882C9F4ABC00305573 /* WidgetEngine in Frameworks */ = {isa = PBXBuildFile; productRef = A1A7A8872C9F4ABC00305573 /* WidgetEngine */; };
 		A1A7A88A2C9F4ABC00305573 /* PresentationWidgetKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1A7A8892C9F4ABC00305573 /* PresentationWidgetKit */; };
+		A1A7A8922C9F4DD200305573 /* WidgetEngine in Frameworks */ = {isa = PBXBuildFile; productRef = A1A7A8912C9F4DD200305573 /* WidgetEngine */; };
 		A1A825E92B7991B700EA98EC /* DBKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1A825E82B7991B700EA98EC /* DBKit */; };
 		A1AA8DDA2AF634C500D12E74 /* AppIconScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD82AF634C500D12E74 /* AppIconScreen.swift */; };
 		A1AA8DDB2AF634C500D12E74 /* AppIconScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AA8DD92AF634C500D12E74 /* AppIconScreenObservable.swift */; };
@@ -540,9 +540,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1A7A8882C9F4ABC00305573 /* WidgetEngine in Frameworks */,
 				A1A7A88A2C9F4ABC00305573 /* PresentationWidgetKit in Frameworks */,
 				A1A7A8792C9F4A8E00305573 /* SwiftUI.framework in Frameworks */,
+				A1A7A8922C9F4DD200305573 /* WidgetEngine in Frameworks */,
 				A1A7A8782C9F4A8E00305573 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1110,12 +1110,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				A1A7A8522C9F48F300305573 /* Basic */,
 				A1A7A87A2C9F4A8E00305573 /* WatchWidget */,
 			);
 			name = WatchWidgetExtension;
 			packageProductDependencies = (
-				A1A7A8872C9F4ABC00305573 /* WidgetEngine */,
 				A1A7A8892C9F4ABC00305573 /* PresentationWidgetKit */,
+				A1A7A8912C9F4DD200305573 /* WidgetEngine */,
 			);
 			productName = WatchWidgetExtension;
 			productReference = A1A7A8772C9F4A8E00305573 /* WatchWidgetExtension.appex */;
@@ -2192,13 +2193,13 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = CommunicationSource;
 		};
-		A1A7A8872C9F4ABC00305573 /* WidgetEngine */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WidgetEngine;
-		};
 		A1A7A8892C9F4ABC00305573 /* PresentationWidgetKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationWidgetKit;
+		};
+		A1A7A8912C9F4DD200305573 /* WidgetEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WidgetEngine;
 		};
 		A1A825E82B7991B700EA98EC /* DBKit */ = {
 			isa = XCSwiftPackageProductDependency;
