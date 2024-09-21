@@ -10,16 +10,35 @@ import CoreData
 import DBKitInterface
 
 public class Database: DatabaseType {
-    private let inMemory: Bool
     private var backgroundContext: NSManagedObjectContext?
     
-    private lazy var persistentContainer: NSPersistentContainer = {
-        guard let objectModelURL = Bundle.module.url(forResource: "reHydrate", withExtension: "momd"),
+    private let persistentContainer: NSPersistentContainer
+    
+    public init(appGroup: String, inMemory: Bool = false) {
+        let databaseName = "reHydrate"
+        
+        guard let objectModelURL = Bundle.module.url(forResource: databaseName, withExtension: "momd"),
               let objectModel = NSManagedObjectModel(contentsOf: objectModelURL)
         else {
-            fatalError("Failed to retrieve the object model")
+            let message = "Failed to retrieve the database object model"
+            LoggingService.log(level: .error, message)
+            fatalError(message)
         }
-        let persistentContainer = NSPersistentContainer(name: "reHydrate", managedObjectModel: objectModel)
+        
+        guard let storeContainer = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+        else {
+            let message = "Failed to created shared file container."
+            LoggingService.log(level: .error, message)
+            fatalError(message)
+        }
+        let storeURL = storeContainer.appendingPathComponent("\(databaseName).sqlite")
+        let storeDescription = NSPersistentStoreDescription(url: storeURL)
+        storeDescription.shouldMigrateStoreAutomatically = true
+        storeDescription.shouldInferMappingModelAutomatically = true
+        
+        persistentContainer = NSPersistentContainer(name: "reHydrate", managedObjectModel: objectModel)
+        persistentContainer.persistentStoreDescriptions = [storeDescription]
         if inMemory {
             persistentContainer.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
@@ -31,11 +50,6 @@ public class Database: DatabaseType {
             }
             LoggingService.log(level: .debug, "Loaded persistent store: \(description)")
         }
-        return persistentContainer
-    }()
-    
-    public init(inMemory: Bool = false) {
-        self.inMemory = inMemory
     }
     
     public func open() -> NSManagedObjectContext {

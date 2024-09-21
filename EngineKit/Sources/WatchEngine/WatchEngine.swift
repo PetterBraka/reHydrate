@@ -37,11 +37,12 @@ public final class WatchEngine {
             fatalError("Shared UserDefaults couldn't be setup")
         }
         self.sharedDefaults = sharedDefaults
+        self.database = Database(appGroup: appGroup)
         self.watchService = watchService
         self.notificationCenter = notificationCenter
     }
     
-    private let database: DatabaseType = Database()
+    private let database: DatabaseType
     private let sharedDefaults: UserDefaults
     private let subsystem: String
     

@@ -15,7 +15,7 @@ final class DrinkManagerTests: XCTestCase {
     var sut: DrinkManagerType!
     
     override func setUp() {
-        self.spy = DatabaseSpy(realObject: Database(inMemory: true))
+        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true))
         self.sut = DrinkManager(database: spy)
     }
     

@@ -58,18 +58,14 @@ public final class SceneFactory: ObservableObject {
     private init() {
         let subsystem = "com.braka.reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
-        let logger = LoggingService(subsystem: subsystem)
-        let database = Database()
         let phoneSession = WCSession.default
         self.notificationCenter = NotificationCenter.default
         
         engine = Engine(
             appGroup: appGroup,
             appVersion: UIApplication.shared.appVersion,
-            logger: logger,
-            dayManager: DayManager(database: database),
-            drinkManager: DrinkManager(database: database),
-            consumptionManager: ConsumptionManager(database: database),
+            logger: LoggingService(subsystem: subsystem),
+            database: Database(appGroup: appGroup),
             reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
             celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
             userNotificationCenter: UNUserNotificationCenter.current(),

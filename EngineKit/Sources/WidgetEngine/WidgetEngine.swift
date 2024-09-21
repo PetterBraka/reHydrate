@@ -31,9 +31,10 @@ public final class WidgetEngine {
             fatalError("Shared UserDefaults couldn't be setup")
         }
         self.sharedDefaults = sharedDefaults
+        self.database = Database(appGroup: appGroup)
     }
     
-    private let database: DatabaseType = Database()
+    private let database: DatabaseType
     private let sharedDefaults: UserDefaults
     private let subsystem: String
     
