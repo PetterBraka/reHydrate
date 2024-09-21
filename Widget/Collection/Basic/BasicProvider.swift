@@ -34,7 +34,7 @@ struct BasicProvider: TimelineProvider {
         }
     }
     
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    func getTimeline(in context: Context, completion: @escaping (Timeline<BasicEntry>) -> ()) {
         let viewModel = presenter.getViewModel()
         let endOfDayViewModel = presenter.getEndOfDayViewModel()
         let entry = BasicEntry(from: viewModel)
