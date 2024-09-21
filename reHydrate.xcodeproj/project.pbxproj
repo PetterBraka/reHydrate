@@ -654,10 +654,10 @@
 				A1271B6F2C97195100336920 /* PresentationWidgetKit */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				A149F2A22B69B9DD00710609 /* reHydrateTests */,
+				A10D693C2C9755040093BBAB /* Widget */,
 				A1271B3C2C8F944700336920 /* Watch App */,
 				A1271B452C8F945700336920 /* Watch AppTests */,
 				A1271B492C8F946400336920 /* Watch AppUITests */,
-				A10D693C2C9755040093BBAB /* Widget */,
 				3378767424378A9400F5A732 /* Products */,
 				F887073E19DFDDCFF694E7E8 /* Frameworks */,
 			);
@@ -1132,10 +1132,10 @@
 			targets = (
 				3378767224378A9400F5A732 /* reHydrate */,
 				A149F2A02B69B9DD00710609 /* reHydrateTests */,
+				A10D69382C9755030093BBAB /* WidgetExtension */,
 				A185DB322B77C5F300B9318B /* Watch App */,
 				A185DB412B77C5F500B9318B /* Watch AppTests */,
 				A185DB4B2B77C5F500B9318B /* Watch AppUITests */,
-				A10D69382C9755030093BBAB /* WidgetExtension */,
 			);
 		};
 /* End PBXProject section */
