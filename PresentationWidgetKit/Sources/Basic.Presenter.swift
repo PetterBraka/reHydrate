@@ -28,13 +28,9 @@ extension Screen.Basic {
             self.engine = engine
         }
         
-        public func getViewModel() -> Basic.ViewModel {
+        public func getViewModel() async -> Basic.ViewModel {
             let (unit, symbol) = getUnitSystem()
-            guard let day = engine.dayService.getSharedToday()
-            else {
-                engine.logger.info("No shared day found")
-                return .init(date: .now, consumed: 0, goal: 2, symbol: symbol)
-            }
+            let day = await engine.dayService.getToday()
             let consumed = engine.unitService.convert(day.consumed, from: .litres, to: unit)
             let goal = engine.unitService.convert(day.goal, from: .litres, to: unit)
             
@@ -46,15 +42,11 @@ extension Screen.Basic {
             )
         }
         
-        public func getEndOfDayViewModel() -> Basic.ViewModel {
+        public func getEndOfDayViewModel() async -> Basic.ViewModel {
             let (unit, symbol) = getUnitSystem()
             let endOfDay = engine.dateService.getEnd(of: engine.dateService.now())
             
-            guard let day = engine.dayService.getSharedToday()
-            else {
-                engine.logger.info("No shared day found")
-                return .init(date: .now, consumed: 0, goal: 2, symbol: symbol)
-            }
+            let day = await engine.dayService.getToday()
             let goal = engine.unitService.convert(day.goal, from: .litres, to: unit)
             
             return Basic.ViewModel(
