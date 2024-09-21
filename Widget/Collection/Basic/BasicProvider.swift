@@ -6,7 +6,6 @@
 //  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import DayServiceInterface
 import PresentationWidgetKitInterface
 import PresentationWidgetKit
 import WidgetEngine
