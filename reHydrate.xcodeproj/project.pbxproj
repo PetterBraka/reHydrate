@@ -472,7 +472,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A1A7A8522C9F48F300305573 /* Basic */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Basic; sourceTree = "<group>"; };
+		A11224B32C9F54EC00C6BBA2 /* Widget-Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Widget-Shared"; sourceTree = "<group>"; };
 		A1A7A87A2C9F4A8E00305573 /* WatchWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (A1A7A8832C9F4A8F00305573 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = WatchWidget; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -687,6 +687,7 @@
 				A1271B3C2C8F944700336920 /* Watch App */,
 				A1271B452C8F945700336920 /* Watch AppTests */,
 				A1271B492C8F946400336920 /* Watch AppUITests */,
+				A11224B32C9F54EC00C6BBA2 /* Widget-Shared */,
 				A10D693C2C9755040093BBAB /* Widget */,
 				A1A7A87A2C9F4A8E00305573 /* WatchWidget */,
 				3378767424378A9400F5A732 /* Products */,
@@ -741,7 +742,6 @@
 		A10D693C2C9755040093BBAB /* Widget */ = {
 			isa = PBXGroup;
 			children = (
-				A1A7A84D2C9F48DA00305573 /* Collection */,
 				A10D69432C9755050093BBAB /* Assets.xcassets */,
 				A10D69452C9755050093BBAB /* Info.plist */,
 				A10D69462C9755050093BBAB /* Widget.entitlements */,
@@ -916,14 +916,6 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
-		A1A7A84D2C9F48DA00305573 /* Collection */ = {
-			isa = PBXGroup;
-			children = (
-				A1A7A8522C9F48F300305573 /* Basic */,
-			);
-			path = Collection;
-			sourceTree = "<group>";
-		};
 		A1AA8DE12AF7825B00D12E74 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
@@ -1002,7 +994,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A1A7A8522C9F48F300305573 /* Basic */,
+				A11224B32C9F54EC00C6BBA2 /* Widget-Shared */,
 			);
 			name = WidgetExtension;
 			packageProductDependencies = (
@@ -1110,7 +1102,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A1A7A8522C9F48F300305573 /* Basic */,
+				A11224B32C9F54EC00C6BBA2 /* Widget-Shared */,
 				A1A7A87A2C9F4A8E00305573 /* WatchWidget */,
 			);
 			name = WatchWidgetExtension;
