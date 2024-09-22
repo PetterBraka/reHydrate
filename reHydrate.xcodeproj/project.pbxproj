@@ -470,8 +470,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A11224B32C9F54EC00C6BBA2 /* Widget-Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Widget-Shared"; sourceTree = "<group>"; };
-		A1A7A87A2C9F4A8E00305573 /* WatchWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (A1A7A8832C9F4A8F00305573 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = WatchWidget; sourceTree = "<group>"; };
+		A11224B32C9F54EC00C6BBA2 /* Widget shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Widget shared"; sourceTree = "<group>"; };
+		A1A7A87A2C9F4A8E00305573 /* Watch widget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (A1A7A8832C9F4A8F00305573 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Watch widget"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -685,9 +685,9 @@
 				A1271B3C2C8F944700336920 /* Watch App */,
 				A1271B452C8F945700336920 /* Watch AppTests */,
 				A1271B492C8F946400336920 /* Watch AppUITests */,
-				A11224B32C9F54EC00C6BBA2 /* Widget-Shared */,
+				A11224B32C9F54EC00C6BBA2 /* Widget shared */,
 				A10D693C2C9755040093BBAB /* Widget */,
-				A1A7A87A2C9F4A8E00305573 /* WatchWidget */,
+				A1A7A87A2C9F4A8E00305573 /* Watch widget */,
 				3378767424378A9400F5A732 /* Products */,
 				F887073E19DFDDCFF694E7E8 /* Frameworks */,
 			);
@@ -991,7 +991,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A11224B32C9F54EC00C6BBA2 /* Widget-Shared */,
+				A11224B32C9F54EC00C6BBA2 /* Widget shared */,
 			);
 			name = WidgetExtension;
 			packageProductDependencies = (
@@ -1099,8 +1099,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A11224B32C9F54EC00C6BBA2 /* Widget-Shared */,
-				A1A7A87A2C9F4A8E00305573 /* WatchWidget */,
+				A11224B32C9F54EC00C6BBA2 /* Widget shared */,
+				A1A7A87A2C9F4A8E00305573 /* Watch widget */,
 			);
 			name = WatchWidgetExtension;
 			packageProductDependencies = (
@@ -1980,14 +1980,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = WatchWidget/WatchWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Watch widget/WatchWidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WatchWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WatchWidget;
+				INFOPLIST_FILE = "Watch widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Watch widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2015,14 +2015,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = WatchWidget/WatchWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Watch widget/WatchWidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DCQ3V8BLU5;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WatchWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WatchWidget;
+				INFOPLIST_FILE = "Watch widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Watch widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
