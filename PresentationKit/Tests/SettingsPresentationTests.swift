@@ -61,6 +61,7 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_didAppear() async {
+        dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 0, goal: 0)
         await sut.perform(action: .didAppear)
         XCTAssertEqual(
             sut.viewModel,
@@ -77,7 +78,6 @@ final class SettingsPresentationTests: XCTestCase {
     
     func test_didAppear_withGoal() async {
         dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 1, goal: 2)
-        unitService.stub.convertValueFromUnitToUnit_returnValue = 2
         
         await sut.perform(action: .didAppear)
         XCTAssertEqual(
@@ -91,14 +91,13 @@ final class SettingsPresentationTests: XCTestCase {
                   error: nil)
         )
         
-        XCTAssertEqual(unitService.spy.lastMethodCall, .convert(value: 2, fromUnit: .litres, toUnit: .litres))
+        XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem])
         XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
     func test_didAppear_withImperialGoal() async {
-        dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 1, goal: 2)
+        dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 1, goal: 3.52)
         unitService.stub.getUnitSystem_returnValue = .imperial
-        unitService.stub.convertValueFromUnitToUnit_returnValue = 3.52
         
         await sut.perform(action: .didAppear)
         XCTAssertEqual(
@@ -112,7 +111,7 @@ final class SettingsPresentationTests: XCTestCase {
                   error: nil)
         )
         
-        XCTAssertEqual(unitService.spy.lastMethodCall, .convert(value: 2, fromUnit: .litres, toUnit: .pint))
+        XCTAssertEqual(unitService.spy.lastMethodCall, .getUnitSystem)
         XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
@@ -129,6 +128,7 @@ final class SettingsPresentationTests: XCTestCase {
                             Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 54, seconds: 59)),
                     end: (Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 5, seconds: 0),
                           Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)))
+        dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 0, goal: 0)
         
         await sut.perform(action: .didAppear)
         XCTAssertEqual(
@@ -620,6 +620,7 @@ final class SettingsPresentationTests: XCTestCase {
             end: (Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 5, seconds: 0),
                   Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
         )
+        dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 0, goal: 0)
         await sut.perform(action: .didAppear)
         
         notificationService.stub.getSettings_returnValue = .init(
@@ -759,6 +760,7 @@ final class SettingsPresentationTests: XCTestCase {
             end: (Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 5, seconds: 0),
                   Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59))
         )
+        dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 0, goal: 0)
         await sut.perform(action: .didAppear)
         
         notificationService.stub.getSettings_returnValue = .init(
