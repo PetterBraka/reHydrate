@@ -50,6 +50,7 @@ public final class Engine {
         else {
             fatalError("Shared UserDefaults couldn't be setup")
         }
+        self.appGroup = appGroup
         self.logger = logger
         self.dayManager = DayManager(database: database)
         self.drinkManager = DrinkManager(database: database)
@@ -68,6 +69,7 @@ public final class Engine {
         self.notificationCenter = notificationCenter
     }
     
+    public let appGroup: String
     public var appVersion: String
     private let reminders: [NotificationMessage]
     private let celebrations: [NotificationMessage]

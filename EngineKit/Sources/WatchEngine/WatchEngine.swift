@@ -31,6 +31,7 @@ public final class WatchEngine {
         notificationCenter: NotificationCenter
     ) {
         self.subsystem = subsystem
+        self.appGroup = appGroup
         
         guard let sharedDefaults = UserDefaults(suiteName: appGroup)
         else {
@@ -42,6 +43,7 @@ public final class WatchEngine {
         self.notificationCenter = notificationCenter
     }
     
+    public let appGroup: String
     private let database: DatabaseType
     private let sharedDefaults: UserDefaults
     private let subsystem: String
@@ -62,6 +64,7 @@ public final class WatchEngine {
 }
 
 extension WatchEngine:
+    HasAppGroup,
     HasLoggingService,
     HasUnitService,
     HasUserPreferenceService,

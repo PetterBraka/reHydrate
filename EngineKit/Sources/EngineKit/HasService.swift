@@ -20,6 +20,7 @@ import CommunicationKitInterface
 import PhoneCommsInterface
 
 public protocol HasService:
+    HasAppGroup,
     HasLoggingService,
     HasDayManagerService,
     HasDrinkManagerService,
