@@ -19,7 +19,13 @@ struct HomeView: View {
             header
             Divider()
             if observer.viewModel.drinks.isEmpty {
-                Text("No container found")
+                Text(
+                    LocalizedString(
+                        "ui.watch.home.no.drinks.found",
+                        value: "No container found",
+                        comment: "An error message when no water containers are found in the system."
+                    )
+                )
             } else {
                 drinksView
             }
