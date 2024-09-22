@@ -16,8 +16,20 @@ struct BasicWidget: Widget {
             BasicView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("Todays consumption")
-        .description("This helps you keep track of your water consumption today.")
+        .configurationDisplayName(
+            LocalizedString(
+                "ui.widget.basic.name",
+                value: "Todays consumption",
+                comment: "Widget name for a basic widget to track todays consumption."
+            )
+        )
+        .description(
+            LocalizedString(
+                "ui.widget.basic.description",
+                value: "A widget to track todays consumption.",
+                comment: "Widget description for a basic widget to track todays consumption."
+            )
+        )
         .supportedFamilies([.accessoryCircular, .accessoryInline, .accessoryRectangular])
     }
 }

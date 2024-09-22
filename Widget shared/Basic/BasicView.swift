@@ -60,11 +60,25 @@ struct BasicView : View {
     private var motivationalText: some View {
         let difference = entry.goal - entry.consumed
         if difference > 1 {
-            Text(String(format: "You still need %.1f%@", difference, entry.symbol))
+            Text(LocalizedString(
+                "ui.widget.basic.motivational.text",
+                value: "You still need %.1f%@",
+                arguments: difference, entry.symbol,
+                comment: "Motivational text for when you are far away from your goal"
+            ))
         } else if difference > 0 {
-            Text(String(format: "Only %.1f%@ left", difference, entry.symbol))
+            Text(LocalizedString(
+                "ui.widget.basic.motivational.text.close",
+                value: "Only %.1f%@ left",
+                arguments: difference, entry.symbol,
+                comment: "Motivational text for when you are close to your goal"
+            ))
         } else{
-            Text("You did it!")
+            Text(LocalizedString(
+                "ui.widget.basic.motivational.text.close",
+                value: "You did it!",
+                comment: "Celebration text when you reached your goal"
+            ))
         }
     }
     

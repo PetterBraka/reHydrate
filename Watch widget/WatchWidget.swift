@@ -11,14 +11,9 @@ import WidgetKit
 import SwiftUI
 
 @main
-struct WatchWidget: Widget {
-    let kind: String = "today-widget"
+struct WatchWidget: WidgetBundle {
 
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: BasicProvider()) { entry in
-            BasicView(entry: entry)
-        }
-        .configurationDisplayName("My today")
-        .description("This helps you keep track of your water consumption today.")
+    var body: some Widget {
+        BasicWidget()
     }
 }
