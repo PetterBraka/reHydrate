@@ -12,7 +12,7 @@ import SwiftUI
 
 struct BasicWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "basic", provider: BasicProvider(engine: .shared)) { entry in
+        StaticConfiguration(kind: "basic", provider: BasicProvider()) { entry in
             BasicView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }

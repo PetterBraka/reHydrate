@@ -15,7 +15,7 @@ struct WatchWidget: Widget {
     let kind: String = "today-widget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: BasicProvider(engine: .shared)) { entry in
+        StaticConfiguration(kind: kind, provider: BasicProvider()) { entry in
             BasicView(entry: entry)
         }
         .configurationDisplayName("My today")

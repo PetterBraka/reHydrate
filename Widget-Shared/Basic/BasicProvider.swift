@@ -15,8 +15,8 @@ import SwiftUI
 struct BasicProvider: TimelineProvider {
     let presenter: TodayPresenter
     
-    init(engine: WidgetEngine) {
-        self.presenter = Screen.Today.Presenter(engine: engine)
+    init() {
+        self.presenter = Screen.Today.Presenter(appGroup: "group.com.braka.reHydrate.shared")
     }
     
     func placeholder(in context: Context) -> BasicEntry {
@@ -24,36 +24,33 @@ struct BasicProvider: TimelineProvider {
     }
     
     func getSnapshot(in context: Context, completion: @escaping (BasicEntry) -> ()) {
-        if context.isPreview {
-            completion(BasicEntry(date: .now, consumed: 1.4, goal: 2, symbol: "L"))
-        } else {
-            Task {
-                let viewModel = await presenter.getViewModel()
-                let entry = BasicEntry(from: viewModel)
-                completion(entry)
-            }
-        }
+        let viewModel = presenter.getViewModel()
+        let entry = BasicEntry(
+            date: viewModel.date,
+            consumed: viewModel.consumed,
+            goal: viewModel.goal,
+            symbol: viewModel.symbol
+        )
+        completion(entry)
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<BasicEntry>) -> ()) {
-        Task {
-            let viewModel = await presenter.getViewModel()
-            let endOfDayViewModel = await presenter.getEndOfDayViewModel()
-            let entry = BasicEntry(from: viewModel)
-            let lastEntry = BasicEntry(from: endOfDayViewModel)
-            
-            let timeline = Timeline(entries: [entry, lastEntry], policy: .never)
-            
-            completion(timeline)
-        }
-    }
-}
-
-extension BasicEntry {
-    init(from viewModel: Today.ViewModel) {
-        date = viewModel.date
-        consumed = viewModel.consumed
-        goal = viewModel.goal
-        symbol = viewModel.symbol
+        let viewModel = presenter.getViewModel()
+        let entry = BasicEntry(
+            date: viewModel.date,
+            consumed: viewModel.consumed,
+            goal: viewModel.goal,
+            symbol: viewModel.symbol
+        )
+        let lastEntry = BasicEntry(
+            date: viewModel.endOfDay,
+            consumed: 0,
+            goal: viewModel.goal,
+            symbol: viewModel.symbol
+        )
+        
+        let timeline = Timeline(entries: [entry, lastEntry], policy: .never)
+        
+        completion(timeline)
     }
 }

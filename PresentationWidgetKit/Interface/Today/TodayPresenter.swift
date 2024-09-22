@@ -6,6 +6,5 @@
 //
 
 public protocol TodayPresenter {
-    func getViewModel() async -> Today.ViewModel
-    func getEndOfDayViewModel() async -> Today.ViewModel
+    func getViewModel() -> Today.ViewModel
 }
