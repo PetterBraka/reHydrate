@@ -175,7 +175,6 @@
 		A1EABF252ACB63BC00591981 /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */; };
 		A1EABF282ADA842100591981 /* EditContainerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF272ADA842100591981 /* EditContainerScreen.swift */; };
 		A1EABF2C2ADA936F00591981 /* FilledContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF2B2ADA936F00591981 /* FilledContainer.swift */; };
-		A1EABF2E2ADAC80000591981 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF2D2ADAC80000591981 /* LocalizedString.swift */; };
 		A1EABF302ADAD57600591981 /* EditContainerScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF2F2ADAD57600591981 /* EditContainerScreenObservable.swift */; };
 		A1EABF322ADBCC3C00591981 /* Preview+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */; };
 		A1EABF342AF37E5B00591981 /* OpenUrlPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */; };
@@ -449,7 +448,6 @@
 		A1EABF242ACB63BC00591981 /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		A1EABF272ADA842100591981 /* EditContainerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContainerScreen.swift; sourceTree = "<group>"; };
 		A1EABF2B2ADA936F00591981 /* FilledContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledContainer.swift; sourceTree = "<group>"; };
-		A1EABF2D2ADAC80000591981 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		A1EABF2F2ADAD57600591981 /* EditContainerScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContainerScreenObservable.swift; sourceTree = "<group>"; };
 		A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Preview+Helpers.swift"; sourceTree = "<group>"; };
 		A1EABF332AF37E5B00591981 /* OpenUrlPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenUrlPort.swift; sourceTree = "<group>"; };
@@ -472,6 +470,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A11224B32C9F54EC00C6BBA2 /* Widget shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Widget shared"; sourceTree = "<group>"; };
 		A1A7A87A2C9F4A8E00305573 /* Watch widget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (A1A7A8832C9F4A8F00305573 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Watch widget"; sourceTree = "<group>"; };
+		A1CC10F22CA0BAF6003B7393 /* LocalizedString */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LocalizedString; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -680,6 +679,7 @@
 				A114C6C02A63DAAE00F53770 /* PresentationKit */,
 				A185DB272B77BAA900B9318B /* PresentationWatchKit */,
 				A1271B6F2C97195100336920 /* PresentationWidgetKit */,
+				A1CC10F22CA0BAF6003B7393 /* LocalizedString */,
 				3378767524378A9400F5A732 /* reHydrate */,
 				A149F2A22B69B9DD00710609 /* reHydrateTests */,
 				A1271B3C2C8F944700336920 /* Watch App */,
@@ -869,7 +869,6 @@
 			children = (
 				33B28F6926BC7F6800DECA9F /* Extensions */,
 				A1614D522A362E8C00235D02 /* SceneFactory.swift */,
-				A1EABF2D2ADAC80000591981 /* LocalizedString.swift */,
 				A1EABF312ADBCC3C00591981 /* Preview+Helpers.swift */,
 			);
 			path = Utilities;
@@ -964,6 +963,9 @@
 				A185DB552B77C5F600B9318B /* PBXTargetDependency */,
 				A10D69482C9755050093BBAB /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				A1CC10F22CA0BAF6003B7393 /* LocalizedString */,
+			);
 			name = reHydrate;
 			packageProductDependencies = (
 				A126D24A2A76665800A296BA /* EngineKit */,
@@ -992,6 +994,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				A11224B32C9F54EC00C6BBA2 /* Widget shared */,
+				A1CC10F22CA0BAF6003B7393 /* LocalizedString */,
 			);
 			name = WidgetExtension;
 			packageProductDependencies = (
@@ -1038,6 +1041,9 @@
 				A10765B92C9EC193007C33D4 /* PBXTargetDependency */,
 				A10765BC2C9EC198007C33D4 /* PBXTargetDependency */,
 				A1A7A8812C9F4A8F00305573 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A1CC10F22CA0BAF6003B7393 /* LocalizedString */,
 			);
 			name = "Watch App";
 			packageProductDependencies = (
@@ -1101,6 +1107,7 @@
 			fileSystemSynchronizedGroups = (
 				A11224B32C9F54EC00C6BBA2 /* Widget shared */,
 				A1A7A87A2C9F4A8E00305573 /* Watch widget */,
+				A1CC10F22CA0BAF6003B7393 /* LocalizedString */,
 			);
 			name = WatchWidgetExtension;
 			packageProductDependencies = (
@@ -1358,7 +1365,6 @@
 				A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */,
 				330C23D627665D4C00293092 /* AppDelegate.swift in Sources */,
 				A1AA8DDD2AF6386C00D12E74 /* AlternateIconsServicePort.swift in Sources */,
-				A1EABF2E2ADAC80000591981 /* LocalizedString.swift in Sources */,
 				A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */,
 				A1E935542C5F639600B73E35 /* PhoneCommunicationDelegate.swift in Sources */,
 				33EC3A7B274D06070049E414 /* SettingsScreen.swift in Sources */,
