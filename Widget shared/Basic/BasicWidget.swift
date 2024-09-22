@@ -18,5 +18,12 @@ struct BasicWidget: Widget {
         }
         .configurationDisplayName("Todays consumption")
         .description("This helps you keep track of your water consumption today.")
+        .supportedFamilies([.accessoryCircular, .accessoryInline, .accessoryRectangular])
     }
+}
+
+#Preview(as: .accessoryRectangular) {
+    BasicWidget()
+} timeline: {
+    BasicEntry(date: .now, consumed: 0, goal: 2, symbol: "L")
 }

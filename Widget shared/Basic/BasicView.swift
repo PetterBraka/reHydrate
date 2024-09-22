@@ -18,74 +18,94 @@ struct BasicView : View {
         Group {
             switch family {
             case .accessoryCircular, .systemSmall:
-                accessoryCircular
+                circularGauge
             case .accessoryCorner:
-                accessoryCorner
+                cornerGauge
             case .accessoryRectangular:
-                accessoryRectangular
-            case .accessoryInline:
-                accessoryInline
-            case .systemMedium, .systemLarge, .systemExtraLarge:
-                unsupported
-            @unknown default:
-                unsupported
+                VStack(alignment: .leading) {
+                    motivationalText
+                    linearGauge
+                }
+            default:
+                Label {
+                    summaryText
+                } icon: {
+                    waterDrop
+                }
             }
         }
         .tint(.cyan)
         .privacySensitive(false)
     }
     
-    private var accessoryCircular: some View {
+    private var circularGauge: some View {
         Gauge(value: entry.consumed, in: 0 ... entry.goal) {
             EmptyView()
         } currentValueLabel: {
-            Text(entry.consumed, format: .number)
+            consumedText
         }
         .gaugeStyle(.accessoryCircularCapacity)
     }
     
-    private var accessoryCorner: some View {
+    private var cornerGauge: some View {
         Text(entry.consumed, format: .number)
             .widgetCurvesContent()
             .widgetLabel {
-                Gauge(value: entry.consumed, in: 0 ... entry.goal) {
-                    EmptyView()
-                } currentValueLabel: {
-                    Text(entry.consumed, format: .number)
-                }
-                .gaugeStyle(.accessoryLinearCapacity)
+                circularGauge
+                    .gaugeStyle(.accessoryLinearCapacity)
             }
     }
     
-    private var accessoryRectangular: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(entry.consumed, format: .number) + Text("/") + Text(entry.goal, format: .number) + Text(entry.symbol)
-            Gauge(value: entry.consumed, in: 0 ... entry.goal) {
-                EmptyView()
-            } currentValueLabel: {
-                EmptyView()
-            } minimumValueLabel: {
-                Text(0.0, format: .number)
-            } maximumValueLabel: {
-                Text(entry.goal, format: .number)
-            }
-            .gaugeStyle(.accessoryLinearCapacity)
+    @ViewBuilder
+    private var motivationalText: some View {
+        let difference = entry.goal - entry.consumed
+        if difference > 1 {
+            Text(String(format: "You still need %.1f%@", difference, entry.symbol))
+        } else if difference > 0 {
+            Text(String(format: "Only %.1f%@ left", difference, entry.symbol))
+        } else{
+            Text("You did it!")
         }
     }
     
-    private var accessoryInline: some View {
+    private var linearGauge: some View {
         Gauge(value: entry.consumed, in: 0 ... entry.goal) {
             EmptyView()
         } currentValueLabel: {
-            Text(entry.consumed, format: .number)
+            EmptyView()
+        } minimumValueLabel: {
+            Text(0.0, format: .number)
+        } maximumValueLabel: {
+            goalText
         }
         .gaugeStyle(.accessoryLinearCapacity)
     }
     
-    private var unsupported: some View {
-        Text(entry.consumed, format: .number) +
-        Text("/") +
-        Text(entry.goal, format: .number) +
-        Text(entry.symbol)
+    private var consumedText: Text {
+        Text(entry.consumed, format: .number)
     }
+    
+    private var goalText: Text {
+        Text(entry.goal, format: .number)
+    }
+    
+    private var summaryText: some View {
+        Text(String(format: "%.1f/%.1f %@", entry.consumed, entry.goal, entry.symbol))
+    }
+    
+    private var waterDrop: Image {
+        if (entry.consumed / entry.goal) > 0.9 {
+            Image(systemName: "drop.fill")
+        } else if (entry.consumed / entry.goal) > 0.3 {
+            Image(systemName: "drop.halffull")
+        } else {
+            Image(systemName: "drop")
+        }
+    }
+}
+
+#Preview(as: .accessoryRectangular) {
+    BasicWidget()
+} timeline: {
+    BasicEntry(date: .now, consumed: 1, goal: 2.5, symbol: "L")
 }
