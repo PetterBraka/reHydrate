@@ -7,9 +7,11 @@
 //
 
 import SwiftUI
+import WidgetKit
 import PresentationWatchInterface
 
 struct HomeView: View {
+    @Environment(\.scenePhase) var scenePhase
     @ObservedObject var observer: HomeScreenObservable
     
     var body: some View {
@@ -25,8 +27,18 @@ struct HomeView: View {
         .onAppear {
             observer.perform(action: .didAppear)
         }
-        .onDisappear {
-            observer.perform(action: .didBackground)
+        .onChange(of: scenePhase) { oldValue, newValue in
+            Task {
+                switch newValue {
+                case .active:
+                    break
+                case .background, .inactive:
+                    await observer.perform(action: .didBackground)
+                    WidgetCenter.shared.reloadAllTimelines()
+                @unknown default:
+                    break
+                }
+            }
         }
     }
     

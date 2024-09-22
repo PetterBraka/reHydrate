@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 import PresentationInterface
 import PresentationKit
 import EngineKit
@@ -37,6 +38,7 @@ struct HomeScreen: View {
                     await observer.perform(action: .didBecomeActive)
                 case .background, .inactive:
                     await observer.perform(action: .didBackground)
+                    WidgetCenter.shared.reloadAllTimelines()
                 @unknown default:
                     break
                 }
