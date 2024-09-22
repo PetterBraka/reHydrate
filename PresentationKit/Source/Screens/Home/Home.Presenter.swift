@@ -14,6 +14,7 @@ import PortsInterface
 import UnitServiceInterface
 import DateServiceInterface
 import PhoneCommsInterface
+import UserPreferenceServiceInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
@@ -25,7 +26,8 @@ extension Screen.Home {
             HasHealthService &
             HasUnitService &
             HasDateService &
-            HasPhoneComms
+            HasPhoneComms &
+            HasUserPreferenceService
         )
         public typealias Router = (
             HomeRoutable &
@@ -70,6 +72,7 @@ extension Screen.Home {
                 await sync(didComplete: nil)
             case .didBackground:
                 await engine.phoneComms.sendDataToWatch()
+                await setWidgetData()
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
@@ -326,4 +329,33 @@ private extension Screen.Home.Presenter {
             return 0
         }
     }
+}
+
+// MARK: Widget data
+private extension Screen.Home.Presenter {
+    func setWidgetData() async {
+        let today = await engine.dayService.getToday()
+        let unitSystem = engine.unitService.getUnitSystem()
+        
+        let data = WidgetData(
+            date: today.date,
+            endOfDay: engine.dateService.getEnd(of: today.date),
+            consumed: today.consumed,
+            goal: today.goal,
+            symbol: unitSystem == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
+        )
+        do {
+            try engine.userPreferenceService.set(data, for: "today-widget")
+        } catch {
+            engine.logger.error("Couldn't set widget data", error: error)
+        }
+    }
+}
+
+private struct WidgetData: Codable {
+    let date: Date
+    let endOfDay: Date
+    let consumed: Double
+    let goal: Double
+    let symbol: String
 }

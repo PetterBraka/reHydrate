@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Home.swift
 //  
 //
 //  Created by Petter vang Brakalsvålet on 10/02/2024.
@@ -14,6 +14,7 @@ public enum Home {
     
     public enum Action {
         case didAppear
+        case didBackground
         case didTapAddDrink(ViewModel.Container)
 //        case didTapRemoveDrink(ViewModel.Drink) // TODO: Nice to have in the future.
     }

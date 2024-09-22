@@ -25,6 +25,9 @@ struct HomeView: View {
         .onAppear {
             observer.perform(action: .didAppear)
         }
+        .onDisappear {
+            observer.perform(action: .didBackground)
+        }
     }
     
     @ViewBuilder

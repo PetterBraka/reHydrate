@@ -14,6 +14,7 @@ import UnitServiceInterface
 import DayServiceInterface
 import WatchCommsInterface
 import DateServiceInterface
+import UserPreferenceServiceInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
@@ -24,7 +25,9 @@ extension Screen.Home {
             HasDayService &
             HasDrinksService &
             HasDateService &
-            HasWatchComms
+            HasWatchComms &
+            HasUserPreferenceService &
+            HasAppGroup
         )
         
         private let engine: Engine
@@ -58,6 +61,8 @@ extension Screen.Home {
             switch action {
             case .didAppear:
                 await sync()
+            case .didBackground:
+                await setWidgetData()
             case let .didTapAddDrink(container):
                 guard let drink = viewModel.drinks.first(where: { $0.container == container })
                 else { return }
@@ -187,4 +192,34 @@ private extension Container {
         case .small: self = .small
         }
     }
+}
+
+// Widget data
+private extension Screen.Home.Presenter {
+    func setWidgetData() async {
+        let today = await engine.dayService.getToday()
+        let unitSystem = engine.unitService.getUnitSystem()
+        
+        let data = WidgetData(
+            date: today.date,
+            endOfDay: engine.dateService.getEnd(of: today.date),
+            consumed: today.consumed,
+            goal: today.goal,
+            symbol: unitSystem == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
+        )
+        
+        do {
+            try engine.userPreferenceService.set(data, for: "today-widget")
+        } catch {
+            engine.logger.error("Couldn't set widget data", error: error)
+        }
+    }
+}
+
+private struct WidgetData: Codable {
+    let date: Date
+    let endOfDay: Date
+    let consumed: Double
+    let goal: Double
+    let symbol: String
 }
