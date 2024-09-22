@@ -136,7 +136,6 @@
 		A1271B462C8F945700336920 /* watch_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1271B442C8F945700336920 /* watch_AppTests.swift */; };
 		A1271B4A2C8F946400336920 /* watch_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1271B472C8F946400336920 /* watch_AppUITests.swift */; };
 		A1271B4B2C8F946400336920 /* watch_AppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1271B482C8F946400336920 /* watch_AppUITestsLaunchTests.swift */; };
-		A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */; };
 		A13BFF5E2B16971B00E47671 /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */; };
 		A13BFF602B16A29600E47671 /* HistoryScreenObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */; };
 		A149F2A42B69B9DD00710609 /* HealthKitPortTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2A32B69B9DD00710609 /* HealthKitPortTests.swift */; };
@@ -420,7 +419,6 @@
 		A1271B532C8F950700336920 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		A1271B6B2C97029800336920 /* Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Watch App.entitlements"; sourceTree = "<group>"; };
 		A1271B6F2C97195100336920 /* PresentationWidgetKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationWidgetKit; sourceTree = "<group>"; };
-		A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = reHydrate.xcdatamodel; sourceTree = "<group>"; };
 		A13BFF5D2B16971B00E47671 /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
 		A13BFF5F2B16A29600E47671 /* HistoryScreenObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreenObservable.swift; sourceTree = "<group>"; };
 		A149F2A12B69B9DD00710609 /* reHydrateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = reHydrateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -719,7 +717,6 @@
 				A1614D512A362E7300235D02 /* Utilities */,
 				33F320FD243CEB2100E61D27 /* Info.plist */,
 				3310709A244DBCD3008365A3 /* reHydrate.entitlements */,
-				A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */,
 				33231623274A75530039EE23 /* reHydrateApp.swift */,
 			);
 			path = reHydrate;
@@ -1360,7 +1357,6 @@
 				332315F42742B3430039EE23 /* AppView.swift in Sources */,
 				A1EABF1E2AC5C77100591981 /* Celebration.swift in Sources */,
 				330C23D627665D4C00293092 /* AppDelegate.swift in Sources */,
-				A132EF922986C7A8006C5DB1 /* reHydrate.xcdatamodeld in Sources */,
 				A1AA8DDD2AF6386C00D12E74 /* AlternateIconsServicePort.swift in Sources */,
 				A1EABF2E2ADAC80000591981 /* LocalizedString.swift in Sources */,
 				A1EABF222ACB5AD500591981 /* NotificationDelegatePort.swift in Sources */,
@@ -2209,20 +2205,6 @@
 			productName = EngineMocks;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		A132EF902986C7A8006C5DB1 /* reHydrate.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */,
-			);
-			currentVersion = A132EF912986C7A8006C5DB1 /* reHydrate.xcdatamodel */;
-			name = reHydrate.xcdatamodeld;
-			path = reHydrate/reHydrate.xcdatamodeld;
-			sourceTree = SOURCE_ROOT;
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 3378766B24378A9300F5A732 /* Project object */;
 }
