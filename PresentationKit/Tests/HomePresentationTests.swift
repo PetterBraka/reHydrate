@@ -14,6 +14,7 @@ import PortsMocks
 import UnitService
 import DateServiceMocks
 import PhoneCommsMocks
+import UserPreferenceServiceMocks
 @testable import PresentationKit
 
 final class HomePresentationTests: XCTestCase {
@@ -28,6 +29,7 @@ final class HomePresentationTests: XCTestCase {
     private var healthService: (stub: HealthInterfaceStubbing, spy: HealthInterfaceSpying)!
     private var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
     private var phoneComms: (stub: PhoneCommsTypeStubbing, spy: PhoneCommsTypeSpying)!
+    private var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     private var notificationCenter: NotificationCenter!
     
     override func setUp() {
@@ -44,6 +46,7 @@ final class HomePresentationTests: XCTestCase {
         engine.unitService = UnitService(engine: engine) // Using real UnitService to not over-stub
         dateService = engine.makeDateService()
         phoneComms = engine.makePhoneComms()
+        userPreferenceService = engine.makeUserPreferenceService()
     }
     
     override func tearDown() {
@@ -54,6 +57,36 @@ final class HomePresentationTests: XCTestCase {
         drinksService = nil
         healthService = nil
         dateService = nil
+        phoneComms = nil
+        userPreferenceService = nil
+    }
+    
+    func test_perform_DidBackground() async {
+        let givenDate: Date = .february_6_1994_Sunday
+        dateService.stub.now_returnValue = givenDate
+        dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
+        healthService.stub.isSupported_returnValue = false
+        sut = Sut(engine: engine, router: router, formatter: formatter, notificationCenter: notificationCenter)
+        
+        await sut.perform(action: .didBackground)
+        XCTAssertEqual(
+            userPreferenceService.spy.methodLog.map {
+                if case .set(_, let key) = $0 { return key } else { return "" }
+            },
+            ["", "today-widget"]
+        )
+        XCTAssertEqual(phoneComms.spy.lastMethodCall, .sendDataToWatch)
+        assertViewModel(
+            sut.viewModel,
+            .init(
+                dateTitle: "Thursday - 02 Feb",
+                consumption: 0,
+                goal: 0,
+                smallUnit: .milliliters,
+                largeUnit: .liters,
+                drinks: []
+            )
+        )
     }
 }
 
