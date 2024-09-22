@@ -133,7 +133,6 @@ extension Screen.Home.Presenter {
         let unitSystem = engine.unitService.getUnitSystem()
         let isMetric = unitSystem == .metric
         let smallUnit: UnitModel = isMetric ? .millilitres : .ounces
-        let largeUnit: UnitModel = isMetric ? .litres : .pint
         
         let title = if let date {
             formatter.string(from: date)
@@ -141,19 +140,8 @@ extension Screen.Home.Presenter {
             viewModel.dateTitle
         }
         
-        let localConsumption: Double
-        if let consumption {
-            localConsumption = engine.unitService.convert(consumption, from: .litres, to: largeUnit)
-        } else {
-            localConsumption = viewModel.consumption
-        }
-        
-        let localGoal: Double
-        if let goal {
-            localGoal = engine.unitService.convert(goal, from: .litres, to: largeUnit)
-        } else {
-            localGoal = viewModel.goal
-        }
+        let localConsumption = consumption ?? viewModel.consumption
+        let localGoal = goal ?? viewModel.goal
         
         let localDrinks: [ViewModel.Drink] = await getDrinks().compactMap {
             guard let container = ViewModel.Container(from: $0.container) else { return nil }

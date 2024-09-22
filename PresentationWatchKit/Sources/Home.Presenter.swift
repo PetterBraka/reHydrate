@@ -78,8 +78,8 @@ extension Screen.Home {
             let today = await engine.dayService.getToday()
             let drinks = await getDrinks()
             updateViewModel(
-                consumption: engine.unitService.convert(today.consumed, from: .litres, to: unit),
-                goal: engine.unitService.convert(today.goal, from: .litres, to: unit),
+                consumption: today.consumed,
+                goal: today.goal,
                 unit: unit.mapToDomain(),
                 drinks: getDrinks(from: drinks)
             )

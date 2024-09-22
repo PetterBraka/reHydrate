@@ -36,7 +36,11 @@ public final class DayService: DayServiceType {
         var day: Day
         if let foundDay = try? await engine.dayManager.fetch(with: engine.dateService.now()),
            let oldDay = Day(with: foundDay) {
-            day = oldDay
+            day = .init(
+                date: oldDay.date,
+                consumed: getConsumptionTotal(from: foundDay),
+                goal: getGoalTotal(from: foundDay)
+            )
         } else {
             day = await createNewDay()
         }

@@ -133,8 +133,7 @@ extension Screen.Settings {
         
         private func didAppear() async {
             let currentSystem = engine.unitService.getUnitSystem()
-            let goal = await engine.unitService.convert(engine.dayService.getToday().goal, from: .litres,
-                                                        to: currentSystem == .metric ? .litres : .pint)
+            let goal = await engine.dayService.getToday().goal
             let notificationSettings = engine.notificationService.getSettings()
             
             await updateViewModel(
