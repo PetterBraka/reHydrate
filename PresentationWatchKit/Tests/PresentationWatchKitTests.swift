@@ -1,4 +1,5 @@
 import XCTest
+import WatchEngine
 import TestHelper
 import UnitService
 import EngineMocks
@@ -169,6 +170,21 @@ private extension PresentationWatchKitTests {
         for drink in zip(sut.viewModel.drinks, viewModel.drinks) {
             XCTAssertEqual(drink.0.size, drink.1.size, accuracy: 0.1, "\(drink.0.container.rawValue) drink", file: file, line: line)
             XCTAssertEqual(drink.0.container, drink.1.container, "\(drink.0.container.rawValue) drink", file: file, line: line)
+        }
+    }
+}
+
+extension EngineMocks: @retroactive HasAppGroup {}
+
+extension WatchCommsTypeSpy.MethodCall: @retroactive Equatable {
+    public static func == (lhs: WatchCommsTypeSpy.MethodCall, rhs: WatchCommsTypeSpy.MethodCall) -> Bool {
+        switch (lhs, rhs) {
+        case (.addObserver, .addObserver),
+            (setAppContext, setAppContext),
+            (sendDataToPhone, sendDataToPhone),
+            (removeObserver, removeObserver):
+            true
+        default: false
         }
     }
 }

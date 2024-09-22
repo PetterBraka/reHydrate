@@ -37,6 +37,7 @@ public final class EngineMocks {
     public init() {}
     
     public var appVersion: String = "0.0.0-mock"
+    public var appGroup: String = "com.testing"
     
     public var logger: LoggingService = LoggingService(subsystem: "EngineMock")
     public var dayManager: DayManagerType = DayManagerStub()
