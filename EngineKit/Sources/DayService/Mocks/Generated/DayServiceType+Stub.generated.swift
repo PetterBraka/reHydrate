@@ -8,7 +8,6 @@ import DrinkServiceInterface
 
 public protocol DayServiceTypeStubbing {
     var getToday_returnValue: Day { get set }
-    var getSharedToday_returnValue: Day? { get set }
     var getDaysDates_returnValue: Result<[Day], Error> { get set }
     var addDrink_returnValue: Result<Double, Error> { get set }
     var removeDrink_returnValue: Result<Double, Error> { get set }
@@ -30,19 +29,6 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
         }
     }
     private var getToday_returnValues: [Day] = []
-    public var getSharedToday_returnValue: Day? {
-        get {
-            if getSharedToday_returnValues.isEmpty {
-                .default
-            } else {
-                getSharedToday_returnValues.removeFirst()
-            }
-        }
-        set {
-            getSharedToday_returnValues.append(newValue)
-        }
-    }
-    private var getSharedToday_returnValues: [Day?] = []
     public var getDaysDates_returnValue: Result<[Day], Error> {
         get {
             if getDaysDates_returnValues.isEmpty {
@@ -115,10 +101,6 @@ public final class DayServiceTypeStub: DayServiceTypeStubbing {
 extension DayServiceTypeStub: DayServiceType {
     public func getToday() async -> Day {
         getToday_returnValue
-    }
-
-    public func getSharedToday() -> Day? {
-        getSharedToday_returnValue
     }
 
     public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
