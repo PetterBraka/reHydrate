@@ -14,7 +14,8 @@ let package: Package = {
         products: [
             .library(name: "EngineKit", targets: ["EngineKit"]),
             .library(name: "EngineMocks", targets: ["EngineMocks"]),
-            .library(name: "WatchEngineKit", targets: ["WatchEngineKit"]),
+            .library(name: "WidgetEngine", targets: ["WidgetEngine"]),
+            .library(name: "WatchEngine", targets: ["WatchEngine"]),
         ],
         dependencies: [
             .package(name: "DBKit", path: "../DBKit"),
@@ -40,7 +41,7 @@ let package: Package = {
                 ]
             ),
             .target(
-                name: "WatchEngineKit",
+                name: "WatchEngine",
                 dependencies: [
                     .loggingService,
                     .dbKit,
@@ -51,6 +52,17 @@ let package: Package = {
                     .source(.userPreferenceService),
                     .source(.dateService),
                     .source(.watchComms),
+                ]
+            ),
+            .target(
+                name: "WidgetEngine",
+                dependencies: [
+                    .dbKit,
+                    .loggingService,
+                    .source(.dayService),
+                    .source(.dateService),
+                    .source(.unitService),
+                    .source(.userPreferenceService),
                 ]
             ),
             .target(
@@ -81,6 +93,7 @@ let package: Package = {
                 sourceDependancy: [
                     .interface(.unitService),
                     .interface(.userPreferenceService),
+                    .interface(.dateService),
                     .portsInterface,
                     .dbKit
                 ],

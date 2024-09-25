@@ -14,6 +14,7 @@ import PortsInterface
 import UnitServiceInterface
 import DateServiceInterface
 import PhoneCommsInterface
+import UserPreferenceServiceInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
@@ -25,7 +26,8 @@ extension Screen.Home {
             HasHealthService &
             HasUnitService &
             HasDateService &
-            HasPhoneComms
+            HasPhoneComms &
+            HasUserPreferenceService
         )
         public typealias Router = (
             HomeRoutable &
@@ -70,6 +72,7 @@ extension Screen.Home {
                 await sync(didComplete: nil)
             case .didBackground:
                 await engine.phoneComms.sendDataToWatch()
+                await setWidgetData()
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
@@ -133,7 +136,6 @@ extension Screen.Home.Presenter {
         let unitSystem = engine.unitService.getUnitSystem()
         let isMetric = unitSystem == .metric
         let smallUnit: UnitModel = isMetric ? .millilitres : .ounces
-        let largeUnit: UnitModel = isMetric ? .litres : .pint
         
         let title = if let date {
             formatter.string(from: date)
@@ -141,19 +143,8 @@ extension Screen.Home.Presenter {
             viewModel.dateTitle
         }
         
-        let localConsumption: Double
-        if let consumption {
-            localConsumption = engine.unitService.convert(consumption, from: .litres, to: largeUnit)
-        } else {
-            localConsumption = viewModel.consumption
-        }
-        
-        let localGoal: Double
-        if let goal {
-            localGoal = engine.unitService.convert(goal, from: .litres, to: largeUnit)
-        } else {
-            localGoal = viewModel.goal
-        }
+        let localConsumption = consumption ?? viewModel.consumption
+        let localGoal = goal ?? viewModel.goal
         
         let localDrinks: [ViewModel.Drink] = await getDrinks().compactMap {
             guard let container = ViewModel.Container(from: $0.container) else { return nil }
@@ -338,4 +329,33 @@ private extension Screen.Home.Presenter {
             return 0
         }
     }
+}
+
+// MARK: Widget data
+private extension Screen.Home.Presenter {
+    func setWidgetData() async {
+        let today = await engine.dayService.getToday()
+        let unitSystem = engine.unitService.getUnitSystem()
+        
+        let data = WidgetData(
+            date: today.date,
+            endOfDay: engine.dateService.getEnd(of: today.date),
+            consumed: today.consumed,
+            goal: today.goal,
+            symbol: unitSystem == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
+        )
+        do {
+            try engine.userPreferenceService.set(data, for: "today-widget")
+        } catch {
+            engine.logger.error("Couldn't set widget data", error: error)
+        }
+    }
+}
+
+private struct WidgetData: Codable {
+    let date: Date
+    let endOfDay: Date
+    let consumed: Double
+    let goal: Double
+    let symbol: String
 }

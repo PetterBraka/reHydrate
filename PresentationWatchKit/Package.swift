@@ -13,8 +13,8 @@ let package = Package(
     products: [
         .library(
             name: "PresentationWatchKit",
-            targets: ["PresentationWatchKit", "PresentationWatchInterface"]
-        ),
+            targets: ["PresentationWatchKit"]
+        )
     ],
     dependencies: [
         .package(path: "../EngineKit"),
@@ -25,9 +25,9 @@ let package = Package(
             name: "PresentationWatchKit",
             dependencies: [
                 "PresentationWatchInterface",
-                .product(name: "WatchEngineKit", package: "EngineKit"),
+                .product(name: "WatchEngine", package: "EngineKit"),
             ],
-            path: "Source"
+            path: "Sources"
         ),
         .target(
             name: "PresentationWatchInterface",

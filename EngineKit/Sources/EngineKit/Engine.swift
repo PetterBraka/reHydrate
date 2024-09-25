@@ -25,6 +25,7 @@ import AppearanceService
 import DateServiceInterface
 import DateService
 import DBKitInterface
+import DBKit
 import CommunicationKitInterface
 import PhoneCommsInterface
 import PhoneComms
@@ -34,9 +35,7 @@ public final class Engine {
         appGroup: String,
         appVersion: String,
         logger: LoggingService,
-        dayManager: DayManagerType,
-        drinkManager: DrinkManagerType,
-        consumptionManager: ConsumptionManagerType,
+        database: DatabaseType,
         reminders: [NotificationMessage],
         celebrations: [NotificationMessage],
         userNotificationCenter: UserNotificationCenterType,
@@ -51,10 +50,11 @@ public final class Engine {
         else {
             fatalError("Shared UserDefaults couldn't be setup")
         }
+        self.appGroup = appGroup
         self.logger = logger
-        self.dayManager = dayManager
-        self.drinkManager = drinkManager
-        self.consumptionManager = consumptionManager
+        self.dayManager = DayManager(database: database)
+        self.drinkManager = DrinkManager(database: database)
+        self.consumptionManager = ConsumptionManager(database: database)
         self.userPreferenceService = UserPreferenceService(defaults: sharedDefault)
         
         self.appVersion = appVersion
@@ -69,6 +69,7 @@ public final class Engine {
         self.notificationCenter = notificationCenter
     }
     
+    public let appGroup: String
     public var appVersion: String
     private let reminders: [NotificationMessage]
     private let celebrations: [NotificationMessage]

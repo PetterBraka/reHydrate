@@ -8,6 +8,7 @@
 
 import UIKit
 import EngineKit
+import WidgetKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     public let sceneFactory = SceneFactory.shared
@@ -18,6 +19,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil)
     -> Bool {
         UNUserNotificationCenter.current().delegate = sceneFactory.notificationDelegate
+        WidgetCenter.shared.getCurrentConfigurations { results in
+            switch results {
+            case let .success(widgets):
+                print(widgets)
+                for widget in widgets {
+                    WidgetCenter.shared.reloadTimelines(ofKind: widget.kind)
+                }
+            case let .failure(error):
+                print(error)
+            }
+        }
         return true
     }
 }

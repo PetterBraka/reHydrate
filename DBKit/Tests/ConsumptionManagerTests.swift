@@ -24,7 +24,7 @@ final class ConsumptionManagerTests: XCTestCase {
     var sut: ConsumptionManagerType!
     
     override func setUp() {
-        self.spy = DatabaseSpy(realObject: Database(inMemory: true))
+        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true))
         self.sut = ConsumptionManager(database: spy)
     }
     

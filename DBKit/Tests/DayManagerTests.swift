@@ -24,7 +24,7 @@ final class DayManagerTests: XCTestCase {
     var sut: DayManagerType!
     
     override func setUp() {
-        self.spy = DatabaseSpy(realObject: Database(inMemory: true))
+        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true))
         self.sut = DayManager(database: spy)
     }
 }

@@ -52,5 +52,3 @@ extension UnitModel {
         }
     }
 }
-
-extension UnitSystem: Codable {}

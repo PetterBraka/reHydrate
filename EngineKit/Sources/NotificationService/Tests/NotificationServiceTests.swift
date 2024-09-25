@@ -394,7 +394,7 @@ extension UserNotificationCenterTypeSpy.MethodCall: Equatable {
             (.removeAllDeliveredNotifications, .removeAllDeliveredNotifications),
             (.removeAllPendingNotificationRequests, .removeAllPendingNotificationRequests):
             true
-        case (.add(let lhsRequest), .add(let rhsRequest)):
+        case (.add, .add):
 //            lhsRequest == rhsRequest
             true
         case (.setNotificationCategories(let lhsCategories), .setNotificationCategories(let rhsCategories)):

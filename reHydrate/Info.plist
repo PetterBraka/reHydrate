@@ -30,6 +30,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+			<key>blackLexiPink</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>blackLexiPink</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
 			<key>blackOrange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -89,15 +98,6 @@
 				<key>CFBundleIconFiles</key>
 				<array>
 					<string>blackYellow</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-			<key>blackLexiPink</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>blackLexiPink</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
@@ -210,6 +210,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+			<key>whiteLexiPink</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>whiteLexiPink</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
 			<key>whiteOrange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -264,15 +273,6 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>whiteLexiPink</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>whiteLexiPink</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
 			<key>yellowWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -313,6 +313,15 @@
 				<key>CFBundleIconFiles</key>
 				<array>
 					<string>blackGreen</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>blackLexiPink</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>blackLexiPink</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
@@ -380,15 +389,6 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-            <key>blackLexiPink</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>blackLexiPink</string>
-                </array>
-                <key>UIPrerenderedIcon</key>
-                <false/>
-            </dict>
 			<key>blueWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -416,15 +416,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-            <key>lexiPinkWhite</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>lexiPinkWhite</string>
-                </array>
-                <key>UIPrerenderedIcon</key>
-                <false/>
-            </dict>
+			<key>lexiPinkWhite</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>lexiPinkWhite</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
 			<key>orangeWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -497,6 +497,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+			<key>whiteLexiPink</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>whiteLexiPink</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
 			<key>whiteOrange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -551,15 +560,6 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-            <key>whiteLexiPink</key>
-            <dict>
-                <key>CFBundleIconFiles</key>
-                <array>
-                    <string>whiteLexiPink</string>
-                </array>
-                <key>UIPrerenderedIcon</key>
-                <false/>
-            </dict>
 			<key>yellowWhite</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -618,6 +618,13 @@
 	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
