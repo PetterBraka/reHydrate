@@ -26,11 +26,18 @@ import DateServiceInterface
 import DateServiceMocks
 import DBKitInterface
 import DBKitMocks
+import CommunicationKitInterface
+import CommunicationKitMocks
+import PhoneCommsInterface
+import PhoneCommsMocks
+import WatchCommsInterface
+import WatchCommsMocks
 
 public final class EngineMocks {
     public init() {}
     
     public var appVersion: String = "0.0.0-mock"
+    public var appGroup: String = "com.testing"
     
     public var logger: LoggingService = LoggingService(subsystem: "EngineMock")
     public var dayManager: DayManagerType = DayManagerStub()
@@ -53,6 +60,10 @@ public final class EngineMocks {
     
     public var appearanceService: AppearanceServiceType = AppearanceServiceTypeStub()
     public var dateService: DateServiceType = DateServiceTypeStub()
+    public var phoneService: PhoneServiceType = PhoneServiceTypeStub()
+    public var watchService: WatchServiceType = WatchServiceTypeStub()
+    public var phoneComms: PhoneCommsType = PhoneCommsTypeStub()
+    public var watchComms: WatchCommsType = WatchCommsTypeStub()
 }
 
 extension EngineMocks: HasService {}

@@ -20,7 +20,7 @@ public final class NotificationService: NotificationServiceType {
         HasDateService
     )
     
-    public private(set) var notificationCenter: NotificationCenterType
+    public private(set) var userNotificationCenter: UserNotificationCenterType
     
     private let reminders: [NotificationMessage]
     private let reminderCategory = "com.rehydrate.reminder"
@@ -42,12 +42,12 @@ public final class NotificationService: NotificationServiceType {
     public init(engine: Engine,
                 reminders: [NotificationMessage],
                 celebrations: [NotificationMessage],
-                notificationCenter: NotificationCenterType,
+                userNotificationCenter: UserNotificationCenterType,
                 didComplete: (() -> Void)?) {
         self.engine = engine
         self.reminders = reminders
         self.celebrations = celebrations
-        self.notificationCenter = notificationCenter
+        self.userNotificationCenter = userNotificationCenter
         checkUserPreference(complete: didComplete)
     }
     
@@ -88,7 +88,7 @@ public final class NotificationService: NotificationServiceType {
     }
     
     public func disable() {
-        notificationCenter.removeAllPendingNotificationRequests()
+        userNotificationCenter.removeAllPendingNotificationRequests()
         storePreferences(enabled: false)
     }
     
@@ -112,7 +112,7 @@ private extension NotificationService {
         guard !isAuthorized 
         else { return }
         do {
-            let granted = try await notificationCenter.requestAuthorization()
+            let granted = try await userNotificationCenter.requestAuthorization()
             isAuthorized = granted
             
             if granted == false {
@@ -190,7 +190,7 @@ private extension NotificationService {
     func addNotifications(startDate: Date, stopDate: Date, frequency: Int) async {
         var date = startDate
         var shouldContinue = true
-        let pendingRequests = await notificationCenter.pendingNotificationRequests()
+        let pendingRequests = await userNotificationCenter.pendingNotificationRequests()
         
         while shouldContinue {
             let triggerComponents = Calendar.current
@@ -241,7 +241,7 @@ private extension NotificationService {
             dateComponents: dateComponents
         )
         
-        try await notificationCenter.add(.init(identifier: id,
+        try await userNotificationCenter.add(.init(identifier: id,
                                                content: content,
                                                trigger: trigger))
     }
@@ -261,7 +261,7 @@ private extension NotificationService {
                 intentIdentifiers: remindersActions.map(\.identifier)
             )
             
-            notificationCenter.setNotificationCategories([remindersCategory])
+            userNotificationCenter.setNotificationCategories([remindersCategory])
         } catch {
             engine.logger.error("Couldn't set notification categories", error: error)
         }

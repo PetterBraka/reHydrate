@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Day {
+public struct Day: Codable {
     public let id: String
     public let date: Date
     public var consumed: Double

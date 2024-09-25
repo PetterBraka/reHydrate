@@ -26,7 +26,7 @@ public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: AppearancePortType
+    private var realObject: AppearancePortType
     public init(realObject: AppearancePortType) {
         self.realObject = realObject
     }

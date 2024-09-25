@@ -16,8 +16,11 @@ import UserPreferenceServiceInterface
 import NotificationServiceInterface
 import AppearanceServiceInterface
 import DateServiceInterface
+import CommunicationKitInterface
+import PhoneCommsInterface
 
 public protocol HasService:
+    HasAppGroup,
     HasLoggingService,
     HasDayManagerService,
     HasDrinkManagerService,
@@ -29,5 +32,7 @@ public protocol HasService:
     HasUserPreferenceService,
     HasNotificationService,
     HasAppearanceService,
-    HasDateService
+    HasDateService,
+    HasPhoneService,
+    HasPhoneComms
 {}

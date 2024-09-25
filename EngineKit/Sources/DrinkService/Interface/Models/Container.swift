@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 10/06/2023.
 //
 
-public enum Container: String {
+public enum Container: String, Codable {
     case small
     case medium
     case large

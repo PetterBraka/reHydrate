@@ -31,7 +31,7 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: DateServiceType
+    private var realObject: DateServiceType
     public init(realObject: DateServiceType) {
         self.realObject = realObject
     }

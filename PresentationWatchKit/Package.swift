@@ -6,31 +6,41 @@ import PackageDescription
 let package = Package(
     name: "PresentationWatchKit",
     platforms: [
-        .watchOS(.v10), 
-        .macOS(.v13)
+        .iOS(.v17),
+        .watchOS(.v10),
+        .macOS(.v14)
     ],
     products: [
         .library(
             name: "PresentationWatchKit",
-            targets: ["PresentationWatchKit", "PresentationWatchInterface"]
-        ),
+            targets: ["PresentationWatchKit"]
+        )
     ],
     dependencies: [
         .package(path: "../EngineKit"),
+        .package(path: "../TestHelper")
     ],
     targets: [
         .target(
             name: "PresentationWatchKit",
             dependencies: [
                 "PresentationWatchInterface",
-                "EngineKit"
-            ]
+                .product(name: "WatchEngine", package: "EngineKit"),
+            ],
+            path: "Sources"
         ),
         .target(
-            name: "PresentationWatchInterface"
+            name: "PresentationWatchInterface",
+            path: "Interface"
         ),
         .testTarget(
             name: "PresentationWatchKitTests",
-            dependencies: ["PresentationWatchKit"]),
+            dependencies: [
+                "TestHelper",
+                "PresentationWatchKit",
+                .product(name: "EngineMocks", package: "EngineKit"),
+            ],
+            path: "Tests"
+        ),
     ]
 )

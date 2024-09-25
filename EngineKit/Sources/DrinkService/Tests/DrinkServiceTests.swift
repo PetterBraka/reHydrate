@@ -96,8 +96,8 @@ final class DrinkServiceTests: XCTestCase {
     func test_editDrink() async throws {
         let givenDrink = DrinkModel(id: "", size: 500, container: "medium")
         drinkManager.edit_returnValue = .success(.init(id: "", size: 600, container: "medium"))
-        let unwrappedDrink = try XCTUnwrap(Drink(from: givenDrink))
-        let editedDrink = try await sut.edit(size: 600, of: unwrappedDrink)
+        _ = try XCTUnwrap(Drink(from: givenDrink))
+        let editedDrink = try await sut.edit(size: 600, of: .medium)
         assert(editedDrink, .init(id: "", size: 600, container: .medium))
     }
     
@@ -106,7 +106,7 @@ final class DrinkServiceTests: XCTestCase {
         drinkManager.edit_returnValue = .success(givenDrink)
         
         do {
-            _ = try await sut.edit(size: 600, of: .init(id: "", size: 500, container: .medium))
+            _ = try await sut.edit(size: 600, of: .medium)
             XCTFail("Should have failed")
         } catch {
             XCTAssertNotNil(error)
@@ -116,9 +116,9 @@ final class DrinkServiceTests: XCTestCase {
     func test_editDrink_fails() async throws {
         let givenDrink = DrinkModel(id: "", size: 500, container: "medium")
         drinkManager.edit_returnValue = .failure(MockError.some)
-        let unwrappedDrink = try XCTUnwrap(Drink(from: givenDrink))
+        _ = try XCTUnwrap(Drink(from: givenDrink))
         do {
-            _ = try await sut.edit(size: 600, of: unwrappedDrink)
+            _ = try await sut.edit(size: 600, of: .medium)
             XCTFail("Should have failed")
         } catch {
             XCTAssertNotNil(error)
@@ -126,13 +126,13 @@ final class DrinkServiceTests: XCTestCase {
     }
     
     func test_remove() async throws {
-        try await sut.remove(container: Container.medium.rawValue)
+        try await sut.remove(container: .medium)
     }
     
     func test_remove_givenDBisEmpty() async throws {
         drinkManager.deleteDrink_returnError = DrinkDBError.notFound
         do {
-            try await sut.remove(container: Container.medium.rawValue)
+            try await sut.remove(container: .medium)
             XCTFail("Should fail")
         } catch {
             // Then

@@ -25,18 +25,22 @@ let package: Package = {
                 name: "PresentationKit",
                 dependencies: [
                     "PresentationInterface",
-                    "EngineKit",
-                ]
+                    .product(name: "EngineKit", package: "EngineKit")
+                ],
+                path: "Source"
             ),
             .target(
-                name: "PresentationInterface"
+                name: "PresentationInterface",
+                path: "Interface"
             ),
             .testTarget(
                 name: "PresentationTests",
                 dependencies: [
                     "PresentationKit",
                     "TestHelper",
-                ]
+                    .product(name: "EngineMocks", package: "EngineKit")
+                ],
+                path: "Tests"
             )
         ]
     )

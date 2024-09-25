@@ -27,7 +27,7 @@ public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: LanguageServiceType
+    private var realObject: LanguageServiceType
     public init(realObject: LanguageServiceType) {
         self.realObject = realObject
     }

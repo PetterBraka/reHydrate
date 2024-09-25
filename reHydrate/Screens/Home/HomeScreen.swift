@@ -7,20 +7,19 @@
 //
 
 import SwiftUI
+import WidgetKit
 import PresentationInterface
 import PresentationKit
 import EngineKit
 
 struct HomeScreen: View {
+    @Environment(\.scenePhase) var scenePhase
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var observer: HomeScreenObservable
 
     var body: some View {
         VStack(spacing: 16) {
             header
-                .task {
-                    await observer.perform(action: .didAppear)
-                }
 
             Spacer()
 
@@ -28,6 +27,22 @@ struct HomeScreen: View {
                 .padding(.horizontal, 24)
 
             Spacer()
+        }
+        .task {
+            await observer.perform(action: .didAppear)
+        }
+        .onChange(of: scenePhase) { oldValue, newValue in
+            Task {
+                switch newValue {
+                case .active:
+                    await observer.perform(action: .didBecomeActive)
+                case .background, .inactive:
+                    await observer.perform(action: .didBackground)
+                    WidgetCenter.shared.reloadAllTimelines()
+                @unknown default:
+                    break
+                }
+            }
         }
         .safeAreaInset(edge: .bottom) {
             navigationBar
@@ -136,7 +151,8 @@ struct HomeScreen: View {
                     formatter.dateFormat = "EEEE - dd MMM"
                     formatter.locale = .current
                     return formatter
-                }()
+                }(),
+                notificationCenter: .default
             )
         )
     )

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Drink: Identifiable, Equatable {
+public struct Drink: Identifiable, Equatable, Codable {
     public let id: String
     
     public let container: Container

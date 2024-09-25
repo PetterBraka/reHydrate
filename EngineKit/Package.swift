@@ -4,43 +4,71 @@
 import PackageDescription
 
 let package: Package = {
-    // MARK: Packages
-    let engineKit = "EngineKit"
-    let engineMocks = "EngineMocks"
-
-    return Package(
-        name: engineKit,
+    Package(
+        name: "EngineKit",
         platforms: [
             .iOS(.v17),
             .macOS(.v14),
             .watchOS(.v10)
         ],
         products: [
-            .library(name: engineKit, targets: [engineKit]),
+            .library(name: "EngineKit", targets: ["EngineKit"]),
+            .library(name: "EngineMocks", targets: ["EngineMocks"]),
+            .library(name: "WidgetEngine", targets: ["WidgetEngine"]),
+            .library(name: "WatchEngine", targets: ["WatchEngine"]),
         ],
         dependencies: [
             .package(name: "DBKit", path: "../DBKit"),
-            .package(name: "TestHelper", path: "../TestHelper")
+            .package(name: "TestHelper", path: "../TestHelper"),
+            .package(name: "CommunicationKit", path: "../CommunicationKit"),
         ],
         targets: [
-            .target(name: engineKit,
+            .target(
+                name: "EngineKit",
+                dependencies: [
+                    .loggingService,
+                    .portsInterface,
+                    .dbKit,
+                    .source(.dayService),
+                    .source(.drinkService),
+                    .source(.languageService),
+                    .source(.unitService),
+                    .source(.userPreferenceService),
+                    .source(.notificationService),
+                    .source(.appearanceService),
+                    .source(.dateService),
+                    .source(.phoneComms),
+                ]
+            ),
+            .target(
+                name: "WatchEngine",
+                dependencies: [
+                    .loggingService,
+                    .dbKit,
+                    .source(.dayService),
+                    .source(.drinkService),
+                    .source(.languageService),
+                    .source(.unitService),
+                    .source(.userPreferenceService),
+                    .source(.dateService),
+                    .source(.watchComms),
+                ]
+            ),
+            .target(
+                name: "WidgetEngine",
+                dependencies: [
+                    .dbKit,
+                    .loggingService,
+                    .source(.dayService),
+                    .source(.dateService),
+                    .source(.unitService),
+                    .source(.userPreferenceService),
+                ]
+            ),
+            .target(
+                name: "EngineMocks",
                     dependencies: [
-                        .loggingService,
-                        .portsInterface,
-                        .dbKit,
-                        .source(.dayService),
-                        .source(.drinkService),
-                        .source(.languageService),
-                        .source(.unitService),
-                        .source(.userPreferenceService),
-                        .source(.notificationService),
-                        .source(.appearanceService),
-                        .source(.dateService),
-                        .engineMocks,
-                        .portsMocks,
-                    ]),
-            .target(name: engineMocks,
-                    dependencies: [
+                        .communicationMocks,
                         .loggingService,
                         .dbKit,
                         .portsMocks,
@@ -52,56 +80,86 @@ let package: Package = {
                         .mocks(.notificationService),
                         .mocks(.appearanceService),
                         .mocks(.dateService),
+                        .mocks(.phoneComms),
+                        .mocks(.watchComms),
                     ]
                    ),
             .loggingService,
             .portsInterface,
             .portsMocks,
         ]
-            .with(targetsFrom: .dayService,
-                  sourceDependancy: [
+            .with(
+                targetsFrom: .dayService,
+                sourceDependancy: [
                     .interface(.unitService),
                     .interface(.userPreferenceService),
+                    .interface(.dateService),
                     .portsInterface,
                     .dbKit
-                  ],
-                  interfaceDependancy: [
+                ],
+                interfaceDependancy: [
                     .interface(.drinkService)
-                  ])
-            .with(targetsFrom: .drinkService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .drinkService,
+                sourceDependancy: [
                     .portsInterface,
                     .dbKit,
                     .interface(.unitService),
                     .interface(.userPreferenceService)
-                  ])
-            .with(targetsFrom: .languageService, sourceDependancy: [
-                .interface(.userPreferenceService)
-            ])
-            .with(targetsFrom: .timelineService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .languageService,
+                sourceDependancy: [
+                    .interface(.userPreferenceService)
+                ]
+            )
+            .with(
+                targetsFrom: .timelineService,
+                sourceDependancy: [
                     .portsInterface,
                     .dbKit
-                  ],
-                  testsDependancy: [
+                ],
+                testsDependancy: [
                     .portsMocks
-                  ])
-            .with(targetsFrom: .unitService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .unitService,
+                sourceDependancy: [
                     .interface(.userPreferenceService)
-                  ])
-            .with(targetsFrom: .userPreferenceService)
-            .with(targetsFrom: .notificationService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .userPreferenceService
+            )
+            .with(
+                targetsFrom: .notificationService,
+                sourceDependancy: [
                     .interface(.dayService),
                     .interface(.userPreferenceService)
-                  ])
-            .with(targetsFrom: .appearanceService,
-                  sourceDependancy: [
+                ]
+            )
+            .with(
+                targetsFrom: .appearanceService,
+                sourceDependancy: [
                     .interface(.userPreferenceService),
                     .portsInterface
-                  ])
-            .with(targetsFrom: .dateService)
+                ]
+            )
+            .with(
+                targetsFrom: .dateService
+            )
+            .with(
+                targetsFrom: .phoneComms,
+                sourceDependancy: [.communicationInterface]
+            )
+            .with(
+                targetsFrom: .watchComms,
+                sourceDependancy: [.communicationInterface]
+            )
     )
 }()
 
@@ -112,15 +170,17 @@ extension Target {
 }
 
 extension Target.Dependency {
-    static let dbKit: Target.Dependency = .byName(name: "DBKit")
+    static let dbKit: Target.Dependency = .product(name: "DBKit", package: "DBKit")
+    static let testHelper: Target.Dependency = .product(name: "TestHelper", package: "TestHelper")
+    static let communicationSource: Target.Dependency = .product(name: "CommunicationSource", package: "CommunicationKit")
+    static let communicationInterface: Target.Dependency = .product(name: "CommunicationInterface", package: "CommunicationKit")
+    static let communicationMocks: Target.Dependency = .product(name: "CommunicationMocks", package: "CommunicationKit")
+    
     static let loggingService: Target.Dependency = .byName(name: "LoggingService")
-    static let testHelper: Target.Dependency = .byName(name: "TestHelper")
     static let portsInterface: Target.Dependency = .byName(name: "PortsInterface")
     static let portsMocks: Target.Dependency = .byName(name: "PortsMocks")
     
     static let engineMocks: Target.Dependency = .byName(name: "EngineMocks")
-    static let blackbird: Target.Dependency = .product(name: "Blackbird",
-                                                       package: "Blackbird")
 }
 
 enum Feature: String {
@@ -133,6 +193,8 @@ enum Feature: String {
     case userPreferenceService = "UserPreferenceService"
     case notificationService = "NotificationService"
     case appearanceService = "AppearanceService"
+    case phoneComms = "PhoneComms"
+    case watchComms = "WatchComms"
 }
 
 extension Feature {

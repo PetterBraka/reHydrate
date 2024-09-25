@@ -1,4 +1,14 @@
 configurations:
+# CommunicationKit
+  - sources:
+      - ../CommunicationKit
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../CommunicationKit/Mocks/Generated/
+    args: 
+      imports: 
+          - CommunicationKitInterface
 # DBKit
 # EnigneKit
   - sources:
@@ -101,6 +111,26 @@ configurations:
     args: 
       imports:
           - PortsInterface
+
+  - sources:
+      - ../EngineKit/Sources/PhoneComms
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/PhoneComms/Mocks/Generated/
+    args: 
+      imports: 
+          - PhoneCommsInterface
+
+  - sources:
+      - ../EngineKit/Sources/WatchComms
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/WatchComms/Mocks/Generated/
+    args: 
+      imports: 
+          - WatchCommsInterface
 # EnigneMocks
   - sources:
         - ../EngineKit/Sources/EngineMocks

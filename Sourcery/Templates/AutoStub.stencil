@@ -133,7 +133,14 @@ public final class {{ protocol.name }}Stub: {{ protocol.name }}Stubbing {
 
 extension {{ protocol.name }}Stub: {{ protocol.name }} {
 {% for variable in protocol.variables %}
-    public var {{ variable.name }}: {{ variable.typeName }} { {% call variableName variable %} }
+    public var {{ variable.name }}: {{ variable.typeName }} {% if variable.isMutable -%}
+        { 
+        get { {% call variableName variable %} }
+        set { {% call variableName variable %} = newValue }
+    }
+    {% else -%}
+    { {% call variableName variable %} }
+    {%- endif -%}
 {% endfor %}
 {% for method in protocol.methods %}
     public func {{ method.name }}{% if method.isAsync %} async{% endif %}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {

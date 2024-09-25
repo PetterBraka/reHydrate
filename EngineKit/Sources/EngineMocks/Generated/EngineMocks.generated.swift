@@ -25,6 +25,12 @@ import DateServiceInterface
 import DateServiceMocks
 import DBKitInterface
 import DBKitMocks
+import CommunicationKitInterface
+import CommunicationKitMocks
+import PhoneCommsInterface
+import PhoneCommsMocks
+import WatchCommsInterface
+import WatchCommsMocks
 
 extension EngineMocks {
     public func makeUserPreferenceService() -> (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying) {
@@ -219,6 +225,66 @@ extension EngineMocks {
         let spy = DateServiceTypeSpy(realObject: realObject)
 
         self.dateService = spy
+        return (realObject, spy)
+    }
+
+    public func makePhoneService() -> (stub: PhoneServiceTypeStubbing, spy: PhoneServiceTypeSpying) {
+        let stub = PhoneServiceTypeStub()
+        let spy = PhoneServiceTypeSpy(realObject: stub)
+
+        self.phoneService = spy
+        return (stub, spy)
+    }
+
+    public func makePhoneService(_ realObject: PhoneServiceType) -> (realObject: PhoneServiceType, spy: PhoneServiceTypeSpying) {
+        let spy = PhoneServiceTypeSpy(realObject: realObject)
+
+        self.phoneService = spy
+        return (realObject, spy)
+    }
+
+    public func makeWatchService() -> (stub: WatchServiceTypeStubbing, spy: WatchServiceTypeSpying) {
+        let stub = WatchServiceTypeStub()
+        let spy = WatchServiceTypeSpy(realObject: stub)
+
+        self.watchService = spy
+        return (stub, spy)
+    }
+
+    public func makeWatchService(_ realObject: WatchServiceType) -> (realObject: WatchServiceType, spy: WatchServiceTypeSpying) {
+        let spy = WatchServiceTypeSpy(realObject: realObject)
+
+        self.watchService = spy
+        return (realObject, spy)
+    }
+
+    public func makePhoneComms() -> (stub: PhoneCommsTypeStubbing, spy: PhoneCommsTypeSpying) {
+        let stub = PhoneCommsTypeStub()
+        let spy = PhoneCommsTypeSpy(realObject: stub)
+
+        self.phoneComms = spy
+        return (stub, spy)
+    }
+
+    public func makePhoneComms(_ realObject: PhoneCommsType) -> (realObject: PhoneCommsType, spy: PhoneCommsTypeSpying) {
+        let spy = PhoneCommsTypeSpy(realObject: realObject)
+
+        self.phoneComms = spy
+        return (realObject, spy)
+    }
+
+    public func makeWatchComms() -> (stub: WatchCommsTypeStubbing, spy: WatchCommsTypeSpying) {
+        let stub = WatchCommsTypeStub()
+        let spy = WatchCommsTypeSpy(realObject: stub)
+
+        self.watchComms = spy
+        return (stub, spy)
+    }
+
+    public func makeWatchComms(_ realObject: WatchCommsType) -> (realObject: WatchCommsType, spy: WatchCommsTypeSpying) {
+        let spy = WatchCommsTypeSpy(realObject: realObject)
+
+        self.watchComms = spy
         return (realObject, spy)
     }
 

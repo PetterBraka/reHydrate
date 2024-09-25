@@ -18,31 +18,31 @@ public final class NotificationDelegateTypeSpy: NotificationDelegateTypeSpying {
     }
 
     public enum MethodCall {
-        case userNotificationCenter(center: NotificationCenterType, response: NotificationResponse)
-        case userNotificationCenter(center: NotificationCenterType, willPresent: DeliveredNotification)
-        case userNotificationCenter(center: NotificationCenterType, openSettingsFor: DeliveredNotification?)
+        case userNotificationCenter(center: UserNotificationCenterType, response: NotificationResponse)
+        case userNotificationCenter(center: UserNotificationCenterType, willPresent: DeliveredNotification)
+        case userNotificationCenter(center: UserNotificationCenterType, openSettingsFor: DeliveredNotification?)
     }
 
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: NotificationDelegateType
+    private var realObject: NotificationDelegateType
     public init(realObject: NotificationDelegateType) {
         self.realObject = realObject
     }
 }
 
 extension NotificationDelegateTypeSpy: NotificationDelegateType {
-    public func userNotificationCenter(_ center: NotificationCenterType, didReceive response: NotificationResponse) async -> Void {
+    public func userNotificationCenter(_ center: UserNotificationCenterType, didReceive response: NotificationResponse) async -> Void {
         methodLog.append(.userNotificationCenter(center: center, response: response))
         await realObject.userNotificationCenter(center, didReceive: response)
     }
-    public func userNotificationCenter(_ center: NotificationCenterType, willPresent: DeliveredNotification) async -> Void {
+    public func userNotificationCenter(_ center: UserNotificationCenterType, willPresent: DeliveredNotification) async -> Void {
         methodLog.append(.userNotificationCenter(center: center, willPresent: willPresent))
         await realObject.userNotificationCenter(center, willPresent: willPresent)
     }
-    public func userNotificationCenter(_ center: NotificationCenterType, openSettingsFor: DeliveredNotification?) -> Void {
+    public func userNotificationCenter(_ center: UserNotificationCenterType, openSettingsFor: DeliveredNotification?) -> Void {
         methodLog.append(.userNotificationCenter(center: center, openSettingsFor: openSettingsFor))
         realObject.userNotificationCenter(center, openSettingsFor: openSettingsFor)
     }

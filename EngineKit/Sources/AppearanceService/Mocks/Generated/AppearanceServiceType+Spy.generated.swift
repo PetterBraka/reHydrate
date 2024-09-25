@@ -26,7 +26,7 @@ public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private let realObject: AppearanceServiceType
+    private var realObject: AppearanceServiceType
     public init(realObject: AppearanceServiceType) {
         self.realObject = realObject
     }

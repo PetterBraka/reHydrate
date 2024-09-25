@@ -8,17 +8,17 @@
 import Foundation
 public protocol NotificationDelegateType: AnyObject {
     func userNotificationCenter(
-        _ center: NotificationCenterType,
+        _ center: UserNotificationCenterType,
         didReceive response: NotificationResponse
     ) async
     
     func userNotificationCenter(
-        _ center: NotificationCenterType,
+        _ center: UserNotificationCenterType,
         willPresent: DeliveredNotification
     ) async
     
     func userNotificationCenter(
-        _ center: NotificationCenterType,
+        _ center: UserNotificationCenterType,
         openSettingsFor: DeliveredNotification?
     )
 }

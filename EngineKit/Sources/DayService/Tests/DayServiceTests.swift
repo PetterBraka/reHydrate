@@ -46,6 +46,8 @@ final class DayServiceTests: XCTestCase {
                                 consumed: 0,
                                 goal: 3)
         dayManager.fetchWithDate_returnValue = .success(givenDay)
+        unitService.stub.convertValueFromUnitToUnit_returnValue = 0
+        unitService.stub.convertValueFromUnitToUnit_returnValue = 3
         
         let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
@@ -107,6 +109,8 @@ final class DayServiceTests: XCTestCase {
                                 goal: 3)
         healthService.stub.requestAuthReadAndWrite_returnValue = Error.mock
         dayManager.fetchWithDate_returnValue = .success(givenDay)
+        unitService.stub.convertValueFromUnitToUnit_returnValue = 0
+        unitService.stub.convertValueFromUnitToUnit_returnValue = 3
         
         let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
@@ -120,6 +124,8 @@ final class DayServiceTests: XCTestCase {
                                 goal: 3)
         healthService.stub.isSupported_returnValue = false
         dayManager.fetchWithDate_returnValue = .success(givenDay)
+        unitService.stub.convertValueFromUnitToUnit_returnValue = 0
+        unitService.stub.convertValueFromUnitToUnit_returnValue = 3
         
         let foundDay = await sut.getToday()
         assert(day: foundDay, dayModel: givenDay)
