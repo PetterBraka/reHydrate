@@ -9,7 +9,7 @@
 import NotificationServiceInterface
 import UserNotifications
 
-extension UNUserNotificationCenter: UserNotificationCenterType {
+extension UNUserNotificationCenter: @retroactive UserNotificationCenterType {
     public func requestAuthorization() async throws -> Bool {
         try await requestAuthorization(options: [UNAuthorizationOptions.badge, .sound, .alert])
     }

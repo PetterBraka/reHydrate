@@ -991,7 +991,7 @@ private extension SettingsPresentationTests {
     }
 }
 
-extension OpenUrlInterfaceSpy.MethodCall: Equatable {
+extension OpenUrlInterfaceSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: OpenUrlInterfaceSpy.MethodCall, rhs: OpenUrlInterfaceSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
         case let (.open(lhsUrl), .open(url: rhsUrl)):
@@ -1009,7 +1009,7 @@ extension OpenUrlInterfaceSpy.MethodCall: Equatable {
     }
 }
 
-extension NotificationServiceTypeSpy.MethodCall: Equatable {
+extension NotificationServiceTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: NotificationServiceTypeSpy.MethodCall, rhs: NotificationServiceTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
         case let (.enable(lhsFrequency, lhsStart, lhsStop), .enable(rhsFrequency, rhsStart, rhsStop)):
@@ -1024,7 +1024,7 @@ extension NotificationServiceTypeSpy.MethodCall: Equatable {
     }
 }
 
-extension UnitServiceTypeSpy.MethodCall: Equatable {
+extension UnitServiceTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: UnitServiceTypeSpy.MethodCall, rhs: UnitServiceTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
         case let (.set(lhsUnitSystem), .set(rhsUnitSystem)):

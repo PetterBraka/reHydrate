@@ -43,7 +43,6 @@ extension NotificationDelegatePort: UNUserNotificationCenterDelegate {
         return [.banner, .list, .sound]
     }
     
-    @MainActor
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         openSettingsFor notification: UNNotification?

@@ -22,7 +22,6 @@ final class HistoryScreenObservable: ObservableObject, HistorySceneType {
         self.viewModel = presenter.viewModel
     }
     
-    @MainActor
     func perform(update: History.Update) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }

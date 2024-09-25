@@ -916,7 +916,7 @@ private extension HomePresentationTests {
     }
 }
 
-extension DrinkServiceTypeSpy.MethodCall: Equatable {
+extension DrinkServiceTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: DrinkServiceTypeSpy.MethodCall, rhs: DrinkServiceTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
         case let (.add(lhsSize, lhsContainer), .add(rhsSize, rhsContainer)):
@@ -952,7 +952,7 @@ extension DrinkServiceTypeSpy.MethodCall: Equatable {
     }
 }
 
-extension DayServiceTypeSpy.MethodCall: Equatable {
+extension DayServiceTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
         case (.getToday, .getToday):
@@ -973,7 +973,7 @@ extension DayServiceTypeSpy.MethodCall: Equatable {
     }
 }
 
-extension HealthInterfaceSpy.MethodCall: Equatable {
+extension HealthInterfaceSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
         case let (.shouldRequestAccess(lhs_healthDataType), .shouldRequestAccess(rhs_healthDataType)):
@@ -1006,7 +1006,7 @@ extension HealthInterfaceSpy.MethodCall: Equatable {
     }
 }
 
-extension PhoneCommsTypeSpy.MethodCall: Equatable {
+extension PhoneCommsTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: PhoneCommsTypeSpy.MethodCall, rhs: PhoneCommsTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
         case (.setAppContext, .setAppContext), (.sendDataToWatch, .sendDataToWatch),
