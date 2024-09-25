@@ -82,6 +82,7 @@ final class NotificationServiceTests: XCTestCase {
         setUpSut()
         
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
+            .pendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
@@ -112,6 +113,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
+            .pendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
@@ -138,6 +140,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
+            .pendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
@@ -157,6 +160,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .failure(.unauthorized))
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
+            .pendingNotificationRequests,
             .requestAuthorization
         ])
     }
@@ -170,12 +174,16 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .failure(.unauthorized))
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
+            .pendingNotificationRequests,
             .requestAuthorization
         ])
     }
     
     func test_enable_twice() async {
         userNotificationCenter.stub.requestAuthorization_returnValue = .success(true)
+        userNotificationCenter.stub.pendingNotificationRequests_returnValue = []
+        userNotificationCenter.stub.pendingNotificationRequests_returnValue = []
+        userNotificationCenter.stub.pendingNotificationRequests_returnValue = [dummyNotificationRequest, dummyNotificationRequest, dummyNotificationRequest]
         setUpSut()
         let dates = getDates(start: "08:00:00", stop: "10:00:00")
         let result = await sut.enable(
@@ -195,6 +203,7 @@ final class NotificationServiceTests: XCTestCase {
         
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
+            .pendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
@@ -205,6 +214,8 @@ final class NotificationServiceTests: XCTestCase {
             .add(request: dummyNotificationRequest),
             .add(request: dummyNotificationRequest),
             .add(request: dummyNotificationRequest),
+            .pendingNotificationRequests,
+            .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .add(request: dummyNotificationRequest),
             .add(request: dummyNotificationRequest),
@@ -222,6 +233,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
+            .pendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
@@ -246,6 +258,7 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .removeAllPendingNotificationRequests,
+            .pendingNotificationRequests,
             .requestAuthorization,
             .setNotificationCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",

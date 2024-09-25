@@ -75,6 +75,10 @@ public final class NotificationService: NotificationServiceType {
         guard frequency >= minimumAllowedFrequency
         else { return .failure(.frequencyTooLow) }
         
+        if await userNotificationCenter.pendingNotificationRequests().isEmpty == false {
+            userNotificationCenter.removeAllPendingNotificationRequests()
+        }
+        
         storePreferences(enabled: true, frequency: frequency, start: start, stop: stop)
         
         do {
