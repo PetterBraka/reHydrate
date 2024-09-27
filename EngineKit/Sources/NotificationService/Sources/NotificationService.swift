@@ -13,6 +13,14 @@ import NotificationServiceInterface
 import DateServiceInterface
 
 public final class NotificationService: NotificationServiceType {
+    private enum PreferenceKey: String {
+        case isOn = "notification-is-enabled"
+        case frequency = "notification-frequency"
+        case start = "notification-start"
+        case stop = "notification-stop"
+        
+    }
+    
     public typealias Engine = (
         HasLoggingService &
         HasUserPreferenceService &
@@ -28,10 +36,6 @@ public final class NotificationService: NotificationServiceType {
     private let celebrationCategory = "com.rehydrate.celebration"
     
     private let engine: Engine
-    private let preferenceKeyIsOn = "notification-is-enabled"
-    private let preferenceKeyFrequency = "notification-frequency"
-    private let preferenceKeyStart = "notification-start"
-    private let preferenceKeyStop = "notification-stop"
     
     public let minimumAllowedFrequency = 10
     private let calendarComponents: Set<Calendar.Component> = [.hour, .minute]
@@ -97,10 +101,10 @@ public final class NotificationService: NotificationServiceType {
     }
     
     public func getSettings() -> NotificationSettings {
-        let enabled: Bool? = engine.userPreferenceService.get(for: preferenceKeyIsOn)
-        let frequency: Int? = engine.userPreferenceService.get(for: preferenceKeyFrequency)
-        let start: Date? = engine.userPreferenceService.get(for: preferenceKeyStart)
-        let stop: Date? = engine.userPreferenceService.get(for: preferenceKeyStop)
+        let enabled: Bool? = engine.userPreferenceService.get(for: PreferenceKey.isOn.rawValue)
+        let frequency: Int? = engine.userPreferenceService.get(for: PreferenceKey.frequency.rawValue)
+        let start: Date? = engine.userPreferenceService.get(for: PreferenceKey.start.rawValue)
+        let stop: Date? = engine.userPreferenceService.get(for: PreferenceKey.stop.rawValue)
         
         return NotificationSettings(
             isOn: enabled ?? false,
@@ -131,7 +135,7 @@ private extension NotificationService {
     
     func storePreferences(enabled: Bool) {
         do {
-            try engine.userPreferenceService.set(enabled, for: preferenceKeyIsOn)
+            try engine.userPreferenceService.set(enabled, for: PreferenceKey.isOn.rawValue)
         } catch {
             engine.logger.error("couldn't store notification settings", error: error)
         }
@@ -143,9 +147,9 @@ private extension NotificationService {
                           stop: Date?) {
         storePreferences(enabled: enabled)
         do {
-            try engine.userPreferenceService.set(frequency, for: preferenceKeyFrequency)
-            try engine.userPreferenceService.set(start, for: preferenceKeyStart)
-            try engine.userPreferenceService.set(stop, for: preferenceKeyStop)
+            try engine.userPreferenceService.set(frequency, for: PreferenceKey.frequency.rawValue)
+            try engine.userPreferenceService.set(start, for: PreferenceKey.start.rawValue)
+            try engine.userPreferenceService.set(stop, for: PreferenceKey.stop.rawValue)
         } catch {
             engine.logger.error("couldn't store notification settings", error: error)
         }
