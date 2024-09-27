@@ -20,6 +20,7 @@ public final class DateService: DateServiceType {
         formatter = DateFormatter()
         formatter.dateStyle = .short
         formatter.timeStyle = .none
+        formatter.locale = .current
     }
     
     public func now() -> Date {
