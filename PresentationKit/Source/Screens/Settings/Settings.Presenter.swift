@@ -311,9 +311,10 @@ private extension Screen.Settings.Presenter {
     
     func enableNotifications(frequency: Int? = nil, start: Date? = nil, stop: Date? = nil) async {
         let now = engine.dateService.now()
-        let frequency = frequency ?? engine.notificationService.minimumAllowedFrequency
-        let start = start ?? engine.dateService.getStart(of: now)
-        let stop = stop ?? engine.dateService.getEnd(of: now)
+        let oldSettings = engine.notificationService.getSettings()
+        let frequency = frequency ?? oldSettings.frequency ?? engine.notificationService.minimumAllowedFrequency
+        let start = start ?? oldSettings.start ?? engine.dateService.getStart(of: now)
+        let stop = stop ?? oldSettings.stop ?? engine.dateService.getEnd(of: now)
         
         let result = await engine.notificationService.enable(
             withFrequency: frequency,
