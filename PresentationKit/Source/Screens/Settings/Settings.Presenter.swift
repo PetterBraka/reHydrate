@@ -357,8 +357,9 @@ private extension Screen.Settings.Presenter {
             return (startRangeStart ... startRangeEnd,
                     stopRangeStart ... stopRangeEnd)
         } else {
-            return (startRangeStart ... stopRangeEnd,
-                    startRangeStart ... stopRangeEnd)
+            let end = dateService.getDate(byAdding: -minimumAllowedFrequency, component: .minute, to: stopRangeEnd)
+            let start = dateService.getDate(byAdding: minimumAllowedFrequency, component: .minute, to: startRangeStart)
+            return (startRangeStart ... end, start ... stopRangeEnd)
         }
     }
     
