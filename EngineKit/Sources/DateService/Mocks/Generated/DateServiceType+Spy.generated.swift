@@ -25,6 +25,7 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
         case getStart(date: Date)
         case getEnd(date: Date)
         case isDate(date: Date, inSameDayAs: Date)
+        case date(hours: Int, minutes: Int, seconds: Int, date: Date)
     }
 
     public var variableLog: [VariableName] = []
@@ -65,5 +66,9 @@ extension DateServiceTypeSpy: DateServiceType {
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
         methodLog.append(.isDate(date: date, inSameDayAs: inSameDayAs))
         return realObject.isDate(date, inSameDayAs: inSameDayAs)
+    }
+    public func date(hours: Int, minutes: Int, seconds: Int, from date: Date) -> Date? {
+        methodLog.append(.date(hours: hours, minutes: minutes, seconds: seconds, date: date))
+        return realObject.date(hours: hours, minutes: minutes, seconds: seconds, from: date)
     }
 }

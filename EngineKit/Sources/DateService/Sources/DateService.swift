@@ -32,16 +32,7 @@ public final class DateService: DateServiceType {
     }
     
     public func get(component: Component, from date: Date) -> Int {
-        return switch component {
-        case .second:
-            calendar.component(.second, from: date)
-        case .minute:
-            calendar.component(.minute, from: date)
-        case .hour:
-            calendar.component(.hour, from: date)
-        case .day:
-            calendar.component(.day, from: date)
-        }
+        calendar.component(.init(from: component), from: date)
     }
     
     public func getDate(byAdding value: Int, component: Component, to date: Date) -> Date {
@@ -71,5 +62,24 @@ public final class DateService: DateServiceType {
     
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
         formatter.string(from: date) == formatter.string(from: inSameDayAs)
+    }
+    
+    public func date(hours: Int, minutes: Int, seconds: Int, from date: Date) -> Date? {
+        calendar.date(bySettingHour: hours, minute: minutes, second: seconds, of: date)
+    }
+}
+
+extension Calendar.Component {
+    init(from component: Component) {
+        switch component {
+        case .second:
+            self = .second
+        case .minute:
+            self = .minute
+        case .hour:
+            self = .hour
+        case .day:
+            self = .day
+        }
     }
 }

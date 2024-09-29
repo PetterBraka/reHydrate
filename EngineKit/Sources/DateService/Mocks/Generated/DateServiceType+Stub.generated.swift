@@ -13,6 +13,7 @@ public protocol DateServiceTypeStubbing {
     var getStartDate_returnValue: Date { get set }
     var getEndDate_returnValue: Date { get set }
     var isDateDateInSameDayAs_returnValue: Bool { get set }
+    var dateHoursMinutesSecondsDate_returnValue: Date? { get set }
 }
 
 public final class DateServiceTypeStub: DateServiceTypeStubbing {
@@ -107,6 +108,19 @@ public final class DateServiceTypeStub: DateServiceTypeStubbing {
         }
     }
     private var isDateDateInSameDayAs_returnValues: [Bool] = []
+    public var dateHoursMinutesSecondsDate_returnValue: Date? {
+        get {
+            if dateHoursMinutesSecondsDate_returnValues.isEmpty {
+                .default
+            } else {
+                dateHoursMinutesSecondsDate_returnValues.removeFirst()
+            }
+        }
+        set {
+            dateHoursMinutesSecondsDate_returnValues.append(newValue)
+        }
+    }
+    private var dateHoursMinutesSecondsDate_returnValues: [Date?] = []
 
     public init() {}
 }
@@ -138,6 +152,10 @@ extension DateServiceTypeStub: DateServiceType {
 
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
         isDateDateInSameDayAs_returnValue
+    }
+
+    public func date(hours: Int, minutes: Int, seconds: Int, from date: Date) -> Date? {
+        dateHoursMinutesSecondsDate_returnValue
     }
 
 }

@@ -197,7 +197,6 @@ struct SettingsScreen: View {
                     } set: {
                         observer.perform(action: .didSetRemindersStart($0))
                     },
-                    in: notifications.startRange,
                     displayedComponents: .hourAndMinute
                 )
                 .transition(.move(edge: .top))
@@ -208,7 +207,6 @@ struct SettingsScreen: View {
                     } set: {
                         observer.perform(action: .didSetRemindersStop($0))
                     },
-                    in: notifications.stopRange,
                     displayedComponents: .hourAndMinute
                 )
                 .transition(.move(edge: .top))

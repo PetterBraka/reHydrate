@@ -152,9 +152,7 @@ extension Screen.Settings {
                 notifications: .init(
                     frequency: notificationSettings.frequency,
                     start: notificationSettings.start,
-                    startRange: notificationSettings.startRange,
-                    stop: notificationSettings.stop,
-                    stopRange: notificationSettings.stopRange
+                    stop: notificationSettings.stop
                 ),
                 error: nil
             )
@@ -315,9 +313,7 @@ private extension Screen.Settings.Presenter {
                 notifications: .init(
                     frequency: settings.frequency,
                     start: settings.start,
-                    startRange: settings.startRange,
-                    stop: settings.stop,
-                    stopRange: settings.stopRange
+                    stop: settings.stop
                 )
             )
         case .failure(let error):
@@ -337,32 +333,6 @@ private extension Screen.Settings.Presenter {
         }
     }
     
-    func getRanges(start: Date, stop: Date) -> (start: ClosedRange<Date>, stop: ClosedRange<Date>) {
-        let dateService = engine.dateService
-        let now = dateService.now()
-        let minimumAllowedFrequency = engine.notificationService.minimumAllowedFrequency
-        
-        let startRangeStart = dateService.getStart(of: now)
-        let stopRangeEnd = dateService.getEnd(of: now)
-        
-        let todayToStartDiff = dateService.daysBetween(start, end: now)
-        let newStart = dateService.getDate(byAdding: todayToStartDiff, component: .day, to: start)
-        let todayToStopDiff = dateService.daysBetween(stop, end: now)
-        let newStop = dateService.getDate(byAdding: todayToStopDiff, component: .day, to: stop)
-         
-        let startRangeEnd = dateService.getDate(byAdding: -minimumAllowedFrequency, component: .minute, to: newStop)
-        let stopRangeStart = dateService.getDate(byAdding: minimumAllowedFrequency, component: .minute, to: newStart)
-        
-        if startRangeStart < startRangeEnd, stopRangeStart < stopRangeEnd {
-            return (startRangeStart ... startRangeEnd,
-                    stopRangeStart ... stopRangeEnd)
-        } else {
-            let end = dateService.getDate(byAdding: -minimumAllowedFrequency, component: .minute, to: stopRangeEnd)
-            let start = dateService.getDate(byAdding: minimumAllowedFrequency, component: .minute, to: startRangeStart)
-            return (startRangeStart ... end, start ... stopRangeEnd)
-        }
-    }
-    
     func disableNotifications() async {
         engine.notificationService.disable()
         await updateViewModel(isLoading: false, notifications: nil)
@@ -370,22 +340,33 @@ private extension Screen.Settings.Presenter {
     
     func getNotificationsSettings(
         frequency: Int? = nil,
-        start: Date? = nil,
-        stop: Date? = nil
+        start startDate: Date? = nil,
+        stop stopDate: Date? = nil
     ) -> ViewModel.NotificationSettings {
-        let now = engine.dateService.now()
         let notificationSettings = engine.notificationService.getSettings()
+        
         let frequency = frequency ?? notificationSettings.frequency ?? engine.notificationService.minimumAllowedFrequency
-        let start = start ?? notificationSettings.start ?? engine.dateService.getStart(of: now)
-        let stop = stop ?? notificationSettings.stop ?? engine.dateService.getEnd(of: now)
-        let range = getRanges(start: start, stop: stop)
+        let now = engine.dateService.now()
+        
+        let start: Date =
+        if let date = startDate ?? notificationSettings.start {
+            date
+        } else {
+            engine.dateService.date(hours: 7, minutes: 00, seconds: 00, from: now) ??
+            engine.dateService.getStart(of: now)
+        }
+        let stop: Date =
+        if let date = stopDate ?? notificationSettings.stop {
+            date
+        } else {
+            engine.dateService.date(hours: 21, minutes: 00, seconds: 00, from: now) ??
+            engine.dateService.getEnd(of: now)
+        }
         
         return .init(
             frequency: frequency,
             start: start,
-            startRange: range.start,
-            stop: stop,
-            stopRange: range.stop
+            stop: stop
         )
     }
 }
