@@ -174,7 +174,11 @@ private extension PresentationWatchKitTests {
     }
 }
 
-extension EngineMocks: @retroactive HasAppGroup {}
+extension EngineMocks: @retroactive HasAppGroup {
+    public var appGroup: String {
+        "com.appGroup"
+    }
+}
 
 extension WatchCommsTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: WatchCommsTypeSpy.MethodCall, rhs: WatchCommsTypeSpy.MethodCall) -> Bool {

@@ -7,6 +7,7 @@
 
 import XCTest
 import TestHelper
+import PortsInterface
 import PortsMocks
 import EngineMocks
 import DayServiceMocks
@@ -1060,5 +1061,11 @@ appVersion: \(appVersion),
 error: \(String(describing: error))
 
 """
+    }
+}
+
+extension EngineMocks: @retroactive HasAppInfo {
+    public var appVersion: String {
+        "0.0.0"
     }
 }
