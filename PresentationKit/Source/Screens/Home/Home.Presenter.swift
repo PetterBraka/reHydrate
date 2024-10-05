@@ -87,8 +87,7 @@ extension Screen.Home {
                     drinks: drinks
                 )
             case .didBackground:
-                await engine.phoneComms.sendDataToWatch()
-                await setWidgetData()
+                break
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
@@ -134,6 +133,9 @@ extension Screen.Home {
                     consumption: today.consumed,
                     goal: today.goal
                 )
+
+                await engine.phoneComms.sendDataToWatch()
+                await setWidgetData()
             }
         }
         
@@ -143,6 +145,9 @@ extension Screen.Home {
                 guard let self else { return }
                 let drinks = await getDrinks()
                 await updateViewModel(drinks: drinks)
+                
+                await engine.phoneComms.sendDataToWatch()
+                await setWidgetData()
             }
         }
         
@@ -158,6 +163,9 @@ extension Screen.Home {
                     goal: today.goal,
                     drinks: drinks
                 )
+                
+                await engine.phoneComms.sendDataToWatch()
+                await setWidgetData()
             }
         }
     }
