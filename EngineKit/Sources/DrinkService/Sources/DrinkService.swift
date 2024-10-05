@@ -65,12 +65,16 @@ public final class DrinkService: DrinkServiceType {
     }
     
     public func resetToDefault() async -> [Drink] {
+        do {
+            try await engine.drinkManager.deleteAll()
+        } catch {
+            engine.logger.error("Couldn't reset drinks", error: error)
+        }
         let defaultDrinks: [Drink] = [
             .init(id: UUID().uuidString, size: 300, container: .small),
             .init(id: UUID().uuidString, size: 500, container: .medium),
             .init(id: UUID().uuidString, size: 750, container: .large)
         ]
-        
         for drink in defaultDrinks {
             do {
                 _ = try engine.drinkManager.createNewDrink(
