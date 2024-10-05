@@ -29,7 +29,7 @@ final class SettingsScreenObservable: ObservableObject, SettingsSceneType {
         case .viewModel:
             self.viewModel = presenter.viewModel
         }
-        DispatchQueue.main.async { [weak self] in
+        Task { @MainActor [weak self] in
             self?.objectWillChange.send()
         }
     }

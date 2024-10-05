@@ -27,7 +27,7 @@ final class AppIconScreenObservable: ObservableObject, AppIconSceneType {
         case .viewModel:
             self.viewModel = presenter.viewModel
         }
-        DispatchQueue.main.async { [weak self] in
+        Task { @MainActor [weak self] in
             self?.objectWillChange.send()
         }
     }

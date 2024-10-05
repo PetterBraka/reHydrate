@@ -15,7 +15,7 @@ final class HistoryScreenObservable: ObservableObject, HistorySceneType {
     public typealias ViewModel = History.ViewModel
     private let presenter: Screen.History.Presenter
     
-    @Published var viewModel: ViewModel
+    var viewModel: ViewModel
     
     init(presenter: Screen.History.Presenter) {
         self.presenter = presenter
@@ -23,12 +23,12 @@ final class HistoryScreenObservable: ObservableObject, HistorySceneType {
     }
     
     func perform(update: History.Update) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            switch update {
-            case .viewModel:
-                viewModel = presenter.viewModel
-            }
+        switch update {
+        case .viewModel:
+            viewModel = presenter.viewModel
+        }
+        Task { @MainActor [weak self] in
+            self?.objectWillChange.send()
         }
     }
     

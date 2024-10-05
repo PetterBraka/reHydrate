@@ -38,7 +38,7 @@ final class EditContainerScreenObservable: ObservableObject, EditContainerSceneT
     }
     
     func perform(update: EditContainer.Update) {
-        DispatchQueue.main.async { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self else { return }
             switch update {
             case .viewModel:

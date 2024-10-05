@@ -27,7 +27,7 @@ final class CreditsScreenObservable: ObservableObject, CreditsSceneType {
         case .viewModel:
             self.viewModel = presenter.viewModel
         }
-        DispatchQueue.main.async { [weak self] in
+        Task { @MainActor [weak self] in
             self?.objectWillChange.send()
         }
     }
