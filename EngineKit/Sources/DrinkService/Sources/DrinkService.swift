@@ -7,6 +7,7 @@
 
 import Foundation
 import LoggingService
+import PortsInterface
 import DrinkServiceInterface
 import UnitServiceInterface
 import DBKitInterface
@@ -15,7 +16,8 @@ public final class DrinkService: DrinkServiceType {
     public typealias Engine = (
         HasLoggingService &
         HasDrinkManagerService &
-        HasUnitService
+        HasUnitService &
+        HasNotificationCenterPort
     )
     
     private let engine: Engine
@@ -33,6 +35,7 @@ public final class DrinkService: DrinkServiceType {
             engine.logger.error("Couldn't map new drink \(newDrink)",error: error)
             throw error
         }
+        engine.notificationCenter.post(name: .drinkDidChange)
         return newDrink
     }
     
@@ -46,11 +49,13 @@ public final class DrinkService: DrinkServiceType {
             engine.logger.error("Couldn't map edited drink \(updatedDrink)",error: error)
             throw error
         }
+        engine.notificationCenter.post(name: .drinkDidChange)
         return updatedDrink
     }
     
     public func remove(container: Container) async throws {
         try await engine.drinkManager.deleteDrink(container: container.rawValue)
+        engine.notificationCenter.post(name: .drinkDidChange)
     }
     
     public func getSaved() async throws -> [Drink] {
@@ -75,6 +80,7 @@ public final class DrinkService: DrinkServiceType {
                 continue
             }
         }
+        engine.notificationCenter.post(name: .drinkDidChange)
         return defaultDrinks
     }
 }
