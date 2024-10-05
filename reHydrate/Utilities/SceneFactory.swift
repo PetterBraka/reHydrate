@@ -75,9 +75,6 @@ public final class SceneFactory: ObservableObject {
         phoneDelegate = PhoneCommunicationDelegate(session: phoneSession, notificationCenter: .default)
         notificationDelegate = NotificationDelegatePort(engine: engine)
         
-        engine.didCompleteNotificationAction = { [weak self] in
-            self?.homePresenter.sync(didComplete: nil)
-        }
         engine.phoneService.activate()
     }
     
@@ -98,9 +95,7 @@ public final class SceneFactory: ObservableObject {
     func makeEditScreen(with drink: Home.ViewModel.Drink) -> EditContainerScreen {
         let presenter = Screen.EditContainer.Presenter(engine: engine,
                                                        router: router,
-                                                       selectedDrink: .init(from: drink)) { [weak self] in
-            self?.homePresenter.sync(didComplete: nil)
-        }
+                                                       selectedDrink: .init(from: drink))
         let observer = EditContainerScreenObservable(presenter: presenter)
         presenter.scene = observer
         

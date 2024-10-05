@@ -12,5 +12,4 @@ public protocol HomeSceneType: AnyObject {
 public protocol HomePresenterType: AnyObject {
     var viewModel: Home.ViewModel { get }
     func perform(action: Home.Action) async
-    func sync(didComplete: (() -> Void)?)
 }

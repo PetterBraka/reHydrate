@@ -45,16 +45,12 @@ extension Screen.EditContainer {
             }
         }
         
-        private let didSavingChanges: (() -> Void)?
-        
         public init(engine: Engine,
                     router: Router,
-                    selectedDrink: Drink,
-                    didSavingChanges: (() -> Void)?) {
+                    selectedDrink: Drink) {
             self.engine = engine
             self.router = router
             self.selectedDrink = selectedDrink
-            self.didSavingChanges = didSavingChanges
             
             self.viewModel = .init(
                 isSaving: false,
@@ -91,7 +87,6 @@ extension Screen.EditContainer {
                     updateViewModel(isSaving: false)
                     router.close()
                     await engine.phoneComms.sendDataToWatch()
-                    didSavingChanges?()
                 } catch {
                     updateViewModel(isSaving: false, error: .failedSaving)
                 }

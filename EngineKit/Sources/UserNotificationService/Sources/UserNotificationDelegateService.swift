@@ -19,14 +19,8 @@ public final class UserNotificationDelegateService: UserNotificationDelegateType
     
     private let engine: Engine
     
-    private let didCompleteAction: (() -> Void)?
-    
-    public init(
-        engine: Engine,
-        didCompleteAction: (() -> Void)?
-    ) {
+    public init(engine: Engine) {
         self.engine = engine
-        self.didCompleteAction = didCompleteAction
     }
     
     public func userNotificationCenter(
@@ -57,7 +51,6 @@ public final class UserNotificationDelegateService: UserNotificationDelegateType
             } catch {
                 engine.logger.error("Couldn't add drink(\(drink)) from notification", error: error)
             }
-            didCompleteAction?()
         } catch {
             engine.logger.critical("No drinks found", error: error)
         }
