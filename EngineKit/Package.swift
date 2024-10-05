@@ -34,7 +34,7 @@ let package: Package = {
                     .source(.languageService),
                     .source(.unitService),
                     .source(.userPreferenceService),
-                    .source(.notificationService),
+                    .source(.userNotificationService),
                     .source(.appearanceService),
                     .source(.dateService),
                     .source(.phoneComms),
@@ -77,7 +77,7 @@ let package: Package = {
                         .mocks(.languageService),
                         .mocks(.unitService),
                         .mocks(.userPreferenceService),
-                        .mocks(.notificationService),
+                        .mocks(.userNotificationService),
                         .mocks(.appearanceService),
                         .mocks(.dateService),
                         .mocks(.phoneComms),
@@ -136,7 +136,7 @@ let package: Package = {
                 targetsFrom: .userPreferenceService
             )
             .with(
-                targetsFrom: .notificationService,
+                targetsFrom: .userNotificationService,
                 sourceDependancy: [
                     .interface(.dayService),
                     .interface(.userPreferenceService)
@@ -191,7 +191,7 @@ enum Feature: String {
     case timelineService = "TimelineService"
     case unitService = "UnitService"
     case userPreferenceService = "UserPreferenceService"
-    case notificationService = "NotificationService"
+    case userNotificationService = "UserNotificationService"
     case appearanceService = "AppearanceService"
     case phoneComms = "PhoneComms"
     case watchComms = "WatchComms"

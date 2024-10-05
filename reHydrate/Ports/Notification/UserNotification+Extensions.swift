@@ -7,7 +7,7 @@
 //
 
 import UserNotifications
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
 extension UNNotificationAction {
     convenience init(from action: NotificationAction) {

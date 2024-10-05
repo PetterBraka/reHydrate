@@ -4,10 +4,10 @@
 //
 //  Created by Petter vang Brakalsvålet on 24/02/2024.
 //
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
 // sourcery:begin: AutoStub, AutoSpy
-extension NotificationServiceType {}
+extension UserNotificationServiceType {}
 extension UserNotificationCenterType {}
-extension NotificationDelegateType {}
+extension UserNotificationDelegateType {}
 // sourcery:end

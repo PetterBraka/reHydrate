@@ -1,5 +1,5 @@
 //
-//  NotificationDelegateService.swift
+//  UserNotificationDelegateService.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 02/10/2023.
@@ -8,9 +8,9 @@
 import LoggingService
 import DayServiceInterface
 import DrinkServiceInterface
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
-public final class NotificationDelegateService: NotificationDelegateType {
+public final class UserNotificationDelegateService: UserNotificationDelegateType {
     public typealias Engine = (
         HasLoggingService &
         HasDayService &

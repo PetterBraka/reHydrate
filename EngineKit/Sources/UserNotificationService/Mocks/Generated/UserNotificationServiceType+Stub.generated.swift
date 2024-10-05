@@ -3,15 +3,15 @@
 // swiftlint:disable line_length
 // swiftlint:disable variable_name    
 import Foundation
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
-public protocol NotificationServiceTypeStubbing {
+public protocol UserNotificationServiceTypeStubbing {
     var minimumAllowedFrequency_returnValue: Int { get set }
     var enableWithFrequencyStartStop_returnValue: Result<Void, NotificationError> { get set }
     var getSettings_returnValue: NotificationSettings { get set }
 }
 
-public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing {
+public final class UserNotificationServiceTypeStub: UserNotificationServiceTypeStubbing {
     public var minimumAllowedFrequency_returnValue: Int {
         get {
             if minimumAllowedFrequency_returnValues.isEmpty {
@@ -55,7 +55,7 @@ public final class NotificationServiceTypeStub: NotificationServiceTypeStubbing 
     public init() {}
 }
 
-extension NotificationServiceTypeStub: NotificationServiceType {
+extension UserNotificationServiceTypeStub: UserNotificationServiceType {
     public var minimumAllowedFrequency: Int { minimumAllowedFrequency_returnValue }
     public func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError> {
         enableWithFrequencyStartStop_returnValue

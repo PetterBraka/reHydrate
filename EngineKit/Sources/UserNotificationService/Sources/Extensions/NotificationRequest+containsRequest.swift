@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
 public extension Array where Element == NotificationRequest {
     func containsRequest(

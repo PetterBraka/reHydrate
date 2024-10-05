@@ -4,7 +4,7 @@
 // swiftlint:disable variable_name
 
 import Foundation
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
 public protocol UserNotificationCenterTypeSpying {
     var variableLog: [UserNotificationCenterTypeSpy.VariableName] { get set }

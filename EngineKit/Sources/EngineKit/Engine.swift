@@ -17,8 +17,8 @@ import UnitServiceInterface
 import UnitService
 import UserPreferenceServiceInterface
 import UserPreferenceService
-import NotificationServiceInterface
-import NotificationService
+import UserNotificationServiceInterface
+import UserNotificationService
 import PortsInterface
 import AppearanceServiceInterface
 import AppearanceService
@@ -90,14 +90,14 @@ public final class Engine {
     public var phoneService: PhoneServiceType
     public var notificationCenter: NotificationCenterPort
     
-    public lazy var notificationService: NotificationServiceType = NotificationService(
+    public lazy var userNotificationService: UserNotificationServiceType = UserNotificationService(
         engine: self,
         reminders: reminders,
         celebrations: celebrations,
         userNotificationCenter: userNotificationCenter,
         didComplete: nil
     )
-    public lazy var notificationDelegate: NotificationDelegateType = NotificationDelegateService(engine: self, didCompleteAction: didCompleteNotificationAction)
+    public lazy var notificationDelegate: UserNotificationDelegateType = UserNotificationDelegateService(engine: self, didCompleteAction: didCompleteNotificationAction)
     
     // MARK: Service
     public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)

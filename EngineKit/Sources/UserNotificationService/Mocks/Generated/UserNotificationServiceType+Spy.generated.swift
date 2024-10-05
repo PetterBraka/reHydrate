@@ -4,16 +4,16 @@
 // swiftlint:disable variable_name
 
 import Foundation
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
-public protocol NotificationServiceTypeSpying {
-    var variableLog: [NotificationServiceTypeSpy.VariableName] { get set }
-    var lastVariabelCall: NotificationServiceTypeSpy.VariableName? { get }
-    var methodLog: [NotificationServiceTypeSpy.MethodCall] { get set }
-    var lastMethodCall: NotificationServiceTypeSpy.MethodCall? { get }
+public protocol UserNotificationServiceTypeSpying {
+    var variableLog: [UserNotificationServiceTypeSpy.VariableName] { get set }
+    var lastVariabelCall: UserNotificationServiceTypeSpy.VariableName? { get }
+    var methodLog: [UserNotificationServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: UserNotificationServiceTypeSpy.MethodCall? { get }
 }
 
-public final class NotificationServiceTypeSpy: NotificationServiceTypeSpying {
+public final class UserNotificationServiceTypeSpy: UserNotificationServiceTypeSpying {
     public enum VariableName {
         case minimumAllowedFrequency
     }
@@ -28,13 +28,13 @@ public final class NotificationServiceTypeSpy: NotificationServiceTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private var realObject: NotificationServiceType
-    public init(realObject: NotificationServiceType) {
+    private var realObject: UserNotificationServiceType
+    public init(realObject: UserNotificationServiceType) {
         self.realObject = realObject
     }
 }
 
-extension NotificationServiceTypeSpy: NotificationServiceType {
+extension UserNotificationServiceTypeSpy: UserNotificationServiceType {
     public var minimumAllowedFrequency: Int {
         get {
             variableLog.append(.minimumAllowedFrequency)

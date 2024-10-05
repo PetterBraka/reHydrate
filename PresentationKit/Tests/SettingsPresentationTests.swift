@@ -13,7 +13,7 @@ import EngineMocks
 import DayServiceMocks
 import UnitServiceMocks
 import DateServiceMocks
-import NotificationServiceMocks
+import UserNotificationServiceMocks
 import UserPreferenceServiceMocks
 import PhoneCommsMocks
 @testable import PresentationKit
@@ -27,7 +27,7 @@ final class SettingsPresentationTests: XCTestCase {
     private var dayService: (stub: DayServiceTypeStubbing, spy: DayServiceTypeSpying)!
     private var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
     private var unitService: (stub: UnitServiceTypeStubbing, spy: UnitServiceTypeSpying)!
-    private var notificationService: (stub: NotificationServiceTypeStubbing, spy: NotificationServiceTypeSpying)!
+    private var userNotificationService: (stub: NotificationServiceTypeStubbing, spy: NotificationServiceTypeSpying)!
     private var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     private var urlService: (stub: OpenUrlInterfaceStubbing, spy: OpenUrlInterfaceSpying)!
     private var phoneComms: (stub: PhoneCommsTypeStubbing, spy: PhoneCommsTypeSpying)!
@@ -39,7 +39,7 @@ final class SettingsPresentationTests: XCTestCase {
         dayService = engine.makeDayService()
         unitService = engine.makeUnitService()
         dateService = engine.makeDateService()
-        notificationService = engine.makeNotificationService()
+        userNotificationService = engine.makeNotificationService()
         userPreferenceService = engine.makeUserPreferenceService()
         urlService = engine.makeOpenUrlService()
         phoneComms = engine.makePhoneComms()
@@ -54,7 +54,7 @@ final class SettingsPresentationTests: XCTestCase {
         dayService = nil
         unitService = nil
         dateService = nil
-        notificationService = nil
+        userNotificationService = nil
         userPreferenceService = nil
         urlService = nil
         
@@ -117,13 +117,13 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_didAppear_withNotificationSettings() async {
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59),
             frequency: 30
         )
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59),
@@ -383,8 +383,8 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_didSetReminders_on() async {
-        notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        notificationService.stub.getSettings_returnValue = .init(isOn: false, start: nil, stop: nil, frequency: nil)
+        userNotificationService.stub.minimumAllowedFrequency_returnValue = 5
+        userNotificationService.stub.getSettings_returnValue = .init(isOn: false, start: nil, stop: nil, frequency: nil)
         dateService.stub.dateHoursMinutesSecondsDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0)
         dateService.stub.dateHoursMinutesSecondsDate_returnValue = Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59)
         dateService.stub.now_returnValue = Date(year: 2021, month: 12, day: 8)
@@ -411,7 +411,7 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_didSetReminders_off() async {
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 23, minutes: 59, seconds: 59),
@@ -435,13 +435,13 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_didSetRemindersStart_to12() async {
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
             frequency: 5
         )
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 0, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
@@ -467,7 +467,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
-        XCTAssertEqual(notificationService.spy.lastMethodCall,
+        XCTAssertEqual(userNotificationService.spy.lastMethodCall,
                        .enable(withFrequency: 5, 
                                start: Date(year: 2021, month: 12, day: 8,
                                            hours: 12, minutes: 0, seconds: 0),
@@ -477,13 +477,13 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_didSetRemindersStop_to20() async {
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 22, minutes: 0, seconds: 0),
             frequency: 5
         )
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 22, minutes: 0, seconds: 0),
@@ -508,7 +508,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
-        XCTAssertEqual(notificationService.spy.lastMethodCall,
+        XCTAssertEqual(userNotificationService.spy.lastMethodCall,
                        .enable(withFrequency: 5,
                                start: Date(year: 2021, month: 12, day: 8,
                                            hours: 7, minutes: 0, seconds: 0),
@@ -518,26 +518,26 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_didTapIncrementFrequency() async {
-        notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.minimumAllowedFrequency_returnValue = 5
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
             frequency: 5
         )
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
             frequency: 5
         )
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
             frequency: 5
         )
-        notificationService.stub.enableWithFrequencyStartStop_returnValue = .success(Void())
+        userNotificationService.stub.enableWithFrequencyStartStop_returnValue = .success(Void())
         await sut.perform(action: .didTapIncrementFrequency)
         
         XCTAssertEqual(
@@ -557,7 +557,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(
-            notificationService.spy.lastMethodCall,
+            userNotificationService.spy.lastMethodCall,
             .enable(withFrequency: 10,
                     start: Date(year: 2021, month: 12, day: 8,
                                 hours: 7, minutes: 0, seconds: 0),
@@ -568,20 +568,20 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_didTapDecrementFrequency() async {
-        notificationService.stub.minimumAllowedFrequency_returnValue = 5
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.minimumAllowedFrequency_returnValue = 5
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
             frequency: 15
         )
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
             frequency: 15
         )
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: true,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
@@ -606,7 +606,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(
-            notificationService.spy.lastMethodCall,
+            userNotificationService.spy.lastMethodCall,
             .enable(withFrequency: 10,
                     start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
                     stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0))
@@ -638,7 +638,7 @@ final class SettingsPresentationTests: XCTestCase {
     func test_didTapIncrementGoal_afterDidLoad() async {
         dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 0, goal: 1.5)
         unitService.stub.convertValueFromUnitToUnit_returnValue = 1.5
-        notificationService.stub.getSettings_returnValue = .init(isOn: false, start: nil, stop: nil, frequency: nil)
+        userNotificationService.stub.getSettings_returnValue = .init(isOn: false, start: nil, stop: nil, frequency: nil)
         await sut.perform(action: .didAppear)
         
         dayService.stub.increaseGoal_returnValue = .success(2)
@@ -685,7 +685,7 @@ final class SettingsPresentationTests: XCTestCase {
     func test_didTapDecrementGoal_afterDidLoad() async {
         dayService.stub.getToday_returnValue = .init(date: .december_8_2021_Wednesday, consumed: 0, goal: 1.5)
         unitService.stub.convertValueFromUnitToUnit_returnValue = 1.5
-        notificationService.stub.getSettings_returnValue = .init(isOn: false, start: nil, stop: nil, frequency: nil)
+        userNotificationService.stub.getSettings_returnValue = .init(isOn: false, start: nil, stop: nil, frequency: nil)
         await sut.perform(action: .didAppear)
         
         dayService.stub.decreaseGoal_returnValue = .success(1)
@@ -709,8 +709,8 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_dismissAlert() async {
-        notificationService.stub.minimumAllowedFrequency_returnValue = 30
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.minimumAllowedFrequency_returnValue = 30
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: false,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),
@@ -737,7 +737,7 @@ final class SettingsPresentationTests: XCTestCase {
     }
     
     func test_dismissAlert_forMissing() async {
-        notificationService.stub.enableWithFrequencyStartStop_returnValue = .failure(.missingReminders)
+        userNotificationService.stub.enableWithFrequencyStartStop_returnValue = .failure(.missingReminders)
         await sut.perform(action: .didSetReminders(true))
         XCTAssertEqual(
             sut.viewModel,
@@ -751,8 +751,8 @@ final class SettingsPresentationTests: XCTestCase {
                 error: .missingReminders
             )
         )
-        notificationService.stub.minimumAllowedFrequency_returnValue = 30
-        notificationService.stub.getSettings_returnValue = .init(
+        userNotificationService.stub.minimumAllowedFrequency_returnValue = 30
+        userNotificationService.stub.getSettings_returnValue = .init(
             isOn: false,
             start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
             stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0),

@@ -16,8 +16,8 @@ import UnitServiceInterface
 import UnitServiceMocks
 import UserPreferenceServiceInterface
 import UserPreferenceServiceMocks
-import NotificationServiceInterface
-import NotificationServiceMocks
+import UserNotificationServiceInterface
+import UserNotificationServiceMocks
 import AppearanceServiceInterface
 import AppearanceServiceMocks
 import PortsInterface
@@ -41,8 +41,8 @@ public final class EngineMocks {
     public var drinkManager: DrinkManagerType = DrinkManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()
     public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceTypeStub()
-    public var notificationService: NotificationServiceType = NotificationServiceTypeStub()
-    public var notificationDelegate: NotificationDelegateType = NotificationDelegateTypeStub()
+    public var userNotificationService: UserNotificationServiceType = UserNotificationServiceTypeStub()
+    public var notificationDelegate: UserNotificationDelegateType = UserNotificationDelegateTypeStub()
     
     //MARK: Ports
     public var appearancePort: AppearancePortType = AppearancePortTypeStub()

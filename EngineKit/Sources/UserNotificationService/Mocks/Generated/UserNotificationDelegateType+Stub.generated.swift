@@ -3,17 +3,17 @@
 // swiftlint:disable line_length
 // swiftlint:disable variable_name    
 import Foundation
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
-public protocol NotificationDelegateTypeStubbing {
+public protocol UserNotificationDelegateTypeStubbing {
 }
 
-public final class NotificationDelegateTypeStub: NotificationDelegateTypeStubbing {
+public final class UserNotificationDelegateTypeStub: UserNotificationDelegateTypeStubbing {
 
     public init() {}
 }
 
-extension NotificationDelegateTypeStub: NotificationDelegateType {
+extension UserNotificationDelegateTypeStub: UserNotificationDelegateType {
     public func userNotificationCenter(_ center: UserNotificationCenterType, didReceive response: NotificationResponse) async -> Void {
     }
 

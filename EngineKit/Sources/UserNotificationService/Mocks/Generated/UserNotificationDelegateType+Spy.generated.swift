@@ -4,16 +4,16 @@
 // swiftlint:disable variable_name
 
 import Foundation
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
-public protocol NotificationDelegateTypeSpying {
-    var variableLog: [NotificationDelegateTypeSpy.VariableName] { get set }
-    var lastVariabelCall: NotificationDelegateTypeSpy.VariableName? { get }
-    var methodLog: [NotificationDelegateTypeSpy.MethodCall] { get set }
-    var lastMethodCall: NotificationDelegateTypeSpy.MethodCall? { get }
+public protocol UserNotificationDelegateTypeSpying {
+    var variableLog: [UserNotificationDelegateTypeSpy.VariableName] { get set }
+    var lastVariabelCall: UserNotificationDelegateTypeSpy.VariableName? { get }
+    var methodLog: [UserNotificationDelegateTypeSpy.MethodCall] { get set }
+    var lastMethodCall: UserNotificationDelegateTypeSpy.MethodCall? { get }
 }
 
-public final class NotificationDelegateTypeSpy: NotificationDelegateTypeSpying {
+public final class UserNotificationDelegateTypeSpy: UserNotificationDelegateTypeSpying {
     public enum VariableName {
     }
 
@@ -27,13 +27,13 @@ public final class NotificationDelegateTypeSpy: NotificationDelegateTypeSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private var realObject: NotificationDelegateType
-    public init(realObject: NotificationDelegateType) {
+    private var realObject: UserNotificationDelegateType
+    public init(realObject: UserNotificationDelegateType) {
         self.realObject = realObject
     }
 }
 
-extension NotificationDelegateTypeSpy: NotificationDelegateType {
+extension UserNotificationDelegateTypeSpy: UserNotificationDelegateType {
     public func userNotificationCenter(_ center: UserNotificationCenterType, didReceive response: NotificationResponse) async -> Void {
         methodLog.append(.userNotificationCenter(center: center, response: response))
         await realObject.userNotificationCenter(center, didReceive: response)

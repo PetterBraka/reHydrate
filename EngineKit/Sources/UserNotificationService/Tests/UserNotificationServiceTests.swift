@@ -12,11 +12,11 @@ import LoggingService
 import UserPreferenceServiceMocks
 import UserPreferenceServiceInterface
 import DrinkServiceInterface
-import NotificationServiceMocks
-import NotificationServiceInterface
+import UserNotificationServiceMocks
+import UserNotificationServiceInterface
 import DateServiceInterface
 import DateServiceMocks
-@testable import NotificationService
+@testable import UserNotificationService
 
 final class NotificationServiceTests: XCTestCase {
     typealias Engine = (
@@ -31,7 +31,7 @@ final class NotificationServiceTests: XCTestCase {
     var userNotificationCenter: (stub: UserNotificationCenterTypeStub, spy: UserNotificationCenterTypeSpy)!
     var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     
-    var sut: NotificationServiceType!
+    var sut: UserNotificationServiceType!
     
     let dummyNotificationRequest = NotificationRequest(
         identifier: "dumy",
@@ -54,7 +54,7 @@ final class NotificationServiceTests: XCTestCase {
         celebrations: [NotificationMessage] = [.init(title: "Celebration", body: "Example")]
     ) {
         let completionExpectation = XCTestExpectation()
-        sut = NotificationService(
+        sut = UserNotificationService(
             engine: engine,
             reminders: reminders,
             celebrations: celebrations,

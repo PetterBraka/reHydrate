@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public protocol NotificationDelegateType: AnyObject {
+public protocol UserNotificationDelegateType: AnyObject {
     func userNotificationCenter(
         _ center: UserNotificationCenterType,
         didReceive response: NotificationResponse

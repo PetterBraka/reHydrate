@@ -15,8 +15,8 @@ import UnitServiceInterface
 import UnitServiceMocks
 import UserPreferenceServiceInterface
 import UserPreferenceServiceMocks
-import NotificationServiceInterface
-import NotificationServiceMocks
+import UserNotificationServiceInterface
+import UserNotificationServiceMocks
 import AppearanceServiceInterface
 import AppearanceServiceMocks
 import PortsInterface
@@ -48,31 +48,31 @@ extension EngineMocks {
         return (realObject, spy)
     }
 
-    public func makeNotificationService() -> (stub: NotificationServiceTypeStubbing, spy: NotificationServiceTypeSpying) {
-        let stub = NotificationServiceTypeStub()
-        let spy = NotificationServiceTypeSpy(realObject: stub)
+    public func makeUserNotificationService() -> (stub: UserNotificationServiceTypeStubbing, spy: UserNotificationServiceTypeSpying) {
+        let stub = UserNotificationServiceTypeStub()
+        let spy = UserNotificationServiceTypeSpy(realObject: stub)
 
-        self.notificationService = spy
+        self.userNotificationService = spy
         return (stub, spy)
     }
 
-    public func makeNotificationService(_ realObject: NotificationServiceType) -> (realObject: NotificationServiceType, spy: NotificationServiceTypeSpying) {
-        let spy = NotificationServiceTypeSpy(realObject: realObject)
+    public func makeUserNotificationService(_ realObject: UserNotificationServiceType) -> (realObject: UserNotificationServiceType, spy: UserNotificationServiceTypeSpying) {
+        let spy = UserNotificationServiceTypeSpy(realObject: realObject)
 
-        self.notificationService = spy
+        self.userNotificationService = spy
         return (realObject, spy)
     }
 
-    public func makeNotificationDelegate() -> (stub: NotificationDelegateTypeStubbing, spy: NotificationDelegateTypeSpying) {
-        let stub = NotificationDelegateTypeStub()
-        let spy = NotificationDelegateTypeSpy(realObject: stub)
+    public func makeNotificationDelegate() -> (stub: UserNotificationDelegateTypeStubbing, spy: UserNotificationDelegateTypeSpying) {
+        let stub = UserNotificationDelegateTypeStub()
+        let spy = UserNotificationDelegateTypeSpy(realObject: stub)
 
         self.notificationDelegate = spy
         return (stub, spy)
     }
 
-    public func makeNotificationDelegate(_ realObject: NotificationDelegateType) -> (realObject: NotificationDelegateType, spy: NotificationDelegateTypeSpying) {
-        let spy = NotificationDelegateTypeSpy(realObject: realObject)
+    public func makeNotificationDelegate(_ realObject: UserNotificationDelegateType) -> (realObject: UserNotificationDelegateType, spy: UserNotificationDelegateTypeSpying) {
+        let spy = UserNotificationDelegateTypeSpy(realObject: realObject)
 
         self.notificationDelegate = spy
         return (realObject, spy)

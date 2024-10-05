@@ -10,7 +10,7 @@ import LoggingService
 import PresentationInterface
 import UnitServiceInterface
 import DayServiceInterface
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 import PortsInterface
 import AppearanceServiceInterface
 import DateServiceInterface
@@ -22,7 +22,7 @@ extension Screen.Settings {
             HasLoggingService &
             HasDayService &
             HasUnitService &
-            HasNotificationService &
+            HasUserNotificationService &
             HasOpenUrlService &
             HasAppInfo &
             HasAppearanceService &
@@ -100,7 +100,7 @@ extension Screen.Settings {
             case .didTapDecrementFrequency:
                 await decreaseFrequency()
             case .dismissAlert:
-                let frequency = engine.notificationService.minimumAllowedFrequency
+                let frequency = engine.userNotificationService.minimumAllowedFrequency
                 await updateViewModel(
                     isLoading: false,
                     notifications: getNotificationsSettings(frequency: frequency),
@@ -139,7 +139,7 @@ extension Screen.Settings {
                 error: nil
             )
             
-            guard engine.notificationService.getSettings().isOn
+            guard engine.userNotificationService.getSettings().isOn
             else {
                 await updateViewModel(isLoading: false, notifications: nil, error: nil)
                 return
@@ -271,9 +271,9 @@ extension UnitSystem {
 private extension Screen.Settings.Presenter {
     func increaseFrequency() async {
         await updateViewModel(isLoading: true)
-        let minFrequency = engine.notificationService.minimumAllowedFrequency
+        let minFrequency = engine.userNotificationService.minimumAllowedFrequency
         let newFrequency: Int
-        if let frequency = engine.notificationService.getSettings().frequency {
+        if let frequency = engine.userNotificationService.getSettings().frequency {
             newFrequency = frequency + minFrequency
         } else {
             newFrequency = minFrequency
@@ -285,9 +285,9 @@ private extension Screen.Settings.Presenter {
     
     func decreaseFrequency() async {
         await updateViewModel(isLoading: true)
-        let minFrequency = engine.notificationService.minimumAllowedFrequency
+        let minFrequency = engine.userNotificationService.minimumAllowedFrequency
         let newFrequency: Int
-        if let frequency = engine.notificationService.getSettings().frequency {
+        if let frequency = engine.userNotificationService.getSettings().frequency {
             newFrequency = frequency - minFrequency
         } else {
             newFrequency = minFrequency
@@ -300,7 +300,7 @@ private extension Screen.Settings.Presenter {
     func enableNotifications(frequency: Int? = nil, start: Date? = nil, stop: Date? = nil) async {
         let settings = getNotificationsSettings(frequency: frequency, start: start, stop: stop)
         
-        let result = await engine.notificationService.enable(
+        let result = await engine.userNotificationService.enable(
             withFrequency: settings.frequency,
             start: settings.start,
             stop: settings.stop
@@ -334,7 +334,7 @@ private extension Screen.Settings.Presenter {
     }
     
     func disableNotifications() async {
-        engine.notificationService.disable()
+        engine.userNotificationService.disable()
         await updateViewModel(isLoading: false, notifications: nil)
     }
     
@@ -343,9 +343,9 @@ private extension Screen.Settings.Presenter {
         start startDate: Date? = nil,
         stop stopDate: Date? = nil
     ) -> ViewModel.NotificationSettings {
-        let notificationSettings = engine.notificationService.getSettings()
+        let notificationSettings = engine.userNotificationService.getSettings()
         
-        let frequency = frequency ?? notificationSettings.frequency ?? engine.notificationService.minimumAllowedFrequency
+        let frequency = frequency ?? notificationSettings.frequency ?? engine.userNotificationService.minimumAllowedFrequency
         let now = engine.dateService.now()
         
         let start: Date =

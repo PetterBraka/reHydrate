@@ -6,12 +6,12 @@
 //  Copyright © 2023 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 import UserNotifications
 
 final class NotificationDelegatePort: NSObject {
     public typealias Engine = (
-        HasNotificationService
+        HasUserNotificationService
     )
     
     let engine: Engine

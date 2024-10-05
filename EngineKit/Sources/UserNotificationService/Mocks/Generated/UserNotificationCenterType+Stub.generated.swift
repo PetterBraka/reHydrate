@@ -3,7 +3,7 @@
 // swiftlint:disable line_length
 // swiftlint:disable variable_name    
 import Foundation
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
 public protocol UserNotificationCenterTypeStubbing {
     var requestAuthorization_returnValue: Result<Bool, Error> { get set }

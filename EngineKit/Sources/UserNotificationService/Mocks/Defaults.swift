@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 
 extension Int {
     static let `default` = 0

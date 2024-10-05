@@ -1,5 +1,5 @@
 //
-//  NotificationService.swift
+//  UserNotificationService.swift
 //
 //
 //  Created by Petter vang Brakalsvålet on 21/09/2023.
@@ -9,10 +9,10 @@ import Foundation
 import LoggingService
 import UserPreferenceServiceInterface
 import DrinkServiceInterface
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 import DateServiceInterface
 
-public final class NotificationService: NotificationServiceType {
+public final class UserNotificationService: UserNotificationServiceType {
     private enum PreferenceKey: String {
         case isOn = "notification-is-enabled"
         case frequency = "notification-frequency"
@@ -115,7 +115,7 @@ public final class NotificationService: NotificationServiceType {
     }
 }
 
-private extension NotificationService {
+private extension UserNotificationService {
     func checkAuthorizationStatus() async throws {
         guard !isAuthorized 
         else { return }
@@ -156,7 +156,7 @@ private extension NotificationService {
     }
 }
 
-private extension NotificationService {
+private extension UserNotificationService {
     func getNextDate(from startDate: Date, using frequency: Int, stopDate: Date) -> Date? {
         let calendar = Calendar.current
         
