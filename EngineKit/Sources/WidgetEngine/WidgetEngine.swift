@@ -19,7 +19,7 @@ import DayService
 import DBKitInterface
 import DBKit
 
-public final class WidgetEngine {
+public final class WidgetEngine: HasNotificationCenterPort {
     public init(
         appGroup: String,
         subsystem: String
@@ -45,6 +45,8 @@ public final class WidgetEngine {
     public lazy var dayManager: DayManagerType = DayManager(database: database)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
+    public lazy var notificationCenter: NotificationCenterPort
+    
 }
 
 extension WidgetEngine:

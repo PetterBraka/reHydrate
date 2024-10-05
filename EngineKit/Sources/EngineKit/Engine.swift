@@ -44,7 +44,7 @@ public final class Engine {
         appearancePort: AppearancePortType,
         healthService: HealthInterface,
         phoneService: PhoneServiceType,
-        notificationCenter: NotificationCenter
+        notificationCenter: NotificationCenterPort
     ) {
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
         else {
@@ -88,7 +88,7 @@ public final class Engine {
     public var appearancePort: AppearancePortType
     public var healthService: HealthInterface
     public var phoneService: PhoneServiceType
-    public var notificationCenter: NotificationCenter
+    public var notificationCenter: NotificationCenterPort
     
     public lazy var notificationService: NotificationServiceType = NotificationService(
         engine: self,
@@ -106,7 +106,7 @@ public final class Engine {
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
     public lazy var appearanceService: AppearanceServiceType = AppearanceService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
-    public lazy var phoneComms: PhoneCommsType = PhoneComms(engine: self, notificationCenter: notificationCenter)
+    public lazy var phoneComms: PhoneCommsType = PhoneComms(engine: self, notificationCenter: .default)
 }
 
 extension Engine: HasService & HasPorts & HasAppInfo {}

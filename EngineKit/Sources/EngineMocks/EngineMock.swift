@@ -49,6 +49,7 @@ public final class EngineMocks {
     public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceTypeStub()
     public var openUrlService: OpenUrlInterface = OpenUrlInterfaceStub()
     public var healthService: HealthInterface = HealthInterfaceStub()
+    public var notificationCenter: NotificationCenterPort = NotificationCenterPortStub()
     
     public var dayService: DayServiceType = DayServiceTypeStub()
     public var drinksService: DrinkServiceType = DrinkServiceTypeStub()

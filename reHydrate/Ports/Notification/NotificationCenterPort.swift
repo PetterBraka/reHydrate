@@ -2,41 +2,40 @@
 //  NotificationCenterPort.swift
 //  reHydrate
 //
-//  Created by Petter vang Brakalsvålet on 26/09/2023.
-//  Copyright © 2023 Petter vang Brakalsvålet. All rights reserved.
+//  Created by Petter vang Brakalsvålet on 05/10/2024.
+//  Copyright © 2024 Petter vang Brakalsvålet. All rights reserved.
 //
 
-import NotificationServiceInterface
-import UserNotifications
+import Foundation
+import PortsInterface
 
-extension UNUserNotificationCenter: @retroactive UserNotificationCenterType {
-    public func requestAuthorization() async throws -> Bool {
-        try await requestAuthorization(options: [UNAuthorizationOptions.badge, .sound, .alert])
+public final class NotificationCenterService: NotificationCenterPort {
+    private let notificationCenter: NotificationCenter
+    
+    init(notificationCenter: NotificationCenter) {
+        self.notificationCenter = notificationCenter
     }
     
-    public func setNotificationCategories(_ categories: Set<NotificationCategory>) {
-        let categories: [UNNotificationCategory] = categories.map {
-            UNNotificationCategory.init(from: $0)
-        }
-        setNotificationCategories(Set(categories))
+    public func post(name: NotificationName) {
+        notificationCenter.post(name: .init(from: name), object: self)
     }
     
-    public func notificationCategories() async -> Set<NotificationCategory> {
-        let categories: Set<UNNotificationCategory> = await notificationCategories()
-        return Set(categories.map { .init(from: $0) })
+    public func addObserver(
+        _ observer: Any,
+        name: NotificationName,
+        selector: Selector,
+        object: Any?
+    ) {
+        notificationCenter.addObserver(observer, selector: selector, name: .init(from: name), object: object)
     }
     
-    public func add(_ request: NotificationRequest) async throws {
-        try await add(UNNotificationRequest(from: request))
+    public func removeObserver(_ observer: Any, name: NotificationName) {
+        notificationCenter.removeObserver(observer, name: .init(from: name), object: nil)
     }
-    
-    public func pendingNotificationRequests() async -> [NotificationRequest] {
-        let requests: [UNNotificationRequest] = await pendingNotificationRequests()
-        return requests.map { .init(from: $0) }
-    }
-    
-    public func deliveredNotifications() async -> [DeliveredNotification] {
-        let notifications: [UNNotification] = await deliveredNotifications()
-        return notifications.map { .init(from: $0) }
+}
+
+extension Notification.Name {
+    init(from name: NotificationName) {
+        self = .init(name.name)
     }
 }

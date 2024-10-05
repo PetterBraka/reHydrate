@@ -11,4 +11,5 @@ extension AlternateIconsServiceType {}
 extension AppearancePortType {}
 extension HealthInterface {}
 extension OpenUrlInterface {}
+extension NotificationCenterPort {}
 // sourcery:end

@@ -138,6 +138,21 @@ extension EngineMocks {
         return (realObject, spy)
     }
 
+    public func makeNotificationCenter() -> (stub: NotificationCenterPortStubbing, spy: NotificationCenterPortSpying) {
+        let stub = NotificationCenterPortStub()
+        let spy = NotificationCenterPortSpy(realObject: stub)
+
+        self.notificationCenter = spy
+        return (stub, spy)
+    }
+
+    public func makeNotificationCenter(_ realObject: NotificationCenterPort) -> (realObject: NotificationCenterPort, spy: NotificationCenterPortSpying) {
+        let spy = NotificationCenterPortSpy(realObject: realObject)
+
+        self.notificationCenter = spy
+        return (realObject, spy)
+    }
+
     public func makeDayService() -> (stub: DayServiceTypeStubbing, spy: DayServiceTypeSpying) {
         let stub = DayServiceTypeStub()
         let spy = DayServiceTypeSpy(realObject: stub)
