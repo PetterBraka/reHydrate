@@ -62,12 +62,14 @@ extension Screen.Home {
                 self?.dayDidChange()
             }
             engine.notificationCenter.addObserver(self, name: .dayDidChange, selector: #selector(dayDidChange), object: nil)
+            engine.notificationCenter.addObserver(self, name: .unitDidChange, selector: #selector(unitDidChange), object: nil)
             engine.notificationCenter.addObserver(self, name: .drinkDidChange, selector: #selector(drinkDidChange), object: nil)
         }
         
         deinit {
             engine.phoneComms.removeObserver()
             engine.notificationCenter.removeObserver(self, name: .dayDidChange)
+            engine.notificationCenter.removeObserver(self, name: .unitDidChange)
             engine.notificationCenter.removeObserver(self, name: .drinkDidChange)
         }
         
@@ -141,6 +143,21 @@ extension Screen.Home {
                 guard let self else { return }
                 let drinks = await getDrinks()
                 await updateViewModel(drinks: drinks)
+            }
+        }
+        
+        @objc
+        private func unitDidChange() {
+            Task.detached { [weak self] in
+                guard let self else { return }
+                let today = await engine.dayService.getToday()
+                let drinks = await getDrinks()
+                await updateViewModel(
+                    date: today.date,
+                    consumption: today.consumed,
+                    goal: today.goal,
+                    drinks: drinks
+                )
             }
         }
     }

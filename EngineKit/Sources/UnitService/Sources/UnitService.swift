@@ -6,12 +6,16 @@
 //
 
 import Foundation
+import LoggingService
 import UnitServiceInterface
 import UserPreferenceServiceInterface
+import NotificationCenterServiceInterface
 
 public final class UnitService: UnitServiceType {
     public typealias Engine = (
-        HasUserPreferenceService
+        HasUserPreferenceService &
+        HasNotificationCenter &
+        HasLoggingService
     )
     
     private let engine: Engine
@@ -23,7 +27,12 @@ public final class UnitService: UnitServiceType {
     }
     
     public func set(unitSystem: UnitSystem) {
-        try? engine.userPreferenceService.set(unitSystem, for: preferenceKey)
+        do {
+            try engine.userPreferenceService.set(unitSystem, for: preferenceKey)
+            engine.notificationCenter.post(name: .unitDidChange)
+        } catch {
+            engine.logger.error("Failed to set unit system to \(unitSystem.rawValue)", error: error)
+        }
     }
     
     public func getUnitSystem() -> UnitSystem {
