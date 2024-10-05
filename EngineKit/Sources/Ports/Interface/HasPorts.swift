@@ -9,6 +9,5 @@ public protocol HasPorts:
     HasOpenUrlService,
     HasAlternateIconsService,
     HasAppearancePort,
-    HasHealthService,
-    HasNotificationCenterPort
+    HasHealthService
 {}

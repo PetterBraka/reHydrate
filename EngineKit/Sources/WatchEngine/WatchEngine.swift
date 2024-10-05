@@ -22,13 +22,14 @@ import DBKit
 import CommunicationKitInterface
 import WatchCommsInterface
 import WatchComms
+import NotificationCenterServiceInterface
+import NotificationCenterService
 
 public final class WatchEngine {
     public init(
         appGroup: String,
         subsystem: String,
-        watchService: WatchServiceType,
-        notificationCenter: NotificationCenter
+        watchService: WatchServiceType
     ) {
         self.subsystem = subsystem
         self.appGroup = appGroup
@@ -40,7 +41,6 @@ public final class WatchEngine {
         self.sharedDefaults = sharedDefaults
         self.database = Database(appGroup: appGroup)
         self.watchService = watchService
-        self.notificationCenter = notificationCenter
     }
     
     public let appGroup: String
@@ -48,7 +48,6 @@ public final class WatchEngine {
     private let sharedDefaults: UserDefaults
     private let subsystem: String
     
-    public let notificationCenter: NotificationCenter
     public var watchService: WatchServiceType
     
     public lazy var logger: LoggingService = LoggingService(subsystem: subsystem)
@@ -60,7 +59,8 @@ public final class WatchEngine {
     public lazy var drinkManager: DrinkManagerType = DrinkManager(database: database)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)
-    public lazy var watchComms: WatchCommsType = WatchComms(engine: self, notificationCenter: notificationCenter)
+    public lazy var watchComms: WatchCommsType = WatchComms(engine: self, notificationCenter: .default)
+    public lazy var notificationCenter: NotificationCenterType = NotificationCenterService(notificationCenter: .default)
 }
 
 extension WatchEngine:
@@ -75,5 +75,6 @@ extension WatchEngine:
     HasDayService,
     HasDrinksService,
     HasWatchService,
-    HasWatchComms
+    HasWatchComms,
+    HasNotificationCenter
 {}

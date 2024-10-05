@@ -38,6 +38,7 @@ let package: Package = {
                     .source(.appearanceService),
                     .source(.dateService),
                     .source(.phoneComms),
+                    .source(.notificationCenterService),
                 ]
             ),
             .target(
@@ -52,6 +53,7 @@ let package: Package = {
                     .source(.userPreferenceService),
                     .source(.dateService),
                     .source(.watchComms),
+                    .source(.notificationCenterService),
                 ]
             ),
             .target(
@@ -63,6 +65,7 @@ let package: Package = {
                     .source(.dateService),
                     .source(.unitService),
                     .source(.userPreferenceService),
+                    .source(.notificationCenterService),
                 ]
             ),
             .target(
@@ -82,6 +85,7 @@ let package: Package = {
                         .mocks(.dateService),
                         .mocks(.phoneComms),
                         .mocks(.watchComms),
+                        .mocks(.notificationCenterService),
                     ]
                    ),
             .loggingService,
@@ -94,6 +98,7 @@ let package: Package = {
                     .interface(.unitService),
                     .interface(.userPreferenceService),
                     .interface(.dateService),
+                    .interface(.notificationCenterService),
                     .portsInterface,
                     .dbKit
                 ],
@@ -107,7 +112,8 @@ let package: Package = {
                     .portsInterface,
                     .dbKit,
                     .interface(.unitService),
-                    .interface(.userPreferenceService)
+                    .interface(.userPreferenceService),
+                    .interface(.notificationCenterService)
                 ]
             )
             .with(
@@ -160,6 +166,9 @@ let package: Package = {
                 targetsFrom: .watchComms,
                 sourceDependancy: [.communicationInterface]
             )
+            .with(
+                targetsFrom: .notificationCenterService
+            )
     )
 }()
 
@@ -192,6 +201,7 @@ enum Feature: String {
     case unitService = "UnitService"
     case userPreferenceService = "UserPreferenceService"
     case userNotificationService = "UserNotificationService"
+    case notificationCenterService = "NotificationCenterService"
     case appearanceService = "AppearanceService"
     case phoneComms = "PhoneComms"
     case watchComms = "WatchComms"

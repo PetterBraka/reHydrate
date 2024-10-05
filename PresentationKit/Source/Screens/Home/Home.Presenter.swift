@@ -44,13 +44,11 @@ extension Screen.Home {
         }
         
         private let formatter: DateFormatter
-        private let notificationCenter: NotificationCenter
         
-        public init(engine: Engine, router: Router, formatter: DateFormatter, notificationCenter: NotificationCenter) {
+        public init(engine: Engine, router: Router, formatter: DateFormatter) {
             self.engine = engine
             self.router = router
             self.formatter = formatter
-            self.notificationCenter = notificationCenter
             viewModel = ViewModel(dateTitle: formatter.string(from: engine.dateService.now()),
                                   consumption: 0,
                                   goal: 0,

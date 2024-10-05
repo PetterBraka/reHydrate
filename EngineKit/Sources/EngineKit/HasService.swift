@@ -18,6 +18,7 @@ import AppearanceServiceInterface
 import DateServiceInterface
 import CommunicationKitInterface
 import PhoneCommsInterface
+import NotificationCenterServiceInterface
 
 public protocol HasService:
     HasAppGroup,

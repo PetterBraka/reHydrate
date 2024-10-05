@@ -1,5 +1,5 @@
 //
-//  NotificationCenterPort.swift
+//  NotificationCenterType.swift
 //  EngineKit
 //
 //  Created by Petter vang Brakalsvålet on 05/10/2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol NotificationCenterPort: AnyObject {
+public protocol NotificationCenterType: AnyObject {
     func post(name: NotificationName)
     func addObserver(
         _ observer: Any,

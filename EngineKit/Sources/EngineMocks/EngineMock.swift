@@ -32,6 +32,8 @@ import PhoneCommsInterface
 import PhoneCommsMocks
 import WatchCommsInterface
 import WatchCommsMocks
+import NotificationCenterServiceInterface
+import NotificationCenterServiceMocks
 
 public final class EngineMocks {
     public init() {}
@@ -49,7 +51,6 @@ public final class EngineMocks {
     public var alternateIconsService: AlternateIconsServiceType = AlternateIconsServiceTypeStub()
     public var openUrlService: OpenUrlInterface = OpenUrlInterfaceStub()
     public var healthService: HealthInterface = HealthInterfaceStub()
-    public var notificationCenter: NotificationCenterPort = NotificationCenterPortStub()
     
     public var dayService: DayServiceType = DayServiceTypeStub()
     public var drinksService: DrinkServiceType = DrinkServiceTypeStub()
@@ -62,6 +63,7 @@ public final class EngineMocks {
     public var watchService: WatchServiceType = WatchServiceTypeStub()
     public var phoneComms: PhoneCommsType = PhoneCommsTypeStub()
     public var watchComms: WatchCommsType = WatchCommsTypeStub()
+    public var notificationCenter: NotificationCenterType = NotificationCenterTypeStub()
 }
 
 extension EngineMocks: HasService {}

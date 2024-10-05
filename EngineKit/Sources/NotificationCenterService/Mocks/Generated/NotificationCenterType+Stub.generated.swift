@@ -3,17 +3,17 @@
 // swiftlint:disable line_length
 // swiftlint:disable variable_name    
 import Foundation
-import PortsInterface
+import NotificationCenterServiceInterface
 
-public protocol NotificationCenterPortStubbing {
+public protocol NotificationCenterTypeStubbing {
 }
 
-public final class NotificationCenterPortStub: NotificationCenterPortStubbing {
+public final class NotificationCenterTypeStub: NotificationCenterTypeStubbing {
 
     public init() {}
 }
 
-extension NotificationCenterPortStub: NotificationCenterPort {
+extension NotificationCenterTypeStub: NotificationCenterType {
     public func post(name: NotificationName) -> Void {
     }
 

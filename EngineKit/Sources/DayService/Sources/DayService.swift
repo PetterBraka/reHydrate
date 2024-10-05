@@ -13,6 +13,7 @@ import LoggingService
 import PortsInterface
 import DBKitInterface
 import DateServiceInterface
+import NotificationCenterServiceInterface
 
 public final class DayService: DayServiceType {
     public typealias Engine = (
@@ -21,7 +22,7 @@ public final class DayService: DayServiceType {
         HasUnitService &
         HasLoggingService &
         HasDateService &
-        HasNotificationCenterPort
+        HasNotificationCenter
     )
     
     private let engine: Engine

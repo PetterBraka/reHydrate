@@ -130,7 +130,17 @@ configurations:
     output: ../EngineKit/Sources/WatchComms/Mocks/Generated/
     args: 
       imports: 
-          - WatchCommsInterface
+          - WatchCommsInterface 
+
+  - sources:
+      - ../EngineKit/Sources/NotificationCenterService
+    templates:
+        - Templates/AutoStub.stencil
+        - Templates/AutoSpy.stencil
+    output: ../EngineKit/Sources/NotificationCenterService/Mocks/Generated/
+    args: 
+      imports: 
+          - NotificationCenterServiceInterface 
 # EnigneMocks
   - sources:
         - ../EngineKit/Sources/EngineMocks
@@ -152,8 +162,8 @@ configurations:
           - LanguageServiceInterface
           - LanguageServiceMocks
           - LoggingService
-          - NotificationServiceInterface
-          - NotificationServiceMocks
+          - UserNotificationServiceInterface
+          - UserNotificationServiceMocks
           - UnitServiceInterface
           - UnitServiceMocks
           - UserPreferenceServiceInterface

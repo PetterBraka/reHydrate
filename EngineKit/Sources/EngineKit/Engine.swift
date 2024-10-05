@@ -29,6 +29,8 @@ import DBKit
 import CommunicationKitInterface
 import PhoneCommsInterface
 import PhoneComms
+import NotificationCenterServiceInterface
+import NotificationCenterService
 
 public final class Engine {
     public init(
@@ -43,8 +45,7 @@ public final class Engine {
         alternateIconsService: AlternateIconsServiceType,
         appearancePort: AppearancePortType,
         healthService: HealthInterface,
-        phoneService: PhoneServiceType,
-        notificationCenter: NotificationCenterPort
+        phoneService: PhoneServiceType
     ) {
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
         else {
@@ -66,7 +67,6 @@ public final class Engine {
         self.appearancePort = appearancePort
         self.healthService = healthService
         self.phoneService = phoneService
-        self.notificationCenter = notificationCenter
     }
     
     public let appGroup: String
@@ -88,7 +88,6 @@ public final class Engine {
     public var appearancePort: AppearancePortType
     public var healthService: HealthInterface
     public var phoneService: PhoneServiceType
-    public var notificationCenter: NotificationCenterPort
     
     public lazy var userNotificationService: UserNotificationServiceType = UserNotificationService(
         engine: self,
@@ -107,6 +106,7 @@ public final class Engine {
     public lazy var appearanceService: AppearanceServiceType = AppearanceService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
     public lazy var phoneComms: PhoneCommsType = PhoneComms(engine: self, notificationCenter: .default)
+    public lazy var notificationCenter: NotificationCenterType = NotificationCenterService(notificationCenter: .default)
 }
 
 extension Engine: HasService & HasPorts & HasAppInfo {}

@@ -11,13 +11,14 @@ import PortsInterface
 import DrinkServiceInterface
 import UnitServiceInterface
 import DBKitInterface
+import NotificationCenterServiceInterface
 
 public final class DrinkService: DrinkServiceType {
     public typealias Engine = (
         HasLoggingService &
         HasDrinkManagerService &
         HasUnitService &
-        HasNotificationCenterPort
+        HasNotificationCenter
     )
     
     private let engine: Engine

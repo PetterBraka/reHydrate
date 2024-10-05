@@ -4,16 +4,16 @@
 // swiftlint:disable variable_name
 
 import Foundation
-import PortsInterface
+import NotificationCenterServiceInterface
 
-public protocol NotificationCenterPortSpying {
-    var variableLog: [NotificationCenterPortSpy.VariableName] { get set }
-    var lastVariabelCall: NotificationCenterPortSpy.VariableName? { get }
-    var methodLog: [NotificationCenterPortSpy.MethodCall] { get set }
-    var lastMethodCall: NotificationCenterPortSpy.MethodCall? { get }
+public protocol NotificationCenterTypeSpying {
+    var variableLog: [NotificationCenterTypeSpy.VariableName] { get set }
+    var lastVariabelCall: NotificationCenterTypeSpy.VariableName? { get }
+    var methodLog: [NotificationCenterTypeSpy.MethodCall] { get set }
+    var lastMethodCall: NotificationCenterTypeSpy.MethodCall? { get }
 }
 
-public final class NotificationCenterPortSpy: NotificationCenterPortSpying {
+public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
     public enum VariableName {
     }
 
@@ -27,13 +27,13 @@ public final class NotificationCenterPortSpy: NotificationCenterPortSpying {
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
-    private var realObject: NotificationCenterPort
-    public init(realObject: NotificationCenterPort) {
+    private var realObject: NotificationCenterType
+    public init(realObject: NotificationCenterType) {
         self.realObject = realObject
     }
 }
 
-extension NotificationCenterPortSpy: NotificationCenterPort {
+extension NotificationCenterTypeSpy: NotificationCenterType {
     public func post(name: NotificationName) -> Void {
         methodLog.append(.post(name: name))
         realObject.post(name: name)

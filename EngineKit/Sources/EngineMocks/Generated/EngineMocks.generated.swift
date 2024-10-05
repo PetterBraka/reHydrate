@@ -31,6 +31,8 @@ import PhoneCommsInterface
 import PhoneCommsMocks
 import WatchCommsInterface
 import WatchCommsMocks
+import NotificationCenterServiceInterface
+import NotificationCenterServiceMocks
 
 extension EngineMocks {
     public func makeUserPreferenceService() -> (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying) {
@@ -135,21 +137,6 @@ extension EngineMocks {
         let spy = HealthInterfaceSpy(realObject: realObject)
 
         self.healthService = spy
-        return (realObject, spy)
-    }
-
-    public func makeNotificationCenter() -> (stub: NotificationCenterPortStubbing, spy: NotificationCenterPortSpying) {
-        let stub = NotificationCenterPortStub()
-        let spy = NotificationCenterPortSpy(realObject: stub)
-
-        self.notificationCenter = spy
-        return (stub, spy)
-    }
-
-    public func makeNotificationCenter(_ realObject: NotificationCenterPort) -> (realObject: NotificationCenterPort, spy: NotificationCenterPortSpying) {
-        let spy = NotificationCenterPortSpy(realObject: realObject)
-
-        self.notificationCenter = spy
         return (realObject, spy)
     }
 
@@ -300,6 +287,21 @@ extension EngineMocks {
         let spy = WatchCommsTypeSpy(realObject: realObject)
 
         self.watchComms = spy
+        return (realObject, spy)
+    }
+
+    public func makeNotificationCenter() -> (stub: NotificationCenterTypeStubbing, spy: NotificationCenterTypeSpying) {
+        let stub = NotificationCenterTypeStub()
+        let spy = NotificationCenterTypeSpy(realObject: stub)
+
+        self.notificationCenter = spy
+        return (stub, spy)
+    }
+
+    public func makeNotificationCenter(_ realObject: NotificationCenterType) -> (realObject: NotificationCenterType, spy: NotificationCenterTypeSpying) {
+        let spy = NotificationCenterTypeSpy(realObject: realObject)
+
+        self.notificationCenter = spy
         return (realObject, spy)
     }
 

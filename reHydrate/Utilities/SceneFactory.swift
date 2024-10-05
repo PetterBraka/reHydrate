@@ -70,8 +70,7 @@ public final class SceneFactory: ObservableObject {
             alternateIconsService: AlternateIconsServicePort(), 
             appearancePort: AppearanceServicePort(),
             healthService: HealthKitPort(),
-            phoneService: PhoneService(session: phoneSession), 
-            notificationCenter: NotificationCenterService(notificationCenter: .default)
+            phoneService: PhoneService(session: phoneSession)
         )
         phoneDelegate = PhoneCommunicationDelegate(session: phoneSession, notificationCenter: .default)
         notificationDelegate = NotificationDelegatePort(engine: engine)
