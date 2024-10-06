@@ -100,6 +100,39 @@ public final class UserNotificationService: UserNotificationServiceType {
         storePreferences(enabled: false)
     }
     
+    public func celebrate() async {
+        let enabled: Bool? = engine.userPreferenceService.get(for: PreferenceKey.isOn.rawValue)
+        guard enabled ?? false else { return }
+        userNotificationCenter.removeAllPendingNotificationRequests()
+        
+        do {
+            guard let message = celebrations.randomElement() ?? celebrations.first
+            else { throw NotificationError.missingReminders }
+            
+            let content = NotificationContent(
+                title: message.title,
+                subtitle: "",
+                body: message.body,
+                categoryIdentifier: reminderCategory,
+                userInfo: [:]
+            )
+            
+            let triggerComponents = Calendar.current
+                .dateComponents(calendarComponents, from: engine.dateService.now())
+            let trigger = NotificationTrigger(repeats: false, dateComponents: triggerComponents)
+            
+            try await userNotificationCenter.add(
+                .init(
+                    identifier: UUID().uuidString,
+                    content: content,
+                    trigger: trigger
+                )
+            )
+        } catch {
+            engine.logger.error("Failed to add celebration notification", error: error)
+        }
+    }
+    
     public func getSettings() -> NotificationSettings {
         let enabled: Bool? = engine.userPreferenceService.get(for: PreferenceKey.isOn.rawValue)
         let frequency: Int? = engine.userPreferenceService.get(for: PreferenceKey.frequency.rawValue)

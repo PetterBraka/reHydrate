@@ -139,7 +139,7 @@ extension Screen.Home {
                 await engine.phoneComms.sendDataToWatch()
                 await setWidgetData()
                 if today.consumed >= today.goal {
-                    engine.userNotificationService.disable()
+                    await engine.userNotificationService.celebrate()
                 }
             }
         }

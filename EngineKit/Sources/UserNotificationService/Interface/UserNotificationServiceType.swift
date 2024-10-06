@@ -12,5 +12,6 @@ public protocol UserNotificationServiceType {
     
     func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError>
     func disable()
+    func celebrate() async
     func getSettings() -> NotificationSettings
 }
