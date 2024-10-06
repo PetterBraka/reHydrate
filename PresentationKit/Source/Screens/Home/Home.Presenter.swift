@@ -23,15 +23,15 @@ extension Screen.Home {
         public typealias ViewModel = Home.ViewModel
         public typealias Engine = (
             HasUserNotificationService &
+            HasUserPreferenceService &
+            HasNotificationCenter &
             HasLoggingService &
-            HasDayService &
             HasDrinksService &
             HasHealthService &
             HasUnitService &
             HasDateService &
-            HasPhoneComms &
-            HasUserPreferenceService &
-            HasNotificationCenter
+            HasDayService &
+            HasPhoneComms
         )
         public typealias Router = (
             HomeRoutable &
