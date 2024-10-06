@@ -107,7 +107,7 @@ public final class UserNotificationService: UserNotificationServiceType {
         
         do {
             guard let message = celebrations.randomElement() ?? celebrations.first
-            else { throw NotificationError.missingReminders }
+            else { throw NotificationError.missingCongratulations }
             
             let content = NotificationContent(
                 title: message.title,
@@ -117,8 +117,10 @@ public final class UserNotificationService: UserNotificationServiceType {
                 userInfo: [:]
             )
             
-            let triggerComponents = Calendar.current
-                .dateComponents(calendarComponents, from: engine.dateService.now())
+            let calendar = Calendar.current
+            guard let date = calendar.date(byAdding: .minute, value: 1, to: engine.dateService.now())
+            else { throw NotificationError.invalidDate }
+            let triggerComponents = calendar.dateComponents(calendarComponents, from: date)
             let trigger = NotificationTrigger(repeats: false, dateComponents: triggerComponents)
             
             try await userNotificationCenter.add(
