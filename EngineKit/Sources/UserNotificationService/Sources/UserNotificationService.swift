@@ -13,14 +13,6 @@ import UserNotificationServiceInterface
 import DateServiceInterface
 
 public final class UserNotificationService: UserNotificationServiceType {
-    private enum PreferenceKey: String {
-        case isOn = "notification-is-enabled"
-        case frequency = "notification-frequency"
-        case start = "notification-start"
-        case stop = "notification-stop"
-        case lastCelebrationsDate = "notification-last-celebrations-date"
-    }
-    
     public typealias Engine = (
         HasLoggingService &
         HasUserPreferenceService &
@@ -101,8 +93,8 @@ public final class UserNotificationService: UserNotificationServiceType {
     }
     
     public func celebrate() async {
-        let enabled: Bool = engine.userPreferenceService.get(for: PreferenceKey.isOn.rawValue) ?? false
-        let lastCelebrationsDate: Date? = engine.userPreferenceService.get(for: PreferenceKey.lastCelebrationsDate.rawValue)
+        let enabled: Bool = engine.userPreferenceService.get(for: .isOn) ?? false
+        let lastCelebrationsDate: Date? = engine.userPreferenceService.get(for: .lastCelebrationsDate)
         guard enabled else { return }
         
         let today = engine.dateService.now()
@@ -138,17 +130,17 @@ public final class UserNotificationService: UserNotificationServiceType {
                     trigger: trigger
                 )
             )
-            try? engine.userPreferenceService.set(today, for: PreferenceKey.lastCelebrationsDate.rawValue)
+            try? engine.userPreferenceService.set(today, for: .lastCelebrationsDate)
         } catch {
             engine.logger.error("Failed to add celebration notification", error: error)
         }
     }
     
     public func getSettings() -> NotificationSettings {
-        let enabled: Bool? = engine.userPreferenceService.get(for: PreferenceKey.isOn.rawValue)
-        let frequency: Int? = engine.userPreferenceService.get(for: PreferenceKey.frequency.rawValue)
-        let start: Date? = engine.userPreferenceService.get(for: PreferenceKey.start.rawValue)
-        let stop: Date? = engine.userPreferenceService.get(for: PreferenceKey.stop.rawValue)
+        let enabled: Bool? = engine.userPreferenceService.get(for: .isOn)
+        let frequency: Int? = engine.userPreferenceService.get(for: .frequency)
+        let start: Date? = engine.userPreferenceService.get(for: .start)
+        let stop: Date? = engine.userPreferenceService.get(for: .stop)
         
         return NotificationSettings(
             isOn: enabled ?? false,
@@ -179,7 +171,7 @@ private extension UserNotificationService {
     
     func storePreferences(enabled: Bool) {
         do {
-            try engine.userPreferenceService.set(enabled, for: PreferenceKey.isOn.rawValue)
+            try engine.userPreferenceService.set(enabled, for: .isOn)
         } catch {
             engine.logger.error("couldn't store notification settings", error: error)
         }
@@ -191,9 +183,9 @@ private extension UserNotificationService {
                           stop: Date?) {
         storePreferences(enabled: enabled)
         do {
-            try engine.userPreferenceService.set(frequency, for: PreferenceKey.frequency.rawValue)
-            try engine.userPreferenceService.set(start, for: PreferenceKey.start.rawValue)
-            try engine.userPreferenceService.set(stop, for: PreferenceKey.stop.rawValue)
+            try engine.userPreferenceService.set(frequency, for: .frequency)
+            try engine.userPreferenceService.set(start, for: .start)
+            try engine.userPreferenceService.set(stop, for: .stop)
         } catch {
             engine.logger.error("couldn't store notification settings", error: error)
         }

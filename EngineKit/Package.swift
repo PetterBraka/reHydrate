@@ -104,6 +104,7 @@ let package: Package = {
                 ],
                 interfaceDependancy: [
                     .interface(.drinkService),
+                    .interface(.userPreferenceService),
                     .interface(.notificationCenterService),
                 ]
             )
@@ -124,6 +125,9 @@ let package: Package = {
                 targetsFrom: .languageService,
                 sourceDependancy: [
                     .interface(.userPreferenceService)
+                ],
+                interfaceDependancy: [
+                    .interface(.userPreferenceService),
                 ]
             )
             .with(
@@ -143,6 +147,7 @@ let package: Package = {
                     .interface(.notificationCenterService),
                 ],
                 interfaceDependancy: [
+                    .interface(.userPreferenceService),
                     .interface(.notificationCenterService),
                 ]
             )
@@ -154,6 +159,9 @@ let package: Package = {
                 sourceDependancy: [
                     .interface(.dayService),
                     .interface(.userPreferenceService)
+                ],
+                interfaceDependancy: [
+                    .interface(.userPreferenceService),
                 ]
             )
             .with(
@@ -161,6 +169,9 @@ let package: Package = {
                 sourceDependancy: [
                     .interface(.userPreferenceService),
                     .portsInterface
+                ],
+                interfaceDependancy: [
+                    .interface(.userPreferenceService),
                 ]
             )
             .with(

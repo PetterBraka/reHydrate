@@ -8,6 +8,6 @@
 import Foundation
 
 public protocol UserPreferenceServiceType {
-    func set<T: Codable>(_ value: T, for key: String) throws
-    func get<T: Codable>(for key: String) -> T?
+    func set<T: Codable>(_ value: T, for key: PreferenceKey) throws
+    func get<T: Codable>(for key: PreferenceKey) -> T?
 }

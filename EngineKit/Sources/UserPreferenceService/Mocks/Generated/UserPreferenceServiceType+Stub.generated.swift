@@ -42,13 +42,13 @@ public final class UserPreferenceServiceTypeStub: UserPreferenceServiceTypeStubb
 }
 
 extension UserPreferenceServiceTypeStub: UserPreferenceServiceType {
-    public func set<T: Codable>(_ value: T, for key: String) throws -> Void {
+    public func set<T: Codable>(_ value: T, for key: PreferenceKey) throws -> Void {
         if let setValueKey_returnValue {
             throw setValueKey_returnValue
         }
     }
 
-    public func get<T: Codable>(for key: String) -> T? {
+    public func get<T: Codable>(for key: PreferenceKey) -> T? {
         getKey_returnValue as? T
     }
 

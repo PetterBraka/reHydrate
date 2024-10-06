@@ -17,8 +17,6 @@ public class LanguageService: LanguageServiceType {
     
     private let engine: Engine
     
-    private let preferenceKey = "LanguageService.Language"
-    
     private(set) var currentLanguage: Language
     
     public init(engine: Engine) {
@@ -30,14 +28,14 @@ public class LanguageService: LanguageServiceType {
     public func setLanguage(to language: Language) {
         defer { currentLanguage = language }
         do {
-            try engine.userPreferenceService.set(language, for: preferenceKey)
+            try engine.userPreferenceService.set(language, for: .language)
         } catch {
             engine.logger.debug("Language couldn't be set", error: error)
         }
     }
     
     public func getSelectedLanguage() -> Language {
-        let language: Language? = engine.userPreferenceService.get(for: preferenceKey)
+        let language: Language? = engine.userPreferenceService.get(for: .language)
         if let language, currentLanguage != language {
             currentLanguage = language
         }

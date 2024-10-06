@@ -396,7 +396,7 @@ private extension Screen.Home.Presenter {
             symbol: unitSystem == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
         )
         do {
-            try engine.userPreferenceService.set(data, for: "today-widget")
+            try engine.userPreferenceService.set(data, for: .today)
         } catch {
             engine.logger.error("Couldn't set widget data", error: error)
         }

@@ -20,15 +20,13 @@ public final class UnitService: UnitServiceType {
     
     private let engine: Engine
     
-    private let preferenceKey = "UnitSystem"
-    
     public init(engine: Engine) {
         self.engine = engine
     }
     
     public func set(unitSystem: UnitSystem) {
         do {
-            try engine.userPreferenceService.set(unitSystem, for: preferenceKey)
+            try engine.userPreferenceService.set(unitSystem, for: .unit)
             engine.notificationCenter.post(name: .unitDidChange)
         } catch {
             engine.logger.error("Failed to set unit system to \(unitSystem.rawValue)", error: error)
@@ -36,7 +34,7 @@ public final class UnitService: UnitServiceType {
     }
     
     public func getUnitSystem() -> UnitSystem {
-        return engine.userPreferenceService.get(for: preferenceKey) ?? .metric
+        return engine.userPreferenceService.get(for: .unit) ?? .metric
     }
     
     public func convert(_ value: Double,
