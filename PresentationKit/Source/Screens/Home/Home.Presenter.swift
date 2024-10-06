@@ -16,11 +16,13 @@ import DateServiceInterface
 import PhoneCommsInterface
 import UserPreferenceServiceInterface
 import NotificationCenterServiceInterface
+import UserNotificationServiceInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
         public typealias ViewModel = Home.ViewModel
         public typealias Engine = (
+            HasUserNotificationService &
             HasLoggingService &
             HasDayService &
             HasDrinksService &
@@ -136,6 +138,9 @@ extension Screen.Home {
 
                 await engine.phoneComms.sendDataToWatch()
                 await setWidgetData()
+                if today.consumed >= today.goal {
+                    engine.userNotificationService.disable()
+                }
             }
         }
         
