@@ -18,6 +18,8 @@ final class NotificationDelegatePort: NSObject {
     
     init(engine: Engine) {
         self.engine = engine
+        super.init()
+        UNUserNotificationCenter.current().delegate = self
     }
 }
 
