@@ -100,10 +100,11 @@ let package: Package = {
                     .interface(.dateService),
                     .interface(.notificationCenterService),
                     .portsInterface,
-                    .dbKit
+                    .dbKit,
                 ],
                 interfaceDependancy: [
-                    .interface(.drinkService)
+                    .interface(.drinkService),
+                    .interface(.notificationCenterService),
                 ]
             )
             .with(
@@ -113,7 +114,10 @@ let package: Package = {
                     .dbKit,
                     .interface(.unitService),
                     .interface(.userPreferenceService),
-                    .interface(.notificationCenterService)
+                    .interface(.notificationCenterService),
+                ],
+                interfaceDependancy: [
+                    .interface(.notificationCenterService),
                 ]
             )
             .with(
@@ -135,7 +139,11 @@ let package: Package = {
             .with(
                 targetsFrom: .unitService,
                 sourceDependancy: [
-                    .interface(.userPreferenceService)
+                    .interface(.userPreferenceService),
+                    .interface(.notificationCenterService),
+                ],
+                interfaceDependancy: [
+                    .interface(.notificationCenterService),
                 ]
             )
             .with(
@@ -160,11 +168,23 @@ let package: Package = {
             )
             .with(
                 targetsFrom: .phoneComms,
-                sourceDependancy: [.communicationInterface]
+                sourceDependancy: [
+                    .communicationInterface,
+                    .interface(.dateService),
+                    .interface(.dayService),
+                    .interface(.drinkService),
+                    .interface(.unitService)
+                ]
             )
             .with(
                 targetsFrom: .watchComms,
-                sourceDependancy: [.communicationInterface]
+                sourceDependancy: [
+                    .communicationInterface,
+                    .interface(.dateService),
+                    .interface(.dayService),
+                    .interface(.drinkService),
+                    .interface(.unitService)
+                ]
             )
             .with(
                 targetsFrom: .notificationCenterService
