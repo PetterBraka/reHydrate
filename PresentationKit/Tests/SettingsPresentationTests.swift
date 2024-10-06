@@ -27,7 +27,7 @@ final class SettingsPresentationTests: XCTestCase {
     private var dayService: (stub: DayServiceTypeStubbing, spy: DayServiceTypeSpying)!
     private var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
     private var unitService: (stub: UnitServiceTypeStubbing, spy: UnitServiceTypeSpying)!
-    private var userNotificationService: (stub: NotificationServiceTypeStubbing, spy: NotificationServiceTypeSpying)!
+    private var userNotificationService: (stub: UserNotificationServiceTypeStubbing, spy: UserNotificationServiceTypeSpying)!
     private var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
     private var urlService: (stub: OpenUrlInterfaceStubbing, spy: OpenUrlInterfaceSpying)!
     private var phoneComms: (stub: PhoneCommsTypeStubbing, spy: PhoneCommsTypeSpying)!
@@ -797,8 +797,8 @@ extension OpenUrlInterfaceSpy.MethodCall: @retroactive Equatable {
     }
 }
 
-extension NotificationServiceTypeSpy.MethodCall: @retroactive Equatable {
-    public static func == (lhs: NotificationServiceTypeSpy.MethodCall, rhs: NotificationServiceTypeSpy.MethodCall) -> Bool {
+extension UserNotificationServiceTypeSpy.MethodCall: @retroactive Equatable {
+    public static func == (lhs: UserNotificationServiceTypeSpy.MethodCall, rhs: UserNotificationServiceTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
         case let (.enable(lhsFrequency, lhsStart, lhsStop), .enable(rhsFrequency, rhsStart, rhsStop)):
             lhsFrequency == rhsFrequency &&
