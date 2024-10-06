@@ -21,6 +21,7 @@ public final class UserNotificationServiceTypeSpy: UserNotificationServiceTypeSp
     public enum MethodCall {
         case enable(withFrequency: Int, start: Date, stop: Date)
         case disable
+        case celebrate
         case getSettings
     }
 
@@ -48,6 +49,10 @@ extension UserNotificationServiceTypeSpy: UserNotificationServiceType {
     public func disable() -> Void {
         methodLog.append(.disable)
         realObject.disable()
+    }
+    public func celebrate() async -> Void {
+        methodLog.append(.celebrate)
+        await realObject.celebrate()
     }
     public func getSettings() -> NotificationSettings {
         methodLog.append(.getSettings)

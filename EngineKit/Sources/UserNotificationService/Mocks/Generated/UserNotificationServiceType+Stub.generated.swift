@@ -64,6 +64,9 @@ extension UserNotificationServiceTypeStub: UserNotificationServiceType {
     public func disable() -> Void {
     }
 
+    public func celebrate() async -> Void {
+    }
+
     public func getSettings() -> NotificationSettings {
         getSettings_returnValue
     }
