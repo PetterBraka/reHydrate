@@ -18,7 +18,7 @@ public final class UserNotificationService: UserNotificationServiceType {
         case frequency = "notification-frequency"
         case start = "notification-start"
         case stop = "notification-stop"
-        
+        case lastCelebrationsDate = "notification-last-celebrations-date"
     }
     
     public typealias Engine = (
@@ -101,8 +101,16 @@ public final class UserNotificationService: UserNotificationServiceType {
     }
     
     public func celebrate() async {
-        let enabled: Bool? = engine.userPreferenceService.get(for: PreferenceKey.isOn.rawValue)
-        guard enabled ?? false else { return }
+        let enabled: Bool = engine.userPreferenceService.get(for: PreferenceKey.isOn.rawValue) ?? false
+        let lastCelebrationsDate: Date? = engine.userPreferenceService.get(for: PreferenceKey.lastCelebrationsDate.rawValue)
+        guard enabled else { return }
+        
+        let today = engine.dateService.now()
+        
+        if let lastCelebrationsDate,
+           engine.dateService.isDate(lastCelebrationsDate, inSameDayAs: today) {
+               return
+        }
         userNotificationCenter.removeAllPendingNotificationRequests()
         
         do {
@@ -118,7 +126,7 @@ public final class UserNotificationService: UserNotificationServiceType {
             )
             
             let calendar = Calendar.current
-            guard let date = calendar.date(byAdding: .minute, value: 1, to: engine.dateService.now())
+            guard let date = calendar.date(byAdding: .minute, value: 1, to: today)
             else { throw NotificationError.invalidDate }
             let triggerComponents = calendar.dateComponents(calendarComponents, from: date)
             let trigger = NotificationTrigger(repeats: false, dateComponents: triggerComponents)
@@ -130,6 +138,7 @@ public final class UserNotificationService: UserNotificationServiceType {
                     trigger: trigger
                 )
             )
+            try? engine.userPreferenceService.set(today, for: PreferenceKey.lastCelebrationsDate.rawValue)
         } catch {
             engine.logger.error("Failed to add celebration notification", error: error)
         }
