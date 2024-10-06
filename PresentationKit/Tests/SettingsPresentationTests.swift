@@ -39,7 +39,7 @@ final class SettingsPresentationTests: XCTestCase {
         dayService = engine.makeDayService()
         unitService = engine.makeUnitService()
         dateService = engine.makeDateService()
-        userNotificationService = engine.makeNotificationService()
+        userNotificationService = engine.makeUserNotificationService()
         userPreferenceService = engine.makeUserPreferenceService()
         urlService = engine.makeOpenUrlService()
         phoneComms = engine.makePhoneComms()

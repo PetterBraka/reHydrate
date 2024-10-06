@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 06/10/2024.
 //
 
-public struct PreferenceKey {
+public struct PreferenceKey: Equatable {
     public let name: String
     
     public init(_ name: String) {

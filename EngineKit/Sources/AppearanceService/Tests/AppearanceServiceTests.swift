@@ -73,7 +73,7 @@ final class AppearanceServiceTests: XCTestCase {
         sut.setAppearance(.dark)
         XCTAssertEqual(
             userPreferenceService.spy.methodLog.debugDescription,
-            [UserPreferenceServiceTypeSpy.MethodCall.set(value: "dark", key: "AppearanceService.key")]
+            [UserPreferenceServiceTypeSpy.MethodCall.set(value: "dark", key: .appearance)]
                 .debugDescription
         )
     }

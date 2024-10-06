@@ -43,7 +43,7 @@ final class EditContainerPresentationTests: XCTestCase {
     }
     
     func test_didAppear() async {
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didAppear)
         
         assert(
@@ -60,7 +60,7 @@ final class EditContainerPresentationTests: XCTestCase {
     
     func test_didAppear_imperial() async {
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didAppear)
         
         assert(
@@ -76,7 +76,7 @@ final class EditContainerPresentationTests: XCTestCase {
     }
     
     func test_didTapCancel() async {
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didTapCancel)
         
         assert(
@@ -91,7 +91,7 @@ final class EditContainerPresentationTests: XCTestCase {
     }
     
     func test_didTapCancel_afterDidAppear() async {
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didAppear)
         await sut.perform(action: .didTapCancel)
         
@@ -108,7 +108,7 @@ final class EditContainerPresentationTests: XCTestCase {
     }
     
     func test_didChangeSize() async {
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didChangeSize(size: 400))
         
         assert(
@@ -124,7 +124,7 @@ final class EditContainerPresentationTests: XCTestCase {
     }
     
     func test_didChangeSize_didSave() async {
-        let sut = Sut(engine: engine, router: router, selectedDrink: Drink(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: Drink(id: "", size: 300, container: .small))
         await sut.perform(action: .didChangeSize(size: 400))
         await sut.perform(action: .didTapSave)
         
@@ -147,7 +147,7 @@ final class EditContainerPresentationTests: XCTestCase {
     func test_didChangeSize_didSaveFailed() async {
         drinkService.stub.editSizeDrink_returnValue = .failure(DummyError())
         
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didChangeSize(size: 400))
         await sut.perform(action: .didTapSave)
         
@@ -166,7 +166,7 @@ final class EditContainerPresentationTests: XCTestCase {
     func test_didChangeSize_imperial() async {
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didChangeSize(size: 14.08))
         await sut.perform(action: .didTapSave)
         
@@ -188,7 +188,7 @@ final class EditContainerPresentationTests: XCTestCase {
     }
     
     func test_didChangeFill() async {
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didChangeFill(fill: 0.5))
         
         assert(
@@ -204,7 +204,7 @@ final class EditContainerPresentationTests: XCTestCase {
     }
     
     func test_didChangeFill_didSave() async {
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didChangeFill(fill: 0.5))
         await sut.perform(action: .didTapSave)
         
@@ -227,7 +227,7 @@ final class EditContainerPresentationTests: XCTestCase {
     func test_didChangeFill_didSaveFailed() async {
         drinkService.stub.editSizeDrink_returnValue = .failure(DummyError())
         
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didChangeFill(fill: 0.5))
         await sut.perform(action: .didTapSave)
         
@@ -252,7 +252,7 @@ final class EditContainerPresentationTests: XCTestCase {
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
         userPreferenceService.stub.getKey_returnValue = UnitSystem.imperial
         
-        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small), didSavingChanges: nil)
+        let sut = Sut(engine: engine, router: router, selectedDrink: .init(id: "", size: 300, container: .small))
         await sut.perform(action: .didChangeFill(fill: 0.5))
         await sut.perform(action: .didTapSave)
         

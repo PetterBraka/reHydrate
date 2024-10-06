@@ -23,50 +23,53 @@ final class UserPreferenceServiceTests: XCTestCase {
     }
     
     func test_setString_success() throws {
-        try sut.set("Dummy string", for: "DummyString")
+        try sut.set("Dummy string", for: .dummyString)
     }
     
     func test_setInt_success() throws {
-        try sut.set(123, for: "DummyInt")
+        try sut.set(123, for: .dummyInt)
     }
     
     func test_setDouble_success() throws {
-        try sut.set(123.123, for: "DummyDouble")
+        try sut.set(123.123, for: .dummyDouble)
     }
     
     func test_setData_success() throws {
-        try sut.set("Dummy data".data(using: .utf8)!, for: "DummyData")
+        try sut.set("Dummy data".data(using: .utf8)!, for: .dummyData)
     }
     
     func test_getString_success() throws {
-        let key = "DummyString"
         let givenValue = "Dummy string"
-        try sut.set(givenValue, for: key)
-        let foundValue: String? = sut.get(for: key)
+        try sut.set(givenValue, for: .dummyString)
+        let foundValue: String? = sut.get(for: .dummyString)
         XCTAssertEqual(foundValue, givenValue)
     }
     
     func test_getInt_success() throws {
-        let key = "DummyInt"
         let givenValue = 123
-        try sut.set(givenValue, for: key)
-        let foundValue: Int? = sut.get(for: key)
+        try sut.set(givenValue, for: .dummyInt)
+        let foundValue: Int? = sut.get(for: .dummyInt)
         XCTAssertEqual(foundValue, givenValue)
     }
     
     func test_getDouble_success() throws {
-        let key = "DummyDouble"
         let givenValue = 123.123
-        try sut.set(givenValue, for: key)
-        let foundValue: Double? = sut.get(for: key)
+        try sut.set(givenValue, for: .dummyDouble)
+        let foundValue: Double? = sut.get(for: .dummyDouble)
         XCTAssertEqual(foundValue, givenValue)
     }
     
     func test_getData_success() throws {
-        let key = "DummyData"
         let givenValue = "Dummy data".data(using: .utf8)!
-        try sut.set(givenValue, for: key)
-        let foundValue: Data? = sut.get(for: key)
+        try sut.set(givenValue, for: .dummyData)
+        let foundValue: Data? = sut.get(for: .dummyData)
         XCTAssertEqual(foundValue, givenValue)
     }
+}
+
+extension PreferenceKey {
+    public static let dummyString = PreferenceKey("DummyString")
+    public static let dummyInt = PreferenceKey("DummyInt")
+    public static let dummyDouble = PreferenceKey("DummyDouble")
+    public static let dummyData = PreferenceKey("DummyData")
 }
