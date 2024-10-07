@@ -94,12 +94,11 @@ public final class UserNotificationService: UserNotificationServiceType {
     
     public func celebrate() async {
         let enabled: Bool = engine.userPreferenceService.get(for: .isOn) ?? false
-        let lastCelebrationsDate: Date? = engine.userPreferenceService.get(for: .lastCelebrationsDate)
         guard enabled else { return }
         
         let today = engine.dateService.now()
         
-        if let lastCelebrationsDate,
+        if let lastCelebrationsDate: Date = engine.userPreferenceService.get(for: .lastCelebrationsDate),
            engine.dateService.isDate(lastCelebrationsDate, inSameDayAs: today) {
                return
         }
