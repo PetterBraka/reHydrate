@@ -34,8 +34,7 @@ public final class SceneFactory: ObservableObject {
             formatter.dateFormat = "EEEE - dd MMM"
             formatter.locale = .current
             return formatter
-        }(),
-        notificationCenter: notificationCenter
+        }()
     )
     private lazy var settingsPresenter = Screen.Settings.Presenter(engine: engine, router: router)
     private lazy var historyPresenter = Screen.History.Presenter(
@@ -52,14 +51,12 @@ public final class SceneFactory: ObservableObject {
     
     // Port
     let notificationDelegate: NotificationDelegatePort
-    private let notificationCenter: NotificationCenter
     private let phoneDelegate: WCSessionDelegate
     
     private init() {
         let subsystem = "com.braka.reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
         let phoneSession = WCSession.default
-        self.notificationCenter = NotificationCenter.default
         
         engine = Engine(
             appGroup: appGroup,
@@ -73,15 +70,11 @@ public final class SceneFactory: ObservableObject {
             alternateIconsService: AlternateIconsServicePort(), 
             appearancePort: AppearanceServicePort(),
             healthService: HealthKitPort(),
-            phoneService: PhoneService(session: phoneSession), 
-            notificationCenter: notificationCenter
+            phoneService: PhoneService(session: phoneSession)
         )
-        phoneDelegate = PhoneCommunicationDelegate(session: phoneSession, notificationCenter: notificationCenter)
+        phoneDelegate = PhoneCommunicationDelegate(session: phoneSession, notificationCenter: .default)
         notificationDelegate = NotificationDelegatePort(engine: engine)
         
-        engine.didCompleteNotificationAction = { [weak self] in
-            self?.homePresenter.sync(didComplete: nil)
-        }
         engine.phoneService.activate()
     }
     
@@ -102,9 +95,7 @@ public final class SceneFactory: ObservableObject {
     func makeEditScreen(with drink: Home.ViewModel.Drink) -> EditContainerScreen {
         let presenter = Screen.EditContainer.Presenter(engine: engine,
                                                        router: router,
-                                                       selectedDrink: .init(from: drink)) { [weak self] in
-            self?.homePresenter.sync(didComplete: nil)
-        }
+                                                       selectedDrink: .init(from: drink))
         let observer = EditContainerScreenObservable(presenter: presenter)
         presenter.scene = observer
         

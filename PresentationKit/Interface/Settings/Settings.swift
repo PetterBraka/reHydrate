@@ -77,20 +77,14 @@ extension Settings.ViewModel {
     public struct NotificationSettings: Equatable {
         public let frequency: Int
         public let start: Date
-        public let startRange: ClosedRange<Date>
         public let stop: Date
-        public let stopRange: ClosedRange<Date>
         
         public init(frequency: Int,
                     start: Date,
-                    startRange: ClosedRange<Date>,
-                    stop: Date,
-                    stopRange: ClosedRange<Date>) {
+                    stop: Date) {
             self.frequency = frequency
             self.start = start
-            self.startRange = startRange
             self.stop = stop
-            self.stopRange = stopRange
         }
     }
 }

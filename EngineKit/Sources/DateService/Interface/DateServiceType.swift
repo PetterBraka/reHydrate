@@ -19,4 +19,6 @@ public protocol DateServiceType {
     func getEnd(of date: Date) -> Date
     
     func isDate(_ date: Date, inSameDayAs: Date) -> Bool
+    
+    func date(hours: Int, minutes: Int, seconds: Int, from date: Date) -> Date?
 }

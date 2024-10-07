@@ -18,7 +18,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _: UIApplication,
         didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil)
     -> Bool {
-        UNUserNotificationCenter.current().delegate = sceneFactory.notificationDelegate
         WidgetCenter.shared.getCurrentConfigurations { results in
             switch results {
             case let .success(widgets):

@@ -18,13 +18,13 @@ public final class UserPreferenceService: UserPreferenceServiceType {
         self.defaults = defaults
     }
     
-    public func set<T: Codable>(_ value: T, for key: String) throws {
+    public func set<T: Codable>(_ value: T, for key: PreferenceKey) throws {
         let data = try encoder.encode(value)
-        defaults.setValue(data, forKey: key)
+        defaults.setValue(data, forKey: key.name)
     }
     
-    public func get<T: Codable>(for key: String) -> T? {
-        guard let data = defaults.data(forKey: key),
+    public func get<T: Codable>(for key: PreferenceKey) -> T? {
+        guard let data = defaults.data(forKey: key.name),
               let value = try? decoder.decode(T.self, from: data)
         else { return nil }
         return value

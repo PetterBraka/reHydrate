@@ -17,8 +17,8 @@ import UnitServiceInterface
 import UnitService
 import UserPreferenceServiceInterface
 import UserPreferenceService
-import NotificationServiceInterface
-import NotificationService
+import UserNotificationServiceInterface
+import UserNotificationService
 import PortsInterface
 import AppearanceServiceInterface
 import AppearanceService
@@ -29,6 +29,8 @@ import DBKit
 import CommunicationKitInterface
 import PhoneCommsInterface
 import PhoneComms
+import NotificationCenterServiceInterface
+import NotificationCenterService
 
 public final class Engine {
     public init(
@@ -43,8 +45,7 @@ public final class Engine {
         alternateIconsService: AlternateIconsServiceType,
         appearancePort: AppearancePortType,
         healthService: HealthInterface,
-        phoneService: PhoneServiceType,
-        notificationCenter: NotificationCenter
+        phoneService: PhoneServiceType
     ) {
         guard let sharedDefault = UserDefaults(suiteName: appGroup)
         else {
@@ -66,7 +67,6 @@ public final class Engine {
         self.appearancePort = appearancePort
         self.healthService = healthService
         self.phoneService = phoneService
-        self.notificationCenter = notificationCenter
     }
     
     public let appGroup: String
@@ -74,7 +74,6 @@ public final class Engine {
     private let reminders: [NotificationMessage]
     private let celebrations: [NotificationMessage]
     public let userNotificationCenter: UserNotificationCenterType
-    public var didCompleteNotificationAction: (() -> Void)?
     
     public var logger: LoggingService
     public var dayManager: DayManagerType
@@ -88,16 +87,15 @@ public final class Engine {
     public var appearancePort: AppearancePortType
     public var healthService: HealthInterface
     public var phoneService: PhoneServiceType
-    public var notificationCenter: NotificationCenter
     
-    public lazy var notificationService: NotificationServiceType = NotificationService(
+    public lazy var userNotificationService: UserNotificationServiceType = UserNotificationService(
         engine: self,
         reminders: reminders,
         celebrations: celebrations,
         userNotificationCenter: userNotificationCenter,
         didComplete: nil
     )
-    public lazy var notificationDelegate: NotificationDelegateType = NotificationDelegateService(engine: self, didCompleteAction: didCompleteNotificationAction)
+    public lazy var notificationDelegate: UserNotificationDelegateType = UserNotificationDelegateService(engine: self)
     
     // MARK: Service
     public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)
@@ -106,7 +104,8 @@ public final class Engine {
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
     public lazy var appearanceService: AppearanceServiceType = AppearanceService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
-    public lazy var phoneComms: PhoneCommsType = PhoneComms(engine: self, notificationCenter: notificationCenter)
+    public lazy var phoneComms: PhoneCommsType = PhoneComms(engine: self, notificationCenter: .default)
+    public lazy var notificationCenter: NotificationCenterType = NotificationCenterService(notificationCenter: .default)
 }
 
 extension Engine: HasService & HasPorts & HasAppInfo {}

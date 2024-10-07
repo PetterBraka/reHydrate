@@ -6,20 +6,22 @@
 //
 
 import XCTest
-import EngineMocks
 import TestHelper
-import LoggingService
-import UnitServiceInterface
-import DBKitInterface
 import DBKitMocks
+import EngineMocks
+import LoggingService
+import DBKitInterface
+import UnitServiceInterface
 import DrinkServiceInterface
+import NotificationCenterServiceInterface
 @testable import DrinkService
 
 final class DrinkServiceTests: XCTestCase {
     typealias Engine = (
         HasLoggingService &
         HasDrinkManagerService &
-        HasUnitService
+        HasUnitService &
+        HasNotificationCenter
     )
     
     var engine: Engine = EngineMocks()

@@ -22,13 +22,12 @@ final class HomeScreenObservable: ObservableObject, HomeSceneType {
     }
 
     func perform(update: Home.Update) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            switch update {
-            case .viewModel:
-                self.viewModel = presenter.viewModel
-            }
-            self.objectWillChange.send()
+        switch update {
+        case .viewModel:
+            self.viewModel = presenter.viewModel
+        }
+        Task { @MainActor [weak self] in
+            self?.objectWillChange.send()
         }
     }
     

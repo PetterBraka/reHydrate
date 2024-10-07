@@ -15,19 +15,23 @@ import UnitServiceInterface
 import DateServiceInterface
 import PhoneCommsInterface
 import UserPreferenceServiceInterface
+import NotificationCenterServiceInterface
+import UserNotificationServiceInterface
 
 extension Screen.Home {
     public final class Presenter: HomePresenterType {
         public typealias ViewModel = Home.ViewModel
         public typealias Engine = (
+            HasUserNotificationService &
+            HasUserPreferenceService &
+            HasNotificationCenter &
             HasLoggingService &
-            HasDayService &
             HasDrinksService &
             HasHealthService &
             HasUnitService &
             HasDateService &
-            HasPhoneComms &
-            HasUserPreferenceService
+            HasDayService &
+            HasPhoneComms
         )
         public typealias Router = (
             HomeRoutable &
@@ -44,35 +48,48 @@ extension Screen.Home {
         }
         
         private let formatter: DateFormatter
-        private let notificationCenter: NotificationCenter
         
-        public init(engine: Engine, router: Router, formatter: DateFormatter, notificationCenter: NotificationCenter) {
+        public init(engine: Engine, router: Router, formatter: DateFormatter) {
             self.engine = engine
             self.router = router
             self.formatter = formatter
-            self.notificationCenter = notificationCenter
             viewModel = ViewModel(dateTitle: formatter.string(from: engine.dateService.now()),
                                   consumption: 0,
                                   goal: 0,
                                   smallUnit: .milliliters,
                                   largeUnit: .liters,
                                   drinks: [])
+            
             engine.phoneComms.addObserver { [weak self] in
-                self?.sync(didComplete: nil)
+                self?.dayDidChange()
             }
+            engine.notificationCenter.addObserver(self, name: .dayDidChange, selector: #selector(dayDidChange), object: nil)
+            engine.notificationCenter.addObserver(self, name: .unitDidChange, selector: #selector(unitDidChange), object: nil)
+            engine.notificationCenter.addObserver(self, name: .drinkDidChange, selector: #selector(drinkDidChange), object: nil)
         }
         
         deinit {
             engine.phoneComms.removeObserver()
+            engine.notificationCenter.removeObserver(self, name: .dayDidChange)
+            engine.notificationCenter.removeObserver(self, name: .unitDidChange)
+            engine.notificationCenter.removeObserver(self, name: .drinkDidChange)
         }
         
         public func perform(action: Home.Action) async {
             switch action {
             case .didAppear, .didBecomeActive:
-                await sync(didComplete: nil)
+                var today = await engine.dayService.getToday()
+                await syncDayWithHealth(&today)
+                let drinks = await getDrinks()
+                
+                await updateViewModel(
+                    date: today.date,
+                    consumption: today.consumed,
+                    goal: today.goal,
+                    drinks: drinks
+                )
             case .didBackground:
-                await engine.phoneComms.sendDataToWatch()
-                await setWidgetData()
+                break
             case .didTapHistory:
                 router.showHistory()
             case .didTapSettings:
@@ -106,22 +123,54 @@ extension Screen.Home {
             }
         }
         
-        private func sync(didComplete: (() -> Void)?) async {
-            var today = await engine.dayService.getToday()
-            
-            await syncDayWithHealth(&today)
-            
-            await updateViewModel(
-                date: today.date,
-                consumption: today.consumed,
-                goal: today.goal
-            )
-            didComplete?()
+        @objc
+        private func dayDidChange() {
+            Task.detached { [weak self] in
+                guard let self else { return }
+                var today = await engine.dayService.getToday()
+                await syncDayWithHealth(&today)
+                
+                await updateViewModel(
+                    date: today.date,
+                    consumption: today.consumed,
+                    goal: today.goal
+                )
+
+                await engine.phoneComms.sendDataToWatch()
+                await setWidgetData()
+                if today.consumed >= today.goal {
+                    await engine.userNotificationService.celebrate()
+                }
+            }
         }
         
-        public func sync(didComplete: (() -> Void)?) {
-            Task {
-                await sync(didComplete: didComplete)
+        @objc
+        private func drinkDidChange() {
+            Task.detached { [weak self] in
+                guard let self else { return }
+                let drinks = await getDrinks()
+                await updateViewModel(drinks: drinks)
+                
+                await engine.phoneComms.sendDataToWatch()
+                await setWidgetData()
+            }
+        }
+        
+        @objc
+        private func unitDidChange() {
+            Task.detached { [weak self] in
+                guard let self else { return }
+                let today = await engine.dayService.getToday()
+                let drinks = await getDrinks()
+                await updateViewModel(
+                    date: today.date,
+                    consumption: today.consumed,
+                    goal: today.goal,
+                    drinks: drinks
+                )
+                
+                await engine.phoneComms.sendDataToWatch()
+                await setWidgetData()
             }
         }
     }
@@ -131,11 +180,11 @@ extension Screen.Home.Presenter {
     private func updateViewModel(
         date: Date? = nil,
         consumption: Double? = nil,
-        goal: Double? = nil
+        goal: Double? = nil,
+        drinks: [ViewModel.Drink]? = nil
     ) async {
         let unitSystem = engine.unitService.getUnitSystem()
         let isMetric = unitSystem == .metric
-        let smallUnit: UnitModel = isMetric ? .millilitres : .ounces
         
         let title = if let date {
             formatter.string(from: date)
@@ -145,24 +194,7 @@ extension Screen.Home.Presenter {
         
         let localConsumption = consumption ?? viewModel.consumption
         let localGoal = goal ?? viewModel.goal
-        
-        let localDrinks: [ViewModel.Drink] = await getDrinks().compactMap {
-            guard let container = ViewModel.Container(from: $0.container) else { return nil }
-            let max: Double = switch $0.container {
-            case .small: 400.0
-            case .medium: 700.0
-            case .large: 1200.0
-            case .health: 1
-            }
-            let localMax = engine.unitService.convert(max, from: .millilitres, to: smallUnit)
-            let localSize = engine.unitService.convert($0.size, from: .millilitres, to: smallUnit)
-            return ViewModel.Drink(
-                id: $0.id,
-                size: localSize,
-                fill: localSize / localMax,
-                container: container
-            )
-        }
+        let localDrinks = drinks ?? viewModel.drinks
         
         viewModel = ViewModel(
             dateTitle: title,
@@ -177,12 +209,31 @@ extension Screen.Home.Presenter {
 
 // MARK: - Drinks
 extension Screen.Home.Presenter {
-    private func getDrinks() async -> [Drink] {
-        if let drinks = try? await engine.drinksService.getSaved(),
-           !drinks.isEmpty {
-            return drinks
+    private func getDrinks() async -> [ViewModel.Drink] {
+        let drinks = if let savedDrinks = try? await engine.drinksService.getSaved(), !savedDrinks.isEmpty {
+            savedDrinks
         } else {
-            return await engine.drinksService.resetToDefault()
+            await engine.drinksService.resetToDefault()
+        }
+        
+        let unitSystem = engine.unitService.getUnitSystem()
+        let smallUnit = unitSystem == .metric ? UnitModel.millilitres : .ounces
+        
+        return drinks.compactMap { [weak self] drink -> ViewModel.Drink? in
+            guard let self, let container = ViewModel.Container(from: drink.container) else { return nil }
+            let max: Double = switch drink.container {
+            case .small: 400.0
+            case .medium: 700.0
+            case .large: 1200.0
+            case .health: 1
+            }
+            let localSize = engine.unitService.convert(drink.size, from: .millilitres, to: smallUnit)
+            return ViewModel.Drink(
+                id: drink.id,
+                size: localSize,
+                fill: drink.size / max,
+                container: container
+            )
         }
     }
 }
@@ -345,7 +396,7 @@ private extension Screen.Home.Presenter {
             symbol: unitSystem == .metric ? UnitVolume.liters.symbol : UnitVolume.pints.symbol
         )
         do {
-            try engine.userPreferenceService.set(data, for: "today-widget")
+            try engine.userPreferenceService.set(data, for: .today)
         } catch {
             engine.logger.error("Couldn't set widget data", error: error)
         }

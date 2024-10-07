@@ -13,6 +13,7 @@ import LoggingService
 import PortsInterface
 import DBKitInterface
 import DateServiceInterface
+import NotificationCenterServiceInterface
 
 public final class DayService: DayServiceType {
     public typealias Engine = (
@@ -20,7 +21,8 @@ public final class DayService: DayServiceType {
         HasConsumptionManagerService &
         HasUnitService &
         HasLoggingService &
-        HasDateService
+        HasDateService &
+        HasNotificationCenter
     )
     
     private let engine: Engine
@@ -64,6 +66,7 @@ public final class DayService: DayServiceType {
         if let day = Day(with: updatedDay) {
             self.today = day
         }
+        engine.notificationCenter.post(name: .dayDidChange)
         return getConsumptionTotal(from: updatedDay)
     }
     
@@ -76,6 +79,7 @@ public final class DayService: DayServiceType {
         if let day = Day(with: updatedDay) {
             self.today = day
         }
+        engine.notificationCenter.post(name: .dayDidChange)
         return getConsumptionTotal(from: updatedDay)
     }
     
@@ -86,6 +90,7 @@ public final class DayService: DayServiceType {
         if let day = Day(with: updatedDay) {
             self.today = day
         }
+        engine.notificationCenter.post(name: .dayDidChange)
         return getGoalTotal(from: updatedDay)
     }
     
@@ -96,6 +101,7 @@ public final class DayService: DayServiceType {
         if let day = Day(with: updatedDay) {
             self.today = day
         }
+        engine.notificationCenter.post(name: .dayDidChange)
         return getGoalTotal(from: updatedDay)
     }
 }

@@ -34,10 +34,11 @@ let package: Package = {
                     .source(.languageService),
                     .source(.unitService),
                     .source(.userPreferenceService),
-                    .source(.notificationService),
+                    .source(.userNotificationService),
                     .source(.appearanceService),
                     .source(.dateService),
                     .source(.phoneComms),
+                    .source(.notificationCenterService),
                 ]
             ),
             .target(
@@ -52,6 +53,7 @@ let package: Package = {
                     .source(.userPreferenceService),
                     .source(.dateService),
                     .source(.watchComms),
+                    .source(.notificationCenterService),
                 ]
             ),
             .target(
@@ -63,6 +65,7 @@ let package: Package = {
                     .source(.dateService),
                     .source(.unitService),
                     .source(.userPreferenceService),
+                    .source(.notificationCenterService),
                 ]
             ),
             .target(
@@ -77,11 +80,12 @@ let package: Package = {
                         .mocks(.languageService),
                         .mocks(.unitService),
                         .mocks(.userPreferenceService),
-                        .mocks(.notificationService),
+                        .mocks(.userNotificationService),
                         .mocks(.appearanceService),
                         .mocks(.dateService),
                         .mocks(.phoneComms),
                         .mocks(.watchComms),
+                        .mocks(.notificationCenterService),
                     ]
                    ),
             .loggingService,
@@ -94,11 +98,14 @@ let package: Package = {
                     .interface(.unitService),
                     .interface(.userPreferenceService),
                     .interface(.dateService),
+                    .interface(.notificationCenterService),
                     .portsInterface,
-                    .dbKit
+                    .dbKit,
                 ],
                 interfaceDependancy: [
-                    .interface(.drinkService)
+                    .interface(.drinkService),
+                    .interface(.userPreferenceService),
+                    .interface(.notificationCenterService),
                 ]
             )
             .with(
@@ -107,13 +114,20 @@ let package: Package = {
                     .portsInterface,
                     .dbKit,
                     .interface(.unitService),
-                    .interface(.userPreferenceService)
+                    .interface(.userPreferenceService),
+                    .interface(.notificationCenterService),
+                ],
+                interfaceDependancy: [
+                    .interface(.notificationCenterService),
                 ]
             )
             .with(
                 targetsFrom: .languageService,
                 sourceDependancy: [
                     .interface(.userPreferenceService)
+                ],
+                interfaceDependancy: [
+                    .interface(.userPreferenceService),
                 ]
             )
             .with(
@@ -129,17 +143,25 @@ let package: Package = {
             .with(
                 targetsFrom: .unitService,
                 sourceDependancy: [
-                    .interface(.userPreferenceService)
+                    .interface(.userPreferenceService),
+                    .interface(.notificationCenterService),
+                ],
+                interfaceDependancy: [
+                    .interface(.userPreferenceService),
+                    .interface(.notificationCenterService),
                 ]
             )
             .with(
                 targetsFrom: .userPreferenceService
             )
             .with(
-                targetsFrom: .notificationService,
+                targetsFrom: .userNotificationService,
                 sourceDependancy: [
                     .interface(.dayService),
                     .interface(.userPreferenceService)
+                ],
+                interfaceDependancy: [
+                    .interface(.userPreferenceService),
                 ]
             )
             .with(
@@ -147,6 +169,9 @@ let package: Package = {
                 sourceDependancy: [
                     .interface(.userPreferenceService),
                     .portsInterface
+                ],
+                interfaceDependancy: [
+                    .interface(.userPreferenceService),
                 ]
             )
             .with(
@@ -154,11 +179,26 @@ let package: Package = {
             )
             .with(
                 targetsFrom: .phoneComms,
-                sourceDependancy: [.communicationInterface]
+                sourceDependancy: [
+                    .communicationInterface,
+                    .interface(.dateService),
+                    .interface(.dayService),
+                    .interface(.drinkService),
+                    .interface(.unitService)
+                ]
             )
             .with(
                 targetsFrom: .watchComms,
-                sourceDependancy: [.communicationInterface]
+                sourceDependancy: [
+                    .communicationInterface,
+                    .interface(.dateService),
+                    .interface(.dayService),
+                    .interface(.drinkService),
+                    .interface(.unitService)
+                ]
+            )
+            .with(
+                targetsFrom: .notificationCenterService
             )
     )
 }()
@@ -191,7 +231,8 @@ enum Feature: String {
     case timelineService = "TimelineService"
     case unitService = "UnitService"
     case userPreferenceService = "UserPreferenceService"
-    case notificationService = "NotificationService"
+    case userNotificationService = "UserNotificationService"
+    case notificationCenterService = "NotificationCenterService"
     case appearanceService = "AppearanceService"
     case phoneComms = "PhoneComms"
     case watchComms = "WatchComms"

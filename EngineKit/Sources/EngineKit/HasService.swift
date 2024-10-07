@@ -13,11 +13,12 @@ import LanguageServiceInterface
 import PortsInterface
 import UnitServiceInterface
 import UserPreferenceServiceInterface
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 import AppearanceServiceInterface
 import DateServiceInterface
 import CommunicationKitInterface
 import PhoneCommsInterface
+import NotificationCenterServiceInterface
 
 public protocol HasService:
     HasAppGroup,
@@ -30,9 +31,10 @@ public protocol HasService:
     HasLanguageService,
     HasUnitService,
     HasUserPreferenceService,
-    HasNotificationService,
+    HasUserNotificationService,
     HasAppearanceService,
     HasDateService,
     HasPhoneService,
-    HasPhoneComms
+    HasPhoneComms,
+    HasNotificationCenter
 {}

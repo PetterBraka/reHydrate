@@ -10,7 +10,7 @@ import LoggingService
 import PresentationInterface
 import UnitServiceInterface
 import DayServiceInterface
-import NotificationServiceInterface
+import UserNotificationServiceInterface
 import PortsInterface
 import AppearanceServiceInterface
 import DateServiceInterface
@@ -22,7 +22,7 @@ extension Screen.Settings {
             HasLoggingService &
             HasDayService &
             HasUnitService &
-            HasNotificationService &
+            HasUserNotificationService &
             HasOpenUrlService &
             HasAppInfo &
             HasAppearanceService &
@@ -88,25 +88,22 @@ extension Screen.Settings {
                     await disableNotifications()
                 }
             case let .didSetRemindersStart(start):
-                await updateViewModel(isLoading: true, notifications: updatedNotificationsSettings(isOn: true,
-                                                                                                   start: start))
-                await enableNotifications()
+                await updateViewModel(isLoading: true, notifications: getNotificationsSettings(start: start))
+                await enableNotifications(start: start)
                 await updateViewModel(isLoading: false)
             case let .didSetRemindersStop(stop):
-                await updateViewModel(isLoading: true, notifications: updatedNotificationsSettings(isOn: true,
-                                                                                                   stop: stop))
-                await enableNotifications()
+                await updateViewModel(isLoading: true, notifications: getNotificationsSettings(stop: stop))
+                await enableNotifications(stop: stop)
                 await updateViewModel(isLoading: false)
             case .didTapIncrementFrequency:
                 await increaseFrequency()
             case .didTapDecrementFrequency:
                 await decreaseFrequency()
             case .dismissAlert:
-                let frequency = engine.notificationService.minimumAllowedFrequency
-                let settings = engine.notificationService.getSettings()
+                let frequency = engine.userNotificationService.minimumAllowedFrequency
                 await updateViewModel(
                     isLoading: false,
-                    notifications: updatedNotificationsSettings(isOn: settings.isOn, frequency: frequency),
+                    notifications: getNotificationsSettings(frequency: frequency),
                     error: nil
                 )
             case .didOpenSettings:
@@ -134,37 +131,28 @@ extension Screen.Settings {
         private func didAppear() async {
             let currentSystem = engine.unitService.getUnitSystem()
             let goal = await engine.dayService.getToday().goal
-            let notificationSettings = engine.notificationService.getSettings()
             
             await updateViewModel(
-                isLoading: true,
+                isLoading: false,
                 unitSystem: .init(from: currentSystem),
                 goal: goal,
                 error: nil
             )
             
-            guard let frequency = notificationSettings.frequency,
-                  let start = notificationSettings.start,
-                  let stop = notificationSettings.stop
+            guard engine.userNotificationService.getSettings().isOn
             else {
-                await updateViewModel(
-                    isLoading: false,
-                    notifications: nil,
-                    error: nil
-                )
+                await updateViewModel(isLoading: false, notifications: nil, error: nil)
                 return
             }
             
-            let range = getRanges(start: start, stop: stop)
+            let notificationSettings = getNotificationsSettings()
             
             await updateViewModel(
                 isLoading: false,
                 notifications: .init(
-                    frequency: frequency,
-                    start: start,
-                    startRange: range.start,
-                    stop: stop,
-                    stopRange: range.stop
+                    frequency: notificationSettings.frequency,
+                    start: notificationSettings.start,
+                    stop: notificationSettings.stop
                 ),
                 error: nil
             )
@@ -283,50 +271,50 @@ extension UnitSystem {
 private extension Screen.Settings.Presenter {
     func increaseFrequency() async {
         await updateViewModel(isLoading: true)
-        let minFrequency = engine.notificationService.minimumAllowedFrequency
+        let minFrequency = engine.userNotificationService.minimumAllowedFrequency
         let newFrequency: Int
-        if let frequency = engine.notificationService.getSettings().frequency {
+        if let frequency = engine.userNotificationService.getSettings().frequency {
             newFrequency = frequency + minFrequency
         } else {
             newFrequency = minFrequency
         }
-        let settings = updatedNotificationsSettings(isOn: true, frequency: newFrequency)
+        let settings = getNotificationsSettings(frequency: newFrequency)
         await updateViewModel(isLoading: true, notifications: settings)
-        await enableNotifications()
+        await enableNotifications(frequency: newFrequency)
     }
     
     func decreaseFrequency() async {
         await updateViewModel(isLoading: true)
-        let minFrequency = engine.notificationService.minimumAllowedFrequency
+        let minFrequency = engine.userNotificationService.minimumAllowedFrequency
         let newFrequency: Int
-        if let frequency = engine.notificationService.getSettings().frequency {
+        if let frequency = engine.userNotificationService.getSettings().frequency {
             newFrequency = frequency - minFrequency
         } else {
             newFrequency = minFrequency
         }
-        let settings = updatedNotificationsSettings(isOn: true, frequency: newFrequency)
+        let settings = getNotificationsSettings(frequency: newFrequency)
         await updateViewModel(isLoading: true, notifications: settings)
-        await enableNotifications()
+        await enableNotifications(frequency: newFrequency)
     }
     
-    func enableNotifications() async {
-        let now = engine.dateService.now()
-        let frequency = viewModel.notifications?.frequency ?? engine.notificationService.minimumAllowedFrequency
-        let start = viewModel.notifications?.start ?? engine.dateService.getStart(of: now)
-        let stop = viewModel.notifications?.stop ?? engine.dateService.getEnd(of: now)
+    func enableNotifications(frequency: Int? = nil, start: Date? = nil, stop: Date? = nil) async {
+        let settings = getNotificationsSettings(frequency: frequency, start: start, stop: stop)
         
-        let result = await engine.notificationService.enable(
-            withFrequency: frequency,
-            start: start,
-            stop: stop
+        let result = await engine.userNotificationService.enable(
+            withFrequency: settings.frequency,
+            start: settings.start,
+            stop: settings.stop
         )
         
         switch result {
         case .success:
-            let range = getRanges(start: start, stop: stop)
             await updateViewModel(
                 isLoading: false,
-                notifications: .init(frequency: frequency, start: start, startRange: range.start, stop: stop, stopRange: range.stop)
+                notifications: .init(
+                    frequency: settings.frequency,
+                    start: settings.start,
+                    stop: settings.stop
+                )
             )
         case .failure(let error):
             switch error {
@@ -345,45 +333,40 @@ private extension Screen.Settings.Presenter {
         }
     }
     
-    func getRanges(start: Date, stop: Date) -> (start: ClosedRange<Date>, stop: ClosedRange<Date>) {
-        let now = engine.dateService.now()
-        let minimumAllowedFrequency = engine.notificationService.minimumAllowedFrequency
-        
-        let startRangeStart = engine.dateService.getStart(of: now)
-        let stopRangeEnd = engine.dateService.getEnd(of: now)
-        
-        let startRangeEnd = engine.dateService.getDate(byAdding: -minimumAllowedFrequency, component: .minute, to: stop)
-        let stopRangeStart = engine.dateService.getDate(byAdding: minimumAllowedFrequency, component: .minute, to: start)
-        
-        return (startRangeStart ... startRangeEnd,
-                stopRangeStart ... stopRangeEnd)
-    }
-    
     func disableNotifications() async {
-        engine.notificationService.disable()
-        await updateViewModel(isLoading: false, notifications: updatedNotificationsSettings(isOn: false))
+        engine.userNotificationService.disable()
+        await updateViewModel(isLoading: false, notifications: nil)
     }
     
-    func updatedNotificationsSettings(
-        isOn: Bool,
+    func getNotificationsSettings(
         frequency: Int? = nil,
-        start: Date? = nil,
-        stop: Date? = nil
-    ) -> ViewModel.NotificationSettings? {
-        guard isOn else { return nil }
+        start startDate: Date? = nil,
+        stop stopDate: Date? = nil
+    ) -> ViewModel.NotificationSettings {
+        let notificationSettings = engine.userNotificationService.getSettings()
+        
+        let frequency = frequency ?? notificationSettings.frequency ?? engine.userNotificationService.minimumAllowedFrequency
         let now = engine.dateService.now()
-        let notificationSettings = engine.notificationService.getSettings()
-        let frequency = frequency ?? notificationSettings.frequency ?? engine.notificationService.minimumAllowedFrequency
-        let start = start ?? notificationSettings.start ?? engine.dateService.getStart(of: now)
-        let stop = stop ?? notificationSettings.stop ?? engine.dateService.getEnd(of: now)
-        let range = getRanges(start: start, stop: stop)
+        
+        let start: Date =
+        if let date = startDate ?? notificationSettings.start {
+            date
+        } else {
+            engine.dateService.date(hours: 7, minutes: 00, seconds: 00, from: now) ??
+            engine.dateService.getStart(of: now)
+        }
+        let stop: Date =
+        if let date = stopDate ?? notificationSettings.stop {
+            date
+        } else {
+            engine.dateService.date(hours: 21, minutes: 00, seconds: 00, from: now) ??
+            engine.dateService.getEnd(of: now)
+        }
         
         return .init(
             frequency: frequency,
             start: start,
-            startRange: range.start,
-            stop: stop,
-            stopRange: range.stop
+            stop: stop
         )
     }
 }

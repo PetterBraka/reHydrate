@@ -18,26 +18,24 @@ public final class AppearanceService: AppearanceServiceType {
     )
     private let engine: Engine
     
-    let preferenceKey = "AppearanceService.key"
-    
     public init(engine: Engine) {
         self.engine = engine
     }
     
     public func getAppearance() -> Appearance {
         let currentStyle = engine.appearancePort.getStyle()
-        let storedAppearance: String? = engine.userPreferenceService.get(for: preferenceKey)
+        let storedAppearance: String? = engine.userPreferenceService.get(for: .appearance)
         return .init(rawValue: storedAppearance ?? "") ?? .init(from: currentStyle) ?? .light
     }
     
     public func setAppearance(_ appearance: AppearanceServiceInterface.Appearance) {
         do {
-            try engine.userPreferenceService.set(appearance.rawValue, for: preferenceKey)
+            try engine.userPreferenceService.set(appearance.rawValue, for: .appearance)
             try engine.appearancePort.setStyle(.init(from: appearance))
         } catch {
             engine.logger.error("Unable to set \(appearance.rawValue) appearance", error: error)
             let inverted: Appearance = appearance == .dark ? .light : .dark
-            try? engine.userPreferenceService.set(inverted.rawValue, for: preferenceKey)
+            try? engine.userPreferenceService.set(inverted.rawValue, for: .appearance)
         }
     }
 }

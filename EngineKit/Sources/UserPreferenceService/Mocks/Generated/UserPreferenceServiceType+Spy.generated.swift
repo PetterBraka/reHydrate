@@ -18,8 +18,8 @@ public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying
     }
 
     public enum MethodCall {
-        case set(value: Any, key: String)
-        case get(key: String)
+        case set(value: Any, key: PreferenceKey)
+        case get(key: PreferenceKey)
     }
 
     public var variableLog: [VariableName] = []
@@ -33,11 +33,11 @@ public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying
 }
 
 extension UserPreferenceServiceTypeSpy: UserPreferenceServiceType {
-    public func set<T: Codable>(_ value: T, for key: String) throws -> Void {
+    public func set<T: Codable>(_ value: T, for key: PreferenceKey) throws -> Void {
         methodLog.append(.set(value: value, key: key))
         try realObject.set(value, for: key)
     }
-    public func get<T: Codable>(for key: String) -> T? {
+    public func get<T: Codable>(for key: PreferenceKey) -> T? {
         methodLog.append(.get(key: key))
         return realObject.get(for: key)
     }

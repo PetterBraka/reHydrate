@@ -16,8 +16,8 @@ import UnitServiceInterface
 import UnitServiceMocks
 import UserPreferenceServiceInterface
 import UserPreferenceServiceMocks
-import NotificationServiceInterface
-import NotificationServiceMocks
+import UserNotificationServiceInterface
+import UserNotificationServiceMocks
 import AppearanceServiceInterface
 import AppearanceServiceMocks
 import PortsInterface
@@ -32,20 +32,19 @@ import PhoneCommsInterface
 import PhoneCommsMocks
 import WatchCommsInterface
 import WatchCommsMocks
+import NotificationCenterServiceInterface
+import NotificationCenterServiceMocks
 
 public final class EngineMocks {
     public init() {}
-    
-    public var appVersion: String = "0.0.0-mock"
-    public var appGroup: String = "com.testing"
     
     public var logger: LoggingService = LoggingService(subsystem: "EngineMock")
     public var dayManager: DayManagerType = DayManagerStub()
     public var drinkManager: DrinkManagerType = DrinkManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()
     public var userPreferenceService: UserPreferenceServiceType = UserPreferenceServiceTypeStub()
-    public var notificationService: NotificationServiceType = NotificationServiceTypeStub()
-    public var notificationDelegate: NotificationDelegateType = NotificationDelegateTypeStub()
+    public var userNotificationService: UserNotificationServiceType = UserNotificationServiceTypeStub()
+    public var notificationDelegate: UserNotificationDelegateType = UserNotificationDelegateTypeStub()
     
     //MARK: Ports
     public var appearancePort: AppearancePortType = AppearancePortTypeStub()
@@ -64,8 +63,8 @@ public final class EngineMocks {
     public var watchService: WatchServiceType = WatchServiceTypeStub()
     public var phoneComms: PhoneCommsType = PhoneCommsTypeStub()
     public var watchComms: WatchCommsType = WatchCommsTypeStub()
+    public var notificationCenter: NotificationCenterType = NotificationCenterTypeStub()
 }
 
 extension EngineMocks: HasService {}
 extension EngineMocks: HasPorts {}
-extension EngineMocks: HasAppInfo {}
