@@ -78,6 +78,7 @@ extension UNNotificationContent {
         mutableContent.body = content.body
         mutableContent.categoryIdentifier = content.categoryIdentifier
         mutableContent.userInfo = content.userInfo
+        mutableContent.sound = .default
         return mutableContent
     }
 }
