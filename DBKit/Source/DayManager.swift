@@ -75,7 +75,8 @@ private extension DayManager {
     }
 }
  
-extension DayManager: DayManagerType {
+extension DayManager: @preconcurrency DayManagerType {
+    @MainActor
     public func createNewDay(date: Date, goal: Double) throws -> DayModel {
         let newDay = DayEntity(context: context)
         newDay.id = UUID().uuidString
@@ -88,6 +89,7 @@ extension DayManager: DayManagerType {
         return DayModel(from: newDay)
     }
     
+    @MainActor
     public func add(consumed: Double, toDayAt date: Date) async throws -> DayModel {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed += consumed
@@ -96,6 +98,7 @@ extension DayManager: DayManagerType {
         return DayModel(from: dayToUpdate)
     }
     
+    @MainActor
     public func remove(consumed: Double, fromDayAt date: Date) async throws -> DayModel {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed -= consumed
@@ -107,6 +110,7 @@ extension DayManager: DayManagerType {
         return DayModel(from: dayToUpdate)
     }
     
+    @MainActor
     public func add(goal: Double, toDayAt date: Date) async throws -> DayModel {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal += goal
@@ -115,6 +119,7 @@ extension DayManager: DayManagerType {
         return DayModel(from: dayToUpdate)
     }
     
+    @MainActor
     public func remove(goal: Double, fromDayAt date: Date) async throws -> DayModel {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal -= goal
@@ -126,12 +131,14 @@ extension DayManager: DayManagerType {
         return DayModel(from: dayToUpdate)
     }
     
+    @MainActor
     private func delete(_ day: DayEntity) throws {
         context.delete(day)
         try database.save(context)
         LoggingService.log(level: .debug, "Deleted \(day)")
     }
     
+    @MainActor
     public func delete(_ day: DayModel) async throws {
         guard let date = DatabaseFormatter.date.date(from: day.date)
         else {
@@ -141,11 +148,13 @@ extension DayManager: DayManagerType {
         try delete(dayToDelete)
     }
     
+    @MainActor
     public func deleteDay(at date: Date) async throws {
         let dayToDelete = try await fetchEntity(with: date)
         try delete(dayToDelete)
     }
     
+    @MainActor
     public func deleteDays(in range: ClosedRange<Date>) async throws {
         let days = try await fetchEntities(between: range)
         for day in days {

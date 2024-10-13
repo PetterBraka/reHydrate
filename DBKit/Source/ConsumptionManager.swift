@@ -42,6 +42,7 @@ extension ConsumptionManager: ConsumptionManagerType {
         LoggingService.log(level: .debug, "Deleted consumption \(entity)")
     }
     
+    @MainActor
     public func delete(_ entry: ConsumptionModel) async throws {
         let datePredicate = NSPredicate(format: "date == %@", entry.date)
         let timePredicate = NSPredicate(format: "time == %@", entry.time)

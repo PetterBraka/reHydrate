@@ -45,7 +45,8 @@ private extension DrinkManager {
     }
 }
 
-extension DrinkManager: DrinkManagerType {
+extension DrinkManager: @preconcurrency DrinkManagerType {
+    @MainActor
     public func createNewDrink(size: Double, container: String) throws -> DrinkModel {
         let newDrink = DrinkEntity(context: context)
         newDrink.id = UUID().uuidString
@@ -56,6 +57,7 @@ extension DrinkManager: DrinkManagerType {
         return DrinkModel(from: newDrink)
     }
     
+    @MainActor
     public func edit(size: Double, of container: String) async throws -> DrinkModel {
         let drink = try await fetchEntity(container)
         drink.amount = size
@@ -64,12 +66,14 @@ extension DrinkManager: DrinkManagerType {
         return DrinkModel(from: drink)
     }
     
+    @MainActor
     private func delete(_ drink: DrinkEntity) throws {
         context.delete(drink)
         try database.save(context)
         LoggingService.log(level: .debug, "Deleted drink \(drink)")
     }
     
+    @MainActor
     public func delete(_ drink: DrinkModel) async throws {
         let predicate = NSCompoundPredicate(type: .and, subpredicates: [
             NSPredicate(format: "container == %@", drink.container),
@@ -86,11 +90,13 @@ extension DrinkManager: DrinkManagerType {
         }
     }
     
+    @MainActor
     public func deleteDrink(container: String) async throws {
         let drink = try await fetchEntity(container)
         try delete(drink)
     }
     
+    @MainActor
     public func deleteAll() async throws {
         let drinks = try await fetchAllEntity()
         for drink in drinks {

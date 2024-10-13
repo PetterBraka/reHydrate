@@ -107,13 +107,13 @@ private extension WatchComms {
 private extension WatchComms {
     func addWatchObservers() {
         notificationCenter.addObserver(forName: .Shared.didReceiveApplicationContext,
-                                       object: nil, queue: .current,
+                                       object: nil, queue: .main,
                                        using: process(notification:))
         notificationCenter.addObserver(forName: .Shared.didReceiveMessage,
-                                       object: nil, queue: .current,
+                                       object: nil, queue: .main,
                                        using: process(notification:))
         notificationCenter.addObserver(forName: .Shared.didReceiveUserInfo,
-                                       object: nil, queue: .current,
+                                       object: nil, queue: .main,
                                        using: process(notification:))
     }
     
@@ -125,7 +125,7 @@ private extension WatchComms {
     
     func process(notification: Notification) {
         guard let watchData = notification.userInfo?.mapKeysAndValues() else { return }
-        Task {
+        Task(priority: .high) { @MainActor in
             await process(day: watchData[.day])
             await process(drinks: watchData[.drinks])
             process(unitSystem: watchData[.unitSystem])
@@ -134,6 +134,7 @@ private extension WatchComms {
         }
     }
     
+    @MainActor
     func process(day data: Data?) async {
         guard let data,
               let day = try? JSONDecoder().decode(Day.self, from: data)
@@ -162,6 +163,7 @@ private extension WatchComms {
         }
     }
     
+    @MainActor
     func process(drinks data: Data?) async {
         guard let data,
               let phoneDrinks = try? JSONDecoder().decode([Drink].self, from: data)

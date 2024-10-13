@@ -74,6 +74,7 @@ public class Database: DatabaseType {
         }
     }
     
+    @MainActor
     public func read<Element: NSManagedObject>(
         matching: NSPredicate?,
         sortBy: [NSSortDescriptor]?,
@@ -100,3 +101,7 @@ public class Database: DatabaseType {
         }
     }
 }
+
+extension NSPredicate: @unchecked @retroactive Sendable {}
+
+extension NSSortDescriptor: @unchecked @retroactive Sendable {}

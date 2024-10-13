@@ -40,6 +40,7 @@ public final class DrinkService: DrinkServiceType {
         return newDrink
     }
     
+    @MainActor
     public func edit(size: Double, of container: Container) async throws -> Drink {
         let updatedDrink = try await engine.drinkManager.edit(
             size: size,
