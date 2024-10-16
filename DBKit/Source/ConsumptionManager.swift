@@ -6,15 +6,18 @@
 //
 
 import CoreData
+import LoggingKit
 import DBKitInterface
 
 public final class ConsumptionManager {
     private let database: DatabaseType
     private let context: NSManagedObjectContext
+    private let logger: LoggerServicing
     
-    public init(database: DatabaseType) {
+    public init(database: DatabaseType, logger: LoggerServicing) {
         self.database = database
         self.context = database.open()
+        self.logger = logger
     }
 
 }
@@ -31,7 +34,7 @@ extension ConsumptionManager: ConsumptionManagerType {
         newEntry.time = DatabaseFormatter.time.string(from: date)
         newEntry.consumed = consumed
         try database.save(context)
-        LoggingService.log(level: .debug, "Created consumption \(newEntry)")
+        logger.log(category: .consumptionDatabase, message: "Created consumption \(newEntry)", error: nil, level: .debug)
         
         return ConsumptionModel(from: newEntry)
     }
@@ -39,7 +42,7 @@ extension ConsumptionManager: ConsumptionManagerType {
     private func delete(_ entity: ConsumptionEntity) throws {
         context.delete(entity)
         try database.save(context)
-        LoggingService.log(level: .debug, "Deleted consumption \(entity)")
+        logger.log(category: .consumptionDatabase, message: "Deleted consumption \(entity)", error: nil, level: .debug)
     }
     
     public func delete(_ entry: ConsumptionModel) async throws {
@@ -51,7 +54,7 @@ extension ConsumptionManager: ConsumptionManagerType {
             sortBy: nil,
             limit: 1,
             context)
-        LoggingService.log(level: .debug, "Found consumption \(entries)")
+        logger.log(category: .consumptionDatabase, message: "Found consumption \(entries)", error: nil, level: .debug)
         guard let entry = entries.first else { return }
         try delete(entry)
     }
@@ -63,7 +66,7 @@ extension ConsumptionManager: ConsumptionManagerType {
             sortBy: [NSSortDescriptor(key: "time", ascending: true)],
             limit: nil,
             context)
-        LoggingService.log(level: .debug, "Found consumption \(entries)")
+        logger.log(category: .consumptionDatabase, message: "Found consumption \(entries)", error: nil, level: .debug)
         return entries.compactMap { .init(from: $0) }
     }
     
@@ -83,7 +86,7 @@ extension ConsumptionManager: ConsumptionManagerType {
                 return lhsDate > rhsDate
             }
         }
-        LoggingService.log(level: .debug, "Found consumption \(entries)")
+        logger.log(category: .consumptionDatabase, message: "Found consumption \(entries)", error: nil, level: .debug)
         return entries.compactMap { .init(from: $0) }
     }
 }

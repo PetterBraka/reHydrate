@@ -6,16 +6,19 @@
 //
 
 import Foundation
-import DBKitInterface
 import CoreData
+import LoggingKit
+import DBKitInterface
 
 public final class DrinkManager {
     private let database: DatabaseType
     private let context: NSManagedObjectContext
+    private let logger: LoggerServicing
     
-    public init(database: DatabaseType) {
+    public init(database: DatabaseType, logger: LoggerServicing) {
         self.database = database
         self.context = database.open()
+        self.logger = logger
     }
 }
 
@@ -26,7 +29,7 @@ private extension DrinkManager {
             sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: 1,
             context)
-        LoggingService.log(level: .debug, "Found drink \(drinks)")
+        logger.log(category: .drinkDatabase, message: "Found drink \(drinks)", error: nil, level: .debug)
         guard let drink = drinks.first
         else {
             throw DatabaseError.noElementFound
@@ -40,7 +43,7 @@ private extension DrinkManager {
             sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: nil,
             context)
-        LoggingService.log(level: .debug, "Found drink \(drinks)")
+        logger.log(category: .drinkDatabase, message: "Found drink \(drinks)", error: nil, level: .debug)
         return drinks
     }
 }
@@ -52,7 +55,7 @@ extension DrinkManager: DrinkManagerType {
         newDrink.amount = size
         newDrink.container = container
         try database.save(context)
-        LoggingService.log(level: .debug, "Created drink \(newDrink)")
+        logger.log(category: .drinkDatabase, message: "Created drink \(newDrink)", error: nil, level: .debug)
         return DrinkModel(from: newDrink)
     }
     
@@ -60,14 +63,14 @@ extension DrinkManager: DrinkManagerType {
         let drink = try await fetchEntity(container)
         drink.amount = size
         try database.save(context)
-        LoggingService.log(level: .debug, "Edited drink \(drink)")
+        logger.log(category: .drinkDatabase, message: "Edited drink \(drink)", error: nil, level: .debug)
         return DrinkModel(from: drink)
     }
     
     private func delete(_ drink: DrinkEntity) throws {
         context.delete(drink)
         try database.save(context)
-        LoggingService.log(level: .debug, "Deleted drink \(drink)")
+        logger.log(category: .drinkDatabase, message: "Deleted drink \(drink)", error: nil, level: .debug)
     }
     
     public func delete(_ drink: DrinkModel) async throws {

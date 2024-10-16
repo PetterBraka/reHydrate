@@ -6,15 +6,18 @@
 //
 
 import CoreData
+import LoggingKit
 import DBKitInterface
 
 public final class DayManager {
     private let database: DatabaseType
     private let context: NSManagedObjectContext
+    private let logger: LoggerServicing
     
-    public init(database: DatabaseType) {
+    public init(database: DatabaseType, logger: LoggerServicing) {
         self.database = database
         self.context = database.open()
+        self.logger = logger
     }
 }
 
@@ -27,7 +30,7 @@ private extension DayManager {
             sortBy: [.init(key: "date", ascending: true)],
             limit: nil,
             context)
-        LoggingService.log(level: .debug, "Found \(days)")
+        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
         guard let day = days.first
         else {
             throw DatabaseError.noElementFound
@@ -41,7 +44,7 @@ private extension DayManager {
             sortBy: [.init(key: "date", ascending: false)],
             limit: 1,
             context)
-        LoggingService.log(level: .debug, "Found \(days)")
+        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
         guard let day = days.first
         else {
             throw DatabaseError.noElementFound
@@ -59,7 +62,7 @@ private extension DayManager {
                 return lowerString == dateString ||
                 dates.contains(date)
             }
-        LoggingService.log(level: .debug, "Found \(days)")
+        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
         return days
     }
     
@@ -70,7 +73,7 @@ private extension DayManager {
             limit: nil,
             context
         )
-        LoggingService.log(level: .debug, "Found \(days)")
+        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
         return days
     }
 }
@@ -83,7 +86,7 @@ extension DayManager: DayManagerType {
         newDay.consumed = 0
         newDay.goal = goal
         try database.save(context)
-        LoggingService.log(level: .debug, "Created \(newDay)")
+        logger.log(category: .dayDatabase, message: "Created \(newDay)", error: nil, level: .debug)
         
         return DayModel(from: newDay)
     }
@@ -92,7 +95,7 @@ extension DayManager: DayManagerType {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed += consumed
         try database.save(context)
-        LoggingService.log(level: .debug, "Edited \(dayToUpdate)")
+        logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
@@ -103,7 +106,7 @@ extension DayManager: DayManagerType {
             dayToUpdate.consumed = 0
         }
         try database.save(context)
-        LoggingService.log(level: .debug, "Edited \(dayToUpdate)")
+        logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
@@ -111,7 +114,7 @@ extension DayManager: DayManagerType {
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal += goal
         try database.save(context)
-        LoggingService.log(level: .debug, "Edited \(dayToUpdate)")
+        logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
@@ -122,14 +125,14 @@ extension DayManager: DayManagerType {
             dayToUpdate.goal = 0
         }
         try database.save(context)
-        LoggingService.log(level: .debug, "Edited \(dayToUpdate)")
+        logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
     private func delete(_ day: DayEntity) throws {
         context.delete(day)
         try database.save(context)
-        LoggingService.log(level: .debug, "Deleted \(day)")
+        logger.log(category: .dayDatabase, message: "Deleted \(day)", error: nil, level: .debug)
     }
     
     public func delete(_ day: DayModel) async throws {
