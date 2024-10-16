@@ -13,7 +13,7 @@ import PortsInterface
 extension Screen.Settings.Credits {
     public final class Presenter: CreditsPresenterType {
         public typealias Engine = (
-            HasLoggingService &
+            HasLoggerService &
             HasOpenUrlService
         )
         public typealias Router = (
@@ -74,7 +74,12 @@ extension Screen.Settings.Credits {
                     try await engine.openUrlService.open(url: url)
                     updateViewModel(isLoading: false)
                 } catch {
-                    engine.logger.error("Unable to open link to \(person.name)", error: error)
+                    engine.logger.log(
+                        category: .presentationKit,
+                        message: "Unable to open link to \(person.name)",
+                        error: error,
+                        level: .error
+                    )
                     updateViewModel(isLoading: false, error: .unableToOpenLink)
                 }
             case .didTapHelpTranslate:
@@ -89,7 +94,12 @@ extension Screen.Settings.Credits {
                     )
                     updateViewModel(isLoading: false)
                 } catch {
-                    engine.logger.error("Unable to create draft email to help", error: error)
+                    engine.logger.log(
+                        category: .presentationKit,
+                        message: "Unable to create draft email to help",
+                        error: error,
+                        level: .error
+                    )
                     updateViewModel(isLoading: false, error: .unableToOpenLink)
                 }
             }
