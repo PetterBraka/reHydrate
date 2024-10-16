@@ -141,6 +141,7 @@
 		A149F2A42B69B9DD00710609 /* HealthKitPortTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2A32B69B9DD00710609 /* HealthKitPortTests.swift */; };
 		A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1614D522A362E8C00235D02 /* SceneFactory.swift */; };
 		A16CBD992BB3524A00F5C914 /* TestHelper in Frameworks */ = {isa = PBXBuildFile; productRef = A16CBD982BB3524A00F5C914 /* TestHelper */; };
+		A171A7282CC052A9002CFC1A /* LoggingKit in Frameworks */ = {isa = PBXBuildFile; productRef = A171A7272CC052A9002CFC1A /* LoggingKit */; };
 		A183BCEB2A3122CB00D42033 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE82A3120C900D42033 /* Images.swift */; };
 		A183BCEC2A3122CE00D42033 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE92A3120C900D42033 /* Font.swift */; };
 		A183BCEE2A31250800D42033 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A183BCE62A3120C900D42033 /* Assets.xcassets */; };
@@ -482,6 +483,7 @@
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				A1A825E92B7991B700EA98EC /* DBKit in Frameworks */,
 				A19889142C559B6A007AAC32 /* CommunicationInterface in Frameworks */,
+				A171A7282CC052A9002CFC1A /* LoggingKit in Frameworks */,
 				A19889162C559B6A007AAC32 /* CommunicationSource in Frameworks */,
 				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
 				A1E935522C5F62E100B73E35 /* EngineMocks in Frameworks */,
@@ -975,6 +977,7 @@
 				A19889132C559B6A007AAC32 /* CommunicationInterface */,
 				A19889152C559B6A007AAC32 /* CommunicationSource */,
 				A1E935512C5F62E100B73E35 /* EngineMocks */,
+				A171A7272CC052A9002CFC1A /* LoggingKit */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -1173,6 +1176,7 @@
 			packageReferences = (
 				A1CA3A1C2B5A5DD5009907EA /* XCRemoteSwiftPackageReference "CalendarKit" */,
 				A111533B2C179EA0001366FE /* XCLocalSwiftPackageReference "CommunicationKit" */,
+				A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */,
 			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
@@ -2144,6 +2148,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:PetterBraka/LoggingKit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.1.0;
+			};
+		};
 		A1CA3A1C2B5A5DD5009907EA /* XCRemoteSwiftPackageReference "CalendarKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PetterBraka/CalendarKit";
@@ -2178,6 +2190,11 @@
 		A16CBD982BB3524A00F5C914 /* TestHelper */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TestHelper;
+		};
+		A171A7272CC052A9002CFC1A /* LoggingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */;
+			productName = LoggingKit;
 		};
 		A185DB662B77C7A600B9318B /* PresentationWatchKit */ = {
 			isa = XCSwiftPackageProductDependency;
