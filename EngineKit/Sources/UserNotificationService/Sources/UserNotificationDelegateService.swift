@@ -12,7 +12,7 @@ import UserNotificationServiceInterface
 
 public final class UserNotificationDelegateService: UserNotificationDelegateType {
     public typealias Engine = (
-        HasLoggingService &
+        HasLoggerService &
         HasDayService &
         HasDrinksService
     )
@@ -42,17 +42,17 @@ public final class UserNotificationDelegateService: UserNotificationDelegateType
             let drinks = try await engine.drinksService.getSaved()
             guard let drink = drinks.first(where: { $0.container.rawValue == actionId })
             else {
-                engine.logger.debug("Unexpected action selected - \(actionId)")
+                engine.logger.log(category: .userNotificationService, message: "Unexpected action selected - \(actionId)", error: nil, level: .debug)
                 return
             }
 
             do {
                 _ = try await engine.dayService.add(drink: drink)
             } catch {
-                engine.logger.error("Couldn't add drink(\(drink)) from notification", error: error)
+                engine.logger.log(category: .userNotificationService, message: "Couldn't add drink(\(drink)) from notification", error: error, level: .error)
             }
         } catch {
-            engine.logger.critical("No drinks found", error: error)
+            engine.logger.log(category: .userNotificationService, message: "No drinks found", error: error, level: .error)
         }
     }
 }

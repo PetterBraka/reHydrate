@@ -18,7 +18,7 @@ import NotificationCenterServiceInterface
 
 final class DrinkServiceTests: XCTestCase {
     typealias Engine = (
-        HasLoggingService &
+        HasLoggerService &
         HasDrinkManagerService &
         HasUnitService &
         HasNotificationCenter

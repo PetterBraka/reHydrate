@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LoggingKit
 import LoggingService
 import UnitServiceInterface
 import UnitService
@@ -39,7 +40,8 @@ public final class WatchEngine {
             fatalError("Shared UserDefaults couldn't be setup")
         }
         self.sharedDefaults = sharedDefaults
-        self.database = Database(appGroup: appGroup)
+        self.logger = LoggerService(subsystem: subsystem)
+        self.database = Database(appGroup: appGroup, logger: logger)
         self.watchService = watchService
     }
     
@@ -50,13 +52,13 @@ public final class WatchEngine {
     
     public var watchService: WatchServiceType
     
-    public lazy var logger: LoggingService = LoggingService(subsystem: subsystem)
+    public var logger: LoggerServicing
     public lazy var userPreferenceService: UserPreferenceServiceType = UserPreferenceService(defaults: sharedDefaults)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
-    public lazy var dayManager: DayManagerType = DayManager(database: database)
-    public lazy var consumptionManager: ConsumptionManagerType = ConsumptionManager(database: database)
-    public lazy var drinkManager: DrinkManagerType = DrinkManager(database: database)
+    public lazy var dayManager: DayManagerType = DayManager(database: database, logger: logger)
+    public lazy var consumptionManager: ConsumptionManagerType = ConsumptionManager(database: database, logger: logger)
+    public lazy var drinkManager: DrinkManagerType = DrinkManager(database: database, logger: logger)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)
     public lazy var watchComms: WatchCommsType = WatchComms(engine: self, notificationCenter: .default)
@@ -65,7 +67,7 @@ public final class WatchEngine {
 
 extension WatchEngine:
     HasAppGroup,
-    HasLoggingService,
+    HasLoggerService,
     HasUnitService,
     HasUserPreferenceService,
     HasDateService,

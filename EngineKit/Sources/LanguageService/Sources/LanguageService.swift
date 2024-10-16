@@ -11,7 +11,7 @@ import UserPreferenceServiceInterface
 
 public class LanguageService: LanguageServiceType {
     public typealias Engine = (
-        HasLoggingService &
+        HasLoggerService &
         HasUserPreferenceService
     )
     
@@ -30,7 +30,7 @@ public class LanguageService: LanguageServiceType {
         do {
             try engine.userPreferenceService.set(language, for: .language)
         } catch {
-            engine.logger.debug("Language couldn't be set", error: error)
+            engine.logger.log(category: .userPreferences, message: "Language couldn't be set", error: error, level: .debug)
         }
     }
     

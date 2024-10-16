@@ -15,7 +15,7 @@ public final class UnitService: UnitServiceType {
     public typealias Engine = (
         HasUserPreferenceService &
         HasNotificationCenter &
-        HasLoggingService
+        HasLoggerService
     )
     
     private let engine: Engine
@@ -29,7 +29,7 @@ public final class UnitService: UnitServiceType {
             try engine.userPreferenceService.set(unitSystem, for: .unit)
             engine.notificationCenter.post(name: .unitDidChange)
         } catch {
-            engine.logger.error("Failed to set unit system to \(unitSystem.rawValue)", error: error)
+            engine.logger.log(category: .userPreferences, message: "Failed to set unit system to \(unitSystem.rawValue)", error: error, level: .error)
         }
     }
     

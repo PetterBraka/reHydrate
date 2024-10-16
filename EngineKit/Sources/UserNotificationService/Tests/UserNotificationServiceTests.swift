@@ -20,7 +20,7 @@ import DateServiceMocks
 
 final class NotificationServiceTests: XCTestCase {
     typealias Engine = (
-        HasLoggingService &
+        HasLoggerService &
         HasUserPreferenceService &
         HasDrinksService &
         HasDateService

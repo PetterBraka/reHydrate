@@ -7,6 +7,7 @@
 
 import Foundation
 
+import LoggingKit
 import LoggingService
 import UserPreferenceServiceInterface
 import UserPreferenceService
@@ -32,19 +33,20 @@ public final class WidgetEngine {
         else {
             fatalError("Shared UserDefaults couldn't be setup")
         }
+        self.logger = LoggerService(subsystem: subsystem)
         self.sharedDefaults = sharedDefaults
-        self.database = Database(appGroup: appGroup)
+        self.database = Database(appGroup: appGroup, logger: logger)
     }
     
     private let database: DatabaseType
     private let sharedDefaults: UserDefaults
     private let subsystem: String
+    public var logger: LoggerServicing
     
-    public lazy var logger: LoggingService = LoggingService(subsystem: subsystem)
     public lazy var userPreferenceService: UserPreferenceServiceType = UserPreferenceService(defaults: sharedDefaults)
-    public lazy var consumptionManager: ConsumptionManagerType = ConsumptionManager(database: database)
+    public lazy var consumptionManager: ConsumptionManagerType = ConsumptionManager(database: database, logger: logger)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
-    public lazy var dayManager: DayManagerType = DayManager(database: database)
+    public lazy var dayManager: DayManagerType = DayManager(database: database, logger: logger)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
     public lazy var notificationCenter: NotificationCenterType = NotificationCenterService()
@@ -54,7 +56,7 @@ extension WidgetEngine:
     HasConsumptionManagerService,
     HasUserPreferenceService,
     HasDayManagerService,
-    HasLoggingService,
+    HasLoggerService,
     HasUnitService,
     HasDateService,
     HasDayService,

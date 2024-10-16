@@ -14,7 +14,7 @@ import DateServiceInterface
 
 public final class UserNotificationService: UserNotificationServiceType {
     public typealias Engine = (
-        HasLoggingService &
+        HasLoggerService &
         HasUserPreferenceService &
         HasDrinksService &
         HasDateService
@@ -101,7 +101,7 @@ public final class UserNotificationService: UserNotificationServiceType {
         
         if let lastCelebrationsDate,
            engine.dateService.isDate(lastCelebrationsDate, inSameDayAs: today) {
-               return
+            return
         }
         userNotificationCenter.removeAllPendingNotificationRequests()
         
@@ -132,7 +132,12 @@ public final class UserNotificationService: UserNotificationServiceType {
             )
             try? engine.userPreferenceService.set(today, for: .lastCelebrationsDate)
         } catch {
-            engine.logger.error("Failed to add celebration notification", error: error)
+            engine.logger.log(
+                category: .userNotificationService,
+                message: "Failed to add celebration notification",
+                error: error,
+                level: .error
+            )
         }
     }
     
@@ -153,7 +158,7 @@ public final class UserNotificationService: UserNotificationServiceType {
 
 private extension UserNotificationService {
     func checkAuthorizationStatus() async throws {
-        guard !isAuthorized 
+        guard !isAuthorized
         else { return }
         do {
             let granted = try await userNotificationCenter.requestAuthorization()
@@ -173,7 +178,12 @@ private extension UserNotificationService {
         do {
             try engine.userPreferenceService.set(enabled, for: .isOn)
         } catch {
-            engine.logger.error("couldn't store notification settings", error: error)
+            engine.logger.log(
+                category: .userNotificationService,
+                message: "couldn't store notification settings",
+                error: error,
+                level: .error
+            )
         }
     }
     
@@ -187,7 +197,12 @@ private extension UserNotificationService {
             try engine.userPreferenceService.set(start, for: .start)
             try engine.userPreferenceService.set(stop, for: .stop)
         } catch {
-            engine.logger.error("couldn't store notification settings", error: error)
+            engine.logger.log(
+                category: .userNotificationService,
+                message: "couldn't store notification settings",
+                error: error,
+                level: .error
+            )
         }
     }
 }
@@ -252,8 +267,13 @@ private extension UserNotificationService {
             } catch {
                 if let notificationError = error as? NotificationError,
                    notificationError == .alreadySet(at: triggerComponents) {} else {
-                    engine.logger.error("Couldn't set notifications", error: error)
-                }
+                       engine.logger.log(
+                        category: .userNotificationService,
+                        message: "Couldn't set notifications",
+                        error: error,
+                        level: .error
+                       )
+                   }
             }
             guard let triggerDate = getNextDate(from: date,
                                                 using: frequency,
@@ -286,8 +306,8 @@ private extension UserNotificationService {
         )
         
         try await userNotificationCenter.add(.init(identifier: id,
-                                               content: content,
-                                               trigger: trigger))
+                                                   content: content,
+                                                   trigger: trigger))
     }
     
     func setNotificationActions() async {
@@ -307,7 +327,12 @@ private extension UserNotificationService {
             
             userNotificationCenter.setNotificationCategories([remindersCategory])
         } catch {
-            engine.logger.error("Couldn't set notification categories", error: error)
+            engine.logger.log(
+                category: .userNotificationService,
+                message: "Couldn't set notification categories",
+                error: error,
+                level: .error
+            )
         }
     }
 }

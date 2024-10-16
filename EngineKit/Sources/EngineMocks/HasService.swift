@@ -22,7 +22,7 @@ import WatchCommsInterface
 import NotificationCenterServiceInterface
 
 public protocol HasService:
-    HasLoggingService,
+    HasLoggerService,
     HasDayManagerService,
     HasDrinkManagerService,
     HasConsumptionManagerService,

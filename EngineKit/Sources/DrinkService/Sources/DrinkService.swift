@@ -15,7 +15,7 @@ import NotificationCenterServiceInterface
 
 public final class DrinkService: DrinkServiceType {
     public typealias Engine = (
-        HasLoggingService &
+        HasLoggerService &
         HasDrinkManagerService &
         HasUnitService &
         HasNotificationCenter
@@ -33,7 +33,12 @@ public final class DrinkService: DrinkServiceType {
         )
         guard let newDrink = Drink(from: newDrink) else {
             let error = DrinkDBError.creatingDrink
-            engine.logger.error("Couldn't map new drink \(newDrink)",error: error)
+            engine.logger.log(
+                category: .drinkService,
+                message: "Couldn't map new drink \(newDrink)",
+                error: error,
+                level: .error
+            )
             throw error
         }
         engine.notificationCenter.post(name: .drinkDidChange)
@@ -47,7 +52,12 @@ public final class DrinkService: DrinkServiceType {
         )
         guard let updatedDrink = Drink(from: updatedDrink) else {
             let error = DrinkDBError.notFound
-            engine.logger.error("Couldn't map edited drink \(updatedDrink)",error: error)
+            engine.logger.log(
+                category: .drinkService,
+                message: "Couldn't map edited drink \(updatedDrink)",
+                error: error,
+                level: .error
+            )
             throw error
         }
         engine.notificationCenter.post(name: .drinkDidChange)
@@ -68,7 +78,12 @@ public final class DrinkService: DrinkServiceType {
         do {
             try await engine.drinkManager.deleteAll()
         } catch {
-            engine.logger.error("Couldn't reset drinks", error: error)
+            engine.logger.log(
+                category: .drinkService,
+                message: "Couldn't reset drinks",
+                error: error,
+                level: .error
+            )
         }
         let defaultDrinks: [Drink] = [
             .init(id: UUID().uuidString, size: 300, container: .small),
@@ -81,7 +96,12 @@ public final class DrinkService: DrinkServiceType {
                     size: drink.size, container: drink.container.rawValue
                 )
             } catch {
-                engine.logger.error("Couldn't store default drink \(drink)", error: error)
+                engine.logger.log(
+                    category: .drinkService,
+                    message: "Couldn't store default drink \(drink)",
+                    error: error,
+                    level: .error
+                )
                 continue
             }
         }
