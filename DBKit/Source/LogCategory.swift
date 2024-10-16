@@ -8,8 +8,8 @@
 import LoggingKit
 
 extension LogCategory {
-    static let database = LogCategory("Database")
-    static let dayDatabase = LogCategory("DayDatabase")
-    static let drinkDatabase = LogCategory("DrinkDatabase")
-    static let consumptionDatabase = LogCategory("ConsumptionDatabase")
+    public static let database = LogCategory("Database")
+    public static let dayDatabase = LogCategory("DayDatabase")
+    public static let drinkDatabase = LogCategory("DrinkDatabase")
+    public static let consumptionDatabase = LogCategory("ConsumptionDatabase")
 }
