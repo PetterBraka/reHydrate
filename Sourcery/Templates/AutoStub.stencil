@@ -31,11 +31,10 @@ Result<{{ method.returnTypeName }}, Error>
 {%- endmacro -%}
 
 {# Macro End #}
+// MARK: - AutoStub
+// swiftlint:disable all  
 {% for protocol in types.protocols %}
 {% if protocol.annotations.AutoStub %}
-// sourcery:file:{{ protocol.name }}+Stub
-// swiftlint:disable line_length
-// swiftlint:disable variable_name    
 import Foundation
 {% for import in argument.imports %}
 import {{ import }}
@@ -170,6 +169,5 @@ extension {{ protocol.name }}Stub: {{ protocol.name }} {
 
 {% endfor %}
 }
-// sourcery:end
 {% endif %}
 {% endfor %}

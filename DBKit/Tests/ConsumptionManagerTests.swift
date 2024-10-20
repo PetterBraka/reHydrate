@@ -26,84 +26,93 @@ final class ConsumptionManagerTests: XCTestCase {
     
     override func setUp() {
         let logger = LoggerService(subsystem: "com.braka.test")
-        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true, logger: logger))
+        let db = Database(appGroup: "group.com.testing.DBKit", inMemory: true, logger: logger)
+        self.spy = DatabaseSpy(realObject: db)
         self.sut = ConsumptionManager(database: spy, logger: logger)
     }
     
     func test_add_one() async throws {
         let givenConsumption = Double.random(in: 300 ... 750)
-        let newEntry = try sut.createEntry(date: referenceDate, consumed: givenConsumption)
+        let newEntry = try await sut.createEntry(date: referenceDate, consumed: givenConsumption)
         assert(newEntry, expectedDate: referenceDate, expectedConsumption: givenConsumption)
         XCTAssertEqual(spy.methodLogNames, [.open, .save])
     }
     
     func test_add_multiple() async throws {
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
         XCTAssertEqual(spy.methodLogNames, [
-            .open, .save, .save, .save, .save
+            .open, .save, .open, .save, .open, .save, .open, .save
         ])
     }
     
     func test_fetch() async throws {
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDates[1])
-        try createEntry(date: referenceDates[1])
-        try createEntry(date: referenceDates[1])
-        try createEntry(date: referenceDates[1])
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDates[1])
+        try await createEntry(date: referenceDates[1])
+        try await createEntry(date: referenceDates[1])
+        try await createEntry(date: referenceDates[1])
         let result = try await sut.fetchAll(at: referenceDate)
         let secondResult = try await sut.fetchAll(at: referenceDates[1])
         XCTAssertEqual(result.count, 3)
         XCTAssertEqual(secondResult.count, 4)
         XCTAssertEqual(spy.methodLogNames, [
-            .open,
-            .save, .save, .save,
-            .save, .save, .save, .save,
-            .read, .read
+            .open, .save,
+            .open, .save,
+            .open, .save,
+            .open, .save,
+            .open, .save,
+            .open, .save,
+            .open, .save,
+            .open, .read,
+            .open, .read
         ])
     }
     
     func test_fetchAll() async throws {
-        try createEntry(date: referenceDates[0])
-        try createEntry(date: referenceDates[3])
-        try createEntry(date: referenceDates[2])
-        try createEntry(date: referenceDates[1])
+        try await createEntry(date: referenceDates[0])
+        try await createEntry(date: referenceDates[3])
+        try await createEntry(date: referenceDates[2])
+        try await createEntry(date: referenceDates[1])
         
         let result = try await sut.fetchAll()
         XCTAssertEqual(result.count, 4)
         XCTAssertEqual(spy.methodLogNames, [
-            .open,
-            .save, .save, .save, .save,
-            .read
+            .open, .save,
+            .open, .save,
+            .open, .save,
+            .open, .save,
+            .open, .read
         ])
     }
     
     func test_delete() async throws {
-        try createEntry(date: referenceDate)
-        try createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
         let optionalEntry = try await sut.fetchAll().first
         let entry = try XCTUnwrap(optionalEntry)
         try await sut.delete(entry)
         XCTAssertEqual(spy.methodLogNames, [
-            .open,
-            .save, .save,
-            .read, .read,
-            .save
+            .open, .save,
+            .open, .save,
+            .open, .read,
+            .open, .read,
+            .open, .save
         ])
     }
     
     func test_delete_failure() async throws {
-        try createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
         try await sut.delete(ConsumptionModel(id: "", date: "", time: "", consumed: 0))
-        XCTAssertEqual(spy.methodLogNames, [.open, .save, .read])
+        XCTAssertEqual(spy.methodLogNames, [.open, .save, .open, .read])
     }
     
-    func test_map() {
-        let entity = ConsumptionEntity(context: spy.open())
+    func test_map() async {
+        let entity = await ConsumptionEntity(context: spy.open())
         entity.id = nil
         entity.date = nil
         entity.time = nil
@@ -111,29 +120,29 @@ final class ConsumptionManagerTests: XCTestCase {
                        ConsumptionModel(id: "", date: "", time: "", consumed: 0))
     }
     
-    func test_map_withDefaults() {
-        let entity = ConsumptionEntity(context: spy.open())
+    func test_map_withDefaults() async {
+        let entity = await ConsumptionEntity(context: spy.open())
         XCTAssertEqual(ConsumptionModel(from: entity),
                        ConsumptionModel(id: "", date: "", time: "", consumed: 0))
     }
     
-    func test_map_withId() {
-        let entity = ConsumptionEntity(context: spy.open())
+    func test_map_withId() async {
+        let entity = await ConsumptionEntity(context: spy.open())
         entity.id = "id"
         XCTAssertEqual(ConsumptionModel(from: entity),
                        ConsumptionModel(id: "id", date: "", time: "", consumed: 0))
     }
     
-    func test_map_withIdAndDate() {
-        let entity = ConsumptionEntity(context: spy.open())
+    func test_map_withIdAndDate() async {
+        let entity = await ConsumptionEntity(context: spy.open())
         entity.id = "id"
         entity.date = "date"
         XCTAssertEqual(ConsumptionModel(from: entity),
                        ConsumptionModel(id: "id", date: "date", time: "", consumed: 0))
     }
     
-    func test_map_withIdAndDateAndTime() {
-        let entity = ConsumptionEntity(context: spy.open())
+    func test_map_withIdAndDateAndTime() async {
+        let entity = await ConsumptionEntity(context: spy.open())
         entity.id = "id"
         entity.date = "date"
         entity.time = "time"
@@ -148,16 +157,16 @@ extension ConsumptionManagerTests {
                 expectedConsumption: Double,
                 file: StaticString = #file,
                 line: UInt = #line) {
-        XCTAssertEqual(entry.date, expectedDate.toDateString(), file: file, line: line)
-        XCTAssertEqual(entry.time, expectedDate.toTimeString(), file: file, line: line)
-        XCTAssertEqual(entry.consumed, expectedConsumption, file: file, line: line)
+        XCTAssertEqual(entry.date, expectedDate.toDateString(), line: line)
+        XCTAssertEqual(entry.time, expectedDate.toTimeString(), line: line)
+        XCTAssertEqual(entry.consumed, expectedConsumption, line: line)
     }
     
     func createEntry(date: Date,
                       file: StaticString = #file,
-                      line: UInt = #line) throws {
+                     line: UInt = #line) async throws {
         let givenConsumption = Double.random(in: 300 ... 750)
-        let newEntry = try sut.createEntry(date: date, consumed: givenConsumption)
+        let newEntry = try await sut.createEntry(date: date, consumed: givenConsumption)
         assert(newEntry, expectedDate: date, expectedConsumption: givenConsumption,
                file: file, line: line)
     }
@@ -172,3 +181,5 @@ private extension Date {
         DatabaseFormatter.time.string(from: self)
     }
 }
+
+extension LoggerService: @retroactive @unchecked Sendable {}

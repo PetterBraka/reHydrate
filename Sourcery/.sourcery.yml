@@ -5,7 +5,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../CommunicationKit/Mocks/Generated/
+    output: ../CommunicationKit/Mocks/Generated.swiftGenerated.swift
     args: 
       imports: 
           - CommunicationKitInterface
@@ -16,7 +16,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/AppearanceService/Mocks/Generated/
+    output: ../EngineKit/Sources/AppearanceService/Mocks/Generated.swift
     args: 
       imports: 
           - AppearanceServiceInterface
@@ -26,7 +26,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/DateService/Mocks/Generated/
+    output: ../EngineKit/Sources/DateService/Mocks/Generated.swift
     args: 
       imports: 
           - DateServiceInterface
@@ -36,7 +36,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/DayService/Mocks/Generated/
+    output: ../EngineKit/Sources/DayService/Mocks/Generated.swift
     args: 
       imports:
           - DayServiceInterface
@@ -47,7 +47,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/DrinkService/Mocks/Generated/
+    output: ../EngineKit/Sources/DrinkService/Mocks/Generated.swift
     args: 
       imports:
           - DrinkServiceInterface
@@ -57,7 +57,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/LanguageService/Mocks/Generated/
+    output: ../EngineKit/Sources/LanguageService/Mocks/Generated.swift
     args: 
       imports:
           - LanguageServiceInterface
@@ -67,7 +67,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/UserNotificationService/Mocks/Generated/
+    output: ../EngineKit/Sources/UserNotificationService/Mocks/Generated.swift
     args: 
       imports:
           - UserNotificationServiceInterface
@@ -77,7 +77,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/UserPreferenceService/Mocks/Generated/
+    output: ../EngineKit/Sources/UserPreferenceService/Mocks/Generated.swift
     args: 
       imports:
           - UserPreferenceServiceInterface
@@ -87,7 +87,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/UnitService/Mocks/Generated/
+    output: ../EngineKit/Sources/UnitService/Mocks/Generated.swift
     args: 
       imports:
           - UnitServiceInterface
@@ -97,7 +97,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/TimelineService/Mocks/Generated/
+    output: ../EngineKit/Sources/TimelineService/Mocks/Generated.swift
     args: 
       imports:
           - TimelineServiceInterface
@@ -107,7 +107,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/Ports/Mocks/Generated/
+    output: ../EngineKit/Sources/Ports/Mocks/Generated.swift
     args: 
       imports:
           - PortsInterface
@@ -117,7 +117,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/PhoneComms/Mocks/Generated/
+    output: ../EngineKit/Sources/PhoneComms/Mocks/Generated.swift
     args: 
       imports: 
           - PhoneCommsInterface
@@ -127,7 +127,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/WatchComms/Mocks/Generated/
+    output: ../EngineKit/Sources/WatchComms/Mocks/Generated.swift
     args: 
       imports: 
           - WatchCommsInterface 
@@ -137,7 +137,7 @@ configurations:
     templates:
         - Templates/AutoStub.stencil
         - Templates/AutoSpy.stencil
-    output: ../EngineKit/Sources/NotificationCenterService/Mocks/Generated/
+    output: ../EngineKit/Sources/NotificationCenterService/Mocks/Generated.swift
     args: 
       imports: 
           - NotificationCenterServiceInterface 
@@ -146,7 +146,7 @@ configurations:
         - ../EngineKit/Sources/EngineMocks
     templates:
         - Templates/AutoMock.stencil
-    output: ../EngineKit/Sources/EngineMocks/Generated/EngineMocks.generated.swift
+    output: ../EngineKit/Sources/EngineMocks/Generated.swift
     args: 
       imports:
           - AppearanceServiceInterface

@@ -34,8 +34,8 @@ public final class DatabaseSpy<DbModel: NSManagedObject & Equatable, RealDatabas
         case read
     }
     
-    public var varLog: [VariableCall] = []
-    public var methodLog: [MethodCall] = []
+    nonisolated(unsafe) public var varLog: [VariableCall] = []
+    nonisolated(unsafe) public var methodLog: [MethodCall] = []
     private let realObject: RealDatabase
     
     public init(realObject: RealDatabase) {

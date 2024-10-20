@@ -15,12 +15,12 @@ public protocol DatabaseStubbing {
     var deleteElement_returnValue: Error? { get }
 }
 
-public final class DatabaseStub: DatabaseStubbing {
+public final actor DatabaseStub: DatabaseStubbing {
     public var readMatchingOrderByLimit_returnValue: [NSManagedObject] = []
-    public var open_returnValue: NSManagedObjectContext = .init(.privateQueue)
-    public var create_returnValue: Result<NSManagedObject, Error> = .success(.init())
-    public var readMatchingSortByLimit_returnValue: Result<[NSManagedObject], Error> = .success([])
-    public var deleteElement_returnValue: Error? = nil
+    nonisolated(unsafe) public var open_returnValue: NSManagedObjectContext = .init(.privateQueue)
+    nonisolated(unsafe) public var create_returnValue: Result<NSManagedObject, Error> = .success(.init())
+    nonisolated(unsafe) public var readMatchingSortByLimit_returnValue: Result<[NSManagedObject], Error> = .success([])
+    nonisolated(unsafe) public var deleteElement_returnValue: Error? = nil
     public init() {}
 }
 

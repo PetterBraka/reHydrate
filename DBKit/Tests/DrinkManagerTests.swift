@@ -24,7 +24,7 @@ final class DrinkManagerTests: XCTestCase {
     func test_createNewDrink_success() async throws {
         let givenSize: Double = 200
         let givenContainer = "small"
-        let drink = try sut.createNewDrink(size: givenSize, container: givenContainer)
+        let drink = try await sut.createNewDrink(size: givenSize, container: givenContainer)
         assert(drink, expectedSize: givenSize, expectedContainer: givenContainer)
         XCTAssertEqual(spy.methodLogNames, [.open,.save])
     }
@@ -32,15 +32,15 @@ final class DrinkManagerTests: XCTestCase {
     func test_createNewDayAndFetchDay_success() async throws {
         let givenSize: Double = 200
         let givenContainer = "small"
-        let drink = try sut.createNewDrink(size: givenSize, container: givenContainer)
+        let drink = try await sut.createNewDrink(size: givenSize, container: givenContainer)
         assert(drink, expectedSize: givenSize, expectedContainer: givenContainer)
         let foundDrink = try await sut.fetch(givenContainer)
         assert(drink, foundDrink)
-        XCTAssertEqual(spy.methodLogNames, [.open, .save, .read])
+        XCTAssertEqual(spy.methodLogNames, [.open, .save, .open, .read])
     }
     
     func test_deleteDrink() async throws {
-        let drinks = try preloadDefaults()
+        let drinks = try await preloadDefaults()
         
         try await sut.delete(drinks[0])
         do {
@@ -56,7 +56,7 @@ final class DrinkManagerTests: XCTestCase {
     }
     
     func test_deleteDrinkContainer() async throws {
-        try preloadDefaults()
+        try await preloadDefaults()
         
         try await sut.deleteDrink(container: "medium")
         do {
@@ -72,7 +72,7 @@ final class DrinkManagerTests: XCTestCase {
     }
     
     func test_editDrink() async throws {
-        let drinks = try preloadDefaults()
+        let drinks = try await preloadDefaults()
         let drink = try XCTUnwrap(drinks.first)
         let editedDrink = try await sut.edit(size: 400, of: drink.container)
         XCTAssertEqual(editedDrink.size, 400)
@@ -83,7 +83,7 @@ final class DrinkManagerTests: XCTestCase {
     }
     
     func test_deleteAll() async throws {
-        try preloadDefaults()
+        try await preloadDefaults()
         
         try await sut.deleteAll()
         let foundDrink = try await sut.fetchAll()
@@ -104,7 +104,7 @@ final class DrinkManagerTests: XCTestCase {
     }
     
     func test_fetchContainer() async throws {
-        let drinks = try preloadDefaults()
+        let drinks = try await preloadDefaults()
         
         let foundDrink = try await sut.fetch("small")
         assert(foundDrink, drinks[0])
@@ -118,7 +118,7 @@ final class DrinkManagerTests: XCTestCase {
     }
     
     func test_fetchAll() async throws {
-        let drinks = try preloadDefaults()
+        let drinks = try await preloadDefaults()
         
         let foundDrinks = try await sut.fetchAll()
         
@@ -126,31 +126,31 @@ final class DrinkManagerTests: XCTestCase {
         XCTAssertEqual(foundDrinks, drinks)
     }
     
-    func test_mapDrink_withDefaults() {
-        let drink = DrinkEntity(context: spy.open())
+    func test_mapDrink_withDefaults() async {
+        let drink = await DrinkEntity(context: spy.open())
         drink.id = nil
         drink.container = nil
         XCTAssertEqual(DrinkModel(from: drink),
                        .init(id: "", size: 0, container: ""))
     }
     
-    func test_mapDrink_withId() {
-        let drink = DrinkEntity(context: spy.open())
+    func test_mapDrink_withId() async {
+        let drink = await DrinkEntity(context: spy.open())
         drink.id = "id"
         XCTAssertEqual(DrinkModel(from: drink),
                        .init(id: "id", size: 0, container: ""))
     }
     
-    func test_mapDrink_withIdAndAmount() {
-        let drink = DrinkEntity(context: spy.open())
+    func test_mapDrink_withIdAndAmount() async {
+        let drink = await DrinkEntity(context: spy.open())
         drink.id = "id"
         drink.amount = 9
         XCTAssertEqual(DrinkModel(from: drink),
                        .init(id: "id", size: 9, container: ""))
     }
     
-    func test_mapDrink() {
-        let drink = DrinkEntity(context: spy.open())
+    func test_mapDrink() async {
+        let drink = await DrinkEntity(context: spy.open())
         drink.id = "id"
         drink.amount = 300
         drink.container = "Small"
@@ -163,21 +163,21 @@ extension DrinkManagerTests {
     func assert(_ givenDrink: DrinkModel,
                 expectedSize: Double, expectedContainer: String,
                 file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(givenDrink.size, expectedSize, file: file, line: line)
-        XCTAssertEqual(givenDrink.container, expectedContainer, file: file, line: line)
+        XCTAssertEqual(givenDrink.size, expectedSize, line: line)
+        XCTAssertEqual(givenDrink.container, expectedContainer, line: line)
     }
     
     func assert(_ givenDrink: DrinkModel, _ expectedDrink: DrinkModel,
                 file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(givenDrink.size, expectedDrink.size, file: file, line: line)
-        XCTAssertEqual(givenDrink.container, expectedDrink.container, file: file, line: line)
+        XCTAssertEqual(givenDrink.size, expectedDrink.size, line: line)
+        XCTAssertEqual(givenDrink.container, expectedDrink.container, line: line)
     }
 }
 
 extension DrinkManagerTests {
     @discardableResult
-    func preloadDefaults(file: StaticString = #file, line: UInt = #line) throws -> [DrinkModel] {
-        try [
+    func preloadDefaults(file: StaticString = #file, line: UInt = #line) async throws -> [DrinkModel] {
+        try await [
             sut.createNewDrink(size: 300, container: "small"),
             sut.createNewDrink(size: 500, container: "medium"),
             sut.createNewDrink(size: 750, container: "large")

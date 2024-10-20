@@ -7,7 +7,7 @@
 
 import CoreData
 
-public final class DummyModel: NSManagedObject {
+public final class DummyModel: NSManagedObject, @unchecked Sendable {
     public var id: String = ""
     public var text: String = ""
 }

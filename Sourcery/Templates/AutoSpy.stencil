@@ -1,8 +1,7 @@
+// MARK: - AutoSpy
+// swiftlint:disable all
 {% for protocol in types.protocols %}
 {% if protocol.annotations.AutoSpy %}
-// sourcery:file:{{ protocol.name }}+Spy
-// swiftlint:disable line_length
-// swiftlint:disable variable_name
 
 import Foundation
 {% for import in argument.imports %}
@@ -91,6 +90,5 @@ extension {{ protocol.name }}Spy: {{ protocol.name }} {
     }
 {% endfor %}
 }
-// sourcery:end
 {%- endif -%}
 {%- endfor -%}
