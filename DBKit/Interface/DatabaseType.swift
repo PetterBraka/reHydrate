@@ -7,9 +7,9 @@
 
 import CoreData
 
-public protocol DatabaseType {
-    func open() -> NSManagedObjectContext
-    func save(_ context: NSManagedObjectContext) throws
+public protocol DatabaseType: Sendable {
+    func open() async -> NSManagedObjectContext
+    func save(_ context: NSManagedObjectContext) async throws
     func read<Element: NSManagedObject>(
         matching: NSPredicate?, sortBy: [NSSortDescriptor]?, limit: Int?,
         _ context: NSManagedObjectContext

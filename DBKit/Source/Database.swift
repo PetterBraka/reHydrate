@@ -9,7 +9,7 @@ import CoreData
 import LoggingKit
 import DBKitInterface
 
-public class Database: DatabaseType {
+public final actor Database: DatabaseType {
     private var backgroundContext: NSManagedObjectContext?
     private let persistentContainer: NSPersistentContainer
     
@@ -54,7 +54,7 @@ public class Database: DatabaseType {
         }
     }
     
-    public func open() -> NSManagedObjectContext {
+    public func open() async -> NSManagedObjectContext {
         if let backgroundContext {
             return backgroundContext
         } else {
@@ -64,7 +64,7 @@ public class Database: DatabaseType {
         }
     }
     
-    public func save(_ context: NSManagedObjectContext) throws {
+    public func save(_ context: NSManagedObjectContext) async throws {
         // Verify that the context has uncommitted changes.
         guard context.hasChanges else { return }
         
@@ -81,7 +81,7 @@ public class Database: DatabaseType {
         sortBy: [NSSortDescriptor]?,
         limit: Int?,
         _ context: NSManagedObjectContext
-    ) async throws -> [Element] {
+    ) async throws -> [Element] where Element: Sendable {
         try await withCheckedThrowingContinuation { continuation in
             let fetchRequest = Element.fetchRequest()
             fetchRequest.predicate = matching

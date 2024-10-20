@@ -20,7 +20,7 @@ public protocol DatabaseSpying {
 }
 
 public final class DatabaseSpy<DbModel: NSManagedObject & Equatable, RealDatabase: DatabaseType> {
-    public enum VariableCall: Equatable {}
+    public enum VariableCall: Equatable, Sendable {}
     
     public enum MethodCall: Equatable {
         case `open`
@@ -76,14 +76,14 @@ extension DatabaseSpy: DatabaseSpying {
 }
 
 extension DatabaseSpy: DatabaseType {
-    public func open() -> NSManagedObjectContext {
+    public func open() async -> NSManagedObjectContext {
         methodLog.append(.open)
-        return realObject.open()
+        return await realObject.open()
     }
     
-    public func save(_ context: NSManagedObjectContext) throws {
+    public func save(_ context: NSManagedObjectContext) async throws {
         methodLog.append(.save(context))
-        try realObject.save(context)
+        try await realObject.save(context)
     }
     
     public func read<Element: NSManagedObject>(matching: NSPredicate?, sortBy: [NSSortDescriptor]?, limit: Int?, _ context: NSManagedObjectContext) async throws -> [Element] {
