@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 07/08/2023.
 //
 
-public struct ConsumptionModel: Equatable {
+public struct ConsumptionModel: Equatable, Sendable {
     public let id: String
     public let date: String
     public let time: String

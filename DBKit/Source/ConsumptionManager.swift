@@ -9,17 +9,21 @@ import CoreData
 import LoggingKit
 import DBKitInterface
 
-public final class ConsumptionManager {
+public final actor ConsumptionManager {
     private let database: DatabaseType
-    private let context: NSManagedObjectContext
     private let logger: LoggerServicing
     
     public init(database: DatabaseType, logger: LoggerServicing) {
         self.database = database
-        self.context = database.open()
         self.logger = logger
     }
-
+    
+    public func run<T>(
+        resultType: T.Type = T.self,
+        body: @MainActor @Sendable () throws -> T
+    ) async rethrows -> T where T : Sendable {
+        try await body()
+    }
 }
 
 extension ConsumptionManager: ConsumptionManagerType {
@@ -27,24 +31,27 @@ extension ConsumptionManager: ConsumptionManagerType {
     public func createEntry(
         date: Date,
         consumed: Double
-    ) throws -> ConsumptionModel {
+    ) async throws -> ConsumptionModel {
+        let context = await database.open()
         let newEntry = ConsumptionEntity(context: context)
         newEntry.id = UUID().uuidString
         newEntry.date = DatabaseFormatter.date.string(from: date)
         newEntry.time = DatabaseFormatter.time.string(from: date)
         newEntry.consumed = consumed
-        try database.save(context)
+        try await database.save(context)
         logger.log(category: .consumptionDatabase, message: "Created \(newEntry)", error: nil, level: .debug)
         
         return ConsumptionModel(from: newEntry)
     }
     
-    private func delete(_ entity: ConsumptionEntity) throws {
+    private func delete(_ entity: ConsumptionEntity) async throws {
+        let context = await database.open()
         context.delete(entity)
-        try database.save(context)
+        try await database.save(context)
     }
     
     public func delete(_ entry: ConsumptionModel) async throws {
+        let context = await database.open()
         let datePredicate = NSPredicate(format: "date == %@", entry.date)
         let timePredicate = NSPredicate(format: "time == %@", entry.time)
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, timePredicate])
@@ -54,11 +61,12 @@ extension ConsumptionManager: ConsumptionManagerType {
             limit: 1,
             context)
         guard let entry = entries.first else { return }
-        try delete(entry)
+        try await delete(entry)
         logger.log(category: .consumptionDatabase, message: "Deleting \(entry)", error: nil, level: .debug)
     }
 
     public func fetchAll(at date: Date) async throws -> [ConsumptionModel] {
+        let context = await database.open()
         let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
         let entries: [ConsumptionEntity] = try await database.read(
             matching: predicate,
@@ -70,6 +78,7 @@ extension ConsumptionManager: ConsumptionManagerType {
     }
     
     public func fetchAll() async throws -> [ConsumptionModel] {
+        let context = await database.open()
         let entries: [ConsumptionEntity] = try await database.read(
             matching: nil,
             sortBy: [NSSortDescriptor(key: "date", ascending: true)],
@@ -108,3 +117,5 @@ extension ConsumptionEntity {
         "consumed:\(consumed))"
     }
 }
+
+extension ConsumptionEntity: @unchecked Sendable {}
