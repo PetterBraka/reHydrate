@@ -8,7 +8,7 @@
 
 import Foundation
 import EngineKit
-import LoggingService
+import LoggingKit
 import PresentationKit
 import PresentationInterface
 import DrinkServiceInterface
@@ -57,12 +57,14 @@ public final class SceneFactory: ObservableObject {
         let subsystem = "com.braka.reHydrate"
         let appGroup = "group.com.braka.reHydrate.shared"
         let phoneSession = WCSession.default
+        let logger = LoggerService(subsystem: subsystem)
+        logger.set(levels: .info, .default, .error, .fault)
         
         engine = Engine(
             appGroup: appGroup,
             appVersion: UIApplication.shared.appVersion,
-            logger: LoggingService(subsystem: subsystem),
-            database: Database(appGroup: appGroup),
+            logger: logger,
+            database: Database(appGroup: appGroup, logger: logger),
             reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
             celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
             userNotificationCenter: UNUserNotificationCenter.current(),

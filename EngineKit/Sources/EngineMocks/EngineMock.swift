@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 14/08/2023.
 //
 
-import LoggingService
+import LoggingKit
 import DayServiceInterface
 import DayServiceMocks
 import DrinkServiceInterface
@@ -38,7 +38,7 @@ import NotificationCenterServiceMocks
 public final class EngineMocks {
     public init() {}
     
-    public var logger: LoggingService = LoggingService(subsystem: "EngineMock")
+    public var logger: LoggerServicing = LoggerService(subsystem: "EngineMock")
     public var dayManager: DayManagerType = DayManagerStub()
     public var drinkManager: DrinkManagerType = DrinkManagerStub()
     public var consumptionManager: ConsumptionManagerType = ConsumptionManagerStub()

@@ -16,7 +16,7 @@ extension Screen.History {
     public final class Presenter: HistoryPresenterType {
         public typealias ViewModel = History.ViewModel
         public typealias Engine = (
-            HasLoggingService &
+            HasLoggerService &
             HasUnitService &
             HasDayService &
             HasDateService

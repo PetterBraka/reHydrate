@@ -7,6 +7,15 @@
       "state" : {
         "revision" : "c8c54b9220ea47ccc5651be39a6b8827c0dbeaea"
       }
+    },
+    {
+      "identity" : "loggingkit",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:PetterBraka/LoggingKit.git",
+      "state" : {
+        "revision" : "1887e55caab70156ef52b52e0a8ef6aa0b9ba6a7",
+        "version" : "1.2.0"
+      }
     }
   ],
   "version" : 2

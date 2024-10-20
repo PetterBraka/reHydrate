@@ -16,7 +16,7 @@ extension Screen.EditContainer {
     public final class Presenter: EditContainerPresenterType {
         public typealias ViewModel = EditContainer.ViewModel
         public typealias Engine = (
-            HasLoggingService &
+            HasLoggerService &
             HasDrinksService &
             HasUnitService &
             HasPhoneComms

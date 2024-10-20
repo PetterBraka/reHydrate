@@ -12,7 +12,7 @@ import PortsInterface
 extension Screen.Settings.AppIcon {
     public final class Presenter: AppIconPresenterType {
         public typealias Engine = (
-            HasLoggingService &
+            HasLoggerService &
             HasAlternateIconsService
         )
         public typealias Router = (
@@ -93,7 +93,7 @@ private extension Screen.Settings.AppIcon.Presenter {
         updateViewModel(isLoading: true)
         let error = await engine.alternateIconsService.setAlternateIcon(to: icon.rawValue)
         if let error {
-            engine.logger.error("Failed setting icon to \(icon.rawValue)", error: error)
+            engine.logger.log(category: .presentationKit, message: "Failed setting icon to \(icon.rawValue)", error: error, level: .error)
             updateViewModel(isLoading: false, error: .failedSettingAlternateIcons)
         } else {
             updateViewModel(isLoading: false, selectedIcon: icon)

@@ -18,20 +18,23 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../EngineKit"),
-        .package(path: "../TestHelper")
+        .package(path: "../TestHelper"),
+        .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.2.0"),
     ],
     targets: [
         .target(
             name: "PresentationWidgetKit",
             dependencies: [
                 "PresentationWidgetKitInterface",
-                .product(name: "WidgetEngine", package: "EngineKit")
+                .product(name: "WidgetEngine", package: "EngineKit"),
             ],
             path: "Sources"
         ),
         .target(
             name: "PresentationWidgetKitInterface",
-            dependencies: [],
+            dependencies: [
+                .product(name: "LoggingKit", package: "LoggingKit"),
+            ],
             path: "Interface"
         ),
         .testTarget(

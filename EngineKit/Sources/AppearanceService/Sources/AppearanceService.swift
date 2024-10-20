@@ -12,7 +12,7 @@ import LoggingService
 
 public final class AppearanceService: AppearanceServiceType {
     public typealias Engine = (
-        HasLoggingService &
+        HasLoggerService &
         HasUserPreferenceService &
         HasPorts
     )
@@ -33,7 +33,12 @@ public final class AppearanceService: AppearanceServiceType {
             try engine.userPreferenceService.set(appearance.rawValue, for: .appearance)
             try engine.appearancePort.setStyle(.init(from: appearance))
         } catch {
-            engine.logger.error("Unable to set \(appearance.rawValue) appearance", error: error)
+            engine.logger.log(
+                category: .userPreferences,
+                message: "Unable to set \(appearance.rawValue) appearance",
+                error: error,
+                level: .error
+            )
             let inverted: Appearance = appearance == .dark ? .light : .dark
             try? engine.userPreferenceService.set(inverted.rawValue, for: .appearance)
         }

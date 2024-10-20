@@ -22,7 +22,7 @@ import NotificationCenterServiceInterface
 
 public protocol HasService:
     HasAppGroup,
-    HasLoggingService,
+    HasLoggerService,
     HasDayManagerService,
     HasDrinkManagerService,
     HasConsumptionManagerService,

@@ -19,7 +19,7 @@ import PhoneCommsInterface
 extension Screen.Settings {
     public final class Presenter: SettingsPresenterType {
         public typealias Engine = (
-            HasLoggingService &
+            HasLoggerService &
             HasDayService &
             HasUnitService &
             HasUserNotificationService &
@@ -212,7 +212,12 @@ extension Screen.Settings.Presenter {
             
             await updateViewModel(isLoading: false, goal: newGoal)
         } catch {
-            engine.logger.error("Couldn't increase the goal", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Couldn't increase the goal",
+                error: error,
+                level: .error
+            )
         }
     }
     
@@ -229,7 +234,12 @@ extension Screen.Settings.Presenter {
             
             await updateViewModel(isLoading: false, goal: newGoal)
         } catch {
-            engine.logger.error("Couldn't decrease the goal", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Couldn't decrease the goal",
+                error: error,
+                level: .error
+            )
         }
     }
 }
@@ -405,7 +415,12 @@ extension Screen.Settings.Presenter {
             try await engine.openUrlService.open(url: url)
             await updateViewModel(isLoading: false, error: nil)
         } catch {
-            engine.logger.error("Couldn't open url", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Couldn't open url",
+                error: error,
+                level: .error
+            )
             await updateViewModel(isLoading: false, error: .init(from: error as? OpenUrlError))
         }
     }
@@ -423,7 +438,12 @@ extension Screen.Settings.Presenter {
             )
             await updateViewModel(isLoading: false, error: nil)
         } catch {
-            engine.logger.error("Couldn't open url", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Couldn't open url",
+                error: error,
+                level: .error
+            )
             await updateViewModel(isLoading: false, error: .init(from: error as? OpenUrlError))
         }
     }

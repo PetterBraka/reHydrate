@@ -6,16 +6,19 @@
 //
 
 import Foundation
-import DBKitInterface
 import CoreData
+import LoggingKit
+import DBKitInterface
 
 public final class DrinkManager {
     private let database: DatabaseType
     private let context: NSManagedObjectContext
+    private let logger: LoggerServicing
     
-    public init(database: DatabaseType) {
+    public init(database: DatabaseType, logger: LoggerServicing) {
         self.database = database
         self.context = database.open()
+        self.logger = logger
     }
 }
 
@@ -26,7 +29,6 @@ private extension DrinkManager {
             sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: 1,
             context)
-        LoggingService.log(level: .debug, "Found drink \(drinks)")
         guard let drink = drinks.first
         else {
             throw DatabaseError.noElementFound
@@ -40,7 +42,6 @@ private extension DrinkManager {
             sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: nil,
             context)
-        LoggingService.log(level: .debug, "Found drink \(drinks)")
         return drinks
     }
 }
@@ -52,7 +53,7 @@ extension DrinkManager: DrinkManagerType {
         newDrink.amount = size
         newDrink.container = container
         try database.save(context)
-        LoggingService.log(level: .debug, "Created drink \(newDrink)")
+        logger.log(category: .drinkDatabase, message: "Created drink \(newDrink)", error: nil, level: .debug)
         return DrinkModel(from: newDrink)
     }
     
@@ -60,14 +61,14 @@ extension DrinkManager: DrinkManagerType {
         let drink = try await fetchEntity(container)
         drink.amount = size
         try database.save(context)
-        LoggingService.log(level: .debug, "Edited drink \(drink)")
+        logger.log(category: .drinkDatabase, message: "Edited drink \(drink)", error: nil, level: .debug)
         return DrinkModel(from: drink)
     }
     
     private func delete(_ drink: DrinkEntity) throws {
         context.delete(drink)
         try database.save(context)
-        LoggingService.log(level: .debug, "Deleted drink \(drink)")
+        logger.log(category: .drinkDatabase, message: "Deleted drink \(drink)", error: nil, level: .debug)
     }
     
     public func delete(_ drink: DrinkModel) async throws {
@@ -81,6 +82,7 @@ extension DrinkManager: DrinkManagerType {
             limit: 1,
             context
         )
+        logger.log(category: .drinkDatabase, message: "Deleting \(drinks)", error: nil, level: .debug)
         for drink in drinks {
             try delete(drink)
         }
@@ -88,23 +90,28 @@ extension DrinkManager: DrinkManagerType {
     
     public func deleteDrink(container: String) async throws {
         let drink = try await fetchEntity(container)
+        logger.log(category: .drinkDatabase, message: "Deleting \(drink)", error: nil, level: .debug)
         try delete(drink)
     }
     
     public func deleteAll() async throws {
         let drinks = try await fetchAllEntity()
+        logger.log(category: .drinkDatabase, message: "Deleting \(drinks)", error: nil, level: .debug)
         for drink in drinks {
             try delete(drink)
         }
     }
     
     public func fetch(_ container: String) async throws -> DrinkModel {
-        try await DrinkModel(from: fetchEntity(container))
+        let drink = try await fetchEntity(container)
+        logger.log(category: .drinkDatabase, message: "Found drink \(drink)", error: nil, level: .debug)
+        return DrinkModel(from: drink)
     }
     
     public func fetchAll() async throws -> [DrinkModel] {
-        try await fetchAllEntity()
-        .compactMap { .init(from: $0) }
+        let drinks = try await fetchAllEntity()
+        logger.log(category: .drinkDatabase, message: "Found \(drinks)", error: nil, level: .debug)
+        return drinks.compactMap { .init(from: $0) }
     }
 }
 
@@ -118,9 +125,9 @@ package extension DrinkModel {
 
 extension DrinkEntity {
     public override var description: String {
-        "Drink: \n\t" +
-        "id:\(id ?? "No id")\n\t" +
-        "amount:\(amount)\n\t" +
-        "container:\(container ?? "No container")\n"
+        "Drink(" +
+        "id:\(id ?? "No id"), " +
+        "amount:\(amount), " +
+        "container:\(container ?? "No container"))"
     }
 }

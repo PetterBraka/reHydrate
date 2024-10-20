@@ -16,7 +16,7 @@ import CommunicationKitInterface
 
 public final class PhoneComms {
     public typealias Engine = (
-        HasLoggingService &
+        HasLoggerService &
         HasDateService &
         HasDayService &
         HasDrinksService &
@@ -44,7 +44,7 @@ extension PhoneComms: PhoneCommsType {
     public func setAppContext() async {
         guard canSendData()
         else {
-            engine.logger.warning("Couldn't send data", error: nil)
+            engine.logger.log(category: .phoneComms, message: "Couldn't send data", error: nil, level: .info)
             return
         }
         
@@ -55,7 +55,7 @@ extension PhoneComms: PhoneCommsType {
     public func sendDataToWatch() async {
         guard canSendData()
         else {
-            engine.logger.warning("Couldn't send data", error: nil)
+            engine.logger.log(category: .phoneComms, message: "Couldn't send data", error: nil, level: .info)
             return
         }
         
@@ -98,7 +98,7 @@ private extension PhoneComms {
     
     func sendMessage(_ data: [CommunicationUserInfo: Codable]) async {
         engine.phoneService.sendMessage(data) { [weak self] error in
-            self?.engine.logger.error("Failed sending \(data) to watchOS device", error: error)
+            self?.engine.logger.log(category: .phoneComms, message: "Failed sending \(data) to watchOS device", error: error, level: .error)
         }
     }
     
@@ -110,7 +110,7 @@ private extension PhoneComms {
         do {
             try engine.phoneService.update(applicationContext: data)
         } catch {
-            engine.logger.error("Failed updating context \(data) to watchOS device", error: error)
+            engine.logger.log(category: .phoneComms, message: "Failed updating context \(data) to watchOS device", error: error, level: .error)
         }
     }
 }
@@ -189,7 +189,7 @@ private extension PhoneComms {
                         of: watchDrink.container
                     )
                 } catch {
-                    engine.logger.error("Failed to update drink to \(watchDrink)", error: error)
+                    engine.logger.log(category: .phoneComms, message: "Failed to update drink to \(watchDrink)", error: error, level: .error)
                 }
             } else {
                 do {
@@ -198,7 +198,7 @@ private extension PhoneComms {
                         container: watchDrink.container
                     )
                 } catch {
-                    engine.logger.error("Failed to add drink to \(watchDrink)", error: error)
+                    engine.logger.log(category: .phoneComms, message: "Failed to add drink to \(watchDrink)", error: error, level: .error)
                 }
             }
         }

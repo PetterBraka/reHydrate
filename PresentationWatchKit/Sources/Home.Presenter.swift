@@ -20,7 +20,7 @@ extension Screen.Home {
     public final class Presenter: HomePresenterType {
         public typealias ViewModel = Home.ViewModel
         public typealias Engine = (
-            HasLoggingService &
+            HasLoggerService &
             HasUnitService &
             HasDayService &
             HasDrinksService &
@@ -138,7 +138,12 @@ private extension Screen.Home.Presenter {
                 unit: unit.mapToDomain()
             )
         } catch {
-            engine.logger.error("Could add drink of size \(drink.size)", error: error)
+            engine.logger.log(
+                category: .watchPresentationKit,
+                message: "Could add drink of size \(drink.size)",
+                error: error,
+                level: .error
+            )
         }
     }
 }
@@ -211,7 +216,12 @@ private extension Screen.Home.Presenter {
         do {
             try engine.userPreferenceService.set(data, for: .today)
         } catch {
-            engine.logger.error("Couldn't set widget data", error: error)
+            engine.logger.log(
+                category: .watchPresentationKit,
+                message: "Couldn't set widget data",
+                error: error,
+                level: .error
+            )
         }
     }
 }

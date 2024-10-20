@@ -16,10 +16,13 @@ let package = Package(
             targets: ["DBKit", "DBKitMocks"]
         )
     ],
+    dependencies: [
+        .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.2.0"),
+    ],
     targets: [
         .target(
             name: "DBKit",
-            dependencies: ["DBKitInterface"],
+            dependencies: ["DBKitInterface", "LoggingKit"],
             path: "Source"
         ),
         .target(

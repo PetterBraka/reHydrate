@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LoggingKit
 import LoggingService
 import DayServiceInterface
 import DayService
@@ -36,7 +37,7 @@ public final class Engine {
     public init(
         appGroup: String,
         appVersion: String,
-        logger: LoggingService,
+        logger: LoggerServicing,
         database: DatabaseType,
         reminders: [NotificationMessage],
         celebrations: [NotificationMessage],
@@ -53,9 +54,9 @@ public final class Engine {
         }
         self.appGroup = appGroup
         self.logger = logger
-        self.dayManager = DayManager(database: database)
-        self.drinkManager = DrinkManager(database: database)
-        self.consumptionManager = ConsumptionManager(database: database)
+        self.dayManager = DayManager(database: database, logger: logger)
+        self.drinkManager = DrinkManager(database: database, logger: logger)
+        self.consumptionManager = ConsumptionManager(database: database, logger: logger)
         self.userPreferenceService = UserPreferenceService(defaults: sharedDefault)
         
         self.appVersion = appVersion
@@ -75,7 +76,7 @@ public final class Engine {
     private let celebrations: [NotificationMessage]
     public let userNotificationCenter: UserNotificationCenterType
     
-    public var logger: LoggingService
+    public var logger: LoggerServicing
     public var dayManager: DayManagerType
     public var drinkManager: DrinkManagerType
     public var consumptionManager: ConsumptionManagerType

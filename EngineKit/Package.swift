@@ -21,6 +21,7 @@ let package: Package = {
             .package(name: "DBKit", path: "../DBKit"),
             .package(name: "TestHelper", path: "../TestHelper"),
             .package(name: "CommunicationKit", path: "../CommunicationKit"),
+            .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.2.0"),
         ],
         targets: [
             .target(
@@ -204,7 +205,7 @@ let package: Package = {
 }()
 
 extension Target {
-    static let loggingService: Target = .target(name: "LoggingService")
+    static let loggingService: Target = .target(name: "LoggingService", dependencies: ["LoggingKit"])
     static let portsInterface: Target = .target(name: "PortsInterface", path: "Sources/Ports/Interface")
     static let portsMocks: Target = .target(name: "PortsMocks", dependencies: [.portsInterface], path: "Sources/Ports/Mocks")
 }
@@ -217,6 +218,7 @@ extension Target.Dependency {
     static let communicationMocks: Target.Dependency = .product(name: "CommunicationMocks", package: "CommunicationKit")
     
     static let loggingService: Target.Dependency = .byName(name: "LoggingService")
+    
     static let portsInterface: Target.Dependency = .byName(name: "PortsInterface")
     static let portsMocks: Target.Dependency = .byName(name: "PortsMocks")
     
@@ -307,7 +309,9 @@ extension Array where Element == Target {
                     path: rootPath + "/Sources",
                     resources: sourceResources),
             .target(name: feature.interface,
-                    dependencies: interfaceDependancy,
+                    dependencies: [
+                        "LoggingKit"
+                    ] + interfaceDependancy,
                     path: rootPath + "/Interface",
                     resources: interfaceResources),
             .target(name: feature.mocks,

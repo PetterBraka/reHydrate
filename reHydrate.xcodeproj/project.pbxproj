@@ -141,6 +141,10 @@
 		A149F2A42B69B9DD00710609 /* HealthKitPortTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A149F2A32B69B9DD00710609 /* HealthKitPortTests.swift */; };
 		A1614D532A362E8C00235D02 /* SceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1614D522A362E8C00235D02 /* SceneFactory.swift */; };
 		A16CBD992BB3524A00F5C914 /* TestHelper in Frameworks */ = {isa = PBXBuildFile; productRef = A16CBD982BB3524A00F5C914 /* TestHelper */; };
+		A171A7282CC052A9002CFC1A /* LoggingKit in Frameworks */ = {isa = PBXBuildFile; productRef = A171A7272CC052A9002CFC1A /* LoggingKit */; };
+		A171A72A2CC5028C002CFC1A /* LoggingKit in Frameworks */ = {isa = PBXBuildFile; productRef = A171A7292CC5028C002CFC1A /* LoggingKit */; };
+		A171A72C2CC5029A002CFC1A /* LoggingKit in Frameworks */ = {isa = PBXBuildFile; productRef = A171A72B2CC5029A002CFC1A /* LoggingKit */; };
+		A171A72E2CC502A6002CFC1A /* LoggingKit in Frameworks */ = {isa = PBXBuildFile; productRef = A171A72D2CC502A6002CFC1A /* LoggingKit */; };
 		A183BCEB2A3122CB00D42033 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE82A3120C900D42033 /* Images.swift */; };
 		A183BCEC2A3122CE00D42033 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183BCE92A3120C900D42033 /* Font.swift */; };
 		A183BCEE2A31250800D42033 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A183BCE62A3120C900D42033 /* Assets.xcassets */; };
@@ -482,6 +486,7 @@
 				3310709B244DBCD3008365A3 /* HealthKit.framework in Frameworks */,
 				A1A825E92B7991B700EA98EC /* DBKit in Frameworks */,
 				A19889142C559B6A007AAC32 /* CommunicationInterface in Frameworks */,
+				A171A7282CC052A9002CFC1A /* LoggingKit in Frameworks */,
 				A19889162C559B6A007AAC32 /* CommunicationSource in Frameworks */,
 				A126D24B2A76665800A296BA /* EngineKit in Frameworks */,
 				A1E935522C5F62E100B73E35 /* EngineMocks in Frameworks */,
@@ -494,6 +499,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10D694F2C9755480093BBAB /* WidgetEngine in Frameworks */,
+				A171A72E2CC502A6002CFC1A /* LoggingKit in Frameworks */,
 				A10D69512C9755490093BBAB /* PresentationWidgetKit in Frameworks */,
 				A10D693B2C9755040093BBAB /* SwiftUI.framework in Frameworks */,
 				A10D693A2C9755040093BBAB /* WidgetKit.framework in Frameworks */,
@@ -505,6 +511,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A16CBD992BB3524A00F5C914 /* TestHelper in Frameworks */,
+				A171A72A2CC5028C002CFC1A /* LoggingKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,6 +520,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10D69342C971F760093BBAB /* WatchEngine in Frameworks */,
+				A171A72C2CC5029A002CFC1A /* LoggingKit in Frameworks */,
 				A19889102C559B54007AAC32 /* CommunicationInterface in Frameworks */,
 				A185DB672B77C7A600B9318B /* PresentationWatchKit in Frameworks */,
 				A19889122C559B54007AAC32 /* CommunicationSource in Frameworks */,
@@ -975,6 +983,7 @@
 				A19889132C559B6A007AAC32 /* CommunicationInterface */,
 				A19889152C559B6A007AAC32 /* CommunicationSource */,
 				A1E935512C5F62E100B73E35 /* EngineMocks */,
+				A171A7272CC052A9002CFC1A /* LoggingKit */,
 			);
 			productName = reHydrate;
 			productReference = 3378767324378A9400F5A732 /* reHydrate.app */;
@@ -1000,6 +1009,7 @@
 			packageProductDependencies = (
 				A10D694E2C9755480093BBAB /* WidgetEngine */,
 				A10D69502C9755490093BBAB /* PresentationWidgetKit */,
+				A171A72D2CC502A6002CFC1A /* LoggingKit */,
 			);
 			productName = WidgetExtension;
 			productReference = A10D69392C9755030093BBAB /* WidgetExtension.appex */;
@@ -1021,6 +1031,7 @@
 			name = reHydrateTests;
 			packageProductDependencies = (
 				A16CBD982BB3524A00F5C914 /* TestHelper */,
+				A171A7292CC5028C002CFC1A /* LoggingKit */,
 			);
 			productName = reHydrateTests;
 			productReference = A149F2A12B69B9DD00710609 /* reHydrateTests.xctest */;
@@ -1051,6 +1062,7 @@
 				A198890F2C559B54007AAC32 /* CommunicationInterface */,
 				A19889112C559B54007AAC32 /* CommunicationSource */,
 				A10D69332C971F760093BBAB /* WatchEngine */,
+				A171A72B2CC5029A002CFC1A /* LoggingKit */,
 			);
 			productName = "Watch App";
 			productReference = A185DB332B77C5F300B9318B /* reHydrate.app */;
@@ -1173,6 +1185,7 @@
 			packageReferences = (
 				A1CA3A1C2B5A5DD5009907EA /* XCRemoteSwiftPackageReference "CalendarKit" */,
 				A111533B2C179EA0001366FE /* XCLocalSwiftPackageReference "CommunicationKit" */,
+				A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */,
 			);
 			productRefGroup = 3378767424378A9400F5A732 /* Products */;
 			projectDirPath = "";
@@ -2144,6 +2157,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:PetterBraka/LoggingKit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.2.0;
+			};
+		};
 		A1CA3A1C2B5A5DD5009907EA /* XCRemoteSwiftPackageReference "CalendarKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PetterBraka/CalendarKit";
@@ -2178,6 +2199,26 @@
 		A16CBD982BB3524A00F5C914 /* TestHelper */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TestHelper;
+		};
+		A171A7272CC052A9002CFC1A /* LoggingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */;
+			productName = LoggingKit;
+		};
+		A171A7292CC5028C002CFC1A /* LoggingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */;
+			productName = LoggingKit;
+		};
+		A171A72B2CC5029A002CFC1A /* LoggingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */;
+			productName = LoggingKit;
+		};
+		A171A72D2CC502A6002CFC1A /* LoggingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A171A7262CC052A9002CFC1A /* XCRemoteSwiftPackageReference "LoggingKit" */;
+			productName = LoggingKit;
 		};
 		A185DB662B77C7A600B9318B /* PresentationWatchKit */ = {
 			isa = XCSwiftPackageProductDependency;

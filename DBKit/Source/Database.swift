@@ -5,23 +5,25 @@
 //  Created by Petter vang Brakalsvålet on 29/07/2023.
 //
 
-import OSLog
 import CoreData
+import LoggingKit
 import DBKitInterface
 
 public class Database: DatabaseType {
     private var backgroundContext: NSManagedObjectContext?
-    
     private let persistentContainer: NSPersistentContainer
     
-    public init(appGroup: String, inMemory: Bool = false) {
+    private let logger: LoggerServicing
+    
+    public init(appGroup: String, inMemory: Bool = false, logger: LoggerServicing) {
         let databaseName = "reHydrate"
+        self.logger = logger
         
         guard let objectModelURL = Bundle.module.url(forResource: databaseName, withExtension: "momd"),
               let objectModel = NSManagedObjectModel(contentsOf: objectModelURL)
         else {
             let message = "Failed to retrieve the database object model"
-            LoggingService.log(level: .error, message)
+            logger.log(category: .database, message: message, error: nil, level: .error)
             fatalError(message)
         }
         
@@ -29,7 +31,7 @@ public class Database: DatabaseType {
             .containerURL(forSecurityApplicationGroupIdentifier: appGroup)
         else {
             let message = "Failed to created shared file container."
-            LoggingService.log(level: .error, message)
+            logger.log(category: .database, message: message, error: nil, level: .error)
             fatalError(message)
         }
         let storeURL = storeContainer.appendingPathComponent("\(databaseName).sqlite")
@@ -45,10 +47,10 @@ public class Database: DatabaseType {
         persistentContainer.loadPersistentStores { description, error in
             if let error {
                 let message = "Failed to load persistent stores: \(error.localizedDescription)"
-                LoggingService.log(level: .error, message)
+                logger.log(category: .database, message: message, error: nil, level: .error)
                 fatalError(message)
             }
-            LoggingService.log(level: .debug, "Loaded persistent store: \(description)")
+            logger.log(category: .database, message: "Loaded store: \(description.type), " + String(describing: description.url), error: nil, level: .debug)
         }
     }
     
@@ -69,7 +71,7 @@ public class Database: DatabaseType {
         do {
             try context.save()
         } catch {
-            LoggingService.log(level: .debug, "Failed to save the context: \(error.localizedDescription)")
+            logger.log(category: .database, message: "Failed to save the context", error: error, level: .debug)
             throw error
         }
     }
@@ -94,7 +96,7 @@ public class Database: DatabaseType {
                     continuation.resume(throwing: DatabaseError.couldNotMapElement)
                 }
             } catch {
-                LoggingService.log(level: .error, "Couldn't fetch items: \(error)")
+                logger.log(category: .database, message: "Couldn't fetch items", error: error, level: .error)
                 continuation.resume(throwing: error)
             }
         }

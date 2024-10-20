@@ -25,7 +25,7 @@ extension Screen.Home {
             HasUserNotificationService &
             HasUserPreferenceService &
             HasNotificationCenter &
-            HasLoggingService &
+            HasLoggerService &
             HasDrinksService &
             HasHealthService &
             HasUnitService &
@@ -294,7 +294,12 @@ private extension Screen.Home.Presenter {
             await exportToHealth(consumed: diff)
             await updateViewModel(consumption: consumption)
         } catch {
-            engine.logger.error("Could not add drink of size \(drink.size)", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Could not add drink of size \(drink.size)",
+                error: error,
+                level: .error
+            )
         }
     }
     
@@ -305,7 +310,12 @@ private extension Screen.Home.Presenter {
             await exportToHealth(consumed: diff)
             await updateViewModel(consumption: consumption)
         } catch {
-            engine.logger.error("Could not remove drink of size \(drink.size)", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Could not remove drink of size \(drink.size)",
+                error: error,
+                level: .error
+            )
         }
     }
 }
@@ -319,7 +329,12 @@ private extension Screen.Home.Presenter {
         do {
             try await engine.healthService.requestAuth(toReadAndWrite: Set(healthData))
         } catch {
-            engine.logger.error("Could get access to health", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Could get access to health",
+                error: error,
+                level: .error
+            )
         }
     }
     
@@ -357,7 +372,12 @@ private extension Screen.Home.Presenter {
                                                   id: .dietaryWater,
                                                   date: engine.dateService.now())
         } catch {
-            engine.logger.error("Could not export to health \(litres)", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Could not export to health \(litres)",
+                error: error,
+                level: .error
+            )
         }
     }
     
@@ -376,7 +396,12 @@ private extension Screen.Home.Presenter {
                 to: unitSystem == .metric ? .litres : .pint
             )
         } catch {
-            engine.logger.error("Couldn't get health data", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Couldn't get health data",
+                error: error,
+                level: .error
+            )
             return 0
         }
     }
@@ -398,7 +423,12 @@ private extension Screen.Home.Presenter {
         do {
             try engine.userPreferenceService.set(data, for: .today)
         } catch {
-            engine.logger.error("Couldn't set widget data", error: error)
+            engine.logger.log(
+                category: .presentationKit,
+                message: "Couldn't set widget data",
+                error: error,
+                level: .error
+            )
         }
     }
 }

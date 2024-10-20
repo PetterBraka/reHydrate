@@ -20,7 +20,6 @@ public final class DayService: DayServiceType {
         HasDayManagerService &
         HasConsumptionManagerService &
         HasUnitService &
-        HasLoggingService &
         HasDateService &
         HasNotificationCenter
     )
