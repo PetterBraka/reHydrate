@@ -9,6 +9,7 @@ import XCTest
 @testable import DBKit
 import DBKitInterface
 import DBKitMocks
+import LoggingKit
 
 final class DayManagerTests: XCTestCase {
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
@@ -24,8 +25,9 @@ final class DayManagerTests: XCTestCase {
     var sut: DayManagerType!
     
     override func setUp() {
-        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true))
-        self.sut = DayManager(database: spy)
+        let logger = LoggerService(subsystem: "com.braka.test")
+        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true, logger: logger))
+        self.sut = DayManager(database: spy, logger: logger)
     }
 }
 

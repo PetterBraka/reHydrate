@@ -9,6 +9,7 @@ import XCTest
 @testable import DBKit
 import DBKitInterface
 import DBKitMocks
+import LoggingKit
 
 final class ConsumptionManagerTests: XCTestCase {
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
@@ -24,8 +25,9 @@ final class ConsumptionManagerTests: XCTestCase {
     var sut: ConsumptionManagerType!
     
     override func setUp() {
-        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true))
-        self.sut = ConsumptionManager(database: spy)
+        let logger = LoggerService(subsystem: "com.braka.test")
+        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true, logger: logger))
+        self.sut = ConsumptionManager(database: spy, logger: logger)
     }
     
     func test_add_one() async throws {

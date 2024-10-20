@@ -9,14 +9,16 @@ import XCTest
 @testable import DBKit
 import DBKitInterface
 import DBKitMocks
+import LoggingKit
 
 final class DrinkManagerTests: XCTestCase {
     var spy: DatabaseSpy<DrinkEntity, Database>!
     var sut: DrinkManagerType!
     
     override func setUp() {
-        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true))
-        self.sut = DrinkManager(database: spy)
+        let logger = LoggerService(subsystem: "com.braka.test")
+        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true, logger: logger))
+        self.sut = DrinkManager(database: spy, logger: logger)
     }
     
     func test_createNewDrink_success() async throws {
