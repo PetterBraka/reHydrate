@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 29/07/2023.
 //
 
-public struct DayModel: Equatable {
+public struct DayModel: Equatable, Sendable {
     public let id: String
     public let date: String
     public let consumed: Double

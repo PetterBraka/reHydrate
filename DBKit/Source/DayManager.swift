@@ -9,22 +9,27 @@ import CoreData
 import LoggingKit
 import DBKitInterface
 
-public final class DayManager {
-    private let database: DatabaseType
-    private let context: NSManagedObjectContext
+public final actor DayManager {
+    nonisolated private let database: DatabaseType
     private let logger: LoggerServicing
     
     public init(database: DatabaseType, logger: LoggerServicing) {
         self.database = database
-        self.context = database.open()
         self.logger = logger
+    }
+    
+    public func run<T>(
+        resultType: T.Type = T.self,
+        body: @MainActor @Sendable () throws -> T
+    ) async rethrows -> T where T : Sendable {
+        try await body()
     }
 }
 
 private extension DayManager {
     func fetchEntity(with date: Date) async throws -> DayEntity {
         let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
-        
+        let context = await database.open()
         let days: [DayEntity] = try await database.read(
             matching: predicate,
             sortBy: [.init(key: "date", ascending: true)],
@@ -38,6 +43,7 @@ private extension DayManager {
     }
     
     func fetchLastEntity() async throws -> DayEntity {
+        let context = await database.open()
         let days: [DayEntity] = try await database.read(
             matching: nil,
             sortBy: [.init(key: "date", ascending: false)],
@@ -66,6 +72,7 @@ private extension DayManager {
     }
     
     func fetchAllEntities() async throws -> [DayEntity] {
+        let context = await database.open()
         let days: [DayEntity] = try await database.read(
             matching: nil,
             sortBy: [.init(key: "date", ascending: true)],
@@ -78,63 +85,69 @@ private extension DayManager {
 }
  
 extension DayManager: DayManagerType {
-    public func createNewDay(date: Date, goal: Double) throws -> DayModel {
+    public func createNewDay(date: Date, goal: Double) async throws -> DayModel {
+        let context = await database.open()
         let newDay = DayEntity(context: context)
         newDay.id = UUID().uuidString
         newDay.date = DatabaseFormatter.date.string(from: date)
         newDay.consumed = 0
         newDay.goal = goal
-        try database.save(context)
+        try await database.save(context)
         logger.log(category: .dayDatabase, message: "Created \(newDay)", error: nil, level: .debug)
         
         return DayModel(from: newDay)
     }
     
     public func add(consumed: Double, toDayAt date: Date) async throws -> DayModel {
+        let context = await database.open()
         logger.log(category: .dayDatabase, message: "Adding \(consumed)", error: nil, level: .debug)
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed += consumed
-        try database.save(context)
+        try await database.save(context)
         logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
     public func remove(consumed: Double, fromDayAt date: Date) async throws -> DayModel {
+        let context = await database.open()
         logger.log(category: .dayDatabase, message: "Removing \(consumed)", error: nil, level: .debug)
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed -= consumed
         if dayToUpdate.consumed < 0 {
             dayToUpdate.consumed = 0
         }
-        try database.save(context)
+        try await database.save(context)
         logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
     public func add(goal: Double, toDayAt date: Date) async throws -> DayModel {
+        let context = await database.open()
         logger.log(category: .dayDatabase, message: "Removing \(goal)", error: nil, level: .debug)
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal += goal
-        try database.save(context)
+        try await database.save(context)
         logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
     public func remove(goal: Double, fromDayAt date: Date) async throws -> DayModel {
+        let context = await database.open()
         logger.log(category: .dayDatabase, message: "Removing \(goal)", error: nil, level: .debug)
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal -= goal
         if dayToUpdate.goal < 0 {
             dayToUpdate.goal = 0
         }
-        try database.save(context)
+        try await database.save(context)
         logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
-    private func delete(_ day: DayEntity) throws {
+    private func delete(_ day: DayEntity) async throws {
+        let context = await database.open()
         context.delete(day)
-        try database.save(context)
+        try await database.save(context)
         logger.log(category: .dayDatabase, message: "Deleted \(day)", error: nil, level: .debug)
     }
     
@@ -144,18 +157,18 @@ extension DayManager: DayManagerType {
             throw DatabaseError.deletingElement
         }
         let dayToDelete = try await fetchEntity(with: date)
-        try delete(dayToDelete)
+        try await delete(dayToDelete)
     }
     
     public func deleteDay(at date: Date) async throws {
         let dayToDelete = try await fetchEntity(with: date)
-        try delete(dayToDelete)
+        try await delete(dayToDelete)
     }
     
     public func deleteDays(in range: ClosedRange<Date>) async throws {
         let days = try await fetchEntities(between: range)
         for day in days {
-            try delete(day)
+            try await delete(day)
         }
     }
     
@@ -200,3 +213,5 @@ extension DayEntity {
         "goal:\(goal))"
     }
 }
+
+extension DayEntity: @unchecked Sendable {}

@@ -8,12 +8,12 @@
 import DBKitInterface
 
 package extension DayModel {
-    static var `default` = DayModel(id: "", date: "", consumed: 0, goal: 0)
+    static let `default` = DayModel(id: "", date: "", consumed: 0, goal: 0)
 }
 package extension Result where Success == DayModel, Failure == Error {
-    static var `default` = Result<Success, Failure>.success(.default)
+    static let `default` = Result<Success, Failure>.success(.default)
 }
 
 package extension Result where Success == [DayModel], Failure == Error {
-    static var `default` = Result<Success, Failure>.success([.default])
+    static let `default` = Result<Success, Failure>.success([.default])
 }
