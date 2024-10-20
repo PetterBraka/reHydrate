@@ -19,7 +19,7 @@ let package = Package(
     dependencies: [
         .package(path: "../EngineKit"),
         .package(path: "../TestHelper"),
-        .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.1.0"),
+        .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.2.0"),
     ],
     targets: [
         .target(

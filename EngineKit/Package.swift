@@ -21,7 +21,7 @@ let package: Package = {
             .package(name: "DBKit", path: "../DBKit"),
             .package(name: "TestHelper", path: "../TestHelper"),
             .package(name: "CommunicationKit", path: "../CommunicationKit"),
-            .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.1.0"),
+            .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.2.0"),
         ],
         targets: [
             .target(

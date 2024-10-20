@@ -13,8 +13,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:PetterBraka/LoggingKit.git",
       "state" : {
-        "revision" : "a9f4feaa694c8f8a7a843c585220625849a40fdd",
-        "version" : "1.1.0"
+        "revision" : "1887e55caab70156ef52b52e0a8ef6aa0b9ba6a7",
+        "version" : "1.2.0"
       }
     }
   ],

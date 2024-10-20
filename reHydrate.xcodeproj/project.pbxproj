@@ -2162,7 +2162,7 @@
 			repositoryURL = "git@github.com:PetterBraka/LoggingKit.git";
 			requirement = {
 				kind = exactVersion;
-				version = 1.1.0;
+				version = 1.2.0;
 			};
 		};
 		A1CA3A1C2B5A5DD5009907EA /* XCRemoteSwiftPackageReference "CalendarKit" */ = {
