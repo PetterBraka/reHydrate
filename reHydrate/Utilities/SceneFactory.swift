@@ -58,7 +58,7 @@ public final class SceneFactory: ObservableObject {
         let appGroup = "group.com.braka.reHydrate.shared"
         let phoneSession = WCSession.default
         let logger = LoggerService(subsystem: subsystem)
-        logger.enable(.database)
+        logger.set(levels: .info, .default, .error, .fault)
         
         engine = Engine(
             appGroup: appGroup,
