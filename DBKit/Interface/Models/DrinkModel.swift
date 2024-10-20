@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 05/10/2023.
 //
 
-public struct DrinkModel: Equatable {
+public struct DrinkModel: Equatable, Sendable {
     public let id: String
     public let container: String
     public let size: Double
