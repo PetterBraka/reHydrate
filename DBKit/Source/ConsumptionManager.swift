@@ -34,7 +34,7 @@ extension ConsumptionManager: ConsumptionManagerType {
         newEntry.time = DatabaseFormatter.time.string(from: date)
         newEntry.consumed = consumed
         try database.save(context)
-        logger.log(category: .consumptionDatabase, message: "Created consumption \(newEntry)", error: nil, level: .debug)
+        logger.log(category: .consumptionDatabase, message: "Created \(newEntry)", error: nil, level: .debug)
         
         return ConsumptionModel(from: newEntry)
     }
@@ -42,7 +42,6 @@ extension ConsumptionManager: ConsumptionManagerType {
     private func delete(_ entity: ConsumptionEntity) throws {
         context.delete(entity)
         try database.save(context)
-        logger.log(category: .consumptionDatabase, message: "Deleted consumption \(entity)", error: nil, level: .debug)
     }
     
     public func delete(_ entry: ConsumptionModel) async throws {
@@ -54,9 +53,9 @@ extension ConsumptionManager: ConsumptionManagerType {
             sortBy: nil,
             limit: 1,
             context)
-        logger.log(category: .consumptionDatabase, message: "Found consumption \(entries)", error: nil, level: .debug)
         guard let entry = entries.first else { return }
         try delete(entry)
+        logger.log(category: .consumptionDatabase, message: "Deleting \(entry)", error: nil, level: .debug)
     }
 
     public func fetchAll(at date: Date) async throws -> [ConsumptionModel] {
@@ -66,7 +65,7 @@ extension ConsumptionManager: ConsumptionManagerType {
             sortBy: [NSSortDescriptor(key: "time", ascending: true)],
             limit: nil,
             context)
-        logger.log(category: .consumptionDatabase, message: "Found consumption \(entries)", error: nil, level: .debug)
+        logger.log(category: .consumptionDatabase, message: "Found \(entries)", error: nil, level: .debug)
         return entries.compactMap { .init(from: $0) }
     }
     
@@ -86,7 +85,7 @@ extension ConsumptionManager: ConsumptionManagerType {
                 return lhsDate > rhsDate
             }
         }
-        logger.log(category: .consumptionDatabase, message: "Found consumption \(entries)", error: nil, level: .debug)
+        logger.log(category: .consumptionDatabase, message: "Found \(entries)", error: nil, level: .debug)
         return entries.compactMap { .init(from: $0) }
     }
 }
@@ -102,10 +101,10 @@ package extension ConsumptionModel {
 
 extension ConsumptionEntity {
     public override var description: String {
-        "Consumption: \n\t" +
-        "id:\(id ?? "No id")\n\t" +
-        "date:\(date ?? "No date")\n\t" +
-        "time:\(time ?? "No time")\n\t" +
-        "consumed:\(consumed)\n"
+        "Consumption(" +
+        "id:\(id ?? "No id"), " +
+        "date:\(date ?? "No date"), " +
+        "time:\(time ?? "No time"), " +
+        "consumed:\(consumed))"
     }
 }

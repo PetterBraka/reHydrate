@@ -50,7 +50,7 @@ public class Database: DatabaseType {
                 logger.log(category: .database, message: message, error: nil, level: .error)
                 fatalError(message)
             }
-            logger.log(category: .database, message: "Loaded persistent store: \(description)", error: nil, level: .debug)
+            logger.log(category: .database, message: "Loaded store: \(description.type), " + String(describing: description.url), error: nil, level: .debug)
         }
     }
     

@@ -29,7 +29,6 @@ private extension DrinkManager {
             sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: 1,
             context)
-        logger.log(category: .drinkDatabase, message: "Found drink \(drinks)", error: nil, level: .debug)
         guard let drink = drinks.first
         else {
             throw DatabaseError.noElementFound
@@ -43,7 +42,6 @@ private extension DrinkManager {
             sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
             limit: nil,
             context)
-        logger.log(category: .drinkDatabase, message: "Found drink \(drinks)", error: nil, level: .debug)
         return drinks
     }
 }
@@ -84,6 +82,7 @@ extension DrinkManager: DrinkManagerType {
             limit: 1,
             context
         )
+        logger.log(category: .drinkDatabase, message: "Deleting \(drinks)", error: nil, level: .debug)
         for drink in drinks {
             try delete(drink)
         }
@@ -91,23 +90,28 @@ extension DrinkManager: DrinkManagerType {
     
     public func deleteDrink(container: String) async throws {
         let drink = try await fetchEntity(container)
+        logger.log(category: .drinkDatabase, message: "Deleting \(drink)", error: nil, level: .debug)
         try delete(drink)
     }
     
     public func deleteAll() async throws {
         let drinks = try await fetchAllEntity()
+        logger.log(category: .drinkDatabase, message: "Deleting \(drinks)", error: nil, level: .debug)
         for drink in drinks {
             try delete(drink)
         }
     }
     
     public func fetch(_ container: String) async throws -> DrinkModel {
-        try await DrinkModel(from: fetchEntity(container))
+        let drink = try await fetchEntity(container)
+        logger.log(category: .drinkDatabase, message: "Found drink \(drink)", error: nil, level: .debug)
+        return DrinkModel(from: drink)
     }
     
     public func fetchAll() async throws -> [DrinkModel] {
-        try await fetchAllEntity()
-        .compactMap { .init(from: $0) }
+        let drinks = try await fetchAllEntity()
+        logger.log(category: .drinkDatabase, message: "Found \(drinks)", error: nil, level: .debug)
+        return drinks.compactMap { .init(from: $0) }
     }
 }
 
@@ -121,9 +125,9 @@ package extension DrinkModel {
 
 extension DrinkEntity {
     public override var description: String {
-        "Drink: \n\t" +
-        "id:\(id ?? "No id")\n\t" +
-        "amount:\(amount)\n\t" +
-        "container:\(container ?? "No container")\n"
+        "Drink(" +
+        "id:\(id ?? "No id"), " +
+        "amount:\(amount), " +
+        "container:\(container ?? "No container"))"
     }
 }

@@ -30,7 +30,6 @@ private extension DayManager {
             sortBy: [.init(key: "date", ascending: true)],
             limit: nil,
             context)
-        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
         guard let day = days.first
         else {
             throw DatabaseError.noElementFound
@@ -92,33 +91,37 @@ extension DayManager: DayManagerType {
     }
     
     public func add(consumed: Double, toDayAt date: Date) async throws -> DayModel {
+        logger.log(category: .dayDatabase, message: "Adding \(consumed)", error: nil, level: .debug)
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed += consumed
         try database.save(context)
-        logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
+        logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
     public func remove(consumed: Double, fromDayAt date: Date) async throws -> DayModel {
+        logger.log(category: .dayDatabase, message: "Removing \(consumed)", error: nil, level: .debug)
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.consumed -= consumed
         if dayToUpdate.consumed < 0 {
             dayToUpdate.consumed = 0
         }
         try database.save(context)
-        logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
+        logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
     public func add(goal: Double, toDayAt date: Date) async throws -> DayModel {
+        logger.log(category: .dayDatabase, message: "Removing \(goal)", error: nil, level: .debug)
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal += goal
         try database.save(context)
-        logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
+        logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
         return DayModel(from: dayToUpdate)
     }
     
     public func remove(goal: Double, fromDayAt date: Date) async throws -> DayModel {
+        logger.log(category: .dayDatabase, message: "Removing \(goal)", error: nil, level: .debug)
         let dayToUpdate = try await fetchEntity(with: date)
         dayToUpdate.goal -= goal
         if dayToUpdate.goal < 0 {
@@ -190,10 +193,10 @@ package extension DayModel {
 
 extension DayEntity {
     public override var description: String {
-        "Day: \n\t" +
-        "id:\(id ?? "No id")\n\t" +
-        "date:\(date ?? "No date")\n\t" +
-        "consumed:\(consumed)\n\t" +
-        "goal:\(goal)\n"
+        "Day(" +
+        "id:\(id?.suffix(12) ?? "No id"), " +
+        "date:\(date ?? "No date"), " +
+        "consumed:\(consumed), " +
+        "goal:\(goal))"
     }
 }
