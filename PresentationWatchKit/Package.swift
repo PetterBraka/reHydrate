@@ -18,7 +18,8 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../EngineKit"),
-        .package(path: "../TestHelper")
+        .package(path: "../TestHelper"),
+        .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.1.0"),
     ],
     targets: [
         .target(
@@ -31,6 +32,9 @@ let package = Package(
         ),
         .target(
             name: "PresentationWatchInterface",
+            dependencies: [
+                .product(name: "LoggingKit", package: "LoggingKit"),
+            ],
             path: "Interface"
         ),
         .testTarget(

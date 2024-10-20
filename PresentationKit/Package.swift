@@ -19,18 +19,22 @@ let package: Package = {
         dependencies: [
             .package(path: "../EngineKit"),
             .package(name: "TestHelper", path: "../TestHelper"),
+            .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.1.0"),
         ],
         targets: [
             .target(
                 name: "PresentationKit",
                 dependencies: [
                     "PresentationInterface",
-                    .product(name: "EngineKit", package: "EngineKit")
+                    .product(name: "EngineKit", package: "EngineKit"),
                 ],
                 path: "Source"
             ),
             .target(
                 name: "PresentationInterface",
+                dependencies: [
+                    .product(name: "LoggingKit", package: "LoggingKit"),
+                ],
                 path: "Interface"
             ),
             .testTarget(
