@@ -65,7 +65,15 @@ extension Screen.Home {
             engine.phoneComms.addObserver { [weak self] in
                 Task(priority: .background) { [weak self] in
                     guard let self else { return }
-                    await self.dataDidChange()
+                    var today = await self.engine.dayService.getToday()
+                    await self.syncDayWithHealth(with: &today)
+                    await self.updateViewModel(
+                        date: today.date,
+                        consumption: today.consumed,
+                        goal: today.goal,
+                        drinks: self.getDrinks()
+                    )
+                    await self.setWidgetData()
                 }
             }
         }
@@ -77,15 +85,14 @@ extension Screen.Home {
         public func perform(action: Home.Action) async {
             switch action {
             case .didAppear, .didBecomeActive:
-                let today = await engine.dayService.getToday()
-                await syncDayWithHealth()
-                let drinks = await getDrinks()
+                var today = await engine.dayService.getToday()
+                await syncDayWithHealth(with: &today)
                 
                 await updateViewModel(
                     date: today.date,
                     consumption: today.consumed,
                     goal: today.goal,
-                    drinks: drinks
+                    drinks: getDrinks()
                 )
             case .didBackground:
                 break
@@ -115,25 +122,25 @@ extension Screen.Home {
                 ))
             case let .didTapAddDrink(drink):
                 await addDrink(drink)
-                await dataDidChange()
+                
+                let today = await engine.dayService.getToday()
+                await updateViewModel(
+                    date: today.date,
+                    consumption: today.consumed,
+                    goal: today.goal,
+                    drinks: getDrinks()
+                )
             case let .didTapRemoveDrink(drink):
                 await removeDrink(drink)
-                await dataDidChange()
+                
+                let today = await engine.dayService.getToday()
+                await updateViewModel(
+                    date: today.date,
+                    consumption: today.consumed,
+                    goal: today.goal,
+                    drinks: getDrinks()
+                )
             }
-        }
-        
-        private func dataDidChange() async {
-            let today = await engine.dayService.getToday()
-            let drinks = await getDrinks()
-            await updateViewModel(
-                date: today.date,
-                consumption: today.consumed,
-                goal: today.goal,
-                drinks: drinks
-            )
-            
-            await engine.phoneComms.sendDataToWatch()
-            await setWidgetData()
         }
     }
 }
@@ -252,8 +259,14 @@ private extension Screen.Home.Presenter {
     func addDrink(_ drink: ViewModel.Drink) async {
         do {
             let consumption = try await engine.dayService.add(drink: .init(from: drink))
-            let diff = consumption - viewModel.consumption
-            await exportToHealth(consumed: diff)
+            let unitSystem = engine.unitService.getUnitSystem()
+            let value = engine.unitService.convert(
+                drink.size,
+                from: unitSystem == .metric ? .millilitres : .ounces,
+                to: .litres
+            )
+            await exportToHealth(consumed: value)
+            await engine.phoneComms.sendDataToWatch()
             await updateViewModel(consumption: consumption)
         } catch {
             engine.logger.log(
@@ -268,8 +281,14 @@ private extension Screen.Home.Presenter {
     func removeDrink(_ drink: ViewModel.Drink) async {
         do {
             let consumption = try await engine.dayService.remove(drink: .init(from: drink))
-            let diff = consumption - viewModel.consumption
-            await exportToHealth(consumed: diff)
+            let unitSystem = engine.unitService.getUnitSystem()
+            let value = engine.unitService.convert(
+                drink.size,
+                from: unitSystem == .metric ? .millilitres : .ounces,
+                to: .litres
+            )
+            await exportToHealth(consumed: value)
+            await engine.phoneComms.sendDataToWatch()
             await updateViewModel(consumption: consumption)
         } catch {
             engine.logger.log(
@@ -300,26 +319,27 @@ private extension Screen.Home.Presenter {
         }
     }
     
-    func syncDayWithHealth() async {
-        guard engine.healthService.isSupported else { return }
-        await requestHealthAccessIfNeeded()
-        let day = await engine.dayService.getToday()
-        let healthTotal = await getHealthTotal()
+    func syncDayWithHealth(with day: inout Day) async {
+        guard let healthTotal = try? await getHealthTotal()
+        else { return }
         let diff = healthTotal - day.consumed
         let unitSystem = engine.unitService.getUnitSystem()
         let size = engine.unitService.convert(
             abs(diff),
             from: .litres,
-            to: unitSystem == .metric ? .millilitres : .ounces
+            to: unitSystem == .metric ? .litres : .pint
         )
         let drink = Drink(id: "health-\(UUID().uuidString)", size: size, container: .health)
         
+        guard diff != 0 else { return }
         do {
+            let updatedConsumption: Double
             if diff > 0 {
-                _ = try await engine.dayService.add(drink: drink)
+                updatedConsumption = try await engine.dayService.add(drink: drink)
             } else {
-                _ = try await engine.dayService.remove(drink: drink)
+                updatedConsumption = try await engine.dayService.remove(drink: drink)
             }
+            day.consumed = updatedConsumption
         } catch {
             engine.logger.log(
                 category: .healthService,
@@ -354,10 +374,11 @@ private extension Screen.Home.Presenter {
         }
     }
     
-    func getHealthTotal() async -> Double {
+    func getHealthTotal() async throws -> Double {
         do {
-            let start = engine.dateService.getStart(of: engine.dateService.now())
-            let end = engine.dateService.getEnd(of: engine.dateService.now())
+            let now = engine.dateService.now()
+            let start = engine.dateService.getStart(of: now)
+            let end = engine.dateService.getEnd(of: now)
             let sum = try await engine.healthService.readSum(
                 .water(.litre), start: start, end: end,
                 intervalComponents: .init(day: 1)
@@ -375,7 +396,7 @@ private extension Screen.Home.Presenter {
                 error: error,
                 level: .error
             )
-            return 0
+            throw error
         }
     }
 }
