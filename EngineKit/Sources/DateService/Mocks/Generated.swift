@@ -84,14 +84,14 @@ extension DateServiceTypeSpy.VariableName: CustomStringConvertible {
 extension DateServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .now: "now("
-        case .daysBetweenStartEnd(let start, let end): "daysBetween(\(String(describing: start)), )\(String(describing: end)))"
-        case .getComponentDate(let component, let date): "get(\(String(describing: component)), )\(String(describing: date)))"
-        case .getDateValueComponentDate(let value, let component, let date): "getDate(\(String(describing: value)), )\(String(describing: component)), )\(String(describing: date)))"
+        case .now: "now"
+        case .daysBetweenStartEnd(let start, let end): "daysBetween(\(String(describing: start)), \(String(describing: end)))"
+        case .getComponentDate(let component, let date): "get(\(String(describing: component)), \(String(describing: date)))"
+        case .getDateValueComponentDate(let value, let component, let date): "getDate(\(String(describing: value)), \(String(describing: component)), \(String(describing: date)))"
         case .getStartDate(let date): "getStart(\(String(describing: date)))"
         case .getEndDate(let date): "getEnd(\(String(describing: date)))"
-        case .isDateDateInSameDayAs(let date, let inSameDayAs): "isDate(\(String(describing: date)), )\(String(describing: inSameDayAs)))"
-        case .dateHoursMinutesSecondsDate(let hours, let minutes, let seconds, let date): "date(\(String(describing: hours)), )\(String(describing: minutes)), )\(String(describing: seconds)), )\(String(describing: date)))"
+        case .isDateDateInSameDayAs(let date, let inSameDayAs): "isDate(\(String(describing: date)), \(String(describing: inSameDayAs)))"
+        case .dateHoursMinutesSecondsDate(let hours, let minutes, let seconds, let date): "date(\(String(describing: hours)), \(String(describing: minutes)), \(String(describing: seconds)), \(String(describing: date)))"
         }
     }
 }

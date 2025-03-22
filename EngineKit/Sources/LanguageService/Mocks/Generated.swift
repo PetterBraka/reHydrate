@@ -60,8 +60,8 @@ extension LanguageServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .setLanguageLanguage(let language): "setLanguage(\(String(describing: language)))"
-        case .getSelectedLanguage: "getSelectedLanguage("
-        case .getLanguageOptions: "getLanguageOptions("
+        case .getSelectedLanguage: "getSelectedLanguage"
+        case .getLanguageOptions: "getLanguageOptions"
         }
     }
 }

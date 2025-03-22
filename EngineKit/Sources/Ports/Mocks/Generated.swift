@@ -59,9 +59,9 @@ extension AlternateIconsServiceTypeSpy.VariableName: CustomStringConvertible {
 extension AlternateIconsServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .supportsAlternateIcons: "supportsAlternateIcons("
+        case .supportsAlternateIcons: "supportsAlternateIcons"
         case .setAlternateIconIconName(let iconName): "setAlternateIcon(\(String(describing: iconName)))"
-        case .getAlternateIcon: "getAlternateIcon("
+        case .getAlternateIcon: "getAlternateIcon"
         }
     }
 }
@@ -116,7 +116,7 @@ extension AppearancePortTypeSpy.VariableName: CustomStringConvertible {
 extension AppearancePortTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .getStyle: "getStyle("
+        case .getStyle: "getStyle"
         case .setStyleStyle(let style): "setStyle(\(String(describing: style)))"
         }
     }
@@ -208,10 +208,10 @@ extension HealthInterfaceSpy.MethodCall: CustomStringConvertible {
         case .shouldRequestAccessHealthDataType(let healthDataType): "shouldRequestAccess(\(String(describing: healthDataType)))"
         case .canWriteDataType(let dataType): "canWrite(\(String(describing: dataType)))"
         case .requestAuthReadAndWrite(let readAndWrite): "requestAuth(\(String(describing: readAndWrite)))"
-        case .exportQuantityIdDate(let quantity, let id, let date): "export(\(String(describing: quantity)), )\(String(describing: id)), )\(String(describing: date)))"
-        case .readSumDataStartEndIntervalComponents(let data, let start, let end, let intervalComponents): "readSum(\(String(describing: data)), )\(String(describing: start)), )\(String(describing: end)), )\(String(describing: intervalComponents)))"
-        case .readSamplesDataStartEnd(let data, let start, let end): "readSamples(\(String(describing: data)), )\(String(describing: start)), )\(String(describing: end)))"
-        case .enableBackgroundDeliveryHealthDataFrequency(let healthData, let frequency): "enableBackgroundDelivery(\(String(describing: healthData)), )\(String(describing: frequency)))"
+        case .exportQuantityIdDate(let quantity, let id, let date): "export(\(String(describing: quantity)), \(String(describing: id)), \(String(describing: date)))"
+        case .readSumDataStartEndIntervalComponents(let data, let start, let end, let intervalComponents): "readSum(\(String(describing: data)), \(String(describing: start)), \(String(describing: end)), \(String(describing: intervalComponents)))"
+        case .readSamplesDataStartEnd(let data, let start, let end): "readSamples(\(String(describing: data)), \(String(describing: start)), \(String(describing: end)))"
+        case .enableBackgroundDeliveryHealthDataFrequency(let healthData, let frequency): "enableBackgroundDelivery(\(String(describing: healthData)), \(String(describing: frequency)))"
         }
     }
 }
@@ -275,7 +275,7 @@ extension OpenUrlInterfaceSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .openUrl(let url): "open(\(String(describing: url)))"
-        case .emailEmailCcBccSubjectBody(let email, let cc, let bcc, let subject, let body): "email(\(String(describing: email)), )\(String(describing: cc)), )\(String(describing: bcc)), )\(String(describing: subject)), )\(String(describing: body)))"
+        case .emailEmailCcBccSubjectBody(let email, let cc, let bcc, let subject, let body): "email(\(String(describing: email)), \(String(describing: cc)), \(String(describing: bcc)), \(String(describing: subject)), \(String(describing: body)))"
         }
     }
 }

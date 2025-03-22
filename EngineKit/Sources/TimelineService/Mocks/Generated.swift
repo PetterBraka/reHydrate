@@ -55,7 +55,7 @@ extension TimelineServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .getTimelineDate(let date): "getTimeline(\(String(describing: date)))"
-        case .getTimelineCollection: "getTimelineCollection("
+        case .getTimelineCollection: "getTimelineCollection"
         }
     }
 }

@@ -54,7 +54,7 @@ extension UserPreferenceServiceTypeSpy.VariableName: CustomStringConvertible {
 extension UserPreferenceServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .setValueKey(let value, let key): "set(\(String(describing: value)), )\(String(describing: key)))"
+        case .setValueKey(let value, let key): "set(\(String(describing: value)), \(String(describing: key)))"
         case .getKey(let key): "get(\(String(describing: key)))"
         }
     }

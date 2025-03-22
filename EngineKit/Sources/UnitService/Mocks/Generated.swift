@@ -60,8 +60,8 @@ extension UnitServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .setUnitSystem(let unitSystem): "set(\(String(describing: unitSystem)))"
-        case .getUnitSystem: "getUnitSystem("
-        case .convertValueFromUnitToUnit(let value, let fromUnit, let toUnit): "convert(\(String(describing: value)), )\(String(describing: fromUnit)), )\(String(describing: toUnit)))"
+        case .getUnitSystem: "getUnitSystem"
+        case .convertValueFromUnitToUnit(let value, let fromUnit, let toUnit): "convert(\(String(describing: value)), \(String(describing: fromUnit)), \(String(describing: toUnit)))"
         }
     }
 }

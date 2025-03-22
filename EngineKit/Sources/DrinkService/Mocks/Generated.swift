@@ -69,11 +69,11 @@ extension DrinkServiceTypeSpy.VariableName: CustomStringConvertible {
 extension DrinkServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .addSizeContainer(let size, let container): "add(\(String(describing: size)), )\(String(describing: container)))"
-        case .editSizeDrink(let size, let drink): "edit(\(String(describing: size)), )\(String(describing: drink)))"
+        case .addSizeContainer(let size, let container): "add(\(String(describing: size)), \(String(describing: container)))"
+        case .editSizeDrink(let size, let drink): "edit(\(String(describing: size)), \(String(describing: drink)))"
         case .removeContainer(let container): "remove(\(String(describing: container)))"
-        case .getSaved: "getSaved("
-        case .resetToDefault: "resetToDefault("
+        case .getSaved: "getSaved"
+        case .resetToDefault: "resetToDefault"
         }
     }
 }

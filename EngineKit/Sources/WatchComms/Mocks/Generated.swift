@@ -64,10 +64,10 @@ extension WatchCommsTypeSpy.VariableName: CustomStringConvertible {
 extension WatchCommsTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .setAppContext: "setAppContext("
-        case .sendDataToPhone: "sendDataToPhone("
+        case .setAppContext: "setAppContext"
+        case .sendDataToPhone: "sendDataToPhone"
         case .addObserverUpdateBlock(let updateBlock): "addObserver(\(String(describing: updateBlock)))"
-        case .removeObserver: "removeObserver("
+        case .removeObserver: "removeObserver"
         }
     }
 }

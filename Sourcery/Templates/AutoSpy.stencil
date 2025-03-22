@@ -113,12 +113,14 @@ extension {{ protocol.name }}Spy.MethodCall: CustomStringConvertible {
                 let {{ param.name }}
                 {%- if forloop.last -%}){% else %}, {% endif -%}
             {%- endif -%}
-            {%- endfor -%}: "{{ method.callName }}(
+            {%- endfor -%}: "{{ method.callName }}
             {%- for param in method.parameters -%}
+            {%- if forloop.first -%}({% endif %}
                 {%- if param.name != nil -%}
                     \(String(describing: {{ param.name }}))
                     {%- if forloop.last -%}{% else %}, {% endif -%}
-                {%- endif -%})
+                {%- endif -%}
+            {%- if forloop.last -%}){% endif %}
             {%- endfor -%}"
         {% endfor %}
         }

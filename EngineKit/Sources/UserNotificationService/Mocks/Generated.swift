@@ -99,16 +99,16 @@ extension UserNotificationCenterTypeSpy.VariableName: CustomStringConvertible {
 extension UserNotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .requestAuthorization: "requestAuthorization("
+        case .requestAuthorization: "requestAuthorization"
         case .setNotificationCategoriesCategories(let categories): "setNotificationCategories(\(String(describing: categories)))"
-        case .notificationCategories: "notificationCategories("
+        case .notificationCategories: "notificationCategories"
         case .addRequest(let request): "add(\(String(describing: request)))"
-        case .pendingNotificationRequests: "pendingNotificationRequests("
+        case .pendingNotificationRequests: "pendingNotificationRequests"
         case .removePendingNotificationRequestsIdentifiers(let identifiers): "removePendingNotificationRequests(\(String(describing: identifiers)))"
-        case .removeAllPendingNotificationRequests: "removeAllPendingNotificationRequests("
-        case .deliveredNotifications: "deliveredNotifications("
+        case .removeAllPendingNotificationRequests: "removeAllPendingNotificationRequests"
+        case .deliveredNotifications: "deliveredNotifications"
         case .removeDeliveredNotificationsIdentifiers(let identifiers): "removeDeliveredNotifications(\(String(describing: identifiers)))"
-        case .removeAllDeliveredNotifications: "removeAllDeliveredNotifications("
+        case .removeAllDeliveredNotifications: "removeAllDeliveredNotifications"
         case .setBadgeCountNewBadgeCount(let newBadgeCount): "setBadgeCount(\(String(describing: newBadgeCount)))"
         }
     }
@@ -169,9 +169,9 @@ extension UserNotificationDelegateTypeSpy.VariableName: CustomStringConvertible 
 extension UserNotificationDelegateTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .userNotificationCenterCenterResponse(let center, let response): "userNotificationCenter(\(String(describing: center)), )\(String(describing: response)))"
-        case .userNotificationCenterCenterWillPresent(let center, let willPresent): "userNotificationCenter(\(String(describing: center)), )\(String(describing: willPresent)))"
-        case .userNotificationCenterCenterOpenSettingsFor(let center, let openSettingsFor): "userNotificationCenter(\(String(describing: center)), )\(String(describing: openSettingsFor)))"
+        case .userNotificationCenterCenterResponse(let center, let response): "userNotificationCenter(\(String(describing: center)), \(String(describing: response)))"
+        case .userNotificationCenterCenterWillPresent(let center, let willPresent): "userNotificationCenter(\(String(describing: center)), \(String(describing: willPresent)))"
+        case .userNotificationCenterCenterOpenSettingsFor(let center, let openSettingsFor): "userNotificationCenter(\(String(describing: center)), \(String(describing: openSettingsFor)))"
         }
     }
 }
@@ -244,10 +244,10 @@ extension UserNotificationServiceTypeSpy.VariableName: CustomStringConvertible {
 extension UserNotificationServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .enableWithFrequencyStartStop(let withFrequency, let start, let stop): "enable(\(String(describing: withFrequency)), )\(String(describing: start)), )\(String(describing: stop)))"
-        case .disable: "disable("
-        case .celebrate: "celebrate("
-        case .getSettings: "getSettings("
+        case .enableWithFrequencyStartStop(let withFrequency, let start, let stop): "enable(\(String(describing: withFrequency)), \(String(describing: start)), \(String(describing: stop)))"
+        case .disable: "disable"
+        case .celebrate: "celebrate"
+        case .getSettings: "getSettings"
         }
     }
 }

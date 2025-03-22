@@ -60,8 +60,8 @@ extension NotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .postName(let name): "post(\(String(describing: name)))"
-        case .addObserverObserverNameSelectorObject(let observer, let name, let selector, let object): "addObserver(\(String(describing: observer)), )\(String(describing: name)), )\(String(describing: selector)), )\(String(describing: object)))"
-        case .removeObserverObserverName(let observer, let name): "removeObserver(\(String(describing: observer)), )\(String(describing: name)))"
+        case .addObserverObserverNameSelectorObject(let observer, let name, let selector, let object): "addObserver(\(String(describing: observer)), \(String(describing: name)), \(String(describing: selector)), \(String(describing: object)))"
+        case .removeObserverObserverName(let observer, let name): "removeObserver(\(String(describing: observer)), \(String(describing: name)))"
         }
     }
 }

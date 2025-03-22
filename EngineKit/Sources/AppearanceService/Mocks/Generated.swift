@@ -54,7 +54,7 @@ extension AppearanceServiceTypeSpy.VariableName: CustomStringConvertible {
 extension AppearanceServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .getAppearance: "getAppearance("
+        case .getAppearance: "getAppearance"
         case .setAppearanceAppearance(let appearance): "setAppearance(\(String(describing: appearance)))"
         }
     }

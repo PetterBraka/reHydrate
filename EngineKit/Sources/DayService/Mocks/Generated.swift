@@ -75,7 +75,7 @@ extension DayServiceTypeSpy.VariableName: CustomStringConvertible {
 extension DayServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .getToday: "getToday("
+        case .getToday: "getToday"
         case .getDaysDates(let dates): "getDays(\(String(describing: dates)))"
         case .addDrink(let drink): "add(\(String(describing: drink)))"
         case .removeDrink(let drink): "remove(\(String(describing: drink)))"

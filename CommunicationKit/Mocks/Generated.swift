@@ -151,11 +151,11 @@ extension PhoneServiceTypeSpy.VariableName: CustomStringConvertible {
 extension PhoneServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .isSupported: "isSupported("
-        case .activate: "activate("
+        case .isSupported: "isSupported"
+        case .activate: "activate"
         case .updateApplicationContext(let applicationContext): "update(\(String(describing: applicationContext)))"
-        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(\(String(describing: message)), )\(String(describing: errorHandler)))"
-        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(\(String(describing: data)), )\(String(describing: errorHandler)))"
+        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(\(String(describing: message)), \(String(describing: errorHandler)))"
+        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(\(String(describing: data)), \(String(describing: errorHandler)))"
         case .transferComplicationUserInfo(let userInfo): "transferComplication(\(String(describing: userInfo)))"
         case .transferUserInfo(let userInfo): "transfer(\(String(describing: userInfo)))"
         }
@@ -272,11 +272,11 @@ extension WatchServiceTypeSpy.VariableName: CustomStringConvertible {
 extension WatchServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .isSupported: "isSupported("
-        case .activate: "activate("
+        case .isSupported: "isSupported"
+        case .activate: "activate"
         case .updateApplicationContext(let applicationContext): "update(\(String(describing: applicationContext)))"
-        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(\(String(describing: message)), )\(String(describing: errorHandler)))"
-        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(\(String(describing: data)), )\(String(describing: errorHandler)))"
+        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(\(String(describing: message)), \(String(describing: errorHandler)))"
+        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(\(String(describing: data)), \(String(describing: errorHandler)))"
         case .sendUserInfoUserInfo(let userInfo): "sendUserInfo(\(String(describing: userInfo)))"
         }
     }
