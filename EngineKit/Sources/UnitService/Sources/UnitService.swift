@@ -14,7 +14,6 @@ import NotificationCenterServiceInterface
 public final class UnitService: UnitServiceType {
     public typealias Engine = (
         HasUserPreferenceService &
-        HasNotificationCenter &
         HasLoggerService
     )
     
@@ -27,7 +26,6 @@ public final class UnitService: UnitServiceType {
     public func set(unitSystem: UnitSystem) {
         do {
             try engine.userPreferenceService.set(unitSystem, for: .unit)
-            engine.notificationCenter.post(name: .unitDidChange)
         } catch {
             engine.logger.log(category: .userPreferences, message: "Failed to set unit system to \(unitSystem.rawValue)", error: error, level: .error)
         }

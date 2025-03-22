@@ -17,8 +17,7 @@ public final class DrinkService: DrinkServiceType {
     public typealias Engine = (
         HasLoggerService &
         HasDrinkManagerService &
-        HasUnitService &
-        HasNotificationCenter
+        HasUnitService
     )
     
     private let engine: Engine
@@ -28,7 +27,7 @@ public final class DrinkService: DrinkServiceType {
     }
     
     public func add(size: Double, container: Container) async throws -> Drink {
-        let newDrink = try engine.drinkManager.createNewDrink(
+        let newDrink = try await engine.drinkManager.createNewDrink(
             size: size, container: container.rawValue
         )
         guard let newDrink = Drink(from: newDrink) else {
@@ -41,7 +40,7 @@ public final class DrinkService: DrinkServiceType {
             )
             throw error
         }
-        engine.notificationCenter.post(name: .drinkDidChange)
+        
         return newDrink
     }
     
@@ -60,13 +59,12 @@ public final class DrinkService: DrinkServiceType {
             )
             throw error
         }
-        engine.notificationCenter.post(name: .drinkDidChange)
+        
         return updatedDrink
     }
     
     public func remove(container: Container) async throws {
         try await engine.drinkManager.deleteDrink(container: container.rawValue)
-        engine.notificationCenter.post(name: .drinkDidChange)
     }
     
     public func getSaved() async throws -> [Drink] {
@@ -92,7 +90,7 @@ public final class DrinkService: DrinkServiceType {
         ]
         for drink in defaultDrinks {
             do {
-                _ = try engine.drinkManager.createNewDrink(
+                _ = try await engine.drinkManager.createNewDrink(
                     size: drink.size, container: drink.container.rawValue
                 )
             } catch {
@@ -105,7 +103,7 @@ public final class DrinkService: DrinkServiceType {
                 continue
             }
         }
-        engine.notificationCenter.post(name: .drinkDidChange)
+        
         return defaultDrinks
     }
 }
