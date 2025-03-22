@@ -12,6 +12,7 @@ public protocol UnitServiceTypeSpying {
     var lastVariabelCall: UnitServiceTypeSpy.VariableName? { get }
     var methodLog: [UnitServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: UnitServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [UnitServiceTypeSpy.MethodName] { get set }
 }
 
 public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
@@ -24,10 +25,17 @@ public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
         case convertValueFromUnitToUnit(value: Double, fromUnit: UnitModel, toUnit: UnitModel)
     }
 
+    public enum MethodName {
+        case setUnitSystem
+        case getUnitSystem
+        case convertValueFromUnitToUnit
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: UnitServiceType
     public init(realObject: UnitServiceType) {
         self.realObject = realObject
@@ -59,9 +67,19 @@ extension UnitServiceTypeSpy.VariableName: CustomStringConvertible {
 extension UnitServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .setUnitSystem(let unitSystem): "set(\(String(describing: unitSystem)))"
+        case .setUnitSystem(let unitSystem): "set(unitSystem: \(String(describing: unitSystem)))"
         case .getUnitSystem: "getUnitSystem"
-        case .convertValueFromUnitToUnit(let value, let fromUnit, let toUnit): "convert(\(String(describing: value)), \(String(describing: fromUnit)), \(String(describing: toUnit)))"
+        case .convertValueFromUnitToUnit(let value, let fromUnit, let toUnit): "convert(value: \(String(describing: value)), fromUnit: \(String(describing: fromUnit)), toUnit: \(String(describing: toUnit)))"
+        }
+    }
+}
+
+extension UnitServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .setUnitSystem: "setUnitSystem"
+        case .getUnitSystem: "getUnitSystem"
+        case .convertValueFromUnitToUnit: "convertValueFromUnitToUnit"
         }
     }
 }

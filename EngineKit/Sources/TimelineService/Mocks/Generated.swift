@@ -12,6 +12,7 @@ public protocol TimelineServiceTypeSpying {
     var lastVariabelCall: TimelineServiceTypeSpy.VariableName? { get }
     var methodLog: [TimelineServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: TimelineServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [TimelineServiceTypeSpy.MethodName] { get set }
 }
 
 public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
@@ -23,10 +24,16 @@ public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
         case getTimelineCollection
     }
 
+    public enum MethodName {
+        case getTimelineDate
+        case getTimelineCollection
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: TimelineServiceType
     public init(realObject: TimelineServiceType) {
         self.realObject = realObject
@@ -54,7 +61,16 @@ extension TimelineServiceTypeSpy.VariableName: CustomStringConvertible {
 extension TimelineServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .getTimelineDate(let date): "getTimeline(\(String(describing: date)))"
+        case .getTimelineDate(let date): "getTimeline(date: \(String(describing: date)))"
+        case .getTimelineCollection: "getTimelineCollection"
+        }
+    }
+}
+
+extension TimelineServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getTimelineDate: "getTimelineDate"
         case .getTimelineCollection: "getTimelineCollection"
         }
     }

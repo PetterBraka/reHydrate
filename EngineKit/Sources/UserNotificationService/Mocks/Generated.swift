@@ -12,6 +12,7 @@ public protocol UserNotificationCenterTypeSpying {
     var lastVariabelCall: UserNotificationCenterTypeSpy.VariableName? { get }
     var methodLog: [UserNotificationCenterTypeSpy.MethodCall] { get set }
     var lastMethodCall: UserNotificationCenterTypeSpy.MethodCall? { get }
+    var methodNameLog: [UserNotificationCenterTypeSpy.MethodName] { get set }
 }
 
 public final class UserNotificationCenterTypeSpy: UserNotificationCenterTypeSpying {
@@ -32,10 +33,25 @@ public final class UserNotificationCenterTypeSpy: UserNotificationCenterTypeSpyi
         case setBadgeCountNewBadgeCount(newBadgeCount: Int)
     }
 
+    public enum MethodName {
+        case requestAuthorization
+        case setNotificationCategoriesCategories
+        case notificationCategories
+        case addRequest
+        case pendingNotificationRequests
+        case removePendingNotificationRequestsIdentifiers
+        case removeAllPendingNotificationRequests
+        case deliveredNotifications
+        case removeDeliveredNotificationsIdentifiers
+        case removeAllDeliveredNotifications
+        case setBadgeCountNewBadgeCount
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: UserNotificationCenterType
     public init(realObject: UserNotificationCenterType) {
         self.realObject = realObject
@@ -100,16 +116,34 @@ extension UserNotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .requestAuthorization: "requestAuthorization"
-        case .setNotificationCategoriesCategories(let categories): "setNotificationCategories(\(String(describing: categories)))"
+        case .setNotificationCategoriesCategories(let categories): "setNotificationCategories(categories: \(String(describing: categories)))"
         case .notificationCategories: "notificationCategories"
-        case .addRequest(let request): "add(\(String(describing: request)))"
+        case .addRequest(let request): "add(request: \(String(describing: request)))"
         case .pendingNotificationRequests: "pendingNotificationRequests"
-        case .removePendingNotificationRequestsIdentifiers(let identifiers): "removePendingNotificationRequests(\(String(describing: identifiers)))"
+        case .removePendingNotificationRequestsIdentifiers(let identifiers): "removePendingNotificationRequests(identifiers: \(String(describing: identifiers)))"
         case .removeAllPendingNotificationRequests: "removeAllPendingNotificationRequests"
         case .deliveredNotifications: "deliveredNotifications"
-        case .removeDeliveredNotificationsIdentifiers(let identifiers): "removeDeliveredNotifications(\(String(describing: identifiers)))"
+        case .removeDeliveredNotificationsIdentifiers(let identifiers): "removeDeliveredNotifications(identifiers: \(String(describing: identifiers)))"
         case .removeAllDeliveredNotifications: "removeAllDeliveredNotifications"
-        case .setBadgeCountNewBadgeCount(let newBadgeCount): "setBadgeCount(\(String(describing: newBadgeCount)))"
+        case .setBadgeCountNewBadgeCount(let newBadgeCount): "setBadgeCount(newBadgeCount: \(String(describing: newBadgeCount)))"
+        }
+    }
+}
+
+extension UserNotificationCenterTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .requestAuthorization: "requestAuthorization"
+        case .setNotificationCategoriesCategories: "setNotificationCategoriesCategories"
+        case .notificationCategories: "notificationCategories"
+        case .addRequest: "addRequest"
+        case .pendingNotificationRequests: "pendingNotificationRequests"
+        case .removePendingNotificationRequestsIdentifiers: "removePendingNotificationRequestsIdentifiers"
+        case .removeAllPendingNotificationRequests: "removeAllPendingNotificationRequests"
+        case .deliveredNotifications: "deliveredNotifications"
+        case .removeDeliveredNotificationsIdentifiers: "removeDeliveredNotificationsIdentifiers"
+        case .removeAllDeliveredNotifications: "removeAllDeliveredNotifications"
+        case .setBadgeCountNewBadgeCount: "setBadgeCountNewBadgeCount"
         }
     }
 }
@@ -122,6 +156,7 @@ public protocol UserNotificationDelegateTypeSpying {
     var lastVariabelCall: UserNotificationDelegateTypeSpy.VariableName? { get }
     var methodLog: [UserNotificationDelegateTypeSpy.MethodCall] { get set }
     var lastMethodCall: UserNotificationDelegateTypeSpy.MethodCall? { get }
+    var methodNameLog: [UserNotificationDelegateTypeSpy.MethodName] { get set }
 }
 
 public final class UserNotificationDelegateTypeSpy: UserNotificationDelegateTypeSpying {
@@ -134,10 +169,17 @@ public final class UserNotificationDelegateTypeSpy: UserNotificationDelegateType
         case userNotificationCenterCenterOpenSettingsFor(center: UserNotificationCenterType, openSettingsFor: DeliveredNotification?)
     }
 
+    public enum MethodName {
+        case userNotificationCenterCenterResponse
+        case userNotificationCenterCenterWillPresent
+        case userNotificationCenterCenterOpenSettingsFor
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: UserNotificationDelegateType
     public init(realObject: UserNotificationDelegateType) {
         self.realObject = realObject
@@ -169,9 +211,19 @@ extension UserNotificationDelegateTypeSpy.VariableName: CustomStringConvertible 
 extension UserNotificationDelegateTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .userNotificationCenterCenterResponse(let center, let response): "userNotificationCenter(\(String(describing: center)), \(String(describing: response)))"
-        case .userNotificationCenterCenterWillPresent(let center, let willPresent): "userNotificationCenter(\(String(describing: center)), \(String(describing: willPresent)))"
-        case .userNotificationCenterCenterOpenSettingsFor(let center, let openSettingsFor): "userNotificationCenter(\(String(describing: center)), \(String(describing: openSettingsFor)))"
+        case .userNotificationCenterCenterResponse(let center, let response): "userNotificationCenter(center: \(String(describing: center)), response: \(String(describing: response)))"
+        case .userNotificationCenterCenterWillPresent(let center, let willPresent): "userNotificationCenter(center: \(String(describing: center)), willPresent: \(String(describing: willPresent)))"
+        case .userNotificationCenterCenterOpenSettingsFor(let center, let openSettingsFor): "userNotificationCenter(center: \(String(describing: center)), openSettingsFor: \(String(describing: openSettingsFor)))"
+        }
+    }
+}
+
+extension UserNotificationDelegateTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .userNotificationCenterCenterResponse: "userNotificationCenterCenterResponse"
+        case .userNotificationCenterCenterWillPresent: "userNotificationCenterCenterWillPresent"
+        case .userNotificationCenterCenterOpenSettingsFor: "userNotificationCenterCenterOpenSettingsFor"
         }
     }
 }
@@ -184,6 +236,7 @@ public protocol UserNotificationServiceTypeSpying {
     var lastVariabelCall: UserNotificationServiceTypeSpy.VariableName? { get }
     var methodLog: [UserNotificationServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: UserNotificationServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [UserNotificationServiceTypeSpy.MethodName] { get set }
 }
 
 public final class UserNotificationServiceTypeSpy: UserNotificationServiceTypeSpying {
@@ -198,10 +251,18 @@ public final class UserNotificationServiceTypeSpy: UserNotificationServiceTypeSp
         case getSettings
     }
 
+    public enum MethodName {
+        case enableWithFrequencyStartStop
+        case disable
+        case celebrate
+        case getSettings
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: UserNotificationServiceType
     public init(realObject: UserNotificationServiceType) {
         self.realObject = realObject
@@ -244,7 +305,18 @@ extension UserNotificationServiceTypeSpy.VariableName: CustomStringConvertible {
 extension UserNotificationServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .enableWithFrequencyStartStop(let withFrequency, let start, let stop): "enable(\(String(describing: withFrequency)), \(String(describing: start)), \(String(describing: stop)))"
+        case .enableWithFrequencyStartStop(let withFrequency, let start, let stop): "enable(withFrequency: \(String(describing: withFrequency)), start: \(String(describing: start)), stop: \(String(describing: stop)))"
+        case .disable: "disable"
+        case .celebrate: "celebrate"
+        case .getSettings: "getSettings"
+        }
+    }
+}
+
+extension UserNotificationServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .enableWithFrequencyStartStop: "enableWithFrequencyStartStop"
         case .disable: "disable"
         case .celebrate: "celebrate"
         case .getSettings: "getSettings"

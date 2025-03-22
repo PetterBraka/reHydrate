@@ -12,6 +12,7 @@ public protocol DrinkServiceTypeSpying {
     var lastVariabelCall: DrinkServiceTypeSpy.VariableName? { get }
     var methodLog: [DrinkServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: DrinkServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [DrinkServiceTypeSpy.MethodName] { get set }
 }
 
 public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
@@ -26,10 +27,19 @@ public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
         case resetToDefault
     }
 
+    public enum MethodName {
+        case addSizeContainer
+        case editSizeDrink
+        case removeContainer
+        case getSaved
+        case resetToDefault
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: DrinkServiceType
     public init(realObject: DrinkServiceType) {
         self.realObject = realObject
@@ -69,9 +79,21 @@ extension DrinkServiceTypeSpy.VariableName: CustomStringConvertible {
 extension DrinkServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .addSizeContainer(let size, let container): "add(\(String(describing: size)), \(String(describing: container)))"
-        case .editSizeDrink(let size, let drink): "edit(\(String(describing: size)), \(String(describing: drink)))"
-        case .removeContainer(let container): "remove(\(String(describing: container)))"
+        case .addSizeContainer(let size, let container): "add(size: \(String(describing: size)), container: \(String(describing: container)))"
+        case .editSizeDrink(let size, let drink): "edit(size: \(String(describing: size)), drink: \(String(describing: drink)))"
+        case .removeContainer(let container): "remove(container: \(String(describing: container)))"
+        case .getSaved: "getSaved"
+        case .resetToDefault: "resetToDefault"
+        }
+    }
+}
+
+extension DrinkServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .addSizeContainer: "addSizeContainer"
+        case .editSizeDrink: "editSizeDrink"
+        case .removeContainer: "removeContainer"
         case .getSaved: "getSaved"
         case .resetToDefault: "resetToDefault"
         }

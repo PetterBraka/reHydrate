@@ -13,6 +13,7 @@ public protocol {{ protocol.name }}Spying {
     var lastVariabelCall: {{ protocol.name }}Spy.VariableName? { get }
     var methodLog: [{{ protocol.name }}Spy.MethodCall] { get set }
     var lastMethodCall: {{ protocol.name }}Spy.MethodCall? { get }
+    var methodNameLog: [{{ protocol.name }}Spy.MethodName] { get set }
 }
 
 public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
@@ -43,10 +44,17 @@ public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
         {% endfor %}
     }
 
+    public enum MethodName {
+        {% for method in protocol.methods %}
+        case {{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
+        {% endfor %}
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: {{ protocol.name }}
     
     public init(realObject: {{ protocol.name }}) {
@@ -117,11 +125,22 @@ extension {{ protocol.name }}Spy.MethodCall: CustomStringConvertible {
             {%- for param in method.parameters -%}
             {%- if forloop.first -%}({% endif %}
                 {%- if param.name != nil -%}
-                    \(String(describing: {{ param.name }}))
+                    {{ param.name }}: \(String(describing: {{ param.name }}))
                     {%- if forloop.last -%}{% else %}, {% endif -%}
                 {%- endif -%}
             {%- if forloop.last -%}){% endif %}
             {%- endfor -%}"
+        {% endfor %}
+        }
+    }
+}
+
+extension {{ protocol.name }}Spy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        {% for method in protocol.methods %}
+        case .{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor -%}
+            : "{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}"
         {% endfor %}
         }
     }

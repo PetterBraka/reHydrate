@@ -12,6 +12,7 @@ public protocol DateServiceTypeSpying {
     var lastVariabelCall: DateServiceTypeSpy.VariableName? { get }
     var methodLog: [DateServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: DateServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [DateServiceTypeSpy.MethodName] { get set }
 }
 
 public final class DateServiceTypeSpy: DateServiceTypeSpying {
@@ -29,10 +30,22 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
         case dateHoursMinutesSecondsDate(hours: Int, minutes: Int, seconds: Int, date: Date)
     }
 
+    public enum MethodName {
+        case now
+        case daysBetweenStartEnd
+        case getComponentDate
+        case getDateValueComponentDate
+        case getStartDate
+        case getEndDate
+        case isDateDateInSameDayAs
+        case dateHoursMinutesSecondsDate
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: DateServiceType
     public init(realObject: DateServiceType) {
         self.realObject = realObject
@@ -85,13 +98,28 @@ extension DateServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .now: "now"
-        case .daysBetweenStartEnd(let start, let end): "daysBetween(\(String(describing: start)), \(String(describing: end)))"
-        case .getComponentDate(let component, let date): "get(\(String(describing: component)), \(String(describing: date)))"
-        case .getDateValueComponentDate(let value, let component, let date): "getDate(\(String(describing: value)), \(String(describing: component)), \(String(describing: date)))"
-        case .getStartDate(let date): "getStart(\(String(describing: date)))"
-        case .getEndDate(let date): "getEnd(\(String(describing: date)))"
-        case .isDateDateInSameDayAs(let date, let inSameDayAs): "isDate(\(String(describing: date)), \(String(describing: inSameDayAs)))"
-        case .dateHoursMinutesSecondsDate(let hours, let minutes, let seconds, let date): "date(\(String(describing: hours)), \(String(describing: minutes)), \(String(describing: seconds)), \(String(describing: date)))"
+        case .daysBetweenStartEnd(let start, let end): "daysBetween(start: \(String(describing: start)), end: \(String(describing: end)))"
+        case .getComponentDate(let component, let date): "get(component: \(String(describing: component)), date: \(String(describing: date)))"
+        case .getDateValueComponentDate(let value, let component, let date): "getDate(value: \(String(describing: value)), component: \(String(describing: component)), date: \(String(describing: date)))"
+        case .getStartDate(let date): "getStart(date: \(String(describing: date)))"
+        case .getEndDate(let date): "getEnd(date: \(String(describing: date)))"
+        case .isDateDateInSameDayAs(let date, let inSameDayAs): "isDate(date: \(String(describing: date)), inSameDayAs: \(String(describing: inSameDayAs)))"
+        case .dateHoursMinutesSecondsDate(let hours, let minutes, let seconds, let date): "date(hours: \(String(describing: hours)), minutes: \(String(describing: minutes)), seconds: \(String(describing: seconds)), date: \(String(describing: date)))"
+        }
+    }
+}
+
+extension DateServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .now: "now"
+        case .daysBetweenStartEnd: "daysBetweenStartEnd"
+        case .getComponentDate: "getComponentDate"
+        case .getDateValueComponentDate: "getDateValueComponentDate"
+        case .getStartDate: "getStartDate"
+        case .getEndDate: "getEndDate"
+        case .isDateDateInSameDayAs: "isDateDateInSameDayAs"
+        case .dateHoursMinutesSecondsDate: "dateHoursMinutesSecondsDate"
         }
     }
 }

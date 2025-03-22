@@ -13,6 +13,7 @@ public protocol DayServiceTypeSpying {
     var lastVariabelCall: DayServiceTypeSpy.VariableName? { get }
     var methodLog: [DayServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: DayServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [DayServiceTypeSpy.MethodName] { get set }
 }
 
 public final class DayServiceTypeSpy: DayServiceTypeSpying {
@@ -28,10 +29,20 @@ public final class DayServiceTypeSpy: DayServiceTypeSpying {
         case decreaseGoal(goal: Double)
     }
 
+    public enum MethodName {
+        case getToday
+        case getDaysDates
+        case addDrink
+        case removeDrink
+        case increaseGoal
+        case decreaseGoal
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: DayServiceType
     public init(realObject: DayServiceType) {
         self.realObject = realObject
@@ -76,11 +87,24 @@ extension DayServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .getToday: "getToday"
-        case .getDaysDates(let dates): "getDays(\(String(describing: dates)))"
-        case .addDrink(let drink): "add(\(String(describing: drink)))"
-        case .removeDrink(let drink): "remove(\(String(describing: drink)))"
-        case .increaseGoal(let goal): "increase(\(String(describing: goal)))"
-        case .decreaseGoal(let goal): "decrease(\(String(describing: goal)))"
+        case .getDaysDates(let dates): "getDays(dates: \(String(describing: dates)))"
+        case .addDrink(let drink): "add(drink: \(String(describing: drink)))"
+        case .removeDrink(let drink): "remove(drink: \(String(describing: drink)))"
+        case .increaseGoal(let goal): "increase(goal: \(String(describing: goal)))"
+        case .decreaseGoal(let goal): "decrease(goal: \(String(describing: goal)))"
+        }
+    }
+}
+
+extension DayServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getToday: "getToday"
+        case .getDaysDates: "getDaysDates"
+        case .addDrink: "addDrink"
+        case .removeDrink: "removeDrink"
+        case .increaseGoal: "increaseGoal"
+        case .decreaseGoal: "decreaseGoal"
         }
     }
 }

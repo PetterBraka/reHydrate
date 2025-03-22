@@ -12,6 +12,7 @@ public protocol AppearanceServiceTypeSpying {
     var lastVariabelCall: AppearanceServiceTypeSpy.VariableName? { get }
     var methodLog: [AppearanceServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: AppearanceServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [AppearanceServiceTypeSpy.MethodName] { get set }
 }
 
 public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
@@ -23,10 +24,16 @@ public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
         case setAppearanceAppearance(appearance: Appearance)
     }
 
+    public enum MethodName {
+        case getAppearance
+        case setAppearanceAppearance
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: AppearanceServiceType
     public init(realObject: AppearanceServiceType) {
         self.realObject = realObject
@@ -55,7 +62,16 @@ extension AppearanceServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .getAppearance: "getAppearance"
-        case .setAppearanceAppearance(let appearance): "setAppearance(\(String(describing: appearance)))"
+        case .setAppearanceAppearance(let appearance): "setAppearance(appearance: \(String(describing: appearance)))"
+        }
+    }
+}
+
+extension AppearanceServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getAppearance: "getAppearance"
+        case .setAppearanceAppearance: "setAppearanceAppearance"
         }
     }
 }

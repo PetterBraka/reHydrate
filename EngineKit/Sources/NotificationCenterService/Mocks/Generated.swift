@@ -12,6 +12,7 @@ public protocol NotificationCenterTypeSpying {
     var lastVariabelCall: NotificationCenterTypeSpy.VariableName? { get }
     var methodLog: [NotificationCenterTypeSpy.MethodCall] { get set }
     var lastMethodCall: NotificationCenterTypeSpy.MethodCall? { get }
+    var methodNameLog: [NotificationCenterTypeSpy.MethodName] { get set }
 }
 
 public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
@@ -24,10 +25,17 @@ public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
         case removeObserverObserverName(observer: Any, name: NotificationName)
     }
 
+    public enum MethodName {
+        case postName
+        case addObserverObserverNameSelectorObject
+        case removeObserverObserverName
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: NotificationCenterType
     public init(realObject: NotificationCenterType) {
         self.realObject = realObject
@@ -59,9 +67,19 @@ extension NotificationCenterTypeSpy.VariableName: CustomStringConvertible {
 extension NotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .postName(let name): "post(\(String(describing: name)))"
-        case .addObserverObserverNameSelectorObject(let observer, let name, let selector, let object): "addObserver(\(String(describing: observer)), \(String(describing: name)), \(String(describing: selector)), \(String(describing: object)))"
-        case .removeObserverObserverName(let observer, let name): "removeObserver(\(String(describing: observer)), \(String(describing: name)))"
+        case .postName(let name): "post(name: \(String(describing: name)))"
+        case .addObserverObserverNameSelectorObject(let observer, let name, let selector, let object): "addObserver(observer: \(String(describing: observer)), name: \(String(describing: name)), selector: \(String(describing: selector)), object: \(String(describing: object)))"
+        case .removeObserverObserverName(let observer, let name): "removeObserver(observer: \(String(describing: observer)), name: \(String(describing: name)))"
+        }
+    }
+}
+
+extension NotificationCenterTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .postName: "postName"
+        case .addObserverObserverNameSelectorObject: "addObserverObserverNameSelectorObject"
+        case .removeObserverObserverName: "removeObserverObserverName"
         }
     }
 }

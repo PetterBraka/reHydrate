@@ -12,6 +12,7 @@ public protocol PhoneServiceTypeSpying {
     var lastVariabelCall: PhoneServiceTypeSpy.VariableName? { get }
     var methodLog: [PhoneServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: PhoneServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [PhoneServiceTypeSpy.MethodName] { get set }
 }
 
 public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
@@ -37,10 +38,21 @@ public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
         case transferUserInfo(userInfo: [CommunicationUserInfo : Codable])
     }
 
+    public enum MethodName {
+        case isSupported
+        case activate
+        case updateApplicationContext
+        case sendMessageMessageErrorHandler
+        case sendDataDataErrorHandler
+        case transferComplicationUserInfo
+        case transferUserInfo
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: PhoneServiceType
     public init(realObject: PhoneServiceType) {
         self.realObject = realObject
@@ -153,11 +165,25 @@ extension PhoneServiceTypeSpy.MethodCall: CustomStringConvertible {
         switch self {
         case .isSupported: "isSupported"
         case .activate: "activate"
-        case .updateApplicationContext(let applicationContext): "update(\(String(describing: applicationContext)))"
-        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(\(String(describing: message)), \(String(describing: errorHandler)))"
-        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(\(String(describing: data)), \(String(describing: errorHandler)))"
-        case .transferComplicationUserInfo(let userInfo): "transferComplication(\(String(describing: userInfo)))"
-        case .transferUserInfo(let userInfo): "transfer(\(String(describing: userInfo)))"
+        case .updateApplicationContext(let applicationContext): "update(applicationContext: \(String(describing: applicationContext)))"
+        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(message: \(String(describing: message)), errorHandler: \(String(describing: errorHandler)))"
+        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(data: \(String(describing: data)), errorHandler: \(String(describing: errorHandler)))"
+        case .transferComplicationUserInfo(let userInfo): "transferComplication(userInfo: \(String(describing: userInfo)))"
+        case .transferUserInfo(let userInfo): "transfer(userInfo: \(String(describing: userInfo)))"
+        }
+    }
+}
+
+extension PhoneServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .isSupported: "isSupported"
+        case .activate: "activate"
+        case .updateApplicationContext: "updateApplicationContext"
+        case .sendMessageMessageErrorHandler: "sendMessageMessageErrorHandler"
+        case .sendDataDataErrorHandler: "sendDataDataErrorHandler"
+        case .transferComplicationUserInfo: "transferComplicationUserInfo"
+        case .transferUserInfo: "transferUserInfo"
         }
     }
 }
@@ -170,6 +196,7 @@ public protocol WatchServiceTypeSpying {
     var lastVariabelCall: WatchServiceTypeSpy.VariableName? { get }
     var methodLog: [WatchServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: WatchServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [WatchServiceTypeSpy.MethodName] { get set }
 }
 
 public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
@@ -190,10 +217,20 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
         case sendUserInfoUserInfo(userInfo: [CommunicationUserInfo : Codable])
     }
 
+    public enum MethodName {
+        case isSupported
+        case activate
+        case updateApplicationContext
+        case sendMessageMessageErrorHandler
+        case sendDataDataErrorHandler
+        case sendUserInfoUserInfo
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: WatchServiceType
     public init(realObject: WatchServiceType) {
         self.realObject = realObject
@@ -274,10 +311,23 @@ extension WatchServiceTypeSpy.MethodCall: CustomStringConvertible {
         switch self {
         case .isSupported: "isSupported"
         case .activate: "activate"
-        case .updateApplicationContext(let applicationContext): "update(\(String(describing: applicationContext)))"
-        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(\(String(describing: message)), \(String(describing: errorHandler)))"
-        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(\(String(describing: data)), \(String(describing: errorHandler)))"
-        case .sendUserInfoUserInfo(let userInfo): "sendUserInfo(\(String(describing: userInfo)))"
+        case .updateApplicationContext(let applicationContext): "update(applicationContext: \(String(describing: applicationContext)))"
+        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(message: \(String(describing: message)), errorHandler: \(String(describing: errorHandler)))"
+        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(data: \(String(describing: data)), errorHandler: \(String(describing: errorHandler)))"
+        case .sendUserInfoUserInfo(let userInfo): "sendUserInfo(userInfo: \(String(describing: userInfo)))"
+        }
+    }
+}
+
+extension WatchServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .isSupported: "isSupported"
+        case .activate: "activate"
+        case .updateApplicationContext: "updateApplicationContext"
+        case .sendMessageMessageErrorHandler: "sendMessageMessageErrorHandler"
+        case .sendDataDataErrorHandler: "sendDataDataErrorHandler"
+        case .sendUserInfoUserInfo: "sendUserInfoUserInfo"
         }
     }
 }

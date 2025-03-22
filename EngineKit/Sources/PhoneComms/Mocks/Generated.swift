@@ -12,6 +12,7 @@ public protocol PhoneCommsTypeSpying {
     var lastVariabelCall: PhoneCommsTypeSpy.VariableName? { get }
     var methodLog: [PhoneCommsTypeSpy.MethodCall] { get set }
     var lastMethodCall: PhoneCommsTypeSpy.MethodCall? { get }
+    var methodNameLog: [PhoneCommsTypeSpy.MethodName] { get set }
 }
 
 public final class PhoneCommsTypeSpy: PhoneCommsTypeSpying {
@@ -25,10 +26,18 @@ public final class PhoneCommsTypeSpy: PhoneCommsTypeSpying {
         case removeObserver
     }
 
+    public enum MethodName {
+        case setAppContext
+        case sendDataToWatch
+        case addObserverUpdateBlock
+        case removeObserver
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: PhoneCommsType
     public init(realObject: PhoneCommsType) {
         self.realObject = realObject
@@ -66,7 +75,18 @@ extension PhoneCommsTypeSpy.MethodCall: CustomStringConvertible {
         switch self {
         case .setAppContext: "setAppContext"
         case .sendDataToWatch: "sendDataToWatch"
-        case .addObserverUpdateBlock(let updateBlock): "addObserver(\(String(describing: updateBlock)))"
+        case .addObserverUpdateBlock(let updateBlock): "addObserver(updateBlock: \(String(describing: updateBlock)))"
+        case .removeObserver: "removeObserver"
+        }
+    }
+}
+
+extension PhoneCommsTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .setAppContext: "setAppContext"
+        case .sendDataToWatch: "sendDataToWatch"
+        case .addObserverUpdateBlock: "addObserverUpdateBlock"
         case .removeObserver: "removeObserver"
         }
     }

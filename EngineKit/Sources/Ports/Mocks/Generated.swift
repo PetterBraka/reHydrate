@@ -12,6 +12,7 @@ public protocol AlternateIconsServiceTypeSpying {
     var lastVariabelCall: AlternateIconsServiceTypeSpy.VariableName? { get }
     var methodLog: [AlternateIconsServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: AlternateIconsServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [AlternateIconsServiceTypeSpy.MethodName] { get set }
 }
 
 public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying {
@@ -24,10 +25,17 @@ public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying
         case getAlternateIcon
     }
 
+    public enum MethodName {
+        case supportsAlternateIcons
+        case setAlternateIconIconName
+        case getAlternateIcon
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: AlternateIconsServiceType
     public init(realObject: AlternateIconsServiceType) {
         self.realObject = realObject
@@ -60,7 +68,17 @@ extension AlternateIconsServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .supportsAlternateIcons: "supportsAlternateIcons"
-        case .setAlternateIconIconName(let iconName): "setAlternateIcon(\(String(describing: iconName)))"
+        case .setAlternateIconIconName(let iconName): "setAlternateIcon(iconName: \(String(describing: iconName)))"
+        case .getAlternateIcon: "getAlternateIcon"
+        }
+    }
+}
+
+extension AlternateIconsServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .supportsAlternateIcons: "supportsAlternateIcons"
+        case .setAlternateIconIconName: "setAlternateIconIconName"
         case .getAlternateIcon: "getAlternateIcon"
         }
     }
@@ -74,6 +92,7 @@ public protocol AppearancePortTypeSpying {
     var lastVariabelCall: AppearancePortTypeSpy.VariableName? { get }
     var methodLog: [AppearancePortTypeSpy.MethodCall] { get set }
     var lastMethodCall: AppearancePortTypeSpy.MethodCall? { get }
+    var methodNameLog: [AppearancePortTypeSpy.MethodName] { get set }
 }
 
 public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
@@ -85,10 +104,16 @@ public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
         case setStyleStyle(style: Style)
     }
 
+    public enum MethodName {
+        case getStyle
+        case setStyleStyle
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: AppearancePortType
     public init(realObject: AppearancePortType) {
         self.realObject = realObject
@@ -117,7 +142,16 @@ extension AppearancePortTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         case .getStyle: "getStyle"
-        case .setStyleStyle(let style): "setStyle(\(String(describing: style)))"
+        case .setStyleStyle(let style): "setStyle(style: \(String(describing: style)))"
+        }
+    }
+}
+
+extension AppearancePortTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getStyle: "getStyle"
+        case .setStyleStyle: "setStyleStyle"
         }
     }
 }
@@ -130,6 +164,7 @@ public protocol HealthInterfaceSpying {
     var lastVariabelCall: HealthInterfaceSpy.VariableName? { get }
     var methodLog: [HealthInterfaceSpy.MethodCall] { get set }
     var lastMethodCall: HealthInterfaceSpy.MethodCall? { get }
+    var methodNameLog: [HealthInterfaceSpy.MethodName] { get set }
 }
 
 public final class HealthInterfaceSpy: HealthInterfaceSpying {
@@ -147,10 +182,21 @@ public final class HealthInterfaceSpy: HealthInterfaceSpying {
         case enableBackgroundDeliveryHealthDataFrequency(healthData: HealthDataType, frequency: HealthFrequency)
     }
 
+    public enum MethodName {
+        case shouldRequestAccessHealthDataType
+        case canWriteDataType
+        case requestAuthReadAndWrite
+        case exportQuantityIdDate
+        case readSumDataStartEndIntervalComponents
+        case readSamplesDataStartEnd
+        case enableBackgroundDeliveryHealthDataFrequency
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: HealthInterface
     public init(realObject: HealthInterface) {
         self.realObject = realObject
@@ -205,13 +251,27 @@ extension HealthInterfaceSpy.VariableName: CustomStringConvertible {
 extension HealthInterfaceSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .shouldRequestAccessHealthDataType(let healthDataType): "shouldRequestAccess(\(String(describing: healthDataType)))"
-        case .canWriteDataType(let dataType): "canWrite(\(String(describing: dataType)))"
-        case .requestAuthReadAndWrite(let readAndWrite): "requestAuth(\(String(describing: readAndWrite)))"
-        case .exportQuantityIdDate(let quantity, let id, let date): "export(\(String(describing: quantity)), \(String(describing: id)), \(String(describing: date)))"
-        case .readSumDataStartEndIntervalComponents(let data, let start, let end, let intervalComponents): "readSum(\(String(describing: data)), \(String(describing: start)), \(String(describing: end)), \(String(describing: intervalComponents)))"
-        case .readSamplesDataStartEnd(let data, let start, let end): "readSamples(\(String(describing: data)), \(String(describing: start)), \(String(describing: end)))"
-        case .enableBackgroundDeliveryHealthDataFrequency(let healthData, let frequency): "enableBackgroundDelivery(\(String(describing: healthData)), \(String(describing: frequency)))"
+        case .shouldRequestAccessHealthDataType(let healthDataType): "shouldRequestAccess(healthDataType: \(String(describing: healthDataType)))"
+        case .canWriteDataType(let dataType): "canWrite(dataType: \(String(describing: dataType)))"
+        case .requestAuthReadAndWrite(let readAndWrite): "requestAuth(readAndWrite: \(String(describing: readAndWrite)))"
+        case .exportQuantityIdDate(let quantity, let id, let date): "export(quantity: \(String(describing: quantity)), id: \(String(describing: id)), date: \(String(describing: date)))"
+        case .readSumDataStartEndIntervalComponents(let data, let start, let end, let intervalComponents): "readSum(data: \(String(describing: data)), start: \(String(describing: start)), end: \(String(describing: end)), intervalComponents: \(String(describing: intervalComponents)))"
+        case .readSamplesDataStartEnd(let data, let start, let end): "readSamples(data: \(String(describing: data)), start: \(String(describing: start)), end: \(String(describing: end)))"
+        case .enableBackgroundDeliveryHealthDataFrequency(let healthData, let frequency): "enableBackgroundDelivery(healthData: \(String(describing: healthData)), frequency: \(String(describing: frequency)))"
+        }
+    }
+}
+
+extension HealthInterfaceSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .shouldRequestAccessHealthDataType: "shouldRequestAccessHealthDataType"
+        case .canWriteDataType: "canWriteDataType"
+        case .requestAuthReadAndWrite: "requestAuthReadAndWrite"
+        case .exportQuantityIdDate: "exportQuantityIdDate"
+        case .readSumDataStartEndIntervalComponents: "readSumDataStartEndIntervalComponents"
+        case .readSamplesDataStartEnd: "readSamplesDataStartEnd"
+        case .enableBackgroundDeliveryHealthDataFrequency: "enableBackgroundDeliveryHealthDataFrequency"
         }
     }
 }
@@ -224,6 +284,7 @@ public protocol OpenUrlInterfaceSpying {
     var lastVariabelCall: OpenUrlInterfaceSpy.VariableName? { get }
     var methodLog: [OpenUrlInterfaceSpy.MethodCall] { get set }
     var lastMethodCall: OpenUrlInterfaceSpy.MethodCall? { get }
+    var methodNameLog: [OpenUrlInterfaceSpy.MethodName] { get set }
 }
 
 public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
@@ -236,10 +297,16 @@ public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
         case emailEmailCcBccSubjectBody(email: String, cc: String?, bcc: String?, subject: String, body: String?)
     }
 
+    public enum MethodName {
+        case openUrl
+        case emailEmailCcBccSubjectBody
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: OpenUrlInterface
     public init(realObject: OpenUrlInterface) {
         self.realObject = realObject
@@ -274,8 +341,17 @@ extension OpenUrlInterfaceSpy.VariableName: CustomStringConvertible {
 extension OpenUrlInterfaceSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .openUrl(let url): "open(\(String(describing: url)))"
-        case .emailEmailCcBccSubjectBody(let email, let cc, let bcc, let subject, let body): "email(\(String(describing: email)), \(String(describing: cc)), \(String(describing: bcc)), \(String(describing: subject)), \(String(describing: body)))"
+        case .openUrl(let url): "open(url: \(String(describing: url)))"
+        case .emailEmailCcBccSubjectBody(let email, let cc, let bcc, let subject, let body): "email(email: \(String(describing: email)), cc: \(String(describing: cc)), bcc: \(String(describing: bcc)), subject: \(String(describing: subject)), body: \(String(describing: body)))"
+        }
+    }
+}
+
+extension OpenUrlInterfaceSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .openUrl: "openUrl"
+        case .emailEmailCcBccSubjectBody: "emailEmailCcBccSubjectBody"
         }
     }
 }

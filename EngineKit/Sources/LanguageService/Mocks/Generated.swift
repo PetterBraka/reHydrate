@@ -12,6 +12,7 @@ public protocol LanguageServiceTypeSpying {
     var lastVariabelCall: LanguageServiceTypeSpy.VariableName? { get }
     var methodLog: [LanguageServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: LanguageServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [LanguageServiceTypeSpy.MethodName] { get set }
 }
 
 public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
@@ -24,10 +25,17 @@ public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
         case getLanguageOptions
     }
 
+    public enum MethodName {
+        case setLanguageLanguage
+        case getSelectedLanguage
+        case getLanguageOptions
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: LanguageServiceType
     public init(realObject: LanguageServiceType) {
         self.realObject = realObject
@@ -59,7 +67,17 @@ extension LanguageServiceTypeSpy.VariableName: CustomStringConvertible {
 extension LanguageServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .setLanguageLanguage(let language): "setLanguage(\(String(describing: language)))"
+        case .setLanguageLanguage(let language): "setLanguage(language: \(String(describing: language)))"
+        case .getSelectedLanguage: "getSelectedLanguage"
+        case .getLanguageOptions: "getLanguageOptions"
+        }
+    }
+}
+
+extension LanguageServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .setLanguageLanguage: "setLanguageLanguage"
         case .getSelectedLanguage: "getSelectedLanguage"
         case .getLanguageOptions: "getLanguageOptions"
         }

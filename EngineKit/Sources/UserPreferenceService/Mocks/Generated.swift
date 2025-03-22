@@ -12,6 +12,7 @@ public protocol UserPreferenceServiceTypeSpying {
     var lastVariabelCall: UserPreferenceServiceTypeSpy.VariableName? { get }
     var methodLog: [UserPreferenceServiceTypeSpy.MethodCall] { get set }
     var lastMethodCall: UserPreferenceServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [UserPreferenceServiceTypeSpy.MethodName] { get set }
 }
 
 public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying {
@@ -23,10 +24,16 @@ public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying
         case getKey(key: PreferenceKey)
     }
 
+    public enum MethodName {
+        case setValueKey
+        case getKey
+    }
+
     public var variableLog: [VariableName] = []
     public var lastVariabelCall: VariableName? { variableLog.last }
     public var methodLog: [MethodCall] = []
     public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
     private var realObject: UserPreferenceServiceType
     public init(realObject: UserPreferenceServiceType) {
         self.realObject = realObject
@@ -54,8 +61,17 @@ extension UserPreferenceServiceTypeSpy.VariableName: CustomStringConvertible {
 extension UserPreferenceServiceTypeSpy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .setValueKey(let value, let key): "set(\(String(describing: value)), \(String(describing: key)))"
-        case .getKey(let key): "get(\(String(describing: key)))"
+        case .setValueKey(let value, let key): "set(value: \(String(describing: value)), key: \(String(describing: key)))"
+        case .getKey(let key): "get(key: \(String(describing: key)))"
+        }
+    }
+}
+
+extension UserPreferenceServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .setValueKey: "setValueKey"
+        case .getKey: "getKey"
         }
     }
 }
