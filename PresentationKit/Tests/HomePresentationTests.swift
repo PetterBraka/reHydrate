@@ -30,7 +30,6 @@ final class HomePresentationTests: XCTestCase {
     private var dateService: (stub: DateServiceTypeStubbing, spy: DateServiceTypeSpying)!
     private var phoneComms: (stub: PhoneCommsTypeStubbing, spy: PhoneCommsTypeSpying)!
     private var userPreferenceService: (stub: UserPreferenceServiceTypeStubbing, spy: UserPreferenceServiceTypeSpying)!
-    private var notificationCenter: NotificationCenter!
     
     override func setUp() {
         engine = EngineMocks()
@@ -38,7 +37,6 @@ final class HomePresentationTests: XCTestCase {
         formatter = DateFormatter()
         formatter.dateFormat = "EEEE - dd MMM"
         formatter.locale = .init(identifier: "en_GB")
-        notificationCenter = .init()
         
         dayService = engine.makeDayService()
         drinksService = engine.makeDrinksService()
@@ -64,11 +62,11 @@ final class HomePresentationTests: XCTestCase {
 
 // MARK: - init / deinit
 extension HomePresentationTests {
-    func test_init() {
+    func test_init() throws {
         dateService.stub.now_returnValue = .init(year: 2023, month: 2, day: 2)
         sut = Sut(engine: engine, router: router, formatter: formatter)
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb", consumption: 0, goal: 0,
@@ -91,7 +89,7 @@ extension HomePresentationTests {
 
 // MARK: - didAppear
 extension HomePresentationTests {
-    func test_performAction_didAppear_healthIsNotSupported() async {
+    func test_performAction_didAppear_healthIsNotSupported() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -110,7 +108,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -125,7 +123,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didAppear_withHealthInSync() async {
+    func test_performAction_didAppear_withHealthInSync() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -153,7 +151,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -168,7 +166,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didAppear_withNoHealthData() async {
+    func test_performAction_didAppear_withNoHealthData() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -189,7 +187,7 @@ extension HomePresentationTests {
         sut = .init(engine: engine, router: router, formatter: formatter)
         await sut.perform(action: .didAppear)
         
-        XCTAssertEqual(healthService.spy.variableLog, [.isSupported, .isSupported])
+        XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
         XCTAssertEqual(healthService.spy.methodLog, [
             .shouldRequestAccess(healthDataType: [.water(.litre)]),
             .readSum(data: .water(.litre), start: givenStartDate, end: givenEndDate,
@@ -199,7 +197,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -214,7 +212,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didAppear_withMoreHealthData() async {
+    func test_performAction_didAppear_withMoreHealthData() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -244,7 +242,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday, .add(drink: .init(id: "", size: 1000, container: .health))])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -259,7 +257,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didAppear_withNoHealthAccess() async {
+    func test_performAction_didAppear_withNoHealthAccess() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -291,7 +289,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -306,7 +304,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didAppear_withHealthFailed() async {
+    func test_performAction_didAppear_withHealthFailed() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -334,7 +332,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -345,7 +343,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didAppear_withHealthNoAccess() async {
+    func test_performAction_didAppear_withHealthNoAccess() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -374,7 +372,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -385,7 +383,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didAppear_withHealthFailedAccess() async {
+    func test_performAction_didAppear_withHealthFailedAccess() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -415,7 +413,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -426,7 +424,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didAppear_withNoDrinks() async {
+    func test_performAction_didAppear_withNoDrinks() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 3)
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 1, goal: 2)
@@ -444,7 +442,7 @@ extension HomePresentationTests {
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Friday - 03 Feb",
@@ -458,7 +456,7 @@ extension HomePresentationTests {
 
 // MARK: - didTapHistory
 extension HomePresentationTests {
-    func test_performAction_didTapHistory() async {
+    func test_performAction_didTapHistory() async throws {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         
         sut = .init(engine: engine, router: router, formatter: formatter)
@@ -469,7 +467,7 @@ extension HomePresentationTests {
 
 // MARK: - didTapSettings
 extension HomePresentationTests {
-    func test_performAction_didTapSettings() async {
+    func test_performAction_didTapSettings() async throws {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         
         sut = .init(engine: engine, router: router, formatter: formatter)
@@ -480,7 +478,7 @@ extension HomePresentationTests {
 
 // MARK: - didTapEditDrink
 extension HomePresentationTests {
-    func test_performAction_didTapEditDrink() async {
+    func test_performAction_didTapEditDrink() async throws {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         
         sut = .init(engine: engine, router: router, formatter: formatter)
@@ -491,7 +489,7 @@ extension HomePresentationTests {
 
 // MARK: - didTapAddDrink
 extension HomePresentationTests {
-    func test_performAction_didTapAddDrink_withNoHealthSupport() async {
+    func test_performAction_didTapAddDrink_withNoHealthSupport() async throws {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         drinksService.stub.getSaved_returnValue = .success([
             .init(id: "1", size: 100, container: .small)
@@ -508,7 +506,7 @@ extension HomePresentationTests {
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -519,7 +517,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didTapAddDrink_withHealthSupport() async {
+    func test_performAction_didTapAddDrink_withHealthSupport() async throws {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         drinksService.stub.getSaved_returnValue = .success([
             .init(id: "1", size: 100, container: .small)
@@ -536,7 +534,7 @@ extension HomePresentationTests {
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -547,7 +545,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didTapAddDrink_withHealthError() async {
+    func test_performAction_didTapAddDrink_withHealthError() async throws {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         drinksService.stub.getSaved_returnValue = .success([
             .init(id: "1", size: 100, container: .small)
@@ -565,7 +563,7 @@ extension HomePresentationTests {
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -576,7 +574,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didTapAddDrink_unknownDrink() async {
+    func test_performAction_didTapAddDrink_unknownDrink() async throws {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         drinksService.stub.getSaved_returnValue = .success([
             .init(id: "1", size: 100, container: .small)
@@ -593,7 +591,7 @@ extension HomePresentationTests {
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -604,7 +602,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didTapAddDrink_failedAdding() async {
+    func test_performAction_didTapAddDrink_failedAdding() async throws {
         dateService.stub.now_returnValue = Date(year: 2023, month: 2, day: 2)
         drinksService.stub.getSaved_returnValue = .success([
             .init(id: "1", size: 100, container: .small)
@@ -621,7 +619,7 @@ extension HomePresentationTests {
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -635,7 +633,7 @@ extension HomePresentationTests {
 
 // MARK: - didTapRemoveDrink
 extension HomePresentationTests {
-    func test_performAction_didTapRemoveDrink_withNoHealthSupport() async {
+    func test_performAction_didTapRemoveDrink_withNoHealthSupport() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
         dateService.stub.now_returnValue = givenDate
         drinksService.stub.getSaved_returnValue = .success([
@@ -654,7 +652,7 @@ extension HomePresentationTests {
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -665,7 +663,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didTapRemoveDrink_withHealthSupport() async {
+    func test_performAction_didTapRemoveDrink_withHealthSupport() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
         dateService.stub.now_returnValue = givenDate
         drinksService.stub.getSaved_returnValue = .success([
@@ -684,7 +682,7 @@ extension HomePresentationTests {
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -695,7 +693,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didTapRemoveDrink_withHealthError() async {
+    func test_performAction_didTapRemoveDrink_withHealthError() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
         dateService.stub.now_returnValue = givenDate
         drinksService.stub.getSaved_returnValue = .success([
@@ -715,7 +713,7 @@ extension HomePresentationTests {
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -726,7 +724,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didTapRemoveDrink_unknownDrink() async {
+    func test_performAction_didTapRemoveDrink_unknownDrink() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
         dateService.stub.now_returnValue = givenDate
         drinksService.stub.getSaved_returnValue = .success([
@@ -739,13 +737,13 @@ extension HomePresentationTests {
         sut = .init(engine: engine, router: router, formatter: formatter)
         await sut.perform(action: .didTapRemoveDrink(.init(id: "123", size: 500, fill: 0.1, container: .large)))
         
-        XCTAssertEqual(healthService.spy.variableLog, [.isSupported])
-        XCTAssertEqual(healthService.spy.methodLog, [])
+        XCTAssertEqual(healthService.spy.variableLog, [])
+        XCTAssertEqual(healthService.spy.methodLog, [.export(quantity: .init(unit: .litre, value: -0.1), id: .dietaryWater, date: .now)])
         XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "123", size: 500, container: .large))])
         XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -756,7 +754,7 @@ extension HomePresentationTests {
         )
     }
     
-    func test_performAction_didTapRemoveDrink_failedAdding() async {
+    func test_performAction_didTapRemoveDrink_failedAdding() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
         dateService.stub.now_returnValue = givenDate
         drinksService.stub.getSaved_returnValue = .success([
@@ -771,11 +769,20 @@ extension HomePresentationTests {
         
         XCTAssertEqual(healthService.spy.variableLog, [])
         XCTAssertEqual(healthService.spy.methodLog, [])
-        XCTAssertEqual(dayService.spy.methodLog, [.remove(drink: .init(id: "123", size: 500, container: .large))])
-        XCTAssertEqual(phoneComms.spy.methodLog, [.addObserver(updateBlock: {}), .sendDataToWatch])
+        XCTAssertEqual(
+            dayService.spy.methodLog,
+            [.remove(drink: .init(id: "123", size: 500, container: .large))]
+        )
+        XCTAssertEqual(
+            phoneComms.spy.methodLog,
+            [
+                .addObserver(updateBlock: {}),
+                .sendDataToWatch
+            ]
+        )
         assertLog(router.log, [])
         
-        assertViewModel(
+        try assertViewModel(
             sut.viewModel,
             .init(
                 dateTitle: "Thursday - 02 Feb",
@@ -792,7 +799,7 @@ private extension HomePresentationTests {
     func assertViewModel(
         _ givenViewModel: Sut.ViewModel, _ expectedViewModel: Sut.ViewModel,
         accuracy: Double = 0.01, file: StaticString = #file, line: UInt = #line
-    ) {
+    ) throws {
         XCTAssertEqual(
             givenViewModel.consumption, expectedViewModel.consumption, accuracy: accuracy,
             "consumption", file: file, line: line
@@ -802,20 +809,23 @@ private extension HomePresentationTests {
             "goal", file: file, line: line
         )
         for index in givenViewModel.drinks.indices {
+            let givenDrink = try XCTUnwrap(givenViewModel.drinks[safe: index], file: file, line: line)
+            let expectedDrink = try XCTUnwrap(expectedViewModel.drinks[safe: index], file: file, line: line)
+            
             XCTAssertEqual(
-                givenViewModel.drinks[index].id, expectedViewModel.drinks[index].id,
+                givenDrink.id, expectedDrink.id,
                 "drinks[\(index)].id", file: file, line: line
             )
             XCTAssertEqual(
-                givenViewModel.drinks[index].size, expectedViewModel.drinks[index].size, accuracy: accuracy,
+                givenDrink.size, expectedDrink.size, accuracy: accuracy,
                 "drinks[\(index)].size", file: file, line: line
             )
             XCTAssertEqual(
-                givenViewModel.drinks[index].fill, expectedViewModel.drinks[index].fill, accuracy: accuracy,
+                givenDrink.fill, expectedDrink.fill, accuracy: accuracy,
                 "drinks[\(index)].fill", file: file, line: line
             )
             XCTAssertEqual(
-                givenViewModel.drinks[index].container, expectedViewModel.drinks[index].container,
+                givenDrink.container, expectedDrink.container,
                 "drinks[\(index)].container", file: file, line: line
             )
         }
@@ -980,6 +990,25 @@ extension UserPreferenceServiceTypeSpy.MethodCall: @retroactive Equatable {
             key_lhs == key_rhs
         case (.set, .get), (.get, .set):
             false
+        }
+    }
+}
+
+extension DayServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getToday:
+            <#code#>
+        case .getDays(let dates):
+            <#code#>
+        case .add(let drink):
+            <#code#>
+        case .remove(let drink):
+            <#code#>
+        case .increase(let goal):
+            <#code#>
+        case .decrease(let goal):
+            <#code#>
         }
     }
 }
