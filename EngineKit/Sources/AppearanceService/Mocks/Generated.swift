@@ -16,7 +16,7 @@ public protocol AppearanceServiceTypeSpying {
 }
 
 public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -42,10 +42,12 @@ public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
 
 extension AppearanceServiceTypeSpy: AppearanceServiceType {
     public func getAppearance() -> Appearance {
+        methodNameLog.append(.getAppearance)
         methodLog.append(.getAppearance)
         return realObject.getAppearance()
     }
     public func setAppearance(_ appearance: Appearance) -> Void {
+        methodNameLog.append(.setAppearanceAppearance)
         methodLog.append(.setAppearanceAppearance(appearance: appearance))
         realObject.setAppearance(appearance)
     }

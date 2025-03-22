@@ -16,7 +16,7 @@ public protocol UserNotificationCenterTypeSpying {
 }
 
 public final class UserNotificationCenterTypeSpy: UserNotificationCenterTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -60,46 +60,57 @@ public final class UserNotificationCenterTypeSpy: UserNotificationCenterTypeSpyi
 
 extension UserNotificationCenterTypeSpy: UserNotificationCenterType {
     public func requestAuthorization() async throws -> Bool {
+        methodNameLog.append(.requestAuthorization)
         methodLog.append(.requestAuthorization)
         return try await realObject.requestAuthorization()
     }
     public func setNotificationCategories(_ categories: Set<NotificationCategory>) -> Void {
+        methodNameLog.append(.setNotificationCategoriesCategories)
         methodLog.append(.setNotificationCategoriesCategories(categories: categories))
         realObject.setNotificationCategories(categories)
     }
     public func notificationCategories() async -> Set<NotificationCategory> {
+        methodNameLog.append(.notificationCategories)
         methodLog.append(.notificationCategories)
         return await realObject.notificationCategories()
     }
     public func add(_ request: NotificationRequest) async throws -> Void {
+        methodNameLog.append(.addRequest)
         methodLog.append(.addRequest(request: request))
         try await realObject.add(request)
     }
     public func pendingNotificationRequests() async -> [NotificationRequest] {
+        methodNameLog.append(.pendingNotificationRequests)
         methodLog.append(.pendingNotificationRequests)
         return await realObject.pendingNotificationRequests()
     }
     public func removePendingNotificationRequests(withIdentifiers identifiers: [String]) -> Void {
+        methodNameLog.append(.removePendingNotificationRequestsIdentifiers)
         methodLog.append(.removePendingNotificationRequestsIdentifiers(identifiers: identifiers))
         realObject.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     public func removeAllPendingNotificationRequests() -> Void {
+        methodNameLog.append(.removeAllPendingNotificationRequests)
         methodLog.append(.removeAllPendingNotificationRequests)
         realObject.removeAllPendingNotificationRequests()
     }
     public func deliveredNotifications() async -> [DeliveredNotification] {
+        methodNameLog.append(.deliveredNotifications)
         methodLog.append(.deliveredNotifications)
         return await realObject.deliveredNotifications()
     }
     public func removeDeliveredNotifications(withIdentifiers identifiers: [String]) -> Void {
+        methodNameLog.append(.removeDeliveredNotificationsIdentifiers)
         methodLog.append(.removeDeliveredNotificationsIdentifiers(identifiers: identifiers))
         realObject.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
     public func removeAllDeliveredNotifications() -> Void {
+        methodNameLog.append(.removeAllDeliveredNotifications)
         methodLog.append(.removeAllDeliveredNotifications)
         realObject.removeAllDeliveredNotifications()
     }
     public func setBadgeCount(_ newBadgeCount: Int) async throws -> Void {
+        methodNameLog.append(.setBadgeCountNewBadgeCount)
         methodLog.append(.setBadgeCountNewBadgeCount(newBadgeCount: newBadgeCount))
         try await realObject.setBadgeCount(newBadgeCount)
     }
@@ -160,7 +171,7 @@ public protocol UserNotificationDelegateTypeSpying {
 }
 
 public final class UserNotificationDelegateTypeSpy: UserNotificationDelegateTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -188,14 +199,17 @@ public final class UserNotificationDelegateTypeSpy: UserNotificationDelegateType
 
 extension UserNotificationDelegateTypeSpy: UserNotificationDelegateType {
     public func userNotificationCenter(_ center: UserNotificationCenterType, didReceive response: NotificationResponse) async -> Void {
+        methodNameLog.append(.userNotificationCenterCenterResponse)
         methodLog.append(.userNotificationCenterCenterResponse(center: center, response: response))
         await realObject.userNotificationCenter(center, didReceive: response)
     }
     public func userNotificationCenter(_ center: UserNotificationCenterType, willPresent: DeliveredNotification) async -> Void {
+        methodNameLog.append(.userNotificationCenterCenterWillPresent)
         methodLog.append(.userNotificationCenterCenterWillPresent(center: center, willPresent: willPresent))
         await realObject.userNotificationCenter(center, willPresent: willPresent)
     }
     public func userNotificationCenter(_ center: UserNotificationCenterType, openSettingsFor: DeliveredNotification?) -> Void {
+        methodNameLog.append(.userNotificationCenterCenterOpenSettingsFor)
         methodLog.append(.userNotificationCenterCenterOpenSettingsFor(center: center, openSettingsFor: openSettingsFor))
         realObject.userNotificationCenter(center, openSettingsFor: openSettingsFor)
     }
@@ -240,7 +254,7 @@ public protocol UserNotificationServiceTypeSpying {
 }
 
 public final class UserNotificationServiceTypeSpy: UserNotificationServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
         case minimumAllowedFrequency
     }
 
@@ -277,18 +291,22 @@ extension UserNotificationServiceTypeSpy: UserNotificationServiceType {
         }
     }
     public func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError> {
+        methodNameLog.append(.enableWithFrequencyStartStop)
         methodLog.append(.enableWithFrequencyStartStop(withFrequency: withFrequency, start: start, stop: stop))
         return await realObject.enable(withFrequency: withFrequency, start: start, stop: stop)
     }
     public func disable() -> Void {
+        methodNameLog.append(.disable)
         methodLog.append(.disable)
         realObject.disable()
     }
     public func celebrate() async -> Void {
+        methodNameLog.append(.celebrate)
         methodLog.append(.celebrate)
         await realObject.celebrate()
     }
     public func getSettings() -> NotificationSettings {
+        methodNameLog.append(.getSettings)
         methodLog.append(.getSettings)
         return realObject.getSettings()
     }

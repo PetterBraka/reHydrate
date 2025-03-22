@@ -16,7 +16,7 @@ public protocol DateServiceTypeSpying {
 }
 
 public final class DateServiceTypeSpy: DateServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -54,34 +54,42 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
 
 extension DateServiceTypeSpy: DateServiceType {
     public func now() -> Date {
+        methodNameLog.append(.now)
         methodLog.append(.now)
         return realObject.now()
     }
     public func daysBetween(_ start: Date, end: Date) -> Int {
+        methodNameLog.append(.daysBetweenStartEnd)
         methodLog.append(.daysBetweenStartEnd(start: start, end: end))
         return realObject.daysBetween(start, end: end)
     }
     public func get(component: Component, from date: Date) -> Int {
+        methodNameLog.append(.getComponentDate)
         methodLog.append(.getComponentDate(component: component, date: date))
         return realObject.get(component: component, from: date)
     }
     public func getDate(byAdding value: Int, component: Component, to date: Date) -> Date {
+        methodNameLog.append(.getDateValueComponentDate)
         methodLog.append(.getDateValueComponentDate(value: value, component: component, date: date))
         return realObject.getDate(byAdding: value, component: component, to: date)
     }
     public func getStart(of date: Date) -> Date {
+        methodNameLog.append(.getStartDate)
         methodLog.append(.getStartDate(date: date))
         return realObject.getStart(of: date)
     }
     public func getEnd(of date: Date) -> Date {
+        methodNameLog.append(.getEndDate)
         methodLog.append(.getEndDate(date: date))
         return realObject.getEnd(of: date)
     }
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
+        methodNameLog.append(.isDateDateInSameDayAs)
         methodLog.append(.isDateDateInSameDayAs(date: date, inSameDayAs: inSameDayAs))
         return realObject.isDate(date, inSameDayAs: inSameDayAs)
     }
     public func date(hours: Int, minutes: Int, seconds: Int, from date: Date) -> Date? {
+        methodNameLog.append(.dateHoursMinutesSecondsDate)
         methodLog.append(.dateHoursMinutesSecondsDate(hours: hours, minutes: minutes, seconds: seconds, date: date))
         return realObject.date(hours: hours, minutes: minutes, seconds: seconds, from: date)
     }

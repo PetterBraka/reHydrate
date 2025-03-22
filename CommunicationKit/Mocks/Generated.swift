@@ -16,7 +16,7 @@ public protocol PhoneServiceTypeSpying {
 }
 
 public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
         case currentState
         case isReachable
         case applicationContext
@@ -115,30 +115,37 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
         }
     }
     public func isSupported() -> Bool {
+        methodNameLog.append(.isSupported)
         methodLog.append(.isSupported)
         return realObject.isSupported()
     }
     public func activate() -> Void {
+        methodNameLog.append(.activate)
         methodLog.append(.activate)
         realObject.activate()
     }
     public func update(applicationContext: [CommunicationUserInfo : Codable]) throws -> Void {
+        methodNameLog.append(.updateApplicationContext)
         methodLog.append(.updateApplicationContext(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
     public func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
+        methodNameLog.append(.sendMessageMessageErrorHandler)
         methodLog.append(.sendMessageMessageErrorHandler(message: message, errorHandler: errorHandler))
         realObject.sendMessage(message, errorHandler: errorHandler)
     }
     public func sendData(_ data: Data, errorHandler: ((Error) -> Void)?) -> Void {
+        methodNameLog.append(.sendDataDataErrorHandler)
         methodLog.append(.sendDataDataErrorHandler(data: data, errorHandler: errorHandler))
         realObject.sendData(data, errorHandler: errorHandler)
     }
     public func transferComplication(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
+        methodNameLog.append(.transferComplicationUserInfo)
         methodLog.append(.transferComplicationUserInfo(userInfo: userInfo))
         return realObject.transferComplication(userInfo: userInfo)
     }
     public func transfer(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
+        methodNameLog.append(.transferUserInfo)
         methodLog.append(.transferUserInfo(userInfo: userInfo))
         return realObject.transfer(userInfo: userInfo)
     }
@@ -200,7 +207,7 @@ public protocol WatchServiceTypeSpying {
 }
 
 public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
         case currentState
         case isReachable
         case applicationContext
@@ -269,26 +276,32 @@ extension WatchServiceTypeSpy: WatchServiceType {
         }
     }
     public func isSupported() -> Bool {
+        methodNameLog.append(.isSupported)
         methodLog.append(.isSupported)
         return realObject.isSupported()
     }
     public func activate() -> Void {
+        methodNameLog.append(.activate)
         methodLog.append(.activate)
         realObject.activate()
     }
     public func update(applicationContext: [CommunicationUserInfo : Codable]) throws -> Void {
+        methodNameLog.append(.updateApplicationContext)
         methodLog.append(.updateApplicationContext(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
     public func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
+        methodNameLog.append(.sendMessageMessageErrorHandler)
         methodLog.append(.sendMessageMessageErrorHandler(message: message, errorHandler: errorHandler))
         realObject.sendMessage(message, errorHandler: errorHandler)
     }
     public func sendData(_ data: Data, errorHandler: ((Error) -> Void)?) -> Void {
+        methodNameLog.append(.sendDataDataErrorHandler)
         methodLog.append(.sendDataDataErrorHandler(data: data, errorHandler: errorHandler))
         realObject.sendData(data, errorHandler: errorHandler)
     }
     public func sendUserInfo(_ userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
+        methodNameLog.append(.sendUserInfoUserInfo)
         methodLog.append(.sendUserInfoUserInfo(userInfo: userInfo))
         return realObject.sendUserInfo(userInfo)
     }

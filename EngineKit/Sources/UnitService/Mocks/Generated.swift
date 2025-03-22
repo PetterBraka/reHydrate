@@ -16,7 +16,7 @@ public protocol UnitServiceTypeSpying {
 }
 
 public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -44,14 +44,17 @@ public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
 
 extension UnitServiceTypeSpy: UnitServiceType {
     public func set(unitSystem: UnitSystem) -> Void {
+        methodNameLog.append(.setUnitSystem)
         methodLog.append(.setUnitSystem(unitSystem: unitSystem))
         realObject.set(unitSystem: unitSystem)
     }
     public func getUnitSystem() -> UnitSystem {
+        methodNameLog.append(.getUnitSystem)
         methodLog.append(.getUnitSystem)
         return realObject.getUnitSystem()
     }
     public func convert(_ value: Double, from fromUnit: UnitModel, to toUnit: UnitModel) -> Double {
+        methodNameLog.append(.convertValueFromUnitToUnit)
         methodLog.append(.convertValueFromUnitToUnit(value: value, fromUnit: fromUnit, toUnit: toUnit))
         return realObject.convert(value, from: fromUnit, to: toUnit)
     }

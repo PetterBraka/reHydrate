@@ -16,7 +16,7 @@ public protocol LanguageServiceTypeSpying {
 }
 
 public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -44,14 +44,17 @@ public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
 
 extension LanguageServiceTypeSpy: LanguageServiceType {
     public func setLanguage(to language: Language) -> Void {
+        methodNameLog.append(.setLanguageLanguage)
         methodLog.append(.setLanguageLanguage(language: language))
         realObject.setLanguage(to: language)
     }
     public func getSelectedLanguage() -> Language {
+        methodNameLog.append(.getSelectedLanguage)
         methodLog.append(.getSelectedLanguage)
         return realObject.getSelectedLanguage()
     }
     public func getLanguageOptions() -> [Language] {
+        methodNameLog.append(.getLanguageOptions)
         methodLog.append(.getLanguageOptions)
         return realObject.getLanguageOptions()
     }

@@ -16,7 +16,7 @@ public protocol PhoneCommsTypeSpying {
 }
 
 public final class PhoneCommsTypeSpy: PhoneCommsTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -46,18 +46,22 @@ public final class PhoneCommsTypeSpy: PhoneCommsTypeSpying {
 
 extension PhoneCommsTypeSpy: PhoneCommsType {
     public func setAppContext() async -> Void {
+        methodNameLog.append(.setAppContext)
         methodLog.append(.setAppContext)
         await realObject.setAppContext()
     }
     public func sendDataToWatch() async -> Void {
+        methodNameLog.append(.sendDataToWatch)
         methodLog.append(.sendDataToWatch)
         await realObject.sendDataToWatch()
     }
     public func addObserver(using updateBlock: @escaping () -> Void) -> Void {
+        methodNameLog.append(.addObserverUpdateBlock)
         methodLog.append(.addObserverUpdateBlock(updateBlock: updateBlock))
         realObject.addObserver(using: updateBlock)
     }
     public func removeObserver() -> Void {
+        methodNameLog.append(.removeObserver)
         methodLog.append(.removeObserver)
         realObject.removeObserver()
     }

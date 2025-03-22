@@ -16,7 +16,7 @@ public protocol DrinkServiceTypeSpying {
 }
 
 public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -48,22 +48,27 @@ public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
 
 extension DrinkServiceTypeSpy: DrinkServiceType {
     public func add(size: Double, container: Container) async throws -> Drink {
+        methodNameLog.append(.addSizeContainer)
         methodLog.append(.addSizeContainer(size: size, container: container))
         return try await realObject.add(size: size, container: container)
     }
     public func edit(size: Double, of drink: Container) async throws -> Drink {
+        methodNameLog.append(.editSizeDrink)
         methodLog.append(.editSizeDrink(size: size, drink: drink))
         return try await realObject.edit(size: size, of: drink)
     }
     public func remove(container: Container) async throws -> Void {
+        methodNameLog.append(.removeContainer)
         methodLog.append(.removeContainer(container: container))
         try await realObject.remove(container: container)
     }
     public func getSaved() async throws -> [Drink] {
+        methodNameLog.append(.getSaved)
         methodLog.append(.getSaved)
         return try await realObject.getSaved()
     }
     public func resetToDefault() async -> [Drink] {
+        methodNameLog.append(.resetToDefault)
         methodLog.append(.resetToDefault)
         return await realObject.resetToDefault()
     }

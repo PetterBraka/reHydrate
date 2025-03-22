@@ -16,7 +16,7 @@ public protocol NotificationCenterTypeSpying {
 }
 
 public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -44,14 +44,17 @@ public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
 
 extension NotificationCenterTypeSpy: NotificationCenterType {
     public func post(name: NotificationName) -> Void {
+        methodNameLog.append(.postName)
         methodLog.append(.postName(name: name))
         realObject.post(name: name)
     }
     public func addObserver(_ observer: Any, name: NotificationName, selector: Selector, object: Any?) -> Void {
+        methodNameLog.append(.addObserverObserverNameSelectorObject)
         methodLog.append(.addObserverObserverNameSelectorObject(observer: observer, name: name, selector: selector, object: object))
         realObject.addObserver(observer, name: name, selector: selector, object: object)
     }
     public func removeObserver(_ observer: Any, name: NotificationName) -> Void {
+        methodNameLog.append(.removeObserverObserverName)
         methodLog.append(.removeObserverObserverName(observer: observer, name: name))
         realObject.removeObserver(observer, name: name)
     }

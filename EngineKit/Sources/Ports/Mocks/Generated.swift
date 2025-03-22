@@ -16,7 +16,7 @@ public protocol AlternateIconsServiceTypeSpying {
 }
 
 public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -44,14 +44,17 @@ public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying
 
 extension AlternateIconsServiceTypeSpy: AlternateIconsServiceType {
     public func supportsAlternateIcons() async -> Bool {
+        methodNameLog.append(.supportsAlternateIcons)
         methodLog.append(.supportsAlternateIcons)
         return await realObject.supportsAlternateIcons()
     }
     public func setAlternateIcon(to iconName: String) async -> Error? {
+        methodNameLog.append(.setAlternateIconIconName)
         methodLog.append(.setAlternateIconIconName(iconName: iconName))
         return await realObject.setAlternateIcon(to: iconName)
     }
     public func getAlternateIcon() async -> String? {
+        methodNameLog.append(.getAlternateIcon)
         methodLog.append(.getAlternateIcon)
         return await realObject.getAlternateIcon()
     }
@@ -96,7 +99,7 @@ public protocol AppearancePortTypeSpying {
 }
 
 public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -122,10 +125,12 @@ public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
 
 extension AppearancePortTypeSpy: AppearancePortType {
     public func getStyle() -> Style? {
+        methodNameLog.append(.getStyle)
         methodLog.append(.getStyle)
         return realObject.getStyle()
     }
     public func setStyle(_ style: Style) throws -> Void {
+        methodNameLog.append(.setStyleStyle)
         methodLog.append(.setStyleStyle(style: style))
         try realObject.setStyle(style)
     }
@@ -168,7 +173,7 @@ public protocol HealthInterfaceSpying {
 }
 
 public final class HealthInterfaceSpy: HealthInterfaceSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
         case isSupported
     }
 
@@ -211,30 +216,37 @@ extension HealthInterfaceSpy: HealthInterface {
         }
     }
     public func shouldRequestAccess(for healthDataType: [HealthDataType]) async -> Bool {
+        methodNameLog.append(.shouldRequestAccessHealthDataType)
         methodLog.append(.shouldRequestAccessHealthDataType(healthDataType: healthDataType))
         return await realObject.shouldRequestAccess(for: healthDataType)
     }
     public func canWrite(_ dataType: HealthDataType) -> Bool {
+        methodNameLog.append(.canWriteDataType)
         methodLog.append(.canWriteDataType(dataType: dataType))
         return realObject.canWrite(dataType)
     }
     public func requestAuth(toReadAndWrite readAndWrite: Set<HealthDataType>) async throws -> Void {
+        methodNameLog.append(.requestAuthReadAndWrite)
         methodLog.append(.requestAuthReadAndWrite(readAndWrite: readAndWrite))
         try await realObject.requestAuth(toReadAndWrite: readAndWrite)
     }
     public func export(quantity: Quantity, id: QuantityTypeIdentifier, date: Date) async throws -> Void {
+        methodNameLog.append(.exportQuantityIdDate)
         methodLog.append(.exportQuantityIdDate(quantity: quantity, id: id, date: date))
         try await realObject.export(quantity: quantity, id: id, date: date)
     }
     public func readSum(_ data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents) async throws -> Double {
+        methodNameLog.append(.readSumDataStartEndIntervalComponents)
         methodLog.append(.readSumDataStartEndIntervalComponents(data: data, start: start, end: end, intervalComponents: intervalComponents))
         return try await realObject.readSum(data, start: start, end: end, intervalComponents: intervalComponents)
     }
     public func readSamples(_ data: HealthDataType, start: Date, end: Date) async throws -> [Double] {
+        methodNameLog.append(.readSamplesDataStartEnd)
         methodLog.append(.readSamplesDataStartEnd(data: data, start: start, end: end))
         return try await realObject.readSamples(data, start: start, end: end)
     }
     public func enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency) async throws -> Void {
+        methodNameLog.append(.enableBackgroundDeliveryHealthDataFrequency)
         methodLog.append(.enableBackgroundDeliveryHealthDataFrequency(healthData: healthData, frequency: frequency))
         try await realObject.enableBackgroundDelivery(healthData: healthData, frequency: frequency)
     }
@@ -288,7 +300,7 @@ public protocol OpenUrlInterfaceSpying {
 }
 
 public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
         case settingsUrl
     }
 
@@ -321,10 +333,12 @@ extension OpenUrlInterfaceSpy: OpenUrlInterface {
         }
     }
     public func open(url: URL) async throws -> Void {
+        methodNameLog.append(.openUrl)
         methodLog.append(.openUrl(url: url))
         try await realObject.open(url: url)
     }
     public func email(to email: String, cc: String?, bcc: String?, subject: String, body: String?) async throws -> Void {
+        methodNameLog.append(.emailEmailCcBccSubjectBody)
         methodLog.append(.emailEmailCcBccSubjectBody(email: email, cc: cc, bcc: bcc, subject: subject, body: body))
         try await realObject.email(to: email, cc: cc, bcc: bcc, subject: subject, body: body)
     }

@@ -16,7 +16,7 @@ public protocol TimelineServiceTypeSpying {
 }
 
 public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -42,10 +42,12 @@ public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
 
 extension TimelineServiceTypeSpy: TimelineServiceType {
     public func getTimeline(for date: Date) async -> [Timeline] {
+        methodNameLog.append(.getTimelineDate)
         methodLog.append(.getTimelineDate(date: date))
         return await realObject.getTimeline(for: date)
     }
     public func getTimelineCollection() async -> [TimelineCollection] {
+        methodNameLog.append(.getTimelineCollection)
         methodLog.append(.getTimelineCollection)
         return await realObject.getTimelineCollection()
     }

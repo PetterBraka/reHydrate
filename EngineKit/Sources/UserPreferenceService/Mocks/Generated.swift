@@ -16,7 +16,7 @@ public protocol UserPreferenceServiceTypeSpying {
 }
 
 public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -42,10 +42,12 @@ public final class UserPreferenceServiceTypeSpy: UserPreferenceServiceTypeSpying
 
 extension UserPreferenceServiceTypeSpy: UserPreferenceServiceType {
     public func set<T: Codable>(_ value: T, for key: PreferenceKey) throws -> Void {
+        methodNameLog.append(.setValueKey)
         methodLog.append(.setValueKey(value: value, key: key))
         try realObject.set(value, for: key)
     }
     public func get<T: Codable>(for key: PreferenceKey) -> T? {
+        methodNameLog.append(.getKey)
         methodLog.append(.getKey(key: key))
         return realObject.get(for: key)
     }

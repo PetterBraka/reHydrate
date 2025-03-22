@@ -17,7 +17,7 @@ public protocol DayServiceTypeSpying {
 }
 
 public final class DayServiceTypeSpy: DayServiceTypeSpying {
-    public enum VariableName {
+    public enum VariableName: Equatable {
     }
 
     public enum MethodCall {
@@ -51,26 +51,32 @@ public final class DayServiceTypeSpy: DayServiceTypeSpying {
 
 extension DayServiceTypeSpy: DayServiceType {
     public func getToday() async -> Day {
+        methodNameLog.append(.getToday)
         methodLog.append(.getToday)
         return await realObject.getToday()
     }
     public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
+        methodNameLog.append(.getDaysDates)
         methodLog.append(.getDaysDates(dates: dates))
         return try await realObject.getDays(between: dates)
     }
     public func add(drink: Drink) async throws -> Double {
+        methodNameLog.append(.addDrink)
         methodLog.append(.addDrink(drink: drink))
         return try await realObject.add(drink: drink)
     }
     public func remove(drink: Drink) async throws -> Double {
+        methodNameLog.append(.removeDrink)
         methodLog.append(.removeDrink(drink: drink))
         return try await realObject.remove(drink: drink)
     }
     public func increase(goal: Double) async throws -> Double {
+        methodNameLog.append(.increaseGoal)
         methodLog.append(.increaseGoal(goal: goal))
         return try await realObject.increase(goal: goal)
     }
     public func decrease(goal: Double) async throws -> Double {
+        methodNameLog.append(.decreaseGoal)
         methodLog.append(.decreaseGoal(goal: goal))
         return try await realObject.decrease(goal: goal)
     }
