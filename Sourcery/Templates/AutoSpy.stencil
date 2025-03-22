@@ -24,7 +24,7 @@ public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
 
     public enum MethodCall {
         {% for method in protocol.methods %}
-        case {{ method.callName }}
+        case {{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
             {%- for param in method.parameters -%}
             {%- if param.name != nil -%}
                 {%- if forloop.first -%}({%- endif -%}
@@ -71,7 +71,7 @@ extension {{ protocol.name }}Spy: {{ protocol.name }} {
 {% endfor %}
 {% for method in protocol.methods %}
     public func {{ method.name }}{% if method.isAsync %} async{% endif %}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
-        methodLog.append(.{{ method.callName }}
+        methodLog.append(.{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
         {%- for param in method.parameters -%}
         {%- if param.name != nil -%}
             {%- if forloop.first -%}({%- endif -%}
@@ -90,5 +90,40 @@ extension {{ protocol.name }}Spy: {{ protocol.name }} {
     }
 {% endfor %}
 }
+{% if protocol.annotations.AutoString %}
+
+extension {{ protocol.name }}Spy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        {% for variable in protocol.variables %}
+        case .{{ variable.name }}: "{{ variable.name }}"
+        {% endfor %}
+        }
+    }
+}
+
+extension {{ protocol.name }}Spy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        {% for method in protocol.methods %}
+        case .{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
+            {%- for param in method.parameters -%}
+            {%- if param.name != nil -%}
+                {%- if forloop.first -%}({%- endif -%}
+                let {{ param.name }}
+                {%- if forloop.last -%}){% else %}, {% endif -%}
+            {%- endif -%}
+            {%- endfor -%}: "{{ method.callName }}(
+            {%- for param in method.parameters -%}
+                {%- if param.name != nil -%}
+                    \(String(describing: {{ param.name }}))
+                    {%- if forloop.last -%}{% else %}, {% endif -%}
+                {%- endif -%})
+            {%- endfor -%}"
+        {% endfor %}
+        }
+    }
+}
+{%- endif -%}
 {%- endif -%}
 {%- endfor -%}

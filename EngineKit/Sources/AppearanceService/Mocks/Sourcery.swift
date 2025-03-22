@@ -6,6 +6,6 @@
 //
 import AppearanceServiceInterface
 
-// sourcery:begin: AutoStub, AutoSpy
+// sourcery:begin: AutoStub, AutoSpy, AutoString
 extension AppearanceServiceType {}
 // sourcery:end

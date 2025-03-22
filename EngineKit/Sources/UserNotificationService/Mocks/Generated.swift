@@ -20,16 +20,16 @@ public final class UserNotificationCenterTypeSpy: UserNotificationCenterTypeSpyi
 
     public enum MethodCall {
         case requestAuthorization
-        case setNotificationCategories(categories: Set<NotificationCategory>)
+        case setNotificationCategoriesCategories(categories: Set<NotificationCategory>)
         case notificationCategories
-        case add(request: NotificationRequest)
+        case addRequest(request: NotificationRequest)
         case pendingNotificationRequests
-        case removePendingNotificationRequests(identifiers: [String])
+        case removePendingNotificationRequestsIdentifiers(identifiers: [String])
         case removeAllPendingNotificationRequests
         case deliveredNotifications
-        case removeDeliveredNotifications(identifiers: [String])
+        case removeDeliveredNotificationsIdentifiers(identifiers: [String])
         case removeAllDeliveredNotifications
-        case setBadgeCount(newBadgeCount: Int)
+        case setBadgeCountNewBadgeCount(newBadgeCount: Int)
     }
 
     public var variableLog: [VariableName] = []
@@ -48,7 +48,7 @@ extension UserNotificationCenterTypeSpy: UserNotificationCenterType {
         return try await realObject.requestAuthorization()
     }
     public func setNotificationCategories(_ categories: Set<NotificationCategory>) -> Void {
-        methodLog.append(.setNotificationCategories(categories: categories))
+        methodLog.append(.setNotificationCategoriesCategories(categories: categories))
         realObject.setNotificationCategories(categories)
     }
     public func notificationCategories() async -> Set<NotificationCategory> {
@@ -56,7 +56,7 @@ extension UserNotificationCenterTypeSpy: UserNotificationCenterType {
         return await realObject.notificationCategories()
     }
     public func add(_ request: NotificationRequest) async throws -> Void {
-        methodLog.append(.add(request: request))
+        methodLog.append(.addRequest(request: request))
         try await realObject.add(request)
     }
     public func pendingNotificationRequests() async -> [NotificationRequest] {
@@ -64,7 +64,7 @@ extension UserNotificationCenterTypeSpy: UserNotificationCenterType {
         return await realObject.pendingNotificationRequests()
     }
     public func removePendingNotificationRequests(withIdentifiers identifiers: [String]) -> Void {
-        methodLog.append(.removePendingNotificationRequests(identifiers: identifiers))
+        methodLog.append(.removePendingNotificationRequestsIdentifiers(identifiers: identifiers))
         realObject.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     public func removeAllPendingNotificationRequests() -> Void {
@@ -76,7 +76,7 @@ extension UserNotificationCenterTypeSpy: UserNotificationCenterType {
         return await realObject.deliveredNotifications()
     }
     public func removeDeliveredNotifications(withIdentifiers identifiers: [String]) -> Void {
-        methodLog.append(.removeDeliveredNotifications(identifiers: identifiers))
+        methodLog.append(.removeDeliveredNotificationsIdentifiers(identifiers: identifiers))
         realObject.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
     public func removeAllDeliveredNotifications() -> Void {
@@ -84,8 +84,33 @@ extension UserNotificationCenterTypeSpy: UserNotificationCenterType {
         realObject.removeAllDeliveredNotifications()
     }
     public func setBadgeCount(_ newBadgeCount: Int) async throws -> Void {
-        methodLog.append(.setBadgeCount(newBadgeCount: newBadgeCount))
+        methodLog.append(.setBadgeCountNewBadgeCount(newBadgeCount: newBadgeCount))
         try await realObject.setBadgeCount(newBadgeCount)
+    }
+}
+
+extension UserNotificationCenterTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension UserNotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .requestAuthorization: "requestAuthorization("
+        case .setNotificationCategoriesCategories(let categories): "setNotificationCategories(\(String(describing: categories)))"
+        case .notificationCategories: "notificationCategories("
+        case .addRequest(let request): "add(\(String(describing: request)))"
+        case .pendingNotificationRequests: "pendingNotificationRequests("
+        case .removePendingNotificationRequestsIdentifiers(let identifiers): "removePendingNotificationRequests(\(String(describing: identifiers)))"
+        case .removeAllPendingNotificationRequests: "removeAllPendingNotificationRequests("
+        case .deliveredNotifications: "deliveredNotifications("
+        case .removeDeliveredNotificationsIdentifiers(let identifiers): "removeDeliveredNotifications(\(String(describing: identifiers)))"
+        case .removeAllDeliveredNotifications: "removeAllDeliveredNotifications("
+        case .setBadgeCountNewBadgeCount(let newBadgeCount): "setBadgeCount(\(String(describing: newBadgeCount)))"
+        }
     }
 }
 
@@ -104,9 +129,9 @@ public final class UserNotificationDelegateTypeSpy: UserNotificationDelegateType
     }
 
     public enum MethodCall {
-        case userNotificationCenter(center: UserNotificationCenterType, response: NotificationResponse)
-        case userNotificationCenter(center: UserNotificationCenterType, willPresent: DeliveredNotification)
-        case userNotificationCenter(center: UserNotificationCenterType, openSettingsFor: DeliveredNotification?)
+        case userNotificationCenterCenterResponse(center: UserNotificationCenterType, response: NotificationResponse)
+        case userNotificationCenterCenterWillPresent(center: UserNotificationCenterType, willPresent: DeliveredNotification)
+        case userNotificationCenterCenterOpenSettingsFor(center: UserNotificationCenterType, openSettingsFor: DeliveredNotification?)
     }
 
     public var variableLog: [VariableName] = []
@@ -121,16 +146,33 @@ public final class UserNotificationDelegateTypeSpy: UserNotificationDelegateType
 
 extension UserNotificationDelegateTypeSpy: UserNotificationDelegateType {
     public func userNotificationCenter(_ center: UserNotificationCenterType, didReceive response: NotificationResponse) async -> Void {
-        methodLog.append(.userNotificationCenter(center: center, response: response))
+        methodLog.append(.userNotificationCenterCenterResponse(center: center, response: response))
         await realObject.userNotificationCenter(center, didReceive: response)
     }
     public func userNotificationCenter(_ center: UserNotificationCenterType, willPresent: DeliveredNotification) async -> Void {
-        methodLog.append(.userNotificationCenter(center: center, willPresent: willPresent))
+        methodLog.append(.userNotificationCenterCenterWillPresent(center: center, willPresent: willPresent))
         await realObject.userNotificationCenter(center, willPresent: willPresent)
     }
     public func userNotificationCenter(_ center: UserNotificationCenterType, openSettingsFor: DeliveredNotification?) -> Void {
-        methodLog.append(.userNotificationCenter(center: center, openSettingsFor: openSettingsFor))
+        methodLog.append(.userNotificationCenterCenterOpenSettingsFor(center: center, openSettingsFor: openSettingsFor))
         realObject.userNotificationCenter(center, openSettingsFor: openSettingsFor)
+    }
+}
+
+extension UserNotificationDelegateTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension UserNotificationDelegateTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .userNotificationCenterCenterResponse(let center, let response): "userNotificationCenter(\(String(describing: center)), )\(String(describing: response)))"
+        case .userNotificationCenterCenterWillPresent(let center, let willPresent): "userNotificationCenter(\(String(describing: center)), )\(String(describing: willPresent)))"
+        case .userNotificationCenterCenterOpenSettingsFor(let center, let openSettingsFor): "userNotificationCenter(\(String(describing: center)), )\(String(describing: openSettingsFor)))"
+        }
     }
 }
 
@@ -150,7 +192,7 @@ public final class UserNotificationServiceTypeSpy: UserNotificationServiceTypeSp
     }
 
     public enum MethodCall {
-        case enable(withFrequency: Int, start: Date, stop: Date)
+        case enableWithFrequencyStartStop(withFrequency: Int, start: Date, stop: Date)
         case disable
         case celebrate
         case getSettings
@@ -174,7 +216,7 @@ extension UserNotificationServiceTypeSpy: UserNotificationServiceType {
         }
     }
     public func enable(withFrequency: Int, start: Date, stop: Date) async -> Result<Void, NotificationError> {
-        methodLog.append(.enable(withFrequency: withFrequency, start: start, stop: stop))
+        methodLog.append(.enableWithFrequencyStartStop(withFrequency: withFrequency, start: start, stop: stop))
         return await realObject.enable(withFrequency: withFrequency, start: start, stop: stop)
     }
     public func disable() -> Void {
@@ -190,9 +232,49 @@ extension UserNotificationServiceTypeSpy: UserNotificationServiceType {
         return realObject.getSettings()
     }
 }
+
+extension UserNotificationServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .minimumAllowedFrequency: "minimumAllowedFrequency"
+        }
+    }
+}
+
+extension UserNotificationServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .enableWithFrequencyStartStop(let withFrequency, let start, let stop): "enable(\(String(describing: withFrequency)), )\(String(describing: start)), )\(String(describing: stop)))"
+        case .disable: "disable("
+        case .celebrate: "celebrate("
+        case .getSettings: "getSettings("
+        }
+    }
+}
 // MARK: - AutoString
 // swiftlint:disable all
 
+import UserNotificationServiceInterface
+
+extension NotificationSettings: CustomStringConvertible {
+    public var description: String {
+        "NotificationSettings(isOn: \(String(describing: isOn)) start: \(String(describing: start)) stop: \(String(describing: stop)) frequency: \(String(describing: frequency)) )"
+    }
+}
+
+extension NotificationError: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .unauthorized: "unauthorized"
+        case .invalidDate: "invalidDate"
+        case .missingDateComponents: "missingDateComponents"
+        case .missingReminders: "missingReminders"
+        case .missingCongratulations: "missingCongratulations"
+        case .frequencyTooLow: "frequencyTooLow"
+        case .alreadySet(let at): "alreadySet(at:\(String(describing: at)))"
+        }
+    }
+}
 
 
 // MARK: - AutoStub

@@ -82,7 +82,7 @@ final class WatchCommsTests: XCTestCase {
             watchService.spy.methodLog,
             [
                 .isSupported,
-                .update(applicationContext: [
+                .updateApplicationContext(applicationContext: [
                     .day: day,
                     .drinks: drinks,
                     .unitSystem: unitSystem
@@ -222,7 +222,7 @@ final class WatchCommsTests: XCTestCase {
         )
         XCTAssertEqual(
             watchService.spy.methodLog,
-            [.isSupported, .update(applicationContext: [.day: day, .drinks: drinks, .unitSystem: unitSystem])]
+            [.isSupported, .updateApplicationContext(applicationContext: [.day: day, .drinks: drinks, .unitSystem: unitSystem])]
         )
     }
     
@@ -244,7 +244,7 @@ final class WatchCommsTests: XCTestCase {
         )
         XCTAssertEqual(
             watchService.spy.methodLog,
-            [.isSupported, .update(applicationContext: [.day: day, .unitSystem: unitSystem])]
+            [.isSupported, .updateApplicationContext(applicationContext: [.day: day, .unitSystem: unitSystem])]
         )
     }
     
@@ -267,7 +267,7 @@ final class WatchCommsTests: XCTestCase {
         )
         XCTAssertEqual(
             watchService.spy.methodLog,
-            [.isSupported, .update(applicationContext: [.day: day, .drinks: drinks, .unitSystem: unitSystem])]
+            [.isSupported, .updateApplicationContext(applicationContext: [.day: day, .drinks: drinks, .unitSystem: unitSystem])]
         )
     }
     
@@ -290,7 +290,7 @@ final class WatchCommsTests: XCTestCase {
         )
         XCTAssertEqual(
             watchService.spy.methodLog,
-            [.isSupported, .update(applicationContext: [.day: day, .unitSystem: unitSystem])]
+            [.isSupported, .updateApplicationContext(applicationContext: [.day: day, .unitSystem: unitSystem])]
         )
     }
                        
@@ -314,7 +314,7 @@ final class WatchCommsTests: XCTestCase {
         )
         XCTAssertEqual(
             watchService.spy.methodLog,
-            [.isSupported, .sendMessage(message: [.day: day, .drinks: drinks, .unitSystem: unitSystem], errorHandler: nil)]
+            [.isSupported, .sendMessageMessageErrorHandler(message: [.day: day, .drinks: drinks, .unitSystem: unitSystem], errorHandler: nil)]
         )
     }
     
@@ -336,7 +336,7 @@ final class WatchCommsTests: XCTestCase {
         )
         XCTAssertEqual(
             watchService.spy.methodLog,
-            [.isSupported, .sendMessage(message: [.day: day, .unitSystem: unitSystem], errorHandler: nil)]
+            [.isSupported, .sendMessageMessageErrorHandler(message: [.day: day, .unitSystem: unitSystem], errorHandler: nil)]
         )
     }
     
@@ -359,7 +359,7 @@ final class WatchCommsTests: XCTestCase {
         await fulfillment(of: [expectation], timeout: timeout)
         XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .add(size: 300, container: .small), .add(size: 500, container: .medium)])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .addSizeContainer(size: 300, container: .small), .addSizeContainer(size: 500, container: .medium)])
     }
     
     func test_addObserver_didReceiveMessage() async {
@@ -381,7 +381,7 @@ final class WatchCommsTests: XCTestCase {
         await fulfillment(of: [expectation], timeout: timeout)
         XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .add(size: 300, container: .small), .add(size: 500, container: .medium)])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .addSizeContainer(size: 300, container: .small), .addSizeContainer(size: 500, container: .medium)])
     }
     
     func test_addObserver_didReceiveUserInfo() async {
@@ -403,7 +403,7 @@ final class WatchCommsTests: XCTestCase {
         await fulfillment(of: [expectation], timeout: timeout)
         XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem])
         XCTAssertEqual(dayService.spy.methodLog, [.getToday])
-        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .add(size: 300, container: .small), .add(size: 500, container: .medium)])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .addSizeContainer(size: 300, container: .small), .addSizeContainer(size: 500, container: .medium)])
     }
     
     func test_addObserver_processing_noData() async {
@@ -433,7 +433,7 @@ final class WatchCommsTests: XCTestCase {
         notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo.mapValueToData())
         
         await fulfillment(of: [expectation], timeout: timeout)
-        XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem, .set(unitSystem: .metric)])
+        XCTAssertEqual(unitService.spy.methodLog, [.getUnitSystem, .setUnitSystem(unitSystem: .metric)])
     }
     
     func test_addObserver_processing_unit_unexpectedData() async {
@@ -468,7 +468,7 @@ final class WatchCommsTests: XCTestCase {
         notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo.mapValueToData())
         
         await fulfillment(of: [expectation], timeout: timeout)
-        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .edit(size: 300, drink: .small), .edit(size: 500, drink: .medium)])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .editSizeDrink(size: 300, drink: .small), .editSizeDrink(size: 500, drink: .medium)])
     }
     
     func test_addObserver_processing_drink_didAddAndEdit() async {
@@ -486,7 +486,7 @@ final class WatchCommsTests: XCTestCase {
         notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo.mapValueToData())
         
         await fulfillment(of: [expectation], timeout: timeout)
-        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .edit(size: 300, drink: .small), .add(size: 500, container: .medium)])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .editSizeDrink(size: 300, drink: .small), .addSizeContainer(size: 500, container: .medium)])
     }
     
     func test_addObserver_processing_drink_didNotRemove() async {
@@ -504,7 +504,7 @@ final class WatchCommsTests: XCTestCase {
         notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo.mapValueToData())
         
         await fulfillment(of: [expectation], timeout: timeout)
-        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .edit(size: 200, drink: .small)])
+        XCTAssertEqual(drinksService.spy.methodLog, [.getSaved, .editSizeDrink(size: 200, drink: .small)])
     }
     
     func test_addObserver_processing_drink_didNotEdit() async {
@@ -557,8 +557,8 @@ final class WatchCommsTests: XCTestCase {
         notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo.mapValueToData())
         
         await fulfillment(of: [expectation], timeout: timeout)
-        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .add(drink: .init(id: "watch-message", size: 900, container: .medium))])
-        XCTAssertEqual(unitService.spy.methodLog, [.convert(value: 0.9, fromUnit: .litres, toUnit: .millilitres)])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .addDrink(drink: .init(id: "watch-message", size: 900, container: .medium))])
+        XCTAssertEqual(unitService.spy.methodLog, [.convertValueFromUnitToUnit(value: 0.9, fromUnit: .litres, toUnit: .millilitres)])
     }
     
     func test_addObserver_processing_day_didRemoveDrink() async {
@@ -577,8 +577,8 @@ final class WatchCommsTests: XCTestCase {
         notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo.mapValueToData())
         
         await fulfillment(of: [expectation], timeout: timeout)
-        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .remove(drink: .init(id: "watch-message", size: 900, container: .medium))])
-        XCTAssertEqual(unitService.spy.methodLog, [.convert(value: 0.9, fromUnit: .litres, toUnit: .millilitres)])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .removeDrink(drink: .init(id: "watch-message", size: 900, container: .medium))])
+        XCTAssertEqual(unitService.spy.methodLog, [.convertValueFromUnitToUnit(value: 0.9, fromUnit: .litres, toUnit: .millilitres)])
     }
     
     func test_addObserver_processing_day_didIncreaseGoal() async {
@@ -596,7 +596,7 @@ final class WatchCommsTests: XCTestCase {
         notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo.mapValueToData())
         
         await fulfillment(of: [expectation], timeout: timeout)
-        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .increase(goal: 0.5)])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .increaseGoal(goal: 0.5)])
         XCTAssertEqual(unitService.spy.methodLog, [])
     }
     
@@ -615,7 +615,7 @@ final class WatchCommsTests: XCTestCase {
         notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo.mapValueToData())
         
         await fulfillment(of: [expectation], timeout: timeout)
-        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .decrease(goal: 0.5)])
+        XCTAssertEqual(dayService.spy.methodLog, [.getToday, .decreaseGoal(goal: 0.5)])
         XCTAssertEqual(unitService.spy.methodLog, [])
     }
     
@@ -693,7 +693,7 @@ final class WatchCommsTests: XCTestCase {
     }
 }
 
-extension WatchServiceTypeSpy.MethodCall: Equatable {
+extension WatchServiceTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: WatchServiceTypeSpy.MethodCall, rhs: WatchServiceTypeSpy.MethodCall) -> Bool {
         func isEqual(_ lhs: [CommunicationUserInfo: Codable], _ rhs: [CommunicationUserInfo: Codable]) -> Bool {
             for key in CommunicationUserInfo.allCases {
@@ -707,125 +707,39 @@ extension WatchServiceTypeSpy.MethodCall: Equatable {
         return switch (lhs, rhs) {
         case (.isSupported, .isSupported), (.activate, .activate):
             true
-        case (.update(let applicationContext_lhs), .update(let applicationContext_rhs)):
+        case (.updateApplicationContext(let applicationContext_lhs), .updateApplicationContext(let applicationContext_rhs)):
             isEqual(applicationContext_lhs, applicationContext_rhs)
-        case (.sendMessage(let message_lhs, _), .sendMessage(let message_rhs, _)):
+        case (.sendMessageMessageErrorHandler(let message_lhs, _), .sendMessageMessageErrorHandler(let message_rhs, _)):
             isEqual(message_lhs, message_rhs)
-        case (.sendData(let data_lhs, _), .sendData(let data_rhs, _)):
+        case (.sendDataDataErrorHandler(let data_lhs, _), .sendDataDataErrorHandler(let data_rhs, _)):
             data_lhs == data_rhs
-        case (.sendUserInfo(userInfo: let userInfo_lhs), .sendUserInfo(userInfo: let userInfo_rhs)):
+        case (.sendUserInfoUserInfo(userInfo: let userInfo_lhs), .sendUserInfoUserInfo(userInfo: let userInfo_rhs)):
             isEqual(userInfo_lhs, userInfo_rhs)
         case (.isSupported, _), (_, .isSupported),
             (.activate, _), (_, .activate),
-            (.update, _), (_, .update),
-            (.sendMessage, _), (_, .sendMessage),
-            (.sendData, _), (_, .sendData),
-            (.sendUserInfo, _), (_, .sendUserInfo):
+            (.updateApplicationContext, _), (_, .updateApplicationContext),
+            (.sendMessageMessageErrorHandler, _), (_, .sendMessageMessageErrorHandler),
+            (.sendDataDataErrorHandler, _), (_, .sendDataDataErrorHandler),
+            (.sendUserInfoUserInfo, _), (_, .sendUserInfoUserInfo):
             false
         }
-    }
-}
-
-extension WatchServiceTypeSpy.MethodCall: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .isSupported: "isSupported"
-        case .activate: "activate"
-        case .update(let applicationContext): "update(\(applicationContext)"
-        case .sendMessage(let message, _): "sendMessage(\(message), errorHandler)"
-        case .sendData(let data, _): "sendData(\(data), errorHandler)"
-        case .sendUserInfo(userInfo: let userInfo): "sendUserInfo(\(userInfo))"
-        }
-    }
-}
-
-extension WatchServiceTypeSpy.VariableName: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .currentState: "currentState"
-        case .isReachable: "isReachable"
-        case .applicationContext: "applicationContext"
-        case .receivedApplicationContext: "receivedApplicationContext"
-        case .iOSDeviceNeedsUnlockAfterRebootForReachability: "iOSDeviceNeedsUnlockAfterRebootForReachability"
-        }
-    }
-}
-
-extension DrinkServiceTypeSpy.MethodCall: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .add(let size, let container):
-            "add(\(size), \(container))"
-        case .edit(let size, let drink):
-            "edit(\(size), \(drink))"
-        case .remove(let container):
-            "remove(\(container))"
-        case .getSaved:
-            "getSaved"
-        case .resetToDefault:
-            "resetToDefault"
-        }
-    }
-}
-
-extension DayServiceTypeSpy.MethodCall: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .getToday:
-            "getToday"
-        case .getDays(let dates):
-            "getDays(\(dates))"
-        case .add(let drink):
-            "add(\(drink))"
-        case .remove(let drink):
-            "remove(\(drink))"
-        case .increase(let goal):
-            "increase(\(goal))"
-        case .decrease(let goal):
-            "decrease(\(goal))"
-        }
-    }
-}
-
-extension CommunicationUserInfo: CustomStringConvertible {
-    public var description: String { key }
-}
-
-extension UnitSystem: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .imperial: "imperial"
-        case .metric: "metric"
-        }
-    }
-}
-
-extension Day: CustomStringConvertible {
-    public var description: String {
-        "Day(id: \(id), date: \(date), consumed: \(consumed), goal: \(goal))"
-    }
-}
-
-extension Drink: CustomStringConvertible {
-    public var description: String {
-        "Drink(id: \(id), size: \(size), container: \(container))"
     }
 }
 
 extension UnitServiceTypeSpy.MethodCall: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
-        case (.set(let unitSystem_lhs), .set(let unitSystem_rhs)):
+        case (.setUnitSystem(let unitSystem_lhs), .setUnitSystem(let unitSystem_rhs)):
             unitSystem_lhs == unitSystem_rhs
         case (.getUnitSystem, .getUnitSystem):
             true
-        case (let .convert(value_lhs, fromUnit_lhs, toUnit_lhs), let .convert(value_rhs, fromUnit_rhs, toUnit_rhs)):
+        case (let .convertValueFromUnitToUnit(value_lhs, fromUnit_lhs, toUnit_lhs), let .convertValueFromUnitToUnit(value_rhs, fromUnit_rhs, toUnit_rhs)):
             value_lhs == value_rhs &&
             fromUnit_lhs == fromUnit_rhs &&
             toUnit_lhs == toUnit_rhs
-        case (.getUnitSystem, .set), (.convert, .set),
-            (.set, .getUnitSystem), (.convert, .getUnitSystem),
-            (.set, .convert), (.getUnitSystem, .convert):
+        case (.getUnitSystem, .setUnitSystem), (.convertValueFromUnitToUnit, .setUnitSystem),
+            (.setUnitSystem, .getUnitSystem), (.convertValueFromUnitToUnit, .getUnitSystem),
+            (.setUnitSystem, .convertValueFromUnitToUnit), (.getUnitSystem, .convertValueFromUnitToUnit):
             false
         }
     }
@@ -836,22 +750,22 @@ extension DayServiceTypeSpy.MethodCall: Equatable {
         switch (lhs, rhs) {
         case (.getToday, .getToday):
             true
-        case (.getDays(let dates_lhs), .getDays(let dates_rhs)):
+        case (.getDaysDates(let dates_lhs), .getDaysDates(let dates_rhs)):
             dates_lhs == dates_rhs
-        case (.add(let drink_lhs), .add(let drink_rhs)):
+        case (.addDrink(let drink_lhs), .addDrink(let drink_rhs)):
             drink_lhs == drink_rhs
-        case (.remove(let drink_lhs), .remove(let drink_rhs)):
+        case (.removeDrink(let drink_lhs), .removeDrink(let drink_rhs)):
             drink_lhs == drink_rhs
-        case (.increase(let goal_lhs), .increase(let goal_rhs)):
+        case (.increaseGoal(let goal_lhs), .increaseGoal(let goal_rhs)):
             goal_lhs == goal_rhs
-        case (.decrease(let goal_lhs), .decrease(let goal_rhs)):
+        case (.decreaseGoal(let goal_lhs), .decreaseGoal(let goal_rhs)):
             goal_lhs == goal_rhs
-        case (.getDays, .getToday), (.add, .getToday), (.remove, .getToday), (.increase, .getToday), (.decrease, .getToday),
-            (.getToday, .getDays), (.add, .getDays), (.remove, .getDays), (.increase, .getDays), (.decrease, .getDays),
-            (.getToday, .add), (.getDays, .add), (.remove, .add), (.increase, .add), (.decrease, .add),
-            (.getToday, .remove), (.getDays, .remove), (.add, .remove), (.increase, .remove), (.decrease, .remove),
-            (.getToday, .increase), (.getDays, .increase), (.add, .increase), (.remove, .increase), (.decrease, .increase),
-            (.getToday, .decrease), (.getDays, .decrease), (.add, .decrease), (.remove, .decrease), (.increase, .decrease):
+        case (.getDaysDates, .getToday), (.addDrink, .getToday), (.removeDrink, .getToday), (.increaseGoal, .getToday), (.decreaseGoal, .getToday),
+            (.getToday, .getDaysDates), (.addDrink, .getDaysDates), (.removeDrink, .getDaysDates), (.increaseGoal, .getDaysDates), (.decreaseGoal, .getDaysDates),
+            (.getToday, .addDrink), (.getDaysDates, .addDrink), (.removeDrink, .addDrink), (.increaseGoal, .addDrink), (.decreaseGoal, .addDrink),
+            (.getToday, .removeDrink), (.getDaysDates, .removeDrink), (.addDrink, .removeDrink), (.increaseGoal, .removeDrink), (.decreaseGoal, .removeDrink),
+            (.getToday, .increaseGoal), (.getDaysDates, .increaseGoal), (.addDrink, .increaseGoal), (.removeDrink, .increaseGoal), (.decreaseGoal, .increaseGoal),
+            (.getToday, .decreaseGoal), (.getDaysDates, .decreaseGoal), (.addDrink, .decreaseGoal), (.removeDrink, .decreaseGoal), (.increaseGoal, .decreaseGoal):
             false
         }
     }
@@ -860,21 +774,21 @@ extension DayServiceTypeSpy.MethodCall: Equatable {
 extension DrinkServiceTypeSpy.MethodCall: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
-        case (.add(let size_lhs, let container_lhs), .add(let size_rhs, let container_rhs)):
+        case (.addSizeContainer(let size_lhs, let container_lhs), .addSizeContainer(let size_rhs, let container_rhs)):
             size_lhs == size_rhs &&
             container_lhs == container_rhs
-        case (.edit(let size_lhs, let drink_lhs), .edit(let size_rhs, let drink_rhs)):
+        case (.editSizeDrink(let size_lhs, let drink_lhs), .editSizeDrink(let size_rhs, let drink_rhs)):
             size_lhs == size_rhs &&
             drink_lhs == drink_rhs
-        case (.remove(let container_lhs), .remove(let container_rhs)):
+        case (.removeContainer(let container_lhs), .removeContainer(let container_rhs)):
             container_lhs == container_rhs
         case (.getSaved, .getSaved), (.resetToDefault, .resetToDefault):
             true
-        case (.edit, .add), (.remove, .add), (.getSaved, .add), (.resetToDefault, .add),
-            (.add, .edit), (.remove, .edit), (.getSaved, .edit), (.resetToDefault, .edit),
-            (.add, .remove), (.edit, .remove), (.getSaved, .remove), (.resetToDefault, .remove),
-            (.add, .getSaved), (.edit, .getSaved), (.remove, .getSaved), (.resetToDefault, .getSaved),
-            (.add, .resetToDefault), (.edit, .resetToDefault), (.remove, .resetToDefault), (.getSaved, .resetToDefault):
+        case (.editSizeDrink, .addSizeContainer), (.removeContainer, .addSizeContainer), (.getSaved, .addSizeContainer), (.resetToDefault, .addSizeContainer),
+            (.addSizeContainer, .editSizeDrink), (.removeContainer, .editSizeDrink), (.getSaved, .editSizeDrink), (.resetToDefault, .editSizeDrink),
+            (.addSizeContainer, .removeContainer), (.editSizeDrink, .removeContainer), (.getSaved, .removeContainer), (.resetToDefault, .removeContainer),
+            (.addSizeContainer, .getSaved), (.editSizeDrink, .getSaved), (.removeContainer, .getSaved), (.resetToDefault, .getSaved),
+            (.addSizeContainer, .resetToDefault), (.editSizeDrink, .resetToDefault), (.removeContainer, .resetToDefault), (.getSaved, .resetToDefault):
             false
         }
     }

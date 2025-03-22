@@ -19,7 +19,7 @@ public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
     }
 
     public enum MethodCall {
-        case setLanguage(language: Language)
+        case setLanguageLanguage(language: Language)
         case getSelectedLanguage
         case getLanguageOptions
     }
@@ -36,7 +36,7 @@ public final class LanguageServiceTypeSpy: LanguageServiceTypeSpying {
 
 extension LanguageServiceTypeSpy: LanguageServiceType {
     public func setLanguage(to language: Language) -> Void {
-        methodLog.append(.setLanguage(language: language))
+        methodLog.append(.setLanguageLanguage(language: language))
         realObject.setLanguage(to: language)
     }
     public func getSelectedLanguage() -> Language {
@@ -48,9 +48,27 @@ extension LanguageServiceTypeSpy: LanguageServiceType {
         return realObject.getLanguageOptions()
     }
 }
+
+extension LanguageServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension LanguageServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .setLanguageLanguage(let language): "setLanguage(\(String(describing: language)))"
+        case .getSelectedLanguage: "getSelectedLanguage("
+        case .getLanguageOptions: "getLanguageOptions("
+        }
+    }
+}
 // MARK: - AutoString
 // swiftlint:disable all
 
+import LanguageServiceInterface
 
 
 // MARK: - AutoStub

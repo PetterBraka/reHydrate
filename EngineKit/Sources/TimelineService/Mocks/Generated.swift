@@ -19,7 +19,7 @@ public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
     }
 
     public enum MethodCall {
-        case getTimeline(date: Date)
+        case getTimelineDate(date: Date)
         case getTimelineCollection
     }
 
@@ -35,7 +35,7 @@ public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
 
 extension TimelineServiceTypeSpy: TimelineServiceType {
     public func getTimeline(for date: Date) async -> [Timeline] {
-        methodLog.append(.getTimeline(date: date))
+        methodLog.append(.getTimelineDate(date: date))
         return await realObject.getTimeline(for: date)
     }
     public func getTimelineCollection() async -> [TimelineCollection] {
@@ -43,9 +43,26 @@ extension TimelineServiceTypeSpy: TimelineServiceType {
         return await realObject.getTimelineCollection()
     }
 }
+
+extension TimelineServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension TimelineServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getTimelineDate(let date): "getTimeline(\(String(describing: date)))"
+        case .getTimelineCollection: "getTimelineCollection("
+        }
+    }
+}
 // MARK: - AutoString
 // swiftlint:disable all
 
+import TimelineServiceInterface
 
 
 // MARK: - AutoStub

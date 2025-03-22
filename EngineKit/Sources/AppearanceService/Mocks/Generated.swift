@@ -20,7 +20,7 @@ public final class AppearanceServiceTypeSpy: AppearanceServiceTypeSpying {
 
     public enum MethodCall {
         case getAppearance
-        case setAppearance(appearance: Appearance)
+        case setAppearanceAppearance(appearance: Appearance)
     }
 
     public var variableLog: [VariableName] = []
@@ -39,14 +39,31 @@ extension AppearanceServiceTypeSpy: AppearanceServiceType {
         return realObject.getAppearance()
     }
     public func setAppearance(_ appearance: Appearance) -> Void {
-        methodLog.append(.setAppearance(appearance: appearance))
+        methodLog.append(.setAppearanceAppearance(appearance: appearance))
         realObject.setAppearance(appearance)
+    }
+}
+
+extension AppearanceServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension AppearanceServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getAppearance: "getAppearance("
+        case .setAppearanceAppearance(let appearance): "setAppearance(\(String(describing: appearance)))"
+        }
     }
 }
 
 // MARK: - AutoString
 // swiftlint:disable all
 
+import AppearanceServiceInterface
 
 
 // MARK: - AutoStub

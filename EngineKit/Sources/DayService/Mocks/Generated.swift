@@ -21,11 +21,11 @@ public final class DayServiceTypeSpy: DayServiceTypeSpying {
 
     public enum MethodCall {
         case getToday
-        case getDays(dates: ClosedRange<Date>)
-        case add(drink: Drink)
-        case remove(drink: Drink)
-        case increase(goal: Double)
-        case decrease(goal: Double)
+        case getDaysDates(dates: ClosedRange<Date>)
+        case addDrink(drink: Drink)
+        case removeDrink(drink: Drink)
+        case increaseGoal(goal: Double)
+        case decreaseGoal(goal: Double)
     }
 
     public var variableLog: [VariableName] = []
@@ -44,30 +44,58 @@ extension DayServiceTypeSpy: DayServiceType {
         return await realObject.getToday()
     }
     public func getDays(between dates: ClosedRange<Date>) async throws -> [Day] {
-        methodLog.append(.getDays(dates: dates))
+        methodLog.append(.getDaysDates(dates: dates))
         return try await realObject.getDays(between: dates)
     }
     public func add(drink: Drink) async throws -> Double {
-        methodLog.append(.add(drink: drink))
+        methodLog.append(.addDrink(drink: drink))
         return try await realObject.add(drink: drink)
     }
     public func remove(drink: Drink) async throws -> Double {
-        methodLog.append(.remove(drink: drink))
+        methodLog.append(.removeDrink(drink: drink))
         return try await realObject.remove(drink: drink)
     }
     public func increase(goal: Double) async throws -> Double {
-        methodLog.append(.increase(goal: goal))
+        methodLog.append(.increaseGoal(goal: goal))
         return try await realObject.increase(goal: goal)
     }
     public func decrease(goal: Double) async throws -> Double {
-        methodLog.append(.decrease(goal: goal))
+        methodLog.append(.decreaseGoal(goal: goal))
         return try await realObject.decrease(goal: goal)
+    }
+}
+
+extension DayServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension DayServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getToday: "getToday("
+        case .getDaysDates(let dates): "getDays(\(String(describing: dates)))"
+        case .addDrink(let drink): "add(\(String(describing: drink)))"
+        case .removeDrink(let drink): "remove(\(String(describing: drink)))"
+        case .increaseGoal(let goal): "increase(\(String(describing: goal)))"
+        case .decreaseGoal(let goal): "decrease(\(String(describing: goal)))"
+        }
     }
 }
 
 // MARK: - AutoString
 // swiftlint:disable all
 
+import DayServiceInterface
+import DrinkServiceInterface
+
+extension Day: CustomStringConvertible {
+    public var description: String {
+        "Day(id: \(String(describing: id)) date: \(String(describing: date)) consumed: \(String(describing: consumed)) goal: \(String(describing: goal)) )"
+    }
+}
 
 
 // MARK: - AutoStub

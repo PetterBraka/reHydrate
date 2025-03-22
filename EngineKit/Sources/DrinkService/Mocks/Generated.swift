@@ -19,9 +19,9 @@ public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
     }
 
     public enum MethodCall {
-        case add(size: Double, container: Container)
-        case edit(size: Double, drink: Container)
-        case remove(container: Container)
+        case addSizeContainer(size: Double, container: Container)
+        case editSizeDrink(size: Double, drink: Container)
+        case removeContainer(container: Container)
         case getSaved
         case resetToDefault
     }
@@ -38,15 +38,15 @@ public final class DrinkServiceTypeSpy: DrinkServiceTypeSpying {
 
 extension DrinkServiceTypeSpy: DrinkServiceType {
     public func add(size: Double, container: Container) async throws -> Drink {
-        methodLog.append(.add(size: size, container: container))
+        methodLog.append(.addSizeContainer(size: size, container: container))
         return try await realObject.add(size: size, container: container)
     }
     public func edit(size: Double, of drink: Container) async throws -> Drink {
-        methodLog.append(.edit(size: size, drink: drink))
+        methodLog.append(.editSizeDrink(size: size, drink: drink))
         return try await realObject.edit(size: size, of: drink)
     }
     public func remove(container: Container) async throws -> Void {
-        methodLog.append(.remove(container: container))
+        methodLog.append(.removeContainer(container: container))
         try await realObject.remove(container: container)
     }
     public func getSaved() async throws -> [Drink] {
@@ -58,6 +58,48 @@ extension DrinkServiceTypeSpy: DrinkServiceType {
         return await realObject.resetToDefault()
     }
 }
+
+extension DrinkServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension DrinkServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .addSizeContainer(let size, let container): "add(\(String(describing: size)), )\(String(describing: container)))"
+        case .editSizeDrink(let size, let drink): "edit(\(String(describing: size)), )\(String(describing: drink)))"
+        case .removeContainer(let container): "remove(\(String(describing: container)))"
+        case .getSaved: "getSaved("
+        case .resetToDefault: "resetToDefault("
+        }
+    }
+}
+
+// MARK: - AutoString
+// swiftlint:disable all
+
+import DrinkServiceInterface
+
+extension Drink: CustomStringConvertible {
+    public var description: String {
+        "Drink(id: \(String(describing: id)) container: \(String(describing: container)) size: \(String(describing: size)) )"
+    }
+}
+
+extension Container: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .small: "small"
+        case .medium: "medium"
+        case .large: "large"
+        case .health: "health"
+        }
+    }
+}
+
 
 // MARK: - AutoStub
 // swiftlint:disable all  

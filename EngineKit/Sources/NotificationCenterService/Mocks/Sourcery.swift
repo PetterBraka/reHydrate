@@ -1,5 +1,5 @@
 import NotificationCenterServiceInterface
 
-// sourcery:begin: AutoStub, AutoSpy
+// sourcery:begin: AutoStub, AutoSpy, AutoString
 extension NotificationCenterType {}
 // sourcery:end

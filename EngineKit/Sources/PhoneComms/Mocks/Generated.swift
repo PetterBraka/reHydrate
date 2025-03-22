@@ -21,7 +21,7 @@ public final class PhoneCommsTypeSpy: PhoneCommsTypeSpying {
     public enum MethodCall {
         case setAppContext
         case sendDataToWatch
-        case addObserver(updateBlock: () -> Void)
+        case addObserverUpdateBlock(updateBlock: () -> Void)
         case removeObserver
     }
 
@@ -45,7 +45,7 @@ extension PhoneCommsTypeSpy: PhoneCommsType {
         await realObject.sendDataToWatch()
     }
     public func addObserver(using updateBlock: @escaping () -> Void) -> Void {
-        methodLog.append(.addObserver(updateBlock: updateBlock))
+        methodLog.append(.addObserverUpdateBlock(updateBlock: updateBlock))
         realObject.addObserver(using: updateBlock)
     }
     public func removeObserver() -> Void {
@@ -53,9 +53,28 @@ extension PhoneCommsTypeSpy: PhoneCommsType {
         realObject.removeObserver()
     }
 }
+
+extension PhoneCommsTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension PhoneCommsTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .setAppContext: "setAppContext("
+        case .sendDataToWatch: "sendDataToWatch("
+        case .addObserverUpdateBlock(let updateBlock): "addObserver(\(String(describing: updateBlock)))"
+        case .removeObserver: "removeObserver("
+        }
+    }
+}
 // MARK: - AutoString
 // swiftlint:disable all
 
+import PhoneCommsInterface
 
 
 // MARK: - AutoStub

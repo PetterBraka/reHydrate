@@ -19,9 +19,9 @@ public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
     }
 
     public enum MethodCall {
-        case post(name: NotificationName)
-        case addObserver(observer: Any, name: NotificationName, selector: Selector, object: Any?)
-        case removeObserver(observer: Any, name: NotificationName)
+        case postName(name: NotificationName)
+        case addObserverObserverNameSelectorObject(observer: Any, name: NotificationName, selector: Selector, object: Any?)
+        case removeObserverObserverName(observer: Any, name: NotificationName)
     }
 
     public var variableLog: [VariableName] = []
@@ -36,21 +36,39 @@ public final class NotificationCenterTypeSpy: NotificationCenterTypeSpying {
 
 extension NotificationCenterTypeSpy: NotificationCenterType {
     public func post(name: NotificationName) -> Void {
-        methodLog.append(.post(name: name))
+        methodLog.append(.postName(name: name))
         realObject.post(name: name)
     }
     public func addObserver(_ observer: Any, name: NotificationName, selector: Selector, object: Any?) -> Void {
-        methodLog.append(.addObserver(observer: observer, name: name, selector: selector, object: object))
+        methodLog.append(.addObserverObserverNameSelectorObject(observer: observer, name: name, selector: selector, object: object))
         realObject.addObserver(observer, name: name, selector: selector, object: object)
     }
     public func removeObserver(_ observer: Any, name: NotificationName) -> Void {
-        methodLog.append(.removeObserver(observer: observer, name: name))
+        methodLog.append(.removeObserverObserverName(observer: observer, name: name))
         realObject.removeObserver(observer, name: name)
+    }
+}
+
+extension NotificationCenterTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension NotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .postName(let name): "post(\(String(describing: name)))"
+        case .addObserverObserverNameSelectorObject(let observer, let name, let selector, let object): "addObserver(\(String(describing: observer)), )\(String(describing: name)), )\(String(describing: selector)), )\(String(describing: object)))"
+        case .removeObserverObserverName(let observer, let name): "removeObserver(\(String(describing: observer)), )\(String(describing: name)))"
+        }
     }
 }
 // MARK: - AutoString
 // swiftlint:disable all
 
+import NotificationCenterServiceInterface
 
 
 // MARK: - AutoStub

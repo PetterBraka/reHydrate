@@ -30,11 +30,11 @@ public final class PhoneServiceTypeSpy: PhoneServiceTypeSpying {
     public enum MethodCall {
         case isSupported
         case activate
-        case update(applicationContext: [CommunicationUserInfo : Codable])
-        case sendMessage(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
-        case sendData(data: Data, errorHandler: ((Error) -> Void)?)
-        case transferComplication(userInfo: [CommunicationUserInfo : Codable])
-        case transfer(userInfo: [CommunicationUserInfo : Codable])
+        case updateApplicationContext(applicationContext: [CommunicationUserInfo : Codable])
+        case sendMessageMessageErrorHandler(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
+        case sendDataDataErrorHandler(data: Data, errorHandler: ((Error) -> Void)?)
+        case transferComplicationUserInfo(userInfo: [CommunicationUserInfo : Codable])
+        case transferUserInfo(userInfo: [CommunicationUserInfo : Codable])
     }
 
     public var variableLog: [VariableName] = []
@@ -111,24 +111,54 @@ extension PhoneServiceTypeSpy: PhoneServiceType {
         realObject.activate()
     }
     public func update(applicationContext: [CommunicationUserInfo : Codable]) throws -> Void {
-        methodLog.append(.update(applicationContext: applicationContext))
+        methodLog.append(.updateApplicationContext(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
     public func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.sendMessage(message: message, errorHandler: errorHandler))
+        methodLog.append(.sendMessageMessageErrorHandler(message: message, errorHandler: errorHandler))
         realObject.sendMessage(message, errorHandler: errorHandler)
     }
     public func sendData(_ data: Data, errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.sendData(data: data, errorHandler: errorHandler))
+        methodLog.append(.sendDataDataErrorHandler(data: data, errorHandler: errorHandler))
         realObject.sendData(data, errorHandler: errorHandler)
     }
     public func transferComplication(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
-        methodLog.append(.transferComplication(userInfo: userInfo))
+        methodLog.append(.transferComplicationUserInfo(userInfo: userInfo))
         return realObject.transferComplication(userInfo: userInfo)
     }
     public func transfer(userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
-        methodLog.append(.transfer(userInfo: userInfo))
+        methodLog.append(.transferUserInfo(userInfo: userInfo))
         return realObject.transfer(userInfo: userInfo)
+    }
+}
+
+extension PhoneServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .currentState: "currentState"
+        case .isReachable: "isReachable"
+        case .applicationContext: "applicationContext"
+        case .receivedApplicationContext: "receivedApplicationContext"
+        case .remainingComplicationUserInfoTransfers: "remainingComplicationUserInfoTransfers"
+        case .isPaired: "isPaired"
+        case .watchDirectoryUrl: "watchDirectoryUrl"
+        case .isWatchAppInstalled: "isWatchAppInstalled"
+        case .isComplicationEnabled: "isComplicationEnabled"
+        }
+    }
+}
+
+extension PhoneServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .isSupported: "isSupported("
+        case .activate: "activate("
+        case .updateApplicationContext(let applicationContext): "update(\(String(describing: applicationContext)))"
+        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(\(String(describing: message)), )\(String(describing: errorHandler)))"
+        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(\(String(describing: data)), )\(String(describing: errorHandler)))"
+        case .transferComplicationUserInfo(let userInfo): "transferComplication(\(String(describing: userInfo)))"
+        case .transferUserInfo(let userInfo): "transfer(\(String(describing: userInfo)))"
+        }
     }
 }
 
@@ -154,10 +184,10 @@ public final class WatchServiceTypeSpy: WatchServiceTypeSpying {
     public enum MethodCall {
         case isSupported
         case activate
-        case update(applicationContext: [CommunicationUserInfo : Codable])
-        case sendMessage(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
-        case sendData(data: Data, errorHandler: ((Error) -> Void)?)
-        case sendUserInfo(userInfo: [CommunicationUserInfo : Codable])
+        case updateApplicationContext(applicationContext: [CommunicationUserInfo : Codable])
+        case sendMessageMessageErrorHandler(message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?)
+        case sendDataDataErrorHandler(data: Data, errorHandler: ((Error) -> Void)?)
+        case sendUserInfoUserInfo(userInfo: [CommunicationUserInfo : Codable])
     }
 
     public var variableLog: [VariableName] = []
@@ -210,25 +240,64 @@ extension WatchServiceTypeSpy: WatchServiceType {
         realObject.activate()
     }
     public func update(applicationContext: [CommunicationUserInfo : Codable]) throws -> Void {
-        methodLog.append(.update(applicationContext: applicationContext))
+        methodLog.append(.updateApplicationContext(applicationContext: applicationContext))
         try realObject.update(applicationContext: applicationContext)
     }
     public func sendMessage(_ message: [CommunicationUserInfo : Codable], errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.sendMessage(message: message, errorHandler: errorHandler))
+        methodLog.append(.sendMessageMessageErrorHandler(message: message, errorHandler: errorHandler))
         realObject.sendMessage(message, errorHandler: errorHandler)
     }
     public func sendData(_ data: Data, errorHandler: ((Error) -> Void)?) -> Void {
-        methodLog.append(.sendData(data: data, errorHandler: errorHandler))
+        methodLog.append(.sendDataDataErrorHandler(data: data, errorHandler: errorHandler))
         realObject.sendData(data, errorHandler: errorHandler)
     }
     public func sendUserInfo(_ userInfo: [CommunicationUserInfo : Codable]) -> CommunicationInfo {
-        methodLog.append(.sendUserInfo(userInfo: userInfo))
+        methodLog.append(.sendUserInfoUserInfo(userInfo: userInfo))
         return realObject.sendUserInfo(userInfo)
+    }
+}
+
+extension WatchServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .currentState: "currentState"
+        case .isReachable: "isReachable"
+        case .applicationContext: "applicationContext"
+        case .receivedApplicationContext: "receivedApplicationContext"
+        case .iOSDeviceNeedsUnlockAfterRebootForReachability: "iOSDeviceNeedsUnlockAfterRebootForReachability"
+        }
+    }
+}
+
+extension WatchServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .isSupported: "isSupported("
+        case .activate: "activate("
+        case .updateApplicationContext(let applicationContext): "update(\(String(describing: applicationContext)))"
+        case .sendMessageMessageErrorHandler(let message, let errorHandler): "sendMessage(\(String(describing: message)), )\(String(describing: errorHandler)))"
+        case .sendDataDataErrorHandler(let data, let errorHandler): "sendData(\(String(describing: data)), )\(String(describing: errorHandler)))"
+        case .sendUserInfoUserInfo(let userInfo): "sendUserInfo(\(String(describing: userInfo)))"
+        }
     }
 }
 // MARK: - AutoString
 // swiftlint:disable all
 
+import CommunicationKitInterface
+
+extension CommunicationUserInfo: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .session: "session"
+        case .messageData: "messageData"
+        case .activationState: "activationState"
+        case .day: "day"
+        case .drinks: "drinks"
+        case .unitSystem: "unitSystem"
+        }
+    }
+}
 
 
 // MARK: - AutoStub

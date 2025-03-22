@@ -6,8 +6,10 @@
 //
 import UserNotificationServiceInterface
 
-// sourcery:begin: AutoStub, AutoSpy
+// sourcery:begin: AutoStub, AutoSpy, AutoString
 extension UserNotificationServiceType {}
 extension UserNotificationCenterType {}
 extension UserNotificationDelegateType {}
+extension NotificationError {}
+extension NotificationSettings {}
 // sourcery:end

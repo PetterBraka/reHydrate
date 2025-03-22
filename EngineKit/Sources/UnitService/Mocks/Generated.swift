@@ -19,9 +19,9 @@ public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
     }
 
     public enum MethodCall {
-        case set(unitSystem: UnitSystem)
+        case setUnitSystem(unitSystem: UnitSystem)
         case getUnitSystem
-        case convert(value: Double, fromUnit: UnitModel, toUnit: UnitModel)
+        case convertValueFromUnitToUnit(value: Double, fromUnit: UnitModel, toUnit: UnitModel)
     }
 
     public var variableLog: [VariableName] = []
@@ -36,7 +36,7 @@ public final class UnitServiceTypeSpy: UnitServiceTypeSpying {
 
 extension UnitServiceTypeSpy: UnitServiceType {
     public func set(unitSystem: UnitSystem) -> Void {
-        methodLog.append(.set(unitSystem: unitSystem))
+        methodLog.append(.setUnitSystem(unitSystem: unitSystem))
         realObject.set(unitSystem: unitSystem)
     }
     public func getUnitSystem() -> UnitSystem {
@@ -44,14 +44,51 @@ extension UnitServiceTypeSpy: UnitServiceType {
         return realObject.getUnitSystem()
     }
     public func convert(_ value: Double, from fromUnit: UnitModel, to toUnit: UnitModel) -> Double {
-        methodLog.append(.convert(value: value, fromUnit: fromUnit, toUnit: toUnit))
+        methodLog.append(.convertValueFromUnitToUnit(value: value, fromUnit: fromUnit, toUnit: toUnit))
         return realObject.convert(value, from: fromUnit, to: toUnit)
+    }
+}
+
+extension UnitServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension UnitServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .setUnitSystem(let unitSystem): "set(\(String(describing: unitSystem)))"
+        case .getUnitSystem: "getUnitSystem("
+        case .convertValueFromUnitToUnit(let value, let fromUnit, let toUnit): "convert(\(String(describing: value)), )\(String(describing: fromUnit)), )\(String(describing: toUnit)))"
+        }
     }
 }
 // MARK: - AutoString
 // swiftlint:disable all
 
+import UnitServiceInterface
 
+extension UnitModel: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .ounces: "ounces"
+        case .pint: "pint"
+        case .litres: "litres"
+        case .millilitres: "millilitres"
+        }
+    }
+}
+
+extension UnitSystem: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .imperial: "imperial"
+        case .metric: "metric"
+        }
+    }
+}
 
 // MARK: - AutoStub
 // swiftlint:disable all  

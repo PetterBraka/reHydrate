@@ -20,7 +20,7 @@ public final class AlternateIconsServiceTypeSpy: AlternateIconsServiceTypeSpying
 
     public enum MethodCall {
         case supportsAlternateIcons
-        case setAlternateIcon(iconName: String)
+        case setAlternateIconIconName(iconName: String)
         case getAlternateIcon
     }
 
@@ -40,12 +40,29 @@ extension AlternateIconsServiceTypeSpy: AlternateIconsServiceType {
         return await realObject.supportsAlternateIcons()
     }
     public func setAlternateIcon(to iconName: String) async -> Error? {
-        methodLog.append(.setAlternateIcon(iconName: iconName))
+        methodLog.append(.setAlternateIconIconName(iconName: iconName))
         return await realObject.setAlternateIcon(to: iconName)
     }
     public func getAlternateIcon() async -> String? {
         methodLog.append(.getAlternateIcon)
         return await realObject.getAlternateIcon()
+    }
+}
+
+extension AlternateIconsServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension AlternateIconsServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .supportsAlternateIcons: "supportsAlternateIcons("
+        case .setAlternateIconIconName(let iconName): "setAlternateIcon(\(String(describing: iconName)))"
+        case .getAlternateIcon: "getAlternateIcon("
+        }
     }
 }
 
@@ -65,7 +82,7 @@ public final class AppearancePortTypeSpy: AppearancePortTypeSpying {
 
     public enum MethodCall {
         case getStyle
-        case setStyle(style: Style)
+        case setStyleStyle(style: Style)
     }
 
     public var variableLog: [VariableName] = []
@@ -84,8 +101,24 @@ extension AppearancePortTypeSpy: AppearancePortType {
         return realObject.getStyle()
     }
     public func setStyle(_ style: Style) throws -> Void {
-        methodLog.append(.setStyle(style: style))
+        methodLog.append(.setStyleStyle(style: style))
         try realObject.setStyle(style)
+    }
+}
+
+extension AppearancePortTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension AppearancePortTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getStyle: "getStyle("
+        case .setStyleStyle(let style): "setStyle(\(String(describing: style)))"
+        }
     }
 }
 
@@ -105,13 +138,13 @@ public final class HealthInterfaceSpy: HealthInterfaceSpying {
     }
 
     public enum MethodCall {
-        case shouldRequestAccess(healthDataType: [HealthDataType])
-        case canWrite(dataType: HealthDataType)
-        case requestAuth(readAndWrite: Set<HealthDataType>)
-        case export(quantity: Quantity, id: QuantityTypeIdentifier, date: Date)
-        case readSum(data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents)
-        case readSamples(data: HealthDataType, start: Date, end: Date)
-        case enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency)
+        case shouldRequestAccessHealthDataType(healthDataType: [HealthDataType])
+        case canWriteDataType(dataType: HealthDataType)
+        case requestAuthReadAndWrite(readAndWrite: Set<HealthDataType>)
+        case exportQuantityIdDate(quantity: Quantity, id: QuantityTypeIdentifier, date: Date)
+        case readSumDataStartEndIntervalComponents(data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents)
+        case readSamplesDataStartEnd(data: HealthDataType, start: Date, end: Date)
+        case enableBackgroundDeliveryHealthDataFrequency(healthData: HealthDataType, frequency: HealthFrequency)
     }
 
     public var variableLog: [VariableName] = []
@@ -132,32 +165,54 @@ extension HealthInterfaceSpy: HealthInterface {
         }
     }
     public func shouldRequestAccess(for healthDataType: [HealthDataType]) async -> Bool {
-        methodLog.append(.shouldRequestAccess(healthDataType: healthDataType))
+        methodLog.append(.shouldRequestAccessHealthDataType(healthDataType: healthDataType))
         return await realObject.shouldRequestAccess(for: healthDataType)
     }
     public func canWrite(_ dataType: HealthDataType) -> Bool {
-        methodLog.append(.canWrite(dataType: dataType))
+        methodLog.append(.canWriteDataType(dataType: dataType))
         return realObject.canWrite(dataType)
     }
     public func requestAuth(toReadAndWrite readAndWrite: Set<HealthDataType>) async throws -> Void {
-        methodLog.append(.requestAuth(readAndWrite: readAndWrite))
+        methodLog.append(.requestAuthReadAndWrite(readAndWrite: readAndWrite))
         try await realObject.requestAuth(toReadAndWrite: readAndWrite)
     }
     public func export(quantity: Quantity, id: QuantityTypeIdentifier, date: Date) async throws -> Void {
-        methodLog.append(.export(quantity: quantity, id: id, date: date))
+        methodLog.append(.exportQuantityIdDate(quantity: quantity, id: id, date: date))
         try await realObject.export(quantity: quantity, id: id, date: date)
     }
     public func readSum(_ data: HealthDataType, start: Date, end: Date, intervalComponents: DateComponents) async throws -> Double {
-        methodLog.append(.readSum(data: data, start: start, end: end, intervalComponents: intervalComponents))
+        methodLog.append(.readSumDataStartEndIntervalComponents(data: data, start: start, end: end, intervalComponents: intervalComponents))
         return try await realObject.readSum(data, start: start, end: end, intervalComponents: intervalComponents)
     }
     public func readSamples(_ data: HealthDataType, start: Date, end: Date) async throws -> [Double] {
-        methodLog.append(.readSamples(data: data, start: start, end: end))
+        methodLog.append(.readSamplesDataStartEnd(data: data, start: start, end: end))
         return try await realObject.readSamples(data, start: start, end: end)
     }
     public func enableBackgroundDelivery(healthData: HealthDataType, frequency: HealthFrequency) async throws -> Void {
-        methodLog.append(.enableBackgroundDelivery(healthData: healthData, frequency: frequency))
+        methodLog.append(.enableBackgroundDeliveryHealthDataFrequency(healthData: healthData, frequency: frequency))
         try await realObject.enableBackgroundDelivery(healthData: healthData, frequency: frequency)
+    }
+}
+
+extension HealthInterfaceSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .isSupported: "isSupported"
+        }
+    }
+}
+
+extension HealthInterfaceSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .shouldRequestAccessHealthDataType(let healthDataType): "shouldRequestAccess(\(String(describing: healthDataType)))"
+        case .canWriteDataType(let dataType): "canWrite(\(String(describing: dataType)))"
+        case .requestAuthReadAndWrite(let readAndWrite): "requestAuth(\(String(describing: readAndWrite)))"
+        case .exportQuantityIdDate(let quantity, let id, let date): "export(\(String(describing: quantity)), )\(String(describing: id)), )\(String(describing: date)))"
+        case .readSumDataStartEndIntervalComponents(let data, let start, let end, let intervalComponents): "readSum(\(String(describing: data)), )\(String(describing: start)), )\(String(describing: end)), )\(String(describing: intervalComponents)))"
+        case .readSamplesDataStartEnd(let data, let start, let end): "readSamples(\(String(describing: data)), )\(String(describing: start)), )\(String(describing: end)))"
+        case .enableBackgroundDeliveryHealthDataFrequency(let healthData, let frequency): "enableBackgroundDelivery(\(String(describing: healthData)), )\(String(describing: frequency)))"
+        }
     }
 }
 
@@ -177,8 +232,8 @@ public final class OpenUrlInterfaceSpy: OpenUrlInterfaceSpying {
     }
 
     public enum MethodCall {
-        case open(url: URL)
-        case email(email: String, cc: String?, bcc: String?, subject: String, body: String?)
+        case openUrl(url: URL)
+        case emailEmailCcBccSubjectBody(email: String, cc: String?, bcc: String?, subject: String, body: String?)
     }
 
     public var variableLog: [VariableName] = []
@@ -199,17 +254,35 @@ extension OpenUrlInterfaceSpy: OpenUrlInterface {
         }
     }
     public func open(url: URL) async throws -> Void {
-        methodLog.append(.open(url: url))
+        methodLog.append(.openUrl(url: url))
         try await realObject.open(url: url)
     }
     public func email(to email: String, cc: String?, bcc: String?, subject: String, body: String?) async throws -> Void {
-        methodLog.append(.email(email: email, cc: cc, bcc: bcc, subject: subject, body: body))
+        methodLog.append(.emailEmailCcBccSubjectBody(email: email, cc: cc, bcc: bcc, subject: subject, body: body))
         try await realObject.email(to: email, cc: cc, bcc: bcc, subject: subject, body: body)
+    }
+}
+
+extension OpenUrlInterfaceSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .settingsUrl: "settingsUrl"
+        }
+    }
+}
+
+extension OpenUrlInterfaceSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .openUrl(let url): "open(\(String(describing: url)))"
+        case .emailEmailCcBccSubjectBody(let email, let cc, let bcc, let subject, let body): "email(\(String(describing: email)), )\(String(describing: cc)), )\(String(describing: bcc)), )\(String(describing: subject)), )\(String(describing: body)))"
+        }
     }
 }
 // MARK: - AutoString
 // swiftlint:disable all
 
+import PortsInterface
 
 
 // MARK: - AutoStub

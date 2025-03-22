@@ -84,15 +84,15 @@ final class NotificationServiceTests: XCTestCase {
         XCTAssertEqual(userNotificationCenter.spy.methodLog, [
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories(categories: [
+            .setNotificationCategoriesCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
                       actions: [.init(identifier: "small",title: "small (-999)")],
                       intentIdentifiers: ["small"])
             ]),
             .pendingNotificationRequests,
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest)
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest)
         ])
     }
     
@@ -115,15 +115,15 @@ final class NotificationServiceTests: XCTestCase {
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories(categories: [
+            .setNotificationCategoriesCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
                       actions: [.init(identifier: "small",title: "small (-999)")],
                       intentIdentifiers: ["small"])
             ]),
             .pendingNotificationRequests,
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest)
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest)
         ])
     }
     
@@ -142,7 +142,7 @@ final class NotificationServiceTests: XCTestCase {
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories(categories: [
+            .setNotificationCategoriesCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
                       actions: [.init(identifier: "small",title: "small (-999)")],
                       intentIdentifiers: ["small"])
@@ -205,21 +205,21 @@ final class NotificationServiceTests: XCTestCase {
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories(categories: [
+            .setNotificationCategoriesCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
                       actions: [.init(identifier: "small",title: "small (-999)")],
                       intentIdentifiers: ["small"])
             ]),
             .pendingNotificationRequests,
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
             .pendingNotificationRequests,
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
         ])
     }
     
@@ -235,15 +235,15 @@ final class NotificationServiceTests: XCTestCase {
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories(categories: [
+            .setNotificationCategoriesCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
                       actions: [.init(identifier: "small",title: "small (-999)")],
                       intentIdentifiers: ["small"])
             ]),
             .pendingNotificationRequests,
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest),
-            .add(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
         ])
     }
     
@@ -260,13 +260,13 @@ final class NotificationServiceTests: XCTestCase {
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategories(categories: [
+            .setNotificationCategoriesCategories(categories: [
                 .init(identifier: "com.rehydrate.reminder",
                       actions: [.init(identifier: "small",title: "small (-999)")],
                       intentIdentifiers: ["small"])
             ]),
             .pendingNotificationRequests,
-            .add(request: dummyNotificationRequest),
+            .addRequest(request: dummyNotificationRequest),
         ])
     }
     
@@ -348,55 +348,6 @@ private extension NotificationServiceTests {
     }
 }
 
-extension NotificationError: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .unauthorized:
-            "unauthorized"
-        case .invalidDate:
-            "invalidDate"
-        case .missingDateComponents:
-            "missingDateComponents"
-        case .missingReminders:
-            "missingReminders"
-        case .missingCongratulations:
-            "missingCongratulations"
-        case .frequencyTooLow:
-            "frequencyTooLow"
-        case .alreadySet(at: let date):
-            "alreadySet \(date.description)"
-        }
-    }
-}
-
-extension UserNotificationCenterTypeSpy.MethodCall: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .requestAuthorization:
-            "requestAuthorization"
-        case .setNotificationCategories(let categories):
-            "setNotificationCategories: \(categories.description)"
-        case .notificationCategories:
-            "notificationCategories"
-        case .add:
-            "add"
-        case .pendingNotificationRequests:
-            "pendingNotificationRequests"
-        case .removePendingNotificationRequests(let identifiers):
-            "removePendingNotificationRequests with \(identifiers)"
-        case .removeAllPendingNotificationRequests:
-            "removeAllPendingNotificationRequests"
-        case .deliveredNotifications:
-            "deliveredNotifications"
-        case .removeDeliveredNotifications(let identifiers):
-            "removeDeliveredNotifications with \(identifiers)"
-        case .removeAllDeliveredNotifications:
-            "removeAllDeliveredNotifications"
-        case .setBadgeCount:
-            "setBadgeCount"
-        }
-    }
-}
 extension UserNotificationCenterTypeSpy.MethodCall: Equatable {
     public static func == (lhs: UserNotificationCenterTypeSpy.MethodCall, rhs: UserNotificationCenterTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
@@ -407,16 +358,16 @@ extension UserNotificationCenterTypeSpy.MethodCall: Equatable {
             (.removeAllDeliveredNotifications, .removeAllDeliveredNotifications),
             (.removeAllPendingNotificationRequests, .removeAllPendingNotificationRequests):
             true
-        case (.add, .add):
+        case (.addRequest, .addRequest):
 //            lhsRequest == rhsRequest
             true
-        case (.setNotificationCategories(let lhsCategories), .setNotificationCategories(let rhsCategories)):
+        case (.setNotificationCategoriesCategories(let lhsCategories), .setNotificationCategoriesCategories(let rhsCategories)):
             lhsCategories == rhsCategories
-        case (.removePendingNotificationRequests(let lhsIdentifiers), .removePendingNotificationRequests(let rhsIdentifiers)):
+        case (.removePendingNotificationRequestsIdentifiers(let lhsIdentifiers), .removePendingNotificationRequestsIdentifiers(let rhsIdentifiers)):
             lhsIdentifiers == rhsIdentifiers
-        case (.removeDeliveredNotifications(let lhsIdentifiers), .removeDeliveredNotifications(let rhsIdentifiers)):
+        case (.removeDeliveredNotificationsIdentifiers(let lhsIdentifiers), .removeDeliveredNotificationsIdentifiers(let rhsIdentifiers)):
             lhsIdentifiers == rhsIdentifiers
-        case (.setBadgeCount(let lhsNewBadgeCount), .setBadgeCount(let rhsNewBadgeCount)):
+        case (.setBadgeCountNewBadgeCount(let lhsNewBadgeCount), .setBadgeCountNewBadgeCount(let rhsNewBadgeCount)):
             lhsNewBadgeCount == rhsNewBadgeCount
         default:
             false
@@ -447,16 +398,6 @@ extension NotificationTrigger: Equatable {
         lhs.repeats == rhs.repeats &&
         lhs.dateComponents == rhs.dateComponents &&
         lhs.date == rhs.date
-    }
-}
-
-extension NotificationSettings: CustomStringConvertible {
-    public var description: String {
-        return if let start, let stop, let frequency {
-            "isOn: \(isOn), start: \(start), stop: \(stop), frequency: \(frequency)"
-        } else {
-            "isOn: \(isOn)"
-        }
     }
 }
 

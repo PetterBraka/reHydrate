@@ -20,13 +20,13 @@ public final class DateServiceTypeSpy: DateServiceTypeSpying {
 
     public enum MethodCall {
         case now
-        case daysBetween(start: Date, end: Date)
-        case get(component: Component, date: Date)
-        case getDate(value: Int, component: Component, date: Date)
-        case getStart(date: Date)
-        case getEnd(date: Date)
-        case isDate(date: Date, inSameDayAs: Date)
-        case date(hours: Int, minutes: Int, seconds: Int, date: Date)
+        case daysBetweenStartEnd(start: Date, end: Date)
+        case getComponentDate(component: Component, date: Date)
+        case getDateValueComponentDate(value: Int, component: Component, date: Date)
+        case getStartDate(date: Date)
+        case getEndDate(date: Date)
+        case isDateDateInSameDayAs(date: Date, inSameDayAs: Date)
+        case dateHoursMinutesSecondsDate(hours: Int, minutes: Int, seconds: Int, date: Date)
     }
 
     public var variableLog: [VariableName] = []
@@ -45,38 +45,61 @@ extension DateServiceTypeSpy: DateServiceType {
         return realObject.now()
     }
     public func daysBetween(_ start: Date, end: Date) -> Int {
-        methodLog.append(.daysBetween(start: start, end: end))
+        methodLog.append(.daysBetweenStartEnd(start: start, end: end))
         return realObject.daysBetween(start, end: end)
     }
     public func get(component: Component, from date: Date) -> Int {
-        methodLog.append(.get(component: component, date: date))
+        methodLog.append(.getComponentDate(component: component, date: date))
         return realObject.get(component: component, from: date)
     }
     public func getDate(byAdding value: Int, component: Component, to date: Date) -> Date {
-        methodLog.append(.getDate(value: value, component: component, date: date))
+        methodLog.append(.getDateValueComponentDate(value: value, component: component, date: date))
         return realObject.getDate(byAdding: value, component: component, to: date)
     }
     public func getStart(of date: Date) -> Date {
-        methodLog.append(.getStart(date: date))
+        methodLog.append(.getStartDate(date: date))
         return realObject.getStart(of: date)
     }
     public func getEnd(of date: Date) -> Date {
-        methodLog.append(.getEnd(date: date))
+        methodLog.append(.getEndDate(date: date))
         return realObject.getEnd(of: date)
     }
     public func isDate(_ date: Date, inSameDayAs: Date) -> Bool {
-        methodLog.append(.isDate(date: date, inSameDayAs: inSameDayAs))
+        methodLog.append(.isDateDateInSameDayAs(date: date, inSameDayAs: inSameDayAs))
         return realObject.isDate(date, inSameDayAs: inSameDayAs)
     }
     public func date(hours: Int, minutes: Int, seconds: Int, from date: Date) -> Date? {
-        methodLog.append(.date(hours: hours, minutes: minutes, seconds: seconds, date: date))
+        methodLog.append(.dateHoursMinutesSecondsDate(hours: hours, minutes: minutes, seconds: seconds, date: date))
         return realObject.date(hours: hours, minutes: minutes, seconds: seconds, from: date)
+    }
+}
+
+extension DateServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension DateServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .now: "now("
+        case .daysBetweenStartEnd(let start, let end): "daysBetween(\(String(describing: start)), )\(String(describing: end)))"
+        case .getComponentDate(let component, let date): "get(\(String(describing: component)), )\(String(describing: date)))"
+        case .getDateValueComponentDate(let value, let component, let date): "getDate(\(String(describing: value)), )\(String(describing: component)), )\(String(describing: date)))"
+        case .getStartDate(let date): "getStart(\(String(describing: date)))"
+        case .getEndDate(let date): "getEnd(\(String(describing: date)))"
+        case .isDateDateInSameDayAs(let date, let inSameDayAs): "isDate(\(String(describing: date)), )\(String(describing: inSameDayAs)))"
+        case .dateHoursMinutesSecondsDate(let hours, let minutes, let seconds, let date): "date(\(String(describing: hours)), )\(String(describing: minutes)), )\(String(describing: seconds)), )\(String(describing: date)))"
+        }
     }
 }
 
 // MARK: - AutoString
 // swiftlint:disable all
 
+import DateServiceInterface
 
 
 // MARK: - AutoStub
