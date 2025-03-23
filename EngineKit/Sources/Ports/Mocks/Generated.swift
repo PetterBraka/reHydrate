@@ -318,9 +318,9 @@ extension HealthInterfaceSpy.MethodCall: Equatable {
         case (.shouldRequestAccessHealthDataType(let lhs_healthDataType), .shouldRequestAccessHealthDataType(let rhs_healthDataType)): lhs_healthDataType == rhs_healthDataType
         case (.canWriteDataType(let lhs_dataType), .canWriteDataType(let rhs_dataType)): lhs_dataType == rhs_dataType
         case (.requestAuthReadAndWrite(let lhs_readAndWrite), .requestAuthReadAndWrite(let rhs_readAndWrite)): lhs_readAndWrite == rhs_readAndWrite
-        case (.exportQuantityIdDate(let lhs_quantity, let lhs_id, let lhs_date), .exportQuantityIdDate(let rhs_quantity, let rhs_id, let rhs_date)): lhs_quantity == rhs_quantity && lhs_id == rhs_id && lhs_date == rhs_date
-        case (.readSumDataStartEndIntervalComponents(let lhs_data, let lhs_start, let lhs_end, let lhs_intervalComponents), .readSumDataStartEndIntervalComponents(let rhs_data, let rhs_start, let rhs_end, let rhs_intervalComponents)): lhs_data == rhs_data && lhs_start == rhs_start && lhs_end == rhs_end && lhs_intervalComponents == rhs_intervalComponents
-        case (.readSamplesDataStartEnd(let lhs_data, let lhs_start, let lhs_end), .readSamplesDataStartEnd(let rhs_data, let rhs_start, let rhs_end)): lhs_data == rhs_data && lhs_start == rhs_start && lhs_end == rhs_end
+        case (.exportQuantityIdDate(let lhs_quantity, let lhs_id, let lhs_date), .exportQuantityIdDate(let rhs_quantity, let rhs_id, let rhs_date)): lhs_quantity == rhs_quantity && lhs_id == rhs_id && lhs_date.ISO8601Format() == rhs_date.ISO8601Format()
+        case (.readSumDataStartEndIntervalComponents(let lhs_data, let lhs_start, let lhs_end, let lhs_intervalComponents), .readSumDataStartEndIntervalComponents(let rhs_data, let rhs_start, let rhs_end, let rhs_intervalComponents)): lhs_data == rhs_data && lhs_start.ISO8601Format() == rhs_start.ISO8601Format() && lhs_end.ISO8601Format() == rhs_end.ISO8601Format() && lhs_intervalComponents == rhs_intervalComponents
+        case (.readSamplesDataStartEnd(let lhs_data, let lhs_start, let lhs_end), .readSamplesDataStartEnd(let rhs_data, let rhs_start, let rhs_end)): lhs_data == rhs_data && lhs_start.ISO8601Format() == rhs_start.ISO8601Format() && lhs_end.ISO8601Format() == rhs_end.ISO8601Format()
         case (.enableBackgroundDeliveryHealthDataFrequency(let lhs_healthData, let lhs_frequency), .enableBackgroundDeliveryHealthDataFrequency(let rhs_healthData, let rhs_frequency)): lhs_healthData == rhs_healthData && lhs_frequency == rhs_frequency
         default: false
         }

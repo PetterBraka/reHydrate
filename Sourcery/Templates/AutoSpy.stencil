@@ -36,9 +36,11 @@ true
         {%- if param.name != nil -%}
         {%- if param.actualTypeName|hasSuffix: "T" or param.name == "center" -%}
             String(describing: {% endif %}lhs_{{ param.name }}
+            {%- if param.typeName.name == "Date" %}.ISO8601Format(){% endif -%}
             {%- if param.actualTypeName|hasSuffix: "T" or param.name == "center" -%}){% endif -%}
             {%- if param.isClosure %}(){% endif %} == {% if param.actualTypeName|hasSuffix: "T" or param.name == "center" -%}
             String(describing: {% endif %}rhs_{{ param.name }}
+            {%- if param.typeName.name == "Date" %}.ISO8601Format(){% endif %}
             {%- if param.actualTypeName|hasSuffix: "T" or param.name == "center" %}){% endif -%}
             {%- if param.isClosure %}(){% endif -%}
             {%- if not forloop.last %} && {% else %}{% endif %}

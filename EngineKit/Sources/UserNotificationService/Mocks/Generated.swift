@@ -424,7 +424,7 @@ extension UserNotificationServiceTypeSpy.MethodName: CustomStringConvertible {
 extension UserNotificationServiceTypeSpy.MethodCall: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
-        case (.enableWithFrequencyStartStop(let lhs_withFrequency, let lhs_start, let lhs_stop), .enableWithFrequencyStartStop(let rhs_withFrequency, let rhs_start, let rhs_stop)): lhs_withFrequency == rhs_withFrequency && lhs_start == rhs_start && lhs_stop == rhs_stop
+        case (.enableWithFrequencyStartStop(let lhs_withFrequency, let lhs_start, let lhs_stop), .enableWithFrequencyStartStop(let rhs_withFrequency, let rhs_start, let rhs_stop)): lhs_withFrequency == rhs_withFrequency && lhs_start.ISO8601Format() == rhs_start.ISO8601Format() && lhs_stop.ISO8601Format() == rhs_stop.ISO8601Format()
         case (.disable, .disable): true
         case (.celebrate, .celebrate): true
         case (.getSettings, .getSettings): true
