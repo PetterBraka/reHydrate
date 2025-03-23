@@ -98,6 +98,18 @@ extension WatchCommsTypeSpy.MethodName: CustomStringConvertible {
         }
     }
 }
+
+extension WatchCommsTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.setAppContext, .setAppContext): true
+        case (.sendDataToPhone, .sendDataToPhone): true
+        case (.addObserverUpdateBlock(let lhs_updateBlock), .addObserverUpdateBlock(let rhs_updateBlock)): lhs_updateBlock() == rhs_updateBlock()
+        case (.removeObserver, .removeObserver): true
+        default: false
+        }
+    }
+}
 // MARK: - AutoString
 // swiftlint:disable all
 
