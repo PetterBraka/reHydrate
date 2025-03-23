@@ -1,6 +1,9 @@
 // Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
 // MARK: - AutoSpy
 // swiftlint:disable all
 

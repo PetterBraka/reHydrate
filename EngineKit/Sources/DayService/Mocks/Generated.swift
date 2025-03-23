@@ -115,6 +115,20 @@ extension DayServiceTypeSpy.MethodName: CustomStringConvertible {
     }
 }
 
+extension DayServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.getToday, .getToday): true
+        case (.getDaysDates(let lhs_dates), .getDaysDates(let rhs_dates)): lhs_dates == rhs_dates
+        case (.addDrink(let lhs_drink), .addDrink(let rhs_drink)): lhs_drink == rhs_drink
+        case (.removeDrink(let lhs_drink), .removeDrink(let rhs_drink)): lhs_drink == rhs_drink
+        case (.increaseGoal(let lhs_goal), .increaseGoal(let rhs_goal)): lhs_goal == rhs_goal
+        case (.decreaseGoal(let lhs_goal), .decreaseGoal(let rhs_goal)): lhs_goal == rhs_goal
+        default: false
+        }
+    }
+}
+
 // MARK: - AutoString
 // swiftlint:disable all
 

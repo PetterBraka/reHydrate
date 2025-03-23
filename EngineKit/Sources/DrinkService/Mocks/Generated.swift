@@ -1,6 +1,9 @@
 // Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
 // MARK: - AutoSpy
 // swiftlint:disable all
 
@@ -101,6 +104,19 @@ extension DrinkServiceTypeSpy.MethodName: CustomStringConvertible {
         case .removeContainer: "removeContainer"
         case .getSaved: "getSaved"
         case .resetToDefault: "resetToDefault"
+        }
+    }
+}
+
+extension DrinkServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.addSizeContainer(let lhs_size, let lhs_container), .addSizeContainer(let rhs_size, let rhs_container)): lhs_size == rhs_size && lhs_container == rhs_container
+        case (.editSizeDrink(let lhs_size, let lhs_drink), .editSizeDrink(let rhs_size, let rhs_drink)): lhs_size == rhs_size && lhs_drink == rhs_drink
+        case (.removeContainer(let lhs_container), .removeContainer(let rhs_container)): lhs_container == rhs_container
+        case (.getSaved, .getSaved): true
+        case (.resetToDefault, .resetToDefault): true
+        default: false
         }
     }
 }

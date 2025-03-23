@@ -1,6 +1,9 @@
 // Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
 // MARK: - AutoSpy
 // swiftlint:disable all
 
@@ -83,6 +86,17 @@ extension UnitServiceTypeSpy.MethodName: CustomStringConvertible {
         case .setUnitSystem: "setUnitSystem"
         case .getUnitSystem: "getUnitSystem"
         case .convertValueFromUnitToUnit: "convertValueFromUnitToUnit"
+        }
+    }
+}
+
+extension UnitServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.setUnitSystem(let lhs_unitSystem), .setUnitSystem(let rhs_unitSystem)): lhs_unitSystem == rhs_unitSystem
+        case (.getUnitSystem, .getUnitSystem): true
+        case (.convertValueFromUnitToUnit(let lhs_value, let lhs_fromUnit, let lhs_toUnit), .convertValueFromUnitToUnit(let rhs_value, let rhs_fromUnit, let rhs_toUnit)): lhs_value == rhs_value && lhs_fromUnit == rhs_fromUnit && lhs_toUnit == rhs_toUnit
+        default: false
         }
     }
 }

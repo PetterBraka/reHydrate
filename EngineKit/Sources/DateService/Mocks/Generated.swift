@@ -1,6 +1,9 @@
 // Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
 // MARK: - AutoSpy
 // swiftlint:disable all
 
@@ -128,6 +131,22 @@ extension DateServiceTypeSpy.MethodName: CustomStringConvertible {
         case .getEndDate: "getEndDate"
         case .isDateDateInSameDayAs: "isDateDateInSameDayAs"
         case .dateHoursMinutesSecondsDate: "dateHoursMinutesSecondsDate"
+        }
+    }
+}
+
+extension DateServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.now, .now): true
+        case (.daysBetweenStartEnd(let lhs_start, let lhs_end), .daysBetweenStartEnd(let rhs_start, let rhs_end)): lhs_start == rhs_start && lhs_end == rhs_end
+        case (.getComponentDate(let lhs_component, let lhs_date), .getComponentDate(let rhs_component, let rhs_date)): lhs_component == rhs_component && lhs_date == rhs_date
+        case (.getDateValueComponentDate(let lhs_value, let lhs_component, let lhs_date), .getDateValueComponentDate(let rhs_value, let rhs_component, let rhs_date)): lhs_value == rhs_value && lhs_component == rhs_component && lhs_date == rhs_date
+        case (.getStartDate(let lhs_date), .getStartDate(let rhs_date)): lhs_date == rhs_date
+        case (.getEndDate(let lhs_date), .getEndDate(let rhs_date)): lhs_date == rhs_date
+        case (.isDateDateInSameDayAs(let lhs_date, let lhs_inSameDayAs), .isDateDateInSameDayAs(let rhs_date, let rhs_inSameDayAs)): lhs_date == rhs_date && lhs_inSameDayAs == rhs_inSameDayAs
+        case (.dateHoursMinutesSecondsDate(let lhs_hours, let lhs_minutes, let lhs_seconds, let lhs_date), .dateHoursMinutesSecondsDate(let rhs_hours, let rhs_minutes, let rhs_seconds, let rhs_date)): lhs_hours == rhs_hours && lhs_minutes == rhs_minutes && lhs_seconds == rhs_seconds && lhs_date == rhs_date
+        default: false
         }
     }
 }

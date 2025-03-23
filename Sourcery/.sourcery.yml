@@ -6,6 +6,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../CommunicationKit/Mocks/Generated.swift
     args:
         imports:
@@ -18,6 +19,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/AppearanceService/Mocks/Generated.swift
     args:
         imports:
@@ -29,6 +31,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/DateService/Mocks/Generated.swift
     args:
         imports:
@@ -52,6 +55,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/DrinkService/Mocks/Generated.swift
     args:
         imports:
@@ -63,6 +67,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/LanguageService/Mocks/Generated.swift
     args:
         imports:
@@ -74,6 +79,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/UserNotificationService/Mocks/Generated.swift
     args:
         imports:
@@ -85,6 +91,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/UserPreferenceService/Mocks/Generated.swift
     args:
         imports:
@@ -96,6 +103,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/UnitService/Mocks/Generated.swift
     args:
         imports:
@@ -107,6 +115,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/TimelineService/Mocks/Generated.swift
     args:
         imports:
@@ -118,6 +127,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/Ports/Mocks/Generated.swift
     args:
         imports:
@@ -129,6 +139,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/PhoneComms/Mocks/Generated.swift
     args:
         imports:
@@ -140,6 +151,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/WatchComms/Mocks/Generated.swift
     args:
         imports:
@@ -151,6 +163,7 @@ configurations:
       - Templates/AutoStub.stencil
       - Templates/AutoSpy.stencil
       - Templates/AutoString.stencil
+      - Templates/AutoEquatable.stencil
     output: ../EngineKit/Sources/NotificationCenterService/Mocks/Generated.swift
     args:
         imports:

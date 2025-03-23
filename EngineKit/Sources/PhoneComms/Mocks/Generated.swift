@@ -1,6 +1,9 @@
 // Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
 // MARK: - AutoSpy
 // swiftlint:disable all
 
@@ -92,6 +95,18 @@ extension PhoneCommsTypeSpy.MethodName: CustomStringConvertible {
         case .sendDataToWatch: "sendDataToWatch"
         case .addObserverUpdateBlock: "addObserverUpdateBlock"
         case .removeObserver: "removeObserver"
+        }
+    }
+}
+
+extension PhoneCommsTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.setAppContext, .setAppContext): true
+        case (.sendDataToWatch, .sendDataToWatch): true
+        case (.addObserverUpdateBlock(let lhs_updateBlock), .addObserverUpdateBlock(let rhs_updateBlock)): lhs_updateBlock() == rhs_updateBlock()
+        case (.removeObserver, .removeObserver): true
+        default: false
         }
     }
 }

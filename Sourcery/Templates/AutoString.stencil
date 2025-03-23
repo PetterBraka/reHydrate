@@ -9,10 +9,8 @@ import {{ import }}
 
 extension {{ struct.name }}: CustomStringConvertible {
     public var description: String {
-        "{{ struct.name }}({% for variable in struct.variables -%}
-        {% if variable.name != "`default`" and variable.name != "description" -%}
-        {{ variable.name }}: \(String(describing: {{ variable.name }})) {% endif -%}
-        {%- endfor -%})"
+        "{{ struct.name }}({% for variable in struct.storedVariables -%}
+        {{ variable.name }}: \(String(describing: {{ variable.name }})) {% endfor -%})"
     }
 }
 {%- endif -%}

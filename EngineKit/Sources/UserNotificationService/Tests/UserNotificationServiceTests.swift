@@ -348,41 +348,6 @@ private extension NotificationServiceTests {
     }
 }
 
-extension UserNotificationCenterTypeSpy.MethodCall: Equatable {
-    public static func == (lhs: UserNotificationCenterTypeSpy.MethodCall, rhs: UserNotificationCenterTypeSpy.MethodCall) -> Bool {
-        switch (lhs, rhs) {
-        case (.requestAuthorization, .requestAuthorization),
-            (.notificationCategories, .notificationCategories),
-            (.deliveredNotifications, .deliveredNotifications),
-            (.pendingNotificationRequests, .pendingNotificationRequests),
-            (.removeAllDeliveredNotifications, .removeAllDeliveredNotifications),
-            (.removeAllPendingNotificationRequests, .removeAllPendingNotificationRequests):
-            true
-        case (.addRequest, .addRequest):
-//            lhsRequest == rhsRequest
-            true
-        case (.setNotificationCategoriesCategories(let lhsCategories), .setNotificationCategoriesCategories(let rhsCategories)):
-            lhsCategories == rhsCategories
-        case (.removePendingNotificationRequestsIdentifiers(let lhsIdentifiers), .removePendingNotificationRequestsIdentifiers(let rhsIdentifiers)):
-            lhsIdentifiers == rhsIdentifiers
-        case (.removeDeliveredNotificationsIdentifiers(let lhsIdentifiers), .removeDeliveredNotificationsIdentifiers(let rhsIdentifiers)):
-            lhsIdentifiers == rhsIdentifiers
-        case (.setBadgeCountNewBadgeCount(let lhsNewBadgeCount), .setBadgeCountNewBadgeCount(let rhsNewBadgeCount)):
-            lhsNewBadgeCount == rhsNewBadgeCount
-        default:
-            false
-        }
-    }
-}
-
-extension NotificationRequest: Equatable {
-    public static func == (lhs: NotificationRequest, rhs: NotificationRequest) -> Bool {
-        lhs.identifier == rhs.identifier &&
-        lhs.content == rhs.content &&
-        lhs.trigger == rhs.trigger
-    }
-}
-
 extension NotificationContent: Equatable {
     public static func == (lhs: NotificationContent, rhs: NotificationContent) -> Bool {
         lhs.title == rhs.title &&

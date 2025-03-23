@@ -3,16 +3,16 @@
 {{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
 {%- endmacro -%}
 
-{%- macro methodParams method useLet -%}
+{%- macro methodParams method useLet prefix -%}
 {%- if method.parameters.count != 0 -%}(
     {%- for param in method.parameters -%}
-        {%- if useLet == true -%}let {% endif %}{{ param.name }}
+        {%- if useLet == true -%}let {% endif %}{{ prefix }}{{ param.name }}
         {%- if not forloop.last %}, {% else %}){% endif %}
     {%- endfor -%}
 {%- endif -%}
 {%- endmacro -%}
 
-{%- macro methodParamsCall method describing -%}
+{%- macro methodParamsCall method describing-%}
 {%- if method.parameters.count != 0 -%}
     {%- for param in method.parameters -%}
         {%- if param.name != nil -%}
@@ -23,6 +23,25 @@
             {{ param.name }}
             {%- endif -%}
             {%- if not forloop.last %}, {% else %}){% endif %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro methodParamsEquals method -%}
+{%- if method.parameters.count == 0 -%}
+true
+{%- else -%}
+    {%- for param in method.parameters -%}
+        {%- if param.name != nil -%}
+        {%- if param.actualTypeName|hasSuffix: "T" or param.name == "center" -%}
+            String(describing: {% endif %}lhs_{{ param.name }}
+            {%- if param.actualTypeName|hasSuffix: "T" or param.name == "center" -%}){% endif -%}
+            {%- if param.isClosure %}(){% endif %} == {% if param.actualTypeName|hasSuffix: "T" or param.name == "center" -%}
+            String(describing: {% endif %}rhs_{{ param.name }}
+            {%- if param.actualTypeName|hasSuffix: "T" or param.name == "center" %}){% endif -%}
+            {%- if param.isClosure %}(){% endif -%}
+            {%- if not forloop.last %} && {% else %}{% endif %}
         {%- endif -%}
     {%- endfor -%}
 {%- endif -%}
@@ -122,6 +141,7 @@ extension {{ protocol.name }}Spy: {{ protocol.name }} {
     }
 {% endfor %}
 }
+{%- endif -%}
 {% if protocol.annotations.AutoString %}
 
 extension {{ protocol.name }}Spy.VariableName: CustomStringConvertible {
@@ -139,7 +159,7 @@ extension {{ protocol.name }}Spy.MethodCall: CustomStringConvertible {
         switch self {
         {% for method in protocol.methods %}
         case .{% call methodName method -%}
-            {% call methodParams method true %}: "{{ method.callName }}
+            {% call methodParams method true ''%}: "{{ method.callName }}
             {%- call methodParamsCall method true%}"
         {% endfor %}
         }
@@ -156,5 +176,19 @@ extension {{ protocol.name }}Spy.MethodName: CustomStringConvertible {
     }
 }
 {%- endif -%}
+
+{% if protocol.annotations.AutoEquatable %}
+
+extension {{ protocol.name }}Spy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        {% for method in protocol.methods %}
+        case (.{% call methodName method %}{% call methodParams method true 'lhs_' %}, .
+        {%- call methodName method %}{% call methodParams method true 'rhs_' %}): {% call methodParamsEquals method %}
+        {%- endfor %}
+        default: false
+        }
+    }
+}
 {%- endif -%}
 {%- endfor -%}

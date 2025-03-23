@@ -1,6 +1,9 @@
 // Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
 // MARK: - AutoSpy
 // swiftlint:disable all
 
@@ -87,6 +90,17 @@ extension AlternateIconsServiceTypeSpy.MethodName: CustomStringConvertible {
     }
 }
 
+extension AlternateIconsServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.supportsAlternateIcons, .supportsAlternateIcons): true
+        case (.setAlternateIconIconName(let lhs_iconName), .setAlternateIconIconName(let rhs_iconName)): lhs_iconName == rhs_iconName
+        case (.getAlternateIcon, .getAlternateIcon): true
+        default: false
+        }
+    }
+}
+
 import Foundation
 import PortsInterface
 
@@ -157,6 +171,16 @@ extension AppearancePortTypeSpy.MethodName: CustomStringConvertible {
         switch self {
         case .getStyle: "getStyle"
         case .setStyleStyle: "setStyleStyle"
+        }
+    }
+}
+
+extension AppearancePortTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.getStyle, .getStyle): true
+        case (.setStyleStyle(let lhs_style), .setStyleStyle(let rhs_style)): lhs_style == rhs_style
+        default: false
         }
     }
 }
@@ -288,6 +312,21 @@ extension HealthInterfaceSpy.MethodName: CustomStringConvertible {
     }
 }
 
+extension HealthInterfaceSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.shouldRequestAccessHealthDataType(let lhs_healthDataType), .shouldRequestAccessHealthDataType(let rhs_healthDataType)): lhs_healthDataType == rhs_healthDataType
+        case (.canWriteDataType(let lhs_dataType), .canWriteDataType(let rhs_dataType)): lhs_dataType == rhs_dataType
+        case (.requestAuthReadAndWrite(let lhs_readAndWrite), .requestAuthReadAndWrite(let rhs_readAndWrite)): lhs_readAndWrite == rhs_readAndWrite
+        case (.exportQuantityIdDate(let lhs_quantity, let lhs_id, let lhs_date), .exportQuantityIdDate(let rhs_quantity, let rhs_id, let rhs_date)): lhs_quantity == rhs_quantity && lhs_id == rhs_id && lhs_date == rhs_date
+        case (.readSumDataStartEndIntervalComponents(let lhs_data, let lhs_start, let lhs_end, let lhs_intervalComponents), .readSumDataStartEndIntervalComponents(let rhs_data, let rhs_start, let rhs_end, let rhs_intervalComponents)): lhs_data == rhs_data && lhs_start == rhs_start && lhs_end == rhs_end && lhs_intervalComponents == rhs_intervalComponents
+        case (.readSamplesDataStartEnd(let lhs_data, let lhs_start, let lhs_end), .readSamplesDataStartEnd(let rhs_data, let rhs_start, let rhs_end)): lhs_data == rhs_data && lhs_start == rhs_start && lhs_end == rhs_end
+        case (.enableBackgroundDeliveryHealthDataFrequency(let lhs_healthData, let lhs_frequency), .enableBackgroundDeliveryHealthDataFrequency(let rhs_healthData, let rhs_frequency)): lhs_healthData == rhs_healthData && lhs_frequency == rhs_frequency
+        default: false
+        }
+    }
+}
+
 import Foundation
 import PortsInterface
 
@@ -366,6 +405,16 @@ extension OpenUrlInterfaceSpy.MethodName: CustomStringConvertible {
         switch self {
         case .openUrl: "openUrl"
         case .emailEmailCcBccSubjectBody: "emailEmailCcBccSubjectBody"
+        }
+    }
+}
+
+extension OpenUrlInterfaceSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.openUrl(let lhs_url), .openUrl(let rhs_url)): lhs_url == rhs_url
+        case (.emailEmailCcBccSubjectBody(let lhs_email, let lhs_cc, let lhs_bcc, let lhs_subject, let lhs_body), .emailEmailCcBccSubjectBody(let rhs_email, let rhs_cc, let rhs_bcc, let rhs_subject, let rhs_body)): lhs_email == rhs_email && lhs_cc == rhs_cc && lhs_bcc == rhs_bcc && lhs_subject == rhs_subject && lhs_body == rhs_body
+        default: false
         }
     }
 }

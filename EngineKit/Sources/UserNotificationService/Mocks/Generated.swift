@@ -1,6 +1,55 @@
 // Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
+extension DeliveredNotification: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.date == rhs.date && 
+        lhs.request == rhs.request
+    }
+}
+
+extension NotificationContent: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.title == rhs.title && 
+        lhs.subtitle == rhs.subtitle && 
+        lhs.body == rhs.body && 
+        lhs.userInfo.description == rhs.userInfo.description && 
+        lhs.categoryIdentifier == rhs.categoryIdentifier
+    }
+}
+
+extension NotificationRequest: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.identifier == rhs.identifier && 
+        lhs.content == rhs.content && 
+        lhs.trigger == rhs.trigger
+    }
+}
+
+extension NotificationResponse: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.actionIdentifier == rhs.actionIdentifier
+    }
+}
+
+extension NotificationSettings: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.isOn == rhs.isOn && 
+        lhs.start == rhs.start && 
+        lhs.stop == rhs.stop && 
+        lhs.frequency == rhs.frequency
+    }
+}
+
+extension NotificationTrigger: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.repeats == rhs.repeats && 
+        lhs.dateComponents == rhs.dateComponents
+    }
+}
 // MARK: - AutoSpy
 // swiftlint:disable all
 
@@ -159,6 +208,25 @@ extension UserNotificationCenterTypeSpy.MethodName: CustomStringConvertible {
     }
 }
 
+extension UserNotificationCenterTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.requestAuthorization, .requestAuthorization): true
+        case (.setNotificationCategoriesCategories(let lhs_categories), .setNotificationCategoriesCategories(let rhs_categories)): lhs_categories == rhs_categories
+        case (.notificationCategories, .notificationCategories): true
+        case (.addRequest(let lhs_request), .addRequest(let rhs_request)): lhs_request == rhs_request
+        case (.pendingNotificationRequests, .pendingNotificationRequests): true
+        case (.removePendingNotificationRequestsIdentifiers(let lhs_identifiers), .removePendingNotificationRequestsIdentifiers(let rhs_identifiers)): lhs_identifiers == rhs_identifiers
+        case (.removeAllPendingNotificationRequests, .removeAllPendingNotificationRequests): true
+        case (.deliveredNotifications, .deliveredNotifications): true
+        case (.removeDeliveredNotificationsIdentifiers(let lhs_identifiers), .removeDeliveredNotificationsIdentifiers(let rhs_identifiers)): lhs_identifiers == rhs_identifiers
+        case (.removeAllDeliveredNotifications, .removeAllDeliveredNotifications): true
+        case (.setBadgeCountNewBadgeCount(let lhs_newBadgeCount), .setBadgeCountNewBadgeCount(let rhs_newBadgeCount)): lhs_newBadgeCount == rhs_newBadgeCount
+        default: false
+        }
+    }
+}
+
 import Foundation
 import UserNotificationServiceInterface
 
@@ -238,6 +306,17 @@ extension UserNotificationDelegateTypeSpy.MethodName: CustomStringConvertible {
         case .userNotificationCenterCenterResponse: "userNotificationCenterCenterResponse"
         case .userNotificationCenterCenterWillPresent: "userNotificationCenterCenterWillPresent"
         case .userNotificationCenterCenterOpenSettingsFor: "userNotificationCenterCenterOpenSettingsFor"
+        }
+    }
+}
+
+extension UserNotificationDelegateTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.userNotificationCenterCenterResponse(let lhs_center, let lhs_response), .userNotificationCenterCenterResponse(let rhs_center, let rhs_response)): String(describing: lhs_center) == String(describing: rhs_center) && lhs_response == rhs_response
+        case (.userNotificationCenterCenterWillPresent(let lhs_center, let lhs_willPresent), .userNotificationCenterCenterWillPresent(let rhs_center, let rhs_willPresent)): String(describing: lhs_center) == String(describing: rhs_center) && lhs_willPresent == rhs_willPresent
+        case (.userNotificationCenterCenterOpenSettingsFor(let lhs_center, let lhs_openSettingsFor), .userNotificationCenterCenterOpenSettingsFor(let rhs_center, let rhs_openSettingsFor)): String(describing: lhs_center) == String(describing: rhs_center) && lhs_openSettingsFor == rhs_openSettingsFor
+        default: false
         }
     }
 }
@@ -338,6 +417,18 @@ extension UserNotificationServiceTypeSpy.MethodName: CustomStringConvertible {
         case .disable: "disable"
         case .celebrate: "celebrate"
         case .getSettings: "getSettings"
+        }
+    }
+}
+
+extension UserNotificationServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.enableWithFrequencyStartStop(let lhs_withFrequency, let lhs_start, let lhs_stop), .enableWithFrequencyStartStop(let rhs_withFrequency, let rhs_start, let rhs_stop)): lhs_withFrequency == rhs_withFrequency && lhs_start == rhs_start && lhs_stop == rhs_stop
+        case (.disable, .disable): true
+        case (.celebrate, .celebrate): true
+        case (.getSettings, .getSettings): true
+        default: false
         }
     }
 }

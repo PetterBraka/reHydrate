@@ -1,6 +1,9 @@
 // Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
 // MARK: - AutoSpy
 // swiftlint:disable all
 
@@ -74,6 +77,16 @@ extension UserPreferenceServiceTypeSpy.MethodName: CustomStringConvertible {
         switch self {
         case .setValueKey: "setValueKey"
         case .getKey: "getKey"
+        }
+    }
+}
+
+extension UserPreferenceServiceTypeSpy.MethodCall: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.setValueKey(let lhs_value, let lhs_key), .setValueKey(let rhs_value, let rhs_key)): String(describing: lhs_value) == String(describing: rhs_value) && lhs_key == rhs_key
+        case (.getKey(let lhs_key), .getKey(let rhs_key)): lhs_key == rhs_key
+        default: false
         }
     }
 }
