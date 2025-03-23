@@ -283,7 +283,7 @@ private extension Screen.Home.Presenter {
             let consumption = try await engine.dayService.remove(drink: .init(from: drink))
             let unitSystem = engine.unitService.getUnitSystem()
             let value = engine.unitService.convert(
-                drink.size,
+                -drink.size,
                 from: unitSystem == .metric ? .millilitres : .ounces,
                 to: .litres
             )
