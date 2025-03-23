@@ -1,3 +1,33 @@
+{# Macro deffinitions #}
+{%- macro methodName method -%}
+{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
+{%- endmacro -%}
+
+{%- macro methodParams method useLet -%}
+{%- if method.parameters.count != 0 -%}(
+    {%- for param in method.parameters -%}
+        {%- if useLet == true -%}let {% endif %}{{ param.name }}
+        {%- if not forloop.last %}, {% else %}){% endif %}
+    {%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro methodParamsCall method describing -%}
+{%- if method.parameters.count != 0 -%}
+    {%- for param in method.parameters -%}
+        {%- if param.name != nil -%}
+            {%- if forloop.first -%}({%- endif -%}
+            {{ param.name }}: {% if describing == true -%}
+            \(String(describing: {{ param.name }}))
+            {%- else -%}
+            {{ param.name }}
+            {%- endif -%}
+            {%- if not forloop.last %}, {% else %}){% endif %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
 // MARK: - AutoSpy
 // swiftlint:disable all
 {% for protocol in types.protocols %}
@@ -25,7 +55,7 @@ public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
 
     public enum MethodCall {
         {% for method in protocol.methods %}
-        case {{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
+        case {% call methodName method %}
             {%- for param in method.parameters -%}
             {%- if param.name != nil -%}
                 {%- if forloop.first -%}({%- endif -%}
@@ -46,7 +76,7 @@ public final class {{ protocol.name }}Spy: {{ protocol.name }}Spying {
 
     public enum MethodName {
         {% for method in protocol.methods %}
-        case {{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
+        case {% call methodName method %}
         {% endfor %}
     }
 
@@ -79,15 +109,8 @@ extension {{ protocol.name }}Spy: {{ protocol.name }} {
 {% endfor %}
 {% for method in protocol.methods %}
     public func {{ method.name }}{% if method.isAsync %} async{% endif %}{% if method.throws %} throws{% endif %} -> {{ method.returnTypeName }} {
-        methodNameLog.append(.{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %})
-        methodLog.append(.{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
-        {%- for param in method.parameters -%}
-        {%- if param.name != nil -%}
-            {%- if forloop.first -%}({%- endif -%}
-            {{ param.name }}: {{ param.name }}
-            {%- if forloop.last -%}){% else %}, {% endif -%}
-        {%- endif -%}
-        {%- endfor -%})
+        methodNameLog.append(.{% call methodName method %})
+        methodLog.append(.{% call methodName method %}{% call methodParamsCall method false%})
         {% if method.returnTypeName.name == "Void" %}{% else %}return {% endif -%}
         {% if method.throws %}try {% endif -%}
         {% if method.isAsync %}await {% endif -%}
@@ -115,22 +138,9 @@ extension {{ protocol.name }}Spy.MethodCall: CustomStringConvertible {
     public var description: String {
         switch self {
         {% for method in protocol.methods %}
-        case .{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
-            {%- for param in method.parameters -%}
-            {%- if param.name != nil -%}
-                {%- if forloop.first -%}({%- endif -%}
-                let {{ param.name }}
-                {%- if forloop.last -%}){% else %}, {% endif -%}
-            {%- endif -%}
-            {%- endfor -%}: "{{ method.callName }}
-            {%- for param in method.parameters -%}
-            {%- if forloop.first -%}({% endif %}
-                {%- if param.name != nil -%}
-                    {{ param.name }}: \(String(describing: {{ param.name }}))
-                    {%- if forloop.last -%}{% else %}, {% endif -%}
-                {%- endif -%}
-            {%- if forloop.last -%}){% endif %}
-            {%- endfor -%}"
+        case .{% call methodName method -%}
+            {% call methodParams method true %}: "{{ method.callName }}
+            {%- call methodParamsCall method true%}"
         {% endfor %}
         }
     }
@@ -140,8 +150,7 @@ extension {{ protocol.name }}Spy.MethodName: CustomStringConvertible {
     public var description: String {
         switch self {
         {% for method in protocol.methods %}
-        case .{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor -%}
-            : "{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}"
+        case .{% call methodName method %}: "{% call methodName method %}"
         {% endfor %}
         }
     }
