@@ -364,6 +364,7 @@ extension HomePresentationTests {
     func test_performAction_didTapAddDrink_withHealthSupport() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
         dateService.stub.now_returnValue = givenDate
+        dateService.stub.now_returnValue = givenDate
         
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 0.1, goal: 2)
         dayService.stub.addDrink_returnValue = .success(0.1)
@@ -383,6 +384,7 @@ extension HomePresentationTests {
             userPrefMethodNameLog: [.getKey, .getKey, .getKey, .getKey, .getKey],
             unitMethodNameLog: [.getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem]
         )
+        XCTAssertEqual(healthService.spy.methodLog, [.exportQuantityIdDate(quantity: .init(unit: .litre, value: 0.5), id: .dietaryWater, date: givenDate)])
         
         try assertViewModel(
             sut.viewModel,
@@ -397,6 +399,7 @@ extension HomePresentationTests {
     
     func test_performAction_didTapAddDrink_withHealthError() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
+        dateService.stub.now_returnValue = givenDate
         dateService.stub.now_returnValue = givenDate
         
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 0.1, goal: 2)
@@ -416,6 +419,7 @@ extension HomePresentationTests {
             userPrefMethodNameLog: [.getKey, .getKey, .getKey, .getKey, .getKey],
             unitMethodNameLog: [.getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem]
         )
+        XCTAssertEqual(healthService.spy.methodLog, [.exportQuantityIdDate(quantity: .init(unit: .litre, value: 0.5), id: .dietaryWater, date: givenDate)])
         
         try assertViewModel(
             sut.viewModel,
@@ -430,6 +434,7 @@ extension HomePresentationTests {
     
     func test_performAction_didTapAddDrink_unknownDrink() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
+        dateService.stub.now_returnValue = givenDate
         dateService.stub.now_returnValue = givenDate
         
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 0.5, goal: 2)
@@ -449,6 +454,7 @@ extension HomePresentationTests {
             userPrefMethodNameLog: [.getKey, .getKey, .getKey, .getKey, .getKey],
             unitMethodNameLog: [.getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem]
         )
+        XCTAssertEqual(healthService.spy.methodLog, [.exportQuantityIdDate(quantity: .init(unit: .litre, value: 0.5), id: .dietaryWater, date: givenDate)])
         
         try assertViewModel(
             sut.viewModel,
@@ -499,6 +505,7 @@ extension HomePresentationTests {
     func test_performAction_didTapRemoveDrink_withHealthSupport() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
         dateService.stub.now_returnValue = givenDate
+        dateService.stub.now_returnValue = givenDate
         drinksService.stub.getSaved_returnValue = .success([
             .init(id: "1", size: 100, container: .small)
         ])
@@ -518,6 +525,7 @@ extension HomePresentationTests {
             userPrefMethodNameLog: [.getKey, .getKey, .getKey, .getKey, .getKey],
             unitMethodNameLog: [.getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem]
         )
+        XCTAssertEqual(healthService.spy.methodLog, [.exportQuantityIdDate(quantity: .init(unit: .litre, value: -0.1), id: .dietaryWater, date: givenDate)])
         
         try assertViewModel(
             sut.viewModel,
@@ -532,6 +540,7 @@ extension HomePresentationTests {
     
     func test_performAction_didTapRemoveDrink_withHealthError() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
+        dateService.stub.now_returnValue = givenDate
         dateService.stub.now_returnValue = givenDate
         drinksService.stub.getSaved_returnValue = .success([
             .init(id: "1", size: 100, container: .medium)
@@ -554,6 +563,7 @@ extension HomePresentationTests {
             userPrefMethodNameLog: [.getKey, .getKey, .getKey, .getKey, .getKey],
             unitMethodNameLog: [.getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem]
         )
+        XCTAssertEqual(healthService.spy.methodLog, [.exportQuantityIdDate(quantity: .init(unit: .litre, value: -0.1), id: .dietaryWater, date: givenDate)])
         
         try assertViewModel(
             sut.viewModel,
@@ -568,6 +578,7 @@ extension HomePresentationTests {
     
     func test_performAction_didTapRemoveDrink_unknownDrink() async throws {
         let givenDate = Date(year: 2023, month: 2, day: 2)
+        dateService.stub.now_returnValue = givenDate
         dateService.stub.now_returnValue = givenDate
         dayService.stub.getToday_returnValue = .init(date: givenDate, consumed: 0.9, goal: 2)
         dayService.stub.removeDrink_returnValue = .success(0.9)
@@ -588,6 +599,7 @@ extension HomePresentationTests {
             userPrefMethodNameLog: [.getKey, .getKey, .getKey, .getKey, .getKey],
             unitMethodNameLog: [.getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem, .getUnitSystem, .convertValueFromUnitToUnit, .getUnitSystem]
         )
+        XCTAssertEqual(healthService.spy.methodLog, [.exportQuantityIdDate(quantity: .init(unit: .litre, value: -0.2), id: .dietaryWater, date: givenDate)])
         
         try assertViewModel(
             sut.viewModel,
