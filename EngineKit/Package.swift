@@ -315,6 +315,7 @@ let package: Package = {
             .target(
                 name: "UserPreferenceServiceInterface",
                 dependencies: [
+                    "LoggingKit",
                 ],
                 path: "Sources/UserPreferenceService/Interface"
             ),
@@ -419,6 +420,7 @@ let package: Package = {
             .target(
                 name: "PhoneCommsInterface",
                 dependencies: [
+                    "LoggingKit",
                 ],
                 path: "Sources/PhoneComms/Interface"
             ),
@@ -454,6 +456,9 @@ let package: Package = {
             ),
             .target(
                 name: "WatchCommsInterface",
+                dependencies: [
+                    "LoggingKit",
+                ],
                 path: "Sources/WatchComms/Interface"
             ),
             .target(
