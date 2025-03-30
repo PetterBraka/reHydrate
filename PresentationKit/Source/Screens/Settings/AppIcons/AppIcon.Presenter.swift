@@ -39,13 +39,18 @@ extension Screen.Settings.AppIcon {
                 selectedIcon: .blackWhite,
                 error: nil
             )
-            Task(priority: .userInitiated) { [weak self] in
-                await self?.initRealViewModel()
-            }
         }
         
         public func perform(action: AppIcon.Action) async {
             switch action {
+            case .didAppear:
+                let iconName = await engine.alternateIconsService.getAlternateIcon()
+                let icon: ViewModel.Icon? = if let iconName {
+                    ViewModel.Icon(rawValue: iconName)
+                } else {
+                    nil
+                }
+                updateViewModel(isLoading: false, selectedIcon: icon)
             case .didTapClose:
                 router.close()
             case let .didSelectIcon(icon):
@@ -54,18 +59,6 @@ extension Screen.Settings.AppIcon {
                 updateViewModel(isLoading: false, error: nil)
             }
         }
-    }
-}
-
-private extension Screen.Settings.AppIcon.Presenter {
-    func initRealViewModel() async {
-        let iconName = await engine.alternateIconsService.getAlternateIcon()
-        let icon: ViewModel.Icon? = if let iconName {
-            ViewModel.Icon(rawValue: iconName)
-        } else {
-            nil
-        }
-        updateViewModel(isLoading: false, selectedIcon: icon)
     }
 }
 

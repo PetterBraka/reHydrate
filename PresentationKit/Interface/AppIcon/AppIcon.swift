@@ -13,6 +13,7 @@ public enum AppIcon {
     }
     
     public enum Action {
+        case didAppear
         case didTapClose
         case didSelectIcon(AppIcon.ViewModel.Icon)
         case didDismissAlert
