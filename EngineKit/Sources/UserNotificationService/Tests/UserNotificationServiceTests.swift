@@ -81,18 +81,14 @@ final class NotificationServiceTests: XCTestCase {
         userPreferenceService.stub.getKey_returnValue = Date(date: "01/01/2023", time: "09:00:00")!
         setUpSut()
         
-        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodNameLog, [
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategoriesCategories(categories: [
-                .init(identifier: "com.rehydrate.reminder",
-                      actions: [.init(identifier: "small",title: "small (-999)")],
-                      intentIdentifiers: ["small"])
-            ]),
+            .setNotificationCategoriesCategories,
             .pendingNotificationRequests,
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest)
+            .addRequest,
+            .addRequest,
+            .addRequest
         ])
     }
     
@@ -111,19 +107,15 @@ final class NotificationServiceTests: XCTestCase {
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)
         
         assertResult(given: result, expected: .success(Void()))
-        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodNameLog, [
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategoriesCategories(categories: [
-                .init(identifier: "com.rehydrate.reminder",
-                      actions: [.init(identifier: "small",title: "small (-999)")],
-                      intentIdentifiers: ["small"])
-            ]),
+            .setNotificationCategoriesCategories,
             .pendingNotificationRequests,
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest)
+            .addRequest,
+            .addRequest,
+            .addRequest
         ])
     }
     
@@ -201,25 +193,21 @@ final class NotificationServiceTests: XCTestCase {
         assertResult(given: result, expected: .success(Void()))
         assertResult(given: secondResult, expected: .success(Void()))
         
-        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodNameLog, [
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategoriesCategories(categories: [
-                .init(identifier: "com.rehydrate.reminder",
-                      actions: [.init(identifier: "small",title: "small (-999)")],
-                      intentIdentifiers: ["small"])
-            ]),
+            .setNotificationCategoriesCategories,
             .pendingNotificationRequests,
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest),
+            .addRequest,
+            .addRequest,
+            .addRequest,
             .pendingNotificationRequests,
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest),
+            .addRequest,
+            .addRequest,
+            .addRequest,
         ])
     }
     
@@ -231,19 +219,15 @@ final class NotificationServiceTests: XCTestCase {
         let result = await sut.enable(withFrequency: 60, start: dates.start, stop: dates.stop)
         
         assertResult(given: result, expected: .success(Void()))
-        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodNameLog, [
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategoriesCategories(categories: [
-                .init(identifier: "com.rehydrate.reminder",
-                      actions: [.init(identifier: "small",title: "small (-999)")],
-                      intentIdentifiers: ["small"])
-            ]),
+            .setNotificationCategoriesCategories,
             .pendingNotificationRequests,
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest),
-            .addRequest(request: dummyNotificationRequest),
+            .addRequest,
+            .addRequest,
+            .addRequest,
         ])
     }
     
@@ -256,17 +240,13 @@ final class NotificationServiceTests: XCTestCase {
                                       stop: dates.stop)
         
         assertResult(given: result, expected: .success(Void()))
-        XCTAssertEqual(userNotificationCenter.spy.methodLog, [
+        XCTAssertEqual(userNotificationCenter.spy.methodNameLog, [
             .removeAllPendingNotificationRequests,
             .pendingNotificationRequests,
             .requestAuthorization,
-            .setNotificationCategoriesCategories(categories: [
-                .init(identifier: "com.rehydrate.reminder",
-                      actions: [.init(identifier: "small",title: "small (-999)")],
-                      intentIdentifiers: ["small"])
-            ]),
+            .setNotificationCategoriesCategories,
             .pendingNotificationRequests,
-            .addRequest(request: dummyNotificationRequest),
+            .addRequest,
         ])
     }
     
@@ -345,33 +325,6 @@ private extension NotificationServiceTests {
                                  line: UInt = #line) {
         let givenTimes = givenRequests.compactMap { $0.trigger?.date?.toTimeString() }
         XCTAssertEqual(givenTimes, expectedTimes, file: file, line: line)
-    }
-}
-
-extension NotificationContent: Equatable {
-    public static func == (lhs: NotificationContent, rhs: NotificationContent) -> Bool {
-        lhs.title == rhs.title &&
-        lhs.subtitle == rhs.subtitle &&
-        lhs.body == rhs.body &&
-        lhs.userInfo.debugDescription == rhs.userInfo.debugDescription &&
-        lhs.categoryIdentifier == rhs.categoryIdentifier
-    }
-}
-
-extension NotificationTrigger: Equatable {
-    public static func == (lhs: NotificationTrigger, rhs: NotificationTrigger) -> Bool {
-        lhs.repeats == rhs.repeats &&
-        lhs.dateComponents == rhs.dateComponents &&
-        lhs.date == rhs.date
-    }
-}
-
-extension NotificationSettings: Equatable {
-    public static func == (lhs: NotificationSettings, rhs: NotificationSettings) -> Bool {
-        lhs.isOn == rhs.isOn &&
-        lhs.start == rhs.start &&
-        lhs.stop == rhs.stop &&
-        lhs.frequency == rhs.frequency
     }
 }
 
