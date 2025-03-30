@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 30/06/2024.
 //
 
-public enum CommunicationUserInfo: String, CaseIterable {
+public enum CommunicationUserInfo: String, CaseIterable, Sendable {
     case session
     case messageData
     case activationState
