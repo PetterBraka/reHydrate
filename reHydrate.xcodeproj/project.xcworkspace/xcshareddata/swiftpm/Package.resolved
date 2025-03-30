@@ -13,8 +13,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:PetterBraka/LoggingKit.git",
       "state" : {
-        "branch" : "adopt-swift6",
-        "revision" : "a4a32c657ba7e27d5040d110b9b451c92c29b1dd"
+        "revision" : "7aa3568e6f2b414c04a460520c8cbf324ddf28d9",
+        "version" : "2.0.0"
       }
     }
   ],
