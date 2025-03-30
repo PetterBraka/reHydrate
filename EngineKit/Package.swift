@@ -27,312 +27,480 @@ let package: Package = {
             .target(
                 name: "EngineKit",
                 dependencies: [
-                    .loggingService,
-                    .portsInterface,
-                    .dbKit,
-                    .source(.dayService),
-                    .source(.drinkService),
-                    .source(.languageService),
-                    .source(.unitService),
-                    .source(.userPreferenceService),
-                    .source(.userNotificationService),
-                    .source(.appearanceService),
-                    .source(.dateService),
-                    .source(.phoneComms),
-                    .source(.notificationCenterService),
+                    "LoggingService",
+                    "PortsInterface",
+                    .product(name: "DBKit", package: "DBKit"),
+                    "DayService",
+                    "DrinkService",
+                    "LanguageService",
+                    "UnitService",
+                    "UserPreferenceService",
+                    "UserNotificationService",
+                    "AppearanceService",
+                    "DateService",
+                    "PhoneComms",
+                    "NotificationCenterService",
                 ]
             ),
             .target(
                 name: "WatchEngine",
                 dependencies: [
-                    .loggingService,
-                    .dbKit,
-                    .source(.dayService),
-                    .source(.drinkService),
-                    .source(.languageService),
-                    .source(.unitService),
-                    .source(.userPreferenceService),
-                    .source(.dateService),
-                    .source(.watchComms),
-                    .source(.notificationCenterService),
+                    "LoggingService",
+                    .product(name: "DBKit", package: "DBKit"),
+                    "DayService",
+                    "DrinkService",
+                    "LanguageService",
+                    "UnitService",
+                    "UserPreferenceService",
+                    "DateService",
+                    "WatchComms",
+                    "NotificationCenterService",
                 ]
             ),
             .target(
                 name: "WidgetEngine",
                 dependencies: [
-                    .dbKit,
-                    .loggingService,
-                    .source(.dayService),
-                    .source(.dateService),
-                    .source(.unitService),
-                    .source(.userPreferenceService),
-                    .source(.notificationCenterService),
+                    .product(name: "DBKit", package: "DBKit"),
+                    "LoggingService",
+                    "DayService",
+                    "DateService",
+                    "UnitService",
+                    "UserPreferenceService",
+                    "NotificationCenterService",
                 ]
             ),
             .target(
                 name: "EngineMocks",
                     dependencies: [
-                        .communicationMocks,
-                        .loggingService,
-                        .dbKit,
-                        .portsMocks,
-                        .mocks(.dayService),
-                        .mocks(.drinkService),
-                        .mocks(.languageService),
-                        .mocks(.unitService),
-                        .mocks(.userPreferenceService),
-                        .mocks(.userNotificationService),
-                        .mocks(.appearanceService),
-                        .mocks(.dateService),
-                        .mocks(.phoneComms),
-                        .mocks(.watchComms),
-                        .mocks(.notificationCenterService),
+                        .product(name: "CommunicationMocks", package: "CommunicationKit"),
+                        .product(name: "DBKit", package: "DBKit"),
+                        "LoggingService",
+                        "PortsMocks",
+                        "DayServiceMocks",
+                        "DrinkServiceMocks",
+                        "LanguageServiceMocks",
+                        "UnitServiceMocks",
+                        "UserPreferenceServiceMocks",
+                        "UserNotificationServiceMocks",
+                        "AppearanceServiceMocks",
+                        "DateServiceMocks",
+                        "PhoneCommsMocks",
+                        "WatchCommsMocks",
+                        "NotificationCenterServiceMocks",
                     ]
                    ),
-            .loggingService,
-            .portsInterface,
-            .portsMocks,
+            .target(name: "LoggingService", dependencies: ["LoggingKit"]),
+            .target(name: "PortsInterface", dependencies: ["LoggingService"], path: "Sources/Ports/Interface"),
+            .target(name: "PortsMocks", dependencies: ["PortsInterface"], path: "Sources/Ports/Mocks"),
+            // MARK: - DayService
+            .target(
+                name: "DayService",
+                dependencies: [
+                    "DayServiceInterface",
+                    "LoggingService",
+                    "UnitServiceInterface",
+                    "UserPreferenceServiceInterface",
+                    "DateServiceInterface",
+                    "NotificationCenterServiceInterface",
+                    "PortsInterface",
+                    .product(name: "DBKit", package: "DBKit"),
+                ],
+                path: "Sources/DayService/Sources"
+            ),
+            .target(
+                name: "DayServiceInterface",
+                dependencies: [
+                    "LoggingKit",
+                    "DrinkServiceInterface",
+                    "UserPreferenceServiceInterface",
+                    "NotificationCenterServiceInterface",
+                ],
+                path: "Sources/DayService/Interface"
+            ),
+            .target(
+                name: "DayServiceMocks",
+                dependencies: ["DayServiceInterface"],
+                path: "Sources/DayService/Mocks"
+            ),
+            .testTarget(
+                name: "DayServiceTests",
+                dependencies: [
+                    "DayService",
+                    "DayServiceMocks",
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                ],
+                path: "Sources/DayService/Tests"
+            ),
+            // MARK: - DrinkService
+            .target(
+                name: "DrinkService",
+                dependencies: [
+                    "LoggingService",
+                    "DrinkServiceInterface",
+                    "PortsInterface",
+                    .product(name: "DBKit", package: "DBKit"),
+                    "UnitServiceInterface",
+                    "UserPreferenceServiceInterface",
+                    "NotificationCenterServiceInterface",
+                ],
+                path: "Sources/DrinkService/Sources"
+            ),
+            .target(
+                name: "DrinkServiceInterface",
+                dependencies: [
+                    "NotificationCenterServiceInterface",
+                ],
+                path: "Sources/DrinkService/Interface"
+            ),
+            .target(
+                name: "DrinkServiceMocks",
+                dependencies: ["DrinkServiceInterface"],
+                path: "Sources/DrinkService/Mocks"
+            ),
+            .testTarget(
+                name: "DrinkServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "DrinkService",
+                    "DrinkServiceMocks",
+                ],
+                path: "Sources/DrinkService/Tests"
+            ),
+            // MARK: - DateService
+            .target(
+                name: "DateService",
+                dependencies: [
+                    "LoggingService",
+                    "DateServiceInterface",
+                ],
+                path: "Sources/DateService/Sources"
+            ),
+            .target(
+                name: "DateServiceInterface",
+                dependencies: [
+                ],
+                path: "Sources/DateService/Interface"
+            ),
+            .target(
+                name: "DateServiceMocks",
+                dependencies: ["DateServiceInterface"],
+                path: "Sources/DateService/Mocks"
+            ),
+            .testTarget(
+                name: "DateServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "DateService",
+                    "DateServiceMocks",
+                ],
+                path: "Sources/DateService/Tests"
+            ),
+            // MARK: - LanguageService
+            .target(
+                name: "LanguageService",
+                dependencies: [
+                    "LoggingService",
+                    "LanguageServiceInterface",
+                    "UserPreferenceServiceInterface",
+                ],
+                path: "Sources/LanguageService/Sources"
+            ),
+            .target(
+                name: "LanguageServiceInterface",
+                dependencies: [
+                    "UserPreferenceServiceInterface",
+                ],
+                path: "Sources/LanguageService/Interface"
+            ),
+            .target(
+                name: "LanguageServiceMocks",
+                dependencies: ["LanguageServiceInterface"],
+                path: "Sources/LanguageService/Mocks"
+            ),
+            .testTarget(
+                name: "LanguageServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "LanguageService",
+                    "LanguageServiceMocks",
+                ],
+                path: "Sources/LanguageService/Tests"
+            ),
+            // MARK: - TimelineService
+            .target(
+                name: "TimelineService",
+                dependencies: [
+                    "LoggingService",
+                    "TimelineServiceInterface",
+                    "PortsInterface",
+                    .product(name: "DBKit", package: "DBKit")
+                ],
+                path: "Sources/TimelineService/Sources"
+            ),
+            .target(
+                name: "TimelineServiceInterface",
+                dependencies: [
+                ],
+                path: "Sources/TimelineService/Interface"
+            ),
+            .target(
+                name: "TimelineServiceMocks",
+                dependencies: ["TimelineServiceInterface"],
+                path: "Sources/TimelineService/Mocks"
+            ),
+            .testTarget(
+                name: "TimelineServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "TimelineService",
+                    "TimelineServiceMocks",
+                    "PortsMocks"
+                ],
+                path: "Sources/TimelineService/Tests"
+            ),
+            // MARK: - UnitService
+            .target(
+                name: "UnitService",
+                dependencies: [
+                    "LoggingService",
+                    "UnitServiceInterface",
+                    "UserPreferenceServiceInterface",
+                    "NotificationCenterServiceInterface",
+                ],
+                path: "Sources/UnitService/Sources"
+            ),
+            .target(
+                name: "UnitServiceInterface",
+                dependencies: [
+                    "UserPreferenceServiceInterface",
+                    "NotificationCenterServiceInterface",
+                ],
+                path: "Sources/UnitService/Interface"
+            ),
+            .target(
+                name: "UnitServiceMocks",
+                dependencies: ["UnitServiceInterface"],
+                path: "Sources/UnitService/Mocks"
+            ),
+            .testTarget(
+                name: "UnitServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "UnitService",
+                    "UnitServiceMocks",
+                ],
+                path: "Sources/UnitService/Tests"
+            ),
+            // MARK: - UserPreferenceService
+            .target(
+                name: "UserPreferenceService",
+                dependencies: [
+                    "LoggingService",
+                    "UserPreferenceServiceInterface",
+                ],
+                path: "Sources/UserPreferenceService/Sources"
+            ),
+            .target(
+                name: "UserPreferenceServiceInterface",
+                dependencies: [
+                ],
+                path: "Sources/UserPreferenceService/Interface"
+            ),
+            .target(
+                name: "UserPreferenceServiceMocks",
+                dependencies: ["UserPreferenceServiceInterface"],
+                path: "Sources/UserPreferenceService/Mocks"
+            ),
+            .testTarget(
+                name: "UserPreferenceServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "UserPreferenceService",
+                    "UserPreferenceServiceMocks",
+                ],
+                path: "Sources/UserPreferenceService/Tests"
+            ),
+            // MARK: - UserNotificationService
+            .target(
+                name: "UserNotificationService",
+                dependencies: [
+                    "LoggingService",
+                    "UserNotificationServiceInterface",
+                    "DayServiceInterface",
+                    "UserPreferenceServiceInterface"
+                ],
+                path: "Sources/UserNotificationService/Sources"
+            ),
+            .target(
+                name: "UserNotificationServiceInterface",
+                dependencies: [
+                    "UserPreferenceServiceInterface",
+                ],
+                path: "Sources/UserNotificationService/Interface"
+            ),
+            .target(
+                name: "UserNotificationServiceMocks",
+                dependencies: ["UserNotificationServiceInterface"],
+                path: "Sources/UserNotificationService/Mocks"
+            ),
+            .testTarget(
+                name: "UserNotificationServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "UserNotificationService",
+                    "UserNotificationServiceMocks",
+                ],
+                path: "Sources/UserNotificationService/Tests"
+            ),
+            // MARK: - AppearanceService
+            .target(
+                name: "AppearanceService",
+                dependencies: [
+                    "LoggingService",
+                    "AppearanceServiceInterface",
+                    "UserPreferenceServiceInterface",
+                    "PortsInterface"
+                ],
+                path: "Sources/AppearanceService/Sources"
+            ),
+            .target(
+                name: "AppearanceServiceInterface",
+                dependencies: [
+                    "UserPreferenceServiceInterface",
+                ],
+                path: "Sources/AppearanceService/Interface"
+            ),
+            .target(
+                name: "AppearanceServiceMocks",
+                dependencies: ["AppearanceServiceInterface"],
+                path: "Sources/AppearanceService/Mocks"
+            ),
+            .testTarget(
+                name: "AppearanceServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "AppearanceService",
+                    "AppearanceServiceMocks",
+                ],
+                path: "Sources/AppearanceService/Tests"
+            ),
+            // MARK: - PhoneComms
+            .target(
+                name: "PhoneComms",
+                dependencies: [
+                    "LoggingService",
+                    "PhoneCommsInterface",
+                    .product(name: "CommunicationInterface", package: "CommunicationKit"),
+                    "DateServiceInterface",
+                    "DayServiceInterface",
+                    "DrinkServiceInterface",
+                    "UnitServiceInterface"
+                ],
+                path: "Sources/PhoneComms/Sources"
+            ),
+            .target(
+                name: "PhoneCommsInterface",
+                dependencies: [
+                ],
+                path: "Sources/PhoneComms/Interface"
+            ),
+            .target(
+                name: "PhoneCommsMocks",
+                dependencies: ["PhoneCommsInterface"],
+                path: "Sources/PhoneComms/Mocks"
+            ),
+            .testTarget(
+                name: "PhoneCommsTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "PhoneComms",
+                    "PhoneCommsMocks",
+                ],
+                path: "Sources/PhoneComms/Tests"
+            ),
+            // MARK: - WatchComms
+            .target(
+                name: "WatchComms",
+                dependencies: [
+                    "LoggingService",
+                    "WatchCommsInterface",
+                    .product(name: "CommunicationInterface", package: "CommunicationKit"),
+                    "DateServiceInterface",
+                    "DayServiceInterface",
+                    "DrinkServiceInterface",
+                    "UnitServiceInterface"
+                ],
+                path: "Sources/WatchComms/Sources"
+            ),
+            .target(
+                name: "WatchCommsInterface",
+                path: "Sources/WatchComms/Interface"
+            ),
+            .target(
+                name: "WatchCommsMocks",
+                dependencies: ["WatchCommsInterface"],
+                path: "Sources/WatchComms/Mocks"
+            ),
+            .testTarget(
+                name: "WatchCommsTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "WatchComms",
+                    "WatchCommsMocks",
+                ],
+                path: "Sources/WatchComms/Tests"
+            ),
+            // MARK: - NotificationCenterService
+            .target(
+                name: "NotificationCenterService",
+                dependencies: [
+                    "LoggingService",
+                    "NotificationCenterServiceInterface"
+                ],
+                path: "Sources/NotificationCenterService/Sources"
+            ),
+            .target(
+                name: "NotificationCenterServiceInterface",
+                path: "Sources/NotificationCenterService/Interface"
+            ),
+            .target(
+                name: "NotificationCenterServiceMocks",
+                dependencies: ["NotificationCenterServiceInterface"],
+                path: "Sources/NotificationCenterService/Mocks"
+            ),
+            .testTarget(
+                name: "NotificationCenterServiceTests",
+                dependencies: [
+                    "EngineMocks",
+                    .product(name: "DBKit", package: "DBKit"),
+                    .product(name: "TestHelper", package: "TestHelper"),
+                    "NotificationCenterService",
+                    "NotificationCenterServiceMocks",
+                ],
+                path: "Sources/NotificationCenterService/Tests"
+            ),
         ]
-            .with(
-                targetsFrom: .dayService,
-                sourceDependancy: [
-                    .interface(.unitService),
-                    .interface(.userPreferenceService),
-                    .interface(.dateService),
-                    .interface(.notificationCenterService),
-                    .portsInterface,
-                    .dbKit,
-                ],
-                interfaceDependancy: [
-                    .interface(.drinkService),
-                    .interface(.userPreferenceService),
-                    .interface(.notificationCenterService),
-                ]
-            )
-            .with(
-                targetsFrom: .drinkService,
-                sourceDependancy: [
-                    .portsInterface,
-                    .dbKit,
-                    .interface(.unitService),
-                    .interface(.userPreferenceService),
-                    .interface(.notificationCenterService),
-                ],
-                interfaceDependancy: [
-                    .interface(.notificationCenterService),
-                ]
-            )
-            .with(
-                targetsFrom: .languageService,
-                sourceDependancy: [
-                    .interface(.userPreferenceService)
-                ],
-                interfaceDependancy: [
-                    .interface(.userPreferenceService),
-                ]
-            )
-            .with(
-                targetsFrom: .timelineService,
-                sourceDependancy: [
-                    .portsInterface,
-                    .dbKit
-                ],
-                testsDependancy: [
-                    .portsMocks
-                ]
-            )
-            .with(
-                targetsFrom: .unitService,
-                sourceDependancy: [
-                    .interface(.userPreferenceService),
-                    .interface(.notificationCenterService),
-                ],
-                interfaceDependancy: [
-                    .interface(.userPreferenceService),
-                    .interface(.notificationCenterService),
-                ]
-            )
-            .with(
-                targetsFrom: .userPreferenceService
-            )
-            .with(
-                targetsFrom: .userNotificationService,
-                sourceDependancy: [
-                    .interface(.dayService),
-                    .interface(.userPreferenceService)
-                ],
-                interfaceDependancy: [
-                    .interface(.userPreferenceService),
-                ]
-            )
-            .with(
-                targetsFrom: .appearanceService,
-                sourceDependancy: [
-                    .interface(.userPreferenceService),
-                    .portsInterface
-                ],
-                interfaceDependancy: [
-                    .interface(.userPreferenceService),
-                ]
-            )
-            .with(
-                targetsFrom: .dateService
-            )
-            .with(
-                targetsFrom: .phoneComms,
-                sourceDependancy: [
-                    .communicationInterface,
-                    .interface(.dateService),
-                    .interface(.dayService),
-                    .interface(.drinkService),
-                    .interface(.unitService)
-                ]
-            )
-            .with(
-                targetsFrom: .watchComms,
-                sourceDependancy: [
-                    .communicationInterface,
-                    .interface(.dateService),
-                    .interface(.dayService),
-                    .interface(.drinkService),
-                    .interface(.unitService)
-                ]
-            )
-            .with(
-                targetsFrom: .notificationCenterService
-            )
     )
 }()
-
-extension Target {
-    static let loggingService: Target = .target(name: "LoggingService", dependencies: ["LoggingKit"])
-    static let portsInterface: Target = .target(
-        name: "PortsInterface",
-        dependencies: [.loggingService],
-        path: "Sources/Ports/Interface"
-    )
-    static let portsMocks: Target = .target(name: "PortsMocks", dependencies: [.portsInterface], path: "Sources/Ports/Mocks")
-}
-
-extension Target.Dependency {
-    static let dbKit: Target.Dependency = .product(name: "DBKit", package: "DBKit")
-    static let testHelper: Target.Dependency = .product(name: "TestHelper", package: "TestHelper")
-    static let communicationSource: Target.Dependency = .product(name: "CommunicationSource", package: "CommunicationKit")
-    static let communicationInterface: Target.Dependency = .product(name: "CommunicationInterface", package: "CommunicationKit")
-    static let communicationMocks: Target.Dependency = .product(name: "CommunicationMocks", package: "CommunicationKit")
-    
-    static let loggingService: Target.Dependency = .byName(name: "LoggingService")
-    
-    static let portsInterface: Target.Dependency = .byName(name: "PortsInterface")
-    static let portsMocks: Target.Dependency = .byName(name: "PortsMocks")
-    
-    static let engineMocks: Target.Dependency = .byName(name: "EngineMocks")
-}
-
-enum Feature: String {
-    case dayService = "DayService"
-    case dateService = "DateService"
-    case drinkService = "DrinkService"
-    case languageService = "LanguageService"
-    case timelineService = "TimelineService"
-    case unitService = "UnitService"
-    case userPreferenceService = "UserPreferenceService"
-    case userNotificationService = "UserNotificationService"
-    case notificationCenterService = "NotificationCenterService"
-    case appearanceService = "AppearanceService"
-    case phoneComms = "PhoneComms"
-    case watchComms = "WatchComms"
-}
-
-extension Feature {
-    var source: String {
-        rawValue
-    }
-    
-    var interface: String {
-        rawValue + "Interface"
-    }
-    
-    var mocks: String {
-        rawValue + "Mocks"
-    }
-    
-    var tests: String {
-        rawValue + "Tests"
-    }
-}
-
-extension Target.Dependency {
-    
-    static func source(_ feature: Feature) -> Target.Dependency {
-        .byName(name: feature.source)
-    }
-    
-    static func interface(_ feature: Feature) -> Target.Dependency {
-        .byName(name: feature.interface)
-    }
-    
-    static func mocks(_ feature: Feature) -> Target.Dependency {
-        .byName(name: feature.mocks)
-    }
-    
-    static func tests(_ feature: Feature) -> Target.Dependency {
-        .byName(name: feature.tests)
-    }
-}
-
-extension Array where Element == Target.Dependency {
-    func sourceAndMocks(_ feature: Feature) -> [Target.Dependency] {
-        [
-            .byName(name: feature.source),
-            .byName(name: feature.mocks)
-        ]
-    }
-}
-
-extension Array where Element == Target {
-    func with(
-        targetsFrom feature: Feature,
-        sourceDependancy: [Target.Dependency] = [],
-        sourceResources: [Resource]? = nil,
-        interfaceDependancy: [Target.Dependency] = [],
-        interfaceResources: [Resource]? = nil,
-        mocksDependancy: [Target.Dependency] = [],
-        mocksResources: [Resource]? = nil,
-        testsDependancy: [Target.Dependency] = [],
-        testsResources: [Resource]? = nil
-    ) -> [Target] {
-        let rootPath = "Sources/\(feature.source)"
-
-        let newTargets: [Target] = [
-            .target(name: feature.source,
-                    dependencies: [
-                        .byName(name: feature.interface),
-                        .loggingService
-                    ] + sourceDependancy,
-                    path: rootPath + "/Sources",
-                    resources: sourceResources),
-            .target(name: feature.interface,
-                    dependencies: [
-                        "LoggingKit"
-                    ] + interfaceDependancy,
-                    path: rootPath + "/Interface",
-                    resources: interfaceResources),
-            .target(name: feature.mocks,
-                    dependencies: [.byName(name: feature.interface)] + mocksDependancy,
-                    path: rootPath + "/Mocks",
-                    resources: mocksResources),
-            .testTarget(name: feature.tests,
-                        dependencies: [
-                            .byName(name: feature.source),
-                            .byName(name: feature.mocks),
-                            .engineMocks,
-                            .dbKit,
-                            .testHelper,
-                        ] + testsDependancy,
-                        path: rootPath + "/Tests",
-                        resources: testsResources),
-        ]
-        return self + newTargets
-    }
-}
