@@ -350,7 +350,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveApplicationContext - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -372,7 +372,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveMessage - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -394,7 +394,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveUserInfo - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -409,7 +409,7 @@ final class WatchCommsTests: XCTestCase {
     func test_addObserver_processing_noData() async {
         let expectation = expectation(description: "processing_noData - Should trigger update")
         expectation.isInverted = true
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -426,7 +426,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_unit - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -442,7 +442,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_unit_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -461,7 +461,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didEdit - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -479,7 +479,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -497,7 +497,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -515,7 +515,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -531,7 +531,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -550,7 +550,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -570,7 +570,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -589,7 +589,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -608,7 +608,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -625,7 +625,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addObserver {
             expectation.fulfill()
         }
         
@@ -635,61 +635,8 @@ final class WatchCommsTests: XCTestCase {
         XCTAssertEqual(dayService.spy.methodLog, [])
     }
     
-    func test_removeObserver_didReceiveApplicationContext() async {
-        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
-            .unitSystem : UnitSystem.metric,
-            .day : Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5),
-            .drinks : [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
-        ]
-        let message =  "didReceiveApplicationContext - didReceiveApplicationContext not trigger update"
-        let expectation = expectation(description: message)
-        expectation.isInverted = true
-        sut.addObserver {
-            XCTFail(message)
-        }
-        sut.removeObserver()
-        
-        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: nil, userInfo: expectedUserInfo)
-        
-        await fulfillment(of: [expectation], timeout: timeout)
-    }
-    
-    func test_removeObserver_didReceiveMessage() async {
-        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
-            .unitSystem : UnitSystem.metric,
-            .day : Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5),
-            .drinks : [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
-        ]
-        let message =  "didReceiveMessage - Should not trigger update"
-        let expectation = expectation(description:message)
-        expectation.isInverted = true
-        sut.addObserver {
-            XCTFail(message)
-        }
-        sut.removeObserver()
-        
-        notificationCenter.post(name: .Shared.didReceiveMessage, object: nil, userInfo: expectedUserInfo)
-        
-        await fulfillment(of: [expectation], timeout: timeout)
-    }
-    
-    func test_removeObserver_didReceiveUserInfo() async {
-        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
-            .unitSystem : UnitSystem.metric,
-            .day : Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5),
-            .drinks : [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
-        ]
-        let message = "didReceiveUserInfo - Should not trigger update"
-        let expectation = expectation(description: message)
-        expectation.isInverted = true
-        sut.addObserver {
-            XCTFail(message)
-        }
-        sut.removeObserver()
-        
-        notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo)
-        
-        await fulfillment(of: [expectation], timeout: timeout)
+    func addObserver(block: @escaping @Sendable () -> Void) {
+        notificationCenter.addObserver(forName: .Shared.processedNotification, object: nil, queue: .current) { _ in block() }
     }
 }
 
@@ -721,74 +668,6 @@ extension WatchServiceTypeSpy.MethodCall: @retroactive Equatable {
             (.sendMessageMessageErrorHandler, _), (_, .sendMessageMessageErrorHandler),
             (.sendDataDataErrorHandler, _), (_, .sendDataDataErrorHandler),
             (.sendUserInfoUserInfo, _), (_, .sendUserInfoUserInfo):
-            false
-        }
-    }
-}
-
-extension UnitServiceTypeSpy.MethodCall: Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case (.setUnitSystem(let unitSystem_lhs), .setUnitSystem(let unitSystem_rhs)):
-            unitSystem_lhs == unitSystem_rhs
-        case (.getUnitSystem, .getUnitSystem):
-            true
-        case (let .convertValueFromUnitToUnit(value_lhs, fromUnit_lhs, toUnit_lhs), let .convertValueFromUnitToUnit(value_rhs, fromUnit_rhs, toUnit_rhs)):
-            value_lhs == value_rhs &&
-            fromUnit_lhs == fromUnit_rhs &&
-            toUnit_lhs == toUnit_rhs
-        case (.getUnitSystem, .setUnitSystem), (.convertValueFromUnitToUnit, .setUnitSystem),
-            (.setUnitSystem, .getUnitSystem), (.convertValueFromUnitToUnit, .getUnitSystem),
-            (.setUnitSystem, .convertValueFromUnitToUnit), (.getUnitSystem, .convertValueFromUnitToUnit):
-            false
-        }
-    }
-}
-
-extension DayServiceTypeSpy.MethodCall: Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case (.getToday, .getToday):
-            true
-        case (.getDaysDates(let dates_lhs), .getDaysDates(let dates_rhs)):
-            dates_lhs == dates_rhs
-        case (.addDrink(let drink_lhs), .addDrink(let drink_rhs)):
-            drink_lhs == drink_rhs
-        case (.removeDrink(let drink_lhs), .removeDrink(let drink_rhs)):
-            drink_lhs == drink_rhs
-        case (.increaseGoal(let goal_lhs), .increaseGoal(let goal_rhs)):
-            goal_lhs == goal_rhs
-        case (.decreaseGoal(let goal_lhs), .decreaseGoal(let goal_rhs)):
-            goal_lhs == goal_rhs
-        case (.getDaysDates, .getToday), (.addDrink, .getToday), (.removeDrink, .getToday), (.increaseGoal, .getToday), (.decreaseGoal, .getToday),
-            (.getToday, .getDaysDates), (.addDrink, .getDaysDates), (.removeDrink, .getDaysDates), (.increaseGoal, .getDaysDates), (.decreaseGoal, .getDaysDates),
-            (.getToday, .addDrink), (.getDaysDates, .addDrink), (.removeDrink, .addDrink), (.increaseGoal, .addDrink), (.decreaseGoal, .addDrink),
-            (.getToday, .removeDrink), (.getDaysDates, .removeDrink), (.addDrink, .removeDrink), (.increaseGoal, .removeDrink), (.decreaseGoal, .removeDrink),
-            (.getToday, .increaseGoal), (.getDaysDates, .increaseGoal), (.addDrink, .increaseGoal), (.removeDrink, .increaseGoal), (.decreaseGoal, .increaseGoal),
-            (.getToday, .decreaseGoal), (.getDaysDates, .decreaseGoal), (.addDrink, .decreaseGoal), (.removeDrink, .decreaseGoal), (.increaseGoal, .decreaseGoal):
-            false
-        }
-    }
-}
-
-extension DrinkServiceTypeSpy.MethodCall: Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case (.addSizeContainer(let size_lhs, let container_lhs), .addSizeContainer(let size_rhs, let container_rhs)):
-            size_lhs == size_rhs &&
-            container_lhs == container_rhs
-        case (.editSizeDrink(let size_lhs, let drink_lhs), .editSizeDrink(let size_rhs, let drink_rhs)):
-            size_lhs == size_rhs &&
-            drink_lhs == drink_rhs
-        case (.removeContainer(let container_lhs), .removeContainer(let container_rhs)):
-            container_lhs == container_rhs
-        case (.getSaved, .getSaved), (.resetToDefault, .resetToDefault):
-            true
-        case (.editSizeDrink, .addSizeContainer), (.removeContainer, .addSizeContainer), (.getSaved, .addSizeContainer), (.resetToDefault, .addSizeContainer),
-            (.addSizeContainer, .editSizeDrink), (.removeContainer, .editSizeDrink), (.getSaved, .editSizeDrink), (.resetToDefault, .editSizeDrink),
-            (.addSizeContainer, .removeContainer), (.editSizeDrink, .removeContainer), (.getSaved, .removeContainer), (.resetToDefault, .removeContainer),
-            (.addSizeContainer, .getSaved), (.editSizeDrink, .getSaved), (.removeContainer, .getSaved), (.resetToDefault, .getSaved),
-            (.addSizeContainer, .resetToDefault), (.editSizeDrink, .resetToDefault), (.removeContainer, .resetToDefault), (.getSaved, .resetToDefault):
             false
         }
     }
