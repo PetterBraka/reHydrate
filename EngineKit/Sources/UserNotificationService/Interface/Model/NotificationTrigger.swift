@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct NotificationTrigger {
+public struct NotificationTrigger: Sendable {
     public let repeats: Bool
     public let dateComponents: DateComponents
     
