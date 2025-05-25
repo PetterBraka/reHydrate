@@ -13,7 +13,6 @@ import LoggingService
 import PortsInterface
 import DBKitInterface
 import DateServiceInterface
-import NotificationCenterServiceInterface
 
 public final class DayService: DayServiceType {
     public typealias Engine = (

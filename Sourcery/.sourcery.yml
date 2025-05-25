@@ -157,17 +157,6 @@ configurations:
         imports:
           - WatchCommsInterface
 
-  - sources:
-      - ../EngineKit/Sources/NotificationCenterService
-    templates:
-      - Templates/AutoStub.stencil
-      - Templates/AutoSpy.stencil
-      - Templates/AutoString.stencil
-      - Templates/AutoEquatable.stencil
-    output: ../EngineKit/Sources/NotificationCenterService/Mocks/Generated.swift
-    args:
-        imports:
-          - NotificationCenterServiceInterface
   # EnigneMocks
   - sources:
       - ../EngineKit/Sources/EngineMocks

@@ -9,7 +9,6 @@ import Foundation
 import LoggingService
 import UnitServiceInterface
 import UserPreferenceServiceInterface
-import NotificationCenterServiceInterface
 
 public final class UnitService: UnitServiceType {
     public typealias Engine = (

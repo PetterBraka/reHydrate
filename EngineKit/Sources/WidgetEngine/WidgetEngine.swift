@@ -19,8 +19,6 @@ import DayServiceInterface
 import DayService
 import DBKitInterface
 import DBKit
-import NotificationCenterServiceInterface
-import NotificationCenterService
 
 public final class WidgetEngine {
     public init(
@@ -49,7 +47,6 @@ public final class WidgetEngine {
     public lazy var dayManager: DayManagerType = DayManager(database: database, logger: logger)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
-    public lazy var notificationCenter: NotificationCenterType = NotificationCenterService()
 }
 
 extension WidgetEngine:
@@ -59,6 +56,5 @@ extension WidgetEngine:
     HasLoggerService,
     HasUnitService,
     HasDateService,
-    HasDayService,
-    HasNotificationCenter
+    HasDayService
 {}

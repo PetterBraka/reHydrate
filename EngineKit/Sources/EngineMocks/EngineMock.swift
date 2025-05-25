@@ -32,8 +32,6 @@ import PhoneCommsInterface
 import PhoneCommsMocks
 import WatchCommsInterface
 import WatchCommsMocks
-import NotificationCenterServiceInterface
-import NotificationCenterServiceMocks
 
 public final class EngineMocks {
     public init() {}
@@ -63,7 +61,6 @@ public final class EngineMocks {
     public var watchService: WatchServiceType = WatchServiceTypeStub()
     public var phoneComms: PhoneCommsType = PhoneCommsTypeStub()
     public var watchComms: WatchCommsType = WatchCommsTypeStub()
-    public var notificationCenter: NotificationCenterType = NotificationCenterTypeStub()
 }
 
 extension EngineMocks: HasService {}

@@ -39,7 +39,6 @@ let package: Package = {
                     "AppearanceService",
                     "DateService",
                     "PhoneComms",
-                    "NotificationCenterService",
                 ]
             ),
             .target(
@@ -54,7 +53,6 @@ let package: Package = {
                     "UserPreferenceService",
                     "DateService",
                     "WatchComms",
-                    "NotificationCenterService",
                 ]
             ),
             .target(
@@ -66,7 +64,6 @@ let package: Package = {
                     "DateService",
                     "UnitService",
                     "UserPreferenceService",
-                    "NotificationCenterService",
                 ]
             ),
             .target(
@@ -86,7 +83,6 @@ let package: Package = {
                         "DateServiceMocks",
                         "PhoneCommsMocks",
                         "WatchCommsMocks",
-                        "NotificationCenterServiceMocks",
                     ]
                    ),
             .target(name: "LoggingService", dependencies: ["LoggingKit"]),
@@ -101,7 +97,6 @@ let package: Package = {
                     "UnitServiceInterface",
                     "UserPreferenceServiceInterface",
                     "DateServiceInterface",
-                    "NotificationCenterServiceInterface",
                     "PortsInterface",
                     .product(name: "DBKit", package: "DBKit"),
                 ],
@@ -113,7 +108,6 @@ let package: Package = {
                     "LoggingKit",
                     "DrinkServiceInterface",
                     "UserPreferenceServiceInterface",
-                    "NotificationCenterServiceInterface",
                 ],
                 path: "Sources/DayService/Interface"
             ),
@@ -143,14 +137,13 @@ let package: Package = {
                     .product(name: "DBKit", package: "DBKit"),
                     "UnitServiceInterface",
                     "UserPreferenceServiceInterface",
-                    "NotificationCenterServiceInterface",
                 ],
                 path: "Sources/DrinkService/Sources"
             ),
             .target(
                 name: "DrinkServiceInterface",
                 dependencies: [
-                    "NotificationCenterServiceInterface",
+                    "LoggingKit",
                 ],
                 path: "Sources/DrinkService/Interface"
             ),
@@ -247,8 +240,7 @@ let package: Package = {
             ),
             .target(
                 name: "TimelineServiceInterface",
-                dependencies: [
-                ],
+                dependencies: [],
                 path: "Sources/TimelineService/Interface"
             ),
             .target(
@@ -275,7 +267,6 @@ let package: Package = {
                     "LoggingService",
                     "UnitServiceInterface",
                     "UserPreferenceServiceInterface",
-                    "NotificationCenterServiceInterface",
                 ],
                 path: "Sources/UnitService/Sources"
             ),
@@ -283,7 +274,6 @@ let package: Package = {
                 name: "UnitServiceInterface",
                 dependencies: [
                     "UserPreferenceServiceInterface",
-                    "NotificationCenterServiceInterface",
                 ],
                 path: "Sources/UnitService/Interface"
             ),
@@ -342,7 +332,8 @@ let package: Package = {
                     "LoggingService",
                     "UserNotificationServiceInterface",
                     "DayServiceInterface",
-                    "UserPreferenceServiceInterface"
+                    "UserPreferenceServiceInterface",
+                    "DateServiceInterface",
                 ],
                 path: "Sources/UserNotificationService/Sources"
             ),
@@ -452,19 +443,28 @@ let package: Package = {
                     "DrinkServiceInterface",
                     "UnitServiceInterface"
                 ],
-                path: "Sources/WatchComms/Sources"
+                path: "Sources/WatchComms/Sources",
+                swiftSettings: [
+                    .enableExperimentalFeature("StrictConcurrency")
+                ]
             ),
             .target(
                 name: "WatchCommsInterface",
                 dependencies: [
                     "LoggingKit",
                 ],
-                path: "Sources/WatchComms/Interface"
+                path: "Sources/WatchComms/Interface",
+                swiftSettings: [
+                    .enableExperimentalFeature("StrictConcurrency")
+                ]
             ),
             .target(
                 name: "WatchCommsMocks",
                 dependencies: ["WatchCommsInterface"],
-                path: "Sources/WatchComms/Mocks"
+                path: "Sources/WatchComms/Mocks",
+                swiftSettings: [
+                    .enableExperimentalFeature("StrictConcurrency")
+                ]
             ),
             .testTarget(
                 name: "WatchCommsTests",
@@ -475,36 +475,10 @@ let package: Package = {
                     "WatchComms",
                     "WatchCommsMocks",
                 ],
-                path: "Sources/WatchComms/Tests"
-            ),
-            // MARK: - NotificationCenterService
-            .target(
-                name: "NotificationCenterService",
-                dependencies: [
-                    "LoggingService",
-                    "NotificationCenterServiceInterface"
-                ],
-                path: "Sources/NotificationCenterService/Sources"
-            ),
-            .target(
-                name: "NotificationCenterServiceInterface",
-                path: "Sources/NotificationCenterService/Interface"
-            ),
-            .target(
-                name: "NotificationCenterServiceMocks",
-                dependencies: ["NotificationCenterServiceInterface"],
-                path: "Sources/NotificationCenterService/Mocks"
-            ),
-            .testTarget(
-                name: "NotificationCenterServiceTests",
-                dependencies: [
-                    "EngineMocks",
-                    .product(name: "DBKit", package: "DBKit"),
-                    .product(name: "TestHelper", package: "TestHelper"),
-                    "NotificationCenterService",
-                    "NotificationCenterServiceMocks",
-                ],
-                path: "Sources/NotificationCenterService/Tests"
+                path: "Sources/WatchComms/Tests",
+                swiftSettings: [
+                    .enableExperimentalFeature("StrictConcurrency")
+                ]
             ),
         ]
     )

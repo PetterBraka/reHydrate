@@ -30,8 +30,6 @@ import DBKit
 import CommunicationKitInterface
 import PhoneCommsInterface
 import PhoneComms
-import NotificationCenterServiceInterface
-import NotificationCenterService
 
 public final class Engine {
     public init(
@@ -106,7 +104,6 @@ public final class Engine {
     public lazy var appearanceService: AppearanceServiceType = AppearanceService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
     public lazy var phoneComms: PhoneCommsType = PhoneComms(engine: self, notificationCenter: .default)
-    public lazy var notificationCenter: NotificationCenterType = NotificationCenterService(notificationCenter: .default)
 }
 
 extension Engine: HasService & HasPorts & HasAppInfo {}
