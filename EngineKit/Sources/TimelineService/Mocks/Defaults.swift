@@ -8,9 +8,9 @@
 import TimelineServiceInterface
 
 extension Array where Element == Timeline {
-    static let `default` = [Timeline]()
+    nonisolated(unsafe) static let `default` = [Timeline]()
 }
 
 extension Array where Element == TimelineCollection {
-    static let `default` = [TimelineCollection]()
+    nonisolated(unsafe) static let `default` = [TimelineCollection]()
 }
