@@ -25,15 +25,11 @@ public final class PhoneCommsTypeSpy: PhoneCommsTypeSpying {
     public enum MethodCall {
         case setAppContext
         case sendDataToWatch
-        case addObserverUpdateBlock(updateBlock: () -> Void)
-        case removeObserver
     }
 
     public enum MethodName {
         case setAppContext
         case sendDataToWatch
-        case addObserverUpdateBlock
-        case removeObserver
     }
 
     public var variableLog: [VariableName] = []
@@ -58,16 +54,6 @@ extension PhoneCommsTypeSpy: PhoneCommsType {
         methodLog.append(.sendDataToWatch)
         await realObject.sendDataToWatch()
     }
-    public func addObserver(using updateBlock: @escaping () -> Void) -> Void {
-        methodNameLog.append(.addObserverUpdateBlock)
-        methodLog.append(.addObserverUpdateBlock(updateBlock: updateBlock))
-        realObject.addObserver(using: updateBlock)
-    }
-    public func removeObserver() -> Void {
-        methodNameLog.append(.removeObserver)
-        methodLog.append(.removeObserver)
-        realObject.removeObserver()
-    }
 }
 
 extension PhoneCommsTypeSpy.VariableName: CustomStringConvertible {
@@ -82,8 +68,6 @@ extension PhoneCommsTypeSpy.MethodCall: CustomStringConvertible {
         switch self {
         case .setAppContext: "setAppContext"
         case .sendDataToWatch: "sendDataToWatch"
-        case .addObserverUpdateBlock(let updateBlock): "addObserver(updateBlock: \(String(describing: updateBlock)))"
-        case .removeObserver: "removeObserver"
         }
     }
 }
@@ -93,8 +77,6 @@ extension PhoneCommsTypeSpy.MethodName: CustomStringConvertible {
         switch self {
         case .setAppContext: "setAppContext"
         case .sendDataToWatch: "sendDataToWatch"
-        case .addObserverUpdateBlock: "addObserverUpdateBlock"
-        case .removeObserver: "removeObserver"
         }
     }
 }
@@ -104,8 +86,6 @@ extension PhoneCommsTypeSpy.MethodCall: Equatable {
         switch (lhs, rhs) {
         case (.setAppContext, .setAppContext): true
         case (.sendDataToWatch, .sendDataToWatch): true
-        case (.addObserverUpdateBlock(let lhs_updateBlock), .addObserverUpdateBlock(let rhs_updateBlock)): lhs_updateBlock() == rhs_updateBlock()
-        case (.removeObserver, .removeObserver): true
         default: false
         }
     }
@@ -134,12 +114,6 @@ extension PhoneCommsTypeStub: PhoneCommsType {
     }
 
     public func sendDataToWatch() async -> Void {
-    }
-
-    public func addObserver(using updateBlock: @escaping () -> Void) -> Void {
-    }
-
-    public func removeObserver() -> Void {
     }
 
 }

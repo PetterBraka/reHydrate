@@ -514,7 +514,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveApplicationContext - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -536,7 +536,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveMessage - Should trigger update")
-        sut.addObserver {
+            addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -558,7 +558,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveUserInfo - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -573,7 +573,7 @@ final class PhoneCommsTests: XCTestCase {
     func test_addObserver_processing_noData() async {
         let expectation = expectation(description: "processing_noData - Should trigger update")
         expectation.isInverted = true
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -590,7 +590,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_unit - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -606,7 +606,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_unit_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -625,7 +625,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didEdit - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -643,7 +643,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -661,7 +661,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -679,7 +679,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -695,7 +695,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -714,7 +714,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+            addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -734,7 +734,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -753,7 +753,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -772,7 +772,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -789,7 +789,7 @@ final class PhoneCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        sut.addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -799,61 +799,8 @@ final class PhoneCommsTests: XCTestCase {
         XCTAssertEqual(dayService.spy.methodLog, [])
     }
     
-    func test_removeObserver_didReceiveApplicationContext() async {
-        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
-            .unitSystem : UnitSystem.metric,
-            .day : Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5),
-            .drinks : [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
-        ]
-        let message =  "didReceiveApplicationContext - didReceiveApplicationContext not trigger update"
-        let expectation = expectation(description: message)
-        expectation.isInverted = true
-        sut.addObserver {
-            XCTFail(message)
-        }
-        sut.removeObserver()
-        
-        notificationCenter.post(name: .Shared.didReceiveApplicationContext, object: nil, userInfo: expectedUserInfo)
-        
-        await fulfillment(of: [expectation], timeout: timeout)
-    }
-    
-    func test_removeObserver_didReceiveMessage() async {
-        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
-            .unitSystem : UnitSystem.metric,
-            .day : Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5),
-            .drinks : [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
-        ]
-        let message =  "didReceiveMessage - Should not trigger update"
-        let expectation = expectation(description:message)
-        expectation.isInverted = true
-        sut.addObserver {
-            XCTFail(message)
-        }
-        sut.removeObserver()
-        
-        notificationCenter.post(name: .Shared.didReceiveMessage, object: nil, userInfo: expectedUserInfo)
-        
-        await fulfillment(of: [expectation], timeout: timeout)
-    }
-    
-    func test_removeObserver_didReceiveUserInfo() async {
-        let expectedUserInfo: [CommunicationUserInfo: Codable] = [
-            .unitSystem : UnitSystem.metric,
-            .day : Day(id: "1",date: .may_2_1999_Sunday, consumed: 1, goal: 2.5),
-            .drinks : [Drink(id: "1", size: 300, container: .small), Drink(id: "2", size: 500, container: .medium)]
-        ]
-        let message = "didReceiveUserInfo - Should not trigger update"
-        let expectation = expectation(description: message)
-        expectation.isInverted = true
-        sut.addObserver {
-            XCTFail(message)
-        }
-        sut.removeObserver()
-        
-        notificationCenter.post(name: .Shared.didReceiveUserInfo, object: nil, userInfo: expectedUserInfo)
-        
-        await fulfillment(of: [expectation], timeout: timeout)
+    func addDidProcessNotificationObserver(block: @escaping @Sendable () -> Void) {
+        notificationCenter.addObserver(forName: .Shared.processedNotification, object: nil, queue: .current) { _ in block() }
     }
 }
 

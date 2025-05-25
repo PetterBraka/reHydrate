@@ -350,7 +350,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveApplicationContext - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -372,7 +372,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveMessage - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -394,7 +394,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "didReceiveUserInfo - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -409,7 +409,7 @@ final class WatchCommsTests: XCTestCase {
     func test_addObserver_processing_noData() async {
         let expectation = expectation(description: "processing_noData - Should trigger update")
         expectation.isInverted = true
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -426,7 +426,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_unit - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -442,7 +442,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_unit_unexpectedData - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -461,7 +461,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didEdit - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -479,7 +479,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -497,7 +497,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -515,7 +515,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_didAddAndEdit - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -531,7 +531,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_drink_unexpectedData - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -550,7 +550,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -570,7 +570,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -589,7 +589,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -608,7 +608,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -625,7 +625,7 @@ final class WatchCommsTests: XCTestCase {
         ]
         
         let expectation = expectation(description: "processing_day_unexpectedData - Should trigger update")
-        addObserver {
+        addDidProcessNotificationObserver {
             expectation.fulfill()
         }
         
@@ -635,7 +635,7 @@ final class WatchCommsTests: XCTestCase {
         XCTAssertEqual(dayService.spy.methodLog, [])
     }
     
-    func addObserver(block: @escaping @Sendable () -> Void) {
+    func addDidProcessNotificationObserver(block: @escaping @Sendable () -> Void) {
         notificationCenter.addObserver(forName: .Shared.processedNotification, object: nil, queue: .current) { _ in block() }
     }
 }

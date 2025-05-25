@@ -14,19 +14,19 @@ import DrinkServiceInterface
 import UnitServiceInterface
 import CommunicationKitInterface
 
-public final class PhoneComms {
+public final class PhoneComms: Sendable {
     public typealias Engine = (
         HasLoggerService &
         HasDateService &
         HasDayService &
         HasDrinksService &
         HasUnitService &
-        HasPhoneService
+        HasPhoneService &
+        Sendable
     )
     
     private let engine: Engine
     private let notificationCenter: NotificationCenter
-    private var updateBlock: (() -> Void)?
     
     public init(engine: Engine, notificationCenter: NotificationCenter) {
         self.engine = engine
@@ -66,14 +66,6 @@ extension PhoneComms: PhoneCommsType {
         } else {
             await sendMessage(data)
         }
-    }
-    
-    public func addObserver(using updateBlock: @escaping () -> Void) {
-        self.updateBlock = updateBlock
-    }
-    
-    public func removeObserver() {
-        self.updateBlock = nil
     }
 }
 
@@ -134,6 +126,7 @@ private extension PhoneComms {
         notificationCenter.removeObserver(self, name: .Shared.didReceiveUserInfo, object: nil)
     }
     
+    @Sendable
     func process(notification: Notification) {
         guard let watchData = notification.userInfo?.mapKeysAndValues() else { return }
         Task {
@@ -141,7 +134,7 @@ private extension PhoneComms {
             await process(drinks: watchData[.drinks])
             process(unitSystem: watchData[.unitSystem])
             
-            updateBlock?()
+            notificationCenter.post(name: .Shared.processedNotification, object: nil)
         }
     }
     

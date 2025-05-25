@@ -100,17 +100,11 @@ private extension WatchComms {
 private extension WatchComms {
     func addWatchObservers() {
         notificationCenter.addObserver(forName: .Shared.didReceiveApplicationContext,
-                                       object: nil, queue: .current) { [weak self] notification in
-            self?.process(notification: notification)
-        }
+                                       object: nil, queue: .current, using: process(notification:))
         notificationCenter.addObserver(forName: .Shared.didReceiveMessage,
-                                       object: nil, queue: .current) { [weak self] notification in
-            self?.process(notification: notification)
-        }
+                                       object: nil, queue: .current, using: process(notification:))
         notificationCenter.addObserver(forName: .Shared.didReceiveUserInfo,
-                                       object: nil, queue: .current) { [weak self] notification in
-            self?.process(notification: notification)
-        }
+                                       object: nil, queue: .current, using: process(notification:))
     }
     
     func removeWatchObservers() {
@@ -119,6 +113,7 @@ private extension WatchComms {
         notificationCenter.removeObserver(self, name: .Shared.didReceiveUserInfo, object: nil)
     }
     
+    @Sendable
     func process(notification: Notification) {
         guard let watchData = notification.userInfo?.mapKeysAndValues() else { return }
         Task {
