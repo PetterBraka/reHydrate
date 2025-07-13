@@ -10,19 +10,36 @@ import CoreData
 import DBKitInterface
 
 public protocol ConsumptionManagerStubbing {
-    var createEntry_returnValue: Result<ConsumptionModel, Error> { get set }
-    var delete_returnError: Error? { get set }
-    var fetchAllAtDate_returnValue: Result<[ConsumptionModel], Error> { get set }
-    var fetchAll_returnValue: Result<[ConsumptionModel], Error> { get set }
+    func set(_ response: ConsumptionManagerStub.StubResponse) async
 }
 
-public final class ConsumptionManagerStub: ConsumptionManagerStubbing {
+public final actor ConsumptionManagerStub: ConsumptionManagerStubbing {
     public init() {}
+
+    private var createEntry_returnValue: Result<ConsumptionModel, Error> = .default
+    private var delete_returnError: Error? = nil
+    private var fetchAllAtDate_returnValue: Result<[ConsumptionModel], Error> = .default
+    private var fetchAll_returnValue: Result<[ConsumptionModel], Error> = .default
     
-    public var createEntry_returnValue: Result<ConsumptionModel, Error> = .default
-    public var delete_returnError: Error? = nil
-    public var fetchAllAtDate_returnValue: Result<[ConsumptionModel], Error> = .default
-    public var fetchAll_returnValue: Result<[ConsumptionModel], Error> = .default
+    public enum StubResponse: Sendable {
+        case createEntry(Result<ConsumptionModel, Error>)
+        case delete(Error?)
+        case fetchAllAtDate(Result<[ConsumptionModel], Error>)
+        case fetchAll(Result<[ConsumptionModel], Error>)
+    }
+
+    public func set(_ response: StubResponse) async {
+        switch response {
+        case let .createEntry(result):
+            createEntry_returnValue = result
+        case let .delete(error):
+            delete_returnError = error
+        case let .fetchAllAtDate(result):
+            fetchAllAtDate_returnValue = result
+        case let .fetchAll(result):
+            fetchAll_returnValue = result
+        }
+    }
 }
 
 extension ConsumptionManagerStub: ConsumptionManagerType {
@@ -59,4 +76,3 @@ extension ConsumptionManagerStub: ConsumptionManagerType {
         }
     }
 }
-

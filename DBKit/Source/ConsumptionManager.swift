@@ -17,13 +17,6 @@ public final actor ConsumptionManager {
         self.database = database
         self.logger = logger
     }
-    
-    public func run<T>(
-        resultType: T.Type = T.self,
-        body: @MainActor @Sendable () throws -> T
-    ) async rethrows -> T where T : Sendable {
-        try await body()
-    }
 }
 
 extension ConsumptionManager: ConsumptionManagerType {

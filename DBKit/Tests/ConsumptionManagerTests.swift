@@ -5,13 +5,17 @@
 //  Created by Petter vang Brakalsvålet on 08/08/2023.
 //
 
-import XCTest
+import CoreData
+import Testing
 @testable import DBKit
 import DBKitInterface
 import DBKitMocks
 import LoggingKit
 
-final class ConsumptionManagerTests: XCTestCase {
+@Suite("ConsumptionManager")
+struct ConsumptionManagerTests {
+    private typealias MethodName = DatabaseSpy<ConsumptionEntity, Database>.MethodName
+    
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
     /// [1/07/2023, 2/07/2023, 3/07/2023, 5/07/2023]
     let referenceDates = [
@@ -21,34 +25,42 @@ final class ConsumptionManagerTests: XCTestCase {
         Date(timeIntervalSince1970: 1688583262)
     ]
     
-    var spy: DatabaseSpy<ConsumptionEntity, Database>!
-    var sut: ConsumptionManagerType!
-    
-    override func setUp() {
+    var spy: DatabaseSpy<ConsumptionEntity, Database>
+    var sut: ConsumptionManagerType
+
+    init() async throws {
         let logger = LoggerService(subsystem: "com.braka.test")
         let db = Database(appGroup: "group.com.testing.DBKit", inMemory: true, logger: logger)
         self.spy = DatabaseSpy(realObject: db)
         self.sut = ConsumptionManager(database: spy, logger: logger)
     }
     
-    func test_add_one() async throws {
+    @Test
+    func addOne() async throws {
         let givenConsumption = Double.random(in: 300 ... 750)
         let newEntry = try await sut.createEntry(date: referenceDate, consumed: givenConsumption)
         assert(newEntry, expectedDate: referenceDate, expectedConsumption: givenConsumption)
-        XCTAssertEqual(spy.methodLogNames, [.open, .save])
-    }
-    
-    func test_add_multiple() async throws {
-        try await createEntry(date: referenceDate)
-        try await createEntry(date: referenceDate)
-        try await createEntry(date: referenceDate)
-        try await createEntry(date: referenceDate)
-        XCTAssertEqual(spy.methodLogNames, [
-            .open, .save, .open, .save, .open, .save, .open, .save
+        #expect(await spy.getMethodLogNames() == [
+            .open, .save
         ])
     }
     
-    func test_fetch() async throws {
+    @Test
+    func addMultiple() async throws {
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        try await createEntry(date: referenceDate)
+        #expect(await spy.getMethodLogNames() == [
+            .open, .save,
+            .open, .save,
+            .open, .save,
+            .open, .save
+        ])
+    }
+    
+    @Test
+    func fetch() async throws {
         try await createEntry(date: referenceDate)
         try await createEntry(date: referenceDate)
         try await createEntry(date: referenceDate)
@@ -58,9 +70,9 @@ final class ConsumptionManagerTests: XCTestCase {
         try await createEntry(date: referenceDates[1])
         let result = try await sut.fetchAll(at: referenceDate)
         let secondResult = try await sut.fetchAll(at: referenceDates[1])
-        XCTAssertEqual(result.count, 3)
-        XCTAssertEqual(secondResult.count, 4)
-        XCTAssertEqual(spy.methodLogNames, [
+        #expect(result.count == 3)
+        #expect(secondResult.count == 4)
+        #expect(await spy.getMethodLogNames() == [
             .open, .save,
             .open, .save,
             .open, .save,
@@ -73,15 +85,16 @@ final class ConsumptionManagerTests: XCTestCase {
         ])
     }
     
-    func test_fetchAll() async throws {
+    @Test
+    func fetchAll() async throws {
         try await createEntry(date: referenceDates[0])
         try await createEntry(date: referenceDates[3])
         try await createEntry(date: referenceDates[2])
         try await createEntry(date: referenceDates[1])
         
         let result = try await sut.fetchAll()
-        XCTAssertEqual(result.count, 4)
-        XCTAssertEqual(spy.methodLogNames, [
+        #expect(result.count == 4)
+        #expect(await spy.getMethodLogNames() == [
             .open, .save,
             .open, .save,
             .open, .save,
@@ -90,13 +103,14 @@ final class ConsumptionManagerTests: XCTestCase {
         ])
     }
     
-    func test_delete() async throws {
+    @Test
+    func delete() async throws {
         try await createEntry(date: referenceDate)
         try await createEntry(date: referenceDate)
         let optionalEntry = try await sut.fetchAll().first
-        let entry = try XCTUnwrap(optionalEntry)
+        let entry = try #require(optionalEntry)
         try await sut.delete(entry)
-        XCTAssertEqual(spy.methodLogNames, [
+        #expect(await spy.getMethodLogNames() == [
             .open, .save,
             .open, .save,
             .open, .read,
@@ -105,70 +119,72 @@ final class ConsumptionManagerTests: XCTestCase {
         ])
     }
     
-    func test_delete_failure() async throws {
+    @Test
+    func deleteFailure() async throws {
         try await createEntry(date: referenceDate)
         try await sut.delete(ConsumptionModel(id: "", date: "", time: "", consumed: 0))
-        XCTAssertEqual(spy.methodLogNames, [.open, .save, .open, .read])
+        #expect(await spy.getMethodLogNames() == [
+            .open, .save,
+            .open, .read
+        ])
     }
     
-    func test_map() async {
-        let entity = await ConsumptionEntity(context: spy.open())
-        entity.id = nil
-        entity.date = nil
-        entity.time = nil
-        XCTAssertEqual(ConsumptionModel(from: entity),
-                       ConsumptionModel(id: "", date: "", time: "", consumed: 0))
+    @Test
+    func map() async {
+        let entity = await spy.open()
+        let consumptionEntity = ConsumptionEntity(context: entity)
+        consumptionEntity.id = nil
+        consumptionEntity.date = nil
+        consumptionEntity.time = nil
+        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "", date: "", time: "", consumed: 0))
     }
     
-    func test_map_withDefaults() async {
-        let entity = await ConsumptionEntity(context: spy.open())
-        XCTAssertEqual(ConsumptionModel(from: entity),
-                       ConsumptionModel(id: "", date: "", time: "", consumed: 0))
+    @Test
+    func mapWithDefaults() async {
+        let entity = await spy.open()
+        let consumptionEntity = ConsumptionEntity(context: entity)
+        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "", date: "", time: "", consumed: 0))
     }
     
-    func test_map_withId() async {
-        let entity = await ConsumptionEntity(context: spy.open())
-        entity.id = "id"
-        XCTAssertEqual(ConsumptionModel(from: entity),
-                       ConsumptionModel(id: "id", date: "", time: "", consumed: 0))
+    @Test
+    func mapWithId() async {
+        let entity = await spy.open()
+        let consumptionEntity = ConsumptionEntity(context: entity)
+        consumptionEntity.id = "id"
+        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "id", date: "", time: "", consumed: 0))
     }
     
-    func test_map_withIdAndDate() async {
-        let entity = await ConsumptionEntity(context: spy.open())
-        entity.id = "id"
-        entity.date = "date"
-        XCTAssertEqual(ConsumptionModel(from: entity),
-                       ConsumptionModel(id: "id", date: "date", time: "", consumed: 0))
+    @Test
+    func mapWithIdAndDate() async {
+        let entity = await spy.open()
+        let consumptionEntity = ConsumptionEntity(context: entity)
+        consumptionEntity.id = "id"
+        consumptionEntity.date = "date"
+        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "id", date: "date", time: "", consumed: 0))
     }
     
-    func test_map_withIdAndDateAndTime() async {
-        let entity = await ConsumptionEntity(context: spy.open())
-        entity.id = "id"
-        entity.date = "date"
-        entity.time = "time"
-        XCTAssertEqual(ConsumptionModel(from: entity),
-                       ConsumptionModel(id: "id", date: "date", time: "time", consumed: 0))
+    @Test
+    func mapWithIdAndDateAndTime() async {
+        let entity = await spy.open()
+        let consumptionEntity = ConsumptionEntity(context: entity)
+        consumptionEntity.id = "id"
+        consumptionEntity.date = "date"
+        consumptionEntity.time = "time"
+        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "id", date: "date", time: "time", consumed: 0))
     }
-}
 
-extension ConsumptionManagerTests {
     func assert(_ entry: ConsumptionModel,
                 expectedDate: Date,
-                expectedConsumption: Double,
-                file: StaticString = #file,
-                line: UInt = #line) {
-        XCTAssertEqual(entry.date, expectedDate.toDateString(), line: line)
-        XCTAssertEqual(entry.time, expectedDate.toTimeString(), line: line)
-        XCTAssertEqual(entry.consumed, expectedConsumption, line: line)
+                expectedConsumption: Double) {
+        #expect(entry.date == expectedDate.toDateString())
+        #expect(entry.time == expectedDate.toTimeString())
+        #expect(entry.consumed == expectedConsumption)
     }
     
-    func createEntry(date: Date,
-                      file: StaticString = #file,
-                     line: UInt = #line) async throws {
+    func createEntry(date: Date) async throws {
         let givenConsumption = Double.random(in: 300 ... 750)
         let newEntry = try await sut.createEntry(date: date, consumed: givenConsumption)
-        assert(newEntry, expectedDate: date, expectedConsumption: givenConsumption,
-               file: file, line: line)
+        assert(newEntry, expectedDate: date, expectedConsumption: givenConsumption)
     }
 }
 
@@ -182,4 +198,3 @@ private extension Date {
     }
 }
 
-extension LoggerService: @retroactive @unchecked Sendable {}
