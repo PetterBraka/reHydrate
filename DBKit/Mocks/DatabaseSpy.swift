@@ -5,37 +5,25 @@
 //  Created by Petter vang Brakalsvålet on 06/08/2023.
 //
 
+import SwiftData
 import Foundation
-import CoreData
 import DBKitInterface
 
 public protocol DatabaseSpying {
-    associatedtype DbModel: NSManagedObject
+    associatedtype DbModel: PersistentModel & Sendable
     associatedtype RealDatabase: DatabaseType
-    var varLog: [DatabaseSpy<DbModel, RealDatabase>.VariableCall] { get set }
-    var methodLog: [DatabaseSpy<DbModel, RealDatabase>.MethodCall] { get set }
-    var methodLogNames: [DatabaseSpy<DbModel, RealDatabase>.MethodName] { get }
-    var parametersForLasCallTo_save: NSManagedObjectContext? { get }
-    var parametersForLasCallTo_read: (matching: NSPredicate?, sortBy: [NSSortDescriptor]?, limit: Int?, context: NSManagedObjectContext)? { get }
+    func getMethodNamesLog() async -> [DatabaseSpy<DbModel, RealDatabase>.MethodName]
 }
 
-public final class DatabaseSpy<DbModel: NSManagedObject & Equatable, RealDatabase: DatabaseType> {
-    public enum VariableCall: Equatable, Sendable {}
-    
-    public enum MethodCall: Equatable {
-        case `open`
-        case save(_ context: NSManagedObjectContext)
-        case read(matching: NSPredicate?, sortBy: [NSSortDescriptor]?, limit: Int?, _ context: NSManagedObjectContext)
-    }
-    
-    public enum MethodName: Equatable {
-        case `open`
+public final actor DatabaseSpy<DbModel: PersistentModel & Sendable, RealDatabase: DatabaseType> {
+    public enum MethodName: Equatable, Sendable {
+        case insert
+        case delete
         case save
         case read
     }
     
-    nonisolated(unsafe) public var varLog: [VariableCall] = []
-    nonisolated(unsafe) public var methodLog: [MethodCall] = []
+    public private(set) var methodNameLog: [MethodName] = []
     private let realObject: RealDatabase
     
     public init(realObject: RealDatabase) {
@@ -44,60 +32,29 @@ public final class DatabaseSpy<DbModel: NSManagedObject & Equatable, RealDatabas
 }
 
 extension DatabaseSpy: DatabaseSpying {
-    public var methodLogNames: [MethodName] {
-        methodLog.map { method -> MethodName in
-                .init(method)
-        }
-    }
-    
-    public var parametersForLasCallTo_save: NSManagedObjectContext? {
-        for methodCall in methodLog.reversed() {
-            switch methodCall {
-            case let .save(context):
-                return context
-            default:
-                continue
-            }
-        }
-        return nil
-    }
-    
-    public var parametersForLasCallTo_read: (matching: NSPredicate?, sortBy: [NSSortDescriptor]?, limit: Int?, context: NSManagedObjectContext)? {
-        for methodCall in methodLog.reversed() {
-            switch methodCall {
-            case let .read(matching, sortBy, limit, context):
-                return (matching, sortBy, limit, context)
-            default:
-                continue
-            }
-        }
-        return nil
+    public func getMethodNamesLog() async -> [MethodName] {
+        methodNameLog
     }
 }
 
 extension DatabaseSpy: DatabaseType {
-    public func open() async -> NSManagedObjectContext {
-        methodLog.append(.open)
-        return await realObject.open()
+    public func insert<Model: PersistentModel & Sendable>(_ model: Model) async {
+        methodNameLog.append(.insert)
+        await realObject.insert(model)
     }
     
-    public func save(_ context: NSManagedObjectContext) async throws {
-        methodLog.append(.save(context))
-        try await realObject.save(context)
+    public func delete<Model: PersistentModel & Sendable>(_ model: Model) async {
+        methodNameLog.append(.delete)
+        await realObject.delete(model)
     }
     
-    public func read<Element: NSManagedObject>(matching: NSPredicate?, sortBy: [NSSortDescriptor]?, limit: Int?, _ context: NSManagedObjectContext) async throws -> [Element] {
-        methodLog.append(.read(matching: matching, sortBy: sortBy, limit: limit, context))
-        return try await realObject.read(matching: matching, sortBy: sortBy, limit: limit, context)
+    public func save() async throws {
+        methodNameLog.append(.save)
+        try await realObject.save()
     }
-}
-
-extension DatabaseSpy.MethodName {
-    init(_ methodCall: DatabaseSpy.MethodCall) {
-        self = switch methodCall {
-        case .open: .open
-        case .save: .save
-        case .read: .read
-        }
+    
+    public func read<Element: PersistentModel & Sendable>(matching: Predicate<Element>?, sortBy: [SortDescriptor<Element>], limit: Int?) async throws -> [Element] {
+        methodNameLog.append(.read)
+        return try await realObject.read(matching: matching, sortBy: sortBy, limit: limit)
     }
 }

@@ -5,100 +5,77 @@
 //  Created by Petter vang Brakalsvålet on 29/07/2023.
 //
 
-import CoreData
+import Foundation
+import SwiftData
 import LoggingKit
 import DBKitInterface
 
 public final actor Database: DatabaseType {
-    private var backgroundContext: NSManagedObjectContext?
-    private let persistentContainer: NSPersistentContainer
-    
+    private let modelContext: ModelContext
+    private let modelContainer: ModelContainer
     private let logger: LoggerServicing
     
-    public init(appGroup: String, inMemory: Bool = false, logger: LoggerServicing) {
-        let databaseName = "reHydrate"
+    public init(
+        appGroup: String,
+        inMemory: Bool = false,
+        schema: Schema,
+        logger: LoggerServicing,
+    ) {
         self.logger = logger
         
-        guard let objectModelURL = Bundle.module.url(forResource: databaseName, withExtension: "momd"),
-              let objectModel = NSManagedObjectModel(contentsOf: objectModelURL)
-        else {
-            let message = "Failed to retrieve the database object model"
-            logger.log(category: .database, message: message, error: nil, level: .error)
-            fatalError(message)
-        }
+        let dbURL: URL? = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+        let config: ModelConfiguration
         
-        guard let storeContainer = FileManager.default
-            .containerURL(forSecurityApplicationGroupIdentifier: appGroup)
-        else {
-            let message = "Failed to created shared file container."
-            logger.log(category: .database, message: message, error: nil, level: .error)
-            fatalError(message)
-        }
-        let storeURL = storeContainer.appendingPathComponent("\(databaseName).sqlite")
-        let storeDescription = NSPersistentStoreDescription(url: storeURL)
-        storeDescription.shouldMigrateStoreAutomatically = true
-        storeDescription.shouldInferMappingModelAutomatically = true
-        
-        persistentContainer = NSPersistentContainer(name: "reHydrate", managedObjectModel: objectModel)
-        persistentContainer.persistentStoreDescriptions = [storeDescription]
         if inMemory {
-            persistentContainer.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
-        }
-        persistentContainer.loadPersistentStores { description, error in
-            if let error {
-                let message = "Failed to load persistent stores: \(error.localizedDescription)"
-                logger.log(category: .database, message: message, error: nil, level: .error)
-                fatalError(message)
-            }
-            logger.log(category: .database, message: "Loaded store: \(description.type), " + String(describing: description.url), error: nil, level: .debug)
-        }
-    }
-    
-    public func open() async -> NSManagedObjectContext {
-        if let backgroundContext {
-            return backgroundContext
+            config = .init(isStoredInMemoryOnly: true)
+        } else if let dbURL {
+            config = .init(url: dbURL.appendingPathComponent("reHydrate.sqlite"))
         } else {
-            let context = persistentContainer.newBackgroundContext()
-            backgroundContext = context
-            return context
+            let message = "Failed to create shared file container."
+            logger.log(category: .database, message: message, error: nil, level: .error)
+            fatalError(message)
         }
-    }
-    
-    public func save(_ context: NSManagedObjectContext) async throws {
-        // Verify that the context has uncommitted changes.
-        guard context.hasChanges else { return }
         
         do {
-            try context.save()
+            modelContainer = try ModelContainer(for: schema, configurations: config)
+        } catch {
+            let message = "Failed to load persistent model container: \(error.localizedDescription)"
+            logger.log(category: .database, message: message, error: error, level: .error)
+            fatalError(message)
+        }
+        modelContext = ModelContext(modelContainer)
+    }
+    
+    public func insert<Model: PersistentModel & Sendable>(_ model: Model) async {
+        modelContext.insert(model)
+    }
+    
+    public func delete<Model: PersistentModel & Sendable>(_ model: Model) async {
+        modelContext.delete(model)
+    }
+    
+    public func save() async throws {
+        guard modelContext.hasChanges else { return }
+        
+        do {
+            try modelContext.save()
         } catch {
             logger.log(category: .database, message: "Failed to save the context", error: error, level: .debug)
             throw error
         }
     }
     
-    public func read<Element: NSManagedObject>(
-        matching: NSPredicate?,
-        sortBy: [NSSortDescriptor]?,
-        limit: Int?,
-        _ context: NSManagedObjectContext
-    ) async throws -> [Element] where Element: Sendable {
-        try await withCheckedThrowingContinuation { continuation in
-            let fetchRequest = Element.fetchRequest()
-            fetchRequest.predicate = matching
-            fetchRequest.sortDescriptors = sortBy
-            if let limit {
-                fetchRequest.fetchLimit = limit
-            }
-            do {
-                if let result = try context.fetch(fetchRequest) as? [Element] {
-                    continuation.resume(returning: result)
-                } else {
-                    continuation.resume(throwing: DatabaseError.couldNotMapElement)
-                }
-            } catch {
-                logger.log(category: .database, message: "Couldn't fetch items", error: error, level: .error)
-                continuation.resume(throwing: error)
-            }
+    public func read<Element: PersistentModel & Sendable>(
+        matching: Predicate<Element>?,
+        sortBy: [SortDescriptor<Element>] = [],
+        limit: Int?
+    ) async throws -> [Element] {
+        let fetchDescriptor = FetchDescriptor<Element>(predicate: matching, sortBy: sortBy)
+        var results = try modelContext.fetch(fetchDescriptor)
+        if let limit {
+            results = Array(results.prefix(limit))
         }
+        return results
     }
 }
+

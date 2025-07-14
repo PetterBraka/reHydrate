@@ -14,7 +14,7 @@ import LoggingKit
 
 @Suite("ConsumptionManager")
 struct ConsumptionManagerTests {
-    private typealias MethodName = DatabaseSpy<ConsumptionEntity, Database>.MethodName
+    private typealias MethodName = DatabaseSpy<ConsumptionModel, Database>.MethodName
     
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
     /// [1/07/2023, 2/07/2023, 3/07/2023, 5/07/2023]
@@ -25,12 +25,17 @@ struct ConsumptionManagerTests {
         Date(timeIntervalSince1970: 1688583262)
     ]
     
-    var spy: DatabaseSpy<ConsumptionEntity, Database>
+    var spy: DatabaseSpy<ConsumptionModel, Database>
     var sut: ConsumptionManagerType
 
     init() async throws {
         let logger = LoggerService(subsystem: "com.braka.test")
-        let db = Database(appGroup: "group.com.testing.DBKit", inMemory: true, logger: logger)
+        let db = Database(
+            appGroup: "group.com.testing.DBKit",
+            inMemory: true,
+            schema: .init([ConsumptionModel.self]),
+            logger: logger
+        )
         self.spy = DatabaseSpy(realObject: db)
         self.sut = ConsumptionManager(database: spy, logger: logger)
     }
@@ -40,8 +45,8 @@ struct ConsumptionManagerTests {
         let givenConsumption = Double.random(in: 300 ... 750)
         let newEntry = try await sut.createEntry(date: referenceDate, consumed: givenConsumption)
         assert(newEntry, expectedDate: referenceDate, expectedConsumption: givenConsumption)
-        #expect(await spy.getMethodLogNames() == [
-            .open, .save
+        #expect(await spy.getMethodNamesLog() == [
+            .insert, .save
         ])
     }
     
@@ -51,11 +56,11 @@ struct ConsumptionManagerTests {
         try await createEntry(date: referenceDate)
         try await createEntry(date: referenceDate)
         try await createEntry(date: referenceDate)
-        #expect(await spy.getMethodLogNames() == [
-            .open, .save,
-            .open, .save,
-            .open, .save,
-            .open, .save
+        #expect(await spy.getMethodNamesLog() == [
+            .insert, .save,
+            .insert, .save,
+            .insert, .save,
+            .insert, .save
         ])
     }
     
@@ -68,20 +73,23 @@ struct ConsumptionManagerTests {
         try await createEntry(date: referenceDates[1])
         try await createEntry(date: referenceDates[1])
         try await createEntry(date: referenceDates[1])
-        let result = try await sut.fetchAll(at: referenceDate)
-        let secondResult = try await sut.fetchAll(at: referenceDates[1])
-        #expect(result.count == 3)
-        #expect(secondResult.count == 4)
-        #expect(await spy.getMethodLogNames() == [
-            .open, .save,
-            .open, .save,
-            .open, .save,
-            .open, .save,
-            .open, .save,
-            .open, .save,
-            .open, .save,
-            .open, .read,
-            .open, .read
+        let result = try await sut.fetchAll()
+        let resultSecond = try await sut.fetchAll(at: referenceDate)
+        let resultThird = try await sut.fetchAll(at: referenceDates[1])
+        #expect(result.count == 7)
+        #expect(resultSecond.count == 3)
+        #expect(resultThird.count == 4)
+        #expect(await spy.getMethodNamesLog() == [
+            .insert, .save,
+            .insert, .save,
+            .insert, .save,
+            .insert, .save,
+            .insert, .save,
+            .insert, .save,
+            .insert, .save,
+            .read,
+            .read,
+            .read
         ])
     }
     
@@ -94,12 +102,12 @@ struct ConsumptionManagerTests {
         
         let result = try await sut.fetchAll()
         #expect(result.count == 4)
-        #expect(await spy.getMethodLogNames() == [
-            .open, .save,
-            .open, .save,
-            .open, .save,
-            .open, .save,
-            .open, .read
+        #expect(await spy.getMethodNamesLog() == [
+            .insert, .save,
+            .insert, .save,
+            .insert, .save,
+            .insert, .save,
+            .read
         ])
     }
     
@@ -110,67 +118,12 @@ struct ConsumptionManagerTests {
         let optionalEntry = try await sut.fetchAll().first
         let entry = try #require(optionalEntry)
         try await sut.delete(entry)
-        #expect(await spy.getMethodLogNames() == [
-            .open, .save,
-            .open, .save,
-            .open, .read,
-            .open, .read,
-            .open, .save
+        #expect(await spy.getMethodNamesLog() == [
+            .insert, .save,
+            .insert, .save,
+            .read,
+            .delete, .save
         ])
-    }
-    
-    @Test
-    func deleteFailure() async throws {
-        try await createEntry(date: referenceDate)
-        try await sut.delete(ConsumptionModel(id: "", date: "", time: "", consumed: 0))
-        #expect(await spy.getMethodLogNames() == [
-            .open, .save,
-            .open, .read
-        ])
-    }
-    
-    @Test
-    func map() async {
-        let entity = await spy.open()
-        let consumptionEntity = ConsumptionEntity(context: entity)
-        consumptionEntity.id = nil
-        consumptionEntity.date = nil
-        consumptionEntity.time = nil
-        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "", date: "", time: "", consumed: 0))
-    }
-    
-    @Test
-    func mapWithDefaults() async {
-        let entity = await spy.open()
-        let consumptionEntity = ConsumptionEntity(context: entity)
-        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "", date: "", time: "", consumed: 0))
-    }
-    
-    @Test
-    func mapWithId() async {
-        let entity = await spy.open()
-        let consumptionEntity = ConsumptionEntity(context: entity)
-        consumptionEntity.id = "id"
-        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "id", date: "", time: "", consumed: 0))
-    }
-    
-    @Test
-    func mapWithIdAndDate() async {
-        let entity = await spy.open()
-        let consumptionEntity = ConsumptionEntity(context: entity)
-        consumptionEntity.id = "id"
-        consumptionEntity.date = "date"
-        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "id", date: "date", time: "", consumed: 0))
-    }
-    
-    @Test
-    func mapWithIdAndDateAndTime() async {
-        let entity = await spy.open()
-        let consumptionEntity = ConsumptionEntity(context: entity)
-        consumptionEntity.id = "id"
-        consumptionEntity.date = "date"
-        consumptionEntity.time = "time"
-        #expect(ConsumptionModel(from: consumptionEntity) == ConsumptionModel(id: "id", date: "date", time: "time", consumed: 0))
     }
 
     func assert(_ entry: ConsumptionModel,

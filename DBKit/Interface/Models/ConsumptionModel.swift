@@ -4,12 +4,14 @@
 //
 //  Created by Petter vang Brakalsvålet on 07/08/2023.
 //
+import SwiftData
 
-public struct ConsumptionModel: Equatable, Sendable {
-    public let id: String
-    public let date: String
-    public let time: String
-    public let consumed: Double
+@Model
+public final class ConsumptionModel: Equatable, @unchecked Sendable {
+    public var id: String
+    public var date: String
+    public var time: String
+    public var consumed: Double
     
     public init(id: String,
                 date: String,
@@ -21,3 +23,4 @@ public struct ConsumptionModel: Equatable, Sendable {
         self.time = time
     }
 }
+

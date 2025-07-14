@@ -5,53 +5,48 @@
 //  Created by Petter vang Brakalsvålet on 10/08/2023.
 //
 
-import CoreData
+import SwiftData
+import Foundation
 import DBKitInterface
 
 public protocol DatabaseStubbing {
-    var open_returnValue: NSManagedObjectContext { get }
-    var create_returnValue: Result<NSManagedObject, Error> { get }
-    var readMatchingSortByLimit_returnValue: Result<[NSManagedObject], Error> { get }
-    var deleteElement_returnValue: Error? { get }
+    func set(_ response: DatabaseStub.StubResponse) async
 }
 
 public final actor DatabaseStub: DatabaseStubbing {
-    public var readMatchingOrderByLimit_returnValue: [NSManagedObject] = []
-    nonisolated(unsafe) public var open_returnValue: NSManagedObjectContext = .init(.privateQueue)
-    nonisolated(unsafe) public var create_returnValue: Result<NSManagedObject, Error> = .success(.init())
-    nonisolated(unsafe) public var readMatchingSortByLimit_returnValue: Result<[NSManagedObject], Error> = .success([])
-    nonisolated(unsafe) public var deleteElement_returnValue: Error? = nil
+    public enum StubResponse: Sendable {
+        case read(Result<[any PersistentModel & Sendable], Error>)
+    }
+    
+    private var read_returnValue: Result<[any PersistentModel & Sendable], Error> = .failure(NSError(domain: "DatabaseStub", code: 0, userInfo: [NSLocalizedDescriptionKey: "Stub not set! "]))
+
     public init() {}
+
+    public func set(_ response: StubResponse) async {
+        switch response {
+        case let .read(result):
+            read_returnValue = result
+        }
+    }
 }
 
 extension DatabaseStub: DatabaseType {
-    public func open() -> NSManagedObjectContext {
-        open_returnValue
-    }
+    public func insert<Model: PersistentModel & Sendable>(_ model: Model) async {}
     
-    public func save(_ context: NSManagedObjectContext) {}
+    public func delete<Model: PersistentModel & Sendable>(_ model: Model) async {}
     
-    public func create<Element: NSManagedObject>(_ context: NSManagedObjectContext) throws -> Element {
-        switch create_returnValue {
-        case let .success(element):
-            return element as! Element
-        case let .failure(error):
+    public func save() {}
+    
+    public func read<Element: PersistentModel & Sendable>(
+        matching: Predicate<Element>?,
+        sortBy: [SortDescriptor<Element>],
+        limit: Int?
+    ) async throws -> [Element]  {
+        switch read_returnValue {
+        case .success(let value):
+            return value as! [Element]
+        case .failure(let error):
             throw error
-        }
-    }
-    
-    public func read<Element: NSManagedObject>(matching: NSPredicate?, sortBy: [NSSortDescriptor]?, limit: Int?, _ context: NSManagedObjectContext) async throws -> [Element] {
-        switch readMatchingSortByLimit_returnValue {
-        case let .success(elements):
-            return elements as! [Element]
-        case let .failure(error):
-            throw error
-        }
-    }
-    
-    public func delete<Element: NSManagedObject>(_ element: Element, _ context: NSManagedObjectContext) throws {
-        if let deleteElement_returnValue {
-            throw deleteElement_returnValue
         }
     }
 }
