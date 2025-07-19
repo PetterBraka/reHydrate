@@ -13,6 +13,7 @@ public protocol DatabaseSpying {
     associatedtype DbModel: PersistentModel & Sendable
     associatedtype RealDatabase: DatabaseType
     func getMethodNamesLog() async -> [DatabaseSpy<DbModel, RealDatabase>.MethodName]
+    func resetMethodNameLog() async
 }
 
 public final actor DatabaseSpy<DbModel: PersistentModel & Sendable, RealDatabase: DatabaseType> {
@@ -34,6 +35,10 @@ public final actor DatabaseSpy<DbModel: PersistentModel & Sendable, RealDatabase
 extension DatabaseSpy: DatabaseSpying {
     public func getMethodNamesLog() async -> [MethodName] {
         methodNameLog
+    }
+
+    public func resetMethodNameLog() async {
+        methodNameLog.removeAll()
     }
 }
 

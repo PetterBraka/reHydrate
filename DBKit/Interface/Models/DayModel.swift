@@ -5,11 +5,14 @@
 //  Created by Petter vang Brakalsvålet on 29/07/2023.
 //
 
-public struct DayModel: Equatable, Sendable {
-    public let id: String
-    public let date: String
-    public let consumed: Double
-    public let goal: Double
+import SwiftData
+
+@Model
+public class DayModel: Equatable, @unchecked Sendable {
+    public var id: String
+    public var date: String
+    public var consumed: Double
+    public var goal: Double
     
     public init(id: String, date: String,
                 consumed: Double,

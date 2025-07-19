@@ -10,6 +10,7 @@ import Foundation
 public enum DatabaseError: Error {
     case openDB
     case noElementFound
+    case invalidElement
     case creatingElement
     case updatingElement
     case deletingElement
@@ -25,6 +26,8 @@ extension DatabaseError: LocalizedError {
             "Unable to open the database"
         case .noElementFound:
             "No element found in the database"
+        case .invalidElement:
+            "Element is invalid"
         case .creatingElement:
             "Can't create new element"
         case .updatingElement:
