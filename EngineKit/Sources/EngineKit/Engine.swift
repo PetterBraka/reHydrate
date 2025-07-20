@@ -7,6 +7,7 @@
 
 import Foundation
 import LoggingKit
+import SwiftData
 import LoggingService
 import DayServiceInterface
 import DayService
@@ -36,7 +37,6 @@ public final class Engine {
         appGroup: String,
         appVersion: String,
         logger: LoggerServicing,
-        database: DatabaseType,
         reminders: [NotificationMessage],
         celebrations: [NotificationMessage],
         userNotificationCenter: UserNotificationCenterType,
@@ -52,9 +52,12 @@ public final class Engine {
         }
         self.appGroup = appGroup
         self.logger = logger
-        self.dayManager = DayManager(database: database, logger: logger)
-        self.drinkManager = DrinkManager(database: database, logger: logger)
-        self.consumptionManager = ConsumptionManager(database: database, logger: logger)
+        
+        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+        let container = Database.createContainer(path: path, schema: .init([DayEntity.self, DrinkEntity.self, ConsumptionEntity.self]))
+        self.dayManager = DayManager(container: container, logger: logger)
+        self.drinkManager = DrinkManager(container: container, logger: logger)
+        self.consumptionManager = ConsumptionManager(container: container, logger: logger)
         self.userPreferenceService = UserPreferenceService(defaults: sharedDefault)
         
         self.appVersion = appVersion

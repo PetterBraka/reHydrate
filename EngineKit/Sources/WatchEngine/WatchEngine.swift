@@ -39,24 +39,29 @@ public final class WatchEngine {
         }
         self.sharedDefaults = sharedDefaults
         self.logger = LoggerService(subsystem: subsystem)
-        self.database = Database(appGroup: appGroup, logger: logger)
+        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+        let container = Database.createContainer(path: path, schema: .init([DayEntity.self, DrinkEntity.self, ConsumptionEntity.self]))
+        
+        dayManager = DayManager(container: container, logger: logger)
+        consumptionManager = ConsumptionManager(container: container, logger: logger)
+        drinkManager = DrinkManager(container: container, logger: logger)
+        
         self.watchService = watchService
     }
     
     public let appGroup: String
-    private let database: DatabaseType
     private let sharedDefaults: UserDefaults
     private let subsystem: String
     
+    public var dayManager: DayManagerType
+    public var consumptionManager: ConsumptionManagerType
+    public var drinkManager: DrinkManagerType
     public var watchService: WatchServiceType
     
     public var logger: LoggerServicing
     public lazy var userPreferenceService: UserPreferenceServiceType = UserPreferenceService(defaults: sharedDefaults)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
-    public lazy var dayManager: DayManagerType = DayManager(database: database, logger: logger)
-    public lazy var consumptionManager: ConsumptionManagerType = ConsumptionManager(database: database, logger: logger)
-    public lazy var drinkManager: DrinkManagerType = DrinkManager(database: database, logger: logger)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var drinksService: DrinkServiceType = DrinkService(engine: self)
     public lazy var watchComms: WatchCommsType = WatchComms(engine: self, notificationCenter: .default)
