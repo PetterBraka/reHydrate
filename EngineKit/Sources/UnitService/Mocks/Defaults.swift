@@ -11,5 +11,5 @@ extension Double {
 }
 
 extension UnitSystem {
-    static let `default`: UnitSystem = .metric
+    nonisolated(unsafe) static let `default`: UnitSystem = .metric
 }

@@ -6,5 +6,5 @@
 //
 
 extension Optional where Wrapped == Decodable {
-    static let `default`: Wrapped? = nil
+    nonisolated(unsafe) static let `default`: Wrapped? = nil
 }

@@ -1,14 +1,15 @@
 {
+  "originHash" : "2eed12d39f47ccc1fa4cad3a5459370d19a56d04355816c7318f7dd5df3fd406",
   "pins" : [
     {
       "identity" : "loggingkit",
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:PetterBraka/LoggingKit.git",
       "state" : {
-        "revision" : "a9f4feaa694c8f8a7a843c585220625849a40fdd",
-        "version" : "1.1.0"
+        "revision" : "7aa3568e6f2b414c04a460520c8cbf324ddf28d9",
+        "version" : "2.0.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

@@ -80,7 +80,7 @@ final class PresentationWatchKitTests: XCTestCase {
                 .init(size: 300, container: .large)
             ]
         ))
-        XCTAssertEqual(watchComms.spy.methodLog, [.addObserver(updateBlock: {})])
+        XCTAssertEqual(watchComms.spy.methodLog, [.addObserverUpdateBlock(updateBlock: {})])
     }
     
     // MARK: didTapAddDrink
@@ -177,18 +177,5 @@ private extension PresentationWatchKitTests {
 extension EngineMocks: @retroactive HasAppGroup {
     public var appGroup: String {
         "com.appGroup"
-    }
-}
-
-extension WatchCommsTypeSpy.MethodCall: @retroactive Equatable {
-    public static func == (lhs: WatchCommsTypeSpy.MethodCall, rhs: WatchCommsTypeSpy.MethodCall) -> Bool {
-        switch (lhs, rhs) {
-        case (.addObserver, .addObserver),
-            (setAppContext, setAppContext),
-            (sendDataToPhone, sendDataToPhone),
-            (removeObserver, removeObserver):
-            true
-        default: false
-        }
     }
 }

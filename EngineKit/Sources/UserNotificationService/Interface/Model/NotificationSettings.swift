@@ -6,7 +6,7 @@
 //
 import Foundation
 
-public struct NotificationSettings {
+public struct NotificationSettings: Sendable {
     public let isOn: Bool
     public let start: Date?
     public let stop: Date?

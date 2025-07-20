@@ -1,0 +1,43 @@
+// MARK: - AutoString
+// swiftlint:disable all
+
+{% for import in argument.imports %}
+import {{ import }}
+{% endfor -%}
+{% for struct in types.structs -%}
+{% if struct.annotations.AutoString %}
+
+extension {{ struct.name }}: CustomStringConvertible {
+    public var description: String {
+        "{{ struct.name }}({% for variable in struct.storedVariables -%}
+        {{ variable.name }}: \(String(describing: {{ variable.name }})) {% endfor -%})"
+    }
+}
+{%- endif -%}
+{%- endfor -%}
+{% for enum in types.enums %}
+{% if enum.annotations.AutoString %}
+
+extension {{ enum.name }}: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        {% for case in enum.cases %}
+        case .{{ case.name }}
+        {%- if case.hasAssociatedValue -%}(
+            {%- for value in case.associatedValues -%}
+                let {{ value.localName }}{%- if forloop.last -%}{% else %}, {% endif -%}
+            {%- endfor -%}
+        )
+        {%- endif %}: "{{ case.name }}
+        {%- if case.hasAssociatedValue -%}(
+            {%- for value in case.associatedValues -%}
+                {{ value.localName }}:\(String(describing: {{ value.localName }})){%- if forloop.last -%}{% else %}, {% endif -%}
+            {%- endfor -%}
+        )
+        {%- endif %}"
+        {%- endfor %}
+        }
+    }
+}
+{%- endif -%}
+{%- endfor -%}

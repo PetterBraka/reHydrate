@@ -8,7 +8,4 @@
 public protocol WatchCommsType {
     func setAppContext() async
     func sendDataToPhone() async
-    
-    func addObserver(using updateBlock: @escaping () -> Void)
-    func removeObserver()
 }

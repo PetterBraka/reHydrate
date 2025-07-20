@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 02/10/2023.
 //
 
-public struct NotificationRequest {
+public struct NotificationRequest: Sendable {
     public let identifier: String
     public let content: NotificationContent
     public let trigger: NotificationTrigger?

@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -19,7 +19,7 @@ let package = Package(
     dependencies: [
         .package(path: "../EngineKit"),
         .package(path: "../TestHelper"),
-        .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "1.2.0"),
+        .package(url: "git@github.com:PetterBraka/LoggingKit.git", exact: "2.0.0"),
     ],
     targets: [
         .target(

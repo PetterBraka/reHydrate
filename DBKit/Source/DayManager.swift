@@ -5,198 +5,208 @@
 //  Created by Petter vang Brakalsvålet on 29/07/2023.
 //
 
-import CoreData
+import SwiftData
+import Foundation
 import LoggingKit
 import DBKitInterface
 
-public final class DayManager {
-    private let database: DatabaseType
-    private let context: NSManagedObjectContext
+public final actor DayManager {
+    private let context: ModelContext
     private let logger: LoggerServicing
     
-    public init(database: DatabaseType, logger: LoggerServicing) {
-        self.database = database
-        self.context = database.open()
+    public init(container: ModelContainer, logger: LoggerServicing) {
+        self.context = ModelContext(container)
         self.logger = logger
     }
 }
 
 private extension DayManager {
-    func fetchEntity(with date: Date) async throws -> DayEntity {
-        let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
-        
-        let days: [DayEntity] = try await database.read(
+    func fetchEntity(with date: Date) throws -> DayEntity {
+        let dateString = DatabaseFormatter.date.string(from: date)
+        let predicate = #Predicate<DayEntity> { $0.date == dateString }
+        let days: [DayEntity] = try read(
             matching: predicate,
-            sortBy: [.init(key: "date", ascending: true)],
-            limit: nil,
-            context)
-        guard let day = days.first
-        else {
-            throw DatabaseError.noElementFound
-        }
-        return day
-    }
-    
-    func fetchLastEntity() async throws -> DayEntity {
-        let days: [DayEntity] = try await database.read(
-            matching: nil,
-            sortBy: [.init(key: "date", ascending: false)],
-            limit: 1,
-            context)
-        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
-        guard let day = days.first
-        else {
-            throw DatabaseError.noElementFound
-        }
-        return day
-    }
-    
-    func fetchEntities(between dates: ClosedRange<Date>) async throws -> [DayEntity] {
-        let days: [DayEntity] = try await fetchAllEntities()
-            .filter { day in
-                guard let dateString = day.date,
-                      let date = DatabaseFormatter.date.date(from: dateString)
-                else { return false }
-                let lowerString = DatabaseFormatter.date.string(from: dates.lowerBound)
-                return lowerString == dateString ||
-                dates.contains(date)
-            }
-        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
-        return days
-    }
-    
-    func fetchAllEntities() async throws -> [DayEntity] {
-        let days: [DayEntity] = try await database.read(
-            matching: nil,
-            sortBy: [.init(key: "date", ascending: true)],
-            limit: nil,
-            context
+            sortBy: [SortDescriptor(\.date, order: .forward)]
         )
-        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
+        guard let day = days.first
+        else {
+            throw DatabaseError.noElementFound
+        }
+        
+        return day
+    }
+    
+    func fetchLastEntity() throws -> DayEntity {
+        let days: [DayEntity] = try read(
+            sortBy: [SortDescriptor(\.date, order: .reverse)],
+            limit: 1
+        )
+        guard let day = days.first
+        else {
+            throw DatabaseError.noElementFound
+        }
+        return day
+    }
+    
+    func fetchEntities(between dates: ClosedRange<Date>) throws -> [DayEntity] {
+        let allDays: [DayEntity] = try fetchAllEntities()
+        let lower = DatabaseFormatter.date.string(from: dates.lowerBound)
+        let upper = DatabaseFormatter.date.string(from: dates.upperBound)
+        
+        let filtered = allDays.filter {
+            if $0.date == lower || $0.date == upper {
+                return true
+            }
+            guard let date = DatabaseFormatter.date.date(from: $0.date) else { return false }
+            return dates.contains(date)
+        }
+        return filtered
+    }
+    
+    func fetchAllEntities() throws -> [DayEntity] {
+        let days: [DayEntity] = try read(sortBy: [SortDescriptor(\.date, order: .forward)])
         return days
+    }
+    
+    func deleteModels(_ models: [DayModel]) throws {
+        let entitiesToDelete = try fetchAllEntities().filter { entity in
+            models.contains(where: {
+                entity.date == $0.date &&
+                entity.consumed == $0.consumed &&
+                entity.goal == $0.goal })
+        }
+        try deleteEntities(entitiesToDelete)
+    }
+    
+    func deleteEntities(_ entities: [DayEntity]) throws {
+        for entity in entities {
+            context.delete(entity)
+        }
+        try save()
     }
 }
  
 extension DayManager: DayManagerType {
-    public func createNewDay(date: Date, goal: Double) throws -> DayModel {
-        let newDay = DayEntity(context: context)
-        newDay.id = UUID().uuidString
-        newDay.date = DatabaseFormatter.date.string(from: date)
-        newDay.consumed = 0
-        newDay.goal = goal
-        try database.save(context)
+    public func createNewDay(date: Date, goal: Double) async throws -> DayModel {
+        let newDay = DayEntity(
+            id: UUID().uuidString,
+            date: DatabaseFormatter.date.string(from: date),
+            consumed: 0,
+            goal: goal
+        )
+        context.insert(newDay)
+        try save()
         logger.log(category: .dayDatabase, message: "Created \(newDay)", error: nil, level: .debug)
         
-        return DayModel(from: newDay)
+        return newDay.asModel
     }
     
     public func add(consumed: Double, toDayAt date: Date) async throws -> DayModel {
-        logger.log(category: .dayDatabase, message: "Adding \(consumed)", error: nil, level: .debug)
-        let dayToUpdate = try await fetchEntity(with: date)
+        let dayToUpdate = try fetchEntity(with: date)
         dayToUpdate.consumed += consumed
-        try database.save(context)
+        try save()
         logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
-        return DayModel(from: dayToUpdate)
+        return dayToUpdate.asModel
     }
     
     public func remove(consumed: Double, fromDayAt date: Date) async throws -> DayModel {
-        logger.log(category: .dayDatabase, message: "Removing \(consumed)", error: nil, level: .debug)
-        let dayToUpdate = try await fetchEntity(with: date)
+        let dayToUpdate = try fetchEntity(with: date)
         dayToUpdate.consumed -= consumed
         if dayToUpdate.consumed < 0 {
             dayToUpdate.consumed = 0
         }
-        try database.save(context)
+        try save()
         logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
-        return DayModel(from: dayToUpdate)
+        return dayToUpdate.asModel
     }
     
     public func add(goal: Double, toDayAt date: Date) async throws -> DayModel {
-        logger.log(category: .dayDatabase, message: "Removing \(goal)", error: nil, level: .debug)
-        let dayToUpdate = try await fetchEntity(with: date)
+        let dayToUpdate = try fetchEntity(with: date)
         dayToUpdate.goal += goal
-        try database.save(context)
+        try save()
         logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
-        return DayModel(from: dayToUpdate)
+        return dayToUpdate.asModel
     }
     
     public func remove(goal: Double, fromDayAt date: Date) async throws -> DayModel {
-        logger.log(category: .dayDatabase, message: "Removing \(goal)", error: nil, level: .debug)
-        let dayToUpdate = try await fetchEntity(with: date)
+        let dayToUpdate = try fetchEntity(with: date)
         dayToUpdate.goal -= goal
         if dayToUpdate.goal < 0 {
             dayToUpdate.goal = 0
         }
-        try database.save(context)
-        logger.log(category: .dayDatabase, message: "Edited \(dayToUpdate)", error: nil, level: .debug)
-        return DayModel(from: dayToUpdate)
+        try save()
+        logger.log(category: .dayDatabase, message: "Updated \(dayToUpdate)", error: nil, level: .debug)
+        return dayToUpdate.asModel
     }
     
-    private func delete(_ day: DayEntity) throws {
-        context.delete(day)
-        try database.save(context)
-        logger.log(category: .dayDatabase, message: "Deleted \(day)", error: nil, level: .debug)
-    }
-    
-    public func delete(_ day: DayModel) async throws {
-        guard let date = DatabaseFormatter.date.date(from: day.date)
-        else {
-            throw DatabaseError.deletingElement
+    public func delete(_ days: [DayModel]) async throws {
+        if days.allSatisfy({ $0.id.isEmpty || $0.date.isEmpty}) {
+            throw DatabaseError.invalidElement
         }
-        let dayToDelete = try await fetchEntity(with: date)
-        try delete(dayToDelete)
+        try deleteModels(days)
+        logger.log(category: .dayDatabase, message: "Deleted \(days)", error: nil, level: .debug)
     }
     
     public func deleteDay(at date: Date) async throws {
-        let dayToDelete = try await fetchEntity(with: date)
-        try delete(dayToDelete)
+        let dayToDelete = try fetchEntity(with: date)
+        try deleteEntities([dayToDelete])
+        logger.log(category: .dayDatabase, message: "Deleted \(dayToDelete)", error: nil, level: .debug)
+        try save()
     }
     
     public func deleteDays(in range: ClosedRange<Date>) async throws {
-        let days = try await fetchEntities(between: range)
-        for day in days {
-            try delete(day)
-        }
+        let days = try fetchEntities(between: range)
+        logger.log(category: .dayDatabase, message: "Deleted \(days)", error: nil, level: .debug)
+        try deleteEntities(days)
     }
     
     public func fetch(with date: Date) async throws -> DayModel {
-        let day = try await fetchEntity(with: date)
-        return DayModel(from: day)
+        let day = try fetchEntity(with: date)
+        logger.log(category: .dayDatabase, message: "Found \(day)", error: nil, level: .debug)
+        return day.asModel
     }
     
     public func fetchLast() async throws -> DayModel {
-        let day = try await fetchLastEntity()
-        return DayModel(from: day)
+        let day = try fetchLastEntity()
+        logger.log(category: .dayDatabase, message: "Found \(day)", error: nil, level: .debug)
+        return day.asModel
     }
     
     public func fetch(between dates: ClosedRange<Date>) async throws -> [DayModel] {
-        try await fetchEntities(between: dates)
-            .compactMap { .init(from: $0) }
+        let days = try fetchEntities(between: dates)
+        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
+        return days.map { $0.asModel }
     }
-    
     
     public func fetchAll() async throws -> [DayModel] {
-        try await fetchAllEntities().compactMap { .init(from: $0) }
+        let days = try fetchAllEntities()
+        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
+        return days.map { $0.asModel }
     }
 }
 
-package extension DayModel {
-    init(from model: DayEntity) {
-        self.init(
-            id: model.id ?? UUID().uuidString,
-            date: model.date ?? "", 
-            consumed: model.consumed,
-            goal: model.goal
-        )
+private extension DayManager {
+    func read<Element: PersistentModel>(
+        matching: Predicate<Element>? = nil,
+        sortBy: [SortDescriptor<Element>] = [],
+        limit: Int? = nil
+    ) throws -> [Element] {
+        let fetchDescriptor = FetchDescriptor<Element>(predicate: matching, sortBy: sortBy)
+        var results = try context.fetch(fetchDescriptor)
+        if let limit {
+            results = Array(results.prefix(limit))
+        }
+        return results
+    }
+    
+    func save() throws {
+        guard context.hasChanges else { return }
+        do {
+            try context.save()
+        } catch {
+            logger.log(category: .dayDatabase, message: "Failed to save the context", error: error, level: .debug)
+            throw error
+        }
     }
 }
 
-extension DayEntity {
-    public override var description: String {
-        "Day(" +
-        "id:\(id?.suffix(12) ?? "No id"), " +
-        "date:\(date ?? "No date"), " +
-        "consumed:\(consumed), " +
-        "goal:\(goal))"
-    }
-}

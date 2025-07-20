@@ -13,15 +13,13 @@ import LoggingService
 import PortsInterface
 import DBKitInterface
 import DateServiceInterface
-import NotificationCenterServiceInterface
 
 public final class DayService: DayServiceType {
     public typealias Engine = (
         HasDayManagerService &
         HasConsumptionManagerService &
         HasUnitService &
-        HasDateService &
-        HasNotificationCenter
+        HasDateService
     )
     
     private let engine: Engine
@@ -60,12 +58,12 @@ public final class DayService: DayServiceType {
         let consumedAmount = getConsumption(from: drink)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.add(consumed: consumedAmount, toDayAt: today.date)
-        try engine.consumptionManager.createEntry(date: engine.dateService.now(),
-                                                  consumed: consumedAmount)
+        try await engine.consumptionManager.createEntry(date: engine.dateService.now(),
+                                                        consumed: consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
         }
-        engine.notificationCenter.post(name: .dayDidChange)
+        
         return getConsumptionTotal(from: updatedDay)
     }
     
@@ -73,12 +71,12 @@ public final class DayService: DayServiceType {
         let consumedAmount = getConsumption(from: drink)
         let today = await getToday()
         let updatedDay = try await engine.dayManager.remove(consumed: consumedAmount, fromDayAt: today.date)
-        try engine.consumptionManager.createEntry(date: engine.dateService.now(),
+        try await engine.consumptionManager.createEntry(date: engine.dateService.now(),
                                                   consumed: consumedAmount)
         if let day = Day(with: updatedDay) {
             self.today = day
         }
-        engine.notificationCenter.post(name: .dayDidChange)
+        
         return getConsumptionTotal(from: updatedDay)
     }
     
@@ -89,7 +87,7 @@ public final class DayService: DayServiceType {
         if let day = Day(with: updatedDay) {
             self.today = day
         }
-        engine.notificationCenter.post(name: .dayDidChange)
+        
         return getGoalTotal(from: updatedDay)
     }
     
@@ -100,7 +98,7 @@ public final class DayService: DayServiceType {
         if let day = Day(with: updatedDay) {
             self.today = day
         }
-        engine.notificationCenter.post(name: .dayDidChange)
+        
         return getGoalTotal(from: updatedDay)
     }
 }
@@ -121,7 +119,7 @@ extension Day {
 private extension DayService {
     func createNewDay() async -> Day {
         let lastDay = try? await engine.dayManager.fetchLast()
-        if let createdDay = try? engine.dayManager.createNewDay(
+        if let createdDay = try? await engine.dayManager.createNewDay(
             date: engine.dateService.now(),
             goal: lastDay?.goal ?? 3),
            let newDay = Day(with: createdDay) {

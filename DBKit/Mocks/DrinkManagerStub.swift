@@ -10,25 +10,48 @@ import CoreData
 import DBKitInterface
 
 public protocol DrinkManagerStubbing {
-    var createNewDrink_returnValue: Result<DrinkModel, Error> { get set }
-    var edit_returnValue: Result<DrinkModel, Error> { get set }
-    var delete_returnError: Error? { get set }
-    var deleteDrink_returnError: Error? { get set }
-    var deleteAll_returnError: Error? { get set }
-    var fetch_returnValue: Result<DrinkModel, Error> { get set }
-    var fetchAll_returnValue: Result<[DrinkModel], Error> { get set }
+    func set(_ response: DrinkManagerStub.StubResponse) async
 }
 
-public final class DrinkManagerStub: DrinkManagerStubbing {
+public final actor DrinkManagerStub: DrinkManagerStubbing {
+    public enum StubResponse: Sendable {
+        case createNewDrink(Result<DrinkModel, Error>)
+        case edit(Result<DrinkModel, Error>)
+        case delete(Error?)
+        case deleteDrink(Error?)
+        case deleteAll(Error?)
+        case fetch(Result<DrinkModel, Error>)
+        case fetchAll(Result<[DrinkModel], Error>)
+    }
+    
     public init() {}
     
-    public var createNewDrink_returnValue: Result<DrinkModel, Error> = .default
-    public var edit_returnValue: Result<DrinkModel, Error> = .default
-    public var delete_returnError: Error? = nil
-    public var deleteDrink_returnError: Error? = nil
-    public var deleteAll_returnError: Error? = nil
-    public var fetch_returnValue: Result<DrinkModel, Error> = .default
-    public var fetchAll_returnValue: Result<[DrinkModel], Error> = .default
+    private var createNewDrink_returnValue: Result<DrinkModel, Error> = .default
+    private var edit_returnValue: Result<DrinkModel, Error> = .default
+    private var delete_returnError: Error? = nil
+    private var deleteDrink_returnError: Error? = nil
+    private var deleteAll_returnError: Error? = nil
+    private var fetch_returnValue: Result<DrinkModel, Error> = .default
+    private var fetchAll_returnValue: Result<[DrinkModel], Error> = .default
+
+    public func set(_ response: StubResponse) async {
+        switch response {
+        case .createNewDrink(let result):
+            self.createNewDrink_returnValue = result
+        case .edit(let result):
+            self.edit_returnValue = result
+        case .delete(let error):
+            self.delete_returnError = error
+        case .deleteDrink(let error):
+            self.deleteDrink_returnError = error
+        case .deleteAll(let error):
+            self.deleteAll_returnError = error
+        case .fetch(let result):
+            self.fetch_returnValue = result
+        case .fetchAll(let result):
+            self.fetchAll_returnValue = result
+        }
+    }
 }
 
 extension DrinkManagerStub: DrinkManagerType {

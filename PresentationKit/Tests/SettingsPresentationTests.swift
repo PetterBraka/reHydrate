@@ -220,7 +220,7 @@ final class SettingsPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(
             urlService.spy.methodLog,
-            [.email(
+            [.emailEmailCcBccSubjectBody(
                 email: "Petter.braka+reHydrate@gmail.com", cc: nil, bcc: nil,
                 subject: "reHydrate query - v0.0.0", body: nil
             )]
@@ -244,7 +244,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(urlService.spy.methodLog, 
-                       [.open(url: URL(string: "https://github.com/PetterBraka/reHydrate/blob/master/Privacy-Policy.md")!)])
+                       [.openUrl(url: URL(string: "https://github.com/PetterBraka/reHydrate/blob/master/Privacy-Policy.md")!)])
         XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
@@ -264,7 +264,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(urlService.spy.methodLog, 
-                       [.open(url: URL(string:"https://www.instagram.com/braka.coding/")!)])
+                       [.openUrl(url: URL(string:"https://www.instagram.com/braka.coding/")!)])
         XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
@@ -284,7 +284,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(urlService.spy.methodLog, 
-                       [.open(url: URL(string:"https://www.redbubble.com/people/petter-braka/shop")!)])
+                       [.openUrl(url: URL(string:"https://www.redbubble.com/people/petter-braka/shop")!)])
         XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
@@ -304,7 +304,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
-        XCTAssertEqual(urlService.spy.methodLog, [.open(url: URL(string: "prefs:root=reHydrate")!)])
+        XCTAssertEqual(urlService.spy.methodLog, [.openUrl(url: URL(string: "prefs:root=reHydrate")!)])
         XCTAssertEqual(phoneComms.spy.methodLog, [])
     }
     
@@ -468,7 +468,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(userNotificationService.spy.lastMethodCall,
-                       .enable(withFrequency: 5, 
+                       .enableWithFrequencyStartStop(withFrequency: 5, 
                                start: Date(year: 2021, month: 12, day: 8,
                                            hours: 12, minutes: 0, seconds: 0),
                                stop: Date(year: 2021, month: 12, day: 8,
@@ -509,7 +509,7 @@ final class SettingsPresentationTests: XCTestCase {
         )
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(userNotificationService.spy.lastMethodCall,
-                       .enable(withFrequency: 5,
+                       .enableWithFrequencyStartStop(withFrequency: 5,
                                start: Date(year: 2021, month: 12, day: 8,
                                            hours: 7, minutes: 0, seconds: 0),
                                stop: Date(year: 2021, month: 12, day: 8,
@@ -558,7 +558,7 @@ final class SettingsPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(
             userNotificationService.spy.lastMethodCall,
-            .enable(withFrequency: 10,
+            .enableWithFrequencyStartStop(withFrequency: 10,
                     start: Date(year: 2021, month: 12, day: 8,
                                 hours: 7, minutes: 0, seconds: 0),
                     stop: Date(year: 2021, month: 12, day: 8,
@@ -607,7 +607,7 @@ final class SettingsPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [])
         XCTAssertEqual(
             userNotificationService.spy.lastMethodCall,
-            .enable(withFrequency: 10,
+            .enableWithFrequencyStartStop(withFrequency: 10,
                     start: Date(year: 2021, month: 12, day: 8, hours: 7, minutes: 0, seconds: 0),
                     stop: Date(year: 2021, month: 12, day: 8, hours: 21, minutes: 0, seconds: 0))
         )
@@ -631,7 +631,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
-        XCTAssertEqual(dayService.spy.lastMethodCall, .increase(goal: 0.5))
+        XCTAssertEqual(dayService.spy.lastMethodCall, .increaseGoal(goal: 0.5))
         XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
@@ -657,7 +657,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
-        XCTAssertEqual(dayService.spy.lastMethodCall, .increase(goal: 0.5))
+        XCTAssertEqual(dayService.spy.lastMethodCall, .increaseGoal(goal: 0.5))
         XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
@@ -678,7 +678,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
-        XCTAssertEqual(dayService.spy.lastMethodCall, .decrease(goal: 0.5))
+        XCTAssertEqual(dayService.spy.lastMethodCall, .decreaseGoal(goal: 0.5))
         XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
@@ -704,7 +704,7 @@ final class SettingsPresentationTests: XCTestCase {
                 error: nil)
         )
         XCTAssertEqual(router.log, [])
-        XCTAssertEqual(dayService.spy.lastMethodCall, .decrease(goal: 0.5))
+        XCTAssertEqual(dayService.spy.lastMethodCall, .decreaseGoal(goal: 0.5))
         XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
     
@@ -782,16 +782,16 @@ final class SettingsPresentationTests: XCTestCase {
 extension OpenUrlInterfaceSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: OpenUrlInterfaceSpy.MethodCall, rhs: OpenUrlInterfaceSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
-        case let (.open(lhsUrl), .open(url: rhsUrl)):
+        case let (.openUrl(lhsUrl), .openUrl(url: rhsUrl)):
             lhsUrl == rhsUrl
-        case let (.email(lhsEmail, lhsCc, lhsBcc, lhsSubject, lhsBody),
-            .email(rhsEmail, rhsCc, rhsBcc, rhsSubject, rhsBody)):
+        case let (.emailEmailCcBccSubjectBody(lhsEmail, lhsCc, lhsBcc, lhsSubject, lhsBody),
+            .emailEmailCcBccSubjectBody(rhsEmail, rhsCc, rhsBcc, rhsSubject, rhsBody)):
             lhsEmail == rhsEmail &&
             lhsCc == rhsCc &&
             lhsBcc == rhsBcc &&
             lhsSubject == rhsSubject &&
             lhsBody == rhsBody
-        case (.open, .email), (.email, .open):
+        case (.openUrl, .emailEmailCcBccSubjectBody), (.emailEmailCcBccSubjectBody, .openUrl):
             false
         }
     }
@@ -800,7 +800,7 @@ extension OpenUrlInterfaceSpy.MethodCall: @retroactive Equatable {
 extension UserNotificationServiceTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: UserNotificationServiceTypeSpy.MethodCall, rhs: UserNotificationServiceTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
-        case let (.enable(lhsFrequency, lhsStart, lhsStop), .enable(rhsFrequency, rhsStart, rhsStop)):
+        case let (.enableWithFrequencyStartStop(lhsFrequency, lhsStart, lhsStop), .enableWithFrequencyStartStop(rhsFrequency, rhsStart, rhsStop)):
             lhsFrequency == rhsFrequency &&
             lhsStart == rhsStart &&
             lhsStop == rhsStop
@@ -815,11 +815,11 @@ extension UserNotificationServiceTypeSpy.MethodCall: @retroactive Equatable {
 extension UnitServiceTypeSpy.MethodCall: @retroactive Equatable {
     public static func == (lhs: UnitServiceTypeSpy.MethodCall, rhs: UnitServiceTypeSpy.MethodCall) -> Bool {
         switch (lhs, rhs) {
-        case let (.set(lhsUnitSystem), .set(rhsUnitSystem)):
+        case let (.setUnitSystem(lhsUnitSystem), .setUnitSystem(rhsUnitSystem)):
             lhsUnitSystem == rhsUnitSystem
         case (.getUnitSystem, .getUnitSystem):
             true
-        case let (.convert(lhsValue, lhsFromUnit, lhsToUnit), .convert(rhsValue, rhsFromUnit, rhsToUnit)):
+        case let (.convertValueFromUnitToUnit(lhsValue, lhsFromUnit, lhsToUnit), .convertValueFromUnitToUnit(rhsValue, rhsFromUnit, rhsToUnit)):
             lhsValue == rhsValue &&
             lhsFromUnit == rhsFromUnit &&
             lhsToUnit == rhsToUnit

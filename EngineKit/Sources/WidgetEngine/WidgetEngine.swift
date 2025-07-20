@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import SwiftData
 import LoggingKit
 import LoggingService
 import UserPreferenceServiceInterface
@@ -19,8 +19,6 @@ import DayServiceInterface
 import DayService
 import DBKitInterface
 import DBKit
-import NotificationCenterServiceInterface
-import NotificationCenterService
 
 public final class WidgetEngine {
     public init(
@@ -35,21 +33,25 @@ public final class WidgetEngine {
         }
         self.logger = LoggerService(subsystem: subsystem)
         self.sharedDefaults = sharedDefaults
-        self.database = Database(appGroup: appGroup, logger: logger)
+        
+        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+        let container = Database.createContainer(path: path, schema: .init([DayEntity.self, DrinkEntity.self, ConsumptionEntity.self]))
+        
+        consumptionManager = ConsumptionManager(container: container, logger: logger)
+        dayManager = DayManager(container: container, logger: logger)
     }
     
-    private let database: DatabaseType
     private let sharedDefaults: UserDefaults
     private let subsystem: String
     public var logger: LoggerServicing
     
+    public var consumptionManager: ConsumptionManagerType
+    public var dayManager: DayManagerType
+    
     public lazy var userPreferenceService: UserPreferenceServiceType = UserPreferenceService(defaults: sharedDefaults)
-    public lazy var consumptionManager: ConsumptionManagerType = ConsumptionManager(database: database, logger: logger)
     public lazy var unitService: UnitServiceType = UnitService(engine: self)
-    public lazy var dayManager: DayManagerType = DayManager(database: database, logger: logger)
     public lazy var dayService: DayServiceType = DayService(engine: self)
     public lazy var dateService: DateServiceType = DateService()
-    public lazy var notificationCenter: NotificationCenterType = NotificationCenterService()
 }
 
 extension WidgetEngine:
@@ -59,6 +61,5 @@ extension WidgetEngine:
     HasLoggerService,
     HasUnitService,
     HasDateService,
-    HasDayService,
-    HasNotificationCenter
+    HasDayService
 {}

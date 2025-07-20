@@ -14,19 +14,19 @@ import DrinkServiceInterface
 import UnitServiceInterface
 import CommunicationKitInterface
 
-public final class WatchComms {
+public final class WatchComms: Sendable {
     public typealias Engine = (
         HasLoggerService &
         HasDateService &
         HasDayService &
         HasDrinksService &
         HasUnitService &
-        HasWatchService
+        HasWatchService &
+        Sendable
     )
     
     private let engine: Engine
     private let notificationCenter: NotificationCenter
-    private var updateBlock: (() -> Void)?
     
     public init(engine: Engine, notificationCenter: NotificationCenter) {
         self.engine = engine
@@ -62,14 +62,6 @@ extension WatchComms: WatchCommsType {
         let data = await getWatchData()
         await sendMessage(data)
     }
-    
-    public func addObserver(using updateBlock: @escaping () -> Void) {
-        self.updateBlock = updateBlock
-    }
-    
-    public func removeObserver() {
-        self.updateBlock = nil
-    }
 }
 
 private extension WatchComms {
@@ -90,8 +82,9 @@ private extension WatchComms {
     }
     
     func sendMessage(_ data: [CommunicationUserInfo: Codable]) async {
-        engine.watchService.sendMessage(data) { [weak self] error in
-            self?.engine.logger.log(category: .watchComms, message: "Failed sending \(data) to watchOS device", error: error, level: .error)
+        let logger = engine.logger
+        engine.watchService.sendMessage(data) { error in
+            logger.log(category: .watchComms, message: "Failed sending \(data) to watchOS device", error: error, level: .error)
         }
     }
     
@@ -107,14 +100,11 @@ private extension WatchComms {
 private extension WatchComms {
     func addWatchObservers() {
         notificationCenter.addObserver(forName: .Shared.didReceiveApplicationContext,
-                                       object: nil, queue: .current,
-                                       using: process(notification:))
+                                       object: nil, queue: .current, using: process(notification:))
         notificationCenter.addObserver(forName: .Shared.didReceiveMessage,
-                                       object: nil, queue: .current,
-                                       using: process(notification:))
+                                       object: nil, queue: .current, using: process(notification:))
         notificationCenter.addObserver(forName: .Shared.didReceiveUserInfo,
-                                       object: nil, queue: .current,
-                                       using: process(notification:))
+                                       object: nil, queue: .current, using: process(notification:))
     }
     
     func removeWatchObservers() {
@@ -123,6 +113,7 @@ private extension WatchComms {
         notificationCenter.removeObserver(self, name: .Shared.didReceiveUserInfo, object: nil)
     }
     
+    @Sendable
     func process(notification: Notification) {
         guard let watchData = notification.userInfo?.mapKeysAndValues() else { return }
         Task {
@@ -130,7 +121,7 @@ private extension WatchComms {
             await process(drinks: watchData[.drinks])
             process(unitSystem: watchData[.unitSystem])
             
-            updateBlock?()
+            notificationCenter.post(name: .Shared.processedNotification, object: nil)
         }
     }
     

@@ -8,5 +8,5 @@
 import AppearanceServiceInterface
 
 extension Appearance {
-    static let `default` = Appearance.light
+    nonisolated(unsafe) static let `default` = Appearance.light
 }

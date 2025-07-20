@@ -1,0 +1,46 @@
+{%- macro methodName method -%}
+{{ method.callName }}{% for param in method.parameters %}{{ param.name|upperFirstLetter }}{% endfor %}
+{%- endmacro -%}
+
+{%- macro methodParams method useLet prefix -%}
+{%- if method.parameters.count != 0 -%}(
+    {%- for param in method.parameters -%}
+        {%- if useLet == true -%}let {% endif %}{{ prefix }}{{ param.name }}
+        {%- if not forloop.last %}, {% else %}){% endif %}
+    {%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro methodParamsEquals method -%}
+{%- if method.parameters.count == 0 -%}
+true
+{%- else -%}
+    {%- for param in method.parameters -%}
+        {%- if param.name != nil -%}
+            {%- if param.actualTypeName|hasSuffix: "T" -%}String(describing: {% endif %}lhs_{{ param.name }}
+            {%- if param.actualTypeName|hasSuffix: "T" -%}){% endif -%}
+            {%- if param.isClosure %}(){% endif %} == {% if param.actualTypeName|hasSuffix: "T" -%}
+                String(describing: 
+            {%- endif %} rhs_{{ param.name }}{%- if param.actualTypeName|hasSuffix: "T" -%}){% endif -%}
+            {% if param.isClosure %}(){% endif -%}
+            {%- if not forloop.last %} && {% else %}{% endif %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+// MARK: - AutoEquatable
+// swiftlint:disable all
+{% for struct in types.structs %}
+{% if struct.annotations.AutoEquatable %}
+
+extension {{ struct.name }}: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        {% for variable in struct.storedVariables -%}
+        lhs.{{ variable.name }}{% if variable.isDictionary %}.description{% endif %} == rhs.{{ variable.name }}
+        {%- if variable.isDictionary %}.description{% endif %}
+        {%- if not forloop.last %} && {% else %}{% endif %}
+        {% endfor %}
+    }
+}
+{%- endif -%}
+{%- endfor -%}

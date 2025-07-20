@@ -5,21 +5,19 @@
 //  Created by Petter vang Brakalsvålet on 07/08/2023.
 //
 
-import CoreData
+import Foundation
+import SwiftData
 import LoggingKit
 import DBKitInterface
 
-public final class ConsumptionManager {
-    private let database: DatabaseType
-    private let context: NSManagedObjectContext
+public final actor ConsumptionManager {
+    private let context: ModelContext
     private let logger: LoggerServicing
     
-    public init(database: DatabaseType, logger: LoggerServicing) {
-        self.database = database
-        self.context = database.open()
+    public init(container: ModelContainer, logger: LoggerServicing) {
+        self.context = ModelContext(container)
         self.logger = logger
     }
-
 }
 
 extension ConsumptionManager: ConsumptionManagerType {
@@ -27,84 +25,84 @@ extension ConsumptionManager: ConsumptionManagerType {
     public func createEntry(
         date: Date,
         consumed: Double
-    ) throws -> ConsumptionModel {
-        let newEntry = ConsumptionEntity(context: context)
-        newEntry.id = UUID().uuidString
-        newEntry.date = DatabaseFormatter.date.string(from: date)
-        newEntry.time = DatabaseFormatter.time.string(from: date)
-        newEntry.consumed = consumed
-        try database.save(context)
-        logger.log(category: .consumptionDatabase, message: "Created \(newEntry)", error: nil, level: .debug)
+    ) async throws -> ConsumptionModel {
+        let newEntity = ConsumptionEntity(
+            id: UUID().uuidString,
+            date: DatabaseFormatter.date.string(from: date),
+            time: DatabaseFormatter.time.string(from: date),
+            consumed: consumed
+        )
+        context.insert(newEntity)
+        try save()
+        logger.log(category: .consumptionDatabase, message: "Created \(newEntity)", error: nil, level: .debug)
         
-        return ConsumptionModel(from: newEntry)
-    }
-    
-    private func delete(_ entity: ConsumptionEntity) throws {
-        context.delete(entity)
-        try database.save(context)
+        return newEntity.asModel
     }
     
     public func delete(_ entry: ConsumptionModel) async throws {
-        let datePredicate = NSPredicate(format: "date == %@", entry.date)
-        let timePredicate = NSPredicate(format: "time == %@", entry.time)
-        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, timePredicate])
-        let entries: [ConsumptionEntity] = try await database.read(
+        let consumed = entry.consumed
+        let date = entry.date
+        let time = entry.time
+        let predicate = #Predicate<ConsumptionEntity> {
+            $0.consumed == consumed && $0.date == date && $0.time == time
+        }
+        let entities: [ConsumptionEntity] = try read(
             matching: predicate,
-            sortBy: nil,
-            limit: 1,
-            context)
-        guard let entry = entries.first else { return }
-        try delete(entry)
-        logger.log(category: .consumptionDatabase, message: "Deleting \(entry)", error: nil, level: .debug)
+            limit: 1
+        )
+        guard let entity = entities.first else {
+            throw DatabaseError.noElementFound
+        }
+        context.delete(entity)
+        try save()
+        logger.log(category: .consumptionDatabase, message: "Deleted \(entity)", error: nil, level: .debug)
     }
-
+    
     public func fetchAll(at date: Date) async throws -> [ConsumptionModel] {
-        let predicate = NSPredicate(format: "date == %@", DatabaseFormatter.date.string(from: date))
-        let entries: [ConsumptionEntity] = try await database.read(
+        let dateString = DatabaseFormatter.date.string(from: date)
+        let predicate = #Predicate<ConsumptionEntity> { $0.date == dateString }
+        
+        let entries: [ConsumptionEntity] = try read(
             matching: predicate,
-            sortBy: [NSSortDescriptor(key: "time", ascending: true)],
-            limit: nil,
-            context)
+            sortBy: [SortDescriptor(\ConsumptionEntity.time, order: .forward)],
+            limit: nil)
         logger.log(category: .consumptionDatabase, message: "Found \(entries)", error: nil, level: .debug)
-        return entries.compactMap { .init(from: $0) }
+        return entries.map { $0.asModel }
     }
     
     public func fetchAll() async throws -> [ConsumptionModel] {
-        let entries: [ConsumptionEntity] = try await database.read(
+        let entries: [ConsumptionEntity] = try read(
             matching: nil,
-            sortBy: [NSSortDescriptor(key: "date", ascending: true)],
-            limit: nil,
-            context)
-        .sorted { (lhs: ConsumptionEntity , rhs: ConsumptionEntity) in
-            guard let lhsTime = lhs.time, let rhsTime = rhs.time,
-                  let lhsDate = lhs.date, let rhsDate = rhs.date
-            else { return false }
-            if lhsDate == rhsDate {
-                return lhsTime > rhsTime
-            } else {
-                return lhsDate > rhsDate
-            }
-        }
+            sortBy: [SortDescriptor(\ConsumptionEntity.date, order: .forward), SortDescriptor(\ConsumptionEntity.time, order: .forward)],
+            limit: nil)
+        // Entries are sorted by date ascending, then time ascending by the sort descriptors above.
         logger.log(category: .consumptionDatabase, message: "Found \(entries)", error: nil, level: .debug)
-        return entries.compactMap { .init(from: $0) }
+        return entries.map { $0.asModel }
     }
 }
 
-package extension ConsumptionModel {
-    init(from model: ConsumptionEntity) {
-        self.init(id: model.id ?? "",
-                  date: model.date ?? "",
-                  time: model.time ?? "",
-                  consumed: model.consumed)
+private extension ConsumptionManager {
+    func read<Element: PersistentModel>(
+        matching: Predicate<Element>?,
+        sortBy: [SortDescriptor<Element>] = [],
+        limit: Int?
+    ) throws -> [Element] {
+        let fetchDescriptor = FetchDescriptor<Element>(predicate: matching, sortBy: sortBy)
+        var results = try context.fetch(fetchDescriptor)
+        if let limit {
+            results = Array(results.prefix(limit))
+        }
+        return results
+    }
+    
+    func save() throws {
+        guard context.hasChanges else { return }
+        do {
+            try context.save()
+        } catch {
+            logger.log(category: .consumptionDatabase, message: "Failed to save the context", error: error, level: .debug)
+            throw error
+        }
     }
 }
 
-extension ConsumptionEntity {
-    public override var description: String {
-        "Consumption(" +
-        "id:\(id ?? "No id"), " +
-        "date:\(date ?? "No date"), " +
-        "time:\(time ?? "No time"), " +
-        "consumed:\(consumed))"
-    }
-}

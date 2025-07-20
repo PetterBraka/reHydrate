@@ -7,9 +7,9 @@
 
 import Foundation
 
-public protocol ConsumptionManagerType {
+public protocol ConsumptionManagerType: Sendable {
     @discardableResult
-    func createEntry(date: Date, consumed: Double) throws -> ConsumptionModel
+    func createEntry(date: Date, consumed: Double) async throws -> ConsumptionModel
     
     func delete(_ entry: ConsumptionModel) async throws
     

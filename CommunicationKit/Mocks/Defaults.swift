@@ -21,7 +21,7 @@ extension Optional where Wrapped == URL {
 }
 
 extension Dictionary where Key == CommunicationUserInfo, Value == Any {
-    static let `default`: Self = [:]
+    nonisolated(unsafe) static let `default`: Self = [:]
 }
 
 extension CommunicationState {
@@ -29,5 +29,5 @@ extension CommunicationState {
 }
 
 extension CommunicationInfo {
-    static let `default`: Self = .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false) {}
+    nonisolated(unsafe) static let `default`: Self = .init(isCurrentComplicationInfo: false, userInfo: [:], isTransferring: false) {}
 }

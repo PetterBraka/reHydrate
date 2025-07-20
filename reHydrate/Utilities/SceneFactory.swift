@@ -64,12 +64,12 @@ public final class SceneFactory: ObservableObject {
             appGroup: appGroup,
             appVersion: UIApplication.shared.appVersion,
             logger: logger,
-            database: Database(appGroup: appGroup, logger: logger),
             reminders: Reminder.all.map { .init(title: $0.title, body: $0.body) },
             celebrations: Celebration.all.map { .init(title: $0.title, body: $0.body) },
             userNotificationCenter: UNUserNotificationCenter.current(),
             openUrlService: OpenUrlPort(),
-            alternateIconsService: AlternateIconsServicePort(), 
+            alternateIconsService: AlternateIconsServicePort(),
+            
             appearancePort: AppearanceServicePort(),
             healthService: HealthKitPort(),
             phoneService: PhoneService(session: phoneSession)

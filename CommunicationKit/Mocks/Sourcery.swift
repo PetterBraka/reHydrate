@@ -7,7 +7,8 @@
 
 import CommunicationKitInterface
 
-// sourcery:begin: AutoStub, AutoSpy
+// sourcery:begin: AutoStub, AutoSpy, AutoString
 extension WatchServiceType {}
 extension PhoneServiceType {}
+extension CommunicationUserInfo {}
 // sourcery:end

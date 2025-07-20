@@ -6,6 +6,11 @@
 //
 import DrinkServiceInterface
 
-// sourcery:begin: AutoStub, AutoSpy
+// sourcery:begin: AutoStub, AutoSpy, AutoString, AutoEquatable
 extension DrinkServiceType {}
+extension Container {}
+// sourcery:end
+
+// sourcery:begin: AutoStub, AutoSpy, AutoString
+extension Drink {}
 // sourcery:end

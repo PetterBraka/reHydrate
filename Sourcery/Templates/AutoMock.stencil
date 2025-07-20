@@ -1,5 +1,5 @@
-// swiftlint:disable line_length
-// swiftlint:disable variable_name
+// MARK: - AutoMock
+// swiftlint:disable all
 
 {% for type in types.classes -%}
 {% if type.annotations.AutoMock -%}

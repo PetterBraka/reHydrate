@@ -139,7 +139,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [.close])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall: .edit(size: 400, drink: .small)
+            expectedCall: .editSizeDrink(size: 400, drink: .small)
         )
         XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
@@ -181,7 +181,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [.close])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall: .edit(size: 400, drink: .small),
+            expectedCall: .editSizeDrink(size: 400, drink: .small),
             accuracy: 1
         )
         XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
@@ -219,7 +219,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [.close])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall:.edit(size: 200, drink: .small)
+            expectedCall:.editSizeDrink(size: 200, drink: .small)
         )
         XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
@@ -242,7 +242,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall: .edit(size: 200, drink: .small)
+            expectedCall: .editSizeDrink(size: 200, drink: .small)
         )
         XCTAssertEqual(phoneComms.spy.methodLog, [])
         XCTAssertEqual(phoneComms.spy.methodLog, [])
@@ -267,7 +267,7 @@ final class EditContainerPresentationTests: XCTestCase {
         XCTAssertEqual(router.log, [.close])
         assert(
             givenCall: drinkService.spy.lastMethodCall,
-            expectedCall: .edit(size: 200, drink: .small)
+            expectedCall: .editSizeDrink(size: 200, drink: .small)
         )
         XCTAssertEqual(phoneComms.spy.methodLog, [.sendDataToWatch])
     }
@@ -313,39 +313,39 @@ private extension EditContainerPresentationTests {
                 accuracy: Double = 0.01,
                 file: StaticString = #file, line: UInt = #line) {
         switch (givenCall, expectedCall) {
-        case let (.add(givenSize, givenContainer), .add(expectedSize, expectedContainer)):
+        case let (.addSizeContainer(givenSize, givenContainer), .addSizeContainer(expectedSize, expectedContainer)):
             XCTAssertEqual(givenSize, expectedSize, accuracy: accuracy, file: file, line: line)
             XCTAssertEqual(givenContainer, expectedContainer, file: file, line: line)
-        case let (.edit(givenSize, givenDrink), .edit(expectedSize, expectedDrink)):
+        case let (.editSizeDrink(givenSize, givenDrink), .editSizeDrink(expectedSize, expectedDrink)):
             XCTAssertEqual(givenSize, expectedSize, accuracy: accuracy, file: file, line: line)
             XCTAssertEqual(givenDrink, expectedDrink, file: file, line: line)
-        case let (.remove(givenContainer), .remove(expectedContainer)):
+        case let (.removeContainer(givenContainer), .removeContainer(expectedContainer)):
             XCTAssertEqual(givenContainer, expectedContainer)
         case (.getSaved, .getSaved), (.resetToDefault, .resetToDefault):
             XCTAssertTrue(true, file: file, line: line)
-        case (.add, .edit),
-            (.add, .remove),
-            (.add, .getSaved),
-            (.add, .resetToDefault),
-            (.edit, .add),
-            (.edit, .remove),
-            (.edit, .getSaved),
-            (.edit, .resetToDefault),
-            (.remove, .add),
-            (.remove, .edit),
-            (.remove, .getSaved),
-            (.remove, .resetToDefault),
-            (.getSaved, .add),
-            (.getSaved, .edit),
-            (.getSaved, .remove),
+        case (.addSizeContainer, .editSizeDrink),
+            (.addSizeContainer, .removeContainer),
+            (.addSizeContainer, .getSaved),
+            (.addSizeContainer, .resetToDefault),
+            (.editSizeDrink, .addSizeContainer),
+            (.editSizeDrink, .removeContainer),
+            (.editSizeDrink, .getSaved),
+            (.editSizeDrink, .resetToDefault),
+            (.removeContainer, .addSizeContainer),
+            (.removeContainer, .editSizeDrink),
+            (.removeContainer, .getSaved),
+            (.removeContainer, .resetToDefault),
+            (.getSaved, .addSizeContainer),
+            (.getSaved, .editSizeDrink),
+            (.getSaved, .removeContainer),
             (.getSaved, .resetToDefault),
-            (.resetToDefault, .add),
-            (.resetToDefault, .edit),
-            (.resetToDefault, .remove),
+            (.resetToDefault, .addSizeContainer),
+            (.resetToDefault, .editSizeDrink),
+            (.resetToDefault, .removeContainer),
             (.resetToDefault, .getSaved),
-            (.none, .add),
-            (.none, .edit),
-            (.none, .remove),
+            (.none, .addSizeContainer),
+            (.none, .editSizeDrink),
+            (.none, .removeContainer),
             (.none, .getSaved),
             (.none, .resetToDefault):
             XCTFail("\(String(describing: givenCall)), is not \(expectedCall)", file: file, line: line)

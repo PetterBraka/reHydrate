@@ -1,0 +1,139 @@
+// Generated using Sourcery 2.1.7 — https://github.com/krzysztofzablocki/Sourcery
+// DO NOT EDIT
+
+// MARK: - AutoEquatable
+// swiftlint:disable all
+
+// MARK: - AutoSpy
+// swiftlint:disable all
+
+import Foundation
+import TimelineServiceInterface
+
+public protocol TimelineServiceTypeSpying {
+    var variableLog: [TimelineServiceTypeSpy.VariableName] { get set }
+    var lastVariabelCall: TimelineServiceTypeSpy.VariableName? { get }
+    var methodLog: [TimelineServiceTypeSpy.MethodCall] { get set }
+    var lastMethodCall: TimelineServiceTypeSpy.MethodCall? { get }
+    var methodNameLog: [TimelineServiceTypeSpy.MethodName] { get set }
+}
+
+public final class TimelineServiceTypeSpy: TimelineServiceTypeSpying {
+    public enum VariableName: Equatable {
+    }
+
+    public enum MethodCall {
+        case getTimelineDate(date: Date)
+        case getTimelineCollection
+    }
+
+    public enum MethodName {
+        case getTimelineDate
+        case getTimelineCollection
+    }
+
+    public var variableLog: [VariableName] = []
+    public var lastVariabelCall: VariableName? { variableLog.last }
+    public var methodLog: [MethodCall] = []
+    public var lastMethodCall: MethodCall? { methodLog.last }
+    public var methodNameLog: [MethodName] = []
+    private var realObject: TimelineServiceType
+    public init(realObject: TimelineServiceType) {
+        self.realObject = realObject
+    }
+}
+
+extension TimelineServiceTypeSpy: TimelineServiceType {
+    public func getTimeline(for date: Date) async -> [Timeline] {
+        methodNameLog.append(.getTimelineDate)
+        methodLog.append(.getTimelineDate(date: date))
+        return await realObject.getTimeline(for: date)
+    }
+    public func getTimelineCollection() async -> [TimelineCollection] {
+        methodNameLog.append(.getTimelineCollection)
+        methodLog.append(.getTimelineCollection)
+        return await realObject.getTimelineCollection()
+    }
+}
+
+extension TimelineServiceTypeSpy.VariableName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        }
+    }
+}
+
+extension TimelineServiceTypeSpy.MethodCall: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getTimelineDate(let date): "getTimeline(date: \(String(describing: date)))"
+        case .getTimelineCollection: "getTimelineCollection"
+        }
+    }
+}
+
+extension TimelineServiceTypeSpy.MethodName: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .getTimelineDate: "getTimelineDate"
+        case .getTimelineCollection: "getTimelineCollection"
+        }
+    }
+}
+// MARK: - AutoString
+// swiftlint:disable all
+
+import TimelineServiceInterface
+
+
+// MARK: - AutoStub
+// swiftlint:disable all  
+import Foundation
+import TimelineServiceInterface
+
+public protocol TimelineServiceTypeStubbing {
+    var getTimelineDate_returnValue: [Timeline] { get set }
+    var getTimelineCollection_returnValue: [TimelineCollection] { get set }
+}
+
+public final class TimelineServiceTypeStub: TimelineServiceTypeStubbing {
+    public var getTimelineDate_returnValue: [Timeline] {
+        get {
+            if getTimelineDate_returnValues.isEmpty {
+                .default
+            } else {
+                getTimelineDate_returnValues.removeFirst()
+            }
+        }
+        set {
+            getTimelineDate_returnValues.append(newValue)
+        }
+    }
+    private var getTimelineDate_returnValues: [[Timeline]] = []
+    public var getTimelineCollection_returnValue: [TimelineCollection] {
+        get {
+            if getTimelineCollection_returnValues.isEmpty {
+                .default
+            } else {
+                getTimelineCollection_returnValues.removeFirst()
+            }
+        }
+        set {
+            getTimelineCollection_returnValues.append(newValue)
+        }
+    }
+    private var getTimelineCollection_returnValues: [[TimelineCollection]] = []
+
+    public init() {}
+}
+
+extension TimelineServiceTypeStub: TimelineServiceType {
+    public func getTimeline(for date: Date) async -> [Timeline] {
+        getTimelineDate_returnValue
+    }
+
+    public func getTimelineCollection() async -> [TimelineCollection] {
+        getTimelineCollection_returnValue
+    }
+
+}

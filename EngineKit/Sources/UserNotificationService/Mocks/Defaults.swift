@@ -32,5 +32,5 @@ extension Array where Element == NotificationRequest {
     static let `default` = [NotificationRequest]()
 }
 extension Array where Element == DeliveredNotification {
-    static let `default` = [DeliveredNotification]()
+    nonisolated(unsafe) static let `default` = [DeliveredNotification]()
 }

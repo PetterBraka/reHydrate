@@ -6,6 +6,6 @@
 //
 import LanguageServiceInterface
 
-// sourcery:begin: AutoStub, AutoSpy
+// sourcery:begin: AutoStub, AutoSpy, AutoString
 extension LanguageServiceType {}
 // sourcery:end

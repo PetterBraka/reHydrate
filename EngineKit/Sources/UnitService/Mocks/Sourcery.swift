@@ -6,6 +6,8 @@
 //
 import UnitServiceInterface
 
-// sourcery:begin: AutoStub, AutoSpy
+// sourcery:begin: AutoStub, AutoSpy, AutoString, AutoEquatable
 extension UnitServiceType {}
+extension UnitSystem {}
+extension UnitModel {}
 // sourcery:end

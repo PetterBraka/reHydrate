@@ -13,15 +13,13 @@ import LoggingService
 import DBKitInterface
 import UnitServiceInterface
 import DrinkServiceInterface
-import NotificationCenterServiceInterface
 @testable import DrinkService
 
 final class DrinkServiceTests: XCTestCase {
     typealias Engine = (
         HasLoggerService &
         HasDrinkManagerService &
-        HasUnitService &
-        HasNotificationCenter
+        HasUnitService
     )
     
     var engine: Engine = EngineMocks()

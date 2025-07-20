@@ -5,129 +5,128 @@
 //  Created by Petter vang Brakalsvålet on 05/10/2023.
 //
 
+import SwiftData
 import Foundation
-import CoreData
 import LoggingKit
 import DBKitInterface
 
-public final class DrinkManager {
-    private let database: DatabaseType
-    private let context: NSManagedObjectContext
+public final actor DrinkManager {
+    private let context: ModelContext
     private let logger: LoggerServicing
     
-    public init(database: DatabaseType, logger: LoggerServicing) {
-        self.database = database
-        self.context = database.open()
+    public init(container: ModelContainer, logger: LoggerServicing) {
+        self.context = ModelContext(container)
         self.logger = logger
     }
 }
 
 private extension DrinkManager {
+    func deleteEntity(_ entity: DrinkEntity) throws {
+        context.delete(entity)
+        try save()
+    }
+    
     func fetchEntity(_ container: String) async throws -> DrinkEntity {
-        let drinks: [DrinkEntity] = try await database.read(
-            matching: .init(format: "container == %@", container),
-            sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
-            limit: 1,
-            context)
-        guard let drink = drinks.first
-        else {
+        let predicate = #Predicate<DrinkEntity> { $0.container == container }
+        let drinks: [DrinkEntity] = try read(
+            matching: predicate,
+            sortBy: [SortDescriptor(\DrinkEntity.size, order: .forward)],
+            limit: 1)
+        guard let drink = drinks.first else {
             throw DatabaseError.noElementFound
         }
         return drink
     }
     
     func fetchAllEntity() async throws -> [DrinkEntity] {
-        let drinks: [DrinkEntity] = try await database.read(
-            matching: nil,
-            sortBy: [NSSortDescriptor(key: "amount", ascending: true)],
-            limit: nil,
-            context)
-        return drinks
+        try read(sortBy: [SortDescriptor(\DrinkEntity.size, order: .forward)])
     }
 }
 
 extension DrinkManager: DrinkManagerType {
-    public func createNewDrink(size: Double, container: String) throws -> DrinkModel {
-        let newDrink = DrinkEntity(context: context)
-        newDrink.id = UUID().uuidString
-        newDrink.amount = size
-        newDrink.container = container
-        try database.save(context)
-        logger.log(category: .drinkDatabase, message: "Created drink \(newDrink)", error: nil, level: .debug)
-        return DrinkModel(from: newDrink)
+    public func createNewDrink(size: Double, container: String) async throws -> DrinkModel {
+        let newDrink = DrinkEntity(id: UUID().uuidString, size: size, container: container)
+        context.insert(newDrink)
+        try save()
+        logger.log(category: .drinkDatabase, message: "Created \(newDrink)", error: nil, level: .debug)
+        return newDrink.asModel
     }
     
     public func edit(size: Double, of container: String) async throws -> DrinkModel {
         let drink = try await fetchEntity(container)
-        drink.amount = size
-        try database.save(context)
-        logger.log(category: .drinkDatabase, message: "Edited drink \(drink)", error: nil, level: .debug)
-        return DrinkModel(from: drink)
-    }
-    
-    private func delete(_ drink: DrinkEntity) throws {
-        context.delete(drink)
-        try database.save(context)
-        logger.log(category: .drinkDatabase, message: "Deleted drink \(drink)", error: nil, level: .debug)
+        drink.size = size
+        try save()
+        logger.log(category: .drinkDatabase, message: "Updated \(drink)", error: nil, level: .debug)
+        return drink.asModel
     }
     
     public func delete(_ drink: DrinkModel) async throws {
-        let predicate = NSCompoundPredicate(type: .and, subpredicates: [
-            NSPredicate(format: "container == %@", drink.container),
-            NSPredicate(format: "amount == %f", drink.size)
-        ])
-        let drinks: [DrinkEntity] = try await database.read(
-            matching: predicate,
-            sortBy: nil,
-            limit: 1,
-            context
-        )
-        logger.log(category: .drinkDatabase, message: "Deleting \(drinks)", error: nil, level: .debug)
-        for drink in drinks {
-            try delete(drink)
+        let size = drink.size
+        let container = drink.container
+        let predicate = #Predicate<DrinkEntity> {
+            $0.size == size && $0.container == container
         }
+        let entities = try read(matching: predicate, limit: 1)
+        guard let entity = entities.first else {
+            throw DatabaseError.noElementFound
+        }
+        try deleteEntity(entity)
+        logger.log(category: .drinkDatabase, message: "Deleted \(drink)", error: nil, level: .debug)
     }
     
     public func deleteDrink(container: String) async throws {
         let drink = try await fetchEntity(container)
-        logger.log(category: .drinkDatabase, message: "Deleting \(drink)", error: nil, level: .debug)
-        try delete(drink)
+        try deleteEntity(drink)
+        logger.log(category: .drinkDatabase, message: "Deleted \(drink)", error: nil, level: .debug)
     }
     
     public func deleteAll() async throws {
         let drinks = try await fetchAllEntity()
-        logger.log(category: .drinkDatabase, message: "Deleting \(drinks)", error: nil, level: .debug)
         for drink in drinks {
-            try delete(drink)
+            context.delete(drink)
         }
+        try save()
+        logger.log(category: .drinkDatabase, message: "Deleted \(drinks)", error: nil, level: .debug)
     }
     
     public func fetch(_ container: String) async throws -> DrinkModel {
         let drink = try await fetchEntity(container)
-        logger.log(category: .drinkDatabase, message: "Found drink \(drink)", error: nil, level: .debug)
-        return DrinkModel(from: drink)
+        logger.log(category: .drinkDatabase, message: "Found \(drink)", error: nil, level: .debug)
+        return drink.asModel
     }
     
     public func fetchAll() async throws -> [DrinkModel] {
         let drinks = try await fetchAllEntity()
+        if drinks.isEmpty {
+            throw DatabaseError.noElementFound
+        }
         logger.log(category: .drinkDatabase, message: "Found \(drinks)", error: nil, level: .debug)
-        return drinks.compactMap { .init(from: $0) }
+        return drinks.map { $0.asModel }
     }
 }
 
-package extension DrinkModel {
-    init(from model: DrinkEntity) {
-        self.init(id: model.id ?? "",
-                  size: model.amount,
-                  container: model.container ?? "")
+private extension DrinkManager {
+    func read<Element: PersistentModel>(
+        matching: Predicate<Element>? = nil,
+        sortBy: [SortDescriptor<Element>] = [],
+        limit: Int? = nil
+    ) throws -> [Element] {
+        let fetchDescriptor = FetchDescriptor<Element>(predicate: matching, sortBy: sortBy)
+        var results = try context.fetch(fetchDescriptor)
+        if let limit {
+            results = Array(results.prefix(limit))
+        }
+        return results
+    }
+    
+    func save() throws {
+        guard context.hasChanges else { return }
+        do {
+            try context.save()
+        } catch {
+            logger.log(category: .drinkDatabase, message: "Failed to save the context", error: error, level: .debug)
+            throw error
+        }
     }
 }
 
-extension DrinkEntity {
-    public override var description: String {
-        "Drink(" +
-        "id:\(id ?? "No id"), " +
-        "amount:\(amount), " +
-        "container:\(container ?? "No container"))"
-    }
-}
