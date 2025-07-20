@@ -5,10 +5,13 @@
 //  Created by Petter vang Brakalsvålet on 05/10/2023.
 //
 
-public struct DrinkModel: Equatable, Sendable {
-    public let id: String
-    public let container: String
-    public let size: Double
+import SwiftData
+
+@Model
+public class DrinkModel: Equatable, @unchecked Sendable {
+    public var id: String
+    public var container: String
+    public var size: Double
     
     public init(id: String,
                 size: Double,

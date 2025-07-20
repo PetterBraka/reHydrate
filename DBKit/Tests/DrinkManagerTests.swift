@@ -5,182 +5,161 @@
 //  Created by Petter vang Brakalsvålet on 05/10/2023.
 //
 
-import XCTest
+import Testing
 @testable import DBKit
 import DBKitInterface
 import DBKitMocks
 import LoggingKit
 
-final class DrinkManagerTests: XCTestCase {
-    var spy: DatabaseSpy<DrinkEntity, Database>!
-    var sut: DrinkManagerType!
+@Suite("DrinkManager")
+struct DrinkManagerTests {
+    var spy: DatabaseSpy<DrinkModel, Database>
+    var sut: DrinkManagerType
     
-    override func setUp() {
+    init() {
         let logger = LoggerService(subsystem: "com.braka.test")
-        self.spy = DatabaseSpy(realObject: Database(appGroup: "group.com.testing.DBKit", inMemory: true, logger: logger))
+        self.spy = DatabaseSpy(
+            realObject: Database(
+                appGroup: "group.com.testing.DBKit",
+                inMemory: true,
+                schema: .init([DrinkModel.self]),
+                logger: logger
+            )
+        )
         self.sut = DrinkManager(database: spy, logger: logger)
     }
-    
-    func test_createNewDrink_success() async throws {
-        let givenSize: Double = 200
-        let givenContainer = "small"
-        let drink = try await sut.createNewDrink(size: givenSize, container: givenContainer)
-        assert(drink, expectedSize: givenSize, expectedContainer: givenContainer)
-        XCTAssertEqual(spy.methodLogNames, [.open,.save])
-    }
 
-    func test_createNewDayAndFetchDay_success() async throws {
+    @Test
+    func createNewDayAndFetchDay_success() async throws {
         let givenSize: Double = 200
         let givenContainer = "small"
         let drink = try await sut.createNewDrink(size: givenSize, container: givenContainer)
-        assert(drink, expectedSize: givenSize, expectedContainer: givenContainer)
+        #expect(drink.size == givenSize)
+        #expect(drink.container == givenContainer)
+        
         let foundDrink = try await sut.fetch(givenContainer)
-        assert(drink, foundDrink)
-        XCTAssertEqual(spy.methodLogNames, [.open, .save, .open, .read])
+        #expect(drink == foundDrink)
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.insert, .save, .read])
     }
     
-    func test_deleteDrink() async throws {
+    @Test
+    func deleteDrink() async throws {
         let drinks = try await preloadDefaults()
         
         try await sut.delete(drinks[0])
-        do {
+        try await #require(throws: DatabaseError.noElementFound) {
             _ = try await sut.fetch("small")
-            XCTFail("Expected to not find any drink")
-        } catch {
-            guard let dbError = error as? DatabaseError else {
-                XCTFail("Expected database error not \(error)")
-                return
-            }
-            XCTAssertEqual(dbError, .noElementFound)
         }
+        
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.delete, .save, .read])
     }
     
-    func test_deleteDrinkContainer() async throws {
+    @Test
+    func deleteDrinkContainer() async throws {
         try await preloadDefaults()
         
         try await sut.deleteDrink(container: "medium")
-        do {
+        try await #require(throws: DatabaseError.noElementFound) {
             _ = try await sut.fetch("medium")
-            XCTFail("Expected to not find any drink")
-        } catch {
-            guard let dbError = error as? DatabaseError else {
-                XCTFail("Expected database error not \(error)")
-                return
-            }
-            XCTAssertEqual(dbError, .noElementFound)
         }
+        
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.read, .delete, .save, .read])
     }
     
-    func test_editDrink() async throws {
+    @Test
+    func editDrink() async throws {
         let drinks = try await preloadDefaults()
-        let drink = try XCTUnwrap(drinks.first)
+        let drink = try #require(drinks.first)
+        #expect(drink.size == 300)
+        
         let editedDrink = try await sut.edit(size: 400, of: drink.container)
-        XCTAssertEqual(editedDrink.size, 400)
+        #expect(editedDrink.size == 400)
+        
+        let fetchUpdatedDrink = try await sut.fetch(drink.container)
+        #expect(fetchUpdatedDrink.size == 400)
+        
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.read, .save, .read])
     }
     
-    func test_deleteAll_whenEmpty() async throws {
+    @Test
+    func deleteAll_whenEmpty() async throws {
         try await sut.deleteAll()
+        
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.read, .save])
     }
     
-    func test_deleteAll() async throws {
+    @Test
+    func deleteAll() async throws {
         try await preloadDefaults()
         
         try await sut.deleteAll()
-        let foundDrink = try await sut.fetchAll()
-        XCTAssertEqual(foundDrink.count, 0)
-    }
-    
-    func test_fetchContainer_whenEmpty() async throws {
-        do {
-            _ = try await sut.fetch("small")
-            XCTFail("Expected to not find any drink")
-        } catch {
-            guard let dbError = error as? DatabaseError else {
-                XCTFail("Expected database error not \(error)")
-                return
-            }
-            XCTAssertEqual(dbError, .noElementFound)
+        try await #require(throws: DatabaseError.noElementFound) {
+            _ = try await sut.fetchAll()
         }
+        
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.read, .delete, .delete, .delete, .save, .read])
     }
     
-    func test_fetchContainer() async throws {
+    @Test
+    func fetchContainer_whenEmpty() async throws {
+        try await #require(throws: DatabaseError.noElementFound) {
+            _ = try await sut.fetch("small")
+        }
+        
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.read])
+    }
+    
+    @Test
+    func fetchContainer() async throws {
         let drinks = try await preloadDefaults()
         
         let foundDrink = try await sut.fetch("small")
-        assert(foundDrink, drinks[0])
-    }
-    
-    func test_fetchAll_whenEmpty() async throws {
-        let foundDrinks = try await sut.fetchAll()
+        #expect(foundDrink == drinks[0])
         
-        XCTAssertEqual(foundDrinks.count, 0)
-        XCTAssertEqual(foundDrinks, [])
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.read])
     }
     
-    func test_fetchAll() async throws {
+    @Test
+    func fetchAll_whenEmpty() async throws {
+        try await #require(throws: DatabaseError.noElementFound) {
+            _ = try await sut.fetchAll()
+        }
+        
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.read])
+    }
+    
+    @Test
+    func fetchAll() async throws {
         let drinks = try await preloadDefaults()
         
         let foundDrinks = try await sut.fetchAll()
         
-        XCTAssertEqual(foundDrinks.count, drinks.count)
-        XCTAssertEqual(foundDrinks, drinks)
+        #expect(foundDrinks.count == 3)
+        #expect(foundDrinks == drinks)
+        
+        let log = await spy.getMethodNamesLog()
+        #expect(log == [.read])
     }
     
-    func test_mapDrink_withDefaults() async {
-        let drink = await DrinkEntity(context: spy.open())
-        drink.id = nil
-        drink.container = nil
-        XCTAssertEqual(DrinkModel(from: drink),
-                       .init(id: "", size: 0, container: ""))
-    }
+    // MARK: - Helpers
     
-    func test_mapDrink_withId() async {
-        let drink = await DrinkEntity(context: spy.open())
-        drink.id = "id"
-        XCTAssertEqual(DrinkModel(from: drink),
-                       .init(id: "id", size: 0, container: ""))
-    }
-    
-    func test_mapDrink_withIdAndAmount() async {
-        let drink = await DrinkEntity(context: spy.open())
-        drink.id = "id"
-        drink.amount = 9
-        XCTAssertEqual(DrinkModel(from: drink),
-                       .init(id: "id", size: 9, container: ""))
-    }
-    
-    func test_mapDrink() async {
-        let drink = await DrinkEntity(context: spy.open())
-        drink.id = "id"
-        drink.amount = 300
-        drink.container = "Small"
-        XCTAssertEqual(DrinkModel(from: drink),
-                       .init(id: "id", size: 300, container: "Small"))
-    }
-}
-
-extension DrinkManagerTests {
-    func assert(_ givenDrink: DrinkModel,
-                expectedSize: Double, expectedContainer: String,
-                file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(givenDrink.size, expectedSize, line: line)
-        XCTAssertEqual(givenDrink.container, expectedContainer, line: line)
-    }
-    
-    func assert(_ givenDrink: DrinkModel, _ expectedDrink: DrinkModel,
-                file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(givenDrink.size, expectedDrink.size, line: line)
-        XCTAssertEqual(givenDrink.container, expectedDrink.container, line: line)
-    }
-}
-
-extension DrinkManagerTests {
     @discardableResult
-    func preloadDefaults(file: StaticString = #file, line: UInt = #line) async throws -> [DrinkModel] {
-        try await [
+    func preloadDefaults() async throws -> [DrinkModel] {
+        let drinks = try await [
             sut.createNewDrink(size: 300, container: "small"),
             sut.createNewDrink(size: 500, container: "medium"),
             sut.createNewDrink(size: 750, container: "large")
         ]
+        await spy.resetMethodNameLog()
+        return drinks
     }
 }

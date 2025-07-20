@@ -5,7 +5,7 @@
 //  Created by Petter vang Brakalsvålet on 05/10/2023.
 //
 
-public protocol DrinkManagerType {
+public protocol DrinkManagerType: Sendable {
     func createNewDrink(size: Double, container: String) async throws -> DrinkModel
     func edit(size: Double, of container: String) async throws -> DrinkModel
     
