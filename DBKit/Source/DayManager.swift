@@ -49,18 +49,19 @@ private extension DayManager {
     }
     
     func fetchEntities(between dates: ClosedRange<Date>) async throws -> [DayModel] {
-        let lowerString = DatabaseFormatter.date.string(from: dates.lowerBound)
-        let upperString = DatabaseFormatter.date.string(from: dates.upperBound)
-        let predicate = #Predicate<DayModel> { $0.date >= lowerString && $0.date <= upperString }
+        let allDays: [DayModel] = try await fetchAllEntities()
+        let lower = DatabaseFormatter.date.string(from: dates.lowerBound)
+        let upper = DatabaseFormatter.date.string(from: dates.upperBound)
         
-        let days = try await database.read(
-            matching: predicate,
-            sortBy: [SortDescriptor(\.date)],
-            limit: nil
-        )
-        
-        logger.log(category: .dayDatabase, message: "Found \(days)", error: nil, level: .debug)
-        return days
+        let filtered = allDays.filter {
+            if $0.date == lower || $0.date == upper {
+                return true
+            }
+            guard let date = DatabaseFormatter.date.date(from: $0.date) else { return false }
+            return dates.contains(date)
+        }
+        logger.log(category: .dayDatabase, message: "Filtered \(filtered)", error: nil, level: .debug)
+        return filtered
     }
     
     func fetchAllEntities() async throws -> [DayModel] {
@@ -167,4 +168,3 @@ extension DayManager: DayManagerType {
         try await fetchAllEntities()
     }
 }
-

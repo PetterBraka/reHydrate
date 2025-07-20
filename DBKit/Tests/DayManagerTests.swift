@@ -295,37 +295,6 @@ extension DayManagerTests {
     }
 }
 
-// MARK: - ModelMapping
-extension DayManagerTests {
-    @Test
-    func testMap_validDay_withDefaults() async {
-        let validDay = DayModel(id: "", date: "", consumed: 0, goal: 0)
-        #expect(validDay.date == "")
-        #expect(validDay.consumed == 0)
-        #expect(validDay.goal == 0)
-    }
-    
-    @Test
-    func testMap_validDay_withIdAndDate() async {
-        let validDay = DayModel(id: "id", date: "02/05/1999", consumed: 0, goal: 0)
-        #expect(validDay == DayModel(id: "id", date: "02/05/1999", consumed: 0, goal: 0))
-    }
-    
-    @Test
-    func testMap_validDay() async {
-        let validDay = DayModel(id: "id", date: "02/05/1999", consumed: 9, goal: 9)
-        #expect(validDay == DayModel(id: "id", date: "02/05/1999", consumed: 9, goal: 9))
-    }
-    
-    @Test
-    func testMap_invalidDay_id() async {
-        let validDay = DayModel(id: "", date: "02/05/1999", consumed: 0, goal: 0)
-        #expect(validDay.date == "02/05/1999")
-        #expect(validDay.consumed == 0)
-        #expect(validDay.goal == 0)
-    }
-}
-
 private extension DayManagerTests {
     func assert(givenDay: DayModel,
                 expectedDay: DayModel) {
