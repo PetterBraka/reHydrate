@@ -10,12 +10,12 @@ import SwiftData
 import LoggingKit
 import DBKitInterface
 
-enum Database {
+public enum Database {
     
     /// Creates a ModelContainer at the path specified. 
     /// - Parameters:
     ///   - path: The path of the db. `FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)`
-    static func createContainer(path: URL?, inMemory: Bool = false, schema: Schema) -> ModelContainer {
+    public static func createContainer(path: URL?, inMemory: Bool = false, schema: Schema) -> ModelContainer {
         let config: ModelConfiguration
         
         if inMemory {

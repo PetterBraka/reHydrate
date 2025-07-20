@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "DBKit",
     platforms: [
-        .iOS(.v16),
+        .iOS(.v17),
         .watchOS(.v10),
         .macOS(.v15)
     ],
