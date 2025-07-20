@@ -23,20 +23,16 @@ struct DayManagerTests {
         Date(timeIntervalSince1970: 1688583262)
     ]
     
-    var spy: DatabaseSpy<DayModel, Database>!
-    var sut: DayManagerType!
+    var sut: DayManagerType
     
     init() async throws {
         let logger = LoggerService(subsystem: "com.braka.test")
-        self.spy = DatabaseSpy(
-            realObject: Database(
-                appGroup: "group.com.testing.DBKit",
-                inMemory: true,
-                schema: .init([DayModel.self]),
-                logger: logger
-            )
+        let container = Database.createContainer(
+            path: nil,
+            inMemory: true,
+            schema: .init([DayEntity.self])
         )
-        self.sut = DayManager(database: spy, logger: logger)
+        self.sut = DayManager(container: container, logger: logger)
     }
 }
 
@@ -46,16 +42,17 @@ extension DayManagerTests {
     func test_createNewDay_success() async throws {
         let day = try await sut.createNewDay(date: referenceDate, goal: 3)
         assert(givenDay: day, expectedConsumption: 0, expectedGoal: 3)
-        #expect(try await spy.getMethodNamesLog() == [.insert, .save])
+        #expect(try await sut.fetchAll().count == 1)
     }
     
     @Test
     func test_createNewDayAndFetchDay_success() async throws {
         let givenDay = try await sut.createNewDay(date: referenceDate, goal: 3)
-        assert(givenDay: givenDay, expectedConsumption: 0, expectedGoal: 3)
         let foundDay = try await sut.fetch(with: referenceDate)
+        
+        assert(givenDay: givenDay, expectedConsumption: 0, expectedGoal: 3)
         assert(givenDay: givenDay, expectedDay: foundDay)
-        #expect(try await spy.getMethodNamesLog() == [.insert, .save, .read])
+        #expect(try await sut.fetchAll().count == 1)
     }
 }
 
@@ -148,16 +145,13 @@ extension DayManagerTests {
         let days = try await sut.fetchAll()
         #expect(days.count == 3)
         #expect(!days.contains(dayToDelete))
-        #expect(try await spy.getMethodNamesLog() == [.read, .delete, .save, .read])
     }
     
     @Test
     func test_deleteDay_withInvalidDate() async throws {
-        do {
+        try await #require(throws: DatabaseError.invalidElement) {
             try await sut.delete([DayModel(id: "", date: "", consumed: 0, goal: 0)])
-            Issue.record("Shouldn't be able to delete day without valid data")
-        } catch {}
-        #expect(try await spy.getMethodNamesLog().isEmpty)
+        }
     }
 }
 
@@ -171,7 +165,6 @@ extension DayManagerTests {
         let days = try await sut.fetchAll()
         #expect(days.count == 3)
         #expect(!days.contains(where: { $0.date == dateToDelete.toDateString() }))
-        #expect(try await spy.getMethodNamesLog() == [.read, .delete, .save, .read])
     }
 }
 
@@ -190,9 +183,6 @@ extension DayManagerTests {
         }
         let days = try await sut.fetchAll()
         #expect(days.isEmpty)
-        #expect(
-            try await spy.getMethodNamesLog() == [.read, .delete, .delete, .delete, .delete, .save, .read]
-        )
     }
 }
 
@@ -203,7 +193,6 @@ extension DayManagerTests {
         try await preLoad4Days()
         let lastDate = try #require(referenceDates.last)
         _ = try await sut.fetch(with: lastDate)
-        #expect(try await spy.getMethodNamesLog() == [.read])
     }
     
     @Test
@@ -212,8 +201,6 @@ extension DayManagerTests {
         try await #require(throws: DatabaseError.noElementFound) {
             _ = try await sut.fetch(with: lastDate)
         }
-        
-        #expect(try await spy.getMethodNamesLog() == [.read])
     }
 }
 
@@ -225,7 +212,6 @@ extension DayManagerTests {
         let lastDate = referenceDates.last!
         let lastDay = try await sut.fetchLast()
         #expect(lastDay.date == lastDate.toDateString())
-        #expect(try await spy.getMethodNamesLog() == [.read])
     }
     
     @Test
@@ -233,7 +219,6 @@ extension DayManagerTests {
         try await #require(throws: DatabaseError.noElementFound) {
             _ = try await sut.fetchLast()
         }
-        #expect(try await spy.getMethodNamesLog() == [.read])
     }
 }
 
@@ -245,7 +230,6 @@ extension DayManagerTests {
         let days = try await sut.fetch(between: referenceDates[0] ... referenceDates[2] )
         #expect(days.count == 3)
         #expect(days.map(\.date) == [referenceDates[0], referenceDates[1], referenceDates[2]].map { $0.toDateString() })
-        #expect(try await spy.getMethodNamesLog() == [.read])
     }
     
     @Test
@@ -256,23 +240,12 @@ extension DayManagerTests {
         let days = try await sut.fetch(between: lower ... upper)
         #expect(days.count == 4)
         #expect(days.map(\.date) == referenceDates.map { $0.toDateString() })
-        #expect(try await spy.getMethodNamesLog() == [.read])
-    }
-    
-    @Test
-    func test_fetchBetween_blankDay() async throws {
-        await spy.insert(DayModel(id: "", date: "", consumed: 0, goal: 0))
-        
-        let days = try await sut.fetch(between: referenceDates.first! ... referenceDates.last! )
-        #expect(days.count == 0)
-        #expect(try await spy.getMethodNamesLog() == [.insert, .read])
     }
     
     @Test
     func test_fetchBetween_noDays() async throws {
         let days = try await sut.fetch(between: referenceDates.first! ... referenceDates.last! )
         #expect(days.count == 0)
-        #expect(try await spy.getMethodNamesLog() == [.read])
     }
 }
 
@@ -284,14 +257,12 @@ extension DayManagerTests {
         let days = try await sut.fetchAll()
         #expect(days.count == 4)
         #expect(days.map(\.date) == referenceDates.map { $0.toDateString() })
-        #expect(try await spy.getMethodNamesLog() == [.read])
     }
     
     @Test
     func test_fetchAll_noDays() async throws {
         let days = try await sut.fetchAll()
         #expect(days.count == 0)
-        #expect(try await spy.getMethodNamesLog() == [.read])
     }
 }
 
@@ -316,7 +287,6 @@ private extension DayManagerTests {
         _ = try await sut.createNewDay(date: referenceDates[1], goal: 3)
         _ = try await sut.createNewDay(date: referenceDates[2], goal: 3)
         _ = try await sut.createNewDay(date: referenceDates[3], goal: 3)
-        await spy.resetMethodNameLog()
     }
 }
 

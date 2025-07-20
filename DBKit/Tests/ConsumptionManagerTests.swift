@@ -14,8 +14,6 @@ import LoggingKit
 
 @Suite("ConsumptionManager")
 struct ConsumptionManagerTests {
-    private typealias MethodName = DatabaseSpy<ConsumptionModel, Database>.MethodName
-    
     let referenceDate = Date(timeIntervalSince1970: 1688227143)
     /// [1/07/2023, 2/07/2023, 3/07/2023, 5/07/2023]
     let referenceDates = [
@@ -25,19 +23,16 @@ struct ConsumptionManagerTests {
         Date(timeIntervalSince1970: 1688583262)
     ]
     
-    var spy: DatabaseSpy<ConsumptionModel, Database>
     var sut: ConsumptionManagerType
 
     init() async throws {
         let logger = LoggerService(subsystem: "com.braka.test")
-        let db = Database(
-            appGroup: "group.com.testing.DBKit",
+        let container = Database.createContainer(
+            path: nil,
             inMemory: true,
-            schema: .init([ConsumptionModel.self]),
-            logger: logger
+            schema: .init([ConsumptionEntity.self])
         )
-        self.spy = DatabaseSpy(realObject: db)
-        self.sut = ConsumptionManager(database: spy, logger: logger)
+        self.sut = ConsumptionManager(container: container, logger: logger)
     }
     
     @Test
@@ -45,9 +40,7 @@ struct ConsumptionManagerTests {
         let givenConsumption = Double.random(in: 300 ... 750)
         let newEntry = try await sut.createEntry(date: referenceDate, consumed: givenConsumption)
         assert(newEntry, expectedDate: referenceDate, expectedConsumption: givenConsumption)
-        #expect(await spy.getMethodNamesLog() == [
-            .insert, .save
-        ])
+        #expect(try await sut.fetchAll().count == 1)
     }
     
     @Test
@@ -56,12 +49,7 @@ struct ConsumptionManagerTests {
         try await createEntry(date: referenceDate)
         try await createEntry(date: referenceDate)
         try await createEntry(date: referenceDate)
-        #expect(await spy.getMethodNamesLog() == [
-            .insert, .save,
-            .insert, .save,
-            .insert, .save,
-            .insert, .save
-        ])
+        #expect(try await sut.fetchAll().count == 4)
     }
     
     @Test
@@ -73,24 +61,13 @@ struct ConsumptionManagerTests {
         try await createEntry(date: referenceDates[1])
         try await createEntry(date: referenceDates[1])
         try await createEntry(date: referenceDates[1])
+        
         let result = try await sut.fetchAll()
         let resultSecond = try await sut.fetchAll(at: referenceDate)
         let resultThird = try await sut.fetchAll(at: referenceDates[1])
         #expect(result.count == 7)
         #expect(resultSecond.count == 3)
         #expect(resultThird.count == 4)
-        #expect(await spy.getMethodNamesLog() == [
-            .insert, .save,
-            .insert, .save,
-            .insert, .save,
-            .insert, .save,
-            .insert, .save,
-            .insert, .save,
-            .insert, .save,
-            .read,
-            .read,
-            .read
-        ])
     }
     
     @Test
@@ -102,28 +79,23 @@ struct ConsumptionManagerTests {
         
         let result = try await sut.fetchAll()
         #expect(result.count == 4)
-        #expect(await spy.getMethodNamesLog() == [
-            .insert, .save,
-            .insert, .save,
-            .insert, .save,
-            .insert, .save,
-            .read
-        ])
     }
     
     @Test
     func delete() async throws {
         try await createEntry(date: referenceDate)
         try await createEntry(date: referenceDate)
-        let optionalEntry = try await sut.fetchAll().first
-        let entry = try #require(optionalEntry)
+        
+        let entry = try #require(try await sut.fetchAll().first)
         try await sut.delete(entry)
-        #expect(await spy.getMethodNamesLog() == [
-            .insert, .save,
-            .insert, .save,
-            .read,
-            .delete, .save
-        ])
+        #expect(try await sut.fetchAll().count == 1)
+    }
+    
+    @Test
+    func delete_whenEmpty() async throws {
+        try await #require(throws: DatabaseError.noElementFound) {
+            try await sut.delete(.init(id: "", date: "", time: "", consumed: 0))
+        }
     }
 
     func assert(_ entry: ConsumptionModel,

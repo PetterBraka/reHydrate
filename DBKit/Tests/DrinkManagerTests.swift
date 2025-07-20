@@ -13,20 +13,16 @@ import LoggingKit
 
 @Suite("DrinkManager")
 struct DrinkManagerTests {
-    var spy: DatabaseSpy<DrinkModel, Database>
     var sut: DrinkManagerType
     
     init() {
         let logger = LoggerService(subsystem: "com.braka.test")
-        self.spy = DatabaseSpy(
-            realObject: Database(
-                appGroup: "group.com.testing.DBKit",
-                inMemory: true,
-                schema: .init([DrinkModel.self]),
-                logger: logger
-            )
+        let container = Database.createContainer(
+            path: nil,
+            inMemory: true,
+            schema: .init([DrinkEntity.self])
         )
-        self.sut = DrinkManager(database: spy, logger: logger)
+        self.sut = DrinkManager(container: container, logger: logger)
     }
 
     @Test
@@ -39,34 +35,6 @@ struct DrinkManagerTests {
         
         let foundDrink = try await sut.fetch(givenContainer)
         #expect(drink == foundDrink)
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.insert, .save, .read])
-    }
-    
-    @Test
-    func deleteDrink() async throws {
-        let drinks = try await preloadDefaults()
-        
-        try await sut.delete(drinks[0])
-        try await #require(throws: DatabaseError.noElementFound) {
-            _ = try await sut.fetch("small")
-        }
-        
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.delete, .save, .read])
-    }
-    
-    @Test
-    func deleteDrinkContainer() async throws {
-        try await preloadDefaults()
-        
-        try await sut.deleteDrink(container: "medium")
-        try await #require(throws: DatabaseError.noElementFound) {
-            _ = try await sut.fetch("medium")
-        }
-        
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.read, .delete, .save, .read])
     }
     
     @Test
@@ -80,17 +48,40 @@ struct DrinkManagerTests {
         
         let fetchUpdatedDrink = try await sut.fetch(drink.container)
         #expect(fetchUpdatedDrink.size == 400)
+    }
+    
+    @Test
+    func deleteDrink() async throws {
+        let drinks = try await preloadDefaults()
         
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.read, .save, .read])
+        try await sut.delete(drinks[0])
+        try await #require(throws: DatabaseError.noElementFound) {
+            _ = try await sut.fetch("small")
+        }
+        #expect(try await sut.fetchAll().count == 2)
+    }
+    
+    @Test
+    func deleteDrink_whenEmpty() async throws {
+        try await #require(throws: DatabaseError.noElementFound) {
+            try await sut.delete(.init(id: "", size: 0, container: ""))
+        }
+    }
+    
+    @Test
+    func deleteDrinkContainer() async throws {
+        try await preloadDefaults()
+        
+        try await sut.deleteDrink(container: "medium")
+        try await #require(throws: DatabaseError.noElementFound) {
+            _ = try await sut.fetch("medium")
+        }
+        #expect(try await sut.fetchAll().count == 2)
     }
     
     @Test
     func deleteAll_whenEmpty() async throws {
         try await sut.deleteAll()
-        
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.read, .save])
     }
     
     @Test
@@ -101,9 +92,6 @@ struct DrinkManagerTests {
         try await #require(throws: DatabaseError.noElementFound) {
             _ = try await sut.fetchAll()
         }
-        
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.read, .delete, .delete, .delete, .save, .read])
     }
     
     @Test
@@ -111,9 +99,6 @@ struct DrinkManagerTests {
         try await #require(throws: DatabaseError.noElementFound) {
             _ = try await sut.fetch("small")
         }
-        
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.read])
     }
     
     @Test
@@ -122,9 +107,6 @@ struct DrinkManagerTests {
         
         let foundDrink = try await sut.fetch("small")
         #expect(foundDrink == drinks[0])
-        
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.read])
     }
     
     @Test
@@ -132,9 +114,6 @@ struct DrinkManagerTests {
         try await #require(throws: DatabaseError.noElementFound) {
             _ = try await sut.fetchAll()
         }
-        
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.read])
     }
     
     @Test
@@ -145,21 +124,16 @@ struct DrinkManagerTests {
         
         #expect(foundDrinks.count == 3)
         #expect(foundDrinks == drinks)
-        
-        let log = await spy.getMethodNamesLog()
-        #expect(log == [.read])
     }
     
     // MARK: - Helpers
     
     @discardableResult
     func preloadDefaults() async throws -> [DrinkModel] {
-        let drinks = try await [
+        try await [
             sut.createNewDrink(size: 300, container: "small"),
             sut.createNewDrink(size: 500, container: "medium"),
             sut.createNewDrink(size: 750, container: "large")
         ]
-        await spy.resetMethodNameLog()
-        return drinks
     }
 }
