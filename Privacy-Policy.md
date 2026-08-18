@@ -1,42 +1,74 @@
-# PRIVACY POLICY
+# Privacy Policy
 
-### reHydrate
+**reHydrate · Last updated: August 2026**
 
-PetterBraka we respect the privacy of our users you. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our mobile Application (the “Application”).   Please read this Privacy Policy carefully.  IF YOU DISAGREE WITH THE TERMS OF THIS PRIVACY POLICY, PLEASE DO NOT ACCESS THE APPLICATION. 
+> reHydrate has no accounts, no servers and no analytics. What you log stays on your device, and the only other place it can go is Apple Health, if you ask it to.
 
-We reserve the right to make changes to this Privacy Policy at any time and for any reason.  We will alert you about any changes by updating the “Last Updated” date of this Privacy Policy.  You are encouraged to review this Privacy Policy to stay informed of updates periodically. You will be deemed to have been made aware of, will be subject to, and will be considered to have accepted the changes in any revised Privacy Policy by your continued use of the Application after the date such revised Privacy Policy is posted.  
+reHydrate is made by Petter Vang Brakalsvålet ("we", "us"). This page explains what the app stores and what it doesn't. It is short, because the app collects nothing about you.
 
-This Privacy Policy does not apply to the third-party online/mobile store from which you install the Application or make payments, including any in-game virtual items, which may also collect and use data about you.  We are not responsible for any of the data collected by any such third party. 
+## What the app stores
 
-## COLLECTION OF YOUR INFORMATION
-We may collect information about you in a variety of ways.  The information we may collect via the Application depends on the content and materials you use and includes:  
+Everything reHydrate records is written to your device and stays there:
 
-## Personal Data 
-Demographic and other personally identifiable information (such as your name and email address) that you voluntarily give to us when choosing to participate in various activities related to the Application, such as chat, posting messages in comment sections or on our forums, liking posts, sending feedback, and responding to surveys.  If you choose to share data about yourself via your profile, online chat, or other interactive areas of the Application. Please be advised that all data you disclose in these areas is public and your data will be accessible to anyone who accesses the Application.  
+- your drink log: what you drank, how much of it, and when
+- your daily goal, and whether you count in millilitres or ounces
+- the reminder times you set
+- settings such as language, appearance and the app icon you picked
 
-## Mobile Device Access 
-We may request access or permission to certain features from your mobile device, including your mobile device’s reminders, storage, Apple’s Health Application and other features. If you wish to change our access or permissions, you may do so in your device’s settings.
+This sits in a storage container shared between the iPhone app, the Apple Watch app and the widgets, so all three show the same numbers. We have no copy of it and no way to reach it.
 
-## Mobile Device Data 
-Device information such as your mobile device ID number, model, and manufacturer, version of your operating system, country, and any other data you choose to provide.
+## Apple Health
 
-## Third-Party Data 
-We do not use any Third-Partys and will therefore not ask you to share any data from any other Applications or any other accounts with us.  
+If you give permission, reHydrate writes your water intake to the Health app, and reads back water that other apps have logged there so your total is right whichever app you drank through. That exchange happens on your device, between reHydrate and Health. Health data is governed by Apple's rules, and you can withdraw the permission whenever you like in the Health app or in iOS Settings. Anything reHydrate has already written to Health stays in Health until you delete it there.
 
-## THIRD-PARTY WEBSITES
-The Application may contain links to third-party websites and applications of interest, including advertisements and external services, that are not affiliated with us. Once you have used these links to leave the Application, any information you provide to these third parties is not covered by this Privacy Policy, and we cannot guarantee the safety and privacy of your information. Before visiting and providing any information to any third-party websites, you should inform yourself of the privacy policies and practices (if any) of the third-party responsible for that website, and should take those steps necessary to, in your discretion, protect the privacy of your information. We are not responsible for the content or privacy and security practices and policies of any third parties, including other sites, services or applications that may be linked to or from the Application.
+## Reminders
 
-## SECURITY OF YOUR INFORMATION
-We use technical measures to help protect your personal information.  While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.  Any information disclosed online is vulnerable to interception and misuse by unauthorized parties. Therefore, we have decided to only store data on your phone and your phone only, and we will not offer any storages of data on our servers.  However, we cannot guarantee complete security if you provide personal information or if you provide access to your devices.
+Reminders are local notifications. Your device schedules them itself from the times you choose. Nothing is sent to a push server, and no notification service learns that you use the app.
 
-### CONTACT US
-If you have questions or comments about this Privacy Policy, please contact us at:
+## Apple Watch and widgets
 
-PetterBraka<br>
-PetterBraka@gmail.com<br>
-https://github.com/PetterBraka/reHydrate/issues
+The Watch app and the iPhone app pass your numbers to each other over Apple's device-to-device connection. That traffic stays between your own two devices and is not relayed through us.
 
+## What we don't collect
 
-#### Version: 1.0
-Last updated 4th Sep 2020
+No account, no email address, no name. No analytics, no tracking, no advertising, no location, no device identifiers, and no crash reports sent to us. There is no server behind reHydrate, so there is nowhere for your data to be sent and nothing for us to sell.
 
+## Third-party code
+
+reHydrate depends on two open-source Swift packages, [CalendarKit](https://github.com/PetterBraka/CalendarKit) and [LoggingKit](https://github.com/PetterBraka/LoggingKit), both written by the same developer as the app itself. They run entirely on your device. LoggingKit writes debug messages to the system console, which never leaves your phone. There are no third-party SDKs in the app: no analytics vendor, no ad network, no crash reporter, no Firebase.
+
+## The App Store
+
+Apple distributes the app and handles the download, and collects its own data when you install it. That is covered by Apple's privacy policy rather than this one. As the developer, we see the aggregate figures Apple shows in App Store Connect, such as download counts, crash counts and ratings. Apple anonymises those before we see them, and they cannot be traced back to you. reHydrate is free and has no in-app purchases, so no payment details are involved anywhere.
+
+## Backups
+
+If you back up your device to iCloud or to a computer, your reHydrate data goes into that backup along with everything else on the device. The backup belongs to you and to Apple. We have no access to it, and you control it in iOS Settings.
+
+## Deleting your data
+
+Delete individual entries inside the app, or delete the app to remove everything it has stored. Water that was written to Apple Health has to be deleted in Health, since it lives there now. There is no deletion request to send us, because we are not holding anything.
+
+## Your rights
+
+The UK GDPR and the EU GDPR give you the right to access, correct, erase, export or restrict the personal data an organisation holds about you. Those rights bite on data a controller actually holds, and we hold none of yours. Your reHydrate data is on your own device, under your control. You can still write to us with a question, and you can complain to the UK Information Commissioner's Office ([ico.org.uk](https://ico.org.uk/make-a-complaint/)) or to your local EU supervisory authority.
+
+## Security
+
+Your data is protected by the things that protect the rest of your phone: the iOS app sandbox, device encryption and your passcode. Keeping a passcode set and iOS up to date is the useful thing you can do. Because nothing is transmitted, there is no connection for anyone to intercept.
+
+## Children
+
+reHydrate is rated 4+ and is fine for children to use. It collects no personal data from anyone, at any age.
+
+## Check it yourself
+
+reHydrate is open source. If you want to confirm that the app does what this page says, read the code in this repository.
+
+## Changes to this policy
+
+If the policy changes, the date at the top changes with it. The current version is always at [braka.dev/apps/rehydrate/privacy.html](https://braka.dev/apps/rehydrate/privacy.html) and in this file.
+
+## Contact us
+
+Questions about this policy? Email [petter@braka.dev](mailto:petter@braka.dev), or open an issue at [github.com/PetterBraka/reHydrate/issues](https://github.com/PetterBraka/reHydrate/issues).
